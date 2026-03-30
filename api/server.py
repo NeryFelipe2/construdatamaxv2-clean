@@ -11,6 +11,8 @@ from fastapi.responses import FileResponse, RedirectResponse
 from api.routes_cadastro import router as cadastro_router
 from api.routes_campo import router as campo_router
 from api.routes_ns import router as ns_router
+from api.routes_operacao import router as operacao_router
+from api.routes_processamento import router as processamento_router
 from api.routes_rdo import router as rdo_router
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
@@ -27,6 +29,8 @@ app.include_router(ns_router)
 app.include_router(rdo_router)
 app.include_router(campo_router)
 app.include_router(cadastro_router)
+app.include_router(processamento_router)
+app.include_router(operacao_router)
 
 
 @app.on_event("startup")
@@ -84,3 +88,23 @@ def tela_controle():
 @app.get("/campo")
 def tela_campo():
     return _servir_html("construdata_campo.html")
+
+
+@app.get("/perdas")
+def tela_perdas():
+    return _servir_html("construdata_perdas.html")
+
+
+@app.get("/editor")
+def tela_editor():
+    return _servir_html("construdata_editor.html")
+
+
+@app.get("/arquitetura-bim")
+def tela_arquitetura_bim():
+    return _servir_html("ARQUITETURA_BIM_5D.html")
+
+
+@app.get("/fluxograma-bim")
+def tela_fluxograma_bim():
+    return _servir_html("FLUXOGRAMA_BIM_5D.html")

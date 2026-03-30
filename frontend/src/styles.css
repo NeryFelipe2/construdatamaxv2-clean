@@ -355,6 +355,12 @@ h2 {
   color: #9de9d7;
 }
 
+.helper-text {
+  margin: -4px 0 0;
+  color: #93a3b3;
+  font-size: 0.94rem;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -442,6 +448,99 @@ tbody tr:hover,
 .rdo-list {
   display: grid;
   gap: 12px;
+}
+
+.operations-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.operations-card {
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(18, 216, 159, 0.06), transparent 34%),
+    rgba(5, 11, 19, 0.78);
+  border: 1px solid rgba(121, 140, 162, 0.14);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.ops-head {
+  display: grid;
+  gap: 6px;
+}
+
+.ops-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(18, 216, 159, 0.12);
+  color: #8ae8d2;
+  border: 1px solid rgba(18, 216, 159, 0.22);
+  font: 500 0.76rem/1 "IBM Plex Mono", monospace;
+}
+
+.ops-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ops-stat {
+  border-radius: 16px;
+  background: rgba(7, 15, 24, 0.72);
+  border: 1px solid rgba(121, 140, 162, 0.12);
+  padding: 12px;
+}
+
+.ops-stat span {
+  display: block;
+  color: #8ea0b0;
+  font: 500 0.72rem/1.2 "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.ops-stat strong {
+  display: block;
+}
+
+.ops-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ops-log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ops-log-list li {
+  border-radius: 16px;
+  background: rgba(7, 15, 24, 0.72);
+  border: 1px solid rgba(121, 140, 162, 0.12);
+  padding: 12px;
+}
+
+.ops-log-list strong,
+.ops-log-list span {
+  display: block;
+}
+
+.ops-log-list span {
+  color: #93a3b3;
+  margin-top: 4px;
 }
 
 .frame-meta {
@@ -534,6 +633,7 @@ tbody tr:hover,
   .two-column,
   .metrics-grid,
   .mini-grid,
+  .operations-grid,
   .artifact-grid,
   .module-grid,
   .api-grid,
@@ -567,7 +667,8 @@ tbody tr:hover,
   }
 
   .button-row,
-  .scope-row {
+  .scope-row,
+  .ops-links {
     flex-direction: column;
   }
 }
