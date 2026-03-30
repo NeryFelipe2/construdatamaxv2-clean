@@ -1,35 +1,18 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
-type Health = {
-  ok: boolean;
-  app: string;
-  display_name: string;
-};
+/* ─── Types ─── */
+
+type Health = { ok: boolean; app: string; display_name: string };
 
 type DashboardData = {
-  nucleo: string;
-  n_total: number;
-  n_planejadas: number;
-  n_execucao: number;
-  n_concluidas: number;
-  n_medidas: number;
-  pct_fisico: number;
-  pct_financeiro: number;
-  extensao_total_m: number;
-  extensao_exec_m: number;
-  valor_liberado: number;
-  rdos: number;
-  custo_rdo_total: number;
-  m_por_dia: number;
-  dias_medidos: number;
+  nucleo: string; n_total: number; n_planejadas: number; n_execucao: number;
+  n_concluidas: number; n_medidas: number; pct_fisico: number; pct_financeiro: number;
+  extensao_total_m: number; extensao_exec_m: number; valor_liberado: number;
+  rdos: number; custo_rdo_total: number; m_por_dia: number; dias_medidos: number;
 };
 
 type NsItem = Record<string, unknown>;
-
-type NsList = {
-  items: NsItem[];
-};
-
+type NsList = { items: NsItem[] };
 type NsDetail = NsItem & {
   materiais?: Array<{ descricao: string; unidade: string; quantidade: number }>;
   materiais_resumo?: string;
@@ -38,254 +21,99 @@ type NsDetail = NsItem & {
   checklist?: Array<Record<string, unknown>>;
 };
 
-type FotoItem = {
-  id?: number;
-  ns_id?: number;
-  caminho?: string;
-  legenda?: string;
-  data_hora?: string;
-};
+type FotoItem = { id?: number; ns_id?: number; caminho?: string; legenda?: string; data_hora?: string };
+type FotoList = { items: FotoItem[] };
 
-type FotoList = {
-  items: FotoItem[];
-};
-
-type ProcessArtifact = {
-  label: string;
-  path: string;
-  kind: string;
-};
-
+type ProcessArtifact = { label: string; path: string; kind: string };
 type ProcessJob = {
-  job_id: string | null;
-  status: string;
-  nucleo?: string;
-  fonte?: string;
-  motor?: string;
-  modo_rapido?: boolean;
-  arquivo?: string;
-  n_pvs?: number;
-  n_trechos?: number;
-  ns_geradas?: number;
-  ns_erros?: number;
-  artifacts: ProcessArtifact[];
-  created_at?: string;
-  detail?: string;
-  meta?: Record<string, unknown>;
+  job_id: string | null; status: string; nucleo?: string; fonte?: string; motor?: string;
+  modo_rapido?: boolean; arquivo?: string; n_pvs?: number; n_trechos?: number;
+  ns_geradas?: number; ns_erros?: number; artifacts: ProcessArtifact[];
+  created_at?: string; detail?: string; meta?: Record<string, unknown>;
 };
-
-type ProcessLogList = {
-  items: ProcessJob[];
-};
+type ProcessLogList = { items: ProcessJob[] };
 
 type RdoItem = {
-  id: number;
-  data: string;
-  numero?: number;
-  nucleo: string;
-  responsavel?: string;
-  contrato?: string;
-  clima_manha?: string;
-  clima_tarde?: string;
-  observacoes?: string;
-  status: string;
-  total_custo: number;
-  pdf_path?: string | null;
-  apontamentos?: Array<Record<string, unknown>>;
-  equipe?: Array<Record<string, unknown>>;
-  ocorrencias?: Array<Record<string, unknown>>;
-  fotos?: Array<Record<string, unknown>>;
+  id: number; data: string; numero?: number; nucleo: string; responsavel?: string;
+  contrato?: string; clima_manha?: string; clima_tarde?: string; observacoes?: string;
+  status: string; total_custo: number; pdf_path?: string | null;
+  apontamentos?: Array<Record<string, unknown>>; equipe?: Array<Record<string, unknown>>;
+  ocorrencias?: Array<Record<string, unknown>>; fotos?: Array<Record<string, unknown>>;
 };
+type RdoList = { items: RdoItem[] };
 
-type RdoList = {
-  items: RdoItem[];
-};
-
-type CurvaPoint = {
-  mes?: number;
-  mes_label?: string;
-  pct_acum?: number;
-  acum_pct?: number;
-  ext_acum?: number;
-  custo_acum?: number;
-};
-
-type CurvaS = {
-  previsto: CurvaPoint[];
-  realizado: CurvaPoint[];
-  n_total: number;
-  ext_total: number;
-  custo_total: number;
-};
+type CurvaPoint = { mes?: number; mes_label?: string; pct_acum?: number; acum_pct?: number; ext_acum?: number; custo_acum?: number };
+type CurvaS = { previsto: CurvaPoint[]; realizado: CurvaPoint[]; n_total: number; ext_total: number; custo_total: number };
 
 type LeanInsight = {
-  takt_metros_dia: number;
-  cycle_time_dias: number;
-  throughput_ns_semana: number;
-  ns_planejadas_semana: number;
-  ns_bloqueadas_semana: number;
-  ext_planejada_semana: number;
-  restricoes_lookahead: number;
-  alerta_lookahead: string;
-  valor_agregado_pct: number;
-  co2_total_ton: number;
-  custo_ciclo_vida_total: number;
+  takt_metros_dia: number; cycle_time_dias: number; throughput_ns_semana: number;
+  ns_planejadas_semana: number; ns_bloqueadas_semana: number; ext_planejada_semana: number;
+  restricoes_lookahead: number; alerta_lookahead: string; valor_agregado_pct: number;
+  co2_total_ton: number; custo_ciclo_vida_total: number;
 };
 
 type LossInsight = {
-  uarl_m3_ano: number;
-  uarl_litros_dia: number;
-  ili: number;
-  ili_classificacao: string;
-  risco_total_ano: number;
-  n_dmas: number;
-  custo_ineficiencia_ano: number;
+  uarl_m3_ano: number; uarl_litros_dia: number; ili: number; ili_classificacao: string;
+  risco_total_ano: number; n_dmas: number; custo_ineficiencia_ano: number;
 };
 
 type AnalyticsSummary = {
-  status: string;
-  gerado_em?: string;
-  algoritmo: string;
-  r2_test: number;
-  mae: number;
-  rmse: number;
-  n_modelos: number;
-  n_cenarios: number;
-  n_nucleos: number;
-  melhor_cenario?: Record<string, unknown>;
-  top_feature?: Record<string, unknown>;
-  origem?: string;
+  status: string; gerado_em?: string; algoritmo: string; r2_test: number; mae: number;
+  rmse: number; n_modelos: number; n_cenarios: number; n_nucleos: number;
+  melhor_cenario?: Record<string, unknown>; top_feature?: Record<string, unknown>; origem?: string;
 };
 
-type NucleoCatalog = {
-  items: Array<{ nome: string }>;
-  total: number;
-};
-
-type GeoJsonFeature = {
-  type: string;
-  geometry?: { type?: string };
-  properties?: Record<string, unknown>;
-};
-
-type GeoJson = {
-  type: string;
-  features: GeoJsonFeature[];
-};
-
-type ManageEdge = {
-  c?: number;
-  ext?: number;
-  status?: string;
-};
-
-type ManageData = {
-  nodes: Array<Record<string, unknown>>;
-  edges: ManageEdge[];
-  ox: number;
-  oy: number;
-  ext: number;
-  meta?: Record<string, unknown>;
-};
+type NucleoCatalog = { items: Array<{ nome: string }>; total: number };
+type GeoJsonFeature = { type: string; geometry?: { type?: string }; properties?: Record<string, unknown> };
+type GeoJson = { type: string; features: GeoJsonFeature[] };
+type ManageEdge = { c?: number; ext?: number; status?: string };
+type ManageData = { nodes: Array<Record<string, unknown>>; edges: ManageEdge[]; ox: number; oy: number; ext: number; meta?: Record<string, unknown> };
 
 type CronogramaFase = {
-  id: string;
-  nome: string;
-  inicio: string;
-  fim: string;
-  duracao_dias: number;
-  predecessora: string | null;
-  nucleo: string;
+  id: string; nome: string; inicio: string; fim: string; duracao_dias: number;
+  predecessora: string | null; nucleo: string;
 };
-
 type CronogramaNucleo = {
-  nome: string;
-  extensao_m: number;
-  n_trechos: number;
-  equipes: number;
-  inicio: string;
-  fim: string;
-  duracao_dias: number;
-  fases: CronogramaFase[];
+  nome: string; extensao_m: number; n_trechos: number; equipes: number;
+  inicio: string; fim: string; duracao_dias: number; fases: CronogramaFase[];
 };
-
 type CronogramaData = {
-  projeto: string;
-  empresa: string;
-  data_inicio: string;
-  data_fim: string;
-  duracao_total_dias: number;
-  total_tarefas: number;
-  nucleos: CronogramaNucleo[];
+  projeto: string; empresa: string; data_inicio: string; data_fim: string;
+  duracao_total_dias: number; total_tarefas: number; nucleos: CronogramaNucleo[];
 };
 
 type RdoFormState = {
-  data: string;
-  nucleo: string;
-  responsavel: string;
-  climaManha: string;
-  climaTarde: string;
-  equipeFuncao: string;
-  equipeQtd: string;
-  ocorrenciaTipo: string;
-  ocorrenciaHora: string;
-  ocorrenciaDescricao: string;
-  nsId: string;
-  servico: string;
-  quantidade: string;
-  unidade: string;
-  dnMm: string;
+  data: string; nucleo: string; responsavel: string; climaManha: string; climaTarde: string;
+  equipeFuncao: string; equipeQtd: string; ocorrenciaTipo: string; ocorrenciaHora: string;
+  ocorrenciaDescricao: string; nsId: string; servico: string; quantidade: string;
+  unidade: string; dnMm: string;
 };
 
-const NS_STATUS_OPTIONS = [
-  "PLANEJADA",
-  "EM_EXECUCAO",
-  "CONCLUIDA",
-  "MEDIDA",
-  "BLOQUEADA",
-];
+/* ─── Constants ─── */
 
+const NS_STATUS_OPTIONS = ["PLANEJADA", "EM_EXECUCAO", "CONCLUIDA", "MEDIDA", "BLOQUEADA"];
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 const NATIVE_BASE = API_BASE || "";
 
-const moduleLinks = [
-  { label: "RDO", hint: "Diario, fechamento e PDF", href: "/rdo" },
-  { label: "Campo", hint: "Coleta e consulta", href: "/campo" },
-  { label: "Manage", hint: "Rede 3D e propriedades", href: "/manage" },
-  { label: "Controle", hint: "Medicao e curva", href: "/controle" },
-  { label: "Perdas", hint: "Motor de perdas", href: "/perdas" },
-  { label: "Editor", hint: "Editor tecnico", href: "/editor" },
-  { label: "Arquitetura BIM", hint: "Estrutura 5D", href: "/arquitetura-bim" },
-  { label: "Fluxograma BIM", hint: "Fluxo executivo", href: "/fluxograma-bim" },
-];
+const TABS = [
+  { id: "processar", label: "[1] Processar" },
+  { id: "mapa", label: "[2] Mapa" },
+  { id: "rede", label: "[3] Rede" },
+  { id: "hidraulica", label: "[4] Hidraulica" },
+  { id: "trechos", label: "[5] Trechos" },
+  { id: "custos", label: "[6] Custos 5D" },
+  { id: "bim", label: "[7] BIM" },
+  { id: "lean", label: "[8] Lean/LPS" },
+  { id: "perdas", label: "[9] Perdas" },
+  { id: "ia", label: "[10] IA" },
+  { id: "nucleos", label: "[11] Nucleos" },
+  { id: "log", label: "[12] Log" },
+  { id: "gestao", label: "[13] Gestao" },
+] as const;
 
-const apiCatalog = [
-  { method: "GET", path: "/health", note: "Saude do backend" },
-  { method: "POST", path: "/api/processamento/importar", note: "Importa projeto e gera NS" },
-  { method: "GET", path: "/api/processamento/ultimo", note: "Ultimo job processado" },
-  { method: "GET", path: "/api/processamento/logs", note: "Historico dos ultimos jobs" },
-  { method: "GET", path: "/api/processamento/{job_id}", note: "JSON do job selecionado" },
-  { method: "GET", path: "/api/processamento/{job_id}/artefato/{rel_path}", note: "Primeiro artefato do job" },
-  { method: "GET", path: "/api/ns", note: "Lista de notas de servico" },
-  { method: "GET", path: "/api/ns/{id}", note: "Detalhe da NS selecionada" },
-  { method: "PATCH", path: "/api/ns/{id}/status", note: "Atualiza status da NS" },
-  { method: "GET", path: "/api/rdo", note: "Lista de RDOs" },
-  { method: "POST", path: "/api/rdo", note: "Cria RDO com equipe e apontamentos" },
-  { method: "PATCH", path: "/api/rdo/{id}/fechar", note: "Fecha RDO" },
-  { method: "GET", path: "/api/rdo/{id}/pdf", note: "PDF do RDO" },
-  { method: "GET", path: "/api/rdo/{data_ref}", note: "JSON do ultimo RDO por data e nucleo" },
-  { method: "GET", path: "/api/dashboard", note: "Pulso executivo" },
-  { method: "GET", path: "/api/cronograma", note: "Cronograma consolidado" },
-  { method: "GET", path: "/api/curva-s", note: "Curva S" },
-  { method: "GET", path: "/api/cadastro/geojson", note: "Cadastro tecnico" },
-  { method: "GET", path: "/api/manage/rede", note: "Dataset da rede real" },
-  { method: "GET", path: "/api/insights/lean-lps", note: "Lean, LPS e BIM 6D" },
-  { method: "GET", path: "/api/insights/perdas", note: "UARL, ILI e DMAs" },
-  { method: "GET", path: "/api/analytics/resumo", note: "Resumo do modulo de IA" },
-  { method: "GET", path: "/api/nucleos", note: "Catalogo de nucleos" },
-  { method: "GET", path: "/api/fotos/{ns_id}", note: "Fotos da NS" },
-  { method: "POST", path: "/webhook/whatsapp", note: "Entrada de webhook" },
-];
+type TabId = (typeof TABS)[number]["id"];
+
+/* ─── Helpers ─── */
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
@@ -301,177 +129,96 @@ function nativeUrl(path: string): string {
 
 async function getJson<T>(path: string, nucleo = ""): Promise<T> {
   const url = new URL(apiUrl(path), window.location.origin);
-  if (nucleo) {
-    url.searchParams.set("nucleo", nucleo);
-  }
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error(`Falha ao carregar ${path}: ${response.status}`);
-  }
-  return response.json() as Promise<T>;
+  if (nucleo) url.searchParams.set("nucleo", nucleo);
+  const r = await fetch(url.toString());
+  if (!r.ok) throw new Error(`Falha ao carregar ${path}: ${r.status}`);
+  return r.json() as Promise<T>;
 }
 
-function maybeFixEncoding(value: string): string {
-  if (!/[ÃƒÆ’Ã†'ÃƒÆ’Ã‚¢ÃƒÆ’ââ‚¬Å¡]/.test(value)) {
-    return value;
-  }
-
-  try {
-    const bytes = Uint8Array.from(value, (char) => char.charCodeAt(0));
-    return new TextDecoder("utf-8").decode(bytes);
-  } catch {
-    return value;
-  }
+function maybeFixEncoding(v: string): string {
+  if (!/[ÃƒÆ'Ã†'ÃƒÆ'Ã‚¢ÃƒÆ'ââ‚¬Å¡]/.test(v)) return v;
+  try { return new TextDecoder("utf-8").decode(Uint8Array.from(v, c => c.charCodeAt(0))); } catch { return v; }
 }
 
-function cleanText(value: unknown): string {
-  if (typeof value !== "string") {
-    return value == null ? "" : String(value);
-  }
-  return maybeFixEncoding(value);
+function cleanText(v: unknown): string {
+  if (typeof v !== "string") return v == null ? "" : String(v);
+  return maybeFixEncoding(v);
 }
 
-function asNumber(value: unknown): number {
-  if (typeof value === "number") {
-    return value;
-  }
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
+function asNumber(v: unknown): number {
+  if (typeof v === "number") return v;
+  if (typeof v === "string") { const n = Number(v); return Number.isFinite(n) ? n : 0; }
   return 0;
 }
 
-function formatInt(value: number): string {
-  return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(value);
+function formatInt(v: number): string { return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(v); }
+function formatMeters(v: number): string { return `${new Intl.NumberFormat("pt-BR", { maximumFractionDigits: v >= 100 ? 0 : 1 }).format(v)} m`; }
+function formatPercent(v: number): string { return `${new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(v)}%`; }
+function formatCurrency(v: number): string { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(v); }
+
+function formatDate(v?: string | null): string {
+  if (!v) return "-";
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${v}T12:00:00`));
 }
 
-function formatMeters(value: number): string {
-  return `${new Intl.NumberFormat("pt-BR", {
-    maximumFractionDigits: value >= 100 ? 0 : 1,
-  }).format(value)} m`;
-}
-
-function formatPercent(value: number): string {
-  return `${new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(value)}%`;
-}
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatDate(value?: string | null): string {
-  if (!value) {
-    return "-";
-  }
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(`${value}T12:00:00`));
-}
-
-function formatDateTime(value?: string): string {
-  if (!value) {
-    return "-";
-  }
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
+function formatDateTime(v?: string): string {
+  if (!v) return "-";
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(v));
 }
 
 function artifactHref(jobId: string | null, relPath: string): string {
-  if (!jobId) {
-    return "#";
-  }
-  const safePath = relPath.split("/").map((chunk) => encodeURIComponent(chunk)).join("/");
+  if (!jobId) return "#";
+  const safePath = relPath.split("/").map(c => encodeURIComponent(c)).join("/");
   return apiUrl(`/api/processamento/${jobId}/artefato/${safePath}`);
 }
 
 function nsCode(item: NsItem): string {
   const raw = item.codigo ?? item.codigo_ns ?? item.ns_codigo ?? item.ns ?? item.numero ?? item.id;
-  if (raw === undefined || raw === null || raw === "") {
-    return "NS";
-  }
-  if (typeof raw === "number") {
-    return `NS ${String(raw).padStart(3, "0")}`;
-  }
+  if (raw === undefined || raw === null || raw === "") return "NS";
+  if (typeof raw === "number") return `NS ${String(raw).padStart(3, "0")}`;
   return cleanText(raw);
 }
 
 function nsTrecho(item: NsItem): string {
   const pvIni = item.pv_ini ?? item.pv_montante ?? item.origem;
   const pvFim = item.pv_fim ?? item.pv_jusante ?? item.destino;
-  if (pvIni || pvFim) {
-    return `${cleanText(pvIni ?? "-")} -> ${cleanText(pvFim ?? "-")}`;
-  }
+  if (pvIni || pvFim) return `${cleanText(pvIni ?? "-")} -> ${cleanText(pvFim ?? "-")}`;
   return cleanText(item.trecho ?? "-");
 }
 
-function toneClass(value: unknown): string {
-  const text = cleanText(value).toLowerCase();
-  if (text.includes("concl") || text.includes("live") || text.includes("ok")) {
-    return "pill pill-ok";
-  }
-  if (text.includes("exec") || text.includes("aberto") || text.includes("build")) {
-    return "pill pill-warn";
-  }
-  if (text.includes("erro") || text.includes("fail") || text.includes("bloq")) {
-    return "pill pill-bad";
-  }
+function toneClass(v: unknown): string {
+  const t = cleanText(v).toLowerCase();
+  if (t.includes("concl") || t.includes("live") || t.includes("ok")) return "pill pill-ok";
+  if (t.includes("exec") || t.includes("aberto") || t.includes("build")) return "pill pill-warn";
+  if (t.includes("erro") || t.includes("fail") || t.includes("bloq")) return "pill pill-bad";
   return "pill pill-neutral";
 }
 
 function currentPhase(nucleo: CronogramaNucleo): CronogramaFase | null {
   const now = Date.now();
-  for (const fase of nucleo.fases) {
-    const start = new Date(`${fase.inicio}T12:00:00`).getTime();
-    const end = new Date(`${fase.fim}T12:00:00`).getTime();
-    if (now >= start && now <= end) {
-      return fase;
-    }
+  for (const f of nucleo.fases) {
+    const s = new Date(`${f.inicio}T12:00:00`).getTime();
+    const e = new Date(`${f.fim}T12:00:00`).getTime();
+    if (now >= s && now <= e) return f;
   }
-  for (const fase of nucleo.fases) {
-    const start = new Date(`${fase.inicio}T12:00:00`).getTime();
-    if (now < start) {
-      return fase;
-    }
+  for (const f of nucleo.fases) {
+    if (now < new Date(`${f.inicio}T12:00:00`).getTime()) return f;
   }
   return nucleo.fases.at(-1) ?? null;
 }
 
 function makeDefaultRdoForm(nucleo = ""): RdoFormState {
   return {
-    data: todayIso(),
-    nucleo,
-    responsavel: "",
-    climaManha: "Sol",
-    climaTarde: "Sol",
-    equipeFuncao: "",
-    equipeQtd: "1",
-    ocorrenciaTipo: "outro",
-    ocorrenciaHora: "",
-    ocorrenciaDescricao: "",
-    nsId: "",
-    servico: "",
-    quantidade: "",
-    unidade: "m",
-    dnMm: "",
+    data: todayIso(), nucleo, responsavel: "", climaManha: "Sol", climaTarde: "Sol",
+    equipeFuncao: "", equipeQtd: "1", ocorrenciaTipo: "outro", ocorrenciaHora: "",
+    ocorrenciaDescricao: "", nsId: "", servico: "", quantidade: "", unidade: "m", dnMm: "",
   };
 }
 
+/* ─── APP ─── */
+
 export default function App() {
+  const [activeTab, setActiveTab] = useState<TabId>("processar");
   const [health, setHealth] = useState<Health | null>(null);
   const [cronograma, setCronograma] = useState<CronogramaData | null>(null);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
@@ -486,10 +233,6 @@ export default function App() {
   const [selectedNsDetail, setSelectedNsDetail] = useState<NsDetail | null>(null);
   const [selectedNsPhotos, setSelectedNsPhotos] = useState<FotoItem[]>([]);
   const [pendingStatus, setPendingStatus] = useState("PLANEJADA");
-  const [booting, setBooting] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [nsDetailLoading, setNsDetailLoading] = useState(false);
-  const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadNucleo, setUploadNucleo] = useState("");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -504,1464 +247,876 @@ export default function App() {
   const [rdoForm, setRdoForm] = useState<RdoFormState>(makeDefaultRdoForm());
   const [rdoMessage, setRdoMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [activeModulePath, setActiveModulePath] = useState("/manage");
+  const [error, setError] = useState("");
 
+  // ── Data loading ──
   useEffect(() => {
     let active = true;
-
     async function loadBase() {
-      setBooting(true);
-      const [healthResult, cronogramaResult, jobResult, logsResult, analyticsResult, nucleosResult] =
-        await Promise.allSettled([
+      const [hR, cR, jR, lR, aR, nR] = await Promise.allSettled([
         getJson<Health>("/health"),
         getJson<CronogramaData>("/api/cronograma"),
         getJson<ProcessJob>("/api/processamento/ultimo"),
-          getJson<ProcessLogList>("/api/processamento/logs"),
-          getJson<AnalyticsSummary>("/api/analytics/resumo"),
-          getJson<NucleoCatalog>("/api/nucleos"),
-        ]);
-
-      if (!active) {
-        return;
-      }
-
-      if (healthResult.status === "fulfilled") {
-        setHealth(healthResult.value);
-      }
-      if (cronogramaResult.status === "fulfilled") {
-        setCronograma(cronogramaResult.value);
-      }
-      if (jobResult.status === "fulfilled") {
-        setLatestJob(jobResult.value);
-      }
-      if (logsResult.status === "fulfilled") {
-        setProcessLogs(logsResult.value);
-      }
-      if (analyticsResult.status === "fulfilled") {
-        setAnalyticsSummary(analyticsResult.value);
-      }
-      if (nucleosResult.status === "fulfilled") {
-        setNucleoCatalog(nucleosResult.value);
-      }
-
-      const failures = [healthResult, cronogramaResult].filter((item) => item.status === "rejected");
-      if (failures.length > 0) {
-        const first = failures[0] as PromiseRejectedResult;
-        setError(first.reason instanceof Error ? first.reason.message : "Falha ao carregar a base");
-      } else {
-        setError("");
-      }
-
-      setBooting(false);
+        getJson<ProcessLogList>("/api/processamento/logs"),
+        getJson<AnalyticsSummary>("/api/analytics/resumo"),
+        getJson<NucleoCatalog>("/api/nucleos"),
+      ]);
+      if (!active) return;
+      if (hR.status === "fulfilled") setHealth(hR.value);
+      if (cR.status === "fulfilled") setCronograma(cR.value);
+      if (jR.status === "fulfilled") setLatestJob(jR.value);
+      if (lR.status === "fulfilled") setProcessLogs(lR.value);
+      if (aR.status === "fulfilled") setAnalyticsSummary(aR.value);
+      if (nR.status === "fulfilled") setNucleoCatalog(nR.value);
+      const fails = [hR, cR].filter(r => r.status === "rejected");
+      if (fails.length > 0) {
+        const f = fails[0] as PromiseRejectedResult;
+        setError(f.reason instanceof Error ? f.reason.message : "Falha ao carregar a base");
+      } else setError("");
     }
-
     loadBase();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [refreshKey]);
 
   useEffect(() => {
     let active = true;
-
     async function loadScope() {
-      setRefreshing(true);
-      const [dashboardResult, nsResult, rdoResult, curvaResult, geoResult, manageResult] =
-        await Promise.allSettled([
-          getJson<DashboardData>("/api/dashboard", selectedNucleo),
-          getJson<NsList>("/api/ns", selectedNucleo),
-          getJson<RdoList>("/api/rdo", selectedNucleo),
-          getJson<CurvaS>("/api/curva-s", selectedNucleo),
-          getJson<GeoJson>("/api/cadastro/geojson", selectedNucleo),
-          getJson<ManageData>("/api/manage/rede", selectedNucleo),
-        ]);
-
-      if (!active) {
-        return;
-      }
-
-      if (dashboardResult.status === "fulfilled") {
-        setDashboard(dashboardResult.value);
-      }
-      if (nsResult.status === "fulfilled") {
-        setNsList(nsResult.value);
-      }
-      if (rdoResult.status === "fulfilled") {
-        setRdoList(rdoResult.value);
-      }
-      if (curvaResult.status === "fulfilled") {
-        setCurvaS(curvaResult.value);
-      }
-      if (geoResult.status === "fulfilled") {
-        setGeoJson(geoResult.value);
-      }
-      if (manageResult.status === "fulfilled") {
-        setManageData(manageResult.value);
-      }
-
-      const failures = [dashboardResult, nsResult, rdoResult, curvaResult, geoResult, manageResult].filter(
-        (item) => item.status === "rejected",
-      );
-      if (failures.length > 0) {
-        const first = failures[0] as PromiseRejectedResult;
-        setError(first.reason instanceof Error ? first.reason.message : "Falha ao carregar o escopo");
-      } else {
-        setError("");
-      }
-
-      setRefreshing(false);
+      const [dR, nsR, rR, csR, gR, mR] = await Promise.allSettled([
+        getJson<DashboardData>("/api/dashboard", selectedNucleo),
+        getJson<NsList>("/api/ns", selectedNucleo),
+        getJson<RdoList>("/api/rdo", selectedNucleo),
+        getJson<CurvaS>("/api/curva-s", selectedNucleo),
+        getJson<GeoJson>("/api/cadastro/geojson", selectedNucleo),
+        getJson<ManageData>("/api/manage/rede", selectedNucleo),
+      ]);
+      if (!active) return;
+      if (dR.status === "fulfilled") setDashboard(dR.value);
+      if (nsR.status === "fulfilled") setNsList(nsR.value);
+      if (rR.status === "fulfilled") setRdoList(rR.value);
+      if (csR.status === "fulfilled") setCurvaS(csR.value);
+      if (gR.status === "fulfilled") setGeoJson(gR.value);
+      if (mR.status === "fulfilled") setManageData(mR.value);
     }
-
     loadScope();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [selectedNucleo, refreshKey]);
 
   useEffect(() => {
     let active = true;
-
     async function loadInsights() {
-      const [leanResult, lossResult] = await Promise.allSettled([
+      const [lR, pR] = await Promise.allSettled([
         getJson<LeanInsight>("/api/insights/lean-lps", selectedNucleo),
         getJson<LossInsight>("/api/insights/perdas", selectedNucleo),
       ]);
-
-      if (!active) {
-        return;
-      }
-
-      if (leanResult.status === "fulfilled") {
-        setLeanInsight(leanResult.value);
-      }
-      if (lossResult.status === "fulfilled") {
-        setLossInsight(lossResult.value);
-      }
+      if (!active) return;
+      if (lR.status === "fulfilled") setLeanInsight(lR.value);
+      if (pR.status === "fulfilled") setLossInsight(pR.value);
     }
-
     loadInsights();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [selectedNucleo, refreshKey]);
 
   useEffect(() => {
     let active = true;
-
     async function loadNsDetail() {
-      if (!selectedNsId) {
-        setSelectedNsDetail(null);
-        setSelectedNsPhotos([]);
-        return;
-      }
-
-      setNsDetailLoading(true);
-      const [detailResult, photoResult] = await Promise.allSettled([
+      if (!selectedNsId) { setSelectedNsDetail(null); setSelectedNsPhotos([]); return; }
+      const [dR, pR] = await Promise.allSettled([
         getJson<NsDetail>(`/api/ns/${selectedNsId}`),
         getJson<FotoList>(`/api/fotos/${selectedNsId}`),
       ]);
-
-      if (!active) {
-        return;
-      }
-
-      if (detailResult.status === "fulfilled") {
-        setSelectedNsDetail(detailResult.value);
-        setPendingStatus(cleanText(detailResult.value.status || "PLANEJADA"));
-      }
-      if (photoResult.status === "fulfilled") {
-        setSelectedNsPhotos(photoResult.value.items || []);
-      }
-      setNsDetailLoading(false);
+      if (!active) return;
+      if (dR.status === "fulfilled") { setSelectedNsDetail(dR.value); setPendingStatus(cleanText(dR.value.status || "PLANEJADA")); }
+      if (pR.status === "fulfilled") setSelectedNsPhotos(pR.value.items || []);
     }
-
     loadNsDetail();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [selectedNsId, refreshKey]);
 
   useEffect(() => {
-    setRdoForm((current) => ({
-      ...current,
-      nucleo: current.nucleo || selectedNucleo,
-    }));
+    setRdoForm(c => ({ ...c, nucleo: c.nucleo || selectedNucleo }));
   }, [selectedNucleo]);
 
-  async function handleImport(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!uploadFile) {
-      setUploadMessage("Escolha um arquivo antes de processar.");
-      return;
-    }
-
-    setUploading(true);
-    setUploadMessage("");
-
-    const payload = new FormData();
-    payload.append("arquivo", uploadFile);
-    payload.append("nucleo", uploadNucleo);
-    payload.append("modo_rapido", quickMode ? "true" : "false");
-    payload.append("motor", selectedMotor);
-
+  // ── Handlers ──
+  async function handleImport(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!uploadFile) { setUploadMessage("Escolha um arquivo antes de processar."); return; }
+    setUploading(true); setUploadMessage("");
+    const fd = new FormData();
+    fd.append("arquivo", uploadFile);
+    fd.append("nucleo", uploadNucleo);
+    fd.append("modo_rapido", quickMode ? "true" : "false");
+    fd.append("motor", selectedMotor);
     try {
-      const response = await fetch(apiUrl("/api/processamento/importar"), {
-        method: "POST",
-        body: payload,
-      });
-      const data = (await response.json()) as ProcessJob & { detail?: string };
-      if (!response.ok) {
-        throw new Error(data.detail || "Falha ao importar projeto");
-      }
-      setLatestJob(data);
-      setUploadMessage(
-        `Projeto processado com ${cleanText(data.motor ?? selectedMotor).toUpperCase()}. ${data.ns_geradas ?? 0} NS geradas.`,
-      );
-      if (data.nucleo) {
-        setSelectedNucleo(data.nucleo);
-      }
-      setRefreshKey((value) => value + 1);
-    } catch (err) {
-      setUploadMessage(err instanceof Error ? err.message : "Falha ao importar projeto");
-    } finally {
-      setUploading(false);
-    }
+      const r = await fetch(apiUrl("/api/processamento/importar"), { method: "POST", body: fd });
+      const d = (await r.json()) as ProcessJob & { detail?: string };
+      if (!r.ok) throw new Error(d.detail || "Falha ao importar projeto");
+      setLatestJob(d);
+      setUploadMessage(`Projeto processado com ${cleanText(d.motor ?? selectedMotor).toUpperCase()}. ${d.ns_geradas ?? 0} NS geradas.`);
+      if (d.nucleo) setSelectedNucleo(d.nucleo);
+      setRefreshKey(v => v + 1);
+    } catch (err) { setUploadMessage(err instanceof Error ? err.message : "Falha ao importar projeto"); }
+    finally { setUploading(false); }
   }
 
   function handleUploadFileChange(file: File | null) {
     setUploadFile(file);
-    if (!file) {
-      return;
-    }
-
+    if (!file) return;
     const lower = file.name.toLowerCase();
-    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) {
-      setSelectedMotor("v9");
-    }
+    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) setSelectedMotor("v9");
   }
 
   async function handleNsStatusUpdate() {
-    if (!selectedNsId) {
-      return;
-    }
-
+    if (!selectedNsId) return;
     try {
-      const response = await fetch(apiUrl(`/api/ns/${selectedNsId}/status`), {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+      const r = await fetch(apiUrl(`/api/ns/${selectedNsId}/status`), {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: pendingStatus, data_referencia: todayIso() }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.detail || "Falha ao atualizar status");
-      }
-      setSelectedNsDetail((current) => (current ? { ...current, status: pendingStatus } : current));
-      setRefreshKey((value) => value + 1);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Falha ao atualizar status");
-    }
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || "Falha ao atualizar status");
+      setSelectedNsDetail(c => c ? { ...c, status: pendingStatus } : c);
+      setRefreshKey(v => v + 1);
+    } catch (err) { setError(err instanceof Error ? err.message : "Falha ao atualizar status"); }
   }
 
-  async function handleCreateRdo(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setRdoMessage("");
-
+  async function handleCreateRdo(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault(); setRdoMessage("");
     const payload: Record<string, unknown> = {
-      data: rdoForm.data,
-      nucleo: rdoForm.nucleo || selectedNucleo || "REDE",
-      responsavel: rdoForm.responsavel,
-      rt: rdoForm.responsavel,
-      clima: {
-        manha: rdoForm.climaManha,
-        tarde: rdoForm.climaTarde,
-      },
+      data: rdoForm.data, nucleo: rdoForm.nucleo || selectedNucleo || "REDE",
+      responsavel: rdoForm.responsavel, rt: rdoForm.responsavel,
+      clima: { manha: rdoForm.climaManha, tarde: rdoForm.climaTarde },
     };
-
-    if (rdoForm.equipeFuncao && Number(rdoForm.equipeQtd) > 0) {
+    if (rdoForm.equipeFuncao && Number(rdoForm.equipeQtd) > 0)
       payload.equipe = [{ funcao: rdoForm.equipeFuncao, qtd: Number(rdoForm.equipeQtd) }];
-    }
-    if (rdoForm.ocorrenciaDescricao) {
-      payload.ocorrencias = [
-        {
-          tipo: rdoForm.ocorrenciaTipo,
-          desc: rdoForm.ocorrenciaDescricao,
-          hora: rdoForm.ocorrenciaHora,
-        },
-      ];
-    }
-    if (rdoForm.nsId && rdoForm.servico && Number(rdoForm.quantidade) > 0) {
-      payload.servicos = {
-        [rdoForm.nsId]: [
-          {
-            ns_id: Number(rdoForm.nsId),
-            servico: rdoForm.servico,
-            qtd: Number(rdoForm.quantidade),
-            unidade: rdoForm.unidade || "m",
-            dn_mm: Number(rdoForm.dnMm || 0),
-          },
-        ],
-      };
-    }
-
+    if (rdoForm.ocorrenciaDescricao)
+      payload.ocorrencias = [{ tipo: rdoForm.ocorrenciaTipo, desc: rdoForm.ocorrenciaDescricao, hora: rdoForm.ocorrenciaHora }];
+    if (rdoForm.nsId && rdoForm.servico && Number(rdoForm.quantidade) > 0)
+      payload.servicos = { [rdoForm.nsId]: [{ ns_id: Number(rdoForm.nsId), servico: rdoForm.servico, qtd: Number(rdoForm.quantidade), unidade: rdoForm.unidade || "m", dn_mm: Number(rdoForm.dnMm || 0) }] };
     try {
-      const response = await fetch(apiUrl("/api/rdo"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.detail || "Falha ao criar RDO");
-      }
-      setRdoMessage(`RDO ${data.numero ?? data.id} salvo com sucesso.`);
+      const r = await fetch(apiUrl("/api/rdo"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || "Falha ao criar RDO");
+      setRdoMessage(`RDO ${d.numero ?? d.id} salvo com sucesso.`);
       setRdoForm(makeDefaultRdoForm(rdoForm.nucleo || selectedNucleo));
-      setRefreshKey((value) => value + 1);
-    } catch (err) {
-      setRdoMessage(err instanceof Error ? err.message : "Falha ao criar RDO");
-    }
+      setRefreshKey(v => v + 1);
+    } catch (err) { setRdoMessage(err instanceof Error ? err.message : "Falha ao criar RDO"); }
   }
 
   async function handleCloseRdo(rdoId: number) {
     try {
-      const response = await fetch(apiUrl(`/api/rdo/${rdoId}/fechar`), {
-        method: "PATCH",
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.detail || "Falha ao fechar RDO");
-      }
-      setRdoMessage(`RDO ${data.numero ?? data.id} fechado.`);
-      setRefreshKey((value) => value + 1);
-    } catch (err) {
-      setRdoMessage(err instanceof Error ? err.message : "Falha ao fechar RDO");
-    }
+      const r = await fetch(apiUrl(`/api/rdo/${rdoId}/fechar`), { method: "PATCH" });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || "Falha ao fechar RDO");
+      setRdoMessage(`RDO ${d.numero ?? d.id} fechado.`);
+      setRefreshKey(v => v + 1);
+    } catch (err) { setRdoMessage(err instanceof Error ? err.message : "Falha ao fechar RDO"); }
   }
 
+  // ── Derived data ──
   const projectName = cleanText(cronograma?.projeto ?? health?.display_name ?? "ConstruDataMaxV2");
-  const companyName = cleanText(cronograma?.empresa ?? "Operacao NS");
+  const companyName = cleanText(cronograma?.empresa ?? "FCN Construcoes e Saneamento");
   const nuclei = cronograma?.nucleos ?? [];
-  const visibleNuclei = useMemo(
-    () => (selectedNucleo ? nuclei.filter((item) => item.nome === selectedNucleo) : nuclei),
-    [nuclei, selectedNucleo],
-  );
-  const activeModule = moduleLinks.find((item) => item.href === activeModulePath) ?? moduleLinks[0];
-  const latestNs = nsList.items.slice(0, 12);
+  const visibleNuclei = useMemo(() => selectedNucleo ? nuclei.filter(n => n.nome === selectedNucleo) : nuclei, [nuclei, selectedNucleo]);
+  const latestNs = nsList.items.slice(0, 20);
   const latestRdos = rdoList.items.slice(0, 10);
-  const latestRdo = latestRdos[0] ?? null;
   const curvePrev = curvaS?.previsto.at(-1);
   const curveReal = curvaS?.realizado.at(-1);
-  const manageCost = (manageData?.edges ?? []).reduce((acc, edge) => acc + asNumber(edge.c), 0);
-  const artifactKinds = (latestJob?.artifacts ?? []).reduce<Record<string, number>>((acc, artifact) => {
-    const kind = cleanText(artifact.kind).toLowerCase() || "outros";
-    acc[kind] = (acc[kind] ?? 0) + 1;
-    return acc;
-  }, {});
-  const geoTrechos = (geoJson?.features ?? []).filter(
-    (feature) => cleanText(feature.properties?.feature_type) === "trecho",
-  ).length;
-  const geoPvs = (geoJson?.features ?? []).filter(
-    (feature) => cleanText(feature.properties?.feature_type) === "pv",
-  ).length;
+  const manageCost = (manageData?.edges ?? []).reduce((a, e) => a + asNumber(e.c), 0);
+  const geoTrechos = (geoJson?.features ?? []).filter(f => cleanText(f.properties?.feature_type) === "trecho").length;
+  const geoPvs = (geoJson?.features ?? []).filter(f => cleanText(f.properties?.feature_type) === "pv").length;
   const nucleoNames = useMemo(() => {
-    const nomes = new Set<string>();
-    for (const item of nuclei) {
-      if (item.nome) {
-        nomes.add(cleanText(item.nome));
-      }
-    }
-    for (const item of nucleoCatalog.items) {
-      if (item.nome) {
-        nomes.add(cleanText(item.nome));
-      }
-    }
-    return [...nomes].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const s = new Set<string>();
+    for (const n of nuclei) if (n.nome) s.add(cleanText(n.nome));
+    for (const n of nucleoCatalog.items) if (n.nome) s.add(cleanText(n.nome));
+    return [...s].sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [nuclei, nucleoCatalog.items]);
-  const latestProcessLogs = processLogs.items.slice(0, 6);
   const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5" : "Hydro v9";
 
-  function catalogHref(path: string, method: string): string {
-    if (method !== "GET") {
-      return nativeUrl("/");
+  // ── Tab renderers ──
+
+  function renderProcessar() {
+    return (
+      <>
+        <div className="section-title">Pipeline de Processamento</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" type="button" onClick={() => document.getElementById("import-form")?.scrollIntoView()}>
+            PIPELINE COMPLETO
+          </button>
+          <button className="action-btn btn-cyan" type="button" onClick={() => {
+            const el = document.getElementById("file-input") as HTMLInputElement | null;
+            el?.click();
+          }}>APENAS LER</button>
+          <button className="action-btn btn-white" type="button" disabled>DWG SEMANTICO</button>
+          <button className="action-btn btn-white" type="button" disabled>DWG UNIVERSAL</button>
+          <button className="action-btn btn-purple" type="button" disabled>BATCH NUCLEOS</button>
+          <button className="action-btn btn-orange" type="button" disabled>BATCH PROLONGAMENTOS</button>
+          <a className="action-btn btn-dark" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR SAIDA</a>
+          <a className="action-btn btn-white" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">EDITOR HTML</a>
+        </div>
+
+        {uploading && (
+          <div className="progress-wrap">
+            <div className="progress-fill" style={{ width: "60%" }} />
+          </div>
+        )}
+
+        {uploadMessage && (
+          <div className={uploadMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>
+            {uploadMessage}
+          </div>
+        )}
+
+        <form id="import-form" onSubmit={handleImport}>
+          <div className="form-row">
+            <div className="form-field">
+              <label>Nucleo</label>
+              <input type="text" placeholder="Ex.: Teteu" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <label>Arquivo</label>
+              <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} />
+            </div>
+            <div className="form-field">
+              <label>Motor de NS</label>
+              <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
+                <option value="v5">NOVA NS v5 (SABESP)</option>
+                <option value="v9">NS v9 (padrao)</option>
+              </select>
+            </div>
+          </div>
+          <div className="form-check">
+            <input type="checkbox" checked={quickMode} onChange={e => setQuickMode(e.target.checked)} />
+            <label>Modo rapido</label>
+          </div>
+          <div className="action-row">
+            <button className="action-btn btn-green" type="submit" disabled={uploading}>
+              {uploading ? "Processando..." : "IMPORTAR E GERAR"}
+            </button>
+          </div>
+        </form>
+
+        {latestJob && (
+          <>
+            <div className="section-title" style={{ marginTop: 16 }}>RESUMO</div>
+            <div className="resumo-box">
+              <strong>Arquivo:</strong> {cleanText(latestJob.arquivo ?? "-")} | <strong>Motor:</strong> {cleanText(latestJob.motor ?? "-").toUpperCase()} | <strong>Tipo:</strong> {cleanText(latestJob.fonte ?? "-")} | <strong>PVs:</strong> {formatInt(latestJob.n_pvs ?? 0)} | <strong>Trechos:</strong> {formatInt(latestJob.n_trechos ?? 0)} | <strong>NS:</strong> {formatInt(latestJob.ns_geradas ?? 0)} ok, {formatInt(latestJob.ns_erros ?? 0)} erro
+            </div>
+
+            {latestJob.artifacts.length > 0 && (
+              <>
+                <div className="section-title">SAIDAS DO PIPELINE</div>
+                <div className="output-list">
+                  {latestJob.artifacts.slice(0, 20).map(a => (
+                    <a className="output-item" key={`${latestJob.job_id}-${a.path}`} href={artifactHref(latestJob.job_id, a.path)} target="_blank" rel="noreferrer">
+                      <span className="folder">{a.kind.toUpperCase()}/</span>
+                      <span className="desc">{a.label}</span>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </>
+    );
+  }
+
+  function renderMapa() {
+    return (
+      <>
+        <div className="section-title">Mapa da Rede</div>
+        <div className="action-row">
+          <a className="action-btn btn-green" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR EM NOVA GUIA</a>
+        </div>
+        <div className="module-frame-wrap">
+          <iframe src={nativeUrl("/manage")} title="Mapa" />
+        </div>
+      </>
+    );
+  }
+
+  function renderRede() {
+    return (
+      <>
+        <div className="section-title">Rede 3D — Manage Dataset</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Nos</span><span className="kpi-value">{formatInt(manageData?.nodes.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Arestas</span><span className="kpi-value">{formatInt(manageData?.edges.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Extensao</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
+        </div>
+        <div className="action-row">
+          <a className="action-btn btn-cyan" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">VIEWER 3D</a>
+          <a className="action-btn btn-dark" href={apiUrl("/api/manage/rede")} target="_blank" rel="noreferrer">JSON BRUTO</a>
+        </div>
+        <div className="module-frame-wrap">
+          <iframe src={nativeUrl("/manage")} title="Rede" />
+        </div>
+      </>
+    );
+  }
+
+  function renderHidraulica() {
+    return (
+      <>
+        <div className="section-title">Hidraulica — Notas de Servico</div>
+        <div className="section-subtitle">Selecione uma NS para ver detalhe, materiais, checklist e fotos</div>
+
+        <div className="scope-bar">
+          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
+          {nucleoNames.slice(0, 10).map(n => (
+            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
+          ))}
+        </div>
+
+        <div className="two-col">
+          <div>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>NS</th><th>Trecho</th><th>Status</th><th>DN</th><th>Ext</th>
+                </tr>
+              </thead>
+              <tbody>
+                {latestNs.length ? latestNs.map((item, i) => {
+                  const id = asNumber(item.id);
+                  return (
+                    <tr key={`${id}-${i}`} className={selectedNsId === id ? "row-active" : ""} onClick={() => setSelectedNsId(id)}>
+                      <td>{nsCode(item)}</td>
+                      <td>{nsTrecho(item)}</td>
+                      <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
+                      <td>{formatInt(asNumber(item.dn_mm))}</td>
+                      <td>{formatMeters(asNumber(item.ext_m))}</td>
+                    </tr>
+                  );
+                }) : <tr><td colSpan={5} className="empty">Nenhuma NS disponivel.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            {selectedNsDetail ? (
+              <div className="detail-panel">
+                <div className="section-title">{nsCode(selectedNsDetail)}</div>
+                <div className="detail-row"><span className="dlabel">Nucleo</span><span className="dvalue">{cleanText(selectedNsDetail.nucleo)}</span></div>
+                <div className="detail-row"><span className="dlabel">Rua</span><span className="dvalue">{cleanText(selectedNsDetail.rua ?? "-")}</span></div>
+                <div className="detail-row"><span className="dlabel">Material</span><span className="dvalue">{cleanText(selectedNsDetail.material ?? "-")}</span></div>
+                <div className="detail-row"><span className="dlabel">Checklist</span><span className="dvalue">{formatInt((selectedNsDetail.checklist ?? []).filter(c => Boolean(c.concluido)).length)} / {formatInt(selectedNsDetail.checklist?.length ?? 0)}</span></div>
+
+                <div style={{ marginTop: 10 }}>
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Status</label>
+                      <select value={pendingStatus} onChange={e => setPendingStatus(e.target.value)}>
+                        {NS_STATUS_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <button className="action-btn btn-green" onClick={handleNsStatusUpdate}>ATUALIZAR STATUS</button>
+                </div>
+
+                {(selectedNsDetail.materiais ?? []).length > 0 && (
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Materiais</div>
+                    <ul className="mat-list">
+                      {(selectedNsDetail.materiais ?? []).slice(0, 12).map((m, i) => (
+                        <li key={`${m.descricao}-${i}`}>{m.quantidade} {m.unidade} - {cleanText(m.descricao)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {(selectedNsDetail.checklist ?? []).length > 0 && (
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Checklist</div>
+                    <ul className="checklist">
+                      {(selectedNsDetail.checklist ?? []).map(c => (
+                        <li key={String(c.id)}>
+                          <span className={c.concluido ? "check-ok" : "check-pend"}>{c.concluido ? "OK" : "PEND"}</span>{" "}
+                          {cleanText(c.item)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {selectedNsPhotos.length > 0 && (
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Fotos</div>
+                    <ul className="mat-list">
+                      {selectedNsPhotos.map((p, i) => (
+                        <li key={`${p.caminho}-${i}`}>{cleanText(p.legenda || p.caminho || "Foto")} - {formatDateTime(p.data_hora)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="empty">Selecione uma NS na tabela ao lado.</div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  function renderTrechos() {
+    return (
+      <>
+        <div className="section-title">Trechos e Cadastro Tecnico</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Feicoes GIS</span><span className="kpi-value">{formatInt(geoJson?.features.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Trechos</span><span className="kpi-value">{formatInt(geoTrechos)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PVs / PIs</span><span className="kpi-value">{formatInt(geoPvs)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Extensao Total</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
+        </div>
+        <div className="action-row">
+          <a className="action-btn btn-cyan" href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">GEOJSON BRUTO</a>
+          <a className="action-btn btn-dark" href={nativeUrl("/campo")} target="_blank" rel="noreferrer">CAMPO</a>
+        </div>
+
+        <table className="data-table">
+          <thead>
+            <tr><th>NS</th><th>Trecho</th><th>DN (mm)</th><th>Extensao</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            {nsList.items.slice(0, 30).map((item, i) => (
+              <tr key={`t-${asNumber(item.id)}-${i}`}>
+                <td>{nsCode(item)}</td>
+                <td>{nsTrecho(item)}</td>
+                <td>{formatInt(asNumber(item.dn_mm))}</td>
+                <td>{formatMeters(asNumber(item.ext_m))}</td>
+                <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    );
+  }
+
+  function renderCustos() {
+    return (
+      <>
+        <div className="section-title">Custos 5D — Resumo Financeiro</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Valor Liberado</span><span className="kpi-value">{formatCurrency(dashboard?.valor_liberado ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo RDO Total</span><span className="kpi-value">{formatCurrency(dashboard?.custo_rdo_total ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo Rede 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
+        </div>
+        <div className="action-row">
+          <a className="action-btn btn-cyan" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">CONTROLE</a>
+          <a className="action-btn btn-dark" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+        </div>
+
+        <div className="two-col">
+          <div className="detail-panel">
+            <div className="section-title">Curva S — Previsto</div>
+            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
+            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curvePrev?.ext_acum))}</span></div>
+            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curvePrev?.custo_acum))}</span></div>
+          </div>
+          <div className="detail-panel">
+            <div className="section-title">Curva S — Realizado</div>
+            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
+            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curveReal?.ext_acum))}</span></div>
+            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curveReal?.custo_acum))}</span></div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  function renderBim() {
+    const kinds = (latestJob?.artifacts ?? []).reduce<Record<string, number>>((a, art) => {
+      const k = cleanText(art.kind).toLowerCase() || "outros";
+      a[k] = (a[k] ?? 0) + 1;
+      return a;
+    }, {});
+
+    return (
+      <>
+        <div className="section-title">Pipeline de Saidas BIM 5D</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>GERAR TUDO (6 etapas)</button>
+          <button className="action-btn btn-red" disabled>IFC LOD500</button>
+          <button className="action-btn btn-blue" disabled>LandXML</button>
+          <button className="action-btn btn-orange" disabled>Cadastro NTS292</button>
+          <button className="action-btn btn-red" disabled>Cadastro DXF</button>
+          <button className="action-btn btn-teal" disabled>Cronograma</button>
+          <button className="action-btn btn-purple" disabled>Dynamo</button>
+          <button className="action-btn btn-dark" disabled>SCR</button>
+        </div>
+
+        <div className="link-row">
+          <span style={{ color: "#667788", marginRight: 8 }}>Interfaces HTML:</span>
+          <a className="link-btn" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">Editor EPANET</a>
+          <a className="link-btn" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">Viewer 3D</a>
+          <a className="link-btn" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">Controle As-Built</a>
+          <a className="link-btn" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">RDO Diario</a>
+          <a className="link-btn" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">Gestao Perdas</a>
+          <a className="link-btn" href={nativeUrl("/fluxograma-bim")} target="_blank" rel="noreferrer">Fluxograma</a>
+        </div>
+
+        <div className="section-title">SAIDAS DO PIPELINE</div>
+        <div className="output-list">
+          <div className="output-item"><span className="folder">01_NS/</span><span className="desc">Notas de Servico: PDF A4 + JSON + HTML Leaflet + GeoJSON</span></div>
+          <div className="output-item"><span className="folder">02_CIVIL3D/</span><span className="desc">LandXML 1.2 + Cadastro DXF + Dynamo .py + AutoCAD .scr</span></div>
+          <div className="output-item"><span className="folder">03_CADASTRO_NTS292/</span><span className="desc">DXF As-Built georref SIRGAS 2000 UTM 23S + Meta JSON</span></div>
+          <div className="output-item"><span className="folder">04_BIM_LOD500/</span><span className="desc">IFC 3D real (SweptDiskSolid+ExtrudedAreaSolid) + CSV + JSON</span></div>
+          <div className="output-item"><span className="folder">05_CRONOGRAMA/</span><span className="desc">MS Project XML com WBS por fase + Resumo JSON</span></div>
+        </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">HTML</span><span className="kpi-value">{formatInt(kinds.html ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PDF</span><span className="kpi-value">{formatInt(kinds.pdf ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">JSON</span><span className="kpi-value">{formatInt(kinds.json ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">IFC</span><span className="kpi-value">{formatInt(kinds.ifc ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">CSV</span><span className="kpi-value">{formatInt(kinds.csv ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">XML</span><span className="kpi-value">{formatInt(kinds.xml ?? 0)}</span></div>
+        </div>
+      </>
+    );
+  }
+
+  function renderLean() {
+    return (
+      <>
+        <div className="section-title">Lean Construction + Last Planner System + BIM 6D</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>RELATORIO LEAN+LPS</button>
+          <button className="action-btn btn-purple" disabled>TAKT TIME</button>
+          <button className="action-btn btn-blue" disabled>LOOKAHEAD 6 SEM</button>
+          <button className="action-btn btn-orange" disabled>BIM 6D (Ciclo Vida)</button>
+        </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Takt (m/dia)</span><span className="kpi-value">{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Cycle Time</span><span className="kpi-value">{formatInt(leanInsight?.cycle_time_dias ?? 0)} dias</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PPC (%)</span><span className="kpi-value warn">{leanInsight?.restricoes_lookahead != null ? formatInt(leanInsight.restricoes_lookahead) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">VA/NVA</span><span className="kpi-value">{leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">CO2 (ton)</span><span className="kpi-value">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo 50 anos</span><span className="kpi-value">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</span></div>
+        </div>
+
+        {leanInsight?.alerta_lookahead && (
+          <div className="resumo-box">
+            <strong>Alerta Lookahead:</strong> {cleanText(leanInsight.alerta_lookahead)}
+          </div>
+        )}
+
+        <div className="detail-panel">
+          <div className="detail-row"><span className="dlabel">Throughput</span><span className="dvalue">{formatInt(leanInsight?.throughput_ns_semana ?? 0)} NS/semana</span></div>
+          <div className="detail-row"><span className="dlabel">Planejadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_planejadas_semana ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Bloqueadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Ext. planejada/sem</span><span className="dvalue">{formatMeters(leanInsight?.ext_planejada_semana ?? 0)}</span></div>
+        </div>
+      </>
+    );
+  }
+
+  function renderPerdas() {
+    return (
+      <>
+        <div className="section-title">Gestao de Perdas — IWA / UARL / ILI / DMA</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>RELATORIO PERDAS</button>
+          <button className="action-btn btn-red" disabled>MAPA RISCO</button>
+          <button className="action-btn btn-blue" disabled>CRIAR DMAs</button>
+          <button className="action-btn btn-teal" disabled>PDF PERDAS</button>
+          <button className="action-btn btn-orange" disabled>ANALISE TROCA</button>
+        </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">UARL (m3/ano)</span><span className="kpi-value">{formatInt(lossInsight?.uarl_m3_ano ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">ILI</span><span className="kpi-value warn">{lossInsight?.ili != null ? lossInsight.ili.toFixed(2) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Classif.</span><span className="kpi-value">{cleanText(lossInsight?.ili_classificacao ?? "-")}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Risco Alto</span><span className="kpi-value bad">{formatInt(lossInsight?.risco_total_ano ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">DMAs</span><span className="kpi-value">{formatInt(lossInsight?.n_dmas ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Perda R$/ano</span><span className="kpi-value">{formatCurrency(lossInsight?.custo_ineficiencia_ano ?? 0)}</span></div>
+        </div>
+
+        <div className="action-row">
+          <a className="action-btn btn-dark" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">ABRIR MODULO NATIVO</a>
+        </div>
+      </>
+    );
+  }
+
+  function renderIA() {
+    return (
+      <>
+        <div className="section-title">Assistente IA + E-LLMs Gratuitos + Analytics ML</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>GERAR RELATORIO</button>
+          <button className="action-btn btn-purple" disabled>ZERAR RELATORIO</button>
+          <button className="action-btn btn-orange" disabled>GERAR BENCHMARK</button>
+          <button className="action-btn btn-red" disabled>GERAR RISCOS</button>
+          <button className="action-btn btn-teal" disabled>MULTI PROV</button>
+        </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Algoritmo</span><span className="kpi-value">{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">R2</span><span className="kpi-value">{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">MAE</span><span className="kpi-value">{(analyticsSummary?.mae ?? 0).toFixed(2)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">RMSE</span><span className="kpi-value">{(analyticsSummary?.rmse ?? 0).toFixed(2)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Modelos</span><span className="kpi-value">{formatInt(analyticsSummary?.n_modelos ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Cenarios</span><span className="kpi-value">{formatInt(analyticsSummary?.n_cenarios ?? 0)}</span></div>
+        </div>
+
+        <div className="detail-panel">
+          <div className="detail-row"><span className="dlabel">Status</span><span className="dvalue">{cleanText(analyticsSummary?.status ?? "-")}</span></div>
+          <div className="detail-row"><span className="dlabel">Gerado em</span><span className="dvalue">{cleanText(analyticsSummary?.gerado_em ?? "-")}</span></div>
+          <div className="detail-row"><span className="dlabel">Nucleos</span><span className="dvalue">{formatInt(analyticsSummary?.n_nucleos ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Origem</span><span className="dvalue">{cleanText(analyticsSummary?.origem ?? "-")}</span></div>
+        </div>
+      </>
+    );
+  }
+
+  function renderNucleos() {
+    return (
+      <>
+        <div className="section-title">Nucleos DXF (ProSaneamento)</div>
+        <table className="data-table">
+          <thead><tr><th>Nucleo</th><th>Extensao</th><th>Trechos</th><th>Equipes</th><th>Duracao</th><th>Fase</th></tr></thead>
+          <tbody>
+            {nuclei.length ? nuclei.map(n => {
+              const phase = currentPhase(n);
+              return (
+                <tr key={n.nome} onClick={() => setSelectedNucleo(n.nome)} className={selectedNucleo === n.nome ? "row-active" : ""}>
+                  <td style={{ color: "#00e6a0", fontWeight: 600 }}>{cleanText(n.nome)}</td>
+                  <td>{formatMeters(n.extensao_m)}</td>
+                  <td>{formatInt(n.n_trechos)}</td>
+                  <td>{formatInt(n.equipes)}</td>
+                  <td>{formatInt(n.duracao_dias)} dias</td>
+                  <td><span className={toneClass(phase?.id ?? "fase")}>{cleanText(phase?.nome ?? "-")}</span></td>
+                </tr>
+              );
+            }) : <tr><td colSpan={6} className="empty">Nenhum nucleo carregado.</td></tr>}
+          </tbody>
+        </table>
+
+        {nucleoCatalog.items.length > 0 && (
+          <>
+            <div className="section-title" style={{ marginTop: 16 }}>Catalogo de Nucleos ({formatInt(nucleoCatalog.total)})</div>
+            <table className="data-table">
+              <thead><tr><th>Nome</th><th>Existe</th></tr></thead>
+              <tbody>
+                {nucleoCatalog.items.map(n => (
+                  <tr key={n.nome}><td>{cleanText(n.nome)}</td><td style={{ color: "#00e6a0" }}>SIM</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        <div className="action-row" style={{ marginTop: 14 }}>
+          <button className="action-btn btn-purple" disabled>BATCH NUCLEOS DXF</button>
+          <button className="action-btn btn-orange" disabled>BATCH PROLONGAMENTOS</button>
+          <button className="action-btn btn-green" disabled>BATCH TUDO</button>
+        </div>
+      </>
+    );
+  }
+
+  function renderLog() {
+    const logs = processLogs.items;
+    const now = new Date();
+    const ts = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+
+    return (
+      <>
+        <div className="log-area">
+          <div className="log-line"><span className="log-time">[{ts}]</span> ConstruData - HydroNetwork v9.0.0 | {selectedMotorLabel}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> {companyName} - {projectName}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Backend: {health?.ok ? "ONLINE" : "OFFLINE"}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Motores: GDAL, LandXML, DWG/AEC, DWG Semantico, DWG Universal, GerarNS, Civil3D, NTS292, IFC, MSProject, Pipeline, Custo, Medicao, ML, Lean/LPS, Parametrico, MicroPlan, Perdas, CronoMacro, PdfPerdas, Gemini, Multi-LLM, Contratos, Analytics, SLNR_Mestre, Motor_v5</div>
+          {error && <div className="log-line" style={{ color: "#f44336" }}><span className="log-time">[{ts}]</span> [ERRO] {error}</div>}
+          <div className="log-line">&nbsp;</div>
+          <div className="log-line">--- Historico de jobs ---</div>
+          {logs.length ? logs.slice(0, 20).map((job, i) => (
+            <div className="log-line" key={`log-${job.job_id ?? i}`}>
+              <span className="log-time">[{formatDateTime(job.created_at)}]</span>{" "}
+              {cleanText(job.motor ?? "-").toUpperCase()} | {cleanText(job.arquivo ?? job.nucleo ?? "-")} | NS: {formatInt(job.ns_geradas ?? 0)} ok / {formatInt(job.ns_erros ?? 0)} erro | Status: {cleanText(job.status ?? "-")}
+            </div>
+          )) : <div className="log-line">Nenhum job registrado.</div>}
+        </div>
+
+        <div className="bottom-bar">
+          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>Limpar</button>
+          <button className="action-btn btn-dark" onClick={() => {
+            const text = logs.map(j => `${j.created_at} | ${j.motor} | ${j.arquivo} | NS: ${j.ns_geradas} ok / ${j.ns_erros} erro`).join("\n");
+            navigator.clipboard.writeText(text);
+          }}>Copiar</button>
+        </div>
+      </>
+    );
+  }
+
+  function renderGestao() {
+    return (
+      <>
+        <div className="section-title">Gestao & Cronograma</div>
+
+        <div className="scope-bar">
+          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
+          {nucleoNames.slice(0, 10).map(n => (
+            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
+          ))}
+        </div>
+
+        <div className="action-row">
+          <a className="action-btn btn-green" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
+          <a className="action-btn btn-blue" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MEDIR RDO</a>
+          <a className="action-btn btn-orange" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">GERAR MACRO</a>
+          <a className="action-btn btn-purple" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR</button>
+        </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">NS Totais</span><span className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Em Execucao</span><span className="kpi-value warn">{formatInt(dashboard?.n_execucao ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">m/dia</span><span className="kpi-value">{formatMeters(dashboard?.m_por_dia ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">RDOs</span><span className="kpi-value">{formatInt(dashboard?.rdos ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Curva Prevista</span><span className="kpi-value">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Curva Realizada</span><span className="kpi-value">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
+        </div>
+
+        {cronograma && (
+          <div className="resumo-box">
+            <strong>Projeto:</strong> {cleanText(cronograma.projeto)} | <strong>Empresa:</strong> {cleanText(cronograma.empresa)} | <strong>Inicio:</strong> {formatDate(cronograma.data_inicio)} | <strong>Fim:</strong> {formatDate(cronograma.data_fim)} | <strong>Duracao:</strong> {formatInt(cronograma.duracao_total_dias)} dias
+          </div>
+        )}
+
+        <div className="two-col">
+          <div>
+            <div className="section-title">Cronograma por Nucleo</div>
+            {visibleNuclei.length ? visibleNuclei.map(n => {
+              const phase = currentPhase(n);
+              return (
+                <div className="nucleo-card" key={n.nome}>
+                  <h4>{cleanText(n.nome)} <span className={toneClass(phase?.id ?? "")}>{cleanText(phase?.nome ?? "-")}</span></h4>
+                  <div className="meta">{formatDate(n.inicio)} ate {formatDate(n.fim)} | {formatMeters(n.extensao_m)} | {formatInt(n.n_trechos)} trechos | {formatInt(n.equipes)} equipes</div>
+                </div>
+              );
+            }) : <div className="empty">Nenhum nucleo disponivel.</div>}
+          </div>
+
+          <div>
+            <div className="section-title">RDO — Criar e Listar</div>
+            <form onSubmit={handleCreateRdo}>
+              <div className="form-row">
+                <div className="form-field"><label>Data</label><input type="date" value={rdoForm.data} onChange={e => setRdoForm(c => ({ ...c, data: e.target.value }))} /></div>
+                <div className="form-field"><label>Nucleo</label><input type="text" value={rdoForm.nucleo} onChange={e => setRdoForm(c => ({ ...c, nucleo: e.target.value }))} /></div>
+                <div className="form-field"><label>Responsavel</label><input type="text" value={rdoForm.responsavel} onChange={e => setRdoForm(c => ({ ...c, responsavel: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Servico</label><input type="text" value={rdoForm.servico} onChange={e => setRdoForm(c => ({ ...c, servico: e.target.value }))} /></div>
+                <div className="form-field"><label>Qtd</label><input type="number" step="0.01" value={rdoForm.quantidade} onChange={e => setRdoForm(c => ({ ...c, quantidade: e.target.value }))} /></div>
+                <div className="form-field"><label>DN</label><input type="number" value={rdoForm.dnMm} onChange={e => setRdoForm(c => ({ ...c, dnMm: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Clima manha</label><input type="text" value={rdoForm.climaManha} onChange={e => setRdoForm(c => ({ ...c, climaManha: e.target.value }))} /></div>
+                <div className="form-field"><label>Clima tarde</label><input type="text" value={rdoForm.climaTarde} onChange={e => setRdoForm(c => ({ ...c, climaTarde: e.target.value }))} /></div>
+              </div>
+              <div className="action-row">
+                <button className="action-btn btn-green" type="submit">SALVAR RDO</button>
+                <a className="action-btn btn-dark" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MODULO NATIVO</a>
+              </div>
+              {rdoMessage && <div className={rdoMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>{rdoMessage}</div>}
+            </form>
+
+            <div className="section-title" style={{ marginTop: 14 }}>RDOs Existentes ({formatInt(rdoList.items.length)})</div>
+            {latestRdos.length ? latestRdos.map(rdo => (
+              <div className="rdo-card" key={rdo.id}>
+                <div className="rdo-head">
+                  <strong>RDO {rdo.numero ?? rdo.id} - {formatDate(rdo.data)} - {cleanText(rdo.nucleo)}</strong>
+                  <span className={toneClass(rdo.status)}>{cleanText(rdo.status)}</span>
+                </div>
+                <div className="rdo-meta">Resp: {cleanText(rdo.responsavel ?? "-")} | Custo: {formatCurrency(asNumber(rdo.total_custo))} | Apontam: {formatInt(rdo.apontamentos?.length ?? 0)}</div>
+                <div className="action-row">
+                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">PDF</a>
+                  {cleanText(rdo.status) !== "FECHADO" && <button className="action-btn btn-red" onClick={() => handleCloseRdo(rdo.id)}>FECHAR</button>}
+                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.data}?nucleo=${encodeURIComponent(rdo.nucleo)}`)} target="_blank" rel="noreferrer">JSON</a>
+                </div>
+              </div>
+            )) : <div className="empty">Sem RDOs ainda.</div>}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // ── Tab content dispatch ──
+  function renderTabContent() {
+    switch (activeTab) {
+      case "processar": return renderProcessar();
+      case "mapa": return renderMapa();
+      case "rede": return renderRede();
+      case "hidraulica": return renderHidraulica();
+      case "trechos": return renderTrechos();
+      case "custos": return renderCustos();
+      case "bim": return renderBim();
+      case "lean": return renderLean();
+      case "perdas": return renderPerdas();
+      case "ia": return renderIA();
+      case "nucleos": return renderNucleos();
+      case "log": return renderLog();
+      case "gestao": return renderGestao();
     }
-    if (path === "/api/processamento/{job_id}" && latestJob?.job_id) {
-      return apiUrl(`/api/processamento/${latestJob.job_id}`);
-    }
-    if (path === "/api/processamento/{job_id}/artefato/{rel_path}" && latestJob?.job_id && latestJob.artifacts?.[0]) {
-      return artifactHref(latestJob.job_id, latestJob.artifacts[0].path);
-    }
-    if (path === "/api/ns/{id}" && selectedNsId) {
-      return apiUrl(`/api/ns/${selectedNsId}`);
-    }
-    if (path === "/api/ns/{id}/status" && selectedNsId) {
-      return apiUrl(`/api/ns/${selectedNsId}`);
-    }
-    if (path === "/api/rdo/{id}/pdf" && latestRdo) {
-      return apiUrl(`/api/rdo/${latestRdo.id}/pdf`);
-    }
-    if (path === "/api/rdo/{id}/fechar" && latestRdo) {
-      return apiUrl(`/api/rdo/${latestRdo.id}/pdf`);
-    }
-    if (path === "/api/rdo/{data_ref}" && latestRdo) {
-      return apiUrl(`/api/rdo/${latestRdo.data}?nucleo=${encodeURIComponent(latestRdo.nucleo)}`);
-    }
-    if (path === "/api/fotos/{ns_id}" && selectedNsId) {
-      return apiUrl(`/api/fotos/${selectedNsId}`);
-    }
-    return apiUrl(path);
   }
 
   return (
-    <div className="workspace">
-      <div className="workspace-grid" />
-      <div className="page">
-        <header className="masthead">
-          <div>
-            <p className="eyebrow">ConstruDataMaxV2</p>
-            <h1>Frontend completo do backend NS</h1>
-            <p className="subtitle">
-              Agora o frontend expoe processamento, NS, RDO, cadastro, rede, cronograma,
-              integracoes e todos os modulos nativos do backend.
-            </p>
-          </div>
+    <div className="shell">
+      {/* Header */}
+      <header className="header">
+        <div className="header-left">
+          <div className="header-logo">C</div>
+          <span className="header-title">
+            CONSTRUDATA<span className="header-title-accent"> HydroNetwork</span>
+          </span>
+          <span className="header-badge badge-green">v9.0</span>
+          <span className="badge-text">{selectedMotorLabel}</span>
+          <span className={`header-dot ${health?.ok ? "online" : ""}`} />
+        </div>
+        <div className="header-right">
+          <span>{companyName}</span>
+          <span className="header-user">{projectName}</span>
+          <button className="action-btn btn-ghost" style={{ padding: "4px 10px", fontSize: 11 }} onClick={() => setRefreshKey(v => v + 1)}>
+            ATUALIZAR
+          </button>
+        </div>
+      </header>
 
-          <div className="masthead-side">
-            <div className="health-box">
-              <span className={health?.ok ? "dot dot-ok" : "dot"} />
-              <div>
-                <strong>{health?.ok ? "Backend online" : "Sem resposta"}</strong>
-                <small>{projectName}</small>
-              </div>
-            </div>
-            <button className="button ghost" onClick={() => setRefreshKey((value) => value + 1)}>
-              Atualizar dados
-            </button>
-          </div>
-        </header>
+      {/* Tab bar */}
+      <nav className="tab-bar">
+        {TABS.map(tab => (
+          <button
+            key={tab.id}
+            className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
 
-        <main className="layout">
-          <section className="hero-grid">
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">Processamento</p>
-                  <h2>Importar projeto e gerar notas</h2>
-                </div>
-                <span className="pill pill-ok">/api/processamento/importar</span>
-              </div>
+      {/* Error bar */}
+      {error && (
+        <div className="msg msg-err" style={{ margin: 0, borderRadius: 0 }}>
+          {error}
+        </div>
+      )}
 
-              <form className="form-grid" onSubmit={handleImport}>
-                <label className="field">
-                  <span>Nucleo</span>
-                  <input
-                    type="text"
-                    placeholder="Ex.: Verde e Teteu"
-                    value={uploadNucleo}
-                    onChange={(event) => setUploadNucleo(event.target.value)}
-                  />
-                </label>
-
-                <label className="field">
-                  <span>Arquivo</span>
-                  <input
-                    type="file"
-                    accept=".json,.xml,.landxml,.dxf"
-                    onChange={(event) => handleUploadFileChange(event.target.files?.[0] ?? null)}
-                  />
-                </label>
-
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={quickMode}
-                    onChange={(event) => setQuickMode(event.target.checked)}
-                  />
-                  <span>Modo rapido</span>
-                </label>
-
-                <label className="field">
-                  <span>Motor de NS</span>
-                  <select
-                    value={selectedMotor}
-                    onChange={(event) => setSelectedMotor(event.target.value)}
-                  >
-                    <option value="v5">NOVA NS v5 (SABESP)</option>
-                    <option value="v9">NS v9 (padrao)</option>
-                  </select>
-                </label>
-
-                <p className="helper-text">
-                  {selectedMotor === "v5"
-                    ? "v5 aparece no frontend e processa DXF ou JSON. Para XML/LandXML, o frontend troca para v9 automaticamente."
-                    : "v9 aceita JSON, DXF e XML/LandXML e continua disponivel como caminho padrao do HydroNetwork."}
-                </p>
-
-                <div className="mini-grid">
-                  <div className="micro-card">
-                    <strong>Entradas aceitas</strong>
-                    <span>{selectedMotor === "v5" ? "DXF, JSON" : "JSON, XML/LandXML, DXF"}</span>
-                  </div>
-                  <div className="micro-card">
-                    <strong>Saidas</strong>
-                    <span>PDF, HTML, JSON, GeoJSON, IFC, CSV, XML, SCR</span>
-                  </div>
-                  <div className="micro-card">
-                    <strong>Motor</strong>
-                    <span>{selectedMotorLabel}</span>
-                  </div>
-                </div>
-
-                <div className="button-row">
-                  <button className="button primary" type="submit" disabled={uploading}>
-                    {uploading ? "Processando..." : "Importar e gerar"}
-                  </button>
-                  <a className="button ghost" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">
-                    Abrir manage
-                  </a>
-                </div>
-
-                {uploadMessage ? <p className="message">{uploadMessage}</p> : null}
-              </form>
-            </article>
-
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">Ultimo job</p>
-                  <h2>{latestJob?.nucleo ? cleanText(latestJob.nucleo) : "Sem processamento recente"}</h2>
-                </div>
-                <span className={toneClass(latestJob?.status)}>{cleanText(latestJob?.status ?? "empty")}</span>
-              </div>
-
-                <div className="metrics-grid compact">
-                <div className="metric-card">
-                    <span>Arquivo</span>
-                    <strong>{cleanText(latestJob?.arquivo ?? "-") || "-"}</strong>
-                  </div>
-                  <div className="metric-card">
-                    <span>Fonte</span>
-                    <strong>{cleanText(latestJob?.fonte ?? "-") || "-"}</strong>
-                  </div>
-                  <div className="metric-card">
-                    <span>Motor</span>
-                    <strong>{cleanText(latestJob?.motor ?? "-") || "-"}</strong>
-                  </div>
-                  <div className="metric-card">
-                    <span>PVs / trechos</span>
-                  <strong>
-                    {formatInt(latestJob?.n_pvs ?? 0)} / {formatInt(latestJob?.n_trechos ?? 0)}
-                  </strong>
-                </div>
-                <div className="metric-card">
-                  <span>Resultado</span>
-                  <strong>
-                    {formatInt(latestJob?.ns_geradas ?? 0)} ok / {formatInt(latestJob?.ns_erros ?? 0)} erro
-                  </strong>
-                </div>
-              </div>
-
-              <div className="artifact-head">
-                <strong>Artefatos</strong>
-                <small>{formatDateTime(latestJob?.created_at)}</small>
-              </div>
-              <div className="artifact-grid">
-                {latestJob?.artifacts?.length ? (
-                  latestJob.artifacts.slice(0, 18).map((artifact) => (
-                    <a
-                      className="artifact-card"
-                      key={`${latestJob.job_id}-${artifact.path}`}
-                      href={artifactHref(latestJob.job_id, artifact.path)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <span>{artifact.kind.toUpperCase()}</span>
-                      <strong>{artifact.label}</strong>
-                    </a>
-                  ))
-                ) : (
-                  <div className="empty-box">
-                    <strong>Sem artefatos ainda</strong>
-                    <p>Depois do primeiro upload, os arquivos gerados aparecem aqui.</p>
-                  </div>
-                )}
-              </div>
-            </article>
-          </section>
-
-          <section className="panel">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Pulso do backend</p>
-                <h2>Resumo executivo e tecnico</h2>
-              </div>
-              <div className="scope-row">
-                <button
-                  className={selectedNucleo === "" ? "scope-pill active" : "scope-pill"}
-                  onClick={() => setSelectedNucleo("")}
-                >
-                  Todos
-                </button>
-                {nuclei.slice(0, 10).map((nucleo) => (
-                  <button
-                    key={nucleo.nome}
-                    className={selectedNucleo === nucleo.nome ? "scope-pill active" : "scope-pill"}
-                    onClick={() => setSelectedNucleo(nucleo.nome)}
-                  >
-                    {cleanText(nucleo.nome)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="metrics-grid">
-              <article className="metric-card">
-                <span>NS totais</span>
-                <strong>{formatInt(dashboard?.n_total ?? 0)}</strong>
-                <small>{formatInt(dashboard?.n_execucao ?? 0)} em execucao</small>
-              </article>
-              <article className="metric-card">
-                <span>Avanco fisico</span>
-                <strong>{formatPercent(dashboard?.pct_fisico ?? 0)}</strong>
-                <small>{formatMeters(dashboard?.extensao_exec_m ?? 0)} executados</small>
-              </article>
-              <article className="metric-card">
-                <span>Avanco financeiro</span>
-                <strong>{formatPercent(dashboard?.pct_financeiro ?? 0)}</strong>
-                <small>{formatCurrency(dashboard?.valor_liberado ?? 0)}</small>
-              </article>
-              <article className="metric-card">
-                <span>Ritmo diario</span>
-                <strong>{formatMeters(dashboard?.m_por_dia ?? 0)}</strong>
-                <small>{formatInt(dashboard?.rdos ?? 0)} RDOs</small>
-              </article>
-              <article className="metric-card">
-                <span>Rede 3D</span>
-                <strong>{formatInt(manageData?.edges.length ?? 0)} trechos</strong>
-                <small>{formatCurrency(manageCost)}</small>
-              </article>
-              <article className="metric-card">
-                <span>Cadastro GIS</span>
-                <strong>{formatInt(geoJson?.features.length ?? 0)} feicoes</strong>
-                <small>{formatInt(geoTrechos)} trechos / {formatInt(geoPvs)} PVs</small>
-              </article>
-              <article className="metric-card">
-                <span>Curva prevista</span>
-                <strong>{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</strong>
-                <small>{formatMeters(asNumber(curvePrev?.ext_acum))}</small>
-              </article>
-              <article className="metric-card">
-                <span>Curva realizada</span>
-                <strong>{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</strong>
-                <small>{formatMeters(asNumber(curveReal?.ext_acum))}</small>
-              </article>
-            </div>
-          </section>
-
-          <section className="two-column">
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">Modulos nativos</p>
-                  <h2>Todas as telas do backend</h2>
-                </div>
-              </div>
-              <div className="module-grid">
-                {moduleLinks.map((item) => (
-                  <article className={item.href === activeModulePath ? "module-card active" : "module-card"} key={item.label}>
-                    <span>{item.label}</span>
-                    <strong>{item.hint}</strong>
-                    <div className="button-row">
-                      <button className="button ghost slim" type="button" onClick={() => setActiveModulePath(item.href)}>
-                        Abrir aqui
-                      </button>
-                      <a className="button ghost slim" href={nativeUrl(item.href)} target="_blank" rel="noreferrer">
-                        Nova guia
-                      </a>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </article>
-
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">API e integracoes</p>
-                  <h2>Endpoints do backend</h2>
-                </div>
-              </div>
-              <div className="api-grid">
-                {apiCatalog.map((item) => (
-                  <a
-                    className="api-card"
-                    href={catalogHref(item.path, item.method)}
-                    key={`${item.method}-${item.path}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span>{item.method}</span>
-                    <strong>{item.path}</strong>
-                    <small>{item.note}</small>
-                  </a>
-                ))}
-              </div>
-            </article>
-          </section>
-
-          <section className="panel">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Cockpit operacional</p>
-                <h2>Nova NS v5 exposta no frontend com os modulos dos prints</h2>
-              </div>
-              <span className={toneClass(latestJob?.motor ?? selectedMotorLabel)}>{selectedMotorLabel}</span>
-            </div>
-
-            <div className="operations-grid">
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[1] Processar</span>
-                  <strong>Entrada da Nova NS</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>Motor ativo</span>
-                    <strong>{selectedMotorLabel}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Ultimo arquivo</span>
-                    <strong>{cleanText(latestJob?.arquivo ?? "Sem upload")}</strong>
-                  </div>
-                </div>
-                <p className="muted">
-                  v5 agora aparece no frontend e envia o parametro `motor` para o backend.
-                </p>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[7] BIM</span>
-                  <strong>Pipeline BIM 5D</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>HTML</span>
-                    <strong>{formatInt(artifactKinds.html ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>IFC / CSV / XML</span>
-                    <strong>
-                      {formatInt((artifactKinds.ifc ?? 0) + (artifactKinds.csv ?? 0) + (artifactKinds.xml ?? 0))}
-                    </strong>
-                  </div>
-                </div>
-                <div className="ops-links">
-                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/arquitetura-bim")}>
-                    Arquitetura BIM
-                  </button>
-                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/fluxograma-bim")}>
-                    Fluxograma BIM
-                  </button>
-                </div>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[8] Lean/LPS</span>
-                  <strong>Lean Construction + BIM 6D</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>Takt</span>
-                    <strong>{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Cycle Time</span>
-                    <strong>{formatInt(leanInsight?.cycle_time_dias ?? 0)} dias</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>PPC / Lookahead</span>
-                    <strong>{formatInt(leanInsight?.restricoes_lookahead ?? 0)} restr.</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Custo 50 anos</span>
-                    <strong>{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</strong>
-                  </div>
-                </div>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[9] Perdas</span>
-                  <strong>IWA / UARL / ILI / DMA</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>UARL</span>
-                    <strong>{formatInt(lossInsight?.uarl_m3_ano ?? 0)} m3/ano</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>ILI</span>
-                    <strong>{cleanText(lossInsight?.ili_classificacao ?? "Projetado")}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>DMAs</span>
-                    <strong>{formatInt(lossInsight?.n_dmas ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Risco anual</span>
-                    <strong>{formatCurrency(lossInsight?.risco_total_ano ?? 0)}</strong>
-                  </div>
-                </div>
-                <div className="ops-links">
-                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/perdas")}>
-                    Abrir modulo
-                  </button>
-                </div>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[10] IA</span>
-                  <strong>Analytics ML</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>Algoritmo</span>
-                    <strong>{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>R2</span>
-                    <strong>{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>MAE</span>
-                    <strong>{(analyticsSummary?.mae ?? 0).toFixed(2)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Modelos</span>
-                    <strong>{formatInt(analyticsSummary?.n_modelos ?? 0)}</strong>
-                  </div>
-                </div>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[11] Nucleos</span>
-                  <strong>Catalogo operacional</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>Total</span>
-                    <strong>{formatInt(nucleoNames.length)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Selecionado</span>
-                    <strong>{cleanText(selectedNucleo || "Todos")}</strong>
-                  </div>
-                </div>
-                <p className="muted">{nucleoNames.slice(0, 6).join(" • ") || "Sem nucleos carregados."}</p>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[12] Log</span>
-                  <strong>Historico do backend</strong>
-                </div>
-                <ul className="ops-log-list">
-                  {latestProcessLogs.length ? (
-                    latestProcessLogs.map((item, index) => (
-                      <li key={`${item.job_id ?? "job"}-${index}`}>
-                        <strong>{cleanText(item.motor ?? "-").toUpperCase()}</strong>
-                        <span>{cleanText(item.arquivo ?? item.nucleo ?? "Sem arquivo")}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <li>
-                      <strong>SEM LOG</strong>
-                      <span>Nenhum job encontrado.</span>
-                    </li>
-                  )}
-                </ul>
-              </article>
-
-              <article className="operations-card">
-                <div className="ops-head">
-                  <span className="ops-tab">[13] Gestao</span>
-                  <strong>Cronograma e controle</strong>
-                </div>
-                <div className="ops-stats">
-                  <div className="ops-stat">
-                    <span>% fisico</span>
-                    <strong>{formatPercent(dashboard?.pct_fisico ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>% financeiro</span>
-                    <strong>{formatPercent(dashboard?.pct_financeiro ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>RDOs</span>
-                    <strong>{formatInt(dashboard?.rdos ?? 0)}</strong>
-                  </div>
-                  <div className="ops-stat">
-                    <span>Curva realizada</span>
-                    <strong>{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</strong>
-                  </div>
-                </div>
-                <div className="ops-links">
-                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/controle")}>
-                    Abrir controle
-                  </button>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section className="panel">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Workspace</p>
-                <h2>Modulo nativo integrado no frontend</h2>
-              </div>
-              <div className="button-row">
-                <span className="pill pill-ok">{activeModule.href}</span>
-                <a className="button ghost slim" href={nativeUrl(activeModule.href)} target="_blank" rel="noreferrer">
-                  Abrir em nova guia
-                </a>
-              </div>
-            </div>
-
-            <div className="scope-row module-picker">
-              {moduleLinks.map((item) => (
-                <button
-                  key={`picker-${item.href}`}
-                  className={activeModulePath === item.href ? "scope-pill active" : "scope-pill"}
-                  onClick={() => setActiveModulePath(item.href)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="frame-meta">
-              <div className="micro-card">
-                <strong>{activeModule.label}</strong>
-                <span>{activeModule.hint}</span>
-              </div>
-              <div className="micro-card">
-                <strong>Origem</strong>
-                <span>{nativeUrl(activeModule.href)}</span>
-              </div>
-            </div>
-
-            <div className="module-frame-shell">
-              <iframe
-                key={activeModulePath}
-                className="module-frame"
-                src={nativeUrl(activeModule.href)}
-                title={`Modulo ${activeModule.label}`}
-              />
-            </div>
-          </section>
-
-          <section className="two-column">
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">Notas de servico</p>
-                  <h2>Lista, detalhe e atualizacao de status</h2>
-                </div>
-                <small>{refreshing ? "Atualizando..." : `${formatInt(nsList.items.length)} registros`}</small>
-              </div>
-
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>NS</th>
-                      <th>Trecho</th>
-                      <th>Status</th>
-                      <th>DN</th>
-                      <th>Extensao</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {latestNs.length ? (
-                      latestNs.map((item, index) => {
-                        const itemId = asNumber(item.id);
-                        return (
-                          <tr
-                            key={`${itemId}-${index}`}
-                            className={selectedNsId === itemId ? "row-selected" : ""}
-                            onClick={() => setSelectedNsId(itemId)}
-                          >
-                            <td>{nsCode(item)}</td>
-                            <td>{nsTrecho(item)}</td>
-                            <td>
-                              <span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span>
-                            </td>
-                            <td>{formatInt(asNumber(item.dn_mm))}</td>
-                            <td>{formatMeters(asNumber(item.ext_m))}</td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td colSpan={5}>Nenhuma NS disponivel.</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </article>
-
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">Detalhe da NS</p>
-                  <h2>{selectedNsDetail ? nsCode(selectedNsDetail) : "Selecione uma NS"}</h2>
-                </div>
-                {selectedNsDetail ? (
-                  <a className="button ghost slim" href={apiUrl(`/api/ns/${selectedNsId}`)} target="_blank" rel="noreferrer">
-                    JSON bruto
-                  </a>
-                ) : null}
-              </div>
-
-              {nsDetailLoading ? (
-                <div className="empty-box">
-                  <strong>Carregando detalhe...</strong>
-                </div>
-              ) : selectedNsDetail ? (
-                <div className="detail-stack">
-                  <div className="mini-grid">
-                    <div className="micro-card">
-                      <strong>Nucleo</strong>
-                      <span>{cleanText(selectedNsDetail.nucleo)}</span>
-                    </div>
-                    <div className="micro-card">
-                      <strong>Rua</strong>
-                      <span>{cleanText(selectedNsDetail.rua ?? "-")}</span>
-                    </div>
-                    <div className="micro-card">
-                      <strong>Material</strong>
-                      <span>{cleanText(selectedNsDetail.material ?? "-")}</span>
-                    </div>
-                    <div className="micro-card">
-                      <strong>Checklist</strong>
-                      <span>
-                        {formatInt((selectedNsDetail.checklist ?? []).filter((item) => Boolean(item.concluido)).length)} /{" "}
-                        {formatInt(selectedNsDetail.checklist?.length ?? 0)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="status-box">
-                    <label className="field">
-                      <span>Status da NS</span>
-                      <select value={pendingStatus} onChange={(event) => setPendingStatus(event.target.value)}>
-                        {NS_STATUS_OPTIONS.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <button className="button primary" onClick={handleNsStatusUpdate}>
-                      Atualizar status
-                    </button>
-                  </div>
-
-                  <div className="subpanel">
-                    <strong>Materiais</strong>
-                    <ul className="plain-list">
-                      {(selectedNsDetail.materiais ?? []).slice(0, 12).map((item, index) => (
-                        <li key={`${item.descricao}-${index}`}>
-                          {item.quantidade} {item.unidade} - {cleanText(item.descricao)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="subpanel">
-                    <strong>Checklist</strong>
-                    <ul className="plain-list">
-                      {(selectedNsDetail.checklist ?? []).map((item) => (
-                        <li key={String(item.id)}>
-                          <span className={item.concluido ? "ok-text" : "muted"}>
-                            {item.concluido ? "OK" : "PEND"}
-                          </span>{" "}
-                          {cleanText(item.item)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="subpanel">
-                    <strong>Fotos</strong>
-                    {selectedNsPhotos.length ? (
-                      <ul className="plain-list">
-                        {selectedNsPhotos.map((photo, index) => (
-                          <li key={`${photo.caminho}-${index}`}>
-                            {cleanText(photo.legenda || photo.caminho || "Foto")} Ã‚· {formatDateTime(photo.data_hora)}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="muted">Nenhuma foto vinculada a esta NS.</p>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="empty-box">
-                  <strong>Selecione uma NS.</strong>
-                  <p>Aqui entram materiais, checklist, fotos e atualizaÃƒ§Ãƒ£o de status.</p>
-                </div>
-              )}
-            </article>
-          </section>
-
-          <section className="two-column">
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">RDO</p>
-                  <h2>Criar RDO pelo frontend</h2>
-                </div>
-                <span className="pill pill-ok">POST /api/rdo</span>
-              </div>
-
-              <form className="form-grid" onSubmit={handleCreateRdo}>
-                <div className="double-grid">
-                  <label className="field">
-                    <span>Data</span>
-                    <input
-                      type="date"
-                      value={rdoForm.data}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, data: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>NÃƒºcleo</span>
-                    <input
-                      type="text"
-                      value={rdoForm.nucleo}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, nucleo: event.target.value }))}
-                    />
-                  </label>
-                </div>
-
-                <div className="double-grid">
-                  <label className="field">
-                    <span>ResponsÃƒ¡vel</span>
-                    <input
-                      type="text"
-                      value={rdoForm.responsavel}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, responsavel: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>NS vinculada</span>
-                    <select
-                      value={rdoForm.nsId}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, nsId: event.target.value }))}
-                    >
-                      <option value="">Sem NS</option>
-                      {nsList.items.map((item) => (
-                        <option key={String(item.id)} value={String(item.id)}>
-                          {nsCode(item)} Ã‚· {nsTrecho(item)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <div className="double-grid">
-                  <label className="field">
-                    <span>Clima manhÃƒ£</span>
-                    <input
-                      type="text"
-                      value={rdoForm.climaManha}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, climaManha: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>Clima tarde</span>
-                    <input
-                      type="text"
-                      value={rdoForm.climaTarde}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, climaTarde: event.target.value }))}
-                    />
-                  </label>
-                </div>
-
-                <div className="triple-grid">
-                  <label className="field">
-                    <span>ServiÃƒ§o</span>
-                    <input
-                      type="text"
-                      placeholder="Assentamento, escavaÃƒ§Ãƒ£o..."
-                      value={rdoForm.servico}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, servico: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>Quantidade</span>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={rdoForm.quantidade}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, quantidade: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>DN</span>
-                    <input
-                      type="number"
-                      value={rdoForm.dnMm}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, dnMm: event.target.value }))}
-                    />
-                  </label>
-                </div>
-
-                <div className="triple-grid">
-                  <label className="field">
-                    <span>Equipe</span>
-                    <input
-                      type="text"
-                      placeholder="Encanador"
-                      value={rdoForm.equipeFuncao}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, equipeFuncao: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>Qtd equipe</span>
-                    <input
-                      type="number"
-                      min="1"
-                      value={rdoForm.equipeQtd}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, equipeQtd: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>Unidade</span>
-                    <input
-                      type="text"
-                      value={rdoForm.unidade}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, unidade: event.target.value }))}
-                    />
-                  </label>
-                </div>
-
-                <div className="triple-grid">
-                  <label className="field">
-                    <span>OcorrÃƒªncia</span>
-                    <select
-                      value={rdoForm.ocorrenciaTipo}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, ocorrenciaTipo: event.target.value }))}
-                    >
-                      <option value="outro">Outro</option>
-                      <option value="parada">Parada</option>
-                      <option value="chuva">Chuva</option>
-                      <option value="material">Material</option>
-                      <option value="acidente">Acidente</option>
-                    </select>
-                  </label>
-                  <label className="field">
-                    <span>Hora</span>
-                    <input
-                      type="time"
-                      value={rdoForm.ocorrenciaHora}
-                      onChange={(event) => setRdoForm((current) => ({ ...current, ocorrenciaHora: event.target.value }))}
-                    />
-                  </label>
-                  <label className="field">
-                    <span>DescriÃƒ§Ãƒ£o</span>
-                    <input
-                      type="text"
-                      value={rdoForm.ocorrenciaDescricao}
-                      onChange={(event) =>
-                        setRdoForm((current) => ({ ...current, ocorrenciaDescricao: event.target.value }))
-                      }
-                    />
-                  </label>
-                </div>
-
-                <div className="button-row">
-                  <button className="button primary" type="submit">
-                    Salvar RDO
-                  </button>
-                  <a className="button ghost" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">
-                    Abrir mÃƒ³dulo nativo
-                  </a>
-                </div>
-
-                {rdoMessage ? <p className="message">{rdoMessage}</p> : null}
-              </form>
-            </article>
-
-            <article className="panel">
-              <div className="section-head">
-                <div>
-                  <p className="eyebrow">RDOs existentes</p>
-                  <h2>Listagem, fechamento e PDF</h2>
-                </div>
-                <small>{formatInt(rdoList.items.length)} registros</small>
-              </div>
-
-              <div className="rdo-list">
-                {latestRdos.length ? (
-                  latestRdos.map((rdo) => (
-                    <article className="rdo-card" key={rdo.id}>
-                      <div className="rdo-top">
-                        <div>
-                          <strong>RDO {rdo.numero ?? rdo.id}</strong>
-                          <span>
-                            {formatDate(rdo.data)} Ã‚· {cleanText(rdo.nucleo)}
-                          </span>
-                        </div>
-                        <span className={toneClass(rdo.status)}>{cleanText(rdo.status)}</span>
-                      </div>
-                      <div className="rdo-meta">
-                        <span>ResponsÃƒ¡vel: {cleanText(rdo.responsavel ?? "-")}</span>
-                        <span>Custo: {formatCurrency(asNumber(rdo.total_custo))}</span>
-                        <span>Apontamentos: {formatInt(rdo.apontamentos?.length ?? 0)}</span>
-                      </div>
-                      <div className="button-row">
-                        <a className="button ghost slim" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">
-                          PDF
-                        </a>
-                        {cleanText(rdo.status) !== "FECHADO" ? (
-                          <button className="button ghost slim" onClick={() => handleCloseRdo(rdo.id)}>
-                            Fechar
-                          </button>
-                        ) : null}
-                        <a
-                          className="button ghost slim"
-                          href={apiUrl(`/api/rdo/${rdo.data}?nucleo=${encodeURIComponent(rdo.nucleo)}`)}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          JSON
-                        </a>
-                      </div>
-                    </article>
-                  ))
-                ) : (
-                  <div className="empty-box">
-                    <strong>Sem RDOs ainda.</strong>
-                    <p>O formulÃƒ¡rio ao lado jÃƒ¡ salva direto no backend.</p>
-                  </div>
-                )}
-              </div>
-            </article>
-          </section>
-
-          <section className="panel">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Cadastro, curva e cronograma</p>
-                <h2>Leituras operacionais do backend</h2>
-              </div>
-              <small>{companyName}</small>
-            </div>
-
-            <div className="triple-panels">
-              <article className="subpanel">
-                <strong>Cadastro tÃƒ©cnico</strong>
-                <ul className="plain-list">
-                  <li>FeiÃƒ§Ãƒµes no GeoJSON: {formatInt(geoJson?.features.length ?? 0)}</li>
-                  <li>Trechos: {formatInt(geoTrechos)}</li>
-                  <li>PVs/PIs: {formatInt(geoPvs)}</li>
-                  <li>
-                    <a href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">
-                      Abrir GeoJSON bruto
-                    </a>
-                  </li>
-                </ul>
-              </article>
-
-              <article className="subpanel">
-                <strong>Manage dataset</strong>
-                <ul className="plain-list">
-                  <li>NÃƒ³s: {formatInt(manageData?.nodes.length ?? 0)}</li>
-                  <li>Arestas: {formatInt(manageData?.edges.length ?? 0)}</li>
-                  <li>ExtensÃƒ£o: {formatMeters(asNumber(manageData?.ext))}</li>
-                  <li>Custo 5D: {formatCurrency(manageCost)}</li>
-                </ul>
-              </article>
-
-              <article className="subpanel">
-                <strong>Curva S</strong>
-                <ul className="plain-list">
-                  <li>Previsto: {formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</li>
-                  <li>Realizado: {formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</li>
-                  <li>Total de NS: {formatInt(curvaS?.n_total ?? 0)}</li>
-                  <li>ExtensÃƒ£o total: {formatMeters(curvaS?.ext_total ?? 0)}</li>
-                </ul>
-              </article>
-            </div>
-
-            <div className="nucleo-grid">
-              {visibleNuclei.length ? (
-                visibleNuclei.slice(0, 8).map((nucleo) => {
-                  const phase = currentPhase(nucleo);
-                  return (
-                    <article className="nucleo-card" key={nucleo.nome}>
-                      <div className="nucleo-top">
-                        <div>
-                          <strong>{cleanText(nucleo.nome)}</strong>
-                          <span>
-                            {formatDate(nucleo.inicio)} atÃƒ© {formatDate(nucleo.fim)}
-                          </span>
-                        </div>
-                        <span className={toneClass(phase?.id ?? "fase")}>{cleanText(phase?.nome ?? "Sem fase")}</span>
-                      </div>
-                      <div className="mini-grid">
-                        <div className="micro-card">
-                          <strong>ExtensÃƒ£o</strong>
-                          <span>{formatMeters(nucleo.extensao_m)}</span>
-                        </div>
-                        <div className="micro-card">
-                          <strong>Trechos</strong>
-                          <span>{formatInt(nucleo.n_trechos)}</span>
-                        </div>
-                        <div className="micro-card">
-                          <strong>Equipes</strong>
-                          <span>{formatInt(nucleo.equipes)}</span>
-                        </div>
-                        <div className="micro-card">
-                          <strong>DuraÃƒ§Ãƒ£o</strong>
-                          <span>{formatInt(nucleo.duracao_dias)} dias</span>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })
-              ) : (
-                <div className="empty-box">
-                  <strong>Nenhum nÃƒºcleo disponÃƒ­vel.</strong>
-                </div>
-              )}
-            </div>
-          </section>
-          
-          {error ? (
-            <section className="panel error-panel">
-              <p className="eyebrow">Falha</p>
-              <h2>Alguma rota nÃƒ£o respondeu</h2>
-              <p>{error}</p>
-            </section>
-          ) : null}
-
-          {booting ? (
-            <section className="panel loading-panel">
-              <p className="eyebrow">Carregando</p>
-              <h2>Montando o frontend</h2>
-              <p>Buscando saÃƒºde, cronograma, notas, RDOs, rede e processamento.</p>
-            </section>
-          ) : null}
-        </main>
-      </div>
+      {/* Tab content */}
+      <main className="tab-content">
+        {renderTabContent()}
+      </main>
     </div>
   );
 }
