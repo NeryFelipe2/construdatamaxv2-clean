@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ConstruData - HydroNetwork | Arquitetura de Dados BIM 5D</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Outfit:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060e;--s1:#0c0c18;--s2:#131326;--s3:#1a1a36;--brd:#252548;
+--acc:#00ff88;--acc2:#00cc66;--red:#ff3355;--yel:#ffd000;--blu:#3388ff;--cyn:#00ddff;--mag:#cc44ff;--ora:#ff8833;
+--txt:#d8d8ee;--dim:#556;--font:'Outfit',sans-serif;--mono:'IBM Plex Mono',monospace}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#0a0a1a,#0e0e28);border-bottom:1px solid var(--brd);padding:24px 40px;display:flex;align-items:center;gap:20px}
+.hdr h1{font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-1px}
+.hdr h1 span{color:var(--dim);font-weight:300;font-size:16px}
+.hdr .sub{font-size:11px;color:var(--dim);font-family:var(--mono);margin-left:auto}
+
+.content{max-width:1300px;margin:0 auto;padding:30px 40px}
+
+/* SECTION HEADERS */
+h2{font-size:20px;font-weight:800;margin:40px 0 20px;color:var(--txt);display:flex;align-items:center;gap:10px}
+h2 .tag{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+h2 .tag.leg{background:rgba(255,136,51,.15);color:var(--ora);border:1px solid rgba(255,136,51,.3)}
+h2 .tag.new{background:rgba(0,255,136,.12);color:var(--acc);border:1px solid rgba(0,255,136,.3)}
+h2 .tag.d5{background:rgba(255,208,0,.12);color:var(--yel);border:1px solid rgba(255,208,0,.3)}
+
+/* FLOW DIAGRAM */
+.flow{display:flex;align-items:stretch;gap:3px;padding:20px 0;overflow-x:auto}
+.fstep{min-width:140px;max-width:170px;padding:14px 12px;border-radius:8px;border:1px solid var(--brd);display:flex;flex-direction:column;align-items:center;text-align:center;transition:.3s;position:relative}
+.fstep:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.fstep .icon{font-size:22px;margin-bottom:6px}
+.fstep .name{font-size:12px;font-weight:600;margin-bottom:4px}
+.fstep .detail{font-size:9px;color:var(--dim);font-family:var(--mono);line-height:1.5}
+.fstep .file{font-size:9px;font-family:var(--mono);color:var(--cyn);margin-top:6px;padding:2px 6px;background:rgba(0,221,255,.08);border-radius:3px}
+
+.fstep.input{background:linear-gradient(135deg,rgba(51,136,255,.1),rgba(51,136,255,.05));border-color:rgba(51,136,255,.3)}
+.fstep.process{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,255,136,.03));border-color:rgba(0,255,136,.3)}
+.fstep.output{background:linear-gradient(135deg,rgba(255,208,0,.08),rgba(255,208,0,.03));border-color:rgba(255,208,0,.3)}
+.fstep.c3d{background:linear-gradient(135deg,rgba(204,68,255,.08),rgba(204,68,255,.03));border-color:rgba(204,68,255,.3)}
+.fstep.bim5d{background:linear-gradient(135deg,rgba(255,51,85,.08),rgba(255,51,85,.03));border-color:rgba(255,51,85,.3)}
+
+.arrow{display:flex;align-items:center;color:var(--acc);font-size:18px;flex-shrink:0;padding:0 2px}
+
+/* DATA SCHEMA */
+.schema{background:var(--s1);border:1px solid var(--brd);border-radius:10px;padding:20px;margin:15px 0}
+.schema h3{font-size:13px;font-weight:700;color:var(--cyn);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.schema h3 .badge{font-size:9px;padding:2px 8px;border-radius:10px;font-family:var(--mono)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
+.tbl th{padding:6px 10px;text-align:left;font-weight:600;color:var(--acc);font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--brd);background:var(--s2)}
+.tbl td{padding:5px 10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.tbl tr:hover td{background:rgba(0,255,136,.02)}
+.tbl .field{font-family:var(--mono);color:var(--cyn);font-weight:600}
+.tbl .type{font-family:var(--mono);color:var(--dim);font-size:10px}
+.tbl .req{color:var(--red);font-weight:700}
+.tbl .opt{color:var(--dim)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:15px;margin:15px 0}
+
+/* CODE */
+.code{background:#080812;border:1px solid var(--brd);border-radius:6px;padding:14px;font-family:var(--mono);font-size:11px;line-height:1.7;overflow-x:auto;color:var(--txt);margin:10px 0}
+.code .cm{color:#3a3a55}
+.code .kw{color:var(--blu)}
+.code .st{color:var(--acc)}
+.code .fn{color:var(--mag)}
+.code .nb{color:var(--yel)}
+
+/* TIMELINE TABLE */
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:15px 0}
+.phase{background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:12px;transition:.2s}
+.phase:hover{border-color:var(--acc)}
+.phase .num{font-size:10px;font-weight:700;color:var(--acc);font-family:var(--mono)}
+.phase .pname{font-size:13px;font-weight:600;margin:4px 0}
+.phase .pdesc{font-size:10px;color:var(--dim);line-height:1.5}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:30px 0}
+
+/* HIGHLIGHT BOX */
+.highlight{background:linear-gradient(135deg,rgba(0,255,136,.06),rgba(0,255,136,.02));border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:20px;margin:20px 0}
+.highlight h3{color:var(--acc);font-size:15px;margin-bottom:10px}
+.highlight p{font-size:12px;line-height:1.8;color:var(--txt)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>ConstruData <span>HydroNetwork</span></h1>
+  <h1 style="color:var(--yel);font-size:16px">Arquitetura BIM 5D</h1>
+  <div class="sub">CT 11481051 · SABESP · SLNR Santos · FCN Construções e Saneamento</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<h2>🔶 CAMINHO A — Núcleos Legados <span class="tag leg">DXF ProSaneamento → Civil 3D</span></h2>
+<p style="color:var(--dim);font-size:12px;margin-bottom:15px">Para os núcleos já projetados no ProSaneamento (Pantanal, Criadores, Teteu, Israel, Verde e Teteu)</p>
+
+<div class="flow">
+  <div class="fstep input">
+    <div class="icon">📁</div>
+    <div class="name">DXF ProSaneamento</div>
+    <div class="detail">Layers: TUBO_PVC<br>PS_PONTOS<br>PS_PONTOS_IDENT</div>
+    <div class="file">.dxf / .dwg</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep process">
+    <div class="icon">⚙️</div>
+    <div class="name">ler_dxf_gdal.py</div>
+    <div class="detail">GDAL/pyogrio<br>Clustering scipy<br>Auto-name água</div>
+    <div class="file">pvs, trechos, ruas</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep output">
+    <div class="icon">📋</div>
+    <div class="name">Notas de Serviço</div>
+    <div class="detail">gerar_ns.py<br>PDF A4 + JSON<br>HTML Leaflet</div>
+    <div class="file">NS_001.pdf/.json</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep c3d">
+    <div class="icon">🔮</div>
+    <div class="name">Civil 3D Import</div>
+    <div class="detail">LandXML 1.2<br>Dynamo .py<br>AutoCAD .scr</div>
+    <div class="file">.xml / .py / .scr</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep c3d">
+    <div class="icon">🔧</div>
+    <div class="name">Pipe Network</div>
+    <div class="detail">Catálogo SABESP<br>PVC/PEAD/PV<br>Geometria nativa</div>
+    <div class="file">.dwg (Civil 3D)</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep output">
+    <div class="icon">📦</div>
+    <div class="name">Export</div>
+    <div class="detail">NWC → Navisworks<br>IFC 2x3<br>LandXML</div>
+    <div class="file">.nwc / .ifc / .xml</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep bim5d">
+    <div class="icon">💎</div>
+    <div class="name">BIM 5D</div>
+    <div class="detail">3D + Tempo + Custo<br>Medição + Controle<br>ConstruData Manage</div>
+    <div class="file">R$ / cronograma</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<h2>🟢 CAMINHO B — Núcleos Novos <span class="tag new">Civil 3D Nativo → tudo</span></h2>
+<p style="color:var(--dim);font-size:12px;margin-bottom:15px">Para todos os próximos núcleos projetados direto no Civil 3D com ProSaneamento ou Pipe Network nativo</p>
+
+<div class="flow">
+  <div class="fstep c3d">
+    <div class="icon">🔧</div>
+    <div class="name">Civil 3D</div>
+    <div class="detail">Pipe Network nativo<br>Catálogo SABESP<br>Superfície topográfica</div>
+    <div class="file">.dwg</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep process">
+    <div class="icon">📤</div>
+    <div class="name">Export LandXML</div>
+    <div class="detail">BAT automático<br>ou File > Export<br>Pipe Networks</div>
+    <div class="file">.xml</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep process">
+    <div class="icon">⚙️</div>
+    <div class="name">ler_landxml.py</div>
+    <div class="detail">Lê Pipe Network<br>Mesmo formato<br>pvs, trechos</div>
+    <div class="file">pvs, trechos, ruas</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep output">
+    <div class="icon">📋</div>
+    <div class="name">Notas de Serviço</div>
+    <div class="detail">gerar_ns.py<br>PDF A4 campo<br>+ HTML + GeoJSON</div>
+    <div class="file">NS_001.pdf/.json</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep output">
+    <div class="icon">📐</div>
+    <div class="name">Cadastro NTS 292</div>
+    <div class="detail">DXF georref<br>Planta/Perfil<br>Carimbo SABESP</div>
+    <div class="file">.dxf + .pdf</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep output">
+    <div class="icon">📦</div>
+    <div class="name">IFC LOD 500</div>
+    <div class="detail">SweptDiskSolid<br>PropertySets custo<br>+ NWC do Civil 3D</div>
+    <div class="file">.ifc / .nwc</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="fstep bim5d">
+    <div class="icon">💎</div>
+    <div class="name">BIM 5D</div>
+    <div class="detail">Custo por trecho<br>Cronograma Project<br>Medição SABESP</div>
+    <div class="file">CONTROLE TOTAL</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<h2>💎 ESTRUTURA DE DADOS — BIM 5D <span class="tag d5">3D + TEMPO + CUSTO + MEDIÇÃO</span></h2>
+
+<div class="highlight">
+  <h3>O modelo central de dados</h3>
+  <p>Cada trecho da rede é um objeto que carrega <b>5 dimensões</b>: geometria 3D (coordenadas, DN, material), 
+  tempo (fase do cronograma, data prevista/real), custo (SINAPI por serviço), medição (% executado, BM aprovado) 
+  e as-built (dados de campo real). Tudo nasce da <b>Nota de Serviço</b> e termina no <b>Cadastro NTS 292</b>.</p>
+</div>
+
+<div class="grid">
+  <div class="schema">
+    <h3>📋 NOTA DE SERVIÇO (NS) <span class="badge" style="background:rgba(0,255,136,.15);color:var(--acc)">ORIGEM</span></h3>
+    <table class="tbl">
+      <tr><th>Campo</th><th>Tipo</th><th>Fonte</th></tr>
+      <tr><td class="field">ns_id</td><td class="type">int</td><td>Sequencial por núcleo</td></tr>
+      <tr><td class="field">pv_montante</td><td class="type">str</td><td>DXF ou Civil 3D</td></tr>
+      <tr><td class="field">pv_jusante</td><td class="type">str</td><td>DXF ou Civil 3D</td></tr>
+      <tr><td class="field">dn_mm</td><td class="type">int</td><td>Projeto (200/300/400)</td></tr>
+      <tr><td class="field">material</td><td class="type">str</td><td>Catálogo SABESP</td></tr>
+      <tr><td class="field">extensao_m</td><td class="type">float</td><td>Calculado geometria</td></tr>
+      <tr><td class="field">declividade_mm</td><td class="type">float</td><td>Projeto ou Manning</td></tr>
+      <tr><td class="field">ct_mont / cf_mont</td><td class="type">float</td><td>Topografia</td></tr>
+      <tr><td class="field">ct_jus / cf_jus</td><td class="type">float</td><td>Topografia</td></tr>
+      <tr><td class="field">coord_E / coord_N</td><td class="type">float</td><td>UTM SIRGAS 2000</td></tr>
+      <tr><td class="field">rua</td><td class="type">str</td><td>Cartografia</td></tr>
+      <tr><td class="field">nucleo</td><td class="type">str</td><td>Contrato</td></tr>
+    </table>
+  </div>
+
+  <div class="schema">
+    <h3>🔧 PIPE NETWORK (Civil 3D) <span class="badge" style="background:rgba(204,68,255,.15);color:var(--mag)">3D</span></h3>
+    <table class="tbl">
+      <tr><th>Elemento</th><th>Dados</th><th>Catálogo</th></tr>
+      <tr><td class="field">IfcFlowSegment (tubo)</td><td class="type">DN, material, ext, decl</td><td>PVC_SABESP.xml</td></tr>
+      <tr><td class="field">IfcBuildingElementProxy (PV)</td><td class="type">CT, CF, prof, Ø</td><td>PV_REDONDO.xml</td></tr>
+      <tr><td class="field">SweptDiskSolid</td><td class="type">raio ext/int, directrix</td><td>Geometria 3D real</td></tr>
+      <tr><td class="field">ExtrudedAreaSolid</td><td class="type">Ø, altura</td><td>Geometria PV real</td></tr>
+      <tr><td class="field">Placement</td><td class="type">x, y, z (UTM)</td><td>Georref SIRGAS</td></tr>
+      <tr><td class="field">Conectividade</td><td class="type">PV_ini ↔ PV_fim</td><td>Grafo topológico</td></tr>
+    </table>
+  </div>
+
+  <div class="schema">
+    <h3>💰 CUSTO 5D <span class="badge" style="background:rgba(255,208,0,.15);color:var(--yel)">R$</span></h3>
+    <table class="tbl">
+      <tr><th>Campo</th><th>Fórmula</th><th>Fonte Preço</th></tr>
+      <tr><td class="field">custo_tubo</td><td class="type">preço_unit × ext_m</td><td>SINAPI SP + BDI 25%</td></tr>
+      <tr><td class="field">custo_escavacao</td><td class="type">R$/m³ × ext × larg × prof</td><td>SINAPI 93358</td></tr>
+      <tr><td class="field">custo_reaterro</td><td class="type">R$/m³ × ext × larg × prof</td><td>SINAPI 93382</td></tr>
+      <tr><td class="field">custo_reposicao</td><td class="type">R$/m² × ext × largura</td><td>SINAPI 94993</td></tr>
+      <tr><td class="field">custo_pv</td><td class="type">R$/un (PV ou PI)</td><td>SINAPI 93390</td></tr>
+      <tr><td class="field">custo_ligacao</td><td class="type">R$/un × n_ligações</td><td>SINAPI 93591</td></tr>
+      <tr><td class="field">custo_total</td><td class="type">Σ todos acima</td><td>Anexo C contrato</td></tr>
+    </table>
+  </div>
+
+  <div class="schema">
+    <h3>📅 CRONOGRAMA 4D <span class="badge" style="background:rgba(51,136,255,.15);color:var(--blu)">TEMPO</span></h3>
+    <table class="tbl">
+      <tr><th>Campo</th><th>Tipo</th><th>Fonte</th></tr>
+      <tr><td class="field">fase</td><td class="type">int (1-12)</td><td>WBS do Project</td></tr>
+      <tr><td class="field">data_prevista_ini</td><td class="type">date</td><td>MS Project</td></tr>
+      <tr><td class="field">data_prevista_fim</td><td class="type">date</td><td>MS Project</td></tr>
+      <tr><td class="field">data_real_ini</td><td class="type">date</td><td>Campo (as-built)</td></tr>
+      <tr><td class="field">data_real_fim</td><td class="type">date</td><td>Campo (as-built)</td></tr>
+      <tr><td class="field">pct_executado</td><td class="type">float 0-100%</td><td>Medição</td></tr>
+      <tr><td class="field">predecessora</td><td class="type">int[]</td><td>Dependências</td></tr>
+    </table>
+  </div>
+
+  <div class="schema">
+    <h3>📊 MEDIÇÃO (BM) <span class="badge" style="background:rgba(255,51,85,.15);color:var(--red)">SABESP</span></h3>
+    <table class="tbl">
+      <tr><th>Campo</th><th>Tipo</th><th>Regra</th></tr>
+      <tr><td class="field">bm_numero</td><td class="type">int</td><td>BM_01, BM_02...</td></tr>
+      <tr><td class="field">periodo</td><td class="type">date range</td><td>Mensal</td></tr>
+      <tr><td class="field">trecho_id</td><td class="type">FK → NS</td><td>Referência à NS</td></tr>
+      <tr><td class="field">servico</td><td class="type">str</td><td>Código SINAPI</td></tr>
+      <tr><td class="field">qtd_medida</td><td class="type">float</td><td>m, m³, un</td></tr>
+      <tr><td class="field">valor_medido</td><td class="type">float</td><td>qtd × preço unit</td></tr>
+      <tr><td class="field">status_cadastro</td><td class="type">enum</td><td class="req">OBRIGATÓRIO p/ pagar</td></tr>
+      <tr><td class="field">status_fiscal</td><td class="type">enum</td><td>Aprovado/Reprovado</td></tr>
+    </table>
+  </div>
+
+  <div class="schema">
+    <h3>📐 AS-BUILT (NTS 292) <span class="badge" style="background:rgba(0,221,255,.15);color:var(--cyn)">ENTREGA</span></h3>
+    <table class="tbl">
+      <tr><th>Campo</th><th>Tipo</th><th>Regra NTS 292</th></tr>
+      <tr><td class="field">ct_real / cf_real</td><td class="type">float</td><td>Medido em campo</td></tr>
+      <tr><td class="field">dn_real</td><td class="type">int</td><td>Executado (pode mudar)</td></tr>
+      <tr><td class="field">material_real</td><td class="type">str</td><td>Fabricante + lote</td></tr>
+      <tr><td class="field">coord_real_E/N</td><td class="type">float</td><td>UTM SIRGAS 2000</td></tr>
+      <tr><td class="field">metodo_construtivo</td><td class="type">str</td><td>Vala aberta / MND</td></tr>
+      <tr><td class="field">data_execucao</td><td class="type">date</td><td>Data real da obra</td></tr>
+      <tr><td class="field">dwg_georref</td><td class="type">file</td><td class="req">OBRIGATÓRIO</td></tr>
+      <tr><td class="field">pdf_assinado</td><td class="type">file</td><td class="req">OBRIGATÓRIO</td></tr>
+      <tr><td class="field">art_crea</td><td class="type">str</td><td class="req">OBRIGATÓRIO</td></tr>
+      <tr><td class="field">signos_atestado</td><td class="type">str</td><td>Via VisualBIM/1DOC</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<h2>⚡ SCRIPTS — Mapa de Execução</h2>
+
+<div class="schema">
+  <h3>Pipeline Completo — Quem chama quem</h3>
+  <div class="code">
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<span class="cm">  CAMINHO A: DXF ProSaneamento (núcleos existentes)</span><br>
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<br>
+  <span class="fn">ler_dxf_gdal.py</span>(<span class="st">"PANTANAL_ESGOTO.dxf"</span>)<br>
+  &nbsp;&nbsp;→ pvs, trechos, ruas, meta<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_ns.py</span>(pvs, trechos) → <span class="st">NS_001.pdf</span>, <span class="st">NS_001.json</span>, <span class="st">REDE.html</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_civil3d.py</span>(pvs, trechos) → <span class="st">ESGOTO.xml</span> (LandXML)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└─→ <span class="cm">Civil 3D: File > Import LandXML → Pipe Network</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─→ <span class="cm">Civil 3D: Export → .nwc (Navisworks Cache)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_cadastro_nts292.py</span>(pvs, trechos) → <span class="st">CADASTRO.dxf</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_ifc_lod500.py</span>(pvs, trechos) → <span class="st">LOD500.ifc</span> + <span class="st">LOD500.csv</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;└─→ <span class="fn">gerar_project_xml.py</span>(pvs, trechos) → <span class="st">CRONOGRAMA.xml</span> (MS Project)<br>
+<br>
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<span class="cm">  CAMINHO B: Civil 3D Nativo (núcleos futuros)</span><br>
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<br>
+  <span class="cm">Civil 3D: Projetar Pipe Network → Export LandXML</span><br>
+  &nbsp;&nbsp;│<br>
+  <span class="fn">ler_landxml.py</span>(<span class="st">"REDE_EXPORTADA.xml"</span>)<br>
+  &nbsp;&nbsp;→ pvs, trechos, ruas, meta  <span class="cm">(mesmo formato!)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_ns.py</span> → NS de campo<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_cadastro_nts292.py</span> → Cadastro as-built<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_ifc_lod500.py</span> → IFC + custo 5D<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─→ <span class="fn">gerar_project_xml.py</span> → Cronograma<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;└─→ <span class="cm">NWC direto do Civil 3D (já é Pipe Network nativo)</span><br>
+<br>
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<span class="cm">  CONVERGÊNCIA: Ambos caminhos → BIM 5D</span><br>
+<span class="cm">══════════════════════════════════════════════════════════</span><br>
+<br>
+  <span class="fn">ConstruData Manage</span>:<br>
+  &nbsp;&nbsp;IFC (geometria 3D + PropertySets custo) <br>
+  &nbsp;&nbsp;&nbsp;+ CRONOGRAMA.xml (fases + datas)<br>
+  &nbsp;&nbsp;&nbsp;+ MEDIÇÃO (BM por trecho, vinculada à NS)<br>
+  &nbsp;&nbsp;&nbsp;= <span class="nb">BIM 5D COMPLETO</span><br>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<h2>🎯 FLUXO DO CONTROLE DE OBRA — 5D na Prática</h2>
+
+<div class="phase-grid">
+  <div class="phase">
+    <div class="num">FASE 1</div>
+    <div class="pname">📁 Receber Projeto</div>
+    <div class="pdesc">DXF (legado) ou DWG Civil 3D (novo). Rodar <b>ler_dxf_gdal</b> ou <b>ler_landxml</b>. Resultado: pvs + trechos padronizados.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 2</div>
+    <div class="pname">📋 Gerar NS de Campo</div>
+    <div class="pdesc">Rodar <b>gerar_ns.py</b>. Cada trecho vira uma NS com PDF A4 pro encanador. Imprimir e levar pra obra.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 3</div>
+    <div class="pname">🔧 Criar Pipe Network</div>
+    <div class="pdesc">Importar LandXML no Civil 3D com catálogo SABESP (PVC_SABESP.xml). Pipe Network nativo com geometria real.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 4</div>
+    <div class="pname">💰 Montar 5D</div>
+    <div class="pdesc">Rodar <b>gerar_ifc_lod500.py</b> + <b>gerar_project_xml.py</b>. Cada tubo recebe custo SINAPI. Cronograma por fase.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 5</div>
+    <div class="pname">🏗️ Executar Obra</div>
+    <div class="pdesc">Encanador executa conforme NS. Topógrafo mede o as-built. Dados voltam pro sistema (CT/CF reais).</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 6</div>
+    <div class="pname">📊 Medir (BM)</div>
+    <div class="pdesc">Boletim de Medição por trecho executado. <b>Pagamento condicionado ao cadastro</b> (contrato pág. 64). Vincular NS → BM.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 7</div>
+    <div class="pname">📐 Cadastro NTS 292</div>
+    <div class="pdesc">Rodar <b>gerar_cadastro_nts292.py</b> com dados as-built reais. DXF georref + PDF assinado → SIGNOS via VisualBIM.</div>
+  </div>
+  <div class="phase">
+    <div class="num">FASE 8</div>
+    <div class="pname">💎 Controlar no ConstruData</div>
+    <div class="pdesc">Viewer 3D mostra: <b style="color:var(--acc)">verde</b>=executado, <b style="color:var(--yel)">amarelo</b>=em andamento, <b style="color:var(--red)">vermelho</b>=atrasado. Custo acumulado = curva S.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<h2>🗂️ CATÁLOGOS DE TUBULAÇÃO</h2>
+<p style="color:var(--dim);font-size:12px;margin-bottom:15px">Integrados no Civil 3D (AeccCatCfg.xml) e no ConstruData (PropertySets IFC)</p>
+
+<div class="grid">
+  <div class="schema">
+    <h3>PVC SABESP — NBR 9649 / 7362</h3>
+    <table class="tbl">
+      <tr><th>DN (mm)</th><th>Preço (R$/m)</th><th>Manning n</th><th>Junta</th></tr>
+      <tr><td>100</td><td class="field">28.90</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+      <tr><td>150</td><td class="field">38.50</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+      <tr><td>200</td><td class="field">47.12</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+      <tr><td>250</td><td class="field">68.30</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+      <tr><td>300</td><td class="field">89.45</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+      <tr><td>400</td><td class="field">135.20</td><td>0.013</td><td>Bolsa-Ponta</td></tr>
+    </table>
+  </div>
+  <div class="schema">
+    <h3>PEAD SABESP — NBR 13750 / 15561</h3>
+    <table class="tbl">
+      <tr><th>DN (mm)</th><th>Preço (R$/m)</th><th>Manning n</th><th>Junta</th></tr>
+      <tr><td>63</td><td class="field">22.50</td><td>0.011</td><td>Eletrofusão</td></tr>
+      <tr><td>110</td><td class="field">31.80</td><td>0.011</td><td>Eletrofusão</td></tr>
+      <tr><td>160</td><td class="field">42.30</td><td>0.011</td><td>Eletrofusão</td></tr>
+      <tr><td>200</td><td class="field">55.40</td><td>0.011</td><td>Eletrofusão</td></tr>
+      <tr><td>250</td><td class="field">72.80</td><td>0.011</td><td>Eletrofusão</td></tr>
+      <tr><td>315</td><td class="field">98.60</td><td>0.011</td><td>Eletrofusão</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="schema">
+  <h3>PV REDONDO SABESP — N-100</h3>
+  <table class="tbl">
+    <tr><th>Tipo</th><th>Ø int (mm)</th><th>Ø tampão (mm)</th><th>Preço (R$/un)</th><th>Material</th></tr>
+    <tr><td class="field">Poço de Visita</td><td>1200</td><td>600</td><td class="field">3.078,00</td><td>Concreto + FFD</td></tr>
+    <tr><td class="field">Poço de Inspeção</td><td>600</td><td>400</td><td class="field">1.250,00</td><td>Plástico + FFD</td></tr>
+    <tr><td class="field">Terminal de Limpeza</td><td>400</td><td>400</td><td class="field">850,00</td><td>PVC</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<div class="highlight">
+  <h3>🎯 Resumo: O que temos vs O que falta</h3>
+  <table class="tbl" style="margin-top:10px">
+    <tr><th>Componente</th><th>Status</th><th>Próximo Passo</th></tr>
+    <tr><td>ler_dxf_gdal.py v4 (DXF → dados)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>ler_landxml.py (Civil 3D → dados)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>gerar_ns.py (Notas de Serviço)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>gerar_civil3d.py (LandXML + Dynamo)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>gerar_cadastro_nts292.py (As-Built)</td><td style="color:var(--acc)">✅ PRONTO</td><td>Cartografia entorno</td></tr>
+    <tr><td>gerar_ifc_lod500.py (IFC 3D real)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>gerar_project_xml.py (MS Project)</td><td style="color:var(--acc)">✅ PRONTO</td><td>Ajustar produtividades</td></tr>
+    <tr><td>ConstruData Manage (viewer 3D)</td><td style="color:var(--acc)">✅ PRONTO</td><td>Import IFC genérico</td></tr>
+    <tr><td>Catálogos SABESP (XML Civil 3D)</td><td style="color:var(--acc)">✅ PRONTO</td><td>Mais fabricantes</td></tr>
+    <tr><td>Formulário As-Built (campo → sistema)</td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>GUI lançar CT/CF reais</td></tr>
+    <tr><td>Módulo Medição (BM → BIM)</td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Vincular NS → BM → pagamento</td></tr>
+    <tr><td>Curva S (custo acumulado × tempo)</td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Gráfico previsto × real</td></tr>
+    <tr><td>Import IFC genérico (web-ifc)</td><td style="color:var(--red)">⏳ FUTURO</td><td>Carregar qualquer .ifc</td></tr>
+    <tr><td>Export NWC (Navisworks)</td><td style="color:var(--dim)">❌ Proprietário</td><td>Usar Civil 3D → NWC</td></tr>
+  </table>
+</div>
+
+</div>
+</body>
+</html>

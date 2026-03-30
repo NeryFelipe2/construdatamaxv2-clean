@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CatalogConfiguration xmlns="http://www.autodesk.com/civil/Parts">
+  <Name>ConstruData SABESP</Name>
+  <Description>Catálogo de tubos e estruturas para SABESP - SE LIGA NA REDE</Description>
+  <Version>5.1.0</Version>
+  <Date>2026-03-20</Date>
+  <Author>Felipe Nery - DGS Engenharia</Author>
+  
+  <PipeCatalogs>
+    <PipeCatalog>
+      <Name>PVC SABESP</Name>
+      <Description>Tubo PVC para esgoto - NBR 9649</Description>
+      <Path>./metric pipes/PVC_SABESP/PVC_SABESP.xml</Path>
+      <Material>PVC</Material>
+      <Roughness>0.013</Roughness>
+      <Standard>NBR 9649</Standard>
+    </PipeCatalog>
+    
+    <PipeCatalog>
+      <Name>PEAD SABESP</Name>
+      <Description>Tubo PEAD para esgoto - NBR 13750</Description>
+      <Path>./metric pipes/PEAD_SABESP/PEAD_SABESP.xml</Path>
+      <Material>HDPE</Material>
+      <Roughness>0.011</Roughness>
+      <Standard>NBR 13750</Standard>
+    </PipeCatalog>
+  </PipeCatalogs>
+  
+  <StructureCatalogs>
+    <StructureCatalog>
+      <Name>PV Redondo SABESP</Name>
+      <Description>Poço de Visita Redondo - Norma SABESP</Description>
+      <Path>./metric structures/PV_REDONDO_SABESP/PV_REDONDO_SABESP.xml</Path>
+      <Type>Manhole</Type>
+      <Shape>Round</Shape>
+      <Diameter>1200</Diameter>
+      <Standard>SABESP N-100</Standard>
+    </StructureCatalog>
+  </StructureCatalogs>
+  
+  <PartSizeTemplates>
+    <Template>
+      <Name>DN100</Name>
+      <Diameter>100</Diameter>
+    </Template>
+    <Template>
+      <Name>DN150</Name>
+      <Diameter>150</Diameter>
+    </Template>
+    <Template>
+      <Name>DN200</Name>
+      <Diameter>200</Diameter>
+    </Template>
+    <Template>
+      <Name>DN300</Name>
+      <Diameter>300</Diameter>
+    </Template>
+  </PartSizeTemplates>
+  
+  <ValidationRules>
+    <Rule>
+      <Name>Min_DN_Esgoto</Name>
+      <Description>Diâmetro mínimo para esgoto</Description>
+      <Value>100</Value>
+      <Unit>mm</Unit>
+    </Rule>
+    <Rule>
+      <Name>Min_Declividade</Name>
+      <Description>Declividade mínima</Description>
+      <Value>0.002</Value>
+      <Unit>m/m</Unit>
+    </Rule>
+    <Rule>
+      <Name>Min_Profundidade</Name>
+      <Description>Profundidade mínima</Description>
+      <Value>0.30</Value>
+      <Unit>m</Unit>
+    </Rule>
+  </ValidationRules>
+  
+</CatalogConfiguration>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage
+  SchemaVersion="1.0"
+  AutodeskProduct="AutoCAD"
+  Name="PipeNetworkExporter"
+  ProductType="Application"
+  AppVersion="1.0.0"
+  FriendlyVersion="1.0.0"
+  Description="ConstruData Pipe Network exporter for Civil 3D"
+  DescriptionPtb="Exportador ConstruData de Pipe Network para Civil 3D"
+  AppNameSpace="ConstruData.Civil3D"
+  Author="ConstruData"
+  ProductCode="{C1A0A2E8-4F68-4D6D-9B11-2A95510D1E51}"
+  UpgradeCode="{07A4D874-B7E9-40E1-B0A4-0D3CBE8A92F1}">
+  <CompanyDetails Name="ConstruData" Url="https://example.invalid" />
+
+  <Components Description="Civil 3D 2026">
+    <RuntimeRequirements
+      OS="Win64"
+      Platform="Civil3D"
+      SeriesMin="R25.1"
+      SeriesMax="R25.1" />
+    <ComponentEntry
+      AppName="PipeNetworkExporter"
+      AppType=".NET"
+      ModuleName="./Contents/PipeNetworkExporter.dll"
+      AppDescription="Exports Pipe Networks to JSON and CSV"
+      LoadOnAutoCADStartup="False"
+      LoadOnRequest="True">
+      <Commands>
+        <Command Global="CD_EXPORT_PIPENET" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+</ApplicationPackage>

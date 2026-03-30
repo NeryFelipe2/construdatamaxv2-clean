@@ -1,0 +1,3952 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{6F9C7B8B-9503-44D9-8C0C-894C4C6D2888}"/><Properties><ItemName>External Works</ItemName><Images option="0"/><Time createdUniversalDateTime="2008-01-23T12:35:13" modifiedUniversalDateTime="2008-01-23T08:00:12"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{CB3F5D4B-37C7-4834-A82B-C269A7046C99}"/><Properties><ItemName>Bollards</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:37:31" modifiedUniversalDateTime="2007-09-13T13:37:31"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{66BC9CA6-A3DC-405D-BE25-82F3C17F2675}"/><Properties><ItemName>Furnitubes ENN 567</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_354C5BBA-EAD7-4A5A-89E5-0DD3B5BEBE85.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:06:30"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "UrbanbollardftENN567.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B41505E7-9A19-4F58-8814-F4845DDE92FC}"/><Properties><ItemName>Broxap BX46 7003</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_BBAA1A5B-88E5-4F41-8032-D85123B4C9C0.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:06:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "UrbanbollardbroxapBX467003.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CE91F2BD-F25F-402B-8FC5-1176954EE3AA}"/><Properties><ItemName>Townscape Bloc 760</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_239A224E-80AA-40B3-8082-3E419C266011.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:07:03"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollardtownscapebloc760.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{85794D0D-D142-4EFB-8342-9B5B8AB1A922}"/><Properties><ItemName>Marshalls RB123</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_10F42B5A-A157-4260-A4BB-A4046F42D120.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:07:22"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "UrbanbollardmarshallsRB123.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{633BA48F-CFCC-4EE0-9C53-33388CA03921}"/><Properties><ItemName>Ollerton OB 111</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_58E49AEF-6533-4B77-A56F-A9CD0561D09B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:07:51"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "UrbanbollardollertonOB111.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{7CE50C2A-7058-48CF-9377-E2178E2EBB2C}"/><Properties><ItemName>Bollard 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C9C755DC-A434-4BC1-B49E-B1375935C229.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:01"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8625D274-297B-4640-A471-03E08ED85596}"/><Properties><ItemName>Bollard 09</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_9BA76B1F-57D8-4772-9EAC-545137CEC9C2.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:11"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard09.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{37D40A53-50D2-4303-A141-DDF461FF38C1}"/><Properties><ItemName>Bollard 14</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_31A72A80-4098-4717-BFD8-B0B36CA1694A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:20"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard14.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6B326AE6-B8F7-4624-8C76-308C00440F67}"/><Properties><ItemName>Bollard 19</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C75E207A-24EC-4031-A194-24C8A07D11E4.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:30"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard19.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{900EB8A8-C6C1-40A2-87BF-266E321B13DC}"/><Properties><ItemName>Bollard 23</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_62066141-0A22-43AE-8EBF-DA06254DB505.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard23.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{96753A99-DC53-4950-A917-FF2B549F9806}"/><Properties><ItemName>Bollard 29</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_31A272B4-1BBA-4684-8967-7A4E51D39874.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:08:49"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard29.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C327CD7D-D461-4DF9-85D3-9019F329646B}"/><Properties><ItemName>Bollard 30</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_55BA013B-3ACB-4B43-81BB-339CEB8340DC.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:02"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard30.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1A234624-F9FE-4E63-9E60-EC59560D977C}"/><Properties><ItemName>Bollard 33</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_2FD7EE48-42D9-48F2-8178-794A14DBCF6B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:12"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard33.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{837D02D3-5F2B-4B57-86FC-35C5D52ECB01}"/><Properties><ItemName>Bollard 39</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_67BAA09E-71CD-49D3-90E5-02F7833BFEF9.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:21"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbollard39.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{21FDB83F-CDF2-44DD-8EAD-9F260EB4B231}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:41:51" modifiedUniversalDateTime="2007-09-13T13:41:51"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A58CAC00-199F-48D7-BE75-F22D4A3760C9}"/><Properties><ItemName>Amenity Lighting</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:38:05" modifiedUniversalDateTime="2007-09-13T13:38:05"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{85055DD4-B08B-452A-807D-17FF9354C4B1}"/><Properties><ItemName>Abacus 3500</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_0701C820-D449-4C2A-92BA-CCCCCF3CF047.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:34"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylightabacus3500.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{55762FB0-DBB1-4FD8-BE7D-8286647A6CD9}"/><Properties><ItemName>Britannia 8011</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_77AB20BE-8741-4E19-A887-1ECB2111C506.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylightbritannia8011.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{38FEB0EA-E695-466B-A08D-FAC9255FC6A9}"/><Properties><ItemName>Candela E01 A</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_B9DB821D-B6D1-4F12-AD17-D0DD323E424F.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:09:58"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylightcandelae01a.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{AA75D9C5-ACD7-4032-A8D4-81324C59CC61}"/><Properties><ItemName>Urbis Carlton</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_B426B9B7-7B6E-4305-96B6-D767C34E503E.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:10:13"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylighturbiscarlton.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DB9C77E9-5C33-4F6B-8523-6F883006CDF4}"/><Properties><ItemName>Urbis 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_07BB8A34-6116-485A-A43E-D7FC340DBAF2.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:10:22"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylighturbis02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{13750B25-0C7B-48B9-AB47-14AFF1C1AAFF}"/><Properties><ItemName>WE-EP AL500</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_E7CA486D-C38A-471B-B27C-B44F8E42E2C5.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:10:36"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylightweepal500.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F5ED6974-BEFC-478B-826B-8F68BAF1265C}"/><Properties><ItemName>Light amenity 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_EDCF664E-890C-439F-86B8-0C113A63552B.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:10:49"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylight01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{63D62064-51D1-48B8-9F3F-904BE90595E5}"/><Properties><ItemName>Light amenity 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_66D12CD8-4993-42A1-921A-550F2B700F81.png"/></Images><Description>Insert multi-view block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:10:58"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Amenitylight02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{004023D8-18F0-49D6-A153-536D8A91B9A1}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:45:43" modifiedUniversalDateTime="2007-09-13T13:45:43"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EC912819-4AB2-46F8-B65C-8AF364860A69}"/><Properties><ItemName>Litter Bins</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:46:01" modifiedUniversalDateTime="2007-09-13T13:46:01"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{83871F18-D4D8-48A7-9979-7A33C483B5E1}"/><Properties><ItemName>Litter Bin Broxap 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_0A4C743E-8A66-44DA-A4C8-0536CF958A74.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:07"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbbinbroxap01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{620A8C37-AC18-4EB3-A644-7DBBB4A89461}"/><Properties><ItemName>Litter Bin Broxap 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_3368EDEF-148F-4723-9F40-A18D38E7F90F.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:19"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbbinbroxap02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8CF0A981-5B70-4D60-B47F-7C9D7A137094}"/><Properties><ItemName>Litter Bin 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_EF1718E3-DC56-49E2-A7CE-4D876DBD9C96.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:28"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbbin02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{36BB5BA3-CAA4-4162-80AB-AB1D6E8673EA}"/><Properties><ItemName>Skip</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_2D95B34F-DC1E-4F38-BB1C-785F09EAED28.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:37"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbbinskip.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{50937E89-D99C-48B1-85C9-F7C39F45C4D4}"/><Properties><ItemName>Industrial bin</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_1802D4EF-9100-4A8D-AF4C-982565B1F5FF.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:47"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanbbinindustrial.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FA36D502-0F05-4217-8841-A0D618DAC740}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:48:09" modifiedUniversalDateTime="2007-09-13T13:48:09"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CB9F4E63-8DC6-471D-A879-4D42ECDEFE55}"/><Properties><ItemName>Seating</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:48:14" modifiedUniversalDateTime="2007-09-13T13:48:14"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D5394352-EAD7-4719-9FB2-DBCB5D84173F}"/><Properties><ItemName>Seat Broxap 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C122BFDA-11BB-46C4-8043-D8C84F91B0B2.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:11:58"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanseatbroxap01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{83B26070-72CD-41E8-B7EB-31B35AC74941}"/><Properties><ItemName>Seat Townscape 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_5A708C6F-6FF5-4768-A4B8-AED6DDA4D116.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:12:16"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanseattownscape01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{57B6C0A5-C6E7-410C-A99F-78FB76EED74E}"/><Properties><ItemName>Bench 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C4F1221E-D5E8-4F52-84FB-6EFDE29BC58B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:12:34"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanseatbench01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8506DC09-4517-4CA4-8B7B-99E81443FF03}"/><Properties><ItemName>Bench 03</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_6668F3E0-11E4-4F21-9772-1CB54310F7A1.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:12:43"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanseatbench03.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E16E79ED-F946-405E-BA27-C651E26F2B5A}"/><Properties><ItemName>Bench 07</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_B525787C-1DAF-4B1B-9455-FA3421252CDA.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:12:55"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanseatbench07.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5F7ED403-5FA5-40AA-BC94-11CAD8928F79}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:50:18" modifiedUniversalDateTime="2007-09-13T13:50:18"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{BAF0C897-391B-4861-AE3F-F60CA395F15A}"/><Properties><ItemName>Shelters</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:50:35" modifiedUniversalDateTime="2007-09-13T13:50:35"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8AADF8D4-FAA2-4EFE-B836-184F3B53689A}"/><Properties><ItemName>Cantilever 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_831D730D-370F-48F6-9696-F68CCCAEA0B7.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:13:05"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Sheltercantilever01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FA09AE49-E1FB-46BA-AE6D-EED6336DFDA9}"/><Properties><ItemName>Cantilever 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_CF300B07-CDAE-4B92-9698-BD2E823CBCAD.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:13:14"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Sheltercantilever02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4B8A6838-7DDF-47DB-8E23-FC393F54E87B}"/><Properties><ItemName>Shelter 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_6924DEE1-EDAF-43C7-A02C-E5AF499B1141.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:13:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Shelter01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A52C4ED6-C910-4AE0-B322-8CE090F55B00}"/><Properties><ItemName>Shelter 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_826E5C63-5BFB-4156-B70A-DE476E7CC482.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:13:35"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Shelter02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A7774BD8-7EA1-4655-BBA7-428AAB5FE8F1}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:51:49" modifiedUniversalDateTime="2007-09-13T13:51:49"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E4962E64-7BA3-4EC2-AE4D-940FD2695F0C}"/><Properties><ItemName>Fencing</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:51:53" modifiedUniversalDateTime="2007-09-13T13:51:53"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{ABF1F324-BF69-4ECF-BA01-7525A8AB0284}"/><Properties><ItemName>Fence 1.2m picket</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_7182B9F2-D0AE-44DF-A1C7-DE817E6869BB.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:13:50"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingfence1-2picket.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1535E536-C5F5-46EB-83E9-65E019B34177}"/><Properties><ItemName>Railing 1m</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_BFC60B16-0529-4A9D-8868-D0E5BB7791EA.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:14:01"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingrail1m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{AF8B9BB9-01CF-40BA-B466-8AC59167E3D8}"/><Properties><ItemName>Knee rail 0.5m 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_913135F3-EAFB-469D-B541-592D85E1DB6E.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:14:16"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingknee0-5m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4BB0886A-7F00-47F1-91A8-BFE3618289FF}"/><Properties><ItemName>Railing bowtop 1.2m</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_D41E0E58-3878-43B6-A160-E1F568CC7DD3.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:14:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingbowtop1-2m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3BF4E22D-4AA1-4ECB-9752-65F3F1D79361}"/><Properties><ItemName>Railing 1.4m</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C3CE11BF-7A5D-4A74-B0FC-25F62A68C4A1.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:14:41"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailing1-4m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F83A2A1E-BB99-44DD-873C-5E312992E1B2}"/><Properties><ItemName>Fencing post wood 1.2m</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_5E89C26A-5C4A-4D92-92F3-22567328ED24.png"/></Images><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:14:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingpostwood1-2m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{522918F3-A030-4440-99DF-40ABEF16DF83}"/><Properties><ItemName>Fencing post metal 1.4m</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_18C1CB83-2CBC-4062-B91C-B21BDD33FB25.png"/></Images><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:07"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Urbanrailingpostmetal1-2m.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E29DE9F3-4EA4-4B52-87A9-0170508E39B7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:53:58" modifiedUniversalDateTime="2007-09-13T13:53:58"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{24FF82B1-45D1-43D1-A26D-A1D5D63A2154}"/><Properties><ItemName>Playground</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:54:04" modifiedUniversalDateTime="2007-09-13T13:54:04"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{64A68EE0-BFD3-459B-A3E8-600263507B25}"/><Properties><ItemName>Record RSS RP054</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_9410EFDA-041D-4599-A755-3E04F01E6F8A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:17"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp054.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A48A875B-B2ED-4261-AD18-DB3E8013E072}"/><Properties><ItemName>Record RSS RP123</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_7DD08846-E7A3-40BF-8B89-A7D1EB873E9A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:26"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp123.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0336CDF9-37C7-4AD3-96AD-CF508033C1CE}"/><Properties><ItemName>Record RSS RP133</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_61D5C1A3-FAE5-49C7-B112-CFF06D1796D1.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:37"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp133.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E74E8B8F-661E-4F58-847E-661145B4D78E}"/><Properties><ItemName>Record RSS RP267</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_53E0AFF2-7252-4E85-937E-A857EB75862D.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:47"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp267.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0F35B796-BB4F-42BD-BA0E-1093C3BEB1EC}"/><Properties><ItemName>Record RSS RP270</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_205C122E-06FE-4EA7-A771-C25F6BF8D307.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:15:58"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp270.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{99C3F2E8-8ED9-4084-AF19-1D035EF4B794}"/><Properties><ItemName>Record RSS RP275</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_A6C06933-6CB7-4CDE-8681-115EDAB4E703.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:16:13"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp275.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{7A448EE9-D6E7-42ED-A56A-96008C4E5E4C}"/><Properties><ItemName>Record RSS RP282</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_698B2070-6735-4B4B-91E3-497172C02C2D.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:16:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp282.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4FCB99EE-DAC1-4709-8598-295A2A91703C}"/><Properties><ItemName>Record RSS RP426</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_3FDE5499-9E07-4F06-AA2E-F4E802D69658.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:16:34"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp426.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C49F73C7-8706-461F-A238-59C7497704C7}"/><Properties><ItemName>Record RSS RP519</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_686059F3-0846-44D6-9EE7-B18FE4E20F36.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:16:44"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Playrp519.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C06BE62F-AD12-45B8-9836-6CE44F0D4F46}"/><Properties><ItemName>Skatepark Box Rail</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_097A41A8-36EE-48F6-B6E3-D11B1CD478B8.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:16:54"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skateboxrail.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{600612F0-7198-468A-B94A-CECE3FD45CBD}"/><Properties><ItemName>Skatepark Double Half Pipe</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_461BDAB9-64FF-437E-B56F-5AE1E0F53C59.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:17:07"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skatedoublehalfpipe.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5512CA0E-1D64-4743-BF90-BEF368D1E982}"/><Properties><ItemName>Skatepark Grind Rail Incline</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_A2E36282-914A-450D-9161-8F2AA4094E19.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:17:22"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skategrindrailincline.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{818FC7BA-FFAC-4BCF-A804-9EBE4FB286AF}"/><Properties><ItemName>Skatepark Grind Rail</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_4409C5AD-08DE-42A9-BC77-7CFB4583A819.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:17:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skategrindrail.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{86B1D221-B25E-4414-977B-16A9759DB1F0}"/><Properties><ItemName>Skatepark Jump Box</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_FE55DF52-5AD1-419D-B784-9A04C3D4745A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:17:41"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skatejumpbox.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3ACEF149-71BE-4465-A2C0-FD46739F5F69}"/><Properties><ItemName>Skatepark Quarter Pipe</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_372E7273-963E-48FD-AC07-38CDCC08162B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:17:50"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skatequarterpipe.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3B52788E-78CC-4666-857E-8798EBEF2B08}"/><Properties><ItemName>Skatepark Stepped Grid Block</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_E11CEA3C-D89D-4A54-90CC-9F9C0F062746.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:18:05"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Skatesteppedgridblock.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4EE0DDAE-3F59-443C-8087-88F52D2279AE}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:58:40" modifiedUniversalDateTime="2007-09-13T13:58:40"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C54D3A6F-BEC2-4C94-9BF9-8B6A9CDC0915}"/><Properties><ItemName>Signage</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:58:44" modifiedUniversalDateTime="2007-09-13T13:58:44"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EAED7CBE-23D4-4B1B-B52C-6FA02890E7F7}"/><Properties><ItemName>Bus stop standard</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_E8323DBB-4BE9-46CF-A13A-9E6DCEDF84A1.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:18:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Signagebusstopstandard.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F6C7AFE6-3ED1-4586-8FC3-314D394F893C}"/><Properties><ItemName>Broxap BX 4358</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_34E9C236-2494-4487-8B21-24B88496069A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:18:38"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Signagebroxapbx4358.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E8644289-0EDC-43A0-9380-46DB525D2182}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:59:34" modifiedUniversalDateTime="2007-09-13T13:59:34"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5B788CB1-6AA8-439A-B8E3-EB09F065E6B4}"/><Properties><ItemName>Utilities</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T13:59:37" modifiedUniversalDateTime="2007-09-13T13:59:37"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{790E4B62-3528-404F-AB65-0D7A1CA3CE44}"/><Properties><ItemName>BT Phonebox 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_2EC093B5-9534-47D2-9077-F71AE29BE39A.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:18:50"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Utilitiesphonebox01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{86A6A662-6B82-4080-B4C6-558F8EA6CFAB}"/><Properties><ItemName>BT Phonebox 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_268231A8-12A1-4836-8D38-FED5520B165B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:18:59"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Utilitiesphonebox02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4099F7F9-3482-477A-9E62-082373F28CB4}"/><Properties><ItemName>Pylon 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_19E19392-6E46-4E81-B621-94052F592B69.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:19:09"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "UtilitiesPylon01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5B27106B-0A9A-4454-AF4C-F064224FA32F}"/><Properties><ItemName>Wind turbine</ItemName><Images option="2"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_62818AC3-0919-4EB1-9B36-59B3FE3A7C2B.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:19:23"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Utilitieswindturbine.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="31"><ItemID idValue="{735B5B14-60E5-4610-9D80-A72354BB6E78}"/><Properties><ItemName>Fire Hydrant 01</ItemName><Images option="0"><Image cx="32" cy="32" IsDark="false" src="Images\Fire Hydrant 01.PNG"/><Image cx="64" cy="64" IsDark="false" src="Images\Fire Hydrant 01.PNG"/></Images><Time createdUniversalDateTime="2007-07-24T23:58:37" modifiedUniversalDateTime="2007-07-24T23:58:37"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>2</BlockType>
+					<BlockTypeEx>0</BlockTypeEx>
+					<BlockName>Fire Hydrant 01</BlockName>
+					<SourceFile>Fire Hydrant 01.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>1</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D47D803B-C9A1-4896-9657-859A0D12D5E1}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T14:01:02" modifiedUniversalDateTime="2007-09-13T14:01:02"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{79BFA6E0-AAF7-4620-82D1-46E659E0C947}"/><Properties><ItemName>Golf</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T14:01:07" modifiedUniversalDateTime="2007-09-13T14:01:07"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{43ADBDB5-54B3-4A67-90F4-D994D3A12542}"/><Properties><ItemName>Flagpole</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_5E3408C0-1EF4-4F15-AF29-7CFD92DF633D.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:19:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Golfflag.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B9410791-3AC1-4E59-8392-73D8116A8801}"/><Properties><ItemName>Tee Marker</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_AF27EBE3-1505-426C-A4A7-A04461F49B87.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:19:48"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Golfteemarker.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6F0BB9C1-7C31-44D3-825D-0859DEF122D8}"/><Properties><ItemName>Golfer 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_0E20405F-A23A-429C-933E-7809EC45C8F8.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:20:04"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "Golfgolfer01.dwg" 0,0 1 1 0 explode l m l  0,0 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{60BE0B88-5195-4293-BA64-F735FBF65FBC}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2007-09-13T14:02:19" modifiedUniversalDateTime="2007-09-13T14:02:19"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E9FB8323-67CC-4E74-92CB-5FB7CCBD49AA}"/><Properties><ItemName>People</ItemName><Images option="0"/><Time createdUniversalDateTime="2007-09-13T14:02:23" modifiedUniversalDateTime="2007-09-13T14:02:23"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4448F4DE-5794-4E12-8310-E3EBB5490151}"/><Properties><ItemName>People 01</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_38561264-B258-4DA3-B647-7A48649C68A9.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:20:16"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "People01.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EB797DE9-EB53-45CA-8954-5DBCD4F14D6F}"/><Properties><ItemName>People 02</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C21E91C5-EB91-48EA-B059-9C176AA14253.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:20:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "People02.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{69FF6A9C-54F5-44EC-9A21-33611B3C43CA}"/><Properties><ItemName>People 03</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_C4128731-DE68-4881-A5DB-811D7D75626D.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:20:33"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "People03.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{514B883A-8DBB-4158-ACFD-55E2E740C75B}"/><Properties><ItemName>People 04</ItemName><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Command tool_34FACCF4-EF9F-4898-9191-0C2F05B1BC41.png"/></Images><Description>Insert block</Description><Time createdUniversalDateTime="2006-06-23T09:26:38" modifiedUniversalDateTime="2007-09-13T15:20:43"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro><![CDATA[^C^C_-insert "People04.dwg" s 1 ]]></Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="31"><ItemID idValue="{4A9ABAE6-EBF8-42C8-BE1C-9B1440F868D0}"/><Properties><ItemName>Person</ItemName><Images option="0"><Image cx="32" cy="32" IsDark="false" src="Images\Person.PNG"/><Image cx="64" cy="64" IsDark="false" src="Images\Person.PNG"/></Images><Time createdUniversalDateTime="2007-07-24T23:58:37" modifiedUniversalDateTime="2007-07-24T23:58:37"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>2</BlockType>
+					<BlockTypeEx>0</BlockTypeEx>
+					<BlockName>Person</BlockName>
+					<SourceFile>Person.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>1</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="31"><ItemID idValue="{89057E47-198C-4961-B3FE-AD873811E8FC}"/><Properties><ItemName>Wheel Chair</ItemName><Images option="0"><Image cx="32" cy="32" IsDark="false" src="Images\Wheel Chair.PNG"/><Image cx="64" cy="64" IsDark="false" src="Images\Wheel Chair.PNG"/></Images><Time createdUniversalDateTime="2007-07-24T23:58:37" modifiedUniversalDateTime="2007-07-24T23:58:37"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>2</BlockType>
+					<BlockTypeEx>0</BlockTypeEx>
+					<BlockName>Wheel Chair</BlockName>
+					<SourceFile>Wheel Chair.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>1</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+				</Block>
+			</Data>
+		</Tool></Tools></Palette>

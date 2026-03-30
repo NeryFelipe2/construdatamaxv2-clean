@@ -1,0 +1,90 @@
+Begin Part Validation | ALA
+
+Begin Part Family self validation test
+ERROR: Required Parameter not found: Between
+ERROR: Parameter may be used more than once, index must be greater than zero: Qtd ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: c ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: e ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: f ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: n ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: p ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: q ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: m ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: k ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: AbDir ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: AbEsq ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: d1 ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: d2 ([0])
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- ALA
+OK: Part Description parameter validated -- ALA
+OK: Part Name parameter validated -- ALA
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- F0D85D8A-E665-4492-8E99-F3AB9BCD925C
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: Esconsidade
+ERROR: Duplicate Parameter Name: Qtd
+ERROR: Duplicate Parameter Name: c
+ERROR: Duplicate Parameter Name: f
+ERROR: Duplicate Parameter Name: p
+ERROR: Duplicate Parameter Name: q
+ERROR: Duplicate Parameter Name: n
+ERROR: Duplicate Parameter Name: e
+ERROR: Duplicate Parameter Name: k
+ERROR: Duplicate Parameter Name: m
+ERROR: Duplicate Parameter Desc: Album tipo, m
+ERROR: Duplicate Parameter Name: Espacamento
+ERROR: Duplicate Parameter Desc: Espaçamento entre tubos
+ERROR: Duplicate Parameter Name: AbDir
+ERROR: Duplicate Parameter Desc: Abertura direita
+ERROR: Duplicate Parameter Name: AbEsq
+ERROR: Duplicate Parameter Desc: Abertura esquerda
+ERROR: Duplicate Parameter Name: d1
+ERROR: Duplicate Parameter Desc: Parede do tubo (d1)
+ERROR: Duplicate Parameter Name: d2
+ERROR: Duplicate Parameter Desc: Parede do tubo (d2)
+ERROR: Duplicate Parameter Name: SRS
+ERROR: Duplicate Parameter Desc: Rim to Sump Height
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA10 uses Context=Geometry_Distance2D
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter LenA11 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA3 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA4 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA5 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA6 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA7 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA8 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA9 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter LenB2 uses Context=Geometry_Distance3D
+OK: Calc Parameter PathA2 uses Context=PathAngle
+OK: Calc Parameter PathA3 uses Context=PathAngle
+OK: Calc Parameter PathA4 uses Context=PathAngle
+OK: Calc Parameter SBSW uses Context=StructWidth
+OK: Calc Parameter WPOf2 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter WPOf3 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter SRS uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter SRS uses Context=StructRimToSumpHeight
+ 
+ERROR: Table Data Validation Failed | D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric structures\ALA_GENERICA\ALA.xml
+
+ERROR: Part Validation Failed | ALA_GENERICA\ALA.xml

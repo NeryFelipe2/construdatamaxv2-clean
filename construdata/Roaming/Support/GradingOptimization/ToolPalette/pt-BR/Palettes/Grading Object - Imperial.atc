@@ -1,0 +1,487 @@
+<Palette FileRevision="23.1.0" Revision="23.1.0" option="0">
+    <ItemID idValue="{48A1583A-E997-4842-A094-151975D45908}"/>
+    <Properties>
+        <ItemName>Objetos de nivelamento - Imperial</ItemName>
+        <Images option="0"/>
+        <Time createdUniversalDateTime="2020-03-22T11:56:36" modifiedUniversalDateTime="2020-03-22T11:56:36"/>
+    </Properties>
+    <Tools>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{4AF349A4-469C-49A0-B63B-4289BBA6BC06}"/>
+            <Properties>
+                <ItemName>Plataforma de construção</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Building_pad.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Building_pad.png" IsDark="true"/>
+                </Images>
+                <Description>Plataforma de construção</Description>
+                <ToolTip>Uma plataforma de construção aplaina a área na entidade fechada e a move para cima e para baixo como uma única entidade, a fim de atender às restrições e ao objetivo de nivelamento.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:40" modifiedUniversalDateTime="2020-03-22T11:56:40"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_building_pad</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{2D7F386C-DBB0-42B5-90D8-77ECEFF6D8E3}"/>
+            <Data>
+                <Tool>
+                    <Elevation PropertyValue="0"/>
+                    <MinElevation PropertyValue="0.0"/>
+                    <MaxElevation PropertyValue="999.0"/>
+                    <LevelGradingWithPad PropertyValue="-1"/>
+                    <DepthOfMaterial PropertyValue="1.5"/>
+                    <DrainAway PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{5F91233B-ED49-4659-B8F8-A8F8F2B939AF}"/>
+            <Properties>
+                <ItemName>Friso</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\reveal.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\reveal.png" IsDark="true"/>
+                </Images>
+                <Description>Friso</Description>
+                <ToolTip>A ferramenta de friso é utilizada para delinear um friso desejado na borda de uma plataforma de construção. Um friso somente pode ser adicionado a um objeto de plataforma de construção. A ferramenta Exibir adiciona propriedades à plataforma de construção que indicam a diferença mínima e máxima de elevação desejada entre a elevação da plataforma de construção e a superfície do terreno circundante.</ToolTip>
+                <Time createdUniversalDateTime="2020-10-13T00:02:11" modifiedUniversalDateTime="2020-10-13T17:05:12"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_reveal</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{7531530D-1031-4BAC-ABB4-357D46D6B92B}"/>
+            <Data>
+                <Tool>
+                    <StartElevationOffsetLow PropertyValue="3.5"/>
+                    <StartElevationOffsetHigh PropertyValue="4.0"/>
+                    <SameAsStart PropertyValue="-1"/>
+                    <EndElevationOffsetLow PropertyValue="3.5"/>
+                    <EndElevationOffsetHigh PropertyValue="4.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{5FC1DD68-7CD6-4C66-B843-C3EEBFB24F95}"/>
+            <Properties>
+                <ItemName>Caminho</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\pathway.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\pathway.png" IsDark="true"/>
+                </Images>
+                <Description>Caminho</Description>
+                <ToolTip>Um caminho permite definir as restrições de inclinação transversal e largura ao longo de uma linha.</ToolTip>
+                <Time createdUniversalDateTime="2022-04-20T13:00:00" modifiedUniversalDateTime="2022-04-20T13:00:00"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_pathway</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{F2B176C1-C159-49A5-A7D2-F9851D3D9E5A}"/>
+            <Data>
+                <Tool>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <LeftSide PropertyValue="-1"/>
+                    <LeftWidth PropertyValue="9.0"/>
+                    <LeftCrossSlope PropertyValue="2.0"/>
+                    <RightSide PropertyValue="-1"/>
+                    <RightWidth PropertyValue="9.0"/>
+                    <RightCrossSlope PropertyValue="2.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{E70066E0-C856-45B3-8B05-8AC7AA2432E1}"/>
+            <Properties>
+                <ItemName>Reservatório</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Pond.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Pond.png" IsDark="true"/>
+                </Images>
+                <Description>Reservatório</Description>
+                <ToolTip>Um reservatório é uma forma geométrica fechada que representa as propriedades e restrições de um reservatório seco ou molhado.</ToolTip>
+                <Time createdUniversalDateTime="2020-07-31T07:19:48" modifiedUniversalDateTime="2020-07-31T07:19:48"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_pond</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{85CD3CF4-7384-4840-B5BD-DAFAE966D813}"/>
+            <Data>
+                <Tool>
+                    <PondType PropertyValue="1"/>
+                    <MinStorageVolume PropertyValue="30000.0"/>
+                    <MaxStorageDepth PropertyValue="5.0"/>
+                    <AllowBoundaryChange PropertyValue="-1"/>
+                    <BermWidth PropertyValue="10.0"/>
+                    <Freeboard PropertyValue="1.0"/>
+                    <InsideSlope PropertyValue="3.0"/>
+                    <SafetyBenchToggle PropertyValue="0"/>
+                    <SafetyBenchDepth PropertyValue="1.0"/>
+                    <SafetyBenchWidth PropertyValue="2.0"/>
+                    <SafetyBenchSlope PropertyValue="6.0"/>
+                    <PermanentWater PropertyValue="8.0"/>
+                    <AquaticBenchWidth PropertyValue="5.0"/>
+                    <AquaticBenchSlope PropertyValue="6.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{050CE3C8-54CF-4602-8790-C8276A85AF4F}"/>
+            <Properties>
+                <ItemName>Muro de contenção</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Retaining_wall.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Retaining_wall.png" IsDark="true"/>
+                </Images>
+                <Description>Muro de contenção</Description>
+                <ToolTip>O muro de contenção quebra o terreno ao longo de suas linhas e gradua o terreno respeitando as restrições de altura especificadas.</ToolTip>
+                <Time createdUniversalDateTime="2021-07-30T10:56:39" modifiedUniversalDateTime="2021-07-30T10:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_retain_wall</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{A4EEDA88-EACE-4109-81F4-5FEB205BD0D9}"/>
+            <Data>
+                <Tool>
+                    <MaxHeight PropertyValue="10.0"/>
+                    <MinHeight PropertyValue="1.0"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{9BFC729B-B67D-4D85-BA12-5D7CB71A77ED}"/>
+            <Properties>
+                <ItemName>Meio-fio</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Curb.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Curb.png" IsDark="true"/>
+                </Images>
+                <Description>Meio-fio</Description>
+                <ToolTip>O meio-fio quebra o terreno ao longo de suas linhas e gradua o terreno de acordo com a altura e a largura especificadas.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:39" modifiedUniversalDateTime="2020-03-22T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_curb</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{0C6D26D7-748A-4CD0-AC4E-EA3520293F6D}"/>
+            <Data>
+                <Tool>
+                    <Width PropertyValue="0.2"/>
+                    <Height PropertyValue="0.2"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{C40FC33C-2CE6-4819-B9B1-7DC5F0ACBA9C}"/>
+            <Properties>
+                <ItemName>Estacionamento</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Parking lot.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Parking lot.png" IsDark="true"/>
+                </Images>
+                <Description>Estacionamento</Description>
+                <ToolTip>Um estacionamento é uma zona pré-configurada onde as configurações de inclinação são definidas para uso de veículos.</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T02:44:35" modifiedUniversalDateTime="2020-11-19T02:44:35"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <MinSlope PropertyValue="1.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="-1"/>
+                    <HideDrainageElement PropertyValue="0"/>				
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="1.5"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{7475A4C7-B02C-4524-B2F1-EC30881F0648}"/>
+            <Properties>
+                <ItemName>Zona</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Zone.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Zone.png" IsDark="true"/>
+                </Images>
+                <Description>Zona</Description>
+                <ToolTip>A zona é um objeto de nivelamento genérico usado para representar o nivelamento com base na área. Os dados do conjunto de propriedades da zona podem ser adicionados às seguintes geometrias fechadas: polilinha, polilinha 2D, polilinha 3D, linha do recurso, hachura e lote.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:39" modifiedUniversalDateTime="2020-03-22T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="2"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="2.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{E8F6E0D4-DFAD-4B0A-8111-7CD368DC3711}"/>
+            <Properties>
+                <ItemName>Zona de exclusão</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Avoidance_area.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Avoidance_area.png" IsDark="true"/>
+                </Images>
+                <Description>Zona de exclusão</Description>
+                <ToolTip>Em uma zona de exclusão, todas as elevações existentes são fixas, de modo que nenhum nivelamento é permitido.</ToolTip>
+                <Time createdUniversalDateTime="2020-12-24T11:58:37" modifiedUniversalDateTime="2020-12-24T11:58:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_exclusion_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{7953AEA9-1B3A-4941-BB42-4D545DEB583A}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{61DF5B5B-35AC-4F1F-9129-8C79B2904B28}"/>
+            <Properties>
+                <ItemName>Limite de nivelamento</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Grading limit.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Grading limit.png" IsDark="true"/>
+                </Images>
+                <Description>Limite de nivelamento</Description>
+                <ToolTip>Um limite de nivelamento define o limite de nivelamento.</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T01:07:39" modifiedUniversalDateTime="2020-11-19T01:07:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_grading_limit</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="0.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="-1"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{53206DA0-2CDA-44A2-93EC-F2A04F53AF46}"/>
+            <Properties>
+                <ItemName>Aresta alinhada</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Aligned_edge.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Aligned_edge.png" IsDark="true"/>
+                </Images>
+                <Description>Aresta alinhada</Description>
+                <ToolTip>Uma aresta alinhada tenta criar uma geometria de superfície bem-definida ao longo de uma inclinação constante. As arestas de triângulo de superfície que tocam uma aresta alinhada tentarão se alinhar na mesma direção e inclinação.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_aligned_edge</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{F16475A5-2C19-4B8C-BE7B-2230F91ED8D6}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{43F53BD9-62BD-4F1A-90D7-02983C166296}"/>
+            <Properties>
+                <ItemName>Linha de dobra</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bend_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bend_line.png" IsDark="true"/>
+                </Images>
+                <Description>Linha de dobra</Description>
+                <ToolTip>A linha de vergadura tenta relaxar a inclinação dos triângulos de superfície ao longo de uma linha. As arestas de triângulos de superfície que tocam a linhas de vergadura são definidas com uma elevação de inclinação mínima de zero e uma elevação de inclinação máxima de infinito.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_bend_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{CBD72E4C-0F8B-4CD5-9DEE-866A1FE8175D}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{A9EAF5C2-213B-4BEC-9B5C-AEDBBC922179}"/>
+            <Properties>
+                <ItemName>Linha de drenagem</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Drain_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Drain_line.png" IsDark="true"/>
+                </Images>
+                <Description>Linha de drenagem</Description>
+                <ToolTip>As linhas de drenagem são elementos que controlam a direção da inclinação dos triângulos. Ao atribuir linhas de drenagem, o início da linha é o ponto alto, e a linha está direcionada ao ponto baixo.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:38" modifiedUniversalDateTime="2020-03-22T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_drain_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{FF3B308E-EC65-46C2-8099-F9FB801CEC04}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{23B76907-AF0A-4DCF-B015-F3E892424842}"/>
+            <Properties>
+                <ItemName>Linha de cume</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Ridge_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Ridge_line.png" IsDark="true"/>
+                </Images>
+                <Description>Linha de cume</Description>
+                <ToolTip>As linhas de cume controlam a direção de inclinação dos triângulos de superfície para permitir a drenagem longe da linha. O início da linha é o ponto baixo, e o final da linha é o ponto alto da linha.</ToolTip>
+                <Time createdUniversalDateTime="2022-04-14T11:56:38" modifiedUniversalDateTime="2022-04-14T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_ridge_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{E0CA971C-E598-4816-A1A7-C84EFBBD6A16}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{156D020B-D92C-45C7-B27C-AD7ABE99A523}"/>
+            <Properties>
+                <ItemName>Ponto baixo</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Low_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Low_point.png" IsDark="true"/>
+                </Images>
+                <Description>Ponto baixo</Description>
+                <ToolTip>Um ponto baixo é um ponto de referência que demarca uma localização como um ponto de elevação baixo.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:36" modifiedUniversalDateTime="2020-03-22T11:56:36"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_low_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{27583802-D603-42AE-8807-4DF963481700}"/>
+            <Data>
+                <Tool>
+                    <DiamondShaped PropertyValue="0"/>
+                    <OrientationAngle PropertyValue="0.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{53231D4E-D6DB-4D85-B669-A6D3F6DB4CF7}"/>
+            <Properties>
+                <ItemName>Ponto delimitado</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bounded_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bounded_point.png" IsDark="true"/>
+                </Images>
+                <Description>Ponto delimitado</Description>
+                <ToolTip>Um ponto delimitado cria uma restrição de elevação para um ponto ao longo de uma superfície.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_bounded_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{D1C77704-49CD-4763-8DC7-951CAE8D0655}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{2812BA18-2013-471B-8294-270A45F1F3DC}"/>
+            <Properties>
+                <ItemName>Pontos de deslocamento</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Elevation_offset.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Elevation_offset.png" IsDark="true"/>
+                </Images>
+                <Description>Pontos de deslocamento</Description>
+                <ToolTip>O ponto de deslocamento controla a diferença de elevação entre cada extremidade do segmento de linha. Pontos de deslocamento com valores positivos tentam manter o primeiro ponto mais alto que o final do segmento, e um valor negativo força o ponto inicial a ser mais baixo.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:38" modifiedUniversalDateTime="2020-03-22T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/PTB/?contextId=id_dlg_tool_prop_elevation_offset</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{C0530EE0-3BA9-4D02-8262-B60D02849401}"/>
+            <Data>
+                <Tool>
+                    <MinOffset PropertyValue="1"/>
+                    <MaxOffset PropertyValue="1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+    </Tools>
+</Palette>

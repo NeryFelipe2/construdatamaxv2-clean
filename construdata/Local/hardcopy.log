@@ -1,0 +1,47 @@
+AutoCAD Warning: The paper size in the layout is not supported by the
+selected plot device.
+
+Click OK to use the default paper size or Cancel to
+set the None device.
+
+AutoCAD Error: void __cdecl GDI_Caps_Loader::initResColorMem(void) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\gdiplcap.cpp ln 659
+Test Failed Unable to get resolution information
+
+AutoCAD Error: A operação foi cancelada pelo usuário.
+
+
+AutoCAD Error: void __cdecl GDI_Plotter_Device::start_document(class HT_Document_Info *) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\gdi_plotter_device.cpp ln 620
+The device has reported an unknown error. C:\Users\felip\Desktop\CONSORCIO SANTOS\PROJETOS\TETEU-VV\-25-PROJETO ESGOTO-VERDE-E-TETEU NS 002- (1)
+
+AutoCAD Error: A operação foi cancelada pelo usuário.
+
+
+AutoCAD Error: void __cdecl GDI_Plotter_Device::start_document(class HT_Document_Info *) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\gdi_plotter_device.cpp ln 620
+The device has reported an unknown error. C:\Users\felip\Desktop\CONSORCIO SANTOS\PROJETOS\PANTANAL BAIXO\PANTANAL ESGOTO-REV1 Layout1 (1)
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Warning: void __cdecl RasterPlot::gdi_draw_dci_ism_band(const class HT_DCI_Point *,const class HT_DCI_Point *,short,short) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\rasterplot.cpp ln 1653
+Failed to rasterize image for plot. Raster band
+
+AutoCAD Error: void __cdecl GDI_Caps_Loader::initResColorMem(void) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\gdiplcap.cpp ln 659
+Test Failed Unable to get resolution information
+
+AutoCAD Warning: AutoCAD PDF (High Quality Print).pc3: This plotter configuration cannot be used for one of these reasons: the driver cannot be found, the device cannot be found, or the driver has a problem. The None plot device has been substituted.
+
+AutoCAD Error: void __cdecl GDI_Caps_Loader::initResColorMem(void) U:\components\global\src\heidi\source\driver\gdi\gdiplot\src\gdiplcap.cpp ln 659
+Test Failed Unable to get resolution information
+

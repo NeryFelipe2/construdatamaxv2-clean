@@ -1,0 +1,26 @@
+# Saidas geradas
+SAIDA_BIM_SABESP/
+SAIDA_COMPLETA/
+SAIDA_CRIADORES/
+SAIDA_HYDRONETWORK/
+SAIDA_*/
+__pycache__/
+*.pyc
+
+# Arquivos compactados
+*.zip
+*.rar
+
+# Referencia
+fil32es/
+
+# Temporarios
+*.tmp
+*.bak
+~$*
+~$*.xlsx
+.env
+
+# IFC exemplo grande
+CONSTRUDATA_HYDRONETWORK_V7_FINAL/PACOTE_FINAL_V2/VERDE_TETEU_3D.ifc
+.aider*

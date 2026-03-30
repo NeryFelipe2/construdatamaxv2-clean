@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "civil3d_pipe_exporter", "civil3d_pipe_exporter", "{70ECA747-B722-48B9-945D-B84971AA5E5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipeNetworkExporter", "civil3d_pipe_exporter\PipeNetworkExporter.csproj", "{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A33E62EA-9F1B-C578-948C-88BFAAF0CBBC} = {70ECA747-B722-48B9-945D-B84971AA5E5B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAC29969-B7C9-4533-BA8F-82D4CF3D3E8B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,362 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{9944E303-CD9F-47AA-A06D-C92E17F72FD9}"/><Properties><ItemName resource="51013" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{99321E72-C23C-42AF-B8B1-5028D553FFBA}"/><Properties><ItemName resource="51015" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{41945B0D-A731-48D1-BD7A-355094E5A4E8}"/><Properties><ItemName resource="6401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanCurbGutterGeneral.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanCurbGutterGeneral.png"/></Images><Description resource="6402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanCurbGutterGeneral subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanCurbGutterGeneral</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanCurbGutterGeneral</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6403" Description="6404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6405" Description="6406">0
+		            <Enum>
+								<Right DisplayName="6407">0</Right>
+								<Left DisplayName="6408">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="6433" Description="6434">1
+					<Enum>
+								<GutterEdge DisplayName="6435">1</GutterEdge>
+								<CurbFace DisplayName="6436">0</CurbFace>
+							</Enum>
+						</InsertionPoint>
+						<SlopeMethod DataType="Long" DisplayName="6437" Description="6438">0
+					<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">3</LI>
+								<FixedSlope DisplayName="6440">1</FixedSlope>
+								<UseDepthC DisplayName="6441">2</UseDepthC>
+							</Enum>
+						</SlopeMethod>
+						<GutterSlope DataType="Double" TypeInfo="9" DisplayName="6442" Description="6443">-0.02</GutterSlope>
+						<SlopeDirection DataType="Long" DisplayName="13009" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6409" Description="6410">0.45</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6411" Description="6412">0.3</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">0
+					<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6417" Description="6418">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6419" Description="6420">0.175</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6421" Description="6422">0.400</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6423" Description="6424">0.025</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6425" Description="6426">0.150</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6427" Description="6428">0.200</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6429" Description="6430">0.150</DimensionF>
+						<DimensionG DataType="Double" TypeInfo="17" DisplayName="6431" Description="6432">0.325</DimensionG>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0A865CED-45CF-4B44-83AE-66723202F930}"/><Properties><ItemName resource="6501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanCurbGutterValley1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanCurbGutterValley1.png"/></Images><Description resource="6502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanCurbGutterValley1 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanCurbGutterValley1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanCurbGutterValley1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6503" Description="6504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6505" Description="6506">0
+		            <Enum>
+								<Right DisplayName="6507">0</Right>
+								<Left DisplayName="6508">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="6531" Description="6532">1
+					<Enum>
+								<GutterEdge DisplayName="6533">1</GutterEdge>
+								<CurbFace DisplayName="6534">0</CurbFace>
+							</Enum>
+						</InsertionPoint>
+						<SlopeMethod DataType="Long" DisplayName="6535" Description="6536">0
+					<Enum>
+								<LO DisplayName="6537">0</LO>
+								<LI DisplayName="6444">3</LI>
+								<FixedSlope DisplayName="6538">1</FixedSlope>
+								<UseDepthC DisplayName="6539">2</UseDepthC>
+							</Enum>
+						</SlopeMethod>
+						<GutterSlope DataType="Double" TypeInfo="9" DisplayName="6540" Description="6541">-0.02</GutterSlope>
+						<SlopeDirection DataType="Long" DisplayName="13009" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6509" Description="6510">1.5</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6511" Description="6512">1</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">0
+					<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6517" Description="6518">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6519" Description="6520">0.175</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6521" Description="6522">0.375</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6523" Description="6524">0.025</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6525" Description="6526">0.075</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6527" Description="6528">0.25</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6529" Description="6530">0.25</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{942479CA-B566-4FF5-BDD2-77705839910B}"/><Properties><ItemName resource="6601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanCurbGutterValley2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanCurbGutterValley2.png"/></Images><Description resource="6602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanCurbGutterValley2 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanCurbGutterValley2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanCurbGutterValley2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6603" Description="6604">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum>
+								<Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6605" Description="6606">0
+		            <Enum>
+								<Right DisplayName="6607">0</Right>
+								<Left DisplayName="6608">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="6631" Description="6632">1
+					<Enum>
+								<GutterEdge DisplayName="6633">1</GutterEdge>
+								<CurbFace DisplayName="6634">0</CurbFace>
+							</Enum>
+						</InsertionPoint>
+						<SlopeMethod DataType="Long" DisplayName="6635" Description="6636">0
+					<Enum>
+								<LO DisplayName="6637">0</LO>
+								<LI DisplayName="6444">3</LI>
+								<FixedSlope DisplayName="6638">1</FixedSlope>
+								<UseDepthC DisplayName="6639">2</UseDepthC>
+							</Enum>
+						</SlopeMethod>
+						<GutterSlope DataType="Double" TypeInfo="9" DisplayName="6640" Description="6641">-0.02</GutterSlope>
+						<SlopeDirection DataType="Long" DisplayName="13009" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6609" Description="6610">0.45</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6611" Description="6612">0.3</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">0
+					<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6617" Description="6618">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6619" Description="6620">0.150</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6621" Description="6622">0.610</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6623" Description="6624">0.100</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6625" Description="6626">0.225</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6627" Description="6628">0.075</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6629" Description="6630">0.300</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{084BA0A5-398C-41A1-B87C-163322300126}"/><Properties><ItemName resource="6701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanCurbGutterValley3.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanCurbGutterValley3.png"/></Images><Description resource="6702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanCurbGutterValley3 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanCurbGutterValley3</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanCurbGutterValley3</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6703" Description="6704">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6705" Description="6706">0
+		            <Enum>
+								<Right DisplayName="6707">0</Right>
+								<Left DisplayName="6708">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="6727" Description="6728">1
+					<Enum>
+								<GutterEdge DisplayName="6729">1</GutterEdge>
+								<CurbFace DisplayName="6730">0</CurbFace>
+							</Enum>
+						</InsertionPoint>
+						<SlopeMethod DataType="Long" DisplayName="6731" Description="6732">0
+					<Enum>
+								<LO DisplayName="6733">0</LO>
+								<LI DisplayName="6444">3</LI>
+								<FixedSlope DisplayName="6734">1</FixedSlope>
+								<UseDepthC DisplayName="6735">2</UseDepthC>
+							</Enum>
+						</SlopeMethod>
+						<GutterSlope DataType="Double" TypeInfo="9" DisplayName="6736" Description="6737">-0.02</GutterSlope>
+						<SlopeDirection DataType="Long" DisplayName="13009" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6709" Description="6710">0.45</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6711" Description="6712">1</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">0
+					<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6713" Description="6714">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6715" Description="6716">0.150</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6717" Description="6718">0.600</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6719" Description="6720">0.050</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6721" Description="6722">0.040</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6723" Description="6724">0.150</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6725" Description="6726">0.300</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{910037E8-8BB1-4746-866D-03CE517822A1}"/><Properties><ItemName resource="6801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanReplaceCurbGutter1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanReplaceCurbGutter1.png"/></Images><Description resource="6802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanReplaceCurbGutter1 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanReplaceCurbGutter1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanReplaceCurbGutter1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6803" Description="6804">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+                      <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6805" Description="6806">0
+		                            <Enum>
+								<Right DisplayName="6807">0</Right>
+								<Left DisplayName="6808">1</Left>
+							</Enum>
+						</Side>
+						<FlangePointOffset DataType="Double" TypeInfo="16" DisplayName="6809" Description="6810">3.6</FlangePointOffset>
+						<SidewalkPoint DataType="String" DisplayName="6811" Description="6812">none</SidewalkPoint>
+						<MaxMilling DataType="Double" TypeInfo="17" DisplayName="6813" Description="6814">0.05</MaxMilling>
+						<DesirableLift DataType="Double" TypeInfo="17" DisplayName="6815" Description="6816">0.08</DesirableLift>
+						<MinSodSlope DataType="Double" TypeInfo="9" DisplayName="6817" Description="6818">0.02</MinSodSlope>
+						<MaxSodSlope DataType="Double" TypeInfo="9" DisplayName="6819" Description="6820">0.06</MaxSodSlope>
+						<MarkInsidePoint DataType="String" DisplayName="6821" Description="6822">none</MarkInsidePoint>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6823" Description="6824">0.45</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6825" Description="6826">0.3</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">2
+								<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6831" Description="6832">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6833" Description="6834">0.175</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6835" Description="6836">0.4</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6837" Description="6838">0.025</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6839" Description="6840">0.15</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6841" Description="6842">0.2</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6843" Description="6844">0.15</DimensionF>
+						<DimensionG DataType="Double" TypeInfo="17" DisplayName="6845" Description="6846">0.325</DimensionG>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5A105280-8C89-41F7-81B8-6C9288CAFB25}"/><Properties><ItemName resource="6901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanReplaceCurbGutter2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanReplaceCurbGutter2.png"/></Images><Description resource="6902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanReplaceCurbGutter2 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanReplaceCurbGutter2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanReplaceCurbGutter2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6903" Description="6904">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+                      <Enum>
+								<Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6905" Description="6906">0
+		                            <Enum>
+								<Right DisplayName="6907">0</Right>
+								<Left DisplayName="6908">1</Left>
+							</Enum>
+						</Side>
+						<FlangePointOffset DataType="Double" TypeInfo="16" DisplayName="6909" Description="6910">3.6</FlangePointOffset>
+						<SidewalkPoint DataType="String" DisplayName="6911" Description="6912">none</SidewalkPoint>
+						<MarkInsidePoint DataType="String" DisplayName="6913" Description="6914">none</MarkInsidePoint>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6915" Description="6916">0.45</SubbaseDepth>
+						<SubbaseExt DataType="Double" TypeInfo="16" DisplayName="6917" Description="6918">0.3</SubbaseExt>
+						<SubbaseSlopeMethod DataType="Long" DisplayName="6445" Description="6446">2
+								<Enum>
+								<LO DisplayName="6439">0</LO>
+								<LI DisplayName="6444">1</LI>
+								<FixedSlope DisplayName="6440">2</FixedSlope>
+							</Enum>
+						</SubbaseSlopeMethod>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="6923" Description="6924">-0.02</SubbaseSlope>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="6925" Description="6926">0.175</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="6927" Description="6928">0.4</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="6929" Description="6930">0.025</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="6931" Description="6932">0.15</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="6933" Description="6934">0.2</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="6935" Description="6936">0.15</DimensionF>
+						<DimensionG DataType="Double" TypeInfo="17" DisplayName="6937" Description="6938">0.325</DimensionG>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CD915830-AAED-4E0A-B5EA-41FE20670A86}"/><Properties><ItemName resource="7001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanReplaceSidewalk.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanReplaceSidewalk.png"/></Images><Description resource="7002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanReplaceSidewalk subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanReplaceSidewalk</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanReplaceSidewalk</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7003" Description="7004">R2019</Version>
+						<Side DataType="Long" DisplayName="7005" Description="7006">0
+								    <Enum>
+								<Right DisplayName="7007">0</Right>
+								<Left DisplayName="7008">1</Left>
+							</Enum>
+						</Side>
+						<OutsideSidewalkMarkedPoint DataType="String" DisplayName="7009" Description="7010">none</OutsideSidewalkMarkedPoint>
+						<Width DataType="Double" TypeInfo="16" DisplayName="7011" Description="7012">1.5</Width>
+						<Slope DataType="Double" TypeInfo="9" DisplayName="7013" Description="7014">-0.02</Slope>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="7015" Description="7016">0.1</Depth>
+						<MarkInsidePoint DataType="String" DisplayName="7017" Description="7018">none</MarkInsidePoint>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{743177AA-0415-4172-AFC4-CC0112A23E55}"/><Properties><ItemName resource="7101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Curbs\64\light\AeccUrbanSidewalk.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Curbs\64\dark\AeccUrbanSidewalk.png"/></Images><Description resource="7102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_UrbanSidewalk subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_UrbanSidewalk</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.UrbanSidewalk</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7103" Description="7104">R2019</Version>
+						<Side DataType="Long" DisplayName="7105" Description="7106">0
+						    <Enum>
+								<Right DisplayName="7107">0</Right>
+								<Left DisplayName="7108">1</Left>
+							</Enum>
+						</Side>
+						<InsideBoulevardWidth DataType="Double" TypeInfo="16" DisplayName="7109" Description="7110">0</InsideBoulevardWidth>
+						<SidewalkWidth DataType="Double" TypeInfo="16" DisplayName="7111" Description="7112">1.5</SidewalkWidth>
+						<OutsideBoulevardWidth DataType="Double" TypeInfo="16" DisplayName="7113" Description="7114">0</OutsideBoulevardWidth>
+						<Slope DataType="Double" TypeInfo="9" DisplayName="7115" Description="7116">0.02</Slope>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="7117" Description="7118">0.1</Depth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>

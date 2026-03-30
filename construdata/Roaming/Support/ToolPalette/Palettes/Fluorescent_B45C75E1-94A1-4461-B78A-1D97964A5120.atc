@@ -1,0 +1,333 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{B45C75E1-94A1-4461-B78A-1D97964A5120}"/><Properties><ItemName resource="2001" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2006-09-24T02:38:44" modifiedUniversalDateTime="2006-09-23T19:45:04"/></Properties><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{4AA0A99D-A753-43F4-ADE5-C7DD4B0157BD}"/><Properties><ItemName resource="2011" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2012" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-10-19T18:37:09" modifiedUniversalDateTime="2006-10-19T11:38:30"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="2"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="0">
+							<PeakIntensity Intensity="891.268"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.924026906490326" Blue="0.853459298610687"/>
+							<KelvinColor Temperature="5000"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Linear Length="1.2192"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C9DD42A0-A294-4024-856B-772FBFF7C183}"/><Properties><ItemName resource="2013" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2014" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-10-19T18:37:13" modifiedUniversalDateTime="2006-10-19T11:38:41"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="2"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="0">
+							<PeakIntensity Intensity="1798.45"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.836764276027679" Blue="0.720980763435364"/>
+							<KelvinColor Temperature="3000"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Linear Length="2.4384"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C7A07CC0-DE3E-4338-A796-F5F2C4DD15E4}"/><Properties><ItemName resource="2002" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2003" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-09-22T22:02:53" modifiedUniversalDateTime="2006-09-23T19:43:51"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="0"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="1">
+							<PeakIntensity Intensity="124.937"/>
+							<Flux Intensity="765"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.822113454341888" Blue="0.712969124317169"/>
+							<KelvinColor Temperature="2700"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Sphere Radius="0"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{817BDBE3-A6B7-4F2B-A39F-273248391785}"/><Properties><ItemName resource="2004" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2005" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-09-22T22:02:53" modifiedUniversalDateTime="2006-09-23T19:44:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="0"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="1">
+							<PeakIntensity Intensity="124.937"/>
+							<Flux Intensity="925"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.822113454341888" Blue="0.712969124317169"/>
+							<KelvinColor Temperature="2700"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Sphere Radius="0"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FFAFD109-98D1-4C70-A1DB-DCC8CD0A59A9}"/><Properties><ItemName resource="2006" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2007" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-09-22T22:02:53" modifiedUniversalDateTime="2006-09-23T19:44:58"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="0"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="1">
+							<PeakIntensity Intensity="124.937"/>
+							<Flux Intensity="1365"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.822113454341888" Blue="0.712969124317169"/>
+							<KelvinColor Temperature="2700"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Sphere Radius="0"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{2683106C-7C7B-488F-BB3E-28D2443B3B4D}"/><Properties><ItemName resource="2008" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2009" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-09-22T22:02:53" modifiedUniversalDateTime="2006-09-23T19:45:26"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="2"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="0"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="1">
+							<PeakIntensity Intensity="124.937"/>
+							<Flux Intensity="1500"/>
+						</LampIntensity>
+						<LampColor Method="0">
+							<FloatRGBColor Red="1" Green="0.822113454341888" Blue="0.712969124317169"/>
+							<KelvinColor Temperature="2700"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Sphere Radius="0"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DF808DF3-3D50-4C9C-8FDF-4860B30D521F}"/><Properties><ItemName resource="2015" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2016" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-10-19T18:37:30" modifiedUniversalDateTime="2006-10-19T11:39:08"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="10"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="2"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="0">
+							<PeakIntensity Intensity="649"/>
+						</LampIntensity>
+						<LampColor Method="1">
+							<FloatRGBColor Red="1" Green="0.993046998977661" Blue="0.898935973644257"/>
+							<Preset Value="1"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="linear_pendant.ies">
+								<WebRotation X="0" Y="0" Z="0"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Linear Length="1.2192"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3F148BC8-88ED-4A4A-8E08-88C03502880F}"/><Properties><ItemName resource="2017" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" resource="RCDATA_64_FLUORESCENT_LIGHT" src="AcTpCatalogRes.dll"/></Images><Description resource="2018" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2006-10-19T18:37:44" modifiedUniversalDateTime="2006-10-19T11:39:24"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{727E468D-2F6D-408E-A4CA-A163B060CCD1}"/><Data>
+				<Light>
+					<LightType PropertyValue="10"/>
+					<Status PropertyValue="1"/>
+					<Shadows PropertyValue="1"/>
+					<HotSpot PropertyValue="0.785398163397448"/>
+					<FallOff PropertyValue="0.872664625997165"/>
+					<Intensity PropertyValue="1"/>
+					<Color>
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</Color>
+					<PlotGlyph PropertyValue="0"/>
+					<AttenuationType PropertyValue="0"/>
+					<UseLimits PropertyValue="0"/>
+					<StartLimit PropertyValue="1"/>
+					<EndLimit PropertyValue="10"/>
+					<ShadowType PropertyValue="2"/>
+					<MapSize PropertyValue="256"/>
+					<Softness PropertyValue="1"/>
+					<HasTarget PropertyValue="0"/>
+					<Photometry>
+						<LampIntensity Method="0">
+							<PeakIntensity Intensity="962.4"/>
+						</LampIntensity>
+						<LampColor Method="1">
+							<FloatRGBColor Red="1" Green="0.993046998977661" Blue="0.898935973644257"/>
+							<Preset Value="1"/>
+						</LampColor>
+						<PhotometricWeb>
+							<WebFile Url="linear_cove.ies">
+								<WebRotation X="0" Y="0" Z="1.5707963267949"/>
+							</WebFile>
+						</PhotometricWeb>
+					</Photometry>
+					<AreaShadow Samples="16">
+						<Linear Length="1.2192"/>
+					</AreaShadow>
+				</Light>
+			</Data>
+		</Tool></Tools></Palette>

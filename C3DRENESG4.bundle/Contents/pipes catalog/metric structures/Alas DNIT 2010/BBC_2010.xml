@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<LandPart desc="Part Table" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink" fixColumn="C1">
+	<ColumnConstView desc="Parameter-driven Display" id="CCV1" viewKey="3d" viewName="AeccPartRecipe" pathsRelativeTo="Table">
+		<Images>
+			<Image>
+				<URL xlink:title="Part Reference Image" xlink:href="BBC_2010.bmp"/>
+			</Image>
+		</Images>
+		<Recipe>BBC_2010.dwg</Recipe>
+	</ColumnConstView>
+	<ColumnConstList desc="Largura Célula" dataType="float" unit="mm" name="SHBW" id="CCL1" visible="1" context="StructHwBaseWidth" index="0">
+		<Item id="i0">1500.0000</Item>
+		<Item id="i1">2000.0000</Item>
+		<Item id="i2">2500.0000</Item>
+		<Item id="i3">3000.0000</Item>
+		<Item id="i4">1000.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Tubos em Linha" dataType="int" unit="" name="Qtd" id="CCL2" visible="1" context="Qtd_" index="0">
+		<Item id="i0">1</Item>
+		<Item id="i1">2</Item>
+		<Item id="i2">3</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Esconsidade" dataType="float" unit="" name="Esconsidade" id="CCL3" visible="1" context="Esconsidade_" index="0">
+		<Item id="i0">0.0000</Item>
+		<Item id="i1">15.0000</Item>
+		<Item id="i2">30.0000</Item>
+		<Item id="i3">45.0000</Item>
+		<Item id="i4">315.0000</Item>
+		<Item id="i5">330.0000</Item>
+		<Item id="i6">345.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Altura Célula" dataType="float" unit="mm" name="SBSH" id="CCL4" visible="1" context="StructHeight" index="0">
+		<Item id="i0">1500.0000</Item>
+		<Item id="i1">2000.0000</Item>
+		<Item id="i2">2500.0000</Item>
+		<Item id="i3">3000.0000</Item>
+		<Item id="i4">1000.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Parede do tubo (d1)" dataType="float" unit="mm" name="d1" id="CCL5" visible="1" context="d1_" index="0">
+		<Item id="i0">150.0000</Item>
+		<Item id="i1">200.0000</Item>
+		<Item id="i2">250.0000</Item>
+		<Item id="i3">300.0000</Item>
+		<Item id="i4">350.0000</Item>
+		<Item id="i5">400.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Estrutura Existente" dataType="string" unit="" name="CTravBool" id="CCL6" visible="1" context="CTravBool_" index="0">
+		<Item id="i0">False</Item>
+		<Item id="i1">True</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Parâmetro R (DNIT)" dataType="string" unit="" name="ParamR" id="CCL7" visible="1" context="ParamR_" index="0">
+		<Item id="i0">ZonaUrbana</Item>
+		<Item id="i1">ZonaResid</Item>
+		<Item id="i2">ZonaSubUrb</Item>
+		<Item id="i3">ZonaRural</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Parâmetro K (DNOS)" dataType="string" unit="" name="ParamK" id="CCL8" visible="1" context="ParamK_" index="0">
+		<Item id="i0">ArenoArgiloso</Item>
+		<Item id="i1">Comum</Item>
+		<Item id="i2">Argiloso</Item>
+		<Item id="i3">ArgilosoVegMedia</Item>
+		<Item id="i4">RochaVegEscassa</Item>
+		<Item id="i5">Rochoso</Item>
+	</ColumnConstList>
+	<ColumnConst desc="Part Domain" dataType="string" unit="" name="PDom" id="CC0" visible="0" context="Catalog_Domain" index="0">Structure_Domain</ColumnConst>
+	<ColumnConst desc="Part Type" dataType="string" unit="" name="PTyp" id="CC1" visible="1" context="Catalog_PartType" index="0">Struct_InletOutlet</ColumnConst>
+	<ColumnConst desc="Part Subtype" dataType="string" unit="" name="PSTyp" id="CC2" visible="1" context="Catalog_SubType" index="0">ALA</ColumnConst>
+	<ColumnConst desc="Part Name" dataType="string" unit="" name="PrtNm" id="CC3" visible="0" context="Catalog_PartName" index="0">BBC_2010</ColumnConst>
+	<ColumnConst desc="Part Description" dataType="string" unit="" name="PrtD" id="CC4" visible="1" context="Catalog_PartDesc" index="0">Boca de bueiro celular 2010</ColumnConst>
+	<ColumnConst desc="Part ID" dataType="string" unit="" name="PrtID" id="CC5" visible="0" context="Catalog_PartID" index="0">9CA669A9-F138-429B-9697-11D1F4EC8361</ColumnConst>
+	<ColumnConst desc="Data Version" dataType="string" unit="" name="DVer" id="CC6" visible="0" context="DataVersion" index="0">2.0</ColumnConst>
+	<ColumnConst desc="Content Type" dataType="int" unit="" name="CntTy" id="CC7" visible="0" context="Content_Type" index="0">4</ColumnConst>
+	<ColumnConst desc="Hide Part Flag" dataType="bool" unit="" name="HPrtF" id="CC8" visible="0" context="Catalog_PartHide" index="0">0</ColumnConst>
+	<ColumnConst desc="Structure Shape" dataType="string" unit="" name="SBS" id="CC9" visible="1" context="StructBoundingShape" index="0">BoundingShape_Box</ColumnConst>
+	<ColumnConst desc="Album tipo, b" dataType="float" unit="mm" name="SHBTh" id="CC10" visible="1" context="StructHwBaseThickness" index="0">200.0000</ColumnConst>
+	<ColumnConst desc="Espacamento onde o tubo encaixa" dataType="float" unit="mm" name="Delta" id="CC11" visible="0" context="Geometry_ModelDistanceParameter" index="3">20.0000</ColumnConst>
+	<ColumnConst desc="I" dataType="float" unit="mm" name="LenA7" id="CC12" visible="0" context="Geometry_Distance2D" index="7">1000.0000</ColumnConst>
+	<ColumnConst desc="m" dataType="float" unit="mm" name="LenA8" id="CC13" visible="0" context="Geometry_Distance2D" index="8">200.0000</ColumnConst>
+	<ColumnConst desc="SubSolo (p)" dataType="float" unit="mm" name="WPOf3" id="CC14" visible="0" context="Geometry_WorkplaneOffset" index="3">100.0000</ColumnConst>
+	<ColumnConst desc="Cabeca do tubo" dataType="float" unit="mm" name="LenA13" id="CC15" visible="0" context="Geometry_Distance2D" index="13">200.0000</ColumnConst>
+	<ColumnConst desc="Model Parameter 2" dataType="float" unit="" name="Qtd" id="CC16" visible="0" context="Geometry_ModelParameter" index="2">1.0000</ColumnConst>
+	<ColumnConst desc="Esconsidade (liga ao variavel)" dataType="float" unit="" name="Esconsidade" id="CC17" visible="0" context="Geometry_ModelAngleParameter" index="2">315.0000</ColumnConst>
+	<ColumnConst desc="Structure Width" dataType="float" unit="mm" name="SBSW" id="CC18" visible="1" context="StructWidth" index="0">1.0000</ColumnConst>
+	<ColumnConst desc="Structure Height" dataType="float" unit="mm" name="SBSL" id="CC19" visible="1" context="StructLength" index="0">150.0000</ColumnConst>
+	<ColumnConst desc="180/pi" dataType="float" unit="" name="convPI" id="CC20" visible="0" context="Geometry_ModelParameter" index="4">1.0000</ColumnConst>
+	<ColumnConst desc="Vertical Pipe Clearance" dataType="float" unit="mm" name="SVPC" id="CC21" visible="1" context="StructVertPipeClearance" index="0">300.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, c" dataType="float" unit="mm" name="c" id="CC22" visible="1" context="c_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, e" dataType="float" unit="mm" name="e" id="CC23" visible="1" context="e_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, f" dataType="float" unit="mm" name="f" id="CC24" visible="1" context="f_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, n" dataType="float" unit="mm" name="n" id="CC25" visible="1" context="n_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, q" dataType="float" unit="mm" name="q" id="CC26" visible="1" context="q_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, k" dataType="float" unit="mm" name="k" id="CC27" visible="1" context="k_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, m" dataType="float" unit="mm" name="m" id="CC28" visible="1" context="m_" index="0">0.0000</ColumnConst>
+	<ColumnConst desc="Espaçamento entre tubos" dataType="float" unit="mm" name="Espacamento" id="CC29" visible="1" context="Espacamento_" index="0">10.0000</ColumnConst>
+	<ColumnConst desc="Abertura direita" dataType="float" unit="" name="AbDir" id="CC30" visible="1" context="AbDir_" index="0">10.0000</ColumnConst>
+	<ColumnConst desc="Abertura esquerda" dataType="float" unit="" name="AbEsq" id="CC31" visible="1" context="AbEsq_" index="0">10.0000</ColumnConst>
+	<ColumnConst desc="d1" dataType="float" unit="mm" name="d1" id="CC32" visible="0" context="Geometry_ModelDistanceParameter" index="6">200.0000</ColumnConst>
+	<ColumnConst desc="Rim to Sump Height" dataType="float" unit="mm" name="SRS" id="CC33" visible="1" context="StructRimToSumpHeight" index="0">0.0000</ColumnConst>
+	<ColumnCalc desc="Part Size Name" dataType="string" unit="" name="PrtSN" id="CCA0" visible="1" context="Catalog_PartSizeName" index="0">"BBC_2010 " + "$Qtd" + " x " + FormatNumber($SHBW,0) + " x " + FormatNumber($SBSH,0) + " ( WTh Tubo " + FormatNumber($d1,0) + " ) x " + FormatNumber($Esconsidade,0) + " º"</ColumnCalc>
+	<ColumnCalc desc="Model Parameter 3" dataType="float" unit="" name="AlfaD" id="CCA1" visible="0" context="Geometry_ModelParameter" index="3">$Esconsidade/100</ColumnCalc>
+	<ColumnCalc desc="d2" dataType="float" unit="mm" name="d2" id="CCA2" visible="0" context="Geometry_ModelDistanceParameter" index="7">$d1</ColumnCalc>
+	<ColumnCalc desc="Equacao Distancia" dataType="float" unit="" name="DNM" id="CCA3" visible="0" context="Geometry_ModelParameter" index="1">$SBSH/1000</ColumnCalc>
+	<ColumnCalc desc="Base" dataType="float" unit="mm" name="WPOf1" id="CCA4" visible="0" context="Geometry_WorkplaneOffset" index="1">$SVPC+$d2+$SBSH</ColumnCalc>
+	<ColumnCalc desc="D" dataType="float" unit="mm" name="LenA10" id="CCA5" visible="0" context="Geometry_Distance2D" index="10">$WPOf1*1.5-$LenA8</ColumnCalc>
+	<ColumnCalc desc="Largura cubo subtracao" dataType="float" unit="mm" name="LenA14" id="CCA6" visible="0" context="Geometry_Distance2D" index="14">$SHBW*10</ColumnCalc>
+	<ColumnCalc desc="2D Distance 15" dataType="float" unit="mm" name="LenA15" id="CCA7" visible="0" context="Geometry_Distance2D" index="15">$Qtd*$SHBW+($Qtd-1)*$d1</ColumnCalc>
+	<ColumnCalc desc="F" dataType="float" unit="mm" name="LenA6" id="CCA8" visible="0" context="Geometry_Distance2D" index="6">133.333333333334*$DNM^3+-900.000000000009*$DNM^2+2016.66666666669*$DNM^1+-1300.00000000002</ColumnCalc>
+	<ColumnCalc desc="2D Distance 16" dataType="float" unit="mm" name="LenA16" id="CCA9" visible="0" context="Geometry_Distance2D" index="16">$LenA6+$Delta+$d1</ColumnCalc>
+	<ColumnCalc desc="Largura total da cabeca" dataType="float" unit="mm" name="LenA3" id="CCA10" visible="0" context="Geometry_Distance2D" index="3">$SHBTh+$d1+$Delta</ColumnCalc>
+	<ColumnCalc desc="G" dataType="float" unit="mm" name="LenA9" id="CCA11" visible="0" context="Geometry_Distance2D" index="9">-533.333333333343*$DNM^3+3600.00000000006*$DNM^2+-7666.66666666678*$DNM^1+5500.00000000007</ColumnCalc>
+	<ColumnCalc desc="3D Distance 1" dataType="float" unit="mm" name="LenB1" id="CCA12" visible="0" context="Geometry_Distance3D" index="1">$WPOf3</ColumnCalc>
+	<ColumnCalc desc="Altura cubo subtracao" dataType="float" unit="mm" name="LenB2" id="CCA13" visible="0" context="Geometry_Distance3D" index="2">$LenA14</ColumnCalc>
+	<ColumnCalc desc="Ala Esquerda" dataType="float" unit="deg" name="PathA1" id="CCA14" visible="1" context="PathAngle" index="1">-6.11191138950925*$AlfaD^6+67.3838230693372*$AlfaD^5+-268.503907230363*$AlfaD^4+452.520189362301*$AlfaD^3+-275.771218168881*$AlfaD^2+32.0565302144251*$AlfaD+30</ColumnCalc>
+	<ColumnCalc desc="Ala Direita" dataType="float" unit="deg" name="PathA2" id="CCA15" visible="1" context="PathAngle" index="2">-0.555628308137192*$AlfaD^6+4.6256056652425*$AlfaD^5+-11.4702518861074*$AlfaD^4+7.89009560939625*$AlfaD^3+-1.9694297472083*$AlfaD^2+0.154299891142113*$AlfaD+30</ColumnCalc>
+	<ColumnCalc desc="Path Angle 3" dataType="float" unit="deg" name="PathA3" id="CCA16" visible="1" context="PathAngle" index="3">90+$Esconsidade</ColumnCalc>
+	<ColumnCalc desc="Rim to Sump Height" dataType="float" unit="mm" name="SRS" id="CCA17" visible="0" context="Geometry_ModelDistanceParameter" index="5">$WPOf1</ColumnCalc>
+	<ColumnCalc desc="Fundo" dataType="float" unit="mm" name="WPOf2" id="CCA18" visible="0" context="Geometry_WorkplaneOffset" index="2">$WPOf1+800-$WPOf3</ColumnCalc>
+	<ColumnCalc desc="Parede do tubo (d2)" dataType="float" unit="mm" name="d2" id="CCA19" visible="0" context="d2_" index="0">$d1</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, p" dataType="float" unit="mm" name="p" id="CCA20" visible="1" context="p_" index="0">$LenB1</ColumnCalc>
+</LandPart>

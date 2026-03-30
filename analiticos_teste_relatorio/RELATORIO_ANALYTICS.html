@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatorio Analytics</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2e;
+      --muted: #8ea0b8;
+      --text: #e7eef7;
+      --accent: #22d3ee;
+      --line: #1f3250;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Segoe UI, sans-serif; background: linear-gradient(180deg, #07111f 0%, #0b1324 100%); color: var(--text); }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1, h2 { margin: 0 0 12px; }
+    p.top { color: var(--muted); margin: 8px 0 24px; }
+    .grid { display: grid; gap: 12px; }
+    .grid.cards { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .panel { background: rgba(13, 27, 46, 0.95); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 18px; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+    .card span, .grid.two span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; text-transform: uppercase; }
+    .card strong, .grid.two strong { font-size: 22px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; font-size: 14px; }
+    th { color: var(--accent); }
+    ul { margin: 0; padding-left: 18px; }
+    a { color: var(--accent); text-decoration: none; }
+    .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .chart { margin: 0; background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .chart img { display: block; width: 100%; height: auto; background: #fff; }
+    .chart figcaption { padding: 10px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Relatorio Analytics</h1>
+    <p class="top">ConstruData HydroNetwork V4 | FCN Construções e Saneamento | CT 11481051 · SE LIGA NA REDE · Santos/SP</p>
+    <section class="panel">
+      <div class="grid cards">
+        <div class="card">
+          <span>Algoritmo</span>
+          <strong>XGBoost</strong>
+        </div>
+        
+        <div class="card">
+          <span>R² Teste</span>
+          <strong>0.1861</strong>
+        </div>
+        
+        <div class="card">
+          <span>MAE</span>
+          <strong>3.134</strong>
+        </div>
+        
+        <div class="card">
+          <span>RMSE</span>
+          <strong>4.370</strong>
+        </div>
+        
+        <div class="card">
+          <span>Modelos</span>
+          <strong>162</strong>
+        </div>
+        </div>
+    </section>
+    
+    <section class="panel">
+      <h2>Cenarios</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cenario</th>
+            <th>Prod./dia</th>
+            <th>Prod./mes</th>
+            <th>Conclusao</th>
+            <th>Custo extra/mes</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Baseline (ritmo atual)</td>
+          <td>2.6</td>
+          <td>58</td>
+          <td>31/12/2050</td>
+          <td>R$ 0</td>
+        </tr>
+        
+        <tr>
+          <td>Aceleração +10%</td>
+          <td>2.9</td>
+          <td>63</td>
+          <td>29/09/2048</td>
+          <td>R$ 5,000</td>
+        </tr>
+        
+        <tr>
+          <td>Aceleração +20%</td>
+          <td>3.1</td>
+          <td>69</td>
+          <td>13/11/2046</td>
+          <td>R$ 10,000</td>
+        </tr>
+        
+        <tr>
+          <td>Aceleração +30%</td>
+          <td>3.4</td>
+          <td>75</td>
+          <td>12/04/2045</td>
+          <td>R$ 15,000</td>
+        </tr>
+        
+        <tr>
+          <td>Meta contratual (366/mês)</td>
+          <td>8.8</td>
+          <td>194</td>
+          <td>03/08/2033</td>
+          <td>R$ 118,044</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Top Features</h2>
+      <ul><li><b>la_r3</b>: 0.20397</li><li><b>mes</b>: 0.15406</li><li><b>le_r3</b>: 0.10535</li><li><b>nucleo_enc</b>: 0.10504</li><li><b>lig_total_r7</b>: 0.10038</li><li><b>lig_total_r3</b>: 0.09180</li><li><b>dia_semana</b>: 0.07113</li><li><b>pra_r7</b>: 0.06750</li></ul>
+    </section>
+    <section class="panel">
+      <h2>Resumo por Nucleo</h2>
+      <ul><li><b>João Carlos</b>: 206 ligacoes em 87 dias</li><li><b>Morro do Teteu</b>: 414 ligacoes em 78 dias</li><li><b>Pantanal Baixo</b>: 393 ligacoes em 116 dias</li><li><b>São Manoel</b>: 329 ligacoes em 94 dias</li><li><b>Vila Criadores</b>: 233 ligacoes em 89 dias</li><li><b>Vila Israel</b>: 101 ligacoes em 57 dias</li></ul>
+    </section>
+    <section class="panel">
+      <h2>Arquivos Gerados</h2>
+      <ul><li><a href="ANALYTICS_SLNR.xlsx">xlsx</a></li><li><a href="ANALYTICS_SLNR.json">json</a></li><li><a href="graficos">graficos_dir</a></li><li><a href="RELATORIO_ANALYTICS.md">relatorio_md</a></li></ul>
+    </section>
+    <section class="panel">
+      <h2>Graficos</h2>
+      <div class="charts">
+        <figure class="chart">
+          <img src="graficos/01_real_vs_predito.png" alt="01 Real Vs Predito">
+          <figcaption>01 Real Vs Predito</figcaption>
+        </figure>
+        
+        <figure class="chart">
+          <img src="graficos/02_violin_nucleos.png" alt="02 Violin Nucleos">
+          <figcaption>02 Violin Nucleos</figcaption>
+        </figure>
+        
+        <figure class="chart">
+          <img src="graficos/03_feature_importance.png" alt="03 Feature Importance">
+          <figcaption>03 Feature Importance</figcaption>
+        </figure>
+        
+        <figure class="chart">
+          <img src="graficos/04_tendencia_semanal.png" alt="04 Tendencia Semanal">
+          <figcaption>04 Tendencia Semanal</figcaption>
+        </figure>
+        </div>
+    </section>
+  </main>
+</body>
+</html>

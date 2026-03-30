@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\felip\\AppData\\Local\\Python\\bin\\python.exe",
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\Users\\felip\\.local\\bin;C:\\Users\\felip\\AppData\\Local\\Python\\bin;C:\\Users\\felip\\AppData\\Local\\Python\\pythoncore-3.14-64\\Scripts;${env:PATH}"
+  },
+  "aider.executablePath": "C:\\Users\\felip\\.local\\bin\\aider.exe",
+  "aider.autoAddOnOpen": true,
+  "aider.autoDropOnClose": true
+}

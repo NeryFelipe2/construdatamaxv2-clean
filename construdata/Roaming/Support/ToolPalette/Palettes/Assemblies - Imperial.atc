@@ -1,0 +1,142 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{54542720-C370-4A1A-98C1-5716AD1FC802}"/><Properties><ItemName resource="50001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-21T23:56:14" modifiedUniversalDateTime="2008-03-12T13:17:23"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{CACF779F-DFAF-479D-A1AE-0D658F451B31}"/><Properties><ItemName resource="50011" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:06:20" modifiedUniversalDateTime="2008-02-27T04:06:20"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CD468306-4A39-4AF9-B723-0C82A9644B97}"/><Properties><ItemName resource="50021" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Basic Assembly.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Basic Assembly.png"/></Images><Description resource="50022" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-21T18:59:34" modifiedUniversalDateTime="2008-02-21T18:59:34"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Basic Assembly.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{122A79AE-4119-49E3-8265-01871C403115}"/><Properties><ItemName resource="50031" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Transition.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Transition.png"/></Images><Description resource="50032" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-21T18:59:34" modifiedUniversalDateTime="2008-02-21T18:59:34"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Transition.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{759ECD0F-228E-4C90-86A1-9A0CF710FA62}"/><Properties><ItemName resource="50041" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Divided Highway.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Divided Highway.png"/></Images><Description resource="50042" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-21T18:59:34" modifiedUniversalDateTime="2008-02-21T18:59:34"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Divided Highway.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{63FFBE0A-7669-4083-A9EB-54332E655307}"/><Properties><ItemName resource="50051" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Full Section.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Full Section.png"/></Images><Description resource="50052" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road Full Section.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{4613C961-F63F-4685-BF24-316390294701}"/><Properties><ItemName resource="50061" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Full Section.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Full Section.png"/></Images><Description resource="50062" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Secondary Road Full Section.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A985DCDB-FFD1-476F-893F-9504A677A1CB}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:06:32" modifiedUniversalDateTime="2008-02-27T04:06:32"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{209CCB84-5D30-4C2E-91F6-9639F8B2FF35}"/><Properties><ItemName resource="50071" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:06:46" modifiedUniversalDateTime="2008-02-27T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{F35B9430-D407-45F1-B68E-CED44579862E}"/><Properties><ItemName resource="50081" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road - Through Intersection.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road - Through Intersection.png"/></Images><Description resource="50082" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road - Through Intersection.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{FE543DF2-A579-4729-BB14-5AFA78C6C111}"/><Properties><ItemName resource="50091" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Part Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Part Section - Daylight Left.png"/></Images><Description resource="50092" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road Part Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{42305CDD-7A66-4EA4-9EA2-0610C5740C25}"/><Properties><ItemName resource="50101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Part Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Part Section - Daylight Right.png"/></Images><Description resource="50102" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road Part Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{7AD271D2-C2FD-46ED-911D-8CA457C34070}"/><Properties><ItemName resource="50111" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Half Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Half Section - Daylight Left.png"/></Images><Description resource="50112" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road Half Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{5CD40500-D8BA-4109-B0A3-7013A9E8E0FA}"/><Properties><ItemName resource="50121" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Half Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Half Section - Daylight Right.png"/></Images><Description resource="50122" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Primary Road Half Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{854C0AEF-3475-440A-932B-24699919C311}"/><Properties><ItemName resource="50131" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Half Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Half Section - Daylight Left.png"/></Images><Description resource="50132" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Secondary Road Half Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{4BFAAFA9-555D-4E1F-9398-AA1C6E1D490C}"/><Properties><ItemName resource="50141" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Half Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Half Section - Daylight Right.png"/></Images><Description resource="50142" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Secondary Road Half Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{9BEE04A7-8936-4D9F-89A8-20216A308988}"/><Properties><ItemName resource="50151" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Curb Return Fillets.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Curb Return Fillets.png"/></Images><Description resource="50152" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Curb Return Fillets.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B9317C08-DE6B-4CC0-9843-E6842B7EB240}"/><Properties><ItemName resource="50161" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Null Assembly.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Null Assembly.png"/></Images><Description resource="50162" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-25T15:56:15" modifiedUniversalDateTime="2008-02-25T15:56:15"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Null Assembly.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{53414260-7838-47BA-B8C2-1283934481A0}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:18:03" modifiedUniversalDateTime="2008-02-27T04:18:03"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{253F38F7-A524-460D-8CD0-35B230D90458}"/><Properties><ItemName resource="50171" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:18:09" modifiedUniversalDateTime="2008-02-27T04:18:09"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6F43FB47-F66D-4585-8DD5-74B31F881A18}"/><Properties><ItemName resource="50181" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Roundabout.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Roundabout.png"/></Images><Description resource="50182" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-25T15:56:15" modifiedUniversalDateTime="2008-02-25T15:56:15"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Imperial\Roundabout.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{9D4CB3AB-40C1-4C8A-BCF2-846019A4CCC8}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-02-27T04:21:57" modifiedUniversalDateTime="2008-02-27T04:21:57"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

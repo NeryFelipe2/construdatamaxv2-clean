@@ -1,0 +1,330 @@
+{
+  "precos": {
+    "Tubo PVC DN200": {
+      "tipo": "ESG",
+      "unidade": "m",
+      "preco": 200.12,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Tubo PVC DN300": {
+      "tipo": "ESG",
+      "unidade": "m",
+      "preco": 310.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PV concreto DN1200": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "preco": 3686.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PI plástico DN600": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "preco": 1412.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Caixa inspeção": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "preco": 1034.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Tubo PEAD DN63": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 85.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Tubo PEAD DN110": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 101.8,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PEAD PE80 PN12.5 DN63": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 85.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PEAD PE80 PN12.5 DN160": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 145.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PEAD PE80 PN10": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 95.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "PVC JE PBA DN20": {
+      "tipo": "AG",
+      "unidade": "m",
+      "preco": 42.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Sela eletrofusão": {
+      "tipo": "AG",
+      "unidade": "un",
+      "preco": 660.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Cavalete/hidrom.": {
+      "tipo": "AG",
+      "unidade": "un",
+      "preco": 490.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Conexões diversas": {
+      "tipo": "AG",
+      "unidade": "vb",
+      "preco": 120.0,
+      "fonte": "SINAPI/SABESP"
+    },
+    "Areia": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "preco": 160.0,
+      "fonte": "SINAPI"
+    },
+    "Berço": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "preco": 160.0,
+      "fonte": "SINAPI"
+    },
+    "Brita base": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "preco": 210.0,
+      "fonte": "SINAPI"
+    },
+    "Concreto": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "preco": 720.0,
+      "fonte": "SINAPI"
+    },
+    "CBUQ provisório": {
+      "tipo": "GERAL",
+      "unidade": "m²",
+      "preco": 55.0,
+      "fonte": "SINAPI"
+    },
+    "CBUQ definitivo": {
+      "tipo": "GERAL",
+      "unidade": "m²",
+      "preco": 120.0,
+      "fonte": "SINAPI"
+    }
+  },
+  "composicao": {
+    "Escavação mecânica": {
+      "valor_m": 145.0,
+      "unidade": "R$/m",
+      "detalhe": "Retroescavadeira + operador"
+    },
+    "Tubo ESG (média DN200/300)": {
+      "valor_m": 240.0,
+      "unidade": "R$/m",
+      "detalhe": "Fornecimento + assentamento"
+    },
+    "Tubo AG (média PEAD)": {
+      "valor_m": 95.0,
+      "unidade": "R$/m",
+      "detalhe": "Fornecimento + fusão"
+    },
+    "PV / Caixas / PIs": {
+      "valor_m": 120.0,
+      "unidade": "R$/m",
+      "detalhe": "Média rateada por metro"
+    },
+    "Reaterro compactado": {
+      "valor_m": 80.0,
+      "unidade": "R$/m",
+      "detalhe": "Areia + berço + brita + compactação"
+    },
+    "Ramal predial": {
+      "valor_m": 65.0,
+      "unidade": "R$/m",
+      "detalhe": "Sela + cavalete + conexão"
+    },
+    "Pavimentação (CBUQ prov+def)": {
+      "valor_m": 45.0,
+      "unidade": "R$/m",
+      "detalhe": "Tapa-buraco + definitivo"
+    },
+    "Sinalização + segurança": {
+      "valor_m": 15.0,
+      "unidade": "R$/m",
+      "detalhe": "Cones, placas, sinaleiro"
+    },
+    "BDI 25%": {
+      "valor_m": 197.5,
+      "unidade": "R$/m",
+      "detalhe": "25% sobre diretos"
+    },
+    "TOTAL": {
+      "valor_m": 805.0,
+      "unidade": "R$/m",
+      "detalhe": "≈ R$ 910/m (CRONO_MACRO!H3)"
+    }
+  },
+  "fatores": {
+    "Tubo PVC DN200": {
+      "tipo": "ESG",
+      "unidade": "m",
+      "fator_m": 0.6,
+      "prazo_entrega": "3 semanas"
+    },
+    "Tubo PVC DN300": {
+      "tipo": "ESG",
+      "unidade": "m",
+      "fator_m": 0.4,
+      "prazo_entrega": "3 semanas"
+    },
+    "PV concreto DN1200": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "fator_m": 0.068,
+      "prazo_entrega": "2 semanas"
+    },
+    "PI plástico DN600": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "fator_m": 0.022,
+      "prazo_entrega": "2 semanas"
+    },
+    "Caixa inspeção": {
+      "tipo": "ESG",
+      "unidade": "un",
+      "fator_m": 0.055,
+      "prazo_entrega": "2 semanas"
+    },
+    "Tubo PEAD DN63": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.7,
+      "prazo_entrega": "4 semanas"
+    },
+    "Tubo PEAD DN110": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.3,
+      "prazo_entrega": "4 semanas"
+    },
+    "Sela eletrofusão": {
+      "tipo": "AG",
+      "unidade": "un",
+      "fator_m": 0.022,
+      "prazo_entrega": "2 semanas"
+    },
+    "Cavalete/hidrom.": {
+      "tipo": "AG",
+      "unidade": "un",
+      "fator_m": 0.017,
+      "prazo_entrega": "3 semanas"
+    },
+    "Conexões diversas": {
+      "tipo": "AG",
+      "unidade": "vb",
+      "fator_m": 0.011,
+      "prazo_entrega": "2 semanas"
+    },
+    "Areia": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "fator_m": 0.25,
+      "prazo_entrega": "1 semana"
+    },
+    "Berço": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "fator_m": 0.24,
+      "prazo_entrega": "1 semana"
+    },
+    "Brita base": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "fator_m": 0.22,
+      "prazo_entrega": "1 semana"
+    },
+    "Concreto": {
+      "tipo": "GERAL",
+      "unidade": "m³",
+      "fator_m": 0.18,
+      "prazo_entrega": "1 semana"
+    },
+    "CBUQ provisório": {
+      "tipo": "GERAL",
+      "unidade": "m²",
+      "fator_m": 0.88,
+      "prazo_entrega": "2 semanas"
+    },
+    "CBUQ definitivo": {
+      "tipo": "GERAL",
+      "unidade": "m²",
+      "fator_m": 0.88,
+      "prazo_entrega": "3 semanas"
+    },
+    "PEAD PE80 PN12.5 DN63": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.6503,
+      "prazo_entrega": "4 semanas"
+    },
+    "PEAD PE80 PN12.5 DN160": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.3107,
+      "prazo_entrega": "4 semanas"
+    },
+    "PEAD PE80 PN10": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.0026,
+      "prazo_entrega": "4 semanas"
+    },
+    "PVC JE PBA DN20": {
+      "tipo": "AG",
+      "unidade": "m",
+      "fator_m": 0.0366,
+      "prazo_entrega": "3 semanas"
+    }
+  },
+  "nucleos_saldo": {
+    "SM+JC": {
+      "falta_esg_m": 0,
+      "falta_ag_m": 5759.0,
+      "falta_total_m": 5759.0,
+      "meses_prod": 4.0
+    },
+    "Vila Israel": {
+      "falta_esg_m": 734.0,
+      "falta_ag_m": 1191.0,
+      "falta_total_m": 1925.0,
+      "meses_prod": 3.0
+    },
+    "Morro do Tetéu": {
+      "falta_esg_m": 3997.0,
+      "falta_ag_m": 4696.0,
+      "falta_total_m": 8693.0,
+      "meses_prod": 5.0
+    },
+    "Vila Criadores": {
+      "falta_esg_m": 2633.0,
+      "falta_ag_m": 0,
+      "falta_total_m": 2633.0,
+      "meses_prod": 5.0
+    },
+    "Pantanal Baixo": {
+      "falta_esg_m": 3318.0,
+      "falta_ag_m": 3402.0,
+      "falta_total_m": 6720.0,
+      "meses_prod": 5.0
+    }
+  }
+}

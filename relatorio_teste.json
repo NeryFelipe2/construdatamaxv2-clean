@@ -1,0 +1,15 @@
+{
+  "total_processamentos": 1,
+  "total_pvs": 5,
+  "total_trechos": 4,
+  "extensao_total_m": 56.56,
+  "custo_total_r": 0.0,
+  "dn_counts": {
+    "200": 200.0
+  },
+  "status_counts": {
+    "OK": 4
+  },
+  "total_erros": 0,
+  "data_geracao": "2026-03-20T19:59:49.269226"
+}

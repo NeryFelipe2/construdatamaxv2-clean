@@ -1,0 +1,465 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{0CAD244F-480A-4B26-B76E-4F515117CCE6}"/><Properties><ItemName resource="51019" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:28:38" modifiedUniversalDateTime="2009-01-04T11:41:07"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{BFB6BE8F-9097-4160-9B79-81C80D7E5D99}"/><Properties><ItemName resource="51020" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CC2C2DAB-496A-492F-9AB4-637A87991DFF}"/><Properties><ItemName resource="3101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkMulti.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkMulti.png"/></Images><Description resource="3102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkMulti subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkMulti</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkMulti</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3103" Description="3104">R2026</Version>
+						<Side DataType="Long" DisplayName="3105" Description="3106">0
+		            <Enum>
+								<Right DisplayName="3107">0</Right>
+								<Left DisplayName="3108">1</Left>
+							</Enum>
+						</Side>
+						<NoOfLinks DataType="Long" TypeInfo="2" DisplayName="3109" Description="3110">0</NoOfLinks>
+						<SurfaceCodes DataType="String" DisplayName="3111" Description="3112">Top,Datum</SurfaceCodes>
+						<PointCodes DataType="String" DisplayName="3161" Description="3162">MultiLink_Point</PointCodes>
+						<ShapeCodes DataType="String" DisplayName="3163" Description="3164">MultiLink</ShapeCodes>
+						<dW1 DataType="Double" TypeInfo="16" DisplayName="3113" Description="3114">0</dW1>
+						<dZ1 DataType="Double" TypeInfo="16" DisplayName="3115" Description="3116">0</dZ1>
+						<dW2 DataType="Double" TypeInfo="16" DisplayName="3117" Description="3118">0</dW2>
+						<dZ2 DataType="Double" TypeInfo="16" DisplayName="3119" Description="3120">0</dZ2>
+						<dW3 DataType="Double" TypeInfo="16" DisplayName="3121" Description="3122">0</dW3>
+						<dZ3 DataType="Double" TypeInfo="16" DisplayName="3123" Description="3124">0</dZ3>
+						<dW4 DataType="Double" TypeInfo="16" DisplayName="3125" Description="3126">0</dW4>
+						<dZ4 DataType="Double" TypeInfo="16" DisplayName="3127" Description="3128">0</dZ4>
+						<dW5 DataType="Double" TypeInfo="16" DisplayName="3129" Description="3130">0</dW5>
+						<dZ5 DataType="Double" TypeInfo="16" DisplayName="3131" Description="3132">-0</dZ5>
+						<dW6 DataType="Double" TypeInfo="16" DisplayName="3133" Description="3134">0</dW6>
+						<dZ6 DataType="Double" TypeInfo="16" DisplayName="3135" Description="3136">0</dZ6>
+						<dW7 DataType="Double" TypeInfo="16" DisplayName="3137" Description="3138">0</dW7>
+						<dZ7 DataType="Double" TypeInfo="16" DisplayName="3139" Description="3140">0</dZ7>
+						<dW8 DataType="Double" TypeInfo="16" DisplayName="3141" Description="3142">0</dW8>
+						<dZ8 DataType="Double" TypeInfo="16" DisplayName="3143" Description="3144">0</dZ8>
+						<dW9 DataType="Double" TypeInfo="16" DisplayName="3145" Description="3146">0</dW9>
+						<dZ9 DataType="Double" TypeInfo="16" DisplayName="3147" Description="3148">0</dZ9>
+						<dW10 DataType="Double" TypeInfo="16" DisplayName="3149" Description="3150">0</dW10>
+						<dZ10 DataType="Double" TypeInfo="16" DisplayName="3151" Description="3152">0</dZ10>
+						<dW11 DataType="Double" TypeInfo="16" DisplayName="3153" Description="3154">0</dW11>
+						<dZ11 DataType="Double" TypeInfo="16" DisplayName="3155" Description="3156">0</dZ11>
+						<dW12 DataType="Double" TypeInfo="16" DisplayName="3157" Description="3158">0</dW12>
+						<dZ12 DataType="Double" TypeInfo="16" DisplayName="3159" Description="3160">0</dZ12>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{89240767-2CB7-4BB2-8A94-083F05DEA7B0}"/><Properties><ItemName resource="3201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkOffsetAndElevation.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkOffsetAndElevation.png"/></Images><Description resource="3202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkOffsetAndElevation subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkOffsetAndElevation</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkOffsetAndElevation</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3203" Description="3204">R2019</Version>
+						<Offset DataType="Double" TypeInfo="16" DisplayName="3205" Description="3206">10</Offset>
+						<Elevation DataType="Double" TypeInfo="16" DisplayName="3207" Description="3208">0</Elevation>
+						<PointCodes DataType="String" DisplayName="3209" Description="3210">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3211" Description="3212">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3213" Description="3214">0
+							<Enum>
+								<True DisplayName="3215">1</True>
+								<False DisplayName="3216">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D10FB196-F981-4A19-967A-8D4F0F136199}"/><Properties><ItemName resource="3301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkOffsetAndSlope.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkOffsetAndSlope.png"/></Images><Description resource="3302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkOffsetAndSlope subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkOffsetAndSlope</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkOffsetAndSlope</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3303" Description="3304">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Offset DataType="Double" TypeInfo="16" DisplayName="3305" Description="3306">10</Offset>
+						<UseSuperelevationSlope DataType="Long" DisplayName="3321" Description="3322">0
+							<Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="3311" Description="3312">0.02</Slope>
+						<PointCodes DataType="String" DisplayName="3313" Description="3314">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3315" Description="3316">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3317" Description="3318">0
+							<Enum>
+								<True DisplayName="3319">1</True>
+								<False DisplayName="3320">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FE79FDA6-A18D-48AF-8374-1528EF20A0D6}"/><Properties><ItemName resource="3401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkOffsetOnSurface.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkOffsetOnSurface.png"/></Images><Description resource="3402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkOffsetOnSurface subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkOffsetOnSurface</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkOffsetOnSurface</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3403" Description="3404">R2019</Version>
+						<Offset DataType="Double" TypeInfo="16" DisplayName="3405" Description="3406">0</Offset>
+						<PointCodes DataType="String" DisplayName="3407" Description="3408">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3409" Description="3410">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3411" Description="3412">0
+							<Enum>
+								<True DisplayName="3413">1</True>
+								<False DisplayName="3414">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DC9F12AB-F7C0-45E8-8DCD-9DFD8B88D61E}"/><Properties><ItemName resource="3501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkSlopeAndVerticalDeflection.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkSlopeAndVerticalDeflection.png"/></Images><Description resource="3502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkSlopeAndVerticalDeflection subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkSlopeAndVerticalDeflection</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkSlopeAndVerticalDeflection</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3503" Description="3504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="3505" Description="3506">0
+		                    <Enum>
+								<Right DisplayName="3507">0</Right>
+								<Left DisplayName="3508">1</Left>
+							</Enum>
+						</Side>
+						<UseSuperelevationSlope DataType="Long" DisplayName="3525" Description="3526">0
+							<Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="3513" Description="3514">0.02</Slope>
+						<VerticalDeflection DataType="Double" TypeInfo="16" DisplayName="3515" Description="3516">10.0</VerticalDeflection>
+						<PointCodes DataType="String" DisplayName="3517" Description="3518">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3519" Description="3520">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3521" Description="3522">0
+							<Enum>
+								<True DisplayName="3523">1</True>
+								<False DisplayName="3524">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{290C3A9D-75FA-49D0-B133-5F384560BF49}"/><Properties><ItemName resource="3601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkSlopesBetweenPoints.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkSlopesBetweenPoints.png"/></Images><Description resource="3602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_SlopesBetweenPoints subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkSlopesBetweenPoints</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkSlopesBetweenPoints</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3603" Description="3604">R2019</Version>
+						<MarkedPointName DataType="String" DisplayName="3605" Description="3606">none</MarkedPointName>
+						<Slope1 DataType="Double" TypeInfo="10" DisplayName="3607" Description="3608">-0.25</Slope1>
+						<Slope2 DataType="Double" TypeInfo="10" DisplayName="3609" Description="3610">-0.25</Slope2>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="3611" Description="3612">2</DitchWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{99D86079-6E93-46C5-84C5-9BC051694584}"/><Properties><ItemName resource="3701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkSlopeToElevation.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkSlopeToElevation.png"/></Images><Description resource="3702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkSlopeToElevation subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkSlopeToElevation</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkSlopeToElevation</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3703" Description="3704">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="3705" Description="3706">0
+		                    <Enum>
+								<Right DisplayName="3707">0</Right>
+								<Left DisplayName="3708">1</Left>
+							</Enum>
+						</Side>
+						<UseSuperelevationSlope DataType="Long" DisplayName="3725" Description="3726">0
+							<Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="3713" Description="3714">0.02</Slope>
+						<TargetElevation DataType="Double" TypeInfo="16" DisplayName="3715" Description="3716">0</TargetElevation>
+						<PointCodes DataType="String" DisplayName="3717" Description="3718">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3719" Description="3720">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3721" Description="3722">0
+							<Enum>
+								<True DisplayName="3723">1</True>
+								<False DisplayName="3724">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{607C2C56-A9D3-4E85-ADB6-78714569E23C}"/><Properties><ItemName resource="3801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkSlopeToSurface.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkSlopeToSurface.png"/></Images><Description resource="3802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkSlopeToSurface subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkSlopeToSurface</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkSlopeToSurface</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3803" Description="3804">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="3805" Description="3806">0
+		                    <Enum>
+								<Right DisplayName="3807">0</Right>
+								<Left DisplayName="3808">1</Left>
+							</Enum>
+						</Side>
+						<UseSuperelevationSlope DataType="Long" DisplayName="3823" Description="3824">0
+							<Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="3813" Description="3814">0.02</Slope>
+						<AddLinkIn DataType="Long" DisplayName="3830" Description="3831">2
+							<Enum>
+								<CutOnly DisplayName="3832">0</CutOnly>
+								<FillOnly DisplayName="3833">1</FillOnly>
+								<CutAndFill DisplayName="3834">2</CutAndFill>
+							</Enum>
+						</AddLinkIn>
+						<PointCodes DataType="String" DisplayName="3815" Description="3816">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="3817" Description="3818">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3819" Description="3820">0
+							<Enum>
+								<True DisplayName="3821">1</True>
+								<False DisplayName="3822">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{9A9B710C-E05C-4A22-99A9-030826257573}"/><Properties><ItemName resource="12301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkToLaneMarker.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkToLaneMarker.png"/></Images><Description resource="12302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkToLaneMarker subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkToLaneMarker</HelpData></Help><Time createdUniversalDateTime="2009-01-04T21:58:00" modifiedUniversalDateTime="2009-01-04T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkToLaneMarker</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12303" Description="12304">R2019</Version>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="12305" Description="12306">6</LaneWidth>
+						<LaneMarkerLocation DataType="Double" TypeInfo="8" DisplayName="12307" Description="12308">0.5</LaneMarkerLocation>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="12309" Description="12310">-0.02</Slope>
+						<InsertionSide DataType="Long" DisplayName="12311" Description="12312">0
+							<Enum>
+								<Inside DisplayName="12313">0</Inside>
+								<Outside DisplayName="12314">1</Outside>
+							</Enum>
+						</InsertionSide>
+						<PointCodes DataType="String" DisplayName="12315" Description="12316">Lane_Center</PointCodes>
+						<LinkCodes DataType="String" DisplayName="12317" Description="12318">NONE</LinkCodes>
+						<OmitLink DataType="Long" DisplayName="12319" Description="12320">1
+							<Enum>
+								<True DisplayName="12321">1</True>
+								<False DisplayName="12322">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CD4756BC-F604-4FF9-8AC6-BFEDC49D4BA0}"/><Properties><ItemName resource="3901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkToMarkedPoint.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkToMarkedPoint.png"/></Images><Description resource="3902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkToMarkedPoint subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkToMarkedPoint</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkToMarkedPoint</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="3903" Description="3904">R2019</Version>
+						<MarkedPointName DataType="String" DisplayName="3905" Description="3906">none</MarkedPointName>
+						<SurfaceCodes DataType="String" DisplayName="3907" Description="3908">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="3909" Description="3910">0
+							<Enum>
+								<True DisplayName="3911">1</True>
+								<False DisplayName="3912">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CD2756BC-F604-4FF9-8AC6-BFEDC49D4BA0}"/><Properties><ItemName resource="12101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkToMarkedPoint2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkToMarkedPoint2.png"/></Images><Description resource="12102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkToMarkedPoint subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkToMarkedPoint2</HelpData></Help><Time createdUniversalDateTime="2007-12-05T21:58:00" modifiedUniversalDateTime="2008-12-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkToMarkedPoint2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="12103" Description="12104">R2019</Version>
+						<MarkedPointName DataType="String" DisplayName="12105" Description="12106">none</MarkedPointName>
+						<SurfaceCodes DataType="String" DisplayName="12107" Description="12108">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="12109" Description="12110">0
+							<Enum>
+								<True DisplayName="12111">1</True>
+								<False DisplayName="12112">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{73BB78D1-7140-4F43-AC11-08277F608F01}"/><Properties><ItemName resource="4001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkVertical.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkVertical.png"/></Images><Description resource="4002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkVertical subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkVertical</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkVertical</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4003" Description="4004">R2019</Version>
+						<VerticalDeflection DataType="Double" TypeInfo="16" DisplayName="4005" Description="4006">10</VerticalDeflection>
+						<PointCodes DataType="String" DisplayName="4007" Description="4008">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="4009" Description="4010">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="4011" Description="4012">0
+					<Enum>
+								<True DisplayName="4013">1</True>
+								<False DisplayName="4014">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{39C8E8F3-6D78-43D5-A511-5189BF581331}"/><Properties><ItemName resource="4101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLinkWidthAndSlope.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLinkWidthAndSlope.png"/></Images><Description resource="4102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LinkWidthAndSlope subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LinkWidthAndSlope</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LinkWidthAndSlope</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4103" Description="4104">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="4105" Description="4106">0
+								    <Enum>
+								<Right DisplayName="4107">0</Right>
+								<Left DisplayName="4108">1</Left>
+							</Enum>
+						</Side>
+						<Width DataType="Double" TypeInfo="16" DisplayName="4109" Description="4110">10</Width>
+						<UseSuperelevationSlope DataType="Long" DisplayName="4125" Description="4126">0
+							<Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Slope DataType="Double" TypeInfo="8" DisplayName="4115" Description="4116">0.02</Slope>
+						<PointCodes DataType="String" DisplayName="4117" Description="4118">P2</PointCodes>
+						<SurfaceCodes DataType="String" DisplayName="4119" Description="4120">Top,Datum</SurfaceCodes>
+						<OmitLink DataType="Long" DisplayName="4121" Description="4122">0
+							<Enum>
+								<True DisplayName="4123">1</True>
+								<False DisplayName="4124">0</False>
+							</Enum>
+						</OmitLink>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E72A74C9-D36F-4AE5-B7A8-0AE5520C5276}"/><Properties><ItemName resource="9901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccLotGrade.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccLotGrade.png"/></Images><Description resource="9902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LotGrade subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LotGrade</HelpData></Help><Time createdUniversalDateTime="2006-07-18T09:58:00" modifiedUniversalDateTime="2006-07-18T09:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LotGrade</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9903" Description="9904">R2019</Version>
+						<Side DataType="Long" DisplayName="9905" Description="9906">0
+		                    <Enum>
+								<Right DisplayName="9907">0</Right>
+								<Left DisplayName="9908">1</Left>
+							</Enum>
+						</Side>
+						<InsideWidth DataType="Double" TypeInfo="16" DisplayName="9909" Description="9910">12.0</InsideWidth>
+						<OutsideWidth DataType="Double" TypeInfo="16" DisplayName="9911" Description="9912">12.0</OutsideWidth>
+						<MinSlope DataType="Double" TypeInfo="9" DisplayName="9913" Description="9914">0.01</MinSlope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4E3EF588-D1A0-461E-A953-A01D91A6028E}"/><Properties><ItemName resource="4201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Generic\64\light\AeccMarkPoint.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Generic\64\dark\AeccMarkPoint.png"/></Images><Description resource="4202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MarkPoint subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MarkPoint</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MarkPoint</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4203" Description="4204">R2019</Version>
+						<PointName DataType="String" DisplayName="4205" Description="4206">none</PointName>
+						<PointCodes DataType="String" DisplayName="4207" Description="4208">MarkedPoint</PointCodes>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{BFB6BE8F-9097-4160-9B79-81C80D7E5D99}"/><Properties><ItemName resource="51020" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

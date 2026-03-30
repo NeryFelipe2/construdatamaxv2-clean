@@ -1,0 +1,5 @@
+(setvar "FILEDIA" 0)
+(command "_SAVEAS" "DXF" "" "
+C:/Users/felip/Downloads/NOVA NS Versao 5/_tmp_dwg/manual_isolate.dxf
+")
+(acad-quit)

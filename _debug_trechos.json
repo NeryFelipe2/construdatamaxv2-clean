@@ -1,0 +1,1302 @@
+[
+  {
+    "pv_ini": "PV-1136",
+    "pv_fim": "PV-1126",
+    "dn_mm": 150,
+    "ext_m": 43.97,
+    "material": "FF",
+    "decl_mm": 1.592,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1149",
+    "pv_fim": "PV-1220",
+    "dn_mm": 150,
+    "ext_m": 54.19,
+    "material": "FF",
+    "decl_mm": 4.429,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1162",
+    "pv_fim": "PV-1144",
+    "dn_mm": 150,
+    "ext_m": 38.31,
+    "material": "FF",
+    "decl_mm": -2.611,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1072",
+    "pv_fim": "PV-1154",
+    "dn_mm": 300,
+    "ext_m": 82.03,
+    "material": "PVC",
+    "decl_mm": 3.535,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1143",
+    "pv_fim": "PV-1067",
+    "dn_mm": 150,
+    "ext_m": 67.46,
+    "material": "FF",
+    "decl_mm": 6.375,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1150",
+    "pv_fim": "PV-1143",
+    "dn_mm": 150,
+    "ext_m": 108.03,
+    "material": "FF",
+    "decl_mm": 3.98,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1126",
+    "pv_fim": "PV-1164",
+    "dn_mm": 150,
+    "ext_m": 28.93,
+    "material": "FF",
+    "decl_mm": 4.493,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1148",
+    "pv_fim": "PV-1143",
+    "dn_mm": 150,
+    "ext_m": 60.4,
+    "material": "FF",
+    "decl_mm": 4.47,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1164",
+    "pv_fim": "PV-1163",
+    "dn_mm": 150,
+    "ext_m": 91.14,
+    "material": "FF",
+    "decl_mm": 4.17,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1163",
+    "pv_fim": "PV-1162",
+    "dn_mm": 150,
+    "ext_m": 81.93,
+    "material": "FF",
+    "decl_mm": 4.883,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1144",
+    "pv_fim": "PV-1154",
+    "dn_mm": 150,
+    "ext_m": 19.89,
+    "material": "FF",
+    "decl_mm": 44.749,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1082",
+    "pv_fim": "PV-1056",
+    "dn_mm": 250,
+    "ext_m": 85.59,
+    "material": "FF",
+    "decl_mm": 2.337,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1080",
+    "pv_fim": "PV-1066",
+    "dn_mm": 150,
+    "ext_m": 72.8,
+    "material": "FF",
+    "decl_mm": 3.709,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1062",
+    "pv_fim": "PV-1054",
+    "dn_mm": 150,
+    "ext_m": 82.5,
+    "material": "FF",
+    "decl_mm": 3.636,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1073",
+    "pv_fim": "PV-1068",
+    "dn_mm": 150,
+    "ext_m": 39.94,
+    "material": "FF",
+    "decl_mm": 4.256,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1084",
+    "pv_fim": "PV-1082",
+    "dn_mm": 200,
+    "ext_m": 64.6,
+    "material": "FF",
+    "decl_mm": 2.786,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1063",
+    "pv_fim": "PV-1073",
+    "dn_mm": 150,
+    "ext_m": 94.49,
+    "material": "FF",
+    "decl_mm": 5.397,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1059",
+    "pv_fim": "PV-1061",
+    "dn_mm": 150,
+    "ext_m": 64.7,
+    "material": "FF",
+    "decl_mm": 5.565,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1058",
+    "pv_fim": "PV-1049",
+    "dn_mm": 150,
+    "ext_m": 54.84,
+    "material": "FF",
+    "decl_mm": 0.182,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1056",
+    "pv_fim": "PV-1072",
+    "dn_mm": 250,
+    "ext_m": 79.89,
+    "material": "FF",
+    "decl_mm": 4.756,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1041",
+    "pv_fim": "PV-1082",
+    "dn_mm": 150,
+    "ext_m": 72.51,
+    "material": "FF",
+    "decl_mm": 10.482,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1074",
+    "pv_fim": "PV-1059",
+    "dn_mm": 150,
+    "ext_m": 46.6,
+    "material": "FF",
+    "decl_mm": 5.58,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1077",
+    "pv_fim": "PV-1076",
+    "dn_mm": 150,
+    "ext_m": 59.41,
+    "material": "FF",
+    "decl_mm": 1.515,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1079",
+    "pv_fim": "PV-1061",
+    "dn_mm": 150,
+    "ext_m": 45.09,
+    "material": "FF",
+    "decl_mm": -2.218,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1048",
+    "pv_fim": "PV-1041",
+    "dn_mm": 150,
+    "ext_m": 73.71,
+    "material": "FF",
+    "decl_mm": 3.663,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1067",
+    "pv_fim": "PV-1072",
+    "dn_mm": 150,
+    "ext_m": 89.23,
+    "material": "FF",
+    "decl_mm": 2.354,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1075",
+    "pv_fim": "PV-1052",
+    "dn_mm": 150,
+    "ext_m": 72.59,
+    "material": "FF",
+    "decl_mm": 6.061,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1083",
+    "pv_fim": "PV-1045",
+    "dn_mm": 200,
+    "ext_m": 79.7,
+    "material": "FF",
+    "decl_mm": 3.513,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1076",
+    "pv_fim": "PV-1051",
+    "dn_mm": 150,
+    "ext_m": 77.74,
+    "material": "FF",
+    "decl_mm": 17.623,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1061",
+    "pv_fim": "PV-1063",
+    "dn_mm": 150,
+    "ext_m": 96.72,
+    "material": "FF",
+    "decl_mm": 4.239,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1070",
+    "pv_fim": "PV-1075",
+    "dn_mm": 150,
+    "ext_m": 79.3,
+    "material": "FF",
+    "decl_mm": 3.279,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1081",
+    "pv_fim": "PV-1084",
+    "dn_mm": 150,
+    "ext_m": 57.0,
+    "material": "FF",
+    "decl_mm": 9.824,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1087",
+    "pv_fim": "PV-1069",
+    "dn_mm": 150,
+    "ext_m": 58.81,
+    "material": "FF",
+    "decl_mm": 4.081,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1068",
+    "pv_fim": "PV-1087",
+    "dn_mm": 150,
+    "ext_m": 6.39,
+    "material": "FF",
+    "decl_mm": 4.691,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1043",
+    "pv_fim": "PV-1059",
+    "dn_mm": 150,
+    "ext_m": 4.81,
+    "material": "FF",
+    "decl_mm": 20.804,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1066",
+    "pv_fim": "PV-1060",
+    "dn_mm": 150,
+    "ext_m": 73.81,
+    "material": "FF",
+    "decl_mm": 5.42,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1054",
+    "pv_fim": "PV-1052",
+    "dn_mm": 150,
+    "ext_m": 64.2,
+    "material": "FF",
+    "decl_mm": 6.542,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1045",
+    "pv_fim": "PV-1084",
+    "dn_mm": 200,
+    "ext_m": 71.5,
+    "material": "FF",
+    "decl_mm": 7.413,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1049",
+    "pv_fim": "PV-1051",
+    "dn_mm": 150,
+    "ext_m": 54.6,
+    "material": "FF",
+    "decl_mm": 3.846,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1051",
+    "pv_fim": "PV-1072",
+    "dn_mm": 150,
+    "ext_m": 62.57,
+    "material": "FF",
+    "decl_mm": 1.279,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-934",
+    "pv_fim": "PV-1073",
+    "dn_mm": 150,
+    "ext_m": 52.88,
+    "material": "FF",
+    "decl_mm": 6.997,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-939",
+    "pv_fim": "PV-1249",
+    "dn_mm": 150,
+    "ext_m": 71.42,
+    "material": "FF",
+    "decl_mm": 5.6,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1249",
+    "pv_fim": "PV-1081",
+    "dn_mm": 150,
+    "ext_m": 71.0,
+    "material": "FF",
+    "decl_mm": 4.366,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1060",
+    "pv_fim": "PV-1082",
+    "dn_mm": 150,
+    "ext_m": 71.29,
+    "material": "FF",
+    "decl_mm": 4.348,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1052",
+    "pv_fim": "PV-1060",
+    "dn_mm": 150,
+    "ext_m": 55.28,
+    "material": "FF",
+    "decl_mm": 2.714,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1220",
+    "pv_fim": "PV-1067",
+    "dn_mm": 150,
+    "ext_m": 49.25,
+    "material": "FF",
+    "decl_mm": 18.883,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-1223",
+    "pv_fim": "PV-1226",
+    "dn_mm": 200,
+    "ext_m": 13.62,
+    "material": "FF",
+    "decl_mm": 2.936,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-11 - TRANSIÇÃO",
+    "pv_fim": "PV-10",
+    "dn_mm": 300,
+    "ext_m": 40.87,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-10",
+    "pv_fim": "PV-09",
+    "dn_mm": 300,
+    "ext_m": 46.71,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-09",
+    "pv_fim": "PV-08",
+    "dn_mm": 300,
+    "ext_m": 53.52,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-08",
+    "pv_fim": "PV-07",
+    "dn_mm": 300,
+    "ext_m": 29.68,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-07",
+    "pv_fim": "PV-06",
+    "dn_mm": 300,
+    "ext_m": 18.97,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-06",
+    "pv_fim": "PV-05",
+    "dn_mm": 300,
+    "ext_m": 67.61,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-05",
+    "pv_fim": "PV-04",
+    "dn_mm": 300,
+    "ext_m": 77.68,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-04",
+    "pv_fim": "PV-03",
+    "dn_mm": 300,
+    "ext_m": 85.84,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-03",
+    "pv_fim": "PV-02",
+    "dn_mm": 300,
+    "ext_m": 71.26,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-02",
+    "pv_fim": "PV-01",
+    "dn_mm": 300,
+    "ext_m": 92.56,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-01",
+    "pv_fim": "PV-EEE",
+    "dn_mm": 300,
+    "ext_m": 8.5,
+    "material": "PVC",
+    "decl_mm": 3.804,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "03",
+    "pv_fim": "02",
+    "dn_mm": 200,
+    "ext_m": 10.25,
+    "material": "PVC",
+    "decl_mm": 22.436,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "02",
+    "pv_fim": "01",
+    "dn_mm": 200,
+    "ext_m": 4.75,
+    "material": "PVC",
+    "decl_mm": 7.79,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "11",
+    "pv_fim": "10",
+    "dn_mm": 200,
+    "ext_m": 29.44,
+    "material": "PVC",
+    "decl_mm": 7.167,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "27",
+    "pv_fim": "26",
+    "dn_mm": 150,
+    "ext_m": 14.94,
+    "material": "PVC",
+    "decl_mm": 7.432,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "26",
+    "pv_fim": "25",
+    "dn_mm": 200,
+    "ext_m": 4.85,
+    "material": "PVC",
+    "decl_mm": 15.66,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "17",
+    "pv_fim": "16",
+    "dn_mm": 200,
+    "ext_m": 9.48,
+    "material": "PVC",
+    "decl_mm": 12.453,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "16",
+    "pv_fim": "15",
+    "dn_mm": 200,
+    "ext_m": 13.74,
+    "material": "PVC",
+    "decl_mm": 7.568,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "15",
+    "pv_fim": "13",
+    "dn_mm": 200,
+    "ext_m": 20.53,
+    "material": "PVC",
+    "decl_mm": 6.334,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "14 ",
+    "pv_fim": "13",
+    "dn_mm": 200,
+    "ext_m": 13.78,
+    "material": "PVC",
+    "decl_mm": 9.942,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "34",
+    "pv_fim": "33",
+    "dn_mm": 200,
+    "ext_m": 11.53,
+    "material": "PVC",
+    "decl_mm": 14.652,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "33",
+    "pv_fim": "29",
+    "dn_mm": 200,
+    "ext_m": 31.57,
+    "material": "PVC",
+    "decl_mm": 5.416,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "35",
+    "pv_fim": "32",
+    "dn_mm": 150,
+    "ext_m": 24.99,
+    "material": "PVC",
+    "decl_mm": 10.213,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "32",
+    "pv_fim": "31",
+    "dn_mm": 150,
+    "ext_m": 5.46,
+    "material": "PVC",
+    "decl_mm": 25.072,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "31",
+    "pv_fim": "30",
+    "dn_mm": 150,
+    "ext_m": 1.61,
+    "material": "PVC",
+    "decl_mm": 10.59,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "30",
+    "pv_fim": "29",
+    "dn_mm": 150,
+    "ext_m": 9.27,
+    "material": "PVC",
+    "decl_mm": 2.588,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "29",
+    "pv_fim": "28",
+    "dn_mm": 200,
+    "ext_m": 14.49,
+    "material": "PVC",
+    "decl_mm": 5.936,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "24",
+    "pv_fim": "23",
+    "dn_mm": 200,
+    "ext_m": 48.08,
+    "material": "PVC",
+    "decl_mm": 5.949,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "19",
+    "pv_fim": "18",
+    "dn_mm": 150,
+    "ext_m": 10.29,
+    "material": "PVC",
+    "decl_mm": 47.896,
+    "tipo_rede": "agua",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "13",
+    "pv_fim": "12",
+    "dn_mm": 200,
+    "ext_m": 40.52,
+    "material": "PVC",
+    "decl_mm": 6.91,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-27",
+    "pv_fim": "PV-26",
+    "dn_mm": 200,
+    "ext_m": 13.04,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-26",
+    "pv_fim": "PV-25",
+    "dn_mm": 200,
+    "ext_m": 12.87,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-25",
+    "pv_fim": "PV-24",
+    "dn_mm": 300,
+    "ext_m": 15.33,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-24",
+    "pv_fim": "PV-23",
+    "dn_mm": 300,
+    "ext_m": 23.78,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-23",
+    "pv_fim": "PV-22",
+    "dn_mm": 300,
+    "ext_m": 14.3,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-22",
+    "pv_fim": "PV-21",
+    "dn_mm": 300,
+    "ext_m": 14.18,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-21",
+    "pv_fim": "PV-20",
+    "dn_mm": 300,
+    "ext_m": 18.84,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-20",
+    "pv_fim": "PV-19",
+    "dn_mm": 300,
+    "ext_m": 11.61,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-19",
+    "pv_fim": "PV-18",
+    "dn_mm": 300,
+    "ext_m": 12.64,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-18",
+    "pv_fim": "PV-17",
+    "dn_mm": 300,
+    "ext_m": 8.01,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-17",
+    "pv_fim": "PV-16",
+    "dn_mm": 300,
+    "ext_m": 17.67,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-16",
+    "pv_fim": "PV-15",
+    "dn_mm": 300,
+    "ext_m": 23.06,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-15",
+    "pv_fim": "PV-14",
+    "dn_mm": 300,
+    "ext_m": 7.54,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-14",
+    "pv_fim": "PV-13",
+    "dn_mm": 300,
+    "ext_m": 13.03,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-13",
+    "pv_fim": "PV-12",
+    "dn_mm": 300,
+    "ext_m": 18.49,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-12",
+    "pv_fim": "PV-11",
+    "dn_mm": 300,
+    "ext_m": 25.2,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-11",
+    "pv_fim": "PV-10",
+    "dn_mm": 300,
+    "ext_m": 28.04,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-10",
+    "pv_fim": "PV-09",
+    "dn_mm": 300,
+    "ext_m": 11.69,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-09",
+    "pv_fim": "PV-08",
+    "dn_mm": 300,
+    "ext_m": 33.77,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-08",
+    "pv_fim": "PV-07",
+    "dn_mm": 300,
+    "ext_m": 23.65,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-07",
+    "pv_fim": "PV-06",
+    "dn_mm": 300,
+    "ext_m": 33.83,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-06",
+    "pv_fim": "PV-05",
+    "dn_mm": 300,
+    "ext_m": 11.29,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-05",
+    "pv_fim": "PV-04",
+    "dn_mm": 300,
+    "ext_m": 16.57,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-04",
+    "pv_fim": "PV-03",
+    "dn_mm": 300,
+    "ext_m": 21.4,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-03",
+    "pv_fim": "PV-02",
+    "dn_mm": 300,
+    "ext_m": 2.82,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-02",
+    "pv_fim": "PV-01",
+    "dn_mm": 300,
+    "ext_m": 30.0,
+    "material": "PVC",
+    "decl_mm": 3.0,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-01",
+    "pv_fim": "PV-EEE SÃO MANOEL",
+    "dn_mm": 300,
+    "ext_m": 4.0,
+    "material": "PVC",
+    "decl_mm": 3.263,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-26",
+    "pv_fim": "PV-25",
+    "dn_mm": 200,
+    "ext_m": 57.33,
+    "material": "PVC",
+    "decl_mm": 3.39,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-25",
+    "pv_fim": "PV-24",
+    "dn_mm": 300,
+    "ext_m": 24.2,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-24",
+    "pv_fim": "PV-23",
+    "dn_mm": 300,
+    "ext_m": 12.31,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-23",
+    "pv_fim": "PV-22",
+    "dn_mm": 300,
+    "ext_m": 11.2,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-22",
+    "pv_fim": "PV-21",
+    "dn_mm": 300,
+    "ext_m": 20.92,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-21",
+    "pv_fim": "PV-20",
+    "dn_mm": 300,
+    "ext_m": 7.25,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-20",
+    "pv_fim": "PV-19",
+    "dn_mm": 300,
+    "ext_m": 28.53,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-19",
+    "pv_fim": "PV-18",
+    "dn_mm": 300,
+    "ext_m": 30.62,
+    "material": "PVC",
+    "decl_mm": 3.382,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-18",
+    "pv_fim": "PV-17",
+    "dn_mm": 300,
+    "ext_m": 17.18,
+    "material": "PVC",
+    "decl_mm": 3.402,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-17",
+    "pv_fim": "PV-16",
+    "dn_mm": 300,
+    "ext_m": 9.09,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-16",
+    "pv_fim": "PV-15",
+    "dn_mm": 300,
+    "ext_m": 22.09,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-15",
+    "pv_fim": "PV-14",
+    "dn_mm": 300,
+    "ext_m": 18.56,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-14",
+    "pv_fim": "PV-13",
+    "dn_mm": 300,
+    "ext_m": 25.67,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-13",
+    "pv_fim": "PV-12",
+    "dn_mm": 300,
+    "ext_m": 16.47,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-12",
+    "pv_fim": "PV-11",
+    "dn_mm": 300,
+    "ext_m": 15.97,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-11",
+    "pv_fim": "PV-10",
+    "dn_mm": 300,
+    "ext_m": 9.71,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-10",
+    "pv_fim": "PV-09",
+    "dn_mm": 300,
+    "ext_m": 15.8,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-09",
+    "pv_fim": "PV-08",
+    "dn_mm": 300,
+    "ext_m": 14.93,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-08",
+    "pv_fim": "PV-07",
+    "dn_mm": 300,
+    "ext_m": 14.45,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-07",
+    "pv_fim": "PV-06",
+    "dn_mm": 300,
+    "ext_m": 14.54,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-06",
+    "pv_fim": "PV-05",
+    "dn_mm": 300,
+    "ext_m": 14.0,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-05",
+    "pv_fim": "PV-04",
+    "dn_mm": 300,
+    "ext_m": 21.63,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-04",
+    "pv_fim": "PV-03",
+    "dn_mm": 300,
+    "ext_m": 21.62,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-03",
+    "pv_fim": "PV-02",
+    "dn_mm": 300,
+    "ext_m": 14.51,
+    "material": "PVC",
+    "decl_mm": 3.389,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-02",
+    "pv_fim": "PV-01",
+    "dn_mm": 300,
+    "ext_m": 79.36,
+    "material": "PVC",
+    "decl_mm": 3.279,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  },
+  {
+    "pv_ini": "PV-01",
+    "pv_fim": "PV-01",
+    "dn_mm": 300,
+    "ext_m": 23.09,
+    "material": "PVC",
+    "decl_mm": 5.486,
+    "tipo_rede": "esgoto",
+    "tipo": "esgoto"
+  }
+]

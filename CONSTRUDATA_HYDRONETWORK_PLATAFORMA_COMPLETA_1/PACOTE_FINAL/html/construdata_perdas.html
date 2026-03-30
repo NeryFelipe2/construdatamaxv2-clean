@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ConstruData — Gestão de Perdas de Água</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Manrope:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#04080f;--s1:#0a1020;--s2:#0f1830;--s3:#152040;--s4:#1a2850;
+--brd:#1e3460;--brd2:#254080;
+--water:#00b4ff;--water2:#0088cc;--leak:#ff3355;--safe:#00ff88;--warn:#ffd000;--dim:#446688;
+--txt:#c0d0e8;--wht:#f0f4ff;
+--font:'Manrope',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--txt);font-family:var(--font);font-size:13px}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,#0a1428,#0f1e3a);border-bottom:1px solid var(--brd);height:52px;display:flex;align-items:center;padding:0 24px;gap:16px}
+.topbar .logo{font-weight:800;font-size:16px;color:var(--water);letter-spacing:-0.5px}
+.topbar .logo span{color:var(--dim);font-weight:300;font-size:11px;margin-left:6px}
+.topbar .sep{width:1px;height:24px;background:var(--brd)}
+.topbar .badge{font-size:10px;padding:4px 12px;border-radius:12px;font-weight:700;font-family:var(--mono);background:rgba(0,180,255,.12);color:var(--water);border:1px solid rgba(0,180,255,.2)}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+
+/* ── LAYOUT ── */
+.main{max-width:1280px;margin:0 auto;padding:24px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--brd);margin-bottom:24px}
+.tab{padding:12px 24px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;transition:.2s;margin-bottom:-2px}
+.tab:hover{color:var(--txt)}.tab.active{color:var(--water);border-color:var(--water)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.kpi.blue::before{background:var(--water)}.kpi.red::before{background:var(--leak)}.kpi.green::before{background:var(--safe)}.kpi.yellow::before{background:var(--warn)}
+.kpi .label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:6px;font-family:var(--mono)}
+.kpi .value{font-size:28px;font-weight:800;font-family:var(--mono)}
+.kpi.blue .value{color:var(--water)}.kpi.red .value{color:var(--leak)}.kpi.green .value{color:var(--safe)}.kpi.yellow .value{color:var(--warn)}
+.kpi .sub{font-size:10px;color:var(--dim);margin-top:4px;font-family:var(--mono)}
+
+/* ── CARDS ── */
+.card{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:18px}
+.card h3{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;color:var(--wht)}
+.card h3 .ico{font-size:20px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+/* ── FORM ── */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-family:var(--mono)}
+.field input,.field select{width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:10px 14px;color:var(--wht);font-family:var(--mono);font-size:12px;outline:none;transition:.2s}
+.field input:focus{border-color:var(--water);box-shadow:0 0 0 3px rgba(0,180,255,.1)}
+
+/* ── BUTTONS ── */
+.btn{padding:10px 20px;border-radius:8px;font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.2s;text-transform:uppercase;letter-spacing:.5px}
+.btn-water{background:var(--water);color:#000;border-color:var(--water)}.btn-water:hover{background:#009de0}
+.btn-out{background:transparent;color:var(--water);border-color:var(--water)}.btn-out:hover{background:rgba(0,180,255,.1)}
+.btn-sm{padding:6px 12px;font-size:10px}
+.btn-row{display:flex;gap:8px;margin-top:14px}
+
+/* ── BALANÇO HÍDRICO (Sankey-style) ── */
+.sankey{margin:20px 0}
+.sankey-row{display:flex;align-items:center;margin:4px 0;gap:8px}
+.sankey-bar{height:32px;border-radius:6px;display:flex;align-items:center;padding:0 12px;font-family:var(--mono);font-size:11px;font-weight:600;color:#000;min-width:60px;transition:.3s}
+.sankey-label{width:180px;font-size:11px;text-align:right;color:var(--dim);flex-shrink:0}
+.sankey-value{width:120px;font-family:var(--mono);font-size:11px;color:var(--wht);flex-shrink:0}
+
+/* ── ILI GAUGE ── */
+.gauge-wrap{text-align:center;padding:20px}
+.gauge-value{font-size:64px;font-weight:800;font-family:var(--mono)}
+.gauge-label{font-size:12px;color:var(--dim);margin-top:4px}
+.gauge-bar{height:12px;border-radius:6px;margin:16px auto;max-width:400px;background:linear-gradient(90deg,var(--safe) 0%,var(--safe) 12.5%,#66cc00 12.5%,#66cc00 25%,var(--warn) 25%,var(--warn) 50%,#ff8800 50%,#ff8800 75%,var(--leak) 75%);position:relative}
+.gauge-needle{position:absolute;top:-4px;width:4px;height:20px;background:var(--wht);border-radius:2px;transition:.5s}
+.gauge-scale{display:flex;justify-content:space-between;max-width:400px;margin:4px auto;font-size:9px;color:var(--dim);font-family:var(--mono)}
+
+/* ── RISK TABLE ── */
+.risk-table{width:100%;border-collapse:collapse;margin:10px 0}
+.risk-table th{padding:8px 10px;text-align:left;font-size:9px;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--brd);font-family:var(--mono);font-weight:600}
+.risk-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.risk-table tr:hover{background:rgba(0,180,255,.03)}
+.badge-risk{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700;font-family:var(--mono)}
+.badge-risk.baixo{background:rgba(0,255,136,.12);color:var(--safe)}
+.badge-risk.medio{background:rgba(255,208,0,.12);color:var(--warn)}
+.badge-risk.alto{background:rgba(255,136,0,.12);color:#ff8800}
+.badge-risk.critico{background:rgba(255,51,85,.12);color:var(--leak)}
+
+/* ── DMA CARDS ── */
+.dma-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.dma-card{background:var(--s2);border:1px solid var(--brd);border-radius:10px;padding:14px;border-left:4px solid var(--water)}
+.dma-card .name{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--water)}
+.dma-card .stats{font-size:10px;color:var(--dim);margin-top:6px;line-height:1.8;font-family:var(--mono)}
+
+/* ── ANALYSIS COMPARE ── */
+.compare{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:center;margin:16px 0}
+.compare-side{background:var(--s2);border:1px solid var(--brd);border-radius:10px;padding:16px;text-align:center}
+.compare-side h4{font-size:11px;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+.compare-side .big{font-size:24px;font-weight:800;font-family:var(--mono)}
+.compare-vs{text-align:center;font-size:20px;font-weight:800;color:var(--dim)}
+
+/* ── MISC ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--water);border-radius:8px;padding:10px 20px;font-size:12px;color:var(--water);z-index:9999;animation:fadeup .3s;font-family:var(--mono)}
+@keyframes fadeup{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+.hidden{display:none!important}
+.divider{height:1px;background:var(--brd);margin:20px 0}
+.help{font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6}
+.water-bg{background:radial-gradient(ellipse at 30% 0%, rgba(0,180,255,.06) 0%, transparent 60%)}
+</style>
+</head>
+<body class="water-bg">
+
+<div class="topbar">
+  <div class="logo">ConstruData<span>HydroNetwork</span></div>
+  <div class="sep"></div>
+  <div class="badge">GESTÃO DE PERDAS DE ÁGUA · IWA</div>
+  <div class="sep"></div>
+  <span style="font-size:10px;color:var(--dim);font-family:var(--mono)">FCN Construções e Saneamento · CT 11481051</span>
+  <div class="right">
+    <button class="btn btn-out btn-sm" onclick="exportarJSON()">💾 Exportar</button>
+    <button class="btn btn-water btn-sm" onclick="gerarPDF()">📄 PDF</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('balanco')">Balanço Hídrico</div>
+    <div class="tab" onclick="setTab('ili')">UARL + ILI</div>
+    <div class="tab" onclick="setTab('risco')">Risco de Ruptura</div>
+    <div class="tab" onclick="setTab('dma')">DMAs</div>
+    <div class="tab" onclick="setTab('economia')">Análise Econômica</div>
+    <div class="tab" onclick="setTab('dados')">Dados de Entrada</div>
+  </div>
+
+  <!-- ═══ BALANÇO HÍDRICO ═══ -->
+  <div class="tab-content active" id="tab-balanco">
+    <div class="kpi-grid">
+      <div class="kpi blue"><div class="label">Volume Entrada</div><div class="value" id="k-entrada">0</div><div class="sub">m³/mês</div></div>
+      <div class="kpi green"><div class="label">Água Faturada</div><div class="value" id="k-faturada">0</div><div class="sub">m³/mês</div></div>
+      <div class="kpi red"><div class="label">NRW (Não Faturada)</div><div class="value" id="k-nrw">0%</div><div class="sub" id="k-nrw-vol">0 m³/mês</div></div>
+      <div class="kpi red"><div class="label">Perdas Reais</div><div class="value" id="k-reais">0%</div><div class="sub" id="k-reais-vol">0 m³/mês · R$ 0/mês</div></div>
+      <div class="kpi yellow"><div class="label">Perdas Aparentes</div><div class="value" id="k-aparentes">0%</div><div class="sub" id="k-aparentes-vol">0 m³/mês</div></div>
+      <div class="kpi red"><div class="label">Receita Perdida</div><div class="value" id="k-receita">R$ 0</div><div class="sub">por mês</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">💧</span> Balanço Hídrico IWA</h3>
+      <div class="sankey" id="sankey-chart"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">💡</span> O que o Piero Ereno explica</h3>
+      <p style="line-height:1.8;color:var(--txt)">
+        <b style="color:var(--leak)">Perdas Reais (Físicas)</b>: água que literalmente foge pelo solo. Vazamento invisível. Impacto ambiental integral. Precisa de detecção ativa, pressão controlada, reparo rápido.<br><br>
+        <b style="color:var(--warn)">Perdas Aparentes (Não Físicas)</b>: submedição de hidrômetro + fraude. Trocar hidrômetro aumenta receita mas <b>não salva uma gota de água</b>.<br><br>
+        <span style="color:var(--dim)">A maioria das empresas foca em Perdas Aparentes (troca de hidrômetro = resultado rápido no balanço). Enquanto isso, o vazamento real continua sangrando a rede.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══ UARL + ILI ═══ -->
+  <div class="tab-content" id="tab-ili">
+    <div class="row2">
+      <div class="card">
+        <h3><span class="ico">📐</span> UARL — Mínimo Técnico</h3>
+        <p class="help" style="margin-bottom:12px">UARL = (18×Lm + 0.8×Nc + 25×Lp) × P<br>O mínimo de perda inevitável para esta infraestrutura.</p>
+        <div class="kpi blue" style="margin:12px 0"><div class="label">UARL</div><div class="value" id="k-uarl">0</div><div class="sub">L/dia</div></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--dim);line-height:2">
+          Componente Rede: <b id="uarl-rede" style="color:var(--water)">0</b> L/d<br>
+          Componente Conexões: <b id="uarl-conn" style="color:var(--water)">0</b> L/d<br>
+          Componente Ramais: <b id="uarl-ramal" style="color:var(--water)">0</b> L/d<br>
+          UARL/ano: <b id="uarl-ano" style="color:var(--water)">0</b> m³
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="ico">🎯</span> ILI — Índice de Vazamento</h3>
+        <p class="help" style="margin-bottom:12px">ILI = Perdas Reais / UARL. Quanto menor, melhor a gestão.</p>
+        <div class="gauge-wrap">
+          <div class="gauge-value" id="ili-value" style="color:var(--warn)">—</div>
+          <div class="gauge-label" id="ili-class">Sem dados de volume</div>
+          <div class="gauge-bar"><div class="gauge-needle" id="ili-needle" style="left:0%"></div></div>
+          <div class="gauge-scale"><span>0</span><span>2</span><span>4</span><span>8</span><span>16+</span></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;line-height:2;margin-top:10px">
+          &lt;2 Excelente · 2-4 Bom · 4-8 Regular · 8-16 Ruim · &gt;16 Crítico<br>
+          Brasil médio: 5-12 · Santos/SABESP: 3-6
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RISCO DE RUPTURA ═══ -->
+  <div class="tab-content" id="tab-risco">
+    <div class="kpi-grid">
+      <div class="kpi green"><div class="label">Trechos Baixo Risco</div><div class="value" id="r-baixo">0</div></div>
+      <div class="kpi yellow"><div class="label">Trechos Médio Risco</div><div class="value" id="r-medio">0</div></div>
+      <div class="kpi red"><div class="label">Trechos Alto/Crítico</div><div class="value" id="r-alto">0</div></div>
+      <div class="kpi red"><div class="label">Custo Risco/Ano</div><div class="value" id="r-custo">R$ 0</div></div>
+    </div>
+    <div class="card">
+      <h3><span class="ico">⚠️</span> Top 10 Trechos Mais Críticos</h3>
+      <table class="risk-table">
+        <thead><tr><th>NS</th><th>Material</th><th>DN</th><th>Ext</th><th>Idade</th><th>Taxa Falha</th><th>Prob Ruptura</th><th>Custo Risco</th><th>Nível</th></tr></thead>
+        <tbody id="risk-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ DMAs ═══ -->
+  <div class="tab-content" id="tab-dma">
+    <div class="card">
+      <h3><span class="ico">🗺️</span> DMAs — Setores de Medição</h3>
+      <p class="help" style="margin-bottom:14px">Cada DMA (District Metered Area) tem macromedidor na entrada + sensor de pressão + telemetria. Vazão mínima noturna indica vazamento base do setor.</p>
+      <div class="dma-grid" id="dma-grid"></div>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📋</span> Recomendações</h3>
+      <div id="recomendacoes" style="font-size:12px;line-height:2;color:var(--txt)"></div>
+    </div>
+  </div>
+
+  <!-- ═══ ANÁLISE ECONÔMICA ═══ -->
+  <div class="tab-content" id="tab-economia">
+    <div class="kpi-grid">
+      <div class="kpi red"><div class="label">Custo Perdas/Ano</div><div class="value" id="e-perdas">R$ 0</div></div>
+      <div class="kpi yellow"><div class="label">Energia Perdida/Ano</div><div class="value" id="e-energia">0 kWh</div></div>
+      <div class="kpi red"><div class="label">Total Ineficiência/Ano</div><div class="value" id="e-total">R$ 0</div></div>
+    </div>
+    <div class="card">
+      <h3><span class="ico">💰</span> Trocar Tubo vs Continuar Perdendo</h3>
+      <div class="row3">
+        <div class="field"><label>Extensão (m)</label><input type="number" id="an-ext" value="500"></div>
+        <div class="field"><label>Material Atual</label>
+          <select id="an-mat"><option>PVC</option><option>PEAD</option><option selected>Ferro Fundido</option><option>Cimento Amianto</option><option>CONCRETO</option></select>
+        </div>
+        <div class="field"><label>Idade (anos)</label><input type="number" id="an-idade" value="35"></div>
+      </div>
+      <div class="btn-row"><button class="btn btn-water btn-sm" onclick="calcularTroca()">Calcular</button></div>
+      <div id="analise-resultado" style="margin-top:16px"></div>
+    </div>
+  </div>
+
+  <!-- ═══ DADOS DE ENTRADA ═══ -->
+  <div class="tab-content" id="tab-dados">
+    <div class="card">
+      <h3><span class="ico">📊</span> Infraestrutura da Rede</h3>
+      <div class="row3">
+        <div class="field"><label>Extensão da rede (km)</label><input type="number" step="0.01" id="d-ext" value="2.62"></div>
+        <div class="field"><label>Nº conexões</label><input type="number" id="d-conn" value="1071"></div>
+        <div class="field"><label>Extensão ramais (km)</label><input type="number" step="0.01" id="d-ramal" value="6.4"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>Pressão média (m.c.a.)</label><input type="number" id="d-pressao" value="35"></div>
+        <div class="field"><label>Núcleo</label><input id="d-nucleo" value="Verde e Teteu"></div>
+        <div class="field"><label>Idade rede (anos)</label><input type="number" id="d-idade" value="0"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="ico">💧</span> Volumes Medidos (m³/mês)</h3>
+      <p class="help" style="margin-bottom:10px">Preencha com dados de macromedição. Se rede nova, deixe em branco — o sistema calcula UARL preventivo.</p>
+      <div class="row3">
+        <div class="field"><label>Volume produzido</label><input type="number" id="d-prod" value="45000" placeholder="m³/mês"></div>
+        <div class="field"><label>Vol. micromedido</label><input type="number" id="d-micro" value="28000" placeholder="m³/mês"></div>
+        <div class="field"><label>Fraudes estimadas</label><input type="number" id="d-fraudes" value="20"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-water" onclick="recalcular()">🔄 Recalcular Tudo</button>
+        <button class="btn btn-out" onclick="limparVolumes()">Limpar Volumes (rede nova)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const state = { balanco: null, uarl: null, ili: null, risco: [], dmas: [], projecao: null };
+
+const UARL_COEF = { rede: 18, conexao: 0.8, ramal: 25 };
+const CUSTO_AGUA = { producao: 2.80, distribuicao: 1.50, tarifa: 8.50, energia_kwh: 0.45, custo_kwh: 0.85 };
+const TAXA_FALHA = {
+  "PVC":{nova:.05,madura:.12,velha:.35,critica:.80},
+  "PEAD":{nova:.02,madura:.05,velha:.10,critica:.25},
+  "Ferro Fundido":{nova:.15,madura:.40,velha:1.2,critica:3},
+  "Cimento Amianto":{nova:.30,madura:.80,velha:2.5,critica:5},
+  "CONCRETO":{nova:.08,madura:.20,velha:.50,critica:1.2},
+};
+const VIDA_UTIL = {"PVC":50,"PEAD":100,"Ferro Fundido":60,"Cimento Amianto":30,"CONCRETO":80};
+
+function setTab(name) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function fmt(n){ return n.toLocaleString('pt-BR',{maximumFractionDigits:0}) }
+function fmtR(n){ return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}) }
+
+function recalcular() {
+  const ext_km = parseFloat(document.getElementById('d-ext').value)||0;
+  const conn = parseInt(document.getElementById('d-conn').value)||0;
+  const ramal_km = parseFloat(document.getElementById('d-ramal').value)||0;
+  const pressao = parseFloat(document.getElementById('d-pressao').value)||25;
+  const vol_prod = parseFloat(document.getElementById('d-prod').value)||0;
+  const vol_micro = parseFloat(document.getElementById('d-micro').value)||0;
+  const fraudes = parseInt(document.getElementById('d-fraudes').value)||0;
+  const idade = parseInt(document.getElementById('d-idade').value)||0;
+
+  // UARL
+  const uarl_rede = UARL_COEF.rede * ext_km * pressao;
+  const uarl_conn = UARL_COEF.conexao * conn * pressao;
+  const uarl_ramal = UARL_COEF.ramal * ramal_km * pressao;
+  const uarl_dia = uarl_rede + uarl_conn + uarl_ramal;
+  const uarl_ano = uarl_dia * 365 / 1000;
+  
+  state.uarl = { dia: uarl_dia, ano: uarl_ano, rede: uarl_rede, conn: uarl_conn, ramal: uarl_ramal };
+  
+  document.getElementById('k-uarl').textContent = fmt(uarl_dia);
+  document.getElementById('uarl-rede').textContent = fmt(uarl_rede);
+  document.getElementById('uarl-conn').textContent = fmt(uarl_conn);
+  document.getElementById('uarl-ramal').textContent = fmt(uarl_ramal);
+  document.getElementById('uarl-ano').textContent = fmt(uarl_ano);
+
+  // Balanço Hídrico
+  if (vol_prod > 0) {
+    const vol_macro = vol_prod * 0.95;
+    const submed = vol_macro * 0.05;
+    const fraude_vol = fraudes * 15;
+    const faturada = vol_micro + 500;
+    const nrw = vol_prod - faturada;
+    const p_aparentes = submed + fraude_vol;
+    const p_reais = Math.max(0, nrw - p_aparentes - 500);
+    const nrw_pct = (nrw / vol_prod * 100);
+    const reais_pct = (p_reais / vol_prod * 100);
+    const apar_pct = (p_aparentes / vol_prod * 100);
+    const custo_reais = p_reais * (CUSTO_AGUA.producao + CUSTO_AGUA.distribuicao);
+    const receita_perdida = nrw * CUSTO_AGUA.tarifa;
+
+    state.balanco = { entrada:vol_prod, faturada, nrw, nrw_pct, p_reais, reais_pct, p_aparentes, apar_pct, submed, fraude_vol, custo_reais, receita_perdida };
+
+    document.getElementById('k-entrada').textContent = fmt(vol_prod);
+    document.getElementById('k-faturada').textContent = fmt(faturada);
+    document.getElementById('k-nrw').textContent = nrw_pct.toFixed(1)+'%';
+    document.getElementById('k-nrw-vol').textContent = fmt(nrw)+' m³/mês';
+    document.getElementById('k-reais').textContent = reais_pct.toFixed(1)+'%';
+    document.getElementById('k-reais-vol').textContent = fmt(p_reais)+' m³/mês · '+fmtR(custo_reais)+'/mês';
+    document.getElementById('k-aparentes').textContent = apar_pct.toFixed(1)+'%';
+    document.getElementById('k-aparentes-vol').textContent = fmt(p_aparentes)+' m³/mês';
+    document.getElementById('k-receita').textContent = fmtR(receita_perdida);
+
+    // Sankey
+    const maxW = vol_prod;
+    const pct = v => Math.max(3, v/maxW*100);
+    document.getElementById('sankey-chart').innerHTML = `
+      <div class="sankey-row"><div class="sankey-label">Volume Entrada</div><div class="sankey-bar" style="width:${pct(vol_prod)}%;background:var(--water)">${fmt(vol_prod)}</div><div class="sankey-value">100%</div></div>
+      <div class="sankey-row"><div class="sankey-label">Água Faturada</div><div class="sankey-bar" style="width:${pct(faturada)}%;background:var(--safe)">${fmt(faturada)}</div><div class="sankey-value">${(faturada/vol_prod*100).toFixed(1)}%</div></div>
+      <div class="sankey-row"><div class="sankey-label">NRW (Não Faturada)</div><div class="sankey-bar" style="width:${pct(nrw)}%;background:var(--leak)">${fmt(nrw)}</div><div class="sankey-value">${nrw_pct.toFixed(1)}%</div></div>
+      <div class="sankey-row"><div class="sankey-label" style="padding-left:20px">↳ Perdas Reais</div><div class="sankey-bar" style="width:${pct(p_reais)}%;background:#cc2244">${fmt(p_reais)}</div><div class="sankey-value">${reais_pct.toFixed(1)}%</div></div>
+      <div class="sankey-row"><div class="sankey-label" style="padding-left:20px">↳ Perdas Aparentes</div><div class="sankey-bar" style="width:${pct(p_aparentes)}%;background:var(--warn)">${fmt(p_aparentes)}</div><div class="sankey-value">${apar_pct.toFixed(1)}%</div></div>
+    `;
+
+    // ILI
+    const perdas_ano = p_reais * 12;
+    const ili = uarl_ano > 0 ? perdas_ano / uarl_ano : 0;
+    let cls = ili<2?'EXCELENTE':ili<4?'BOM':ili<8?'REGULAR':ili<16?'RUIM':'CRÍTICO';
+    let clr = ili<2?'var(--safe)':ili<4?'#66cc00':ili<8?'var(--warn)':ili<16?'#ff8800':'var(--leak)';
+    state.ili = { ili, cls };
+    document.getElementById('ili-value').textContent = ili.toFixed(2);
+    document.getElementById('ili-value').style.color = clr;
+    document.getElementById('ili-class').textContent = cls;
+    document.getElementById('ili-needle').style.left = Math.min(ili/16*100, 100)+'%';
+  }
+
+  // Projeção econômica
+  const custo_perdas = uarl_ano * CUSTO_AGUA.tarifa * 3;
+  const energia = uarl_ano * 3 * CUSTO_AGUA.energia_kwh;
+  const custo_en = energia * CUSTO_AGUA.custo_kwh;
+  state.projecao = { perdas: custo_perdas, energia, custo_en, total: custo_perdas + custo_en };
+  document.getElementById('e-perdas').textContent = fmtR(custo_perdas);
+  document.getElementById('e-energia').textContent = fmt(energia)+' kWh';
+  document.getElementById('e-total').textContent = fmtR(custo_perdas + custo_en);
+
+  // DMAs
+  const n_dmas = Math.max(2, Math.min(8, Math.floor(ext_km / 0.5)));
+  state.dmas = [];
+  for(let i=0;i<n_dmas;i++){
+    state.dmas.push({id:`DMA_${String(i+1).padStart(2,'0')}`,pvs:Math.floor(conn/n_dmas/3),ext:Math.round(ext_km*1000/n_dmas),lig:Math.floor(conn/n_dmas)});
+  }
+  document.getElementById('dma-grid').innerHTML = state.dmas.map(d=>`
+    <div class="dma-card"><div class="name">${d.id}</div><div class="stats">PVs: ${d.pvs}<br>Extensão: ${d.ext}m<br>Ligações: ~${d.lig}<br>Macro: MM_${d.id.slice(-2)}<br>Pressão: SP_${d.id.slice(-2)}</div></div>
+  `).join('');
+
+  document.getElementById('recomendacoes').innerHTML = [
+    '✅ Instalar macromedidores nas entradas de cada DMA desde o comissionamento',
+    '✅ Telemetria de pressão nos pontos críticos (morro, extremidades)',
+    '✅ Manter cadastro 6D atualizado (data, material, DN) para rastreabilidade',
+    '✅ Primeira campanha de detecção acústica após 2 anos de operação',
+    '✅ Verificação de consumo mínimo noturno por DMA (vazamento base)',
+    '✅ PPC semanal do LPS deve incluir check de vazamentos visíveis',
+    '⚠️ Trocar hidrômetro aumenta receita mas NÃO salva água — priorizar perdas reais',
+  ].map(r=>`<div style="padding:4px 0">${r}</div>`).join('');
+
+  toast('Recalculado!');
+}
+
+function limparVolumes() {
+  document.getElementById('d-prod').value='';
+  document.getElementById('d-micro').value='';
+  recalcular();
+}
+
+function calcularTroca() {
+  const ext=parseFloat(document.getElementById('an-ext').value)||500;
+  const mat=document.getElementById('an-mat').value;
+  const idade=parseFloat(document.getElementById('an-idade').value)||35;
+  const pressao=parseFloat(document.getElementById('d-pressao').value)||25;
+  const vida=VIDA_UTIL[mat]||50;
+  const pct=idade/vida;
+  const cat=pct<.2?'nova':pct<.6?'madura':pct<1?'velha':'critica';
+  const taxa=(TAXA_FALHA[mat]||TAXA_FALHA.PVC)[cat]||.1;
+  
+  let custo_nao=0;
+  for(let a=0;a<10;a++){
+    const id_fut=idade+a;const pf=id_fut/vida;
+    const cf=pf<.2?'nova':pf<.6?'madura':pf<1?'velha':'critica';
+    const tf=(TAXA_FALHA[mat]||TAXA_FALHA.PVC)[cf]||.1;
+    const falhas=tf*(pressao/25)*(ext/1000);
+    custo_nao+=falhas*2500+falhas*207*CUSTO_AGUA.tarifa;
+  }
+  const custo_troca=ext*910;
+  const custo_trocar=custo_troca+custo_troca*.003*10;
+  const economia=custo_nao-custo_trocar;
+  const payback=custo_nao>0?custo_troca/(custo_nao/10):999;
+  const rec=economia>0?'TROCAR':'MANTER';
+  const recFinal=idade>vida*0.8?'TROCAR (fim vida útil)':rec;
+  
+  document.getElementById('analise-resultado').innerHTML=`
+    <div class="compare">
+      <div class="compare-side" style="border-color:var(--leak)"><h4>NÃO trocar (10 anos)</h4><div class="big" style="color:var(--leak)">${fmtR(custo_nao)}</div><div style="font-size:10px;color:var(--dim);margin-top:6px">${(taxa*ext/1000*10).toFixed(1)} falhas estimadas<br>${fmtR(custo_nao/10)}/ano em reparos+perdas</div></div>
+      <div class="compare-vs">VS</div>
+      <div class="compare-side" style="border-color:var(--safe)"><h4>Trocar (PEAD novo)</h4><div class="big" style="color:var(--safe)">${fmtR(custo_trocar)}</div><div style="font-size:10px;color:var(--dim);margin-top:6px">Investimento: ${fmtR(custo_troca)}<br>Vida útil: 100 anos</div></div>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-family:var(--mono)">
+      <div style="font-size:11px;color:var(--dim)">Economia em 10 anos</div>
+      <div style="font-size:28px;font-weight:800;color:${economia>0?'var(--safe)':'var(--leak)'}">${economia>0?'+':''}${fmtR(economia)}</div>
+      <div style="font-size:11px;color:var(--dim);margin-top:4px">Payback: ${payback.toFixed(1)} anos</div>
+      <div style="font-size:16px;font-weight:800;color:${recFinal.includes('TROCAR')?'var(--safe)':'var(--warn)';margin-top:8px}">${recFinal}</div>
+    </div>`;
+}
+
+function gerarPDF() {
+  const w=window.open('','_blank');
+  const b=state.balanco||{};const u=state.uarl||{};const il=state.ili||{};
+  w.document.write(`<!DOCTYPE html><html><head><title>Relatório de Perdas</title>
+  <style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-size:10px}
+  body{padding:20px}h1{font-size:16px;margin-bottom:4px;color:#003366}h2{font-size:12px;margin:14px 0 6px;border-bottom:2px solid #0088cc;padding-bottom:3px;color:#0066aa}
+  table{width:100%;border-collapse:collapse;margin:6px 0}th,td{border:1px solid #ccc;padding:4px 6px;text-align:left}th{background:#e8f4ff;font-weight:700}
+  .header{border:2px solid #003366;padding:12px;margin-bottom:12px;display:flex;justify-content:space-between}
+  .kpi-row{display:flex;gap:10px;margin:10px 0}.kpi-box{flex:1;border:1px solid #ccc;border-radius:4px;padding:8px;text-align:center}
+  .kpi-box .v{font-size:18px;font-weight:700}.kpi-box .l{font-size:8px;color:#666}
+  .red{color:#cc0033}.green{color:#008844}.blue{color:#0066cc}
+  @media print{body{padding:10px}}</style></head><body>
+  <div class="header"><div><h1>RELATÓRIO DE GESTÃO DE PERDAS DE ÁGUA</h1>
+  <p>FCN Construções e Saneamento · CT 11481051 · SLNR Santos</p>
+  <p>Metodologia IWA · ConstruData - HydroNetwork</p></div>
+  <div style="text-align:right"><b>Data:</b> ${new Date().toLocaleDateString('pt-BR')}<br><b>Núcleo:</b> ${document.getElementById('d-nucleo').value}</div></div>
+  <h2>1. Infraestrutura</h2>
+  <table><tr><th>Extensão</th><th>Conexões</th><th>Ramais</th><th>Pressão</th></tr>
+  <tr><td>${document.getElementById('d-ext').value} km</td><td>${document.getElementById('d-conn').value}</td><td>${document.getElementById('d-ramal').value} km</td><td>${document.getElementById('d-pressao').value} m.c.a.</td></tr></table>
+  <h2>2. UARL — Mínimo Técnico</h2>
+  <p>UARL = (18×Lm + 0.8×Nc + 25×Lp) × P = <b>${fmt(u.dia||0)} L/dia</b> = <b>${fmt(u.ano||0)} m³/ano</b></p>
+  <table><tr><th>Componente</th><th>Valor (L/dia)</th></tr>
+  <tr><td>Rede</td><td>${fmt(u.rede||0)}</td></tr>
+  <tr><td>Conexões</td><td>${fmt(u.conn||0)}</td></tr>
+  <tr><td>Ramais</td><td>${fmt(u.ramal||0)}</td></tr></table>
+  ${b.entrada?`<h2>3. Balanço Hídrico</h2>
+  <div class="kpi-row">
+  <div class="kpi-box"><div class="l">Entrada</div><div class="v blue">${fmt(b.entrada)} m³</div></div>
+  <div class="kpi-box"><div class="l">Faturada</div><div class="v green">${fmt(b.faturada)} m³</div></div>
+  <div class="kpi-box"><div class="l">NRW</div><div class="v red">${b.nrw_pct.toFixed(1)}%</div></div>
+  <div class="kpi-box"><div class="l">Perdas Reais</div><div class="v red">${b.reais_pct.toFixed(1)}%</div></div>
+  </div>
+  <table><tr><th>Componente</th><th>Volume (m³/mês)</th><th>%</th><th>Custo (R$/mês)</th></tr>
+  <tr><td>Volume Entrada</td><td>${fmt(b.entrada)}</td><td>100%</td><td>—</td></tr>
+  <tr><td>Água Faturada</td><td>${fmt(b.faturada)}</td><td>${(b.faturada/b.entrada*100).toFixed(1)}%</td><td>—</td></tr>
+  <tr style="color:#cc0033"><td><b>Perdas Reais</b></td><td>${fmt(b.p_reais)}</td><td>${b.reais_pct.toFixed(1)}%</td><td>${fmtR(b.custo_reais)}</td></tr>
+  <tr><td>Perdas Aparentes</td><td>${fmt(b.p_aparentes)}</td><td>${b.apar_pct.toFixed(1)}%</td><td>—</td></tr>
+  <tr style="color:#cc0033"><td><b>Receita Perdida</b></td><td colspan="3"><b>${fmtR(b.receita_perdida)}/mês</b></td></tr></table>
+  <h2>4. ILI — Infrastructure Leakage Index</h2>
+  <p style="font-size:24px;font-weight:700;text-align:center;margin:10px;color:${il.ili<4?'#008844':il.ili<8?'#cc8800':'#cc0033'}">ILI = ${il.ili?.toFixed(2)||'—'} → ${il.cls||'—'}</p>
+  <p>Classificação: &lt;2 Excelente · 2-4 Bom · 4-8 Regular · 8-16 Ruim · &gt;16 Crítico</p>`:'<h2>3. Rede Nova — Análise Preventiva</h2><p>Sem dados de macromedição. UARL calculado para dimensionamento de DMAs e planejamento preventivo.</p>'}
+  <h2>${b.entrada?'5':'3'}. DMAs Recomendados</h2>
+  <table><tr><th>DMA</th><th>Extensão</th><th>Ligações</th><th>Macromedidor</th></tr>
+  ${state.dmas.map(d=>`<tr><td>${d.id}</td><td>${d.ext}m</td><td>~${d.lig}</td><td>MM_${d.id.slice(-2)}</td></tr>`).join('')}</table>
+  <h2>${b.entrada?'6':'4'}. Recomendações</h2>
+  <ol style="line-height:2;padding-left:20px">
+  <li>Instalar macromedidores nas entradas de cada DMA</li>
+  <li>Telemetria de pressão nos pontos críticos</li>
+  <li>Manter cadastro 6D atualizado para rastreabilidade</li>
+  <li>Campanha de detecção acústica após 2 anos</li>
+  <li>Verificação consumo mínimo noturno por DMA</li>
+  <li>Priorizar perdas reais sobre troca de hidrômetro</li></ol>
+  <div style="margin-top:30px;display:flex;justify-content:space-between">
+  <div style="border-top:1px solid #000;width:200px;text-align:center;padding-top:4px">Responsável Técnico</div>
+  <div style="border-top:1px solid #000;width:200px;text-align:center;padding-top:4px">Gerência de Perdas</div></div>
+  <script>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+  w.document.close();
+}
+
+function exportarJSON() {
+  const data = { state, meta: { plataforma:'ConstruData - HydroNetwork', modulo:'Gestão de Perdas', data:new Date().toISOString() }};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='PERDAS_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
+
+// INIT
+recalcular();
+</script>
+</body>
+</html>

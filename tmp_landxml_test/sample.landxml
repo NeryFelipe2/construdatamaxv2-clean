@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units>
+    <Metric areaUnit="squareMeter" linearUnit="meter" volumeUnit="cubicMeter" diameterUnit="millimeter" />
+  </Units>
+  <PipeNetworks>
+    <PipeNetwork name="Rede Principal" oID="N1" desc="Teste LandXML">
+      <Structs>
+        <Struct name="PV1" oID="S1" elevRim="101.0" elevSump="99.5">
+          <Center>7353000 359100 100.2</Center>
+          <CircStruct diameter="1200" />
+        </Struct>
+        <Struct name="PV2" oID="S2" elevRim="100.7" elevSump="98.9">
+          <Center>7353010 359110 99.7</Center>
+          <CircStruct diameter="1200" />
+        </Struct>
+      </Structs>
+      <Pipes>
+        <Pipe name="T1" oID="P1" refStart="PV1" refEnd="PV2" material="PVC">
+          <CircPipe diameter="300" />
+          <PntList3D>7353000 359100 99.5 7353010 359110 98.9</PntList3D>
+        </Pipe>
+      </Pipes>
+    </PipeNetwork>
+  </PipeNetworks>
+</LandXML>

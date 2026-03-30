@@ -1,0 +1,15 @@
+{
+  "name": "PV_REDONDO_SABESP",
+  "description": "Poço de Visita Redondo - Norma SABESP",
+  "type": "Manhole",
+  "shape": "Round",
+  "diameter_mm": 1200,
+  "height_mm": 1000,
+  "cone_height_mm": 300,
+  "base_thickness_mm": 150,
+  "wall_thickness_mm": 150,
+  "cover_diameter_mm": 600,
+  "sump_depth_mm": 200,
+  "standard": "SABESP N-100",
+  "source": "INS_CNX.DEF (ProSaneamento)"
+}

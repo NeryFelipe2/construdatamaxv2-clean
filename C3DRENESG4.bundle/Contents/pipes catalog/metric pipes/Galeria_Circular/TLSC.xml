@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<LandPart desc="Part Table" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink" fixColumn="C1">
+	<ColumnConstView desc="Parameter-driven Display" id="CCV1" viewKey="3d" viewName="AeccPartRecipe" pathsRelativeTo="Table">
+		<Images>
+			<Image>
+				<URL xlink:title="Part Reference Image" xlink:href="TLSC.bmp"/>
+			</Image>
+		</Images>
+		<Recipe>TLSC.dwg</Recipe>
+	</ColumnConstView>
+	<ColumnUnique desc="Primary Key" datatype="string" name="UUID" visible="0">
+		<RowUnique id="r0">493FA146-5743-4F5F-81BB-E4D06B51B000</RowUnique>
+		<RowUnique id="r1">3456545E-1577-4BDA-AB71-E12A05A4A531</RowUnique>
+		<RowUnique id="r2">96D329BB-3665-4393-802E-6FCD8FC8B766</RowUnique>
+		<RowUnique id="r3">4CDFE9C2-3E4E-4306-B2F8-23D0AEB0893E</RowUnique>
+		<RowUnique id="r4">C0DFA52F-0CC6-4040-A597-DC04C53F4152</RowUnique>
+		<RowUnique id="r5">71EB0B8E-2AF3-49D8-8C7F-02F3EE7808E4</RowUnique>
+		<RowUnique id="r6">3E2F074F-25E3-43E1-8F53-7FB3C2B820A5</RowUnique>
+		<RowUnique id="r7">2FF392C2-C5B3-470D-A3BF-80ECA03A1D67</RowUnique>
+		<RowUnique id="r8">F42DA959-AD49-44E9-96F7-2832710D71EE</RowUnique>
+		<RowUnique id="r9">0C94CB39-FBA5-43E6-89D0-9268B4294172</RowUnique>
+		<RowUnique id="r10">C2352CAA-22DE-4C34-9AC0-C3B927BB2F45</RowUnique>
+		<RowUnique id="r11">C374F578-2FAC-4B94-A792-2063C07C04F1</RowUnique>
+		<RowUnique id="r12">B5F17711-70CE-4361-B10F-2217F6608C77</RowUnique>
+		<RowUnique id="r13">F93F6625-EC3B-4D15-BE51-28053A60DA9C</RowUnique>
+		<RowUnique id="r14">829CAFF6-8B66-4607-AC5A-EBD6923E6F0D</RowUnique>
+		<RowUnique id="r15">D44B23A0-A4F0-4DC1-94A0-F1CA365B03FD</RowUnique>
+		<RowUnique id="r16">43172B41-1104-45BD-858E-C2E904B2FE84</RowUnique>
+		<RowUnique id="r17">F0AAB7FC-17BA-49DD-85A8-F47F0320B3BB</RowUnique>
+		<RowUnique id="r18">AFF51B56-EFF4-4E98-9646-683BBF112765</RowUnique>
+		<RowUnique id="r19">7DF157F9-05E0-43F0-893E-1E3F5064C69C</RowUnique>
+		<RowUnique id="r20">B9AB2FBB-F2AB-4DC4-8B39-D5F1DBC9E540</RowUnique>
+		<RowUnique id="r21">6871A876-16C3-44D3-8F5D-00BC95AC4C2E</RowUnique>
+		<RowUnique id="r22">54796CB8-3246-4769-AB9D-B9547B428F9F</RowUnique>
+		<RowUnique id="r23">015BE2F3-206B-4093-BCBD-995559C9C090</RowUnique>
+	</ColumnUnique>
+	<Column desc="Inner Pipe Diameter" dataType="float" unit="mm" name="PID" id="C1" visible="1" context="PipeInnerDiameter" index="0">
+		<Row id="r0">1200.0000</Row>
+		<Row id="r1">1400.0000</Row>
+		<Row id="r2">1500.0000</Row>
+		<Row id="r3">1600.0000</Row>
+		<Row id="r4">1800.0000</Row>
+		<Row id="r5">2000.0000</Row>
+		<Row id="r6">2200.0000</Row>
+		<Row id="r7">2400.0000</Row>
+		<Row id="r8">2500.0000</Row>
+		<Row id="r9">2600.0000</Row>
+		<Row id="r10">2800.0000</Row>
+		<Row id="r11">3000.0000</Row>
+		<Row id="r12">3200.0000</Row>
+		<Row id="r13">3400.0000</Row>
+		<Row id="r14">3500.0000</Row>
+		<Row id="r15">3600.0000</Row>
+		<Row id="r16">3800.0000</Row>
+		<Row id="r17">4000.0000</Row>
+		<Row id="r18">4200.0000</Row>
+		<Row id="r19">4400.0000</Row>
+		<Row id="r20">4500.0000</Row>
+		<Row id="r21">4600.0000</Row>
+		<Row id="r22">4800.0000</Row>
+		<Row id="r23">5000.0000</Row>
+	</Column>
+	<ColumnConstList desc="Tubo Existente" dataType="string" unit="" name="CTravBool" id="CCL1" visible="1" context="CTravBool_" index="0">
+		<Item id="i0">False</Item>
+		<Item id="i1">True</Item>
+	</ColumnConstList>
+	<ColumnConst desc="Part Domain" dataType="string" unit="" name="PDom" id="CC0" visible="0" context="Catalog_Domain" index="0">Pipe_Domain</ColumnConst>
+	<ColumnConst desc="Part Type" dataType="string" unit="" name="PTyp" id="CC1" visible="1" context="Catalog_PartType" index="0">Pipe</ColumnConst>
+	<ColumnConst desc="Part Subtype" dataType="string" unit="" name="PSTyp" id="CC2" visible="1" context="Catalog_SubType" index="0">Simples</ColumnConst>
+	<ColumnConst desc="Part Name" dataType="string" unit="" name="PrtNm" id="CC3" visible="0" context="Catalog_PartName" index="0">TLSC</ColumnConst>
+	<ColumnConst desc="Part Description" dataType="string" unit="" name="PrtD" id="CC4" visible="1" context="Catalog_PartDesc" index="0">TLSC</ColumnConst>
+	<ColumnConst desc="Part ID" dataType="string" unit="" name="PrtID" id="CC5" visible="0" context="Catalog_PartID" index="0">8158D4D7-AB46-400C-8B3A-BA3004904171</ColumnConst>
+	<ColumnConst desc="Data Version" dataType="string" unit="" name="DVer" id="CC6" visible="0" context="DataVersion" index="0">2.0</ColumnConst>
+	<ColumnConst desc="Content Type" dataType="int" unit="" name="CntTy" id="CC7" visible="0" context="Content_Type" index="0">4</ColumnConst>
+	<ColumnConst desc="Hide Part Flag" dataType="bool" unit="" name="HPrtF" id="CC8" visible="0" context="Catalog_PartHide" index="0">0</ColumnConst>
+	<ColumnConst desc="Cross Sectional Shape" dataType="string" unit="" name="CSS" id="CC9" visible="1" context="SweptShape" index="0">SweptShape_Circular</ColumnConst>
+	<ColumnConst desc="Custom Sizing Flag" dataType="bool" unit="" name="CusSF" id="CC10" visible="0" context="CustomPartSizing_Flag" index="0">0</ColumnConst>
+	<ColumnConst desc="Wall Thickness" dataType="float" unit="mm" name="WTh" id="CC11" visible="1" context="WallThickness" index="0">44.5000</ColumnConst>
+	<ColumnConst desc="Espaçamento entre tubos" dataType="float" unit="mm" name="Espacamento" id="CC13" visible="1" context="Espacamento_" index="0">0.0000</ColumnConst>
+	<ColumnCalc desc="Part Size Name" dataType="string" unit="" name="PrtSN" id="CCA0" visible="1" context="Catalog_PartSizeName" index="0">"$PrtD" + " " + FormatNumber($PID,0) + " mm"</ColumnCalc>
+	<ColumnCalc desc="Body Diameter  1" dataType="float" unit="mm" name="BdyD1" id="CCA1" visible="0" context="BodyGeometry_Diameter" index="1">$PID</ColumnCalc>
+</LandPart>

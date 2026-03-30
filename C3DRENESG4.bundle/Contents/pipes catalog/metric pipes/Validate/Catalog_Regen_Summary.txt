@@ -1,0 +1,12 @@
+OK: Part successfully added to catalog --> ADS\ADS.xml
+OK: Part successfully added to catalog --> Galeria_Circular\BDTC.xml
+OK: Part successfully added to catalog --> Galeria_Circular\BSTC.xml
+OK: Part successfully added to catalog --> Galeria_Circular\BTTC.xml
+OK: Part successfully added to catalog --> Galeria_Circular\TLDC.xml
+OK: Part successfully added to catalog --> Galeria_Circular\TLSC.xml
+OK: Part successfully added to catalog --> Galeria_Retangular\BDRC.xml
+OK: Part successfully added to catalog --> Galeria_Retangular\BSRC.xml
+OK: Part successfully added to catalog --> Galeria_Retangular\BTRC.xml
+OK: Part successfully added to catalog --> PEAD\PEAD.xml
+OK: Part successfully added to catalog --> Pvc\PVC.xml
+CatalogRegen complete: saving --> D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric pipes\metric pipes.apc

@@ -1,0 +1,26 @@
+Begin Part Validation | Caixa_ligacao
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- CL
+OK: Part Description parameter validated -- Caixa_ligacao
+OK: Part Name parameter validated -- Caixa_ligacao
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- CA8058E0-D565-43CE-A1F3-801DC0B6E5FE
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter SBSL uses Context=StructLength
+OK: Calc Parameter SBSW uses Context=StructWidth
+ 
+OK: Query validation successful
+
+OK: Part Validated | Caixa_de_ligacao\Caixa_ligacao.xml

@@ -1,0 +1,13 @@
+{
+  "name": "PVC_SABESP",
+  "description": "Tubo PVC para esgoto - Norma SABESP NBR 9649",
+  "material": "PVC",
+  "roughness": 0.013,
+  "diameters_mm": [100, 150, 200, 250, 300, 400],
+  "pressure_kpa": 6.0,
+  "stiffness": "Flexible",
+  "length_m": 6.0,
+  "joint_type": "BellSpigot",
+  "standard": "NBR 9649",
+  "source": "PAR_ADD0.DAT (ProSaneamento)"
+}

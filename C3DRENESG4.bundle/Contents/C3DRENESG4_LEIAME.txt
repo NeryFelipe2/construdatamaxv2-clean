@@ -1,0 +1,85 @@
+C3DRENESG4 - Programa para cálculo de redes de drenagem e esgoto
+urbanos
+
+____________________________________________________________________
+Autor:
+
+	Neyton Luiz Dalle Molle
+	Engenheiro Civil
+
+____________________________________________________________________
+Instalação:
+
+1) Feche o Civil 3D se estiver aberto 
+
+2) Descompactar todos os arquivos numa mesma pasta (pode ser qualquer uma)
+
+3) Nos arquivos DLL e CHM, clique o botão direito do mouse, clique propriedades e 
+   clique o botão desbloquear na aba Geral, se existir
+
+4) Abrir o Civil 3D
+
+5) Use o comando NETLOAD, selecione o arquivo dll correspondente:
+
+   Civil 3D     Dll a carregar
+   
+   2014:        C3DRENESG4_2014.dll
+   2015:        C3DRENESG4_2014.dll
+   2016:        C3DRENESG4_2014.dll
+   2017:        C3DRENESG4_2014.dll
+   2018:        C3DRENESG4_2018.dll
+   2019:        C3DRENESG4_2018.dll
+   2020:        C3DRENESG4_2018.dll
+   2021:        C3DRENESG4_2018.dll
+
+6) Para carregar o menu e as barras de ferramentas, use o comando CMENU
+
+___________________________________________________________________
+Desinstalar:
+
+   Apague a pasta do programa
+
+____________________________________________________________________
+Ajuda do programa:
+
+   Se o arquivo de ajuda "C3DRENESG.chm" não abrir, veja: 
+
+   1) Clique o botão direito do mouse sobre os arquivos de ajuda do programa
+   2) clique em Propriedades
+   3) Clique o botão Desbloquear
+
+
+   Ou ainda, veja a ajuda Online:
+
+   https://tbn2net.com/help/C3DRENESG4
+
+____________________________________________________________________
+Licença de uso:
+
+   Gratuita para testar. Será possível dar entrada dos dados e 
+   calcular. Porém, não será possível salvar os resultados.
+
+   Caso registre uma licença demonstrativa, será possível usar o 
+   programa sem restrições por 15 dias.
+
+   Para registrar, preencha seu nome e email na tela que se abre
+   ao usar o programa e que informa ser uma versão demonstrativa.
+
+   Após este período, o programa volta a ficar em modo demonstrativo.
+
+   Caso adquira uma licença definitiva, você estará sujeito ao 
+   CONTRATO DE LICENCA DO PROGRAMA, disponível no pacote do mesmo.
+
+____________________________________________________________________
+Garantias:
+
+   Nenhuma. Use por sua própria conta e risco!!!
+
+____________________________________________________________________
+Suporte:
+
+    neyton@yahoo.com
+    https://tbn2.blogspot.com
+    https://tbn2net.com
+    whatsapp: +55 41 99827 5531
+    skype: neyton@hotmail.com

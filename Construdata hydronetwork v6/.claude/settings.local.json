@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find c:/Users/felip/AppData -maxdepth 5 -name *lee2py*)",
+      "Bash(find c:/Users/felip/.vscode -maxdepth 3 -name *aider*log*)",
+      "Bash(find c:/Users/felip/Downloads -maxdepth 3 -name *lee2py*)",
+      "Bash(find c:/Users/felip/AppData/Roaming/Code -maxdepth 5 -name *aider*log*)",
+      "Bash(find c:/Users/felip/.vscode/extensions -maxdepth 5 -name *lee2py* -o -name *aider-composer*)",
+      "Bash(find c:/Users/felip/.vscode/extensions/lee2py.aider-composer-1.12.0 -name *.log)"
+    ]
+  }
+}

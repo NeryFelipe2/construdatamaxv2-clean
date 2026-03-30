@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Autodesk Civil 3D Structure Catalog 2004 -->
+<pXML id="F1FEBE2D-D589-4f85-BF8E-650ED06A5EA5" version="1.0" name="Metric Structures" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<Desc>Metric Structure Catalog  </Desc>
+	<DefaultLinearUnits>mm  </DefaultLinearUnits>
+	<Images>
+		<Image>
+			<URL xlink:title="Catalog Image" xlink:href="Autodesk Logo.jpg" xlink:show="embed" xlink:actuate="onLoad"/>
+		</Image>
+	</Images>
+	<Supplier name="Autodesk">
+		<Desc>Metric Structure Catalog    </Desc>
+		<Images>
+			<Image>
+				<URL xlink:title="Logo" xlink:href="Autodesk Logo.jpg" xlink:show="embed" xlink:actuate="onLoad"/>
+			</Image>
+		</Images>
+		<Link>
+			<URL xlink:title="Homepage" xlink:href="http://www.autodesk.com" xml:lang="en"/>
+		</Link>
+	</Supplier>
+	<Extrinsics>
+		<Extrinsic>
+			<AeccCIRules>
+				<DomainHierarchy>
+					<Domain>
+						<DomainEnum>Structure_Domain</DomainEnum>
+						<Type>
+							<TypeEnum>Struct_InletOutlet</TypeEnum>
+						</Type>
+						<Type>
+							<TypeEnum>Struct_Junction</TypeEnum>
+						</Type>
+					</Domain>
+				</DomainHierarchy>
+				<DomainSet>
+					<DomainEnum>Structure_Domain          </DomainEnum>
+				</DomainSet>
+				<TypeSet>
+					<TypeEnum>Struct_Junction          </TypeEnum>
+					<TypeEnum>Struct_InletOutlet          </TypeEnum>
+					<TypeEnum>Struct_General          </TypeEnum>
+					<TypeEnum>Struct_Ala_C          </TypeEnum>
+				</TypeSet>
+				<SubTypeSet>
+					<SubTypeString>ALA</SubTypeString>
+					<SubTypeString>CCS</SubTypeString>
+					<SubTypeString>BL</SubTypeString>
+					<SubTypeString>CI</SubTypeString>
+					<SubTypeString>CL</SubTypeString>
+					<SubTypeString>CP</SubTypeString>
+					<SubTypeString>PVBL</SubTypeString>
+					<SubTypeString>PVR</SubTypeString>
+					<SubTypeString>Rectangular</SubTypeString>
+					<SubTypeString>PVQ</SubTypeString>
+					<SubTypeString>TL</SubTypeString>
+				</SubTypeSet>
+				<ShapeSet>
+					<PartShapeEnum>Undefined_Shape          </PartShapeEnum>
+					<PartShapeEnum>Round          </PartShapeEnum>
+					<PartShapeEnum>Rectangular          </PartShapeEnum>
+					<PartShapeEnum>Oval          </PartShapeEnum>
+				</ShapeSet>
+				<ConnectionTypeSet>
+					<ConnectionTypeEnum>Undefined_Connection_Type          </ConnectionTypeEnum>
+				</ConnectionTypeSet>
+				<MaterialSet/>
+				<GaugeSet/>
+				<ParameterContextSet/>
+				<ParameterSet>
+					<ParameterString>SBSH</ParameterString>
+					<ParameterString>SBSW</ParameterString>
+					<ParameterString>Esconsidade</ParameterString>
+					<ParameterString>Qtd</ParameterString>
+					<ParameterString>d1</ParameterString>
+					<ParameterString>d2</ParameterString>
+					<ParameterString>CTravBool</ParameterString>
+					<ParameterString>ParamR</ParameterString>
+					<ParameterString>ParamK</ParameterString>
+					<ParameterString>PDom</ParameterString>
+					<ParameterString>PTyp</ParameterString>
+					<ParameterString>PSTyp</ParameterString>
+					<ParameterString>PrtNm</ParameterString>
+					<ParameterString>PrtD</ParameterString>
+					<ParameterString>PrtID</ParameterString>
+					<ParameterString>DVer</ParameterString>
+					<ParameterString>CntTy</ParameterString>
+					<ParameterString>HPrtF</ParameterString>
+					<ParameterString>SBS</ParameterString>
+					<ParameterString>CusSF</ParameterString>
+					<ParameterString>SBSL</ParameterString>
+					<ParameterString>SVPC</ParameterString>
+					<ParameterString>LenA5</ParameterString>
+					<ParameterString>LenB2</ParameterString>
+					<ParameterString>k</ParameterString>
+					<ParameterString>Espacamento</ParameterString>
+					<ParameterString>LenA8</ParameterString>
+					<ParameterString>SHBTh</ParameterString>
+					<ParameterString>CatID</ParameterString>
+					<ParameterString>PrtSN</ParameterString>
+					<ParameterString>AlfaD</ParameterString>
+					<ParameterString>LenA1</ParameterString>
+					<ParameterString>LenA10</ParameterString>
+					<ParameterString>LenA3</ParameterString>
+					<ParameterString>LenB1</ParameterString>
+					<ParameterString>PathA1</ParameterString>
+					<ParameterString>PathA2</ParameterString>
+					<ParameterString>PathA3</ParameterString>
+					<ParameterString>S</ParameterString>
+					<ParameterString>SHBW</ParameterString>
+					<ParameterString>WPOf1</ParameterString>
+					<ParameterString>WPOf2</ParameterString>
+					<ParameterString>e</ParameterString>
+					<ParameterString>f</ParameterString>
+					<ParameterString>n</ParameterString>
+					<ParameterString>p</ParameterString>
+					<ParameterString>q</ParameterString>
+					<ParameterString>m</ParameterString>
+					<ParameterString>AbDir</ParameterString>
+					<ParameterString>AbEsq</ParameterString>
+					<ParameterString>LenA2</ParameterString>
+					<ParameterString>LenA4</ParameterString>
+					<ParameterString>LenA7</ParameterString>
+					<ParameterString>LenA9</ParameterString>
+					<ParameterString>SRS</ParameterString>
+					<ParameterString>WPOf3</ParameterString>
+					<ParameterString>c</ParameterString>
+					<ParameterString>Coef_C</ParameterString>
+					<ParameterString>Coef_TC</ParameterString>
+					<ParameterString>AreaContr</ParameterString>
+					<ParameterString>ContrIni</ParameterString>
+					<ParameterString>ContrFim</ParameterString>
+					<ParameterString>DNM</ParameterString>
+					<ParameterString>LenA6</ParameterString>
+					<ParameterString>PathA4</ParameterString>
+					<ParameterString>b</ParameterString>
+					<ParameterString>d</ParameterString>
+					<ParameterString>Delta</ParameterString>
+					<ParameterString>LenA13</ParameterString>
+					<ParameterString>convPI</ParameterString>
+					<ParameterString>LenA14</ParameterString>
+					<ParameterString>LenA15</ParameterString>
+					<ParameterString>LenA16</ParameterString>
+					<ParameterString>LenA11</ParameterString>
+					<ParameterString>LenA12</ParameterString>
+					<ParameterString>SIW</ParameterString>
+					<ParameterString>SIL</ParameterString>
+					<ParameterString>SSTh</ParameterString>
+					<ParameterString>WTh</ParameterString>
+					<ParameterString>FTh</ParameterString>
+					<ParameterString>SFW</ParameterString>
+					<ParameterString>SFH</ParameterString>
+					<ParameterString>SFD</ParameterString>
+					<ParameterString>SFL</ParameterString>
+					<ParameterString>SID</ParameterString>
+					<ParameterString>BdyD1</ParameterString>
+					<ParameterString>SBSD</ParameterString>
+					<ParameterString>SBH</ParameterString>
+					<ParameterString>SBPC</ParameterString>
+					<ParameterString>BdyD2</ParameterString>
+					<ParameterString>LenB3</ParameterString>
+				</ParameterSet>
+				<UnitsSet>
+					<UnitsEnum/>
+					<UnitsEnum>inch</UnitsEnum>
+					<UnitsEnum>ft</UnitsEnum>
+					<UnitsEnum>mm</UnitsEnum>
+					<UnitsEnum>cm</UnitsEnum>
+					<UnitsEnum>m</UnitsEnum>
+					<UnitsEnum>deg</UnitsEnum>
+					<UnitsString>min</UnitsString>
+					<UnitsString>m²</UnitsString>
+					<UnitsString>l/s</UnitsString>
+				</UnitsSet>
+				<RelativePathPreference>Table</RelativePathPreference>
+			</AeccCIRules>
+		</Extrinsic>
+	</Extrinsics>
+	<Chapter name="Alas DER 1989">Alas DER 1989
+		<Desc>Alas DER 1989</Desc>
+		<Part name="BBC_1989" id="D8C1EC8E-5D89-467A-8B2D-A63CAB4102B5">
+			<Desc>Boca de bueiro celular 1989</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Boca de bueiro celular 1989" xlink:href="Alas DER 1989\BBC_1989.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Alas DER 1989\BBC_1989.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_InletOutlet" part_subtype="ALA" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BBT_1989" id="5C8344C5-36E3-429E-8E41-130E2FDD85D8">
+			<Desc>Boca de bueiro tubular 1989</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Boca de bueiro tubular 1989" xlink:href="Alas DER 1989\BBT_1989.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Alas DER 1989\BBT_1989.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_InletOutlet" part_subtype="ALA" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Alas DNIT 2010">Alas DNIT 2010
+		<Desc>Alas DNIT 2010</Desc>
+		<Part name="BBC_2010" id="9CA669A9-F138-429B-9697-11D1F4EC8361">
+			<Desc>Boca de bueiro celular 2010</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Boca de bueiro celular 2010" xlink:href="Alas DNIT 2010\BBC_2010.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Alas DNIT 2010\BBC_2010.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_InletOutlet" part_subtype="ALA" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BBT_2010" id="3A5FAC19-335B-4B12-94AD-66FA4E229A58">
+			<Desc>Boca de bueiro tubular 2010</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Boca de bueiro tubular 2010" xlink:href="Alas DNIT 2010\BBT_2010.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Alas DNIT 2010\BBT_2010.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_InletOutlet" part_subtype="ALA" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="ALA_GENERICA">ALA_GENERICA
+		<Desc>ALA_GENERICA</Desc>
+		<Part name="ALA" id="F0D85D8A-E665-4492-8E99-F3AB9BCD925C">
+			<Desc>ALA</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="ALA" xlink:href="ALA_GENERICA\ALA.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="ALA_GENERICA\ALA.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_InletOutlet" part_subtype="ALA" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Caixa_Coletora_sarjeta">Caixa_Coletora_sarjeta
+		<Desc>Caixa_Coletora_sarjeta</Desc>
+		<Part name="Caixa_Coletora_sarjeta" id="B0865763-14D1-48E2-B94E-59BE3C9732FD">
+			<Desc>Caixa_Coletora_sarjeta</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Caixa_Coletora_sarjeta" xlink:href="Caixa_Coletora_sarjeta\Caixa_Coletora_sarjeta.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Caixa_Coletora_sarjeta\Caixa_Coletora_sarjeta.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="CCS" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Caixa_de_Captacao">Caixa_de_Captacao
+		<Desc>Caixa_de_Captacao</Desc>
+		<Part name="Caixa_de_Captacao" id="590A1E9C-1F39-43AD-B521-E213508B0F54">
+			<Desc>Caixa_de_Captacao</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Caixa_de_Captacao" xlink:href="Caixa_de_Captacao\Caixa_de_Captacao.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Caixa_de_Captacao\Caixa_de_Captacao.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="BL" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Caixa_de_Inspecao">Caixa_de_Inspecao
+		<Desc>Caixa_de_Inspecao</Desc>
+		<Part name="Caixa_de_Inspecao" id="8408C1FD-F016-49E0-B69C-63E8D684EE9C">
+			<Desc>Caixa_de_Inspecao</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Caixa_de_Inspecao" xlink:href="Caixa_de_Inspecao\Caixa_de_Inspecao.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Caixa_de_Inspecao\Caixa_de_Inspecao.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="CI" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Caixa_de_ligacao">Caixa_de_ligacao
+		<Desc>Caixa_de_ligacao</Desc>
+		<Part name="Caixa_ligacao" id="CA8058E0-D565-43CE-A1F3-801DC0B6E5FE">
+			<Desc>Caixa_ligacao</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Caixa_ligacao" xlink:href="Caixa_de_ligacao\Caixa_ligacao.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Caixa_de_ligacao\Caixa_ligacao.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="CL" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Caixa_de_passagem">Caixa_de_passagem
+		<Desc>Caixa_de_passagem</Desc>
+		<Part name="Caixa_de_passagem" id="7B78229F-2EE9-4A41-A3EB-0EAC23723BB5">
+			<Desc>Caixa_de_passagem</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Caixa_de_passagem" xlink:href="Caixa_de_passagem\Caixa_de_passagem.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Caixa_de_passagem\Caixa_de_passagem.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="CP" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="PVBL">PVBL
+		<Desc>PVBL</Desc>
+		<Part name="PVBL2" id="E03F65CC-8783-4546-B0FC-F4F26FA7F032">
+			<Desc>PVBL2</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="PVBL2" xlink:href="PVBL\PVBL2.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="PVBL\PVBL2.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="PVBL" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="PV_Redondo">PV_Redondo
+		<Desc>PV_Redondo</Desc>
+		<Part name="PV_Redondo" id="FDA76CB5-8CB6-4CD0-93C6-2F888139B47A">
+			<Desc>PV_Redondo</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="PV_Redondo" xlink:href="PV_Redondo\PV_Redondo.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="PV_Redondo\PV_Redondo.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="PVR" part_shape="BoundingShape_Cylinder" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="PV_Retangular">PV_Retangular
+		<Desc>PV_Retangular</Desc>
+		<Part name="AeccStructTwoTierRectBase_Metric" id="69E31713-3BEA-4BB3-9BAF-3AD51780D5C5">
+			<Desc>Rectangular Structure 2-Tier Circular Frame SI</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Rectangular Structure 2-Tier Circular Frame SI" xlink:href="PV_Retangular\AeccStructTwoTierRectBase_Metric.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="PV_Retangular\AeccStructTwoTierRectBase_Metric.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="Rectangular" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="PV_Retangular" id="334F5352-E9BD-482A-A902-C14AB08A3E2B">
+			<Desc>PV_Retangular</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="PV_Retangular" xlink:href="PV_Retangular\PV_Retangular.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="PV_Retangular\PV_Retangular.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="PVQ" part_shape="BoundingShape_Box" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Terminal_de_inspecao">Terminal_de_inspecao
+		<Desc>Terminal_de_inspecao</Desc>
+		<Part name="Terminal de inspecao" id="3C4D8FDC-0274-4D81-BA25-4DF742DF94FE">
+			<Desc>Terminal_de_inspecao</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="Terminal_de_inspecao" xlink:href="Terminal_de_inspecao\Terminal de inspecao.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Terminal_de_inspecao\Terminal de inspecao.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Structure_Domain" part_type="Struct_Junction" part_subtype="TL" part_shape="BoundingShape_Cylinder" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+</pXML>

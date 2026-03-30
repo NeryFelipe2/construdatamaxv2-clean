@@ -1,0 +1,13 @@
+﻿{
+  "generator": "ConstruData Civil 3D Pipe Exporter",
+  "generatedAtUtc": "2026-03-26T14:11:41.4012053Z",
+  "drawingName": "test_hidden_export.dwg",
+  "drawingPath": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\test_hidden_export.dwg",
+  "summary": {
+    "networkCount": 0,
+    "pipeCount": 0,
+    "structureCount": 0
+  },
+  "networks": [],
+  "warnings": []
+}

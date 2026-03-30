@@ -1,0 +1,388 @@
+======================================================================
+DIAGNOSTICO SNAP — VILA CRIADORES
+======================================================================
+
+Arquivo: CRIADORES_ESGOTO.dxf
+Total layers: 272
+Layers de TUBO: ['TUBO_PVC', 'SGC-Tubos (Desenho Bifilar)']
+
+Layers com mais de 50 entidades:
+  PS_PERFIL_COTA_LIN: 6067 entidades
+  BOMBA: 4212 entidades
+  PS_PERFIL_COTA_TXT: 2387 entidades
+  PS_PONTOS_IDENTIFICACAO_TXT: 2125 entidades
+  LISTAGEM_TEXTO: 913 entidades
+  DETALHE_POCO_FOR: 892 entidades
+  DETALHE_POCO_COT: 755 entidades
+  DETALHE_POCO_TIT: 669 entidades
+  PS_IND_DIAMETRO: 454 entidades
+  LISTAGEM_LINHA: 413 entidades
+  ESCADA: 400 entidades
+  PS_PONTOS_IDENTIFICACAO_LIN: 393 entidades
+  PS_IND_COMPRIMENTO: 367 entidades
+  PS_PERFIL_CAIXAS: 292 entidades
+  PAREDE CONCRETO CORTE: 270 entidades
+  DETALHE_POCO_TXT: 264 entidades
+  PS_IND_INCLINACAO: 262 entidades
+  PS_IND_FLUXO: 260 entidades
+  PAREDE-VISTA: 256 entidades
+  PS_PERFIL_TUBO: 239 entidades
+  Layer1: 183 entidades
+  Survey.td2_Mark: 165 entidades
+  VEGETAÇÃO: 162 entidades
+  Heights: 149 entidades
+  Survey.td2: 144 entidades
+  Positions: 144 entidades
+  DETALHE_POCO_TUB: 143 entidades
+  PONTOS-CAIXAS_U: 128 entidades
+  TUBO_PVC: 128 entidades
+  SANC_COTAS: 126 entidades
+  PS_PERFIL_GRADE: 120 entidades
+  SGC-Eixos: 112 entidades
+  BOLA LM: 112 entidades
+  CONEXÃO: 88 entidades
+  SGC-Tubos (Desenho Bifilar): 87 entidades
+  FLANGES: 84 entidades
+  GER-SIMBOLOS: 76 entidades
+  SANC_TEXTO: 72 entidades
+  0-quadras: 61 entidades
+  A_Alerta: 58 entidades
+  PS_PERFIL_TITULOS: 52 entidades
+  PS_PERFIL_TERRENO: 52 entidades
+
+[19:18:15] >>>  Lendo DXF: CRIADORES_ESGOTO.dxf
+[19:18:17] [OK]    XDATA: 1040 INSERTs, 1057 polilínias | 138 textos de rua
+[19:18:27] [OK]    PVs (PS_PONTOS texto): 127 (PVs+PIs)
+[19:18:27] [OK]    Tubos (ezdxf layer): 133 polilinhas
+[19:18:27] [OK]    PVs totais: 127
+[19:18:27]      Snap adaptativo: tol=300m (P90=258m, base=50m)
+[19:18:27]      Nós sintéticos criados: 189 (endpoints de tubos sem PV)
+[19:18:27] [OK]    Trechos: 104 (sem match: 27) | Tipo: ESGOTO
+[19:18:27] [OK]    Ruas: 138 textos de logradouro
+Resultado:
+  PVs extraidos: 316
+  Trechos gerados: 104
+  Ruas: 138
+
+Parametros de snap:
+  tol_pv_tubo = 50.0m
+  _snap_sint = 2.0m (nos sinteticos)
+
+Analise dos trechos:
+  < 5m: 3 trechos
+  5-10m: 10 trechos
+  10-20m: 24 trechos
+  20-50m: 59 trechos
+  50m+: 8 trechos
+
+DNs encontrados:
+  DN200: 44 trechos
+  DN300: 60 trechos
+
+Analise dos PVs:
+  PV: 96
+  PI: 31
+  ND: 189
+  RG: 0
+  Com CT: 125
+  Com CF: 125
+  Com prof: 125
+
+  Nos sinteticos: 189
+
+======================================================================
+
+======================================================================
+DIAGNOSTICO SNAP — MORRO DO TETÉU
+======================================================================
+
+Arquivo: TETÉU_ESGOTO.dxf
+Total layers: 294
+Layers de TUBO: ['TUBO_PE_80_NTS194_PN_12_5', 'TUBO_PVC_20_JE_PBA_6M', 'TUBO_PVC']
+
+Layers com mais de 50 entidades:
+  LT-PONTOS-GPS-COMPLETO: 5452 entidades
+  TEXTO: 2597 entidades
+  LT-COTA-SOLEIRA: 2451 entidades
+  PS_PONTOS_IDENTIFICACAO_TXT: 2312 entidades
+  Survey: 1985 entidades
+  LT-ALINHAMENTO-PREDIAL: 1984 entidades
+  Positions: 1415 entidades
+  Heights: 1372 entidades
+  Survey_Mark: 1366 entidades
+  Survey_point_desc_Mark: 1366 entidades
+  quadrasultima: 1164 entidades
+  ESGOTO: 1147 entidades
+  LT-TEXTO: 826 entidades
+  PS_PERFIL_COTA_LIN: 678 entidades
+  PS_PONTOS_IDENTIFICACAO_LIN: 639 entidades
+  PS_IND_FLUXO: 534 entidades
+  PS_IND_COMPRIMENTO: 531 entidades
+  TUBO_PVC: 519 entidades
+  PONTOS-Caixas - Esgoto_U: 399 entidades
+  ZZ-Carimbo Texto: 386 entidades
+  PONTOS-CAIXAS_U: 354 entidades
+  PS_IND_DIAMETRO: 308 entidades
+  PS_PERFIL_COTA_TXT: 304 entidades
+  COTAS: 282 entidades
+  LT-ESCADA-DEGRAU: 281 entidades
+  QUADRA-DEF: 278 entidades
+  LT-POSTE: 219 entidades
+  QUADRAS: 188 entidades
+  A_Curvas Intermediarias: 177 entidades
+  CURVAS: 158 entidades
+  Formato: 156 entidades
+  LT-TEXTO-RUA: 138 entidades
+  LT-MURETA: 109 entidades
+  LT-BORDA-PASSEIO: 72 entidades
+  LT-LIMITE-PAV-CONCRETO: 72 entidades
+  C-TOPO-MINR: 61 entidades
+  LT-CANAL-CANALETA: 57 entidades
+  TXT-LOGRAD: 54 entidades
+  LT-CAIXA: 52 entidades
+
+[19:19:17] >>>  Lendo DXF: TETÉU_ESGOTO.dxf
+[19:19:29] [OK]    XDATA: 37550 INSERTs, 90792 polilínias | 8882 textos de rua
+[19:20:17] [OK]    PVs (PS_PONTOS texto): 320 (PVs+PIs)
+[19:20:17] [OK]    Tubos (ezdxf layer): 519 polilinhas
+[19:20:17] [OK]    PVs totais: 320
+[19:20:17]      Snap adaptativo: tol=62m (P90=42m, base=50m)
+[19:20:17]      Nós sintéticos criados: 707 (endpoints de tubos sem PV)
+[19:20:18] [OK]    Trechos: 441 (sem match: 40) | Tipo: AGUA
+[19:20:18] [OK]    Ruas: 8882 textos de logradouro
+Resultado:
+  PVs extraidos: 1027
+  Trechos gerados: 441
+  Ruas: 8882
+
+Parametros de snap:
+  tol_pv_tubo = 50.0m
+  _snap_sint = 2.0m (nos sinteticos)
+
+Analise dos trechos:
+  < 5m: 14 trechos
+  5-10m: 148 trechos
+  10-20m: 184 trechos
+  20-50m: 87 trechos
+  50m+: 8 trechos
+
+DNs encontrados:
+  DN200: 333 trechos
+  DN300: 23 trechos
+  DN400: 1 trechos
+
+Analise dos PVs:
+  PV: 59
+  PI: 261
+  ND: 707
+  RG: 0
+  Com CT: 320
+  Com CF: 317
+  Com prof: 317
+
+  Nos sinteticos: 707
+
+======================================================================
+
+======================================================================
+DIAGNOSTICO SNAP — PANTANAL BAIXO
+======================================================================
+
+Arquivo: PANTANAL_ESGOTO.dxf
+Total layers: 215
+Layers de TUBO: ['TUBO_PVC', 'TUBO-PVC']
+
+Layers com mais de 50 entidades:
+  PS_PERFIL_COTA_LIN: 3274 entidades
+  PS_PONTOS_IDENTIFICACAO_TXT: 1678 entidades
+  PS_PERFIL_COTA_TXT: 1495 entidades
+  Positions: 1454 entidades
+  Heights: 1454 entidades
+  Survey_Mark: 1451 entidades
+  Survey: 1439 entidades
+  Survey_point_desc_Mark: 1436 entidades
+  TEXTO: 1275 entidades
+  LISTAGEM_TEXTO: 681 entidades
+  ESGOTO: 621 entidades
+  LISTAGEM_LINHA: 383 entidades
+  PS_PONTOS_IDENTIFICACAO_LIN: 368 entidades
+  PS_IND_COMPRIMENTO: 353 entidades
+  PS_IND_FLUXO: 352 entidades
+  PS_IND_DIAMETRO: 315 entidades
+  PS_IND_INCLINACAO: 313 entidades
+  DETALHE_POCO_TUB: 302 entidades
+  TUBO_PVC: 222 entidades
+  PONTOS-Caixas - Esgoto_U: 172 entidades
+  PS_PERFIL_CAIXAS: 163 entidades
+  DETALHE_POCO_COT: 159 entidades
+  MURO: 154 entidades
+  PS_PERFIL_TUBO: 128 entidades
+  DETALHE_POCO_FOR: 119 entidades
+  DETALHE_POCO_TXT: 113 entidades
+  PONTOS-CAIXAS_U: 108 entidades
+  PS_PERFIL_GRADE: 100 entidades
+  GUIA: 96 entidades
+  DETALHE_POCO_TIT: 90 entidades
+  0: 66 entidades
+
+[19:20:21] >>>  Lendo DXF: PANTANAL_ESGOTO.dxf
+[19:20:22] [OK]    XDATA: 364 INSERTs, 922 polilínias | 64 textos de rua
+[19:20:25] [OK]    PVs (PS_PONTOS texto): 188 (PVs+PIs)
+[19:20:25] [OK]    Tubos (ezdxf layer): 222 polilinhas
+[19:20:25] [OK]    PVs totais: 188
+[19:20:25]      Nós sintéticos criados: 204 (endpoints de tubos sem PV)
+[19:20:25] [OK]    Trechos: 213 (sem match: 9) | Tipo: ESGOTO
+[19:20:25] [OK]    Ruas: 64 textos de logradouro
+Resultado:
+  PVs extraidos: 392
+  Trechos gerados: 213
+  Ruas: 64
+
+Parametros de snap:
+  tol_pv_tubo = 50.0m
+  _snap_sint = 2.0m (nos sinteticos)
+
+Analise dos trechos:
+  < 5m: 18 trechos
+  5-10m: 42 trechos
+  10-20m: 90 trechos
+  20-50m: 59 trechos
+  50m+: 4 trechos
+
+DNs encontrados:
+  DN200: 160 trechos
+  DN300: 53 trechos
+
+Analise dos PVs:
+  PV: 36
+  PI: 152
+  ND: 204
+  RG: 0
+  Com CT: 188
+  Com CF: 188
+  Com prof: 188
+
+  Nos sinteticos: 204
+
+======================================================================
+
+======================================================================
+DIAGNOSTICO SNAP — JOÃO CARLOS
+======================================================================
+
+Arquivo: JOÃO_CARLOS_ESGOTO.dxf
+Total layers: 686
+Layers de TUBO: ['H2-TUBO', 'H2-TUBO-TXT', 'AGUA-TUBO', 'AGUA-TUBO-TXT', 'H-TUBO', 'TUBO_DRENAGEM', 'ESG-TUBO', 'H-TUBO-TXT', 'LABEL_TUBO', 'DRE-TUBO-TXT', 'SGC-Tubos (Desenho Bifilar)', 'TUBO_PVC', 'TUBO_DE_CONCRETO', 'TUBO_PE_80_NTS194_PN_12_5', 'TUBO_PE_80_NTS194_PN_10']
+
+Layers com mais de 50 entidades:
+  VEGETAÇÃO: 14972 entidades
+  BOMBA: 10905 entidades
+  PS_PERFIL_COTA_LIN: 6127 entidades
+  01-CONTINUA: 5223 entidades
+  LT-COTAS: 3301 entidades
+  PS_PONTOS_IDENTIFICACAO_TXT: 3124 entidades
+  LT-TEXTO: 2891 entidades
+  PS_PERFIL_COTA_TXT: 2737 entidades
+  LISTAGEM_TEXTO: 2203 entidades
+  LT-ALINHAMENTO-PREDIAL: 1939 entidades
+  PAREDE CONCRETO CORTE: 1459 entidades
+  PAREDE-VISTA: 1198 entidades
+  S_Solo Comum: 1077 entidades
+  LT-COTAS-W: 1070 entidades
+  ESCADA: 1012 entidades
+  GER-SIMBOLOS: 987 entidades
+  PS_PONTOS_IDENTIFICACAO_LIN: 809 entidades
+  LIN-TEXTP-PV: 607 entidades
+  _TG: 554 entidades
+  FLANGES: 477 entidades
+  SANC_COTAS: 442 entidades
+  PS_IND_COMPRIMENTO: 374 entidades
+  PS_IND_DIAMETRO: 370 entidades
+  SANC_TEXTO: 336 entidades
+  PS_PERFIL_CAIXAS: 299 entidades
+  PS_IND_INCLINACAO: 287 entidades
+  LISTAGEM_LINHA: 284 entidades
+  SGC-Eixos: 282 entidades
+  BOLA LM: 270 entidades
+  HACHURAS: 270 entidades
+  ZZ-Carimbo Texto: 260 entidades
+  PS_PERFIL_TUBO: 258 entidades
+  PS_IND_FLUXO: 251 entidades
+  SGC-Tubos (Desenho Bifilar): 247 entidades
+  CONEXÃO: 247 entidades
+  0: 231 entidades
+  TUBO_PVC: 219 entidades
+  PONTOS-AGUA_U: 202 entidades
+  PONTOS-CAIXAS: 199 entidades
+  LIN - REDE EXISTENTE SECUNDÁRIA: 190 entidades
+  P_Eixo: 188 entidades
+  LIN - INDEFINIDO: 172 entidades
+  PONTOS-CAIXAS_U: 142 entidades
+  PS_PERFIL_GRADE: 111 entidades
+  TUBO_DE_CONCRETO: 111 entidades
+  SGC-PONTAS: 94 entidades
+  TEXTO: 89 entidades
+  COTAS: 88 entidades
+  SGC-Valvulas (Linhas Externas): 88 entidades
+  AL3: 84 entidades
+  Formato: 82 entidades
+  0-quadras: 80 entidades
+  SGC-Valvulas (Acionamento): 80 entidades
+  LIN-ARQ-TEXTO_MENOR: 74 entidades
+  desenho: 72 entidades
+  VISTA 3: 72 entidades
+  LIN - PV PERFIL: 69 entidades
+
+[19:20:34] >>>  Lendo DXF: JOÃO_CARLOS_ESGOTO.dxf
+[19:20:36] [OK]    XDATA: 641 INSERTs, 991 polilínias | 88 textos de rua
+[19:20:45] [OK]    PVs (PS_PONTOS texto): 118 (PVs+PIs)
+[19:20:45] [OK]    Tubos (ezdxf layer): 386 polilinhas
+[19:20:45] [OK]    PVs totais: 118
+[19:20:45]      Snap adaptativo: tol=300m (P90=576m, base=50m)
+[19:20:45]      Nós sintéticos criados: 378 (endpoints de tubos sem PV)
+[19:20:45] [OK]    Trechos: 243 (sem match: 71) | Tipo: AGUA
+[19:20:45] [OK]    Ruas: 88 textos de logradouro
+Resultado:
+  PVs extraidos: 496
+  Trechos gerados: 243
+  Ruas: 88
+
+Parametros de snap:
+  tol_pv_tubo = 50.0m
+  _snap_sint = 2.0m (nos sinteticos)
+
+Analise dos trechos:
+  < 5m: 15 trechos
+  5-10m: 34 trechos
+  10-20m: 170 trechos
+  20-50m: 21 trechos
+  50m+: 3 trechos
+
+DNs encontrados:
+  DN200: 3 trechos
+  DN300: 8 trechos
+  DN1000: 180 trechos
+
+Analise dos PVs:
+  PV: 28
+  PI: 53
+  ND: 378
+  RG: 37
+  Com CT: 80
+  Com CF: 80
+  Com prof: 80
+
+  Nos sinteticos: 378
+
+======================================================================
+
+======================================================================
+RESUMO COMPARATIVO
+======================================================================
+Nucleo                  PVs    Trechos   Sinteticos
+----------------------------------------------------------------------
+Vila Criadores          316        104          189
+Morro do Tetéu         1027        441          707
+Pantanal Baixo          392        213          204
+João Carlos             496        243          378
+

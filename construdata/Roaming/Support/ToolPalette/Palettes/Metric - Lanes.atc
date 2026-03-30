@@ -1,0 +1,766 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{18165CE9-FBAC-4114-9B19-EA790E7528AE}"/><Properties><ItemName resource="51004" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{D868889A-1BFB-4DA0-BC74-FB29A15BAF3E}"/><Properties><ItemName resource="51006" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{38EF2E36-19FD-3459-AFCB-4FEB165ACBDE}"/><Properties><ItemName resource="12401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneSuperelevationAOR.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneSuperelevationAOR.png"/></Images><Description resource="12402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneSuperelevationAOR subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneSuperelevationAOR</HelpData></Help><Time createdUniversalDateTime="2010-11-04T21:58:00" modifiedUniversalDateTime="2010-11-04T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneSuperelevationAOR</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12403" Description="12404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="12405" Description="12406">0
+		                    <Enum>
+								<Right DisplayName="12407">0</Right>
+								<Left DisplayName="12408">1</Left>
+							</Enum>
+						</Side>
+						<Width DataType="Double" TypeInfo="16" DisplayName="12409" Description="12410">3.6</Width>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="12411" Description="12412">-0.02</DefaultSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="12413" Description="12414">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="12415" Description="12416">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="12417" Description="12418">0.1</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="12419" Description="12420">0.3</SubBaseDepth>
+						<UseSuperelevation DataType="Long" DisplayName="12421" Description="12422">6
+		                    <Enum>
+								<LeftLO DisplayName="12423">0</LeftLO>
+								<LeftLI DisplayName="12424">1</LeftLI>
+								<RightLO DisplayName="12425">2</RightLO>
+								<RightLI DisplayName="12426">3</RightLI>
+								<None DisplayName="12427">6</None>
+							</Enum>
+						</UseSuperelevation>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+							<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<SupportAOR DataType="Long" DisplayName="12432" Description="12433">1
+		                    <Enum>
+								<Yes DisplayName="12434">1</Yes>
+								<No DisplayName="12435">0</No>
+							</Enum>
+						</SupportAOR>
+						<InsidePointCode DataType="Long" DisplayName="12436" Description="12437">0
+		                    <Enum>
+								<Crown DisplayName="12438">0</Crown>
+								<ETW DisplayName="12439">1</ETW>
+								<Lane DisplayName="12440">2</Lane>
+								<None DisplayName="12441">3</None>
+							</Enum>
+						</InsidePointCode>
+						<OutsidePointCode DataType="Long" DisplayName="12442" Description="12443">1
+		                    <Enum>
+								<Crown DisplayName="12444">0</Crown>
+								<ETW DisplayName="12445">1</ETW>
+								<Lane DisplayName="12446">2</Lane>
+								<None DisplayName="12447">3</None>
+							</Enum>
+						</OutsidePointCode>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EBF08D6D-9DDF-4DFD-A0A3-6F869931364E}"/><Properties><ItemName resource="11001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccCrownedLane.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccCrownedLane.png"/></Images><Description resource="11002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_CrownedLane subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_CrownedLane</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.CrownedLane</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="11003" Description="11004">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<LeftLaneWidth DataType="Double" TypeInfo="16" DisplayName="11005" Description="11006">3.6</LeftLaneWidth>
+						<RightLaneWidth DataType="Double" TypeInfo="16" DisplayName="11007" Description="11008">3.6</RightLaneWidth>
+						<DefaultLeftSlope DataType="Double" TypeInfo="9" DisplayName="11009" Description="11010">-0.02</DefaultLeftSlope>
+						<DefaultRightSlope DataType="Double" TypeInfo="9" DisplayName="11025" Description="11026">-0.02</DefaultRightSlope>
+						<BaseLeftSlope DataType="Double" TypeInfo="9" DisplayName="11011" Description="11012">-0.03</BaseLeftSlope>
+						<BaseRightSlope DataType="Double" TypeInfo="9" DisplayName="11027" Description="11028">-0.03</BaseRightSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="11013" Description="11014">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="11015" Description="11016">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="11017" Description="11018">0.100</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="11019" Description="11020">0.300</SubBaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B4942C9E-9266-4954-BA75-FDE43FD9478B}"/><Properties><ItemName resource="7501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccGenericPavementStructure.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccGenericPavementStructure.png"/></Images><Description resource="7502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_GenericPavementStructure subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_GenericPavementStructure</HelpData></Help><Time createdUniversalDateTime="2006-01-12T21:58:00" modifiedUniversalDateTime="2006-01-12T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.GenericPavementStructure</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7503" Description="7504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="7505" Description="7506">0
+		          <Enum>
+								<Right DisplayName="7507">0</Right>
+								<Left DisplayName="7508">1</Left>
+							</Enum>
+						</Side>
+						<Width DataType="Double" TypeInfo="16" DisplayName="7509" Description="7510">3.6</Width>
+						<ShiftWidth DataType="Double" TypeInfo="16" DisplayName="7511" Description="7512">0.2</ShiftWidth>
+						<DefaultCrossSlope DataType="Double" TypeInfo="9" DisplayName="7513" Description="7514">-0.02</DefaultCrossSlope>
+						<UseSuperelevationSlope DataType="Long" DisplayName="7515" Description="7516">0
+		          <Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+							<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="7522" Description="7523">0.2</Depth>
+						<DeflectOuterVerticalFace DataType="Long" DisplayName="7524" Description="7525">0
+		          <Enum>
+								<Yes DisplayName="7526">1</Yes>
+								<No DisplayName="7527">0</No>
+							</Enum>
+						</DeflectOuterVerticalFace>
+						<OuterEdgeSlope DataType="Double" TypeInfo="10" DisplayName="7528" Description="7529">1.0</OuterEdgeSlope>
+						<InsideTopPointCodes DataType="String" DisplayName="7530" Description="7531">None</InsideTopPointCodes>
+						<OutsideTopPointCodes DataType="String" DisplayName="7532" Description="7533">None</OutsideTopPointCodes>
+						<OutsideBottomPointCodes DataType="String" DisplayName="7534" Description="7535">None</OutsideBottomPointCodes>
+						<InsideBottomPointCodes DataType="String" DisplayName="7536" Description="7537">None</InsideBottomPointCodes>
+						<TopLinkCodes DataType="String" DisplayName="7538" Description="7539">None</TopLinkCodes>
+						<BottomLinkCodes DataType="String" DisplayName="7540" Description="7541">None</BottomLinkCodes>
+						<RightLinkCodes DataType="String" DisplayName="7542" Description="7543">None</RightLinkCodes>
+						<LeftLinkCodes DataType="String" DisplayName="7544" Description="7545">None</LeftLinkCodes>
+						<ShapeCodes DataType="String" DisplayName="7546" Description="7547">None</ShapeCodes>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{60F7DC2D-50C2-4A25-B31F-D855524FF925}"/><Properties><ItemName resource="2301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneBrokenBack.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneBrokenBack.png"/></Images><Description resource="2302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneInside subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneBrokenBack</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneBrokenBack</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2303" Description="2304">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="2305" Description="2306">0
+		                    <Enum>
+								<Right DisplayName="2307">0</Right>
+								<Left DisplayName="2308">1</Left>
+							</Enum>
+						</Side>
+						<CrownPtOnInside DataType="Long" DisplayName="2325" Description="2326">0
+		          <Enum>
+								<Yes DisplayName="2327">1</Yes>
+								<No DisplayName="2328">0</No>
+							</Enum>
+						</CrownPtOnInside>
+						<InsideWidth DataType="Double" TypeInfo="16" DisplayName="2309" Description="2310">3.6</InsideWidth>
+						<InsideSlope DataType="Double" TypeInfo="9" DisplayName="2311" Description="2312">-0.02</InsideSlope>
+						<OutsideWidth DataType="Double" TypeInfo="16" DisplayName="2313" Description="2314">3.6</OutsideWidth>
+						<OutsideSlope DataType="Double" TypeInfo="9" DisplayName="2315" Description="2316">-0.025</OutsideSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="2317" Description="2318">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="2319" Description="2320">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="2321" Description="2322">0.1</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="2323" Description="2324">0.3</SubBaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{40F80302-6E21-4646-B27F-AB7F77424ABF}"/><Properties><ItemName resource="2401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneFromTaperedMedian1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneFromTaperedMedian1.png"/></Images><Description resource="2402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneFromTaperedMedian1 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneFromTaperedMedian1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneFromTaperedMedian1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2403" Description="2404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+                      <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="2405" Description="2406">0
+		                            <Enum>
+								<Right DisplayName="2407">0</Right>
+								<Left DisplayName="2408">1</Left>
+							</Enum>
+						</Side>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="2409" Description="2410">3.6</LaneWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="2425" Description="2426">0
+                  <Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+                  <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="2430" Description="2431">-0.02</DefaultSlope>
+						<InsideAdjustment DataType="Double" TypeInfo="16" DisplayName="2413" Description="2414">0</InsideAdjustment>
+						<OutsideAdjustment DataType="Double" TypeInfo="16" DisplayName="2415" Description="2416">0</OutsideAdjustment>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="2417" Description="2418">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="2419" Description="2420">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="2421" Description="2422">0.100</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="2423" Description="2424">0.300</SubBaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DC2962BC-DE17-4293-AD04-3E856A2EF9DD}"/><Properties><ItemName resource="2501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneFromTaperedMedian2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneFromTaperedMedian2.png"/></Images><Description resource="2502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneFromTaperedMedian2 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneFromTaperedMedian2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneFromTaperedMedian2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2503" Description="2504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+                  <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="2505" Description="2506">0
+		                            <Enum>
+								<Right DisplayName="2507">0</Right>
+								<Left DisplayName="2508">1</Left>
+							</Enum>
+						</Side>
+						<InsideLaneWidth DataType="Double" TypeInfo="16" DisplayName="2509" Description="2510">3.6</InsideLaneWidth>
+						<InsideUseSuperelevation DataType="Long" DisplayName="2529" Description="2530">2
+		                            <Enum>
+								<No DisplayName="2531">0</No>
+								<LO DisplayName="2532">1</LO>
+								<LI DisplayName="2533">2</LI>
+							</Enum>
+						</InsideUseSuperelevation>
+						<DefaultInsideSlope DataType="Double" TypeInfo="9" DisplayName="2534" Description="2535">0.02</DefaultInsideSlope>
+						<OutsideLaneWidth DataType="Double" TypeInfo="16" DisplayName="2513" Description="2514">3.6</OutsideLaneWidth>
+						<OutsideUseSuperelevation DataType="Long" DisplayName="2536" Description="2537">1
+		                            <Enum>
+								<No DisplayName="2538">0</No>
+								<LO DisplayName="2539">1</LO>
+								<LI DisplayName="2540">2</LI>
+							</Enum>
+						</OutsideUseSuperelevation>
+						<DefaultOutsideSlope DataType="Double" TypeInfo="9" DisplayName="2541" Description="2542">-0.02</DefaultOutsideSlope>
+						<InsideAdjustment DataType="Double" TypeInfo="16" DisplayName="2517" Description="2518">0</InsideAdjustment>
+						<OutsideAdjustment DataType="Double" TypeInfo="16" DisplayName="2519" Description="2520">0</OutsideAdjustment>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="2521" Description="2522">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="2523" Description="2524">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="2525" Description="2526">0.100</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="2527" Description="2528">0.300</SubBaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B6FCDADF-362D-4661-92CE-1DEC8ED248A2}"/><Properties><ItemName resource="10901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneInsideSuperLayerVaryingWidth.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneInsideSuperLayerVaryingWidth.png"/></Images><Description resource="10902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneInsideSuperLayerVaryingWidth subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneInsideSuperLayerVaryingWidth</HelpData></Help><Time createdUniversalDateTime="2007-11-05T10:00:00" modifiedUniversalDateTime="2007-11-05T10:00:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneInsideSuperLayerVaryingWidth</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10903" Description="10904">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="10905" Description="10906">0
+		          <Enum>
+								<Right DisplayName="10907">0</Right>
+								<Left DisplayName="10908">1</Left>
+							</Enum>
+						</Side>
+						<CrownPointonInside DataType="Long" DisplayName="10909" Description="10910">0		                              
+							<Enum>
+								<Yes DisplayName="10911">1</Yes>
+								<No DisplayName="10912">0</No>
+							</Enum>
+						</CrownPointonInside>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="10913" Description="10914">3.6</LaneWidth>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="10915" Description="10916">-0.02</DefaultSlope>
+						<Pave1Name DataType="String" DisplayName="10917" Description="10918">BC</Pave1Name>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="10919" Description="10920">0.025</Pave1Depth>
+						<Pave2Name DataType="String" DisplayName="10933" Description="10934">WMM</Pave2Name>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="10935" Description="10936">0.025</Pave2Depth>
+						<Pave2WidthSpecification DataType="Long" DisplayName="10937" Description="10938">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave2WidthSpecification>
+						<Pave2InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10939" Description="10940">0</Pave2InsideExtendedWidth>
+						<Pave2OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10941" Description="10942">0</Pave2OutsideExtendedWidth>
+						<Pave3Name DataType="String" DisplayName="10943" Description="10944">WMM</Pave3Name>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="10945" Description="10946">0.025</Pave3Depth>
+						<Pave3WidthSpecification DataType="Long" DisplayName="10947" Description="10948">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave3WidthSpecification>
+						<Pave3InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10949" Description="10950">0</Pave3InsideExtendedWidth>
+						<Pave3OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10951" Description="10952">0</Pave3OutsideExtendedWidth>
+						<Pave4Name DataType="String" DisplayName="10953" Description="10954">WMM</Pave4Name>
+						<Pave4Depth DataType="Double" TypeInfo="16" DisplayName="10955" Description="10956">0.025</Pave4Depth>
+						<Pave4WidthSpecification DataType="Long" DisplayName="10957" Description="10958">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave4WidthSpecification>
+						<Pave4InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10959" Description="10960">0</Pave4InsideExtendedWidth>
+						<Pave4OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10961" Description="10962">0</Pave4OutsideExtendedWidth>
+						<Pave5Name DataType="String" DisplayName="10963" Description="10964">WMM</Pave5Name>
+						<Pave5Depth DataType="Double" TypeInfo="16" DisplayName="10965" Description="10966">0.025</Pave5Depth>
+						<Pave5WidthSpecification DataType="Long" DisplayName="10967" Description="10968">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave5WidthSpecification>
+						<Pave5InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10969" Description="10970">0</Pave5InsideExtendedWidth>
+						<Pave5OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10971" Description="10972">0</Pave5OutsideExtendedWidth>
+						<Pave6Name DataType="String" DisplayName="10973" Description="10974">SUBBASE</Pave6Name>
+						<Pave6Depth DataType="Double" TypeInfo="16" DisplayName="10975" Description="10976">0.025</Pave6Depth>
+						<Pave6WidthSpecification DataType="Long" DisplayName="10977" Description="10978">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave6WidthSpecification>
+						<Pave6InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="10979" Description="11101">0</Pave6InsideExtendedWidth>
+						<Pave6OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11102" Description="11103">0</Pave6OutsideExtendedWidth>
+						<Pave7Name DataType="String" DisplayName="11104" Description="11105">SUBBASE</Pave7Name>
+						<Pave7Depth DataType="Double" TypeInfo="16" DisplayName="11106" Description="11107">0.025</Pave7Depth>
+						<Pave7WidthSpecification DataType="Long" DisplayName="11108" Description="11109">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave7WidthSpecification>
+						<Pave7InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11110" Description="11111">0</Pave7InsideExtendedWidth>
+						<Pave7OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11112" Description="11113">0</Pave7OutsideExtendedWidth>
+						<Pave8Name DataType="String" DisplayName="11114" Description="11115">NONE</Pave8Name>
+						<Pave8Depth DataType="Double" TypeInfo="16" DisplayName="11116" Description="11117">0.025</Pave8Depth>
+						<Pave8WidthSpecification DataType="Long" DisplayName="11118" Description="11119">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave8WidthSpecification>
+						<Pave8InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11120" Description="11121">0</Pave8InsideExtendedWidth>
+						<Pave8OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11122" Description="11123">0</Pave8OutsideExtendedWidth>
+						<Pave9Name DataType="String" DisplayName="11124" Description="11125">NONE</Pave9Name>
+						<Pave9Depth DataType="Double" TypeInfo="16" DisplayName="11126" Description="11127">0.025</Pave9Depth>
+						<Pave9WidthSpecification DataType="Long" DisplayName="11128" Description="11129">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave9WidthSpecification>
+						<Pave9InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11130" Description="11131">0</Pave9InsideExtendedWidth>
+						<Pave9OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11132" Description="11133">0</Pave9OutsideExtendedWidth>
+						<Pave10Name DataType="String" DisplayName="11134" Description="11135">NONE</Pave10Name>
+						<Pave10Depth DataType="Double" TypeInfo="16" DisplayName="11136" Description="11137">0.025</Pave10Depth>
+						<Pave10WidthSpecification DataType="Long" DisplayName="11138" Description="11139">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="10923">0</MatchHigherPavementLayer>
+								<Width DisplayName="10924">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="10925">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="10926">3</InsideOffsetWidth>
+							</Enum>
+						</Pave10WidthSpecification>
+						<Pave10InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11140" Description="11141">0</Pave10InsideExtendedWidth>
+						<Pave10OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11142" Description="11143">0</Pave10OutsideExtendedWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F2B719AB-0E1D-4AAC-B67A-1CCF8B24361C}"/><Properties><ItemName resource="10301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneInsideSuperMultiLayer.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneInsideSuperMultiLayer.png"/></Images><Description resource="10302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneInsideSuperMultiLayer subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneInsideSuperMultiLayer</HelpData></Help><Time createdUniversalDateTime="2007-11-01T10:00:00" modifiedUniversalDateTime="2007-11-01T10:00:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneInsideSuperMultiLayer</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10303" Description="10304">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="10305" Description="10306">0
+		            				<Enum>
+								<Right DisplayName="10307">0</Right>
+								<Left DisplayName="10308">1</Left>
+							</Enum>
+						</Side>
+						<CrownPointonInside DataType="Long" DisplayName="10309" Description="10310">0		                              
+							<Enum>
+								<Yes DisplayName="10311">1</Yes>
+								<No DisplayName="10312">0</No>
+							</Enum>
+						</CrownPointonInside>
+						<Width DataType="Double" TypeInfo="16" DisplayName="10313" Description="10314">3.6</Width>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="10315" Description="10316">-0.02</DefaultSlope>
+						<SuperelevationSlope DataType="Long" DisplayName="13010" Description="13011">0
+              <Enum>
+								<Default DisplayName="13012">0</Default>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<RightInsideLane DisplayName="13017">2</RightInsideLane>
+							</Enum>
+						</SuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13006" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="10317" Description="10318">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="10319" Description="10320">0.025</Pave2Depth>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="10321" Description="10322">0.025</Pave3Depth>
+						<Base1Depth DataType="Double" TypeInfo="16" DisplayName="10323" Description="10324">0.100</Base1Depth>
+						<Base2Depth DataType="Double" TypeInfo="16" DisplayName="10325" Description="10326">0.100</Base2Depth>
+						<Base3Depth DataType="Double" TypeInfo="16" DisplayName="10327" Description="10328">0.100</Base3Depth>
+						<Subbase1Depth DataType="Double" TypeInfo="16" DisplayName="10329" Description="10330">0.3</Subbase1Depth>
+						<Subbase2Depth DataType="Double" TypeInfo="16" DisplayName="10331" Description="10332">0.3</Subbase2Depth>
+						<Subbase3InnerDepth DataType="Double" TypeInfo="16" DisplayName="10333" Description="10334">0.3</Subbase3InnerDepth>
+						<Subbase3OuterDepth DataType="Double" TypeInfo="16" DisplayName="10335" Description="10336">0.3</Subbase3OuterDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A1E222BE-7DDE-446C-A7B9-08C3945223FC}"/><Properties><ItemName resource="11301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneOutsideSuperLayerVaryingWidth.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneOutsideSuperLayerVaryingWidth.png"/></Images><Description resource="11302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneOutsideSuperLayerVaryingWidth subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneOutsideSuperLayerVaryingWidth</HelpData></Help><Time createdUniversalDateTime="2007-11-05T10:00:00" modifiedUniversalDateTime="2007-11-05T10:00:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneOutsideSuperLayerVaryingWidth</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="11303" Description="11304">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="11305" Description="11306">0
+		          <Enum>
+								<Right DisplayName="11307">0</Right>
+								<Left DisplayName="11308">1</Left>
+							</Enum>
+						</Side>
+						<CrownPointonInside DataType="Long" DisplayName="11309" Description="11310">0		                              
+							<Enum>
+								<Yes DisplayName="11311">1</Yes>
+								<No DisplayName="11312">0</No>
+							</Enum>
+						</CrownPointonInside>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="11313" Description="11314">3.6</LaneWidth>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="11315" Description="11316">-0.02</DefaultSlope>
+						<Pave1Name DataType="String" DisplayName="11317" Description="11318">BC</Pave1Name>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="11319" Description="11320">0.025</Pave1Depth>
+						<Pave2Name DataType="String" DisplayName="11333" Description="11334">WMM</Pave2Name>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="11335" Description="11336">0.025</Pave2Depth>
+						<Pave2WidthSpecification DataType="Long" DisplayName="11337" Description="11338">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave2WidthSpecification>
+						<Pave2InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11339" Description="11340">0</Pave2InsideExtendedWidth>
+						<Pave2OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11341" Description="11342">0</Pave2OutsideExtendedWidth>
+						<Pave3Name DataType="String" DisplayName="11343" Description="11344">WMM</Pave3Name>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="11345" Description="11346">0.025</Pave3Depth>
+						<Pave3WidthSpecification DataType="Long" DisplayName="11347" Description="11348">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave3WidthSpecification>
+						<Pave3InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11349" Description="11350">0</Pave3InsideExtendedWidth>
+						<Pave3OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11351" Description="11352">0</Pave3OutsideExtendedWidth>
+						<Pave4Name DataType="String" DisplayName="11353" Description="11354">WMM</Pave4Name>
+						<Pave4Depth DataType="Double" TypeInfo="16" DisplayName="11355" Description="11356">0.025</Pave4Depth>
+						<Pave4WidthSpecification DataType="Long" DisplayName="11357" Description="11358">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave4WidthSpecification>
+						<Pave4InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11359" Description="11360">0</Pave4InsideExtendedWidth>
+						<Pave4OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11361" Description="11362">0</Pave4OutsideExtendedWidth>
+						<Pave5Name DataType="String" DisplayName="11363" Description="11364">WMM</Pave5Name>
+						<Pave5Depth DataType="Double" TypeInfo="16" DisplayName="11365" Description="11366">0.025</Pave5Depth>
+						<Pave5WidthSpecification DataType="Long" DisplayName="11367" Description="11368">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave5WidthSpecification>
+						<Pave5InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11369" Description="11370">0</Pave5InsideExtendedWidth>
+						<Pave5OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11371" Description="11372">0</Pave5OutsideExtendedWidth>
+						<Pave6Name DataType="String" DisplayName="11373" Description="11374">SUBBASE</Pave6Name>
+						<Pave6Depth DataType="Double" TypeInfo="16" DisplayName="11375" Description="11376">0.025</Pave6Depth>
+						<Pave6WidthSpecification DataType="Long" DisplayName="11377" Description="11378">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave6WidthSpecification>
+						<Pave6InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11379" Description="11501">0</Pave6InsideExtendedWidth>
+						<Pave6OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11502" Description="11503">0</Pave6OutsideExtendedWidth>
+						<Pave7Name DataType="String" DisplayName="11504" Description="11505">SUBBASE</Pave7Name>
+						<Pave7Depth DataType="Double" TypeInfo="16" DisplayName="11506" Description="11507">0.025</Pave7Depth>
+						<Pave7WidthSpecification DataType="Long" DisplayName="11508" Description="11513">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave7WidthSpecification>
+						<Pave7InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11510" Description="11511">0</Pave7InsideExtendedWidth>
+						<Pave7OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11512" Description="11513">0</Pave7OutsideExtendedWidth>
+						<Pave8Name DataType="String" DisplayName="11514" Description="11515">NONE</Pave8Name>
+						<Pave8Depth DataType="Double" TypeInfo="16" DisplayName="11516" Description="11517">0.025</Pave8Depth>
+						<Pave8WidthSpecification DataType="Long" DisplayName="11518" Description="11519">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave8WidthSpecification>
+						<Pave8InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11520" Description="11521">0</Pave8InsideExtendedWidth>
+						<Pave8OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11522" Description="11523">0</Pave8OutsideExtendedWidth>
+						<Pave9Name DataType="String" DisplayName="11524" Description="11525">NONE</Pave9Name>
+						<Pave9Depth DataType="Double" TypeInfo="16" DisplayName="11526" Description="11527">0.025</Pave9Depth>
+						<Pave9WidthSpecification DataType="Long" DisplayName="11528" Description="11529">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave9WidthSpecification>
+						<Pave9InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11530" Description="11531">0</Pave9InsideExtendedWidth>
+						<Pave9OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11532" Description="11533">0</Pave9OutsideExtendedWidth>
+						<Pave10Name DataType="String" DisplayName="11534" Description="11535">NONE</Pave10Name>
+						<Pave10Depth DataType="Double" TypeInfo="16" DisplayName="11536" Description="11537">0.025</Pave10Depth>
+						<Pave10WidthSpecification DataType="Long" DisplayName="11538" Description="11539">0
+							<Enum>
+								<MatchHigherPavementLayer DisplayName="11323">0</MatchHigherPavementLayer>
+								<Width DisplayName="11324">1</Width>
+								<InsideOffsetOutsideOffset DisplayName="11325">2</InsideOffsetOutsideOffset>
+								<InsideOffsetWidth DisplayName="11326">3</InsideOffsetWidth>
+							</Enum>
+						</Pave10WidthSpecification>
+						<Pave10InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11540" Description="11541">0</Pave10InsideExtendedWidth>
+						<Pave10OutsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="11542" Description="11543">0</Pave10OutsideExtendedWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{46C4D6A4-38C6-4550-9D00-F1AC3EC72619}"/><Properties><ItemName resource="10701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneOutsideSuperMultiLayer.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneOutsideSuperMultiLayer.png"/></Images><Description resource="10702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneOutsideSuperMultiLayer subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneOutsideSuperMultiLayer</HelpData></Help><Time createdUniversalDateTime="2007-11-02T21:58:00" modifiedUniversalDateTime="2007-11-02T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneOutsideSuperMultiLayer</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10703" Description="10704">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="10705" Description="10706">0
+		            				<Enum>
+								<Right DisplayName="10707">0</Right>
+								<Left DisplayName="10708">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="10737" Description="10738">0
+                                                 <Enum>
+								<Crown DisplayName="10739">0</Crown>
+								<EdgeofTravelWay DisplayName="10740">1</EdgeofTravelWay>
+							</Enum>
+						</InsertionPoint>
+						<CrownPointonInside DataType="Long" DisplayName="10709" Description="10710">0		                              
+							<Enum>
+								<Yes DisplayName="10711">1</Yes>
+								<No DisplayName="10712">0</No>
+							</Enum>
+						</CrownPointonInside>
+						<Width DataType="Double" TypeInfo="16" DisplayName="10713" Description="10714">3.6</Width>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="10715" Description="10716">-0.02</DefaultSlope>
+						<SuperelevationSlope DataType="Long" DisplayName="13010" Description="13011">0
+              <Enum>
+								<Default DisplayName="13012">0</Default>
+								<LeftOutsideLane DisplayName="13014">1</LeftOutsideLane>
+								<RightOutsideLane DisplayName="13018">2</RightOutsideLane>
+							</Enum>
+						</SuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13006" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="10717" Description="10718">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="10719" Description="10720">0.025</Pave2Depth>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="10721" Description="10722">0.025</Pave3Depth>
+						<Base1Depth DataType="Double" TypeInfo="16" DisplayName="10723" Description="10724">0.100</Base1Depth>
+						<Base2Depth DataType="Double" TypeInfo="16" DisplayName="10725" Description="10726">0.100</Base2Depth>
+						<Base3Depth DataType="Double" TypeInfo="16" DisplayName="10727" Description="10728">0.100</Base3Depth>
+						<Subbase1Depth DataType="Double" TypeInfo="16" DisplayName="10729" Description="10730">0.3</Subbase1Depth>
+						<Subbase2Depth DataType="Double" TypeInfo="16" DisplayName="10731" Description="10732">0.3</Subbase2Depth>
+						<Subbase3InnerDepth DataType="Double" TypeInfo="16" DisplayName="10733" Description="10734">0.3</Subbase3InnerDepth>
+						<Subbase3OuterDepth DataType="Double" TypeInfo="16" DisplayName="10735" Description="10736">0.3</Subbase3OuterDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{85198E83-EF13-4151-8C2B-018E676D7E06}"/><Properties><ItemName resource="2801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneOutsideSuperWithWidening.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneOutsideSuperWithWidening.png"/></Images><Description resource="2802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneOutsideSuperWithWidening subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneOutsideSuperWithWidening</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneOutsideSuperWithWidening</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2803" Description="2804">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="2805" Description="2806">0
+		                    <Enum>
+								<Right DisplayName="2807">0</Right>
+								<Left DisplayName="2808">1</Left>
+							</Enum>
+						</Side>
+						<InsertionPoint DataType="Long" DisplayName="2825" Description="2826">0
+                                                 <Enum>
+								<Crown DisplayName="2827">0</Crown>
+								<EdgeofTravelWay DisplayName="2828">1</EdgeofTravelWay>
+							</Enum>
+						</InsertionPoint>
+						<CrownPtOnInside DataType="Long" DisplayName="2829" Description="2830">0
+                                                 <Enum>
+								<Yes DisplayName="2831">1</Yes>
+								<No DisplayName="2832">0</No>
+							</Enum>
+						</CrownPtOnInside>
+						<Width DataType="Double" TypeInfo="16" DisplayName="2809" Description="2810">3.6</Width>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="2811" Description="2812">-0.02</DefaultSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="2813" Description="2814">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="2815" Description="2816">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="2817" Description="2818">0.1</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="2819" Description="2820">0.3</SubBaseDepth>
+						<WheelbaseLength DataType="Double" TypeInfo="16" DisplayName="2821" Description="2822">10</WheelbaseLength>
+						<NumberOfTravelLanes DataType="Long" TypeInfo="0" DisplayName="2823" Description="2824">1</NumberOfTravelLanes>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{96AF4635-5163-42DE-9159-C1891010B5C9}"/><Properties><ItemName resource="2901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccLaneParabolic.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccLaneParabolic.png"/></Images><Description resource="2902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_LaneParabolic subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_LaneParabolic</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.LaneParabolic</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2903" Description="2904">R2019</Version>
+						<CrownHeight DataType="Double" TypeInfo="16" DisplayName="2905" Description="2906">0.1</CrownHeight>
+						<Width DataType="Double" TypeInfo="16" DisplayName="2907" Description="2908">7.2</Width>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="2909" Description="2910">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="2911" Description="2912">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="2913" Description="2914">0.1</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="2915" Description="2916">0.3</SubBaseDepth>
+						<PerSlope DataType="Double" TypeInfo="9" DisplayName="2917" Description="2918">0</PerSlope>
+						<NoIncrements DataType="Long" TypeInfo="3" DisplayName="2919" Description="2920">8</NoIncrements>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CE77ED52-0EC7-40CF-84B0-9C5A01393CB2}"/><Properties><ItemName resource="7301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Lanes\64\light\AeccShapeTrapezoidal.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Lanes\64\dark\AeccShapeTrapezoidal.png"/></Images><Description resource="7302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShapeTrapezoidal subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShapeTrapezoidal</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShapeTrapezoidal</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7303" Description="7304">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+                  <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="7305" Description="7306">0
+								    <Enum>
+								<Right DisplayName="7307">0</Right>
+								<Left DisplayName="7308">1</Left>
+							</Enum>
+						</Side>
+						<Width DataType="Double" TypeInfo="16" DisplayName="7309" Description="7310">2.4</Width>
+						<DefaultCrossSlope DataType="Double" TypeInfo="9" DisplayName="7311" Description="7312">-0.02</DefaultCrossSlope>
+						<UseSuperelevationSlope DataType="Long" DisplayName="7313" Description="7314">0
+				          <Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideLane DisplayName="13013">1</LeftInsideLane>
+								<LeftOutsideLane DisplayName="13014">2</LeftOutsideLane>
+								<RightInsideLane DisplayName="13017">3</RightInsideLane>
+								<RightOutsideLane DisplayName="13018">4</RightOutsideLane>
+								<LeftInsideShoulder DisplayName="13015">5</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">6</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">7</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">8</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+                  <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<InsideDepth DataType="Double" TypeInfo="16" DisplayName="7320" Description="7321">0.25</InsideDepth>
+						<OutsideDepth DataType="Double" TypeInfo="16" DisplayName="7322" Description="7323">0.125</OutsideDepth>
+						<InsideTopCode DataType="String" DisplayName="7324" Description="7325">NONE</InsideTopCode>
+						<OutsideTopCode DataType="String" DisplayName="7326" Description="7327">NONE</OutsideTopCode>
+						<InsideBottomCode DataType="String" DisplayName="7328" Description="7329">NONE</InsideBottomCode>
+						<OutsideBottomCode DataType="String" DisplayName="7330" Description="7331">NONE</OutsideBottomCode>
+						<TopLinkCode DataType="String" DisplayName="7332" Description="7333">NONE</TopLinkCode>
+						<BottomLinkCode DataType="String" DisplayName="7334" Description="7335">NONE</BottomLinkCode>
+						<ShapeCode DataType="String" DisplayName="7336" Description="7337">NONE</ShapeCode>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D868889A-1BFB-4DA0-BC74-FB29A15BAF3E}"/><Properties><ItemName resource="51006" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

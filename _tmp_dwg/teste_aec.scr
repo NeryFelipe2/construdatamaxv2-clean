@@ -1,0 +1,4 @@
+(setvar "FILEDIA" 0)
+(setvar "CMDECHO" 0)
+(load "C:/Users/felip/Downloads/NOVA NS Versao 5/_tmp_dwg/teste_aec.lsp")
+(acad-quit)

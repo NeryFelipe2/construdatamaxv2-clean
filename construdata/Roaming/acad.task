@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<SeamlessTasks xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SeamlessTask xsi:type="CUIMergeTask">
+    <ID>200</ID>
+    <UpdateVersion>1</UpdateVersion>
+  </SeamlessTask>
+</SeamlessTasks>

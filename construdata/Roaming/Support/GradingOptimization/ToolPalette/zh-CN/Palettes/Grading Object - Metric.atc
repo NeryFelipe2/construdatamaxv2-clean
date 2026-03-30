@@ -1,0 +1,487 @@
+<Palette FileRevision="23.1.0" Revision="23.1.0" option="0">
+    <ItemID idValue="{56D8AFE7-0AF4-4634-94AC-279FEDD4BA55}"/>
+    <Properties>
+        <ItemName>放坡对象 - 公制</ItemName>
+        <Images option="0"/>
+        <Time createdUniversalDateTime="2020-09-04T11:56:36" modifiedUniversalDateTime="2020-09-04T11:56:36"/>
+    </Properties>
+    <Tools>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{DA07E1C8-2FA6-4C12-BFB7-FFCBA40F3EB9}"/>
+            <Properties>
+                <ItemName>建筑地坪</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Building_pad.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Building_pad.png" IsDark="true"/>
+                </Images>
+                <Description>建筑地坪</Description>
+                <ToolTip>建筑地坪将展平闭合图元中的区域，并将其作为单个图元上下移动以实现约束和放坡目标。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:40" modifiedUniversalDateTime="2020-09-04T11:56:40"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_building_pad</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{2D7F386C-DBB0-42B5-90D8-77ECEFF6D8E3}"/>
+            <Data>
+                <Tool>
+                    <Elevation PropertyValue="0"/>
+                    <MinElevation PropertyValue="0.0"/>
+                    <MaxElevation PropertyValue="999.0"/>
+                    <LevelGradingWithPad PropertyValue="-1"/>
+                    <DepthOfMaterial PropertyValue="0.5"/>
+                    <DrainAway PropertyValue="-1"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{9B8A653B-24EB-46A1-89DB-6E617E706518}"/>
+            <Properties>
+                <ItemName>分隔缝</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\reveal.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\reveal.png" IsDark="true"/>
+                </Images>
+                <Description>分隔缝</Description>
+                <ToolTip>分隔缝工具用于沿建筑地坪的边缘绘制所需的分隔缝。只能将分隔缝添加到建筑地坪对象。分隔缝工具可将特性添加到建筑地坪，以指示建筑地坪高程与周围地形曲面之间所需的最小和最大高程差。</ToolTip>
+                <Time createdUniversalDateTime="2020-10-13T00:02:11" modifiedUniversalDateTime="2020-10-13T17:05:12"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_reveal</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{7531530D-1031-4BAC-ABB4-357D46D6B92B}"/>
+            <Data>
+                <Tool>
+                    <StartElevationOffsetLow PropertyValue="1.1"/>
+                    <StartElevationOffsetHigh PropertyValue="1.2"/>
+                    <SameAsStart PropertyValue="-1"/>
+                    <EndElevationOffsetLow PropertyValue="1.1"/>
+                    <EndElevationOffsetHigh PropertyValue="1.2"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{3A0F0A05-FBCF-4719-B2E6-D978F2EE1738}"/>
+            <Properties>
+                <ItemName>通道</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\pathway.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\pathway.png" IsDark="true"/>
+                </Images>
+                <Description>通道</Description>
+                <ToolTip>通道允许沿直线定义横向坡度和宽度约束。</ToolTip>
+                <Time createdUniversalDateTime="2022-04-20T13:00:00" modifiedUniversalDateTime="2022-04-20T13:00:00"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_pathway</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{F2B176C1-C159-49A5-A7D2-F9851D3D9E5A}"/>
+            <Data>
+                <Tool>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <LeftSide PropertyValue="-1"/>
+                    <LeftCrossSlope PropertyValue="2.0"/>
+                    <LeftWidth PropertyValue="3.0"/>
+                    <RightSide PropertyValue="-1"/>
+                    <RightWidth PropertyValue="3.0"/>
+                    <RightCrossSlope PropertyValue="2.0"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{CF08A139-E797-4883-9B9C-163A1E09955F}"/>
+            <Properties>
+                <ItemName>池塘</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Pond.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Pond.png" IsDark="true"/>
+                </Images>
+                <Description>池塘</Description>
+                <ToolTip>池塘是闭合的几何形状，表示旱塘或湿塘的特性和约束。</ToolTip>
+                <Time createdUniversalDateTime="2020-07-31T07:19:48" modifiedUniversalDateTime="2020-07-31T07:19:48"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_pond</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{85CD3CF4-7384-4840-B5BD-DAFAE966D813}"/>
+            <Data>
+                <Tool>
+                    <PondType PropertyValue="1"/>
+                    <MinStorageVolume PropertyValue="850.0"/>
+                    <MaxStorageDepth PropertyValue="1.5"/>
+                    <AllowBoundaryChange PropertyValue="-1"/>
+                    <BermWidth PropertyValue="3.0"/>
+                    <Freeboard PropertyValue="0.3"/>
+                    <InsideSlope PropertyValue="3.0"/>
+                    <SafetyBenchToggle PropertyValue="0"/>
+                    <SafetyBenchDepth PropertyValue="0.3"/>
+                    <SafetyBenchWidth PropertyValue="0.6"/>
+                    <SafetyBenchSlope PropertyValue="6.0"/>
+                    <PermanentWater PropertyValue="2.4"/>
+                    <AquaticBenchWidth PropertyValue="1.5"/>
+                    <AquaticBenchSlope PropertyValue="6.0"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{66866D9B-6365-4E4E-A403-D85F1D3B9EF1}"/>
+            <Properties>
+                <ItemName>挡土墙</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Retaining_wall.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Retaining_wall.png" IsDark="true"/>
+                </Images>
+                <Description>挡土墙</Description>
+                <ToolTip>挡土墙会沿墙线打断地形，并在指定的高度约束范围内阶梯化地形。</ToolTip>
+                <Time createdUniversalDateTime="2021-07-30T11:06:39" modifiedUniversalDateTime="2021-07-30T11:06:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_retain_wall</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{A4EEDA88-EACE-4109-81F4-5FEB205BD0D9}"/>
+            <Data>
+                <Tool>
+                    <MaxHeight PropertyValue="3.0"/>
+                    <MinHeight PropertyValue="0.3"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{15E5ED9F-D3CB-4CE4-8FBB-A6C7281B2CB0}"/>
+            <Properties>
+                <ItemName>路缘</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Curb.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Curb.png" IsDark="true"/>
+                </Images>
+                <Description>路缘</Description>
+                <ToolTip>路缘会沿路缘线打断地形，并在指定的高度和宽度处阶梯化地形。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:39" modifiedUniversalDateTime="2020-09-04T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_curb</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{0C6D26D7-748A-4CD0-AC4E-EA3520293F6D}"/>
+            <Data>
+                <Tool>
+                    <Width PropertyValue="0.2"/>
+                    <Height PropertyValue="0.2"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{1B9A1FBB-253D-4B34-917E-19DF49FF02BB}"/>
+            <Properties>
+                <ItemName>停车场</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Parking lot.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Parking lot.png" IsDark="true"/>
+                </Images>
+                <Description>停车场</Description>
+                <ToolTip>停车场是预先配置的区域，其中已设置车辆使用的坡度设置。</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T19:55:35" modifiedUniversalDateTime="2020-11-19T19:55:35"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <MinSlope PropertyValue="1.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="-1"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0.5"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{440576AD-02D8-48B1-9017-8076731D32C3}"/>
+            <Properties>
+                <ItemName>区域</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Zone.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Zone.png" IsDark="true"/>
+                </Images>
+                <Description>区域</Description>
+                <ToolTip>区域是用于表示基于区域的放坡的常用放坡对象。区域特性集数据可以添加到以下闭合几何图形: 多段线、二维多段线、三维多段线、要素线、图案填充、地块。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:39" modifiedUniversalDateTime="2020-09-04T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="2"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="2.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{9CD7DBE8-78B8-434D-9243-B5BAD72F548B}"/>
+            <Properties>
+                <ItemName>排除区域</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Avoidance_area.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Avoidance_area.png" IsDark="true"/>
+                </Images>
+                <Description>排除区域</Description>
+                <ToolTip>在排除区域中，所有现有高程都是固定的，因此不允许进行放坡。</ToolTip>
+                <Time createdUniversalDateTime="2020-12-24T11:56:37" modifiedUniversalDateTime="2020-12-24T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_exclusion_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{7953AEA9-1B3A-4941-BB42-4D545DEB583A}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{7880C424-1501-4BA7-A5B7-9096F04BEF8C}"/>
+            <Properties>
+                <ItemName>放坡边界</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Grading limit.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Grading limit.png" IsDark="true"/>
+                </Images>
+                <Description>放坡边界</Description>
+                <ToolTip>放坡边界定义放坡的边界。</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T01:09:39" modifiedUniversalDateTime="2020-11-19T01:09:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_grading_limit</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="0.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="-1"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{C63323AA-7E15-4B6D-9C4F-152899C5587E}"/>
+            <Properties>
+                <ItemName>线性齐平线</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Aligned_edge.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Aligned_edge.png" IsDark="true"/>
+                </Images>
+                <Description>线性齐平线</Description>
+                <ToolTip>线性齐平线会尝试沿固定坡度创建定义良好的曲面几何图形。与线性齐平线接触的曲面三角形边将尝试以相同的方向和坡度对齐。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:37" modifiedUniversalDateTime="2020-09-04T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_aligned_edge</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{F16475A5-2C19-4B8C-BE7B-2230F91ED8D6}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{38C2B58C-ECA6-4DEA-983A-59DBBD871434}"/>
+            <Properties>
+                <ItemName>松弛线</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bend_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bend_line.png" IsDark="true"/>
+                </Images>
+                <Description>松弛线</Description>
+                <ToolTip>松弛线会尝试沿直线松弛曲面三角形的坡度约束。与松弛线接触的曲面三角形边将被设定为最小坡度高程为 0，最大坡度高程为无限大。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:37" modifiedUniversalDateTime="2020-09-04T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_bend_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{CBD72E4C-0F8B-4CD5-9DEE-866A1FE8175D}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{2F36D003-8EDE-48EA-8D08-1D3B7A9E7FD5}"/>
+            <Properties>
+                <ItemName>排水管线</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Drain_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Drain_line.png" IsDark="true"/>
+                </Images>
+                <Description>排水管线</Description>
+                <ToolTip>排水管线是用于控制三角形坡度方向的排水元素。指定排水管线时，管线的起点为高点，管线的方向则指向低点。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:38" modifiedUniversalDateTime="2020-09-04T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_drain_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{FF3B308E-EC65-46C2-8099-F9FB801CEC04}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{D76A791D-7B24-4178-A511-EF4A72DD90B2}"/>
+            <Properties>
+                <ItemName>山脊线</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Ridge_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Ridge_line.png" IsDark="true"/>
+                </Images>
+                <Description>山脊线</Description>
+                <ToolTip>山脊线控制曲面三角形的坡度方向，以使排水远离山脊线。山脊线的起点为山脊低点，终点为山脊高点。</ToolTip>
+                <Time createdUniversalDateTime="2022-04-14T11:56:38" modifiedUniversalDateTime="2022-04-14T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_ridge_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{E0CA971C-E598-4816-A1A7-C84EFBBD6A16}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{60EDD5EA-8B70-4379-8DB4-47DA6B763CC3}"/>
+            <Properties>
+                <ItemName>低洼点</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Low_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Low_point.png" IsDark="true"/>
+                </Images>
+                <Description>低洼点</Description>
+                <ToolTip>低洼点是一个参照点，它可将某个位置标记为低高程点。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:36" modifiedUniversalDateTime="2020-09-04T11:56:36"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_low_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{27583802-D603-42AE-8807-4DF963481700}"/>
+            <Data>
+                <Tool>
+                    <DiamondShaped PropertyValue="0"/>
+                    <OrientationAngle PropertyValue="0.0"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{02EEC7C9-3624-4A98-A070-AA46B0E70FF5}"/>
+            <Properties>
+                <ItemName>区间限高点</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bounded_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bounded_point.png" IsDark="true"/>
+                </Images>
+                <Description>区间限高点</Description>
+                <ToolTip>区间限高点可沿曲面为点创建高程约束。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:37" modifiedUniversalDateTime="2020-09-04T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_bounded_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{D1C77704-49CD-4763-8DC7-951CAE8D0655}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{EB054E30-F0A4-41D6-83BC-EE9AC8751BFB}"/>
+            <Properties>
+                <ItemName>偏移点</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Elevation_offset.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Elevation_offset.png" IsDark="true"/>
+                </Images>
+                <Description>偏移点</Description>
+                <ToolTip>偏移点用于控制管线段各个端点之间的高程差。偏移点为正值会尝试使第一个点保持在高于管线段端点的位置。负值则会使起点位置更低。</ToolTip>
+                <Time createdUniversalDateTime="2020-09-04T11:56:38" modifiedUniversalDateTime="2020-09-04T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/CHS/?contextId=id_dlg_tool_prop_elevation_offset</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{C0530EE0-3BA9-4D02-8262-B60D02849401}"/>
+            <Data>
+                <Tool>
+                    <MinOffset PropertyValue="1"/>
+                    <MaxOffset PropertyValue="1"/>
+                    <Units PropertyValue="meter"/>
+                </Tool>
+            </Data>
+        </Tool>
+    </Tools>
+</Palette>

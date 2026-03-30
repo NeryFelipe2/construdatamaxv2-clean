@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Cenários — SLNR Santos</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;color:#1a1a1a}
+.header{background:linear-gradient(135deg,#1F4E79,#2E75B6);color:#fff;padding:20px;border-radius:12px;margin:16px;text-align:center}
+.header h1{font-size:22px;margin-bottom:4px}
+.header p{opacity:.85;font-size:13px}
+.container{max-width:1250px;margin:0 auto;padding:0 16px 16px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:#fff;border-radius:10px;padding:12px;text-align:center;border:2px solid transparent}
+.kpi .label{font-size:11px;color:#666;font-weight:600}
+.kpi .value{font-size:17px;font-weight:700;margin:4px 0}
+.kpi .sub{font-size:10px;color:#999}
+.controls{background:#fff;border-radius:10px;padding:14px;margin-bottom:16px;border:1px solid #e0e0e0}
+.controls label{font-weight:700;font-size:13px}
+.slider-row{display:flex;align-items:center;gap:16px;margin-top:8px}
+.slider-row input[type=range]{flex:1}
+.slider-val{font-weight:700;font-size:20px;color:#1F4E79;min-width:50px;text-align:right}
+.eq-btns{display:flex;gap:8px;margin-top:8px}
+.eq-btns button{padding:4px 12px;border-radius:6px;border:none;cursor:pointer;font-size:11px;font-weight:600;background:#E3F2FD;color:#1F4E79}
+.eq-btns button.active{background:#1F4E79;color:#fff}
+.onda-btns{display:flex;gap:8px;margin-bottom:12px}
+.onda-btns button{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:12px}
+.tbl-wrap{background:#fff;border-radius:10px;border:1px solid #e0e0e0;overflow:hidden;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:#1F4E79;color:#fff}
+th,td{padding:8px 6px}
+th{text-align:left}
+td{border-top:1px solid #f0f0f0}
+tr.selected{background:rgba(200,230,201,.53)}
+tr.unselected{opacity:.45}
+tr:hover{background:rgba(30,136,229,.08)}
+.badge{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.mono{font-family:monospace}
+.right{text-align:right}
+.center{text-align:center}
+.bar-wrap{background:#fff;border-radius:10px;padding:14px;border:1px solid #e0e0e0;margin-bottom:16px}
+.bar-wrap h3{font-size:13px;font-weight:700;margin-bottom:8px}
+.bar-outer{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid #e0e0e0}
+.bar-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:width .3s}
+.cenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cenario{border-radius:8px;padding:12px;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.cenario:hover{border-color:#1F4E79;transform:translateY(-2px)}
+.cenario h4{font-size:13px;font-weight:700}
+.cenario .desc{font-size:10px;color:#666;margin-bottom:6px}
+.cenario .info{font-size:11px}
+.cenario .result{font-size:13px;font-weight:700;color:#1F4E79;margin-top:4px}
+.footer{margin-top:12px;padding:10px;background:#FFF8E1;border-radius:8px;font-size:11px;color:#666}
+.onda1{background:#C8E6C9}.onda2{background:#BBDEFB}.onda3{background:#FFCDD2}
+.dif2{color:#4CAF50}.dif3{color:#FF9800}.dif4{color:#F44336}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>Dashboard de Cenários — SLNR Santos</h1>
+<p>FCN Construções e Saneamento · Contrato 11481051 · Selecione núcleos → veja prazo, custo, equipes em tempo real</p>
+</div>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="controls">
+<div class="slider-row">
+<label>Equipes disponíveis:</label>
+<input type="range" id="eqSlider" min="10" max="80" value="39">
+<span class="slider-val" id="eqVal">39</span>
+<span style="font-size:11px;color:#666" id="eqPessoas">(332 pessoas)</span>
+</div>
+<div class="eq-btns" id="eqBtns"></div>
+</div>
+
+<div class="onda-btns" id="ondaBtns"></div>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr>
+<th>✓</th><th>TAG</th><th>Nome</th><th class="center">Onda</th><th class="center">Tipo</th>
+<th class="right">Rede(m)</th><th class="right">Lig.</th><th class="right">Custo</th>
+<th class="right">Prod</th><th class="right">Meses*</th>
+</tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+<div style="padding:8px;font-size:10px;color:#999;background:#f5f5f5">
+* Meses = execução individual (equipes proporcionais) + 3m pré-obra | Clique na linha para selecionar/desmarcar
+</div>
+</div>
+
+<div class="bar-wrap">
+<h3>Composição do Escopo Selecionado</h3>
+<div class="bar-outer" id="barChart"></div>
+<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#666" id="barLabels"></div>
+</div>
+
+<div class="bar-wrap">
+<h3>Cenários Rápidos</h3>
+<div class="cenarios" id="cenarios"></div>
+</div>
+
+<div class="footer">
+<strong>Como usar:</strong> Clique nos núcleos para selecionar/desmarcar | Use os botões de onda | Arraste o slider de equipes | Clique nos cenários rápidos | Os KPIs atualizam em tempo real
+</div>
+</div>
+
+<script>
+const NUCLEOS=[
+{tag:"010509",nome:"R.M.Mercedes",mr:296.1,lt:47,la:11,le:36,prod:3.0,onda:1,custo:313035,dif:2,tipo:"Misto"},
+{tag:"010506",nome:"Rua Nove Saboo",mr:340.2,lt:54,la:27,le:27,prod:3.0,onda:1,custo:352516,dif:2,tipo:"Misto"},
+{tag:"010532",nome:"Av.MF Pacheco_a",mr:462.0,lt:70,la:29,le:41,prod:3.0,onda:1,custo:461533,dif:2,tipo:"Misto"},
+{tag:"010465",nome:"Cam.Maria Rosa",mr:550.8,lt:68,la:34,le:34,prod:2.3,onda:1,custo:472433,dif:4,tipo:"Montanhoso"},
+{tag:"010492",nome:"R.S.Geraldo",mr:579.6,lt:92,la:46,le:46,prod:2.3,onda:1,custo:595900,dif:2,tipo:"Montanhoso"},
+{tag:"010466",nome:"Av.M.Fontes",mr:719.4,lt:109,la:45,le:64,prod:3.0,onda:1,custo:717208,dif:2,tipo:"Misto"},
+{tag:"010454",nome:"Pacheco Sta Casa",mr:780.0,lt:100,la:50,le:50,prod:2.3,onda:1,custo:684289,dif:4,tipo:"Montanhoso"},
+{tag:"010513",nome:"Lomba Penha(JBat)",mr:1036.8,lt:128,la:64,le:64,prod:2.3,onda:2,custo:880150,dif:4,tipo:"Montanhoso"},
+{tag:"010459",nome:"Vila Vitória",mr:1372.8,lt:176,la:88,le:88,prod:2.3,onda:2,custo:1196212,dif:4,tipo:"Montanhoso"},
+{tag:"010533",nome:"GRusso(var)",mr:1419.6,lt:182,la:61,le:121,prod:2.3,onda:2,custo:1243317,dif:4,tipo:"Montanhoso"},
+{tag:"010453",nome:"Nova Cintra I",mr:1755.0,lt:225,la:30,le:195,prod:2.3,onda:2,custo:1546691,dif:4,tipo:"Montanhoso"},
+{tag:"010503",nome:"Encosta Saboo",mr:1764.0,lt:280,la:140,le:140,prod:2.3,onda:2,custo:1806692,dif:2,tipo:"Montanhoso"},
+{tag:"010490",nome:"Av.Bandeirantes",mr:1808.1,lt:287,la:90,le:197,prod:2.3,onda:2,custo:1866521,dif:2,tipo:"Montanhoso"},
+{tag:"010480",nome:"Caneleira IV CDHU",mr:3505.7,lt:541,la:264,le:277,prod:4.0,onda:3,custo:3508556,dif:2,tipo:"Urbano"},
+{tag:"010449",nome:"Área ZEIS S.Bento",mr:4235.4,lt:543,la:199,le:344,prod:2.3,onda:3,custo:3697121,dif:4,tipo:"Montanhoso"},
+{tag:"010452",nome:"Lomba da Penha",mr:4600.8,lt:568,la:567,le:1,prod:2.3,onda:3,custo:3813433,dif:4,tipo:"Montanhoso"},
+{tag:"010457",nome:"São Bento I",mr:4937.4,lt:633,la:632,le:1,prod:2.3,onda:3,custo:4205739,dif:4,tipo:"Montanhoso"},
+{tag:"010464",nome:"GRusso-JGSilveira",mr:5522.4,lt:708,la:235,le:473,prod:2.3,onda:3,custo:4824817,dif:4,tipo:"Montanhoso"},
+{tag:"010460",nome:"Pacheco Á.Part.",mr:7222.8,lt:926,la:239,le:687,prod:2.3,onda:3,custo:6322111,dif:4,tipo:"Montanhoso"},
+{tag:"010524",nome:"Vila Alemoa",mr:9708.3,lt:1407,la:461,le:946,prod:3.5,onda:3,custo:9301825,dif:3,tipo:"Urb.Denso"}
+];
+
+const ondaCor={1:"#C8E6C9",2:"#BBDEFB",3:"#FFCDD2"};
+const ondaNome={1:"Onda 1 (Quick Wins)",2:"Onda 2 (Médios)",3:"Onda 3 (Grandes)"};
+const difCor={2:"#4CAF50",3:"#FF9800",4:"#F44336"};
+const fmt=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:0});
+const fmtR=n=>`R$ ${fmt(n)}`;
+
+let selected=new Set(NUCLEOS.map(n=>n.tag));
+let equipes=39;
+
+function calc(){
+  const sel=NUCLEOS.filter(n=>selected.has(n.tag));
+  const totalMr=sel.reduce((a,n)=>a+n.mr,0);
+  const totalLig=sel.reduce((a,n)=>a+n.lt,0);
+  const totalLigAg=sel.reduce((a,n)=>a+n.la,0);
+  const totalLigEs=sel.reduce((a,n)=>a+n.le,0);
+  const totalCusto=sel.reduce((a,n)=>a+n.custo,0);
+  const prodMedia=sel.length>0?sel.reduce((a,n)=>a+n.prod*n.mr,0)/totalMr:0;
+  const diasExec=equipes>0&&prodMedia>0?totalMr/(equipes*prodMedia):0;
+  const mesesExec=diasExec/22;
+  const mesesTotal=mesesExec+3;
+  const fatMensal=mesesExec>0?totalCusto/mesesExec:0;
+  return{sel,totalMr,totalLig,totalLigAg,totalLigEs,totalCusto,prodMedia,diasExec,mesesExec,mesesTotal,fatMensal};
+}
+
+function render(){
+  const s=calc();
+  // KPIs
+  const kpis=[
+    {label:"Núcleos",val:s.sel.length,sub:`de ${NUCLEOS.length}`,color:"#1F4E79"},
+    {label:"Rede (m)",val:fmt(Math.round(s.totalMr)),sub:"vala compartilhada",color:"#2E7D32"},
+    {label:"Ligações",val:fmt(s.totalLig),sub:`${fmt(s.totalLigAg)} AG + ${fmt(s.totalLigEs)} ES`,color:"#F57F17"},
+    {label:"Custo Total",val:fmtR(s.totalCusto),sub:"c/ BDI 25%",color:"#C62828"},
+    {label:"Prazo Total",val:`${s.mesesTotal.toFixed(0)} meses`,sub:`${s.mesesExec.toFixed(0)}m exec + 3m pré`,color:"#4A148C"},
+    {label:"Fat./Mês",val:fmtR(s.fatMensal),sub:"média execução",color:"#00695C"}
+  ];
+  document.getElementById('kpis').innerHTML=kpis.map(k=>`
+    <div class="kpi" style="border-color:${k.color}22">
+      <div class="label">${k.label}</div>
+      <div class="value" style="color:${k.color}">${k.val}</div>
+      <div class="sub">${k.sub}</div>
+    </div>`).join('');
+
+  // Table
+  document.getElementById('tbody').innerHTML=NUCLEOS.map((n,i)=>{
+    const sel=selected.has(n.tag);
+    const eq_n=Math.max(2,Math.min(8,Math.round(n.mr/1500)));
+    const meses_n=(n.mr/(eq_n*n.prod*22)+3).toFixed(1);
+    return`<tr class="${sel?'selected':'unselected'}" onclick="toggle('${n.tag}')">
+      <td class="center">${sel?'☑':'☐'}</td>
+      <td class="mono" style="font-weight:600">${n.tag}</td>
+      <td>${n.nome}</td>
+      <td class="center"><span class="badge" style="background:${ondaCor[n.onda]}">${n.onda}</span></td>
+      <td class="center" style="color:${difCor[n.dif]};font-weight:600;font-size:11px">${n.tipo}</td>
+      <td class="right mono">${fmt(Math.round(n.mr))}</td>
+      <td class="right">${fmt(n.lt)}</td>
+      <td class="right mono">${fmtR(n.custo)}</td>
+      <td class="right">${n.prod}</td>
+      <td class="right" style="font-weight:600">${meses_n}</td>
+    </tr>`;
+  }).join('');
+
+  // Bar chart
+  let barHtml='',barLabHtml='';
+  [1,2,3].forEach(onda=>{
+    const mr=NUCLEOS.filter(n=>n.onda===onda&&selected.has(n.tag)).reduce((a,n)=>a+n.mr,0);
+    const pct=s.totalMr>0?(mr/s.totalMr*100):0;
+    if(pct>0){
+      barHtml+=`<div class="bar-seg" style="width:${pct}%;background:${ondaCor[onda]}">${pct>8?`O${onda}: ${pct.toFixed(0)}%`:''}</div>`;
+    }
+    barLabHtml+=`<span>${['🟢','🔵','🔴'][onda-1]} Onda ${onda}: ${fmt(Math.round(mr))}m</span>`;
+  });
+  document.getElementById('barChart').innerHTML=barHtml;
+  document.getElementById('barLabels').innerHTML=barLabHtml;
+
+  // Equipes
+  document.getElementById('eqVal').textContent=equipes;
+  document.getElementById('eqPessoas').textContent=`(${Math.round(equipes*8.5)} pessoas)`;
+  document.querySelectorAll('.eq-btns button').forEach(b=>{
+    b.className=parseInt(b.dataset.eq)===equipes?'active':'';
+  });
+}
+
+function toggle(tag){
+  selected.has(tag)?selected.delete(tag):selected.add(tag);
+  render();
+}
+
+function selectOnda(onda){
+  const tags=NUCLEOS.filter(n=>n.onda===onda).map(n=>n.tag);
+  const allIn=tags.every(t=>selected.has(t));
+  tags.forEach(t=>allIn?selected.delete(t):selected.add(t));
+  render();
+}
+
+function selectAll(){selected=new Set(NUCLEOS.map(n=>n.tag));render()}
+function selectNone(){selected=new Set();render()}
+
+function applyCenario(tags,eq){
+  selected=new Set(tags);
+  equipes=eq;
+  document.getElementById('eqSlider').value=eq;
+  render();
+}
+
+// Init
+document.getElementById('eqSlider').addEventListener('input',e=>{equipes=parseInt(e.target.value);render()});
+
+// Onda buttons
+document.getElementById('ondaBtns').innerHTML=`
+  <button onclick="selectAll()" style="background:#1F4E79;color:#fff;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:12px">✅ Todos</button>
+  <button onclick="selectNone()" style="background:#fff;color:#666;padding:6px 14px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-weight:600;font-size:12px">⬜ Nenhum</button>
+  <button onclick="selectOnda(1)" style="background:${ondaCor[1]};padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:12px">${ondaNome[1]}</button>
+  <button onclick="selectOnda(2)" style="background:${ondaCor[2]};padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:12px">${ondaNome[2]}</button>
+  <button onclick="selectOnda(3)" style="background:${ondaCor[3]};padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:12px">${ondaNome[3]}</button>`;
+
+// Equipe buttons
+const eqPresets=[20,30,39,50,60];
+document.getElementById('eqBtns').innerHTML=eqPresets.map(v=>
+  `<button data-eq="${v}" onclick="equipes=${v};document.getElementById('eqSlider').value=${v};render()">${v} eq</button>`
+).join('');
+
+// Cenários
+const cenarios=[
+  {nome:"Só Quick Wins",desc:"7 pequenos (<800m)",tags:NUCLEOS.filter(n=>n.onda===1).map(n=>n.tag),eq:21,cor:"#E8F5E9"},
+  {nome:"Onda 1+2",desc:"13 núcleos (peq+méd)",tags:NUCLEOS.filter(n=>n.onda<=2).map(n=>n.tag),eq:39,cor:"#E3F2FD"},
+  {nome:"Todos (39 eq)",desc:"20 núcleos",tags:NUCLEOS.map(n=>n.tag),eq:39,cor:"#FFF3E0"},
+  {nome:"Todos (50 eq)",desc:"20 núcleos acelerado",tags:NUCLEOS.map(n=>n.tag),eq:50,cor:"#F3E5F5"},
+  {nome:"Só Montanhosos",desc:"DIFIC 4",tags:NUCLEOS.filter(n=>n.dif>=4).map(n=>n.tag),eq:39,cor:"#FFEBEE"},
+  {nome:"Só Urbanos",desc:"DIFIC ≤ 3",tags:NUCLEOS.filter(n=>n.dif<=3).map(n=>n.tag),eq:25,cor:"#E8F5E9"}
+];
+document.getElementById('cenarios').innerHTML=cenarios.map((c,i)=>{
+  const selN=NUCLEOS.filter(n=>c.tags.includes(n.tag));
+  const mr=selN.reduce((a,n)=>a+n.mr,0);
+  const custo=selN.reduce((a,n)=>a+n.custo,0);
+  const prodM=mr>0?selN.reduce((a,n)=>a+n.prod*n.mr,0)/mr:0;
+  const meses=mr>0?mr/(c.eq*prodM*22)+3:0;
+  return`<div class="cenario" style="background:${c.cor}" onclick="applyCenario([${c.tags.map(t=>`'${t}'`).join(',')}],${c.eq})">
+    <h4>${c.nome}</h4>
+    <div class="desc">${c.desc}</div>
+    <div class="info">${selN.length} núcleos | ${fmt(Math.round(mr))}m</div>
+    <div class="info">${fmtR(custo)}</div>
+    <div class="result">→ ${meses.toFixed(0)} meses (${c.eq} eq)</div>
+  </div>`;
+}).join('');
+
+render();
+</script>
+</body>
+</html>

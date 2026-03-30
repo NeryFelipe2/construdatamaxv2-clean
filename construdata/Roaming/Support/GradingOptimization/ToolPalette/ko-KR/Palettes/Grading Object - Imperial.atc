@@ -1,0 +1,487 @@
+<Palette FileRevision="23.1.0" Revision="23.1.0" option="0">
+    <ItemID idValue="{48A1583A-E997-4842-A094-151975D45908}"/>
+    <Properties>
+        <ItemName>정지 객체 - 영국식</ItemName>
+        <Images option="0"/>
+        <Time createdUniversalDateTime="2020-03-22T11:56:36" modifiedUniversalDateTime="2020-03-22T11:56:36"/>
+    </Properties>
+    <Tools>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{4AF349A4-469C-49A0-B63B-4289BBA6BC06}"/>
+            <Properties>
+                <ItemName>건물 패드</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Building_pad.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Building_pad.png" IsDark="true"/>
+                </Images>
+                <Description>건물 패드</Description>
+                <ToolTip>건물 패드는 닫힌 도면요소 내의 영역을 평평하게 하고, 구속조건 및 정지 목표를 달성하기 위해 이를 단일 도면요소처럼 위아래로 이동합니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:40" modifiedUniversalDateTime="2020-03-22T11:56:40"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_building_pad</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{2D7F386C-DBB0-42B5-90D8-77ECEFF6D8E3}"/>
+            <Data>
+                <Tool>
+                    <Elevation PropertyValue="0"/>
+                    <MinElevation PropertyValue="0.0"/>
+                    <MaxElevation PropertyValue="999.0"/>
+                    <LevelGradingWithPad PropertyValue="-1"/>
+                    <DepthOfMaterial PropertyValue="1.5"/>
+                    <DrainAway PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{5F91233B-ED49-4659-B8F8-A8F8F2B939AF}"/>
+            <Properties>
+                <ItemName>모서리 받침</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\reveal.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\reveal.png" IsDark="true"/>
+                </Images>
+                <Description>모서리 받침</Description>
+                <ToolTip>모서리 받침 도구는 건물 패드의 모서리 받침을 따라 원하는 모서리 받침을 나타내는 데 사용됩니다. 모서리 받침은 건물 패드 객체에만 추가될 수 있습니다. 모서리 받침 도구는 건물 패드 표고와 주변 지형 지표면 간의 원하는 최소 및 최대 표고 차를 나타내는 특성을 건물 패드에 추가합니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-10-13T00:02:11" modifiedUniversalDateTime="2020-10-13T17:05:12"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_reveal</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{7531530D-1031-4BAC-ABB4-357D46D6B92B}"/>
+            <Data>
+                <Tool>
+                    <StartElevationOffsetLow PropertyValue="3.5"/>
+                    <StartElevationOffsetHigh PropertyValue="4.0"/>
+                    <SameAsStart PropertyValue="-1"/>
+                    <EndElevationOffsetLow PropertyValue="3.5"/>
+                    <EndElevationOffsetHigh PropertyValue="4.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{5FC1DD68-7CD6-4C66-B843-C3EEBFB24F95}"/>
+            <Properties>
+                <ItemName>경로</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\pathway.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\pathway.png" IsDark="true"/>
+                </Images>
+                <Description>경로</Description>
+                <ToolTip>경로를 사용하면 선을 따라 횡단 경사 및 폭 구속조건을 정의할 수 있습니다.</ToolTip>
+                <Time createdUniversalDateTime="2022-04-20T13:00:00" modifiedUniversalDateTime="2022-04-20T13:00:00"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_pathway</HelpFile>
+                </Help>
+            </Properties>
+            <Source/>
+            <StockToolRef idValue="{F2B176C1-C159-49A5-A7D2-F9851D3D9E5A}"/>
+            <Data>
+                <Tool>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <LeftSide PropertyValue="-1"/>
+                    <LeftWidth PropertyValue="9.0"/>
+                    <LeftCrossSlope PropertyValue="2.0"/>
+                    <RightSide PropertyValue="-1"/>
+                    <RightWidth PropertyValue="9.0"/>
+                    <RightCrossSlope PropertyValue="2.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{E70066E0-C856-45B3-8B05-8AC7AA2432E1}"/>
+            <Properties>
+                <ItemName>유수지</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Pond.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Pond.png" IsDark="true"/>
+                </Images>
+                <Description>유수지</Description>
+                <ToolTip>유수지는 유수 시설 또는 저류 시설에 대한 특성과 구속조건을 나타내는 닫힌 지오메트리 쉐이프입니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-07-31T07:19:48" modifiedUniversalDateTime="2020-07-31T07:19:48"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_pond</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{85CD3CF4-7384-4840-B5BD-DAFAE966D813}"/>
+            <Data>
+                <Tool>
+                    <PondType PropertyValue="1"/>
+                    <MinStorageVolume PropertyValue="30000.0"/>
+                    <MaxStorageDepth PropertyValue="5.0"/>
+                    <AllowBoundaryChange PropertyValue="-1"/>
+                    <BermWidth PropertyValue="10.0"/>
+                    <Freeboard PropertyValue="1.0"/>
+                    <InsideSlope PropertyValue="3.0"/>
+                    <SafetyBenchToggle PropertyValue="0"/>
+                    <SafetyBenchDepth PropertyValue="1.0"/>
+                    <SafetyBenchWidth PropertyValue="2.0"/>
+                    <SafetyBenchSlope PropertyValue="6.0"/>
+                    <PermanentWater PropertyValue="8.0"/>
+                    <AquaticBenchWidth PropertyValue="5.0"/>
+                    <AquaticBenchSlope PropertyValue="6.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{050CE3C8-54CF-4602-8790-C8276A85AF4F}"/>
+            <Properties>
+                <ItemName>옹벽</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Retaining_wall.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Retaining_wall.png" IsDark="true"/>
+                </Images>
+                <Description>옹벽</Description>
+                <ToolTip>옹벽은 벽 라인워크를 따라 지형을 끊고 지정된 높이 구속조건 내에서 지형의 단을 올립니다.</ToolTip>
+                <Time createdUniversalDateTime="2021-07-30T10:56:39" modifiedUniversalDateTime="2021-07-30T10:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_retain_wall</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{A4EEDA88-EACE-4109-81F4-5FEB205BD0D9}"/>
+            <Data>
+                <Tool>
+                    <MaxHeight PropertyValue="10.0"/>
+                    <MinHeight PropertyValue="1.0"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{9BFC729B-B67D-4D85-BA12-5D7CB71A77ED}"/>
+            <Properties>
+                <ItemName>연석</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Curb.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Curb.png" IsDark="true"/>
+                </Images>
+                <Description>연석</Description>
+                <ToolTip>연석은 연석 라인워크를 따라 지형을 끊고 지정된 높이와 폭으로 지형의 단을 올립니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:39" modifiedUniversalDateTime="2020-03-22T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_curb</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{0C6D26D7-748A-4CD0-AC4E-EA3520293F6D}"/>
+            <Data>
+                <Tool>
+                    <Width PropertyValue="0.2"/>
+                    <Height PropertyValue="0.2"/>
+                    <Reverse PropertyValue="0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{C40FC33C-2CE6-4819-B9B1-7DC5F0ACBA9C}"/>
+            <Properties>
+                <ItemName>주차장</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Parking lot.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Parking lot.png" IsDark="true"/>
+                </Images>
+                <Description>주차장</Description>
+                <ToolTip>주차장은 경사 설정이 차량 사용을 위해 지정되어 있는 미리 구성된 구역입니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T02:44:35" modifiedUniversalDateTime="2020-11-19T02:44:35"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="5.0"/>
+                    <MinSlope PropertyValue="1.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="-1"/>
+                    <HideDrainageElement PropertyValue="0"/>				
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="1.5"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{7475A4C7-B02C-4524-B2F1-EC30881F0648}"/>
+            <Properties>
+                <ItemName>구역</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Zone.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Zone.png" IsDark="true"/>
+                </Images>
+                <Description>구역</Description>
+                <ToolTip>구역은 영역 기반 정지를 나타내는 데 사용되는 일반 정지 객체입니다. 구역 특성 세트 데이터는 폴리선, 2D 폴리선, 3D 폴리선, 형상선, 해치, 구획 등의 닫힌 지오메트리에 추가될 수 있습니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:39" modifiedUniversalDateTime="2020-03-22T11:56:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="2"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="2.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="0"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{E8F6E0D4-DFAD-4B0A-8111-7CD368DC3711}"/>
+            <Properties>
+                <ItemName>제외 구역</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Avoidance_area.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Avoidance_area.png" IsDark="true"/>
+                </Images>
+                <Description>제외 구역</Description>
+                <ToolTip>제외 구역에서는 정지가 발생하지 않도록 모든 기존 표고가 고정됩니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-12-24T11:58:37" modifiedUniversalDateTime="2020-12-24T11:58:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_exclusion_zone</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{7953AEA9-1B3A-4941-BB42-4D545DEB583A}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{61DF5B5B-35AC-4F1F-9129-8C79B2904B28}"/>
+            <Properties>
+                <ItemName>정지 한계</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Grading limit.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Grading limit.png" IsDark="true"/>
+                </Images>
+                <Description>정지 한계</Description>
+                <ToolTip>정지 한계는 정지의 경계를 정의합니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-11-19T01:07:39" modifiedUniversalDateTime="2020-11-19T01:07:39"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_grading_limit</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{AFBDA9C2-4A01-44D3-8A35-E817C024B1FA}"/>
+            <Data>
+                <Tool>
+                    <SlopeType PropertyValue="3"/>
+                    <MaxSlope PropertyValue="33.0"/>
+                    <MinSlope PropertyValue="0.0"/>
+                    <AlignedSurface PropertyValue="0"/>
+                    <ExclusiveDrainage PropertyValue="0"/>
+                    <HideDrainageElement PropertyValue="0"/>
+                    <MinimumZoneInclination PropertyValue="0"/>
+                    <InclinationDirection PropertyValue="2"/>
+                    <DepthOfMaterial PropertyValue="0"/>
+                    <Breakline PropertyValue="-1"/>
+                    <GradingLimit PropertyValue="-1"/>
+                    <BalanceCutAndFill PropertyValue="-1"/>
+                    <MinimizeEarthwork PropertyValue="-1"/>
+                    <SmoothSurface PropertyValue="-1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{53206DA0-2CDA-44A2-93EC-F2A04F53AF46}"/>
+            <Properties>
+                <ItemName>정렬된 모서리</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Aligned_edge.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Aligned_edge.png" IsDark="true"/>
+                </Images>
+                <Description>정렬된 모서리</Description>
+                <ToolTip>정렬된 모서리는 상수 경사를 따라 잘 정의된 지표면 지오메트리를 작성하려고 합니다. 정렬된 모서리에 닿는 지표면 삼각망 모서리는 동일한 방향과 경사로 정렬을 시도합니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_aligned_edge</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{F16475A5-2C19-4B8C-BE7B-2230F91ED8D6}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{43F53BD9-62BD-4F1A-90D7-02983C166296}"/>
+            <Properties>
+                <ItemName>절곡부 선</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bend_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bend_line.png" IsDark="true"/>
+                </Images>
+                <Description>절곡부 선</Description>
+                <ToolTip>절곡부 선은 선을 따라 지표면 삼각망의 경사를 완화하려고합니다. 절곡부 선에 닿는 지표면 삼각망 모서리의 경우 최소 경사 표고는 0으로, 최대 경사 표고는 무한대로 설정됩니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_bend_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{CBD72E4C-0F8B-4CD5-9DEE-866A1FE8175D}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{A9EAF5C2-213B-4BEC-9B5C-AEDBBC922179}"/>
+            <Properties>
+                <ItemName>배수 선</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Drain_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Drain_line.png" IsDark="true"/>
+                </Images>
+                <Description>배수 선</Description>
+                <ToolTip>배수 선은 삼각망의 경사 방향을 조정하는 배수 요소입니다. 배수 선을 지정하는 경우 선의 시작점은 고점이고, 선의 방향은 저점 쪽입니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:38" modifiedUniversalDateTime="2020-03-22T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_drain_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{FF3B308E-EC65-46C2-8099-F9FB801CEC04}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{23B76907-AF0A-4DCF-B015-F3E892424842}"/>
+            <Properties>
+                <ItemName>능선</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Ridge_line.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Ridge_line.png" IsDark="true"/>
+                </Images>
+                <Description>능선</Description>
+                <ToolTip>능선은 지표면 삼각망의 경사 방향을 조정하여 선에서 멀리 떨어져 배수할 수 있도록 합니다. 선의 시작은 능선의 저점이고 선의 끝은 능선의 고점입니다.</ToolTip>
+                <Time createdUniversalDateTime="2022-04-14T11:56:38" modifiedUniversalDateTime="2022-04-14T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_ridge_line</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{E0CA971C-E598-4816-A1A7-C84EFBBD6A16}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{156D020B-D92C-45C7-B27C-AD7ABE99A523}"/>
+            <Properties>
+                <ItemName>저점</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Low_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Low_point.png" IsDark="true"/>
+                </Images>
+                <Description>저점</Description>
+                <ToolTip>저점은 위치를 저 표고점으로 표시하는 참조점입니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:36" modifiedUniversalDateTime="2020-03-22T11:56:36"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_low_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{27583802-D603-42AE-8807-4DF963481700}"/>
+            <Data>
+                <Tool>
+                    <DiamondShaped PropertyValue="0"/>
+                    <OrientationAngle PropertyValue="0.0"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{53231D4E-D6DB-4D85-B669-A6D3F6DB4CF7}"/>
+            <Properties>
+                <ItemName>경계 점</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Bounded_point.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Bounded_point.png" IsDark="true"/>
+                </Images>
+                <Description>경계 점</Description>
+                <ToolTip>경계 점은 지표면을 따라 있는 점에 대한 표고 구속조건을 작성합니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:37" modifiedUniversalDateTime="2020-03-22T11:56:37"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_bounded_point</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{D1C77704-49CD-4763-8DC7-951CAE8D0655}"/>
+            <Data>
+                <Tool>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+        <Tool Revision="23.1.0" option="0">
+            <ItemID idValue="{2812BA18-2013-471B-8294-270A45F1F3DC}"/>
+            <Properties>
+                <ItemName>간격띄우기 점</ItemName>
+                <Images option="0">
+                    <Image cx="64" cy="64" src="..\..\Images\light\Elevation_offset.png" IsDark="false"/>
+                    <Image cx="64" cy="64" src="..\..\Images\dark\Elevation_offset.png" IsDark="true"/>
+                </Images>
+                <Description>간격띄우기 점</Description>
+                <ToolTip>간격띄우기 점은 선 세그먼트의 각 끝 사이의 표고 차를 조정합니다. 간격띄우기 점의 양수 값은 첫 번째 점을 세그먼트 끝보다 높게 유지하려고 시도합니다. 음수 값은 시작점을 더 낮게 만듭니다.</ToolTip>
+                <Time createdUniversalDateTime="2020-03-22T11:56:38" modifiedUniversalDateTime="2020-03-22T11:56:38"/>
+                <Help>
+                    <HelpCommand>HELP_BROWSER_URL</HelpCommand>
+                    <HelpFile>https://help.autodesk.com/view/C3DGO/KOR/?contextId=id_dlg_tool_prop_elevation_offset</HelpFile>
+                </Help>
+            </Properties>
+            <StockToolRef idValue="{C0530EE0-3BA9-4D02-8262-B60D02849401}"/>
+            <Data>
+                <Tool>
+                    <MinOffset PropertyValue="1"/>
+                    <MaxOffset PropertyValue="1"/>
+                    <Units PropertyValue="foot"/>
+                </Tool>
+            </Data>
+        </Tool>
+    </Tools>
+</Palette>

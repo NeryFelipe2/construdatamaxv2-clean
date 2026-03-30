@@ -1,0 +1,280 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{C10DD35D-D14E-4531-9F81-9976DADA345C}"/><Properties><ItemName resource="51025" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:29:32" modifiedUniversalDateTime="2009-01-04T11:55:37"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{23679187-2C80-4B73-A01C-107A942445F2}"/><Properties><ItemName resource="51027" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{AC68651B-48D2-4264-843C-9CF6A078D222}"/><Properties><ItemName resource="8101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccChannel.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccChannel.png"/></Images><Description resource="8102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_Channel subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Channel</HelpData></Help><Time createdUniversalDateTime="2006-01-16T22:58:00" modifiedUniversalDateTime="2006-01-16T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Channel</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8103" Description="8104">R2019</Version>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="8105" Description="8106">2.0</Depth>
+						<BottomWidth DataType="Double" TypeInfo="16" DisplayName="8107" Description="8108">2.0</BottomWidth>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="8109" Description="8110">1.0</Sideslope>
+						<LiningDepth DataType="Double" TypeInfo="16" DisplayName="8111" Description="8112">0.1</LiningDepth>
+						<LeftMarkedPoint DataType="String" DisplayName="8113" Description="8114">None</LeftMarkedPoint>
+						<RightMarkedPoint DataType="String" DisplayName="8115" Description="8116">None</RightMarkedPoint>
+						<LeftExtensionHeight DataType="Double" TypeInfo="16" DisplayName="8117" Description="8118">0.5</LeftExtensionHeight>
+						<LeftBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8119" Description="8120">1.5</LeftBackslopeWidth>
+						<LeftBackslope DataType="Double" TypeInfo="10" DisplayName="8121" Description="8122">0.25</LeftBackslope>
+						<RightExtensionHeight DataType="Double" TypeInfo="16" DisplayName="8123" Description="8124">0.5</RightExtensionHeight>
+						<RightBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8125" Description="8126">1.5</RightBackslopeWidth>
+						<RightBackslope DataType="Double" TypeInfo="10" DisplayName="8127" Description="8128">0.25</RightBackslope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D518CCD0-35CC-431B-AD0F-2A166ABCC36C}"/><Properties><ItemName resource="8201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccChannelParabolicBottom.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccChannelParabolicBottom.png"/></Images><Description resource="8202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ChannelParabolicBottom subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ChannelParabolicBottom</HelpData></Help><Time createdUniversalDateTime="2006-01-17T22:58:00" modifiedUniversalDateTime="2006-01-17T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ChannelParabolicBottom</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8203" Description="8204">R2019</Version>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="8205" Description="8206">2.0</Depth>
+						<BottomWidth DataType="Double" TypeInfo="16" DisplayName="8207" Description="8208">2.0</BottomWidth>
+						<CurveTessalationPoints DataType="Long" DisplayName="8209" Description="8210">7</CurveTessalationPoints>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="8211" Description="8212">1.0</Sideslope>
+						<LiningDepth DataType="Double" TypeInfo="16" DisplayName="8213" Description="8214">0.1</LiningDepth>
+						<LeftMarkedPoint DataType="String" DisplayName="8215" Description="8216">None</LeftMarkedPoint>
+						<RightMarkedPoint DataType="String" DisplayName="8217" Description="8218">None</RightMarkedPoint>
+						<LeftExtensionHeight DataType="Double" TypeInfo="16" DisplayName="8219" Description="8220">0.5</LeftExtensionHeight>
+						<LeftBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8221" Description="8222">1.5</LeftBackslopeWidth>
+						<LeftBackslope DataType="Double" TypeInfo="10" DisplayName="8223" Description="8224">0.25</LeftBackslope>
+						<RightExtensionHeight DataType="Double" TypeInfo="16" DisplayName="8225" Description="8226">0.5</RightExtensionHeight>
+						<RightBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8227" Description="8228">1.25</RightBackslopeWidth>
+						<RightBackslope DataType="Double" TypeInfo="10" DisplayName="8229" Description="8230">0.25</RightBackslope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{30A1FB23-E757-4C91-A77E-F10E229D28FA}"/><Properties><ItemName resource="10501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccDitch.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccDitch.png"/></Images><Description resource="10502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_Ditch subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Ditch</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:59:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Ditch</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10503" Description="10504">R2019</Version>
+						<Side DataType="Long" DisplayName="10505" Description="10506">0
+		                    <Enum>
+								<Right DisplayName="10507">0</Right>
+								<Left DisplayName="10508">1</Left>
+							</Enum>
+						</Side>
+						<IncludeDitch DataType="Long" DisplayName="10516" Description="10517">0
+							<Enum>
+								<CutFill DisplayName="10518">0</CutFill>
+								<Cut DisplayName="10519">1</Cut>
+								<Fill DisplayName="10520">2</Fill>
+							</Enum>
+						</IncludeDitch>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="10521" Description="10522">1</DitchWidth>
+						<DitchDepth DataType="Double" TypeInfo="16" DisplayName="10523" Description="10524">1</DitchDepth>
+						<ForeslopeSlope DataType="Double" TypeInfo="10" DisplayName="10525" Description="10526">0.25</ForeslopeSlope>
+						<ForeslopeBufferWidth DataType="Double" TypeInfo="16" DisplayName="10527" Description="10528">1</ForeslopeBufferWidth>
+						<ForeslopeBufferSlope DataType="Double" TypeInfo="10" DisplayName="10529" Description="10530">-0.1666666667</ForeslopeBufferSlope>
+						<BackslopeSlope DataType="Double" TypeInfo="10" DisplayName="10531" Description="10532">0.25</BackslopeSlope>
+						<BackslopeBufferWidth DataType="Double" TypeInfo="16" DisplayName="10533" Description="10534">1</BackslopeBufferWidth>
+						<BackslopeBufferSlope DataType="Double" TypeInfo="10" DisplayName="10535" Description="10536">0.1666666667</BackslopeBufferSlope>
+						<PlaceMaterial DataType="Long" DisplayName="10537" Description="10538">1
+							<Enum>
+								<AllLinks DisplayName="10539">0</AllLinks>
+								<None DisplayName="10540">1</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="10541" Description="10542">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="10543" Description="10544">0.3</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="10545" Description="10546">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="10547" Description="10548">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="10549" Description="10550">0.15</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="10551" Description="10552">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="10553" Description="10554">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="10555" Description="10556">0.1</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="10557" Description="10558">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{73ED8730-CC4E-4592-9CC9-6720561AE497}"/><Properties><ItemName resource="8301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccSideDitch.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccSideDitch.png"/></Images><Description resource="8302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_SideDitch subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_SideDitch</HelpData></Help><Time createdUniversalDateTime="2006-01-20T22:58:00" modifiedUniversalDateTime="2006-01-20T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.SideDitch</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8303" Description="8304">R2019</Version>
+						<Side DataType="Long" DisplayName="8305" Description="8306">0
+		          <Enum>
+								<Right DisplayName="8307">0</Right>
+								<Left DisplayName="8308">1</Left>
+							</Enum>
+						</Side>
+						<InsideDepth DataType="Double" TypeInfo="16" DisplayName="8309" Description="8310">0.45</InsideDepth>
+						<BottomWidth DataType="Double" TypeInfo="16" DisplayName="8311" Description="8312">0.5</BottomWidth>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="8313" Description="8314">2.0</Sideslope>
+						<DitchWallDepth DataType="Double" TypeInfo="16" DisplayName="8315" Description="8316">0.1</DitchWallDepth>
+						<InsideExtensionHeight DataType="Double" TypeInfo="16" DisplayName="8317" Description="8318">0.15</InsideExtensionHeight>
+						<InsideBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8319" Description="8320">1.5</InsideBackslopeWidth>
+						<RightBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8321" Description="8322">0.1</RightBackslopeWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E3CFA6C9-5CBE-459D-B58A-633E14C46641}"/><Properties><ItemName resource="8401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccSideDitchUShape.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccSideDitchUShape.png"/></Images><Description resource="8402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_SideDitchUShape subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_SideDitchUShape</HelpData></Help><Time createdUniversalDateTime="2006-01-22T22:58:00" modifiedUniversalDateTime="2006-01-22T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.SideDitchUShape</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8403" Description="8404">R2019</Version>
+						<Side DataType="Long" DisplayName="8405" Description="8406">0
+		          <Enum>
+								<Right DisplayName="8407">0</Right>
+								<Left DisplayName="8408">1</Left>
+							</Enum>
+						</Side>
+						<DitchBottomWidth DataType="Double" TypeInfo="16" DisplayName="8417" Description="8418">0.6</DitchBottomWidth>
+						<DitchDepth DataType="Double" TypeInfo="16" DisplayName="8421" Description="8422">0.6</DitchDepth>
+						<InsideWallThickness DataType="Double" TypeInfo="16" DisplayName="8415" Description="8416">0.15</InsideWallThickness>
+						<IncreasedWallThickness DataType="Double" TypeInfo="16" DisplayName="8411" Description="8412">0.2</IncreasedWallThickness>
+						<DitchBottomThickness DataType="Double" TypeInfo="16" DisplayName="8409" Description="8410">0.15</DitchBottomThickness>
+						<InsideTaperedFaceDepth DataType="Double" TypeInfo="16" DisplayName="8413" Description="8414">0.6</InsideTaperedFaceDepth>
+						<InsideHingePointDepth DataType="Double" TypeInfo="16" DisplayName="8433" Description="8434">0.0</InsideHingePointDepth>
+						<InsideBenchWidth DataType="Double" TypeInfo="16" DisplayName="8425" Description="8426">0.5</InsideBenchWidth>
+						<InsideBenchSlope DataType="Double" TypeInfo="9" DisplayName="8427" Description="8428">0.04</InsideBenchSlope>
+						<InsideBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8429" Description="8430">0.3</InsideBackslopeWidth>
+						<InsideBackslope DataType="Double" TypeInfo="10" DisplayName="8431" Description="8432">1.0</InsideBackslope>
+						<OutsideWallThickness DataType="Double" TypeInfo="16" DisplayName="8423" Description="8424">0.15</OutsideWallThickness>
+						<OutsideTaperedFaceWidth DataType="Double" TypeInfo="16" DisplayName="8419" Description="8420">0.2</OutsideTaperedFaceWidth>
+						<OutsideHingePointDepth DataType="Double" TypeInfo="16" DisplayName="8435" Description="8436">0.3</OutsideHingePointDepth>
+						<OutsideBenchWidth DataType="Double" TypeInfo="16" DisplayName="8441" Description="8442">1.0</OutsideBenchWidth>
+						<OutsideBenchSlope DataType="Double" TypeInfo="9" DisplayName="8443" Description="8444">0.04</OutsideBenchSlope>
+						<OutsideBackslopeWidth DataType="Double" TypeInfo="16" DisplayName="8437" Description="8438">0.3</OutsideBackslopeWidth>
+						<OutsideBackslope DataType="Double" TypeInfo="10" DisplayName="8439" Description="8440">1.0</OutsideBackslope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5DDDB8A0-F1BF-4790-8102-38B9471A8C23}"/><Properties><ItemName resource="8501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccSideDitchWithLid.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccSideDitchWithLid.png"/></Images><Description resource="8502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_SideDitchWithLid subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_SideDitchWithLid</HelpData></Help><Time createdUniversalDateTime="2006-01-22T22:58:00" modifiedUniversalDateTime="2006-01-22T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.SideDitchWithLid</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8503" Description="8504">R2019</Version>
+						<Side DataType="Long" DisplayName="8505" Description="8506">0
+		          <Enum>
+								<Right DisplayName="8507">0</Right>
+								<Left DisplayName="8508">1</Left>
+							</Enum>
+						</Side>
+						<DitchDepth DataType="Double" TypeInfo="16" DisplayName="8521" Description="8522">0.6</DitchDepth>
+						<DitchBottomWidth DataType="Double" TypeInfo="16" DisplayName="8509" Description="8510">0.3</DitchBottomWidth>
+						<DitchOpeningAtLid DataType="Double" TypeInfo="16" DisplayName="8515" Description="8516">0.6</DitchOpeningAtLid>
+						<LidGapToOpening DataType="Double" TypeInfo="16" DisplayName="8527" Description="8528">0.0</LidGapToOpening>
+						<InsideWallThicknessAtLid DataType="Double" TypeInfo="16" DisplayName="8517" Description="8518">0.15</InsideWallThicknessAtLid>
+						<InsideWallThickness DataType="Double" TypeInfo="16" DisplayName="8511" Description="8512">0.2</InsideWallThickness>
+						<InsideLidDepth DataType="Double" TypeInfo="16" DisplayName="8523" Description="8524">0.2</InsideLidDepth>
+						<DitchBedDepth DataType="Double" TypeInfo="16" DisplayName="8519" Description="8520">0.2</DitchBedDepth>
+						<InsideBenchWidth DataType="Double" TypeInfo="16" DisplayName="8535" Description="8536">0.5</InsideBenchWidth>
+						<InsideBenchSlope DataType="Double" TypeInfo="9" DisplayName="8537" Description="8538">0.04</InsideBenchSlope>
+						<InsideDaylightWidth DataType="Double" TypeInfo="16" DisplayName="8539" Description="8540">0.3</InsideDaylightWidth>
+						<InsideDaylightSlope DataType="Double" TypeInfo="10" DisplayName="8533" Description="8534">1.0</InsideDaylightSlope>
+						<OutsideWallThicknessAtLid DataType="Double" TypeInfo="16" DisplayName="8529" Description="8530">0.15</OutsideWallThicknessAtLid>
+						<OutsideWallThickness DataType="Double" TypeInfo="16" DisplayName="8513" Description="8514">0.2</OutsideWallThickness>
+						<OutsideLidDepth DataType="Double" TypeInfo="16" DisplayName="8525" Description="8526">0.15</OutsideLidDepth>
+						<OutsideHingePointDepth DataType="Double" TypeInfo="16" DisplayName="8531" Description="8532">0.0</OutsideHingePointDepth>
+						<OutsideBenchWidth DataType="Double" TypeInfo="16" DisplayName="8545" Description="8546">1.1</OutsideBenchWidth>
+						<OutsideBenchSlope DataType="Double" TypeInfo="9" DisplayName="8547" Description="8548">0.04</OutsideBenchSlope>
+						<OutsideDaylightWidth DataType="Double" TypeInfo="16" DisplayName="8541" Description="8542">0.3</OutsideDaylightWidth>
+						<OutsideDaylightSlope DataType="Double" TypeInfo="10" DisplayName="8543" Description="8544">1.0</OutsideDaylightSlope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8B738085-E226-45C7-9B2B-3604B2E1F3F3}"/><Properties><ItemName resource="6301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccTrenchPipe1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccTrenchPipe1.png"/></Images><Description resource="6302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_TrenchPipe1 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_TrenchPipe1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.TrenchPipe1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6303" Description="6304">R2019</Version>
+						<Width DataType="Double" TypeInfo="16" DisplayName="6305" Description="6306">2</Width>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="6307" Description="6308">0.333333</Sideslope>
+						<BeddingDepth DataType="Double" TypeInfo="16" DisplayName="6309" Description="6310">0</BeddingDepth>
+						<SpecialBackfillDepth DataType="Double" TypeInfo="16" DisplayName="6311" Description="6212">0</SpecialBackfillDepth>
+						<OffsetToBottom DataType="Double" TypeInfo="16" DisplayName="6313" Description="6214">0</OffsetToBottom>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{44EAD770-75BE-4B13-B384-B3EF94B660C2}"/><Properties><ItemName resource="11401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccTrenchPipe2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccTrenchPipe2.png"/></Images><Description resource="11402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_TrenchPipe2 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_TrenchPipe2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.TrenchPipe2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="11403" Description="11404">R2019</Version>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="11405" Description="11406">0.333333</Sideslope>
+						<BeddingDepth DataType="Double" TypeInfo="16" DisplayName="11407" Description="11408">0</BeddingDepth>
+						<SBMCover DataType="Double" TypeInfo="16" DisplayName="11409" Description="11410">0.0</SBMCover>
+						<SBMDepth DataType="Double" TypeInfo="16" DisplayName="11411" Description="11412">0.0</SBMDepth>
+						<Width DataType="Double" TypeInfo="16" DisplayName="11413" Description="11414">2.0</Width>
+						<PipeNetworkOffset1 DataType="Double" TypeInfo="16" DisplayName="11415" Description="11416">0.0</PipeNetworkOffset1>
+						<PipeNetworkOffset2 DataType="Double" TypeInfo="16" DisplayName="11417" Description="11418">0.0</PipeNetworkOffset2>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C780D2AD-292E-4B70-B700-D5B2838E7B4A}"/><Properties><ItemName resource="11601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccTrenchPipe3.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccTrenchPipe3.png"/></Images><Description resource="11602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_TrenchPipe3 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_TrenchPipe3</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.TrenchPipe3</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="11603" Description="11604">R2019</Version>
+						<Sideslope DataType="Double" TypeInfo="10" DisplayName="11605" Description="11606">0.333333</Sideslope>
+						<BeddingDepth DataType="Double" TypeInfo="16" DisplayName="11607" Description="11608">0</BeddingDepth>
+						<SBMCover DataType="Double" TypeInfo="16" DisplayName="11609" Description="11610">0.0</SBMCover>
+						<SBMDepth DataType="Double" TypeInfo="16" DisplayName="11611" Description="11612">0.0</SBMDepth>
+						<Width DataType="Double" TypeInfo="16" DisplayName="11613" Description="11614">2.0</Width>
+						<PipeNetworkOffset1 DataType="Double" TypeInfo="16" DisplayName="11615" Description="11616">0.0</PipeNetworkOffset1>
+						<PipeNetworkOffset2 DataType="Double" TypeInfo="16" DisplayName="11617" Description="11618">0.0</PipeNetworkOffset2>
+						<SideslopeRock DataType="Double" TypeInfo="10" DisplayName="11619" Description="11620">1.0</SideslopeRock>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C5F94D70-E780-4C38-B607-E0550C075BAA}"/><Properties><ItemName resource="8601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Trench Pipe\64\light\AeccTrenchWithPipe.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Trench Pipe\64\dark\AeccTrenchWithPipe.png"/></Images><Description resource="8602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_TrenchWithPipe subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_TrenchWithPipe</HelpData></Help><Time createdUniversalDateTime="2006-01-20T22:58:00" modifiedUniversalDateTime="2006-01-20T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.TrenchWithPipe</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8603" Description="8604">R2019</Version>
+						<Side DataType="Long" DisplayName="8605" Description="8606">0
+		          <Enum>
+								<Right DisplayName="8607">0</Right>
+								<Left DisplayName="8608">1</Left>
+							</Enum>
+						</Side>
+						<AttachmentPoint DataType="Long" DisplayName="8609" Description="8610">2
+		          <Enum>
+								<TopCenter DisplayName="8611">0</TopCenter>
+								<BottomCenter DisplayName="8612">1</BottomCenter>
+								<TopCorner DisplayName="8613">2</TopCorner>
+							</Enum>
+						</AttachmentPoint>
+						<BottomWidth DataType="Double" TypeInfo="16" DisplayName="8614" Description="8615">0.3</BottomWidth>
+						<TopWidth DataType="Double" TypeInfo="16" DisplayName="8616" Description="8617">0.5</TopWidth>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="8618" Description="8619">0.6</Depth>
+						<BeddingDepth DataType="Double" TypeInfo="16" DisplayName="8620" Description="8621">0.2</BeddingDepth>
+						<DrainPipeDiameter DataType="Double" TypeInfo="16" DisplayName="8622" Description="8623">0.2</DrainPipeDiameter>
+						<PipeThickness DataType="Double" TypeInfo="16" DisplayName="8624" Description="8625">0.03</PipeThickness>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{23679187-2C80-4B73-A01C-107A942445F2}"/><Properties><ItemName resource="51027" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

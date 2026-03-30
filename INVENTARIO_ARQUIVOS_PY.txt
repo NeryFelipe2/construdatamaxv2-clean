@@ -1,0 +1,110 @@
+================================================================================================================================================================
+INVENTÁRIO COMPLETO DE ARQUIVOS .PY
+Comparação entre 'NOVA NS Versão 5' e 'CONSTRUDATAMAX/backend'
+================================================================================================================================================================
+
+RESUMO GERAL:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total de arquivos .py em NOVA NS Versão 5: 907
+Arquivos na RAIZ: 86
+  - Com equivalente no backend: 29
+  - SEM equivalente no backend: 57
+Arquivos em subpastas: 821
+
+ARQUIVOS DA RAIZ (ORDENADOS):
+================================================================================================================================================================
+
+| Arquivo | Funções principais | Equivalente? |
+|:---|:---|:---|
+| ANALYTICS_COMPLETO.py |  | NÃO |
+| ConstruData_SABESP_v5.py | def log, def _fmtv | NÃO |
+| LER_DWG_BIM.py |  | NÃO |
+| LER_DWG_DIRETO.py | def encontrar_oda, def converter_dwg_dxf_oda | NÃO |
+| TESTE_DWG_COMPLETO.py |  | NÃO |
+| analisar_dwg.py |  | NÃO |
+| automacao_civil3d.py | def encontrar_janela_civil3d, def atalho_teclado | NÃO |
+| consolidar_ns.py | def listar_todos_arquivos_ns, def extrair_dados_js | NÃO |
+| construdata_analytics.py | def carregar_dados, def preparar_features | SIM - motors\construdata_analytics.py |
+| construdata_gui.py | def _try_import, class HydroNetworkApp | NÃO |
+| construdata_integrador.py | def log, def modo_importar_geo | NÃO |
+| construdata_pipeline.py | def _nucleo_upper, def _nucleo_slug | SIM - importers\construdata_pipeline.py |
+| construdata_planner.py | def log, def detectar_layers | NÃO |
+| construdata_sabesp_v5_FINAL.py | def log, def _fmtv | NÃO |
+| corrigir_rede_esgoto.py | def log, def dist | NÃO |
+| database.py | class BancoDeDados, def criar_banco_exemplo | SIM - core\database.py |
+| debug_extracao.py |  | NÃO |
+| debug_tubos.py |  | NÃO |
+| diagnostico_dxf_completo.py | def _log, def verificar_dependencias | NÃO |
+| diagnostico_teteu.py |  | NÃO |
+| gerar_apresentacao.py | def _f, def _i | NÃO |
+| gerar_cadastro_nts292.py | def _setup_doc, def _draw_pv_symbol | SIM - generators\gerar_cadastro_nts292.py |
+| gerar_civil3d.py | def log, def gerar_landxml | SIM - generators\gerar_civil3d.py |
+| gerar_compras.py | def calcular_materiais_ns, def consolidar_compras | NÃO |
+| gerar_cronograma.py | def pf, def fn | SIM - generators\gerar_cronograma.py |
+| gerar_cronograma_macro.py | def _dias_uteis, def gerar_cronograma_nucleo | SIM - generators\gerar_cronograma_macro.py |
+| gerar_cronograma_ns.py | def _dias_uteis, def gerar_cronograma_ns | NÃO |
+| gerar_estatistica_ml.py |  | NÃO |
+| gerar_exemplo_ns.py |  | NÃO |
+| gerar_guia_ml.py | def pf, def fn | NÃO |
+| gerar_guia_ml_p2.py | def pf, def fn | NÃO |
+| gerar_ifc_lod500.py | def _log, def _calc_manning | SIM - generators\gerar_ifc_lod500.py |
+| gerar_medicao_curva_s.py | def _dias_uteis_entre, def gerar_medicao_curva_s | SIM - generators\gerar_medicao_curva_s.py |
+| gerar_ns.py | def _criar_estrutura_v9, def _ns_folder_name | SIM - generators\gerar_ns.py |
+| gerar_ns_sao_manuel_joao_carlos.py | def gerar_ns_a4, def gerar_ns_desenho | NÃO |
+| gerar_ns_todos_nucleos.py | def gerar_desenho_completo, def gerar_satelite_com | NÃO |
+| gerar_ns_v4.py | def log, def calc_manning | NÃO |
+| gerar_ose.py | def _fmtv, def gerar_ose | NÃO |
+| gerar_pdf_perdas.py | def _cor, def gerar_pdf_perdas | SIM - generators\gerar_pdf_perdas.py |
+| gerar_project_xml.py | def _add_task, def gerar_project_xml | SIM - generators\gerar_project_xml.py |
+| gerar_trechos_completo.py | def preco_tubo, def pav_tipo | NÃO |
+| gerar_trechos_inferidos.py | def classificar, def dn_por_ligs | NÃO |
+| gerar_trechos_mega.py | def _f, def _i | NÃO |
+| gerar_trechos_recortados.py | def _f, def _i | NÃO |
+| gerar_tudo_nucleos.py |  | NÃO |
+| gerar_xlsx.py | def _hdr, def _dat | NÃO |
+| integrador_nova_ns.py | def processar_dxf, def processar_pasta | NÃO |
+| investigar_tubos_sem_pv.py |  | NÃO |
+| ler_dwg_aec.py | def _log, def _get_temp_dir | SIM - importers\ler_dwg_aec.py |
+| ler_dwg_universal.py | def _log, def _encontrar_oda | NÃO |
+| ler_dxf_gdal.py | def _log, def _parse_dn | SIM - importers\ler_dxf_gdal.py |
+| ler_landxml.py | def ler_landxml | SIM - importers\ler_landxml.py |
+| ml_classificador.py | def extrair_features, def salvar_decisoes | NÃO |
+| models.py | class TipoPV, class MaterialTubo | SIM - core\models.py |
+| monitor_leitura_dxf.py | class DXFReadMonitor, def testar_leitura_gdal | NÃO |
+| motor_contratos.py | def _ensure_dirs, def _slug | SIM - motors\motor_contratos.py |
+| motor_custo.py | def custo_trecho, def custo_nucleo | SIM - motors\motor_custo.py |
+| motor_gemini.py | def _get_api_key, def _get_client | SIM - motors\motor_gemini.py |
+| motor_lean_lps.py | def calcular_6d_trecho, def gerar_6d_nucleo | SIM - motors\motor_lean_lps.py |
+| motor_llm.py | def _load_config, def _save_config | SIM - motors\motor_llm.py |
+| motor_medicao.py | def carregar_execucao_xlsx, def carregar_execucao_ | SIM - motors\motor_medicao.py |
+| motor_microplanejamento.py | def classificar_morfologia_trecho, def classificar | SIM - motors\motor_microplanejamento.py |
+| motor_ml.py | def prever_producao, def analisar_gargalos | SIM - motors\motor_ml.py |
+| motor_parametrico.py | class PipeNetwork | SIM - motors\motor_parametrico.py |
+| motor_perdas.py | def _idade_categoria, def balanco_hidrico | SIM - motors\motor_perdas.py |
+| motor_status_ns.py | def _agora, def _status_path | SIM - motors\motor_status_ns.py |
+| motor_teteu_esgoto.py | def _log, def _parse_dn | NÃO |
+| processar_lote_dxf_ns.py | def _slug_ascii, def _classificar_arquivo | NÃO |
+| processar_prolongamentos.py | def main | NÃO |
+| processar_sao_manoel.py | def main | NÃO |
+| processar_sao_manoel_1.py | def main | NÃO |
+| slnr_mestre_ml.py | class SLNRMLIntegrador | SIM - motors\slnr_mestre_ml.py |
+| test_crs_verificacao.py | def verificar_crs | NÃO |
+| test_ler_dxf_gdal.py | def _gdf, def test_rejeita_dxf_sem_assinatura_pros | NÃO |
+| test_novas_classes.py | def testar_classes, def testar_sqlite | NÃO |
+| test_snap_diagnostico.py | def diagnosticar_snap | NÃO |
+| testar_crs_lote.py | def verificar_crs_lote | NÃO |
+| testar_dwg_sao_manoel.py |  | NÃO |
+| testar_landxml.py |  | NÃO |
+| testar_lote_dxf.py | def testar_dxf, def testar_pasta | NÃO |
+| testar_sao_manoel_1.py |  | NÃO |
+| verificar_dwg.py |  | NÃO |
+| verificar_redes.py |  | NÃO |
+| verificar_tipo_rede.py |  | NÃO |
+| verificar_tubos.py |  | NÃO |
+| whatsapp_receiver.py | def _registrar_executada, def _registrar_dados_cam | SIM - motors\whatsapp_receiver.py |
+
+================================================================================================================================================================
+ANÁLISE:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Taxa de cobertura (raiz): 33%
+Arquivos únicos na V5 (sem equivalente): 57

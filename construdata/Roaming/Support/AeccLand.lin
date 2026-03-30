@@ -1,0 +1,28 @@
+;;  AutoCAD Land Development Desktop Complex Linetype file
+;;  Version 1.0
+;;  Copyright (C) 1998 by Autodesk, Inc.
+;;
+*BARBWIRE_1, Barbed Wire Fence with spaces
+A,1.0,-.1,["X",STANDARD,S=.075,R=0.0,X=-0.025,Y=-.0375],-.1
+*BARBWIRE_2, Barbed Wire Fence without spaces
+A,1.0,-.02,["X",STANDARD,S=.075,R=0.0,X=-0.025,Y=-.0375],-.02
+*CHAINLINK_1, Chain Link Fence with spaces
+A,.75,-.1,[CIRCLE,AECCLAND,x=-.0325,s=.0325],-.1,.5
+*CHAINLINK_2, Chain Link Fence without spaces
+A,.75,-.0325,[CIRCLE,AECCLAND,x=-.0325,s=.0325],-.0325,.5
+*GUARD_L, Guardrail, posts on left
+A,0,[CIRCLE,AECCLAND,s=.0175,r=90],.305663,[CIRCLE,AECCLAND,s=.0175,r=90]
+*GUARD_R, Guardrail, posts on right
+A,0,[CIRCLE,AECCLAND,s=.0175,r=270],.305663,[CIRCLE,AECCLAND,s=.0175,r=270]
+*STOCKADE_1, Stockade Fence with spaces
+A,.75,-.1,[BOX,AECCLAND,x=-.025,s=.025],-.1,.5
+*STOCKADE_2, Stockade Fence without spaces
+A,.75,-.05,[BOX,AECCLAND,x=-.025,s=.025],-.05,.5
+*STONEWALL, Stone Wall
+A,0,-.0625,[STONE,AECCLAND,s=1],-.06303
+*TREELINE_L, Tree Line left side
+A,0,-.13,[TREE,AECCLAND,s=.13],-.12
+*TREELINE_R, Tree Line right side
+A,0,-.13,[TREE,AECCLAND,s=.13,r=180],-.12
+
+

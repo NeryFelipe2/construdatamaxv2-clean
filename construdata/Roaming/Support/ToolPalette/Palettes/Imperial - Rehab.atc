@@ -1,0 +1,301 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{211CBAD4-D02C-470F-AEFF-3536BC7D5829}"/><Properties><ItemName resource="51031" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:29:32" modifiedUniversalDateTime="2009-01-04T11:55:37"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{B62E6B06-4644-4BD3-8659-2B0410DB2E3B}"/><Properties><ItemName resource="51032" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{648CAD1C-4552-4F3A-B2C5-F05435F6A8A7}"/><Properties><ItemName resource="4901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayBrokenBackBetweenEdges.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayBrokenBackBetweenEdges.png"/></Images><Description resource="4902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayBrokenBackBetweenEdges subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayBrokenBackBetweenEdges</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayBrokenBackBetweenEdges</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4903" Description="4904">R2019</Version>
+						<LeftFlangeOffset DataType="Double" TypeInfo="16" DisplayName="4905" Description="4906">-18</LeftFlangeOffset>
+						<RightFlangeOffset DataType="Double" TypeInfo="16" DisplayName="4907" Description="4908">18</RightFlangeOffset>
+						<LeftFlangeMarkedPoint DataType="String" DisplayName="4909" Description="4910">none</LeftFlangeMarkedPoint>
+						<RightFlangeMarkedPoint DataType="String" DisplayName="4911" Description="4912">none</RightFlangeMarkedPoint>
+						<MinimumOverlayDepth DataType="Double" TypeInfo="16" DisplayName="4913" Description="4914">0.33</MinimumOverlayDepth>
+						<InsideMinSlope DataType="Double" TypeInfo="9" DisplayName="4915" Description="4916">-0.01</InsideMinSlope>
+						<InsideMaxSlope DataType="Double" TypeInfo="9" DisplayName="4917" Description="4918">-0.04</InsideMaxSlope>
+						<OutsideMinSlope DataType="Double" TypeInfo="9" DisplayName="4919" Description="4920">-0.02</OutsideMinSlope>
+						<OutsideMaxSlope DataType="Double" TypeInfo="9" DisplayName="4921" Description="4922">-0.06</OutsideMaxSlope>
+						<MaxBreakover DataType="Double" TypeInfo="9" DisplayName="4923" Description="4924">0.04</MaxBreakover>
+						<MinCrownDeflection DataType="Double" TypeInfo="16" DisplayName="4925" Description="4926">0.16</MinCrownDeflection>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{675BFE0F-7D50-4DE5-BDBE-A86AF475D7D1}"/><Properties><ItemName resource="5001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayBrokenBackOverGutters.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayBrokenBackOverGutters.png"/></Images><Description resource="5002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayBrokenBackOverGutters subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayBrokenBackOverGutters</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayBrokenBackOverGutters</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5003" Description="5004">R2019</Version>
+						<LeftGutterOffset DataType="Double" TypeInfo="16" DisplayName="5005" Description="5006">-18</LeftGutterOffset>
+						<RightGutterOffset DataType="Double" TypeInfo="16" DisplayName="5007" Description="5008">18</RightGutterOffset>
+						<LeftGutterMarkedPoint DataType="String" DisplayName="5009" Description="5010">none</LeftGutterMarkedPoint>
+						<RightGutterMarkedPoint DataType="String" DisplayName="5011" Description="5012">none</RightGutterMarkedPoint>
+						<MinimumOverlayDepth DataType="Double" TypeInfo="16" DisplayName="5013" Description="5014">0.33</MinimumOverlayDepth>
+						<InsideMinSlope DataType="Double" TypeInfo="9" DisplayName="5015" Description="5016">-0.01</InsideMinSlope>
+						<InsideMaxSlope DataType="Double" TypeInfo="9" DisplayName="5017" Description="5018">-0.04</InsideMaxSlope>
+						<OutsideMinSlope DataType="Double" TypeInfo="9" DisplayName="5019" Description="5020">-0.02</OutsideMinSlope>
+						<OutsideMaxSlope DataType="Double" TypeInfo="9" DisplayName="5021" Description="5022">-0.06</OutsideMaxSlope>
+						<MaxBreakover DataType="Double" TypeInfo="9" DisplayName="5023" Description="5024">0.04</MaxBreakover>
+						<MinCrownDeflection DataType="Double" TypeInfo="16" DisplayName="5025" Description="5026">0.16</MinCrownDeflection>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CB6111C9-C366-4C7C-82BD-D6C63F28E2EC}"/><Properties><ItemName resource="5101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayCrownBetweenEdges.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayCrownBetweenEdges.png"/></Images><Description resource="5102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayCrownBetweenEdges subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayCrownBetweenEdges</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayCrownBetweenEdges</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5103" Description="5104">R2019</Version>
+						<LeftEdgeOffset DataType="Double" TypeInfo="16" DisplayName="5105" Description="5106">-12</LeftEdgeOffset>
+						<RightEdgeOffset DataType="Double" TypeInfo="16" DisplayName="5107" Description="5108">12</RightEdgeOffset>
+						<LeftEdgeMarkedPoint DataType="String" DisplayName="5109" Description="5110">none</LeftEdgeMarkedPoint>
+						<RightEdgeMarkedPoint DataType="String" DisplayName="5111" Description="5112">none</RightEdgeMarkedPoint>
+						<CrownHeight DataType="Double" TypeInfo="16" DisplayName="5113" Description="5114">0.33</CrownHeight>
+						<MinSlope DataType="Double" TypeInfo="9" DisplayName="5115" Description="5116">-0.01</MinSlope>
+						<MaxSlope DataType="Double" TypeInfo="9" DisplayName="5117" Description="5118">-0.03</MaxSlope>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5119" Description="5120">0.3</OverlayDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3070DC95-8990-45DD-922F-37D993BE3534}"/><Properties><ItemName resource="5201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayMedianAsymmetrical.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayMedianAsymmetrical.png"/></Images><Description resource="5202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMedianAsymmetrical subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayMedianAsymmetrical</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayMedianAsymmetrical</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5203" Description="5204">R2019</Version>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5205" Description="5206">0.3</OverlayDepth>
+						<LeftInsertOffset DataType="Double" TypeInfo="16" DisplayName="5207" Description="5208">0.0</LeftInsertOffset>
+						<LISOffset DataType="Double" TypeInfo="16" DisplayName="5209" Description="5210">0.0</LISOffset>
+						<LOSOffset DataType="Double" TypeInfo="16" DisplayName="5211" Description="5212">0.0</LOSOffset>
+						<RightInsertOffset DataType="Double" TypeInfo="16" DisplayName="5213" Description="5214">0.0</RightInsertOffset>
+						<RISOffset DataType="Double" TypeInfo="16" DisplayName="5215" Description="5216">0.0</RISOffset>
+						<ROSOffset DataType="Double" TypeInfo="16" DisplayName="5217" Description="5218">0.0</ROSOffset>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="5219" Description="5220">2.666667</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="5221" Description="5222">0.75</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="5223" Description="5224">0.166667</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="5225" Description="5226">0.416667</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="5227" Description="5228">1.833333</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="5229" Description="5230">0.583333</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{826668FC-2369-4968-AC30-78FE1DCD587A}"/><Properties><ItemName resource="5301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayMedianSymmetrical.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayMedianSymmetrical.png"/></Images><Description resource="5302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMedianSymmetrical subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayMedianSymmetrical</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayMedianSymmetrical</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5303" Description="5304">R2019</Version>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5305" Description="5306">0.3</OverlayDepth>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="5307" Description="5308">0.05</SlopeTolerance>
+						<LeftInsertOffset DataType="Double" TypeInfo="16" DisplayName="5309" Description="5310">0.0</LeftInsertOffset>
+						<LISOffset DataType="Double" TypeInfo="16" DisplayName="5311" Description="5312">0.0</LISOffset>
+						<LOSOffset DataType="Double" TypeInfo="16" DisplayName="5313" Description="5314">0.0</LOSOffset>
+						<RightInsertOffset DataType="Double" TypeInfo="16" DisplayName="5315" Description="5316">0.0</RightInsertOffset>
+						<RISOffset DataType="Double" TypeInfo="16" DisplayName="5317" Description="5318">0.0</RISOffset>
+						<ROSOffset DataType="Double" TypeInfo="16" DisplayName="5319" Description="5320">0.0</ROSOffset>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="5321" Description="5322">2.666667</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="5323" Description="5324">0.75</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="5325" Description="5326">0.166667</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="5327" Description="5328">0.416667</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="5329" Description="5330">1.833333</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="5331" Description="5332">0.583333</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{89752159-8E3C-4A0A-A33E-455BD5E174FC}"/><Properties><ItemName resource="5401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayMillAndLevel1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayMillAndLevel1.png"/></Images><Description resource="5402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMillAndLevel1 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayMillAndLevel1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayMillAndLevel1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5403" Description="5404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<InsideTrimPoint DataType="Double" TypeInfo="16" DisplayName="5405" Description="5406">0</InsideTrimPoint>
+						<InsideSamplePoint DataType="Double" TypeInfo="16" DisplayName="5407" Description="5408">0</InsideSamplePoint>
+						<OutsideTrimPoint DataType="Double" TypeInfo="16" DisplayName="5409" Description="5410">0</OutsideTrimPoint>
+						<OutsideSamplePoint DataType="Double" TypeInfo="16" DisplayName="5411" Description="5412">0</OutsideSamplePoint>
+						<OverlaySlopeOptions DataType="Long" DisplayName="5425" Description="5426">1
+							<Enum>
+								<UserDefined DisplayName="5427">0</UserDefined>
+								<MatchSlope DisplayName="5428">1</MatchSlope>
+								<LO DisplayName="5429">2</LO>
+							</Enum>
+						</OverlaySlopeOptions>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="5430" Description="5431">-0.02</DefaultSlope>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="5415" Description="5416">0.005</SlopeTolerance>
+						<UseProfile DataType="Long" DisplayName="5417" Description="5418">0
+						   	<Enum>
+								<True DisplayName="5419">1</True>
+								<False DisplayName="5420">0</False>
+							</Enum>
+						</UseProfile>
+						<MinimumClearance DataType="Double" TypeInfo="16" DisplayName="5421" Description="5422">0.3</MinimumClearance>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5423" Description="5424">0.3</OverlayDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{14B55B80-6E4B-4371-8AA4-6485DDB51774}"/><Properties><ItemName resource="5501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayMillAndLevel2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayMillAndLevel2.png"/></Images><Description resource="5502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMillAndLevel2 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayMillAndLevel2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayMillAndLevel2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5503" Description="5504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+              <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<CrownPoint DataType="Double" TypeInfo="16" DisplayName="5505" Description="5506">0</CrownPoint>
+						<LeftSamplePoint DataType="Double" TypeInfo="16" DisplayName="5507" Description="5508">0</LeftSamplePoint>
+						<RightSamplePoint DataType="Double" TypeInfo="16" DisplayName="5509" Description="5510">0</RightSamplePoint>
+						<LeftTrimPoint DataType="Double" TypeInfo="16" DisplayName="5511" Description="5512">0</LeftTrimPoint>
+						<RightTrimPoint DataType="Double" TypeInfo="16" DisplayName="5513" Description="5514">0</RightTrimPoint>
+						<LeftOverlaySlopeOptions DataType="Long" DisplayName="5529" Description="5530">1
+							<Enum>
+								<UserDefined DisplayName="5531">0</UserDefined>
+								<MatchSlope DisplayName="5532">1</MatchSlope>
+								<LO DisplayName="5533">2</LO>
+							</Enum>
+						</LeftOverlaySlopeOptions>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="5534" Description="5535">-0.02</LeftDefaultSlope>
+						<RightOverlaySlopeOptions DataType="Long" DisplayName="5536" Description="5537">1
+							<Enum>
+								<UserDefined DisplayName="5538">0</UserDefined>
+								<MatchSlope DisplayName="5539">1</MatchSlope>
+								<LO DisplayName="5540">2</LO>
+							</Enum>
+						</RightOverlaySlopeOptions>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="5541" Description="5542">-0.02</RightDefaultSlope>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="5519" Description="5520">0.005</SlopeTolerance>
+						<UseProfile DataType="Long" DisplayName="5521" Description="5522">0
+						   	<Enum>
+								<True DisplayName="5523">1</True>
+								<False DisplayName="5524">0</False>
+							</Enum>
+						</UseProfile>
+						<MinimumClearance DataType="Double" TypeInfo="16" DisplayName="5525" Description="5526">0.3</MinimumClearance>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5527" Description="5528">0.3</OverlayDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{35965829-93F1-47D2-B3E6-48CCD2AB3AA4}"/><Properties><ItemName resource="5601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayParabolic.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayParabolic.png"/></Images><Description resource="5602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayParabolic subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayParabolic</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayParabolic</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5603" Description="5604">R2019</Version>
+						<LeftFlangeOffset DataType="Double" TypeInfo="16" DisplayName="5605" Description="5606">-24.0</LeftFlangeOffset>
+						<RightFlangeOffset DataType="Double" TypeInfo="16" DisplayName="5607" Description="5608">24.0</RightFlangeOffset>
+						<LeftFlangeMarkedPoint DataType="String" DisplayName="5609" Description="5610">none</LeftFlangeMarkedPoint>
+						<RightFlangeMarkedPoint DataType="String" DisplayName="5611" Description="5612">none</RightFlangeMarkedPoint>
+						<CrownHeight DataType="Double" TypeInfo="16" DisplayName="5613" Description="5614">0.3333</CrownHeight>
+						<MinSlope DataType="Double" TypeInfo="9" DisplayName="5615" Description="5616">-0.01</MinSlope>
+						<MaxSlope DataType="Double" TypeInfo="9" DisplayName="5617" Description="5618">-0.04</MaxSlope>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5619" Description="5620">0.083</OverlayDepth>
+						<NumberOfIncrements DataType="Long" TypeInfo="0" DisplayName="5621" Description="5622">8</NumberOfIncrements>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4FB1FBDA-F0EA-4169-B08C-3522371593D0}"/><Properties><ItemName resource="10101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayWidenFromCurb.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayWidenFromCurb.png"/></Images><Description resource="10102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayWidenFromCurb subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayWidenFromCurb</HelpData></Help><Time createdUniversalDateTime="2006-08-21T09:58:00" modifiedUniversalDateTime="2006-08-21T09:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayWidenFromCurb</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10103" Description="10104">R2019</Version>
+						<Side DataType="Long" DisplayName="10105" Description="10106">0
+							<Enum>
+								<Right DisplayName="10107">0</Right>
+								<Left DisplayName="10108">1</Left>
+							</Enum>
+						</Side>
+						<WideningWidth DataType="Double" TypeInfo="16" DisplayName="10109" Description="10110">12.0</WideningWidth>
+						<OverlayWidth DataType="Double" TypeInfo="16" DisplayName="10111" Description="10112">12.0</OverlayWidth>
+						<Slope DataType="Double" TypeInfo="9" DisplayName="10113" Description="10114">-0.02</Slope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="10115" Description="10116">0.083</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="10117" Description="10118">0.083</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="10119" Description="10120">0.333</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="10121" Description="10122">1.0</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{363138CB-8435-4863-89C6-16AEF63E3B79}"/><Properties><ItemName resource="5701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayWidenMatchSlope1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayWidenMatchSlope1.png"/></Images><Description resource="5702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayWidenMatchSlope1 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayWidenMatchSlope1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayWidenMatchSlope1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5703" Description="5704">R2019</Version>
+						<SampleOffset DataType="Double" TypeInfo="16" DisplayName="5705" Description="5706">0.0</SampleOffset>
+						<InsertOffset DataType="Double" TypeInfo="16" DisplayName="5707" Description="5708">0.0</InsertOffset>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5709" Description="5710">0.3</OverlayDepth>
+						<Width DataType="Double" TypeInfo="16" DisplayName="5711" Description="5712">12.0</Width>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="5713" Description="5714">0.083</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="5715" Description="5716">0.083</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="5717" Description="5718">0.333</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="5719" Description="5720">1</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0EE8274A-A09A-47B4-BCCB-64A65389D262}"/><Properties><ItemName resource="5801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayWidenMatchSlope2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayWidenMatchSlope2.png"/></Images><Description resource="5802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayWidenMatchSlope2 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayWidenMatchSlope2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayWidenMatchSlope2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5803" Description="5804">R2019</Version>
+						<LeftOffset DataType="Double" TypeInfo="16" DisplayName="5805" Description="5806">0.0</LeftOffset>
+						<RightOffset DataType="Double" TypeInfo="16" DisplayName="5807" Description="5808">0.0</RightOffset>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5809" Description="5810">0.3</OverlayDepth>
+						<LeftWidth DataType="Double" TypeInfo="16" DisplayName="5811" Description="5812">12</LeftWidth>
+						<RightWidth DataType="Double" TypeInfo="16" DisplayName="5813" Description="5814">12</RightWidth>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="5815" Description="5816">0.083</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="5817" Description="5818">0.083</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="5819" Description="5820">0.333</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="5821" Description="5822">1</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E3DF4067-BDFD-483C-8025-FA5275E476CC}"/><Properties><ItemName resource="5901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rehab\64\light\AeccOverlayWidenWithSuper1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rehab\64\dark\AeccOverlayWidenWithSuper1.png"/></Images><Description resource="5902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayWidenWithSuper1 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_OverlayWidenWithSuper1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.OverlayWidenWithSuper1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="5903" Description="5904">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<ControlPointOffset DataType="Double" TypeInfo="16" DisplayName="5905" Description="5906">0.0</ControlPointOffset>
+						<InsertPointOffset DataType="Double" TypeInfo="16" DisplayName="5907" Description="5908">0.0</InsertPointOffset>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="5909" Description="5910">0.3</OverlayDepth>
+						<Width DataType="Double" TypeInfo="16" DisplayName="5911" Description="5912">12.0</Width>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="5913" Description="5914">0.083</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="5915" Description="5916">0.083</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="5917" Description="5918">0.333</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="5919" Description="5920">1.0</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B62E6B06-4644-4BD3-8659-2B0410DB2E3B}"/><Properties><ItemName resource="51032" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

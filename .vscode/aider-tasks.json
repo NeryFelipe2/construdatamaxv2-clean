@@ -1,0 +1,27 @@
+[
+  {
+    "label": "Rodar Pytest e corrigir",
+    "description": "Executa os testes com o Python local do workspace e pede correcao das falhas no contexto atual.",
+    "command": "/run C:\\Users\\felip\\AppData\\Local\\Python\\bin\\python.exe -m pytest -q\nSe houver falhas, corrija primeiro os arquivos do contexto atual e explique a causa raiz."
+  },
+  {
+    "label": "Review tecnico",
+    "description": "Faz uma revisao focada em bugs, regressao comportamental e lacunas de teste.",
+    "command": "Faca code review dos arquivos no contexto atual. Priorize bugs, regressoes comportamentais, riscos e testes faltantes. Liste os achados antes de propor mudancas."
+  },
+  {
+    "label": "Refatorar contexto",
+    "description": "Reduz duplicacao e simplifica a implementacao preservando comportamento.",
+    "command": "Refatore os arquivos no contexto atual para reduzir duplicacao, melhorar nomes e simplificar trechos complexos, preservando comportamento."
+  },
+  {
+    "label": "Docstrings e tipos",
+    "description": "Adiciona docstrings objetivas e type hints uteis sem alterar a logica.",
+    "command": "Adicione docstrings objetivas e type hints uteis aos arquivos do contexto atual, sem alterar a logica."
+  },
+  {
+    "label": "Atualizar docs",
+    "description": "Atualiza README, logs ou manuais relacionados ao contexto atual.",
+    "command": "Atualize a documentacao relevante para os arquivos no contexto atual. Prefira README, manuais e logs ja existentes no repositorio."
+  }
+]

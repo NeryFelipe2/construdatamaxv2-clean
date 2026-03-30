@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0" Name="C3DRENESG" Description="Urban Drain and Sewer Calculation" ProductCode="{AF376ED1-A3FD-4038-815A-16F5BA683787}" AppNameSpace="appstore.exchange.autodesk.com" OnlineDocumentation="https://tbn2net.com/help/C3DRENESG4" Author="Neyton Luiz Dalle Molle" HelpFile="./Contents/help.html" AutodeskProduct="AutoCAD" AppVersion="9125.0.0" FriendlyVersion="9125.0.0" ProductType="Application" HelpFilePtb="./Contents/help.html" SupportedLocales="Enu|Ptb" UpgradeCode="{D5BF9192-4DD8-4D48-B513-19A6E74C9B87}" Icon="./Contents/Resources/C3drenrsg.ico" DescriptionPtb="Plugin para dimensionamento de redes de drenagem e esgoto urbanos." IconPtb="./Contents/Resources/C3drenrsg.ico">
+  <CompanyDetails Name="TBN2NET" Email="neyton@tbn2net.com" Url="https://tbn2net.com/C3DRENESG4" Phone="+55 98 99995 3538" />
+  <RuntimeRequirements />
+  <Components Description="Civil 3D 2014 to 2017">
+    <RuntimeRequirements OS="Win32|Win64" Platform="Civil3D" SeriesMin="R19.1" SeriesMax="R21.0" />
+    <ComponentEntry AppName="C3DRENESG4" Version="9125.0.0" ModuleName="./Contents/C3DRENESG4_2014.DLL" ModuleNamePtb="./Contents/C3DRENESG4_2014.DLL" AppDescription="DLL 2014 to 2017" LoadOnAutoCADStartup="True">
+      <Commands>
+        <Command Global="C3DCalc" />
+        <Command Global="CALIN" />
+        <Command Global="CAPAGASARJ" />
+        <Command Global="CAREA" />
+        <Command Global="CCalcEsconsidade" />
+        <Command Global="CDefSarj" />
+        <Command Global="CDelA" />
+        <Command Global="CdrawParts" />
+        <Command Global="CEditSecaoSarj" />
+        <Command Global="Cinstalal" />
+        <Command Global="Clist" />
+        <Command Global="Cnum" />
+        <Command Global="Coffset" />
+        <Command Global="Crecon" />
+        <Command Global="Creset" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+  <Components Description="Civil 3D 2018 to 2022">
+    <RuntimeRequirements OS="Win32|Win64" Platform="Civil3D" SeriesMin="R22.0" SeriesMax="R24.1" />
+    <ComponentEntry AppName="C3DRENESG4" Version="9125.0.0" ModuleName="./Contents/C3DRENESG4_2018.DLL" ModuleNamePtb="./Contents/C3DRENESG4_2018.DLL" AppDescription="DLL 2018" LoadOnAutoCADStartup="True">
+      <Commands>
+        <Command Global="C3DCalc" />
+        <Command Global="CALIN" />
+        <Command Global="CAPAGASARJ" />
+        <Command Global="CAREA" />
+        <Command Global="CCalcEsconsidade" />
+        <Command Global="CDefSarj" />
+        <Command Global="CDelA" />
+        <Command Global="CdrawParts" />
+        <Command Global="CEditRules" />
+        <Command Global="CEditSecaoSarj" />
+        <Command Global="Cinstala" />
+        <Command Global="Clist" />
+        <Command Global="Cnum" />
+        <Command Global="Coffset" />
+        <Command Global="Crecon" />
+        <Command Global="Creset" />
+        <Command Global="Cresumo" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+  <Components Description="Ribbon CUIx">
+    <RuntimeRequirements OS="Win32|Win64" Platform="Civil3D" SeriesMin="R18.2" SeriesMax="R24.1" />
+    <ComponentEntry AppName="CUIx" Version="9125.0.0" ModuleName="./Contents/C3DRENESG.cuix" ModuleNamePtb="./Contents/C3DRENESG.cuix" AppDescription="Menus" LoadOnAppearance="False" LoadOnAutoCADStartup="True" LoadOnCommandInvocation="False" />
+  </Components>
+</ApplicationPackage>

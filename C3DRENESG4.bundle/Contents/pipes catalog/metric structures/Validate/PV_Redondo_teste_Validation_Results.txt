@@ -1,0 +1,24 @@
+Begin Part Validation | PV_Redondo_teste
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- teste
+OK: Part Description parameter validated -- PV_Redondo_teste
+OK: Part Name parameter validated -- PV_Redondo_teste
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 89F5861D-1B98-4BA9-B99B-001058AECE0F
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSD uses Context=StructDiameter
+ 
+OK: Query validation successful
+
+OK: Part Validated | PV_Redondo\PV_Redondo_teste.xml

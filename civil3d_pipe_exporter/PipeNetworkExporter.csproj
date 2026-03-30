@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AutoCADRoot Condition="'$(AutoCADRoot)' == ''">C:\Program Files\Autodesk\AutoCAD 2026</AutoCADRoot>
+    <Civil3DRoot Condition="'$(Civil3DRoot)' == ''">$(AutoCADRoot)\C3D</Civil3DRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="acmgd">
+      <HintPath>$(AutoCADRoot)\acmgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="acdbmgd">
+      <HintPath>$(AutoCADRoot)\acdbmgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="accoremgd">
+      <HintPath>$(AutoCADRoot)\accoremgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AeccDbMgd">
+      <HintPath>$(Civil3DRoot)\AeccDbMgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AecBaseMgd">
+      <HintPath>$(AutoCADRoot)\ACA\AecBaseMgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CheckAutodeskReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(AutoCADRoot)\acmgd.dll')" Text="AutoCAD .NET reference not found: $(AutoCADRoot)\acmgd.dll" />
+    <Error Condition="!Exists('$(AutoCADRoot)\acdbmgd.dll')" Text="AutoCAD .NET reference not found: $(AutoCADRoot)\acdbmgd.dll" />
+    <Error Condition="!Exists('$(AutoCADRoot)\accoremgd.dll')" Text="AutoCAD .NET reference not found: $(AutoCADRoot)\accoremgd.dll" />
+    <Error Condition="!Exists('$(Civil3DRoot)\AeccDbMgd.dll')" Text="Civil 3D .NET reference not found: $(Civil3DRoot)\AeccDbMgd.dll" />
+    <Error Condition="!Exists('$(AutoCADRoot)\ACA\AecBaseMgd.dll')" Text="AEC .NET reference not found: $(AutoCADRoot)\ACA\AecBaseMgd.dll" />
+  </Target>
+</Project>

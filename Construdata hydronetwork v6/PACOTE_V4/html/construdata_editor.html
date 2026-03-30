@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ConstruData — Editor de Rede · NS · Cadastro</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Manrope:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#06060f;--s1:#0c0c1a;--s2:#111128;--s3:#181838;--s4:#202048;
+--brd:#2a2a55;--brd2:#353570;
+--acc:#00ff88;--red:#ff3355;--yel:#ffd000;--blu:#3399ff;--cyn:#00ddff;--mag:#cc44ff;--ora:#ff8833;
+--agua:#00aaff;--esg:#00ff88;
+--txt:#d0d0e8;--dim:#5566;--wht:#f0f0ff;
+--font:'Manrope',sans-serif;--mono:'JetBrains Mono',monospace;
+--rad:8px;--shadow:0 4px 20px rgba(0,0,0,.5);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--font);font-size:13px}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:56px 1fr 380px;grid-template-rows:auto 1fr;height:100vh}
+.topbar{grid-column:1/-1;background:var(--s1);border-bottom:1px solid var(--brd);height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;z-index:100}
+.topbar .logo{font-weight:800;font-size:15px;color:var(--acc);letter-spacing:-0.5px}
+.topbar .logo span{color:var(--dim);font-weight:300;font-size:11px;margin-left:4px}
+.topbar .sep{width:1px;height:20px;background:var(--brd)}
+.topbar .status{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.topbar .status b{color:var(--acc)}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+
+/* ── SIDEBAR (toolbar) ── */
+.sidebar{background:var(--s1);border-right:1px solid var(--brd);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px}
+.tool{width:42px;height:42px;border-radius:var(--rad);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid transparent;transition:.2s;position:relative;color:var(--dim);font-size:18px}
+.tool:hover{background:var(--s3);color:var(--txt);border-color:var(--brd)}
+.tool.active{background:rgba(0,255,136,.1);border-color:var(--acc);color:var(--acc)}
+.tool .tip{position:absolute;left:52px;background:var(--s3);color:var(--txt);padding:4px 10px;border-radius:4px;font-size:10px;white-space:nowrap;pointer-events:none;opacity:0;transition:.2s;border:1px solid var(--brd);z-index:999}
+.tool:hover .tip{opacity:1}
+.tool-sep{width:30px;height:1px;background:var(--brd);margin:4px 0}
+
+/* ── MAP ── */
+.map-wrap{position:relative;overflow:hidden}
+#map{width:100%;height:100%;z-index:1}
+.map-overlay{position:absolute;top:10px;left:10px;z-index:500;display:flex;gap:6px}
+.map-btn{background:var(--s2);border:1px solid var(--brd);border-radius:6px;padding:6px 12px;font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--txt);transition:.2s}
+.map-btn:hover{border-color:var(--acc);color:var(--acc)}
+.map-btn.active{background:rgba(0,255,136,.12);border-color:var(--acc);color:var(--acc)}
+.map-info{position:absolute;bottom:10px;left:10px;z-index:500;background:rgba(6,6,15,.9);border:1px solid var(--brd);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:10px;color:var(--dim)}
+.map-info b{color:var(--acc)}
+
+/* ── PANEL (right) ── */
+.panel{background:var(--s1);border-left:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden}
+.panel-tabs{display:flex;border-bottom:1px solid var(--brd);background:var(--bg)}
+.ptab{flex:1;padding:10px 8px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;transition:.2s}
+.ptab:hover{color:var(--txt)}
+.ptab.active{color:var(--acc);border-color:var(--acc);background:var(--s1)}
+.panel-body{flex:1;overflow-y:auto;padding:0}
+.panel-body::-webkit-scrollbar{width:4px}
+.panel-body::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
+
+/* ── Panel sections ── */
+.psec{padding:14px;border-bottom:1px solid rgba(255,255,255,.04)}
+.psec h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:10px;font-weight:600}
+.field{margin-bottom:8px}
+.field label{display:block;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;font-family:var(--mono)}
+.field input,.field select{width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:5px;padding:7px 10px;color:var(--wht);font-family:var(--mono);font-size:12px;outline:none;transition:.2s}
+.field input:focus,.field select:focus{border-color:var(--acc);box-shadow:0 0 0 2px rgba(0,255,136,.1)}
+.field input:read-only{color:var(--dim);background:var(--bg)}
+.field .unit{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:9px;color:var(--dim)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+.calc-result{background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-top:8px}
+.calc-row{display:flex;justify-content:space-between;padding:3px 0;font-size:11px}
+.calc-row .lbl{color:var(--dim)}
+.calc-row .val{color:var(--acc);font-family:var(--mono);font-weight:600}
+.calc-row .val.warn{color:var(--yel)}
+.calc-row .val.err{color:var(--red)}
+
+/* ── Buttons ── */
+.btn{padding:8px 16px;border-radius:6px;font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.2s;text-transform:uppercase;letter-spacing:.5px}
+.btn-acc{background:var(--acc);color:#000;border-color:var(--acc)}.btn-acc:hover{background:#00dd77}
+.btn-out{background:transparent;color:var(--acc);border-color:var(--acc)}.btn-out:hover{background:rgba(0,255,136,.1)}
+.btn-red{background:transparent;color:var(--red);border-color:var(--red)}.btn-red:hover{background:rgba(255,51,85,.1)}
+.btn-blu{background:transparent;color:var(--blu);border-color:var(--blu)}.btn-blu:hover{background:rgba(51,153,255,.1)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-row{display:flex;gap:6px;margin-top:10px}
+
+/* ── NS List ── */
+.ns-item{background:var(--s2);border:1px solid var(--brd);border-radius:6px;padding:10px;margin:6px 14px;cursor:pointer;transition:.2s}
+.ns-item:hover{border-color:var(--blu)}
+.ns-item.selected{border-color:var(--acc);background:rgba(0,255,136,.05)}
+.ns-item.exec{border-left:3px solid var(--acc)}
+.ns-item.pend{border-left:3px solid var(--yel)}
+.ns-head{display:flex;justify-content:space-between;align-items:center}
+.ns-head .id{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--wht)}
+.ns-head .badge{font-size:8px;padding:2px 6px;border-radius:3px;font-weight:700;font-family:var(--mono)}
+.ns-head .badge.agua{background:rgba(0,170,255,.15);color:var(--agua)}
+.ns-head .badge.esg{background:rgba(0,255,136,.15);color:var(--esg)}
+.ns-head .badge.exec{background:rgba(0,255,136,.15);color:var(--acc)}
+.ns-head .badge.pend{background:rgba(255,208,0,.15);color:var(--yel)}
+.ns-det{font-size:10px;color:var(--dim);margin-top:4px;font-family:var(--mono)}
+
+/* ── Cadastro ── */
+.cad-status{display:flex;gap:8px;align-items:center;margin:6px 0}
+.cad-dot{width:10px;height:10px;border-radius:50%}
+.cad-dot.ok{background:var(--acc)}.cad-dot.pend{background:var(--yel)}.cad-dot.no{background:var(--red)}
+
+/* ── Toast/Notifications ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--acc);border-radius:8px;padding:10px 20px;font-size:12px;color:var(--acc);z-index:9999;animation:fadeup .3s ease;font-family:var(--mono)}
+@keyframes fadeup{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ── Type badges ── */
+.type-agua{color:var(--agua)}.type-esg{color:var(--esg)}
+
+/* ── Leaflet overrides ── */
+.leaflet-control-zoom{border:1px solid var(--brd)!important}
+.leaflet-control-zoom a{background:var(--s2)!important;color:var(--txt)!important;border-color:var(--brd)!important}
+.leaflet-popup-content-wrapper{background:var(--s2);color:var(--txt);border:1px solid var(--brd);border-radius:8px;box-shadow:var(--shadow)}
+.leaflet-popup-tip{background:var(--s2)}
+.leaflet-popup-close-button{color:var(--dim)!important}
+
+/* ── Empty state ── */
+.empty{text-align:center;padding:40px 20px;color:var(--dim)}
+.empty .ico{font-size:48px;margin-bottom:12px;opacity:.3}
+.empty h3{font-size:14px;margin-bottom:6px;color:var(--txt)}
+.empty p{font-size:11px;line-height:1.6}
+
+/* ── File input ── */
+.file-drop{border:2px dashed var(--brd);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:.3s;margin:14px}
+.file-drop:hover{border-color:var(--acc);background:rgba(0,255,136,.03)}
+.file-drop .ico{font-size:28px;margin-bottom:6px}
+.file-drop p{font-size:10px;color:var(--dim)}
+
+/* ── Context menu ── */
+.ctx-menu{position:absolute;background:var(--s2);border:1px solid var(--brd);border-radius:6px;padding:4px;z-index:10000;min-width:160px;box-shadow:var(--shadow)}
+.ctx-item{padding:7px 12px;font-size:11px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:8px}
+.ctx-item:hover{background:var(--s3)}
+.ctx-item .k{margin-left:auto;font-size:9px;color:var(--dim);font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">ConstruData<span>HydroNetwork</span></div>
+    <div class="sep"></div>
+    <div class="status">PVs: <b id="st-pvs">0</b> · Trechos: <b id="st-tr">0</b> · Ext: <b id="st-ext">0</b>m</div>
+    <div class="sep"></div>
+    <div class="status">Tipo: <b id="st-tipo" class="type-esg">ESGOTO</b></div>
+    <div class="right">
+      <button class="btn btn-out btn-sm" onclick="importarJSON()">📂 Importar</button>
+      <button class="btn btn-acc btn-sm" onclick="exportarJSON()">💾 Exportar</button>
+      <button class="btn btn-blu btn-sm" onclick="exportarNS()">📋 Gerar NS</button>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="sidebar">
+    <div class="tool active" id="tool-select" onclick="setTool('select')" title="Selecionar">
+      <span>↖</span><div class="tip">Selecionar (V)</div>
+    </div>
+    <div class="tool" id="tool-pv" onclick="setTool('pv')" title="Adicionar PV">
+      <span>⊕</span><div class="tip">Adicionar PV (P)</div>
+    </div>
+    <div class="tool" id="tool-tubo" onclick="setTool('tubo')" title="Criar Tubo">
+      <span>━</span><div class="tip">Criar Tubo (T)</div>
+    </div>
+    <div class="tool" id="tool-move" onclick="setTool('move')" title="Mover PV">
+      <span>✥</span><div class="tip">Mover PV (M)</div>
+    </div>
+    <div class="tool-sep"></div>
+    <div class="tool" id="tool-delete" onclick="setTool('delete')" title="Apagar">
+      <span>✕</span><div class="tip">Apagar (Del)</div>
+    </div>
+    <div class="tool-sep"></div>
+    <div class="tool" onclick="toggleTipo()">
+      <span id="tipo-icon">🟢</span><div class="tip">Alternar Água/Esgoto</div>
+    </div>
+    <div class="tool" onclick="fitBounds()">
+      <span>⊞</span><div class="tip">Zoom Extents (F)</div>
+    </div>
+    <div class="tool-sep"></div>
+    <div class="tool" onclick="undo()">
+      <span>↩</span><div class="tip">Desfazer (Ctrl+Z)</div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-overlay">
+      <div class="map-btn active" onclick="setBase('sat')">Satélite</div>
+      <div class="map-btn" onclick="setBase('osm')">Mapa</div>
+      <div class="map-btn" onclick="setBase('topo')">Topo</div>
+    </div>
+    <div class="map-info">
+      <span id="cursor-coord">E: — N: —</span> · SIRGAS 2000 UTM 23S ·
+      Modo: <b id="mode-label">SELECIONAR</b>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel">
+    <div class="panel-tabs">
+      <div class="ptab active" onclick="setTab('props')">Propriedades</div>
+      <div class="ptab" onclick="setTab('ns')">NS</div>
+      <div class="ptab" onclick="setTab('cadastro')">Cadastro</div>
+      <div class="ptab" onclick="setTab('custo')">Custo</div>
+    </div>
+    <div class="panel-body" id="panel-body">
+      <!-- Dynamic content -->
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="file-input" accept=".json,.geojson" style="display:none" onchange="handleFile(event)">
+
+<script>
+// ════════════════════════════════════════════════════════
+// ConstruData HydroNetwork — Editor de Rede + NS + Cadastro
+// ════════════════════════════════════════════════════════
+
+// ── STATE ──
+const state = {
+  pvs: {},           // nome → {x,y,ct,cf,dn_saida,material,tipo}
+  trechos: [],       // {id,pv_ini,pv_fim,dn_mm,material,decl_mm,tipo}
+  tipo: 'esgoto',    // 'esgoto' ou 'agua'
+  tool: 'select',
+  selectedPV: null,
+  selectedTrecho: null,
+  tuboStart: null,   // PV name when creating pipe
+  nextPV: 1,
+  history: [],
+  tab: 'props',
+};
+
+// ── MAP ──
+const map = L.map('map', {
+  center: [-23.96, -46.33],
+  zoom: 15,
+  zoomControl: true,
+});
+
+const baseLayers = {
+  sat: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20}),
+  osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}),
+  topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {maxZoom: 17}),
+};
+baseLayers.sat.addTo(map);
+
+const pvLayer = L.layerGroup().addTo(map);
+const tuboLayer = L.layerGroup().addTo(map);
+const pvMarkers = {};   // nome → L.circleMarker
+const tuboLines = {};   // trecho.id → L.polyline
+
+// ── CONSTANTS ──
+const MANNING_N = { PVC: 0.013, PEAD: 0.011, 'PE 80': 0.011, 'PE 100': 0.011, CONCRETO: 0.015 };
+const DN_OPTIONS_ESG = [100, 150, 200, 250, 300, 400, 500, 600];
+const DN_OPTIONS_AGUA = [32, 50, 63, 75, 110, 160, 200, 250, 315];
+const MAT_OPTIONS_ESG = ['PVC', 'CONCRETO'];
+const MAT_OPTIONS_AGUA = ['PEAD', 'PE 80', 'PE 100', 'PVC'];
+const CORES_DN = {32:'#66ccff',50:'#33aaff',63:'#00aaff',75:'#0088dd',100:'#44dd88',110:'#33cc77',150:'#22bb66',160:'#2196F3',200:'#00cc66',250:'#ffaa00',300:'#ff8833',315:'#ff7722',400:'#ff3355',500:'#cc22aa',600:'#9922cc'};
+
+// ── TOOLS ──
+function setTool(t) {
+  state.tool = t;
+  state.tuboStart = null;
+  document.querySelectorAll('.tool').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('tool-' + t);
+  if (el) el.classList.add('active');
+  
+  const labels = {select:'SELECIONAR',pv:'ADICIONAR PV',tubo:'CRIAR TUBO',move:'MOVER PV',delete:'APAGAR'};
+  document.getElementById('mode-label').textContent = labels[t] || t.toUpperCase();
+  
+  // Cursor
+  const cursors = {select:'default',pv:'crosshair',tubo:'crosshair',move:'grab',delete:'not-allowed'};
+  document.getElementById('map').style.cursor = cursors[t] || 'default';
+}
+
+function toggleTipo() {
+  state.tipo = state.tipo === 'esgoto' ? 'agua' : 'esgoto';
+  const icon = document.getElementById('tipo-icon');
+  const label = document.getElementById('st-tipo');
+  if (state.tipo === 'agua') {
+    icon.textContent = '💧';
+    label.textContent = 'ÁGUA';
+    label.className = 'type-agua';
+  } else {
+    icon.textContent = '🟢';
+    label.textContent = 'ESGOTO';
+    label.className = 'type-esg';
+  }
+}
+
+// ── MAP EVENTS ──
+map.on('click', function(e) {
+  const {lat, lng} = e.latlng;
+  // Approximate UTM (for display — real conversion needs proj4)
+  const x = 360000 + (lng + 46.33) * 95000;
+  const y = 7352000 + (lat + 23.96) * 111000;
+  
+  if (state.tool === 'pv') {
+    addPV(lat, lng, x, y);
+  } else if (state.tool === 'tubo' && state.tuboStart) {
+    // If clicking empty space while in tubo mode, cancel
+    state.tuboStart = null;
+    toast('Criação de tubo cancelada');
+  } else if (state.tool === 'select') {
+    deselectAll();
+  }
+});
+
+map.on('mousemove', function(e) {
+  const x = 360000 + (e.latlng.lng + 46.33) * 95000;
+  const y = 7352000 + (e.latlng.lat + 23.96) * 111000;
+  document.getElementById('cursor-coord').textContent = `E: ${x.toFixed(1)}  N: ${y.toFixed(1)}`;
+});
+
+// ── PV OPERATIONS ──
+function addPV(lat, lng, x, y) {
+  saveHistory();
+  const prefix = state.tipo === 'agua' ? 'NA_' : 'PV';
+  const nome = prefix + String(state.nextPV).padStart(2, '0');
+  state.nextPV++;
+  
+  state.pvs[nome] = {
+    x: Math.round(x * 1000) / 1000,
+    y: Math.round(y * 1000) / 1000,
+    lat, lng,
+    ct: 0, cf: 0, prof: 1.5,
+    tipo: state.tipo,
+    material_pv: state.tipo === 'esgoto' ? 'CONCRETO' : 'PEAD',
+  };
+  
+  renderPV(nome);
+  selectPV(nome);
+  updateStats();
+  toast(`${nome} criado`);
+}
+
+function renderPV(nome) {
+  if (pvMarkers[nome]) pvLayer.removeLayer(pvMarkers[nome]);
+  
+  const pv = state.pvs[nome];
+  if (!pv) return;
+  
+  const isAgua = pv.tipo === 'agua';
+  const color = isAgua ? '#00aaff' : '#00ff88';
+  const fillColor = state.selectedPV === nome ? '#ffffff' : (isAgua ? '#003366' : '#003322');
+  const radius = state.selectedPV === nome ? 9 : 7;
+  
+  const marker = L.circleMarker([pv.lat, pv.lng], {
+    radius, color, fillColor, fillOpacity: 1, weight: 2.5
+  }).addTo(pvLayer);
+  
+  // Label
+  const tooltip = L.tooltip({permanent: true, direction: 'top', offset: [0, -10],
+    className: 'pv-label'}).setContent(`<span style="font-family:JetBrains Mono;font-size:10px;color:${color};background:rgba(6,6,15,.85);padding:2px 5px;border-radius:3px;border:1px solid ${color}40">${nome}</span>`);
+  marker.bindTooltip(tooltip);
+  
+  marker.on('click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    if (state.tool === 'select' || state.tool === 'pv') {
+      selectPV(nome);
+    } else if (state.tool === 'tubo') {
+      if (!state.tuboStart) {
+        state.tuboStart = nome;
+        toast(`Tubo: ${nome} → clique no PV destino`);
+        renderPV(nome); // highlight
+      } else if (state.tuboStart !== nome) {
+        addTubo(state.tuboStart, nome);
+        state.tuboStart = null;
+      }
+    } else if (state.tool === 'delete') {
+      deletePV(nome);
+    }
+  });
+  
+  if (state.tool === 'move') {
+    marker.on('mousedown', function() {
+      map.dragging.disable();
+      const onMove = (e) => {
+        pv.lat = e.latlng.lat;
+        pv.lng = e.latlng.lng;
+        pv.x = Math.round((360000 + (e.latlng.lng + 46.33) * 95000) * 1000) / 1000;
+        pv.y = Math.round((7352000 + (e.latlng.lat + 23.96) * 111000) * 1000) / 1000;
+        marker.setLatLng(e.latlng);
+        renderConnectedTubos(nome);
+      };
+      const onUp = () => {
+        map.off('mousemove', onMove);
+        map.off('mouseup', onUp);
+        map.dragging.enable();
+        recalcAll();
+        renderPanel();
+      };
+      map.on('mousemove', onMove);
+      map.on('mouseup', onUp);
+    });
+  }
+  
+  pvMarkers[nome] = marker;
+}
+
+function deletePV(nome) {
+  saveHistory();
+  // Remove connected trechos
+  state.trechos = state.trechos.filter(t => {
+    if (t.pv_ini === nome || t.pv_fim === nome) {
+      if (tuboLines[t.id]) tuboLayer.removeLayer(tuboLines[t.id]);
+      delete tuboLines[t.id];
+      return false;
+    }
+    return true;
+  });
+  if (pvMarkers[nome]) pvLayer.removeLayer(pvMarkers[nome]);
+  delete pvMarkers[nome];
+  delete state.pvs[nome];
+  if (state.selectedPV === nome) state.selectedPV = null;
+  updateStats();
+  renderPanel();
+  toast(`${nome} apagado`);
+}
+
+// ── TUBO OPERATIONS ──
+function addTubo(pvA, pvB) {
+  // Check if already exists
+  if (state.trechos.find(t => (t.pv_ini === pvA && t.pv_fim === pvB) || (t.pv_ini === pvB && t.pv_fim === pvA))) {
+    toast('Tubo já existe entre esses PVs');
+    return;
+  }
+  saveHistory();
+  
+  const pA = state.pvs[pvA], pB = state.pvs[pvB];
+  const ext = Math.sqrt((pA.x - pB.x) ** 2 + (pA.y - pB.y) ** 2);
+  const isAgua = state.tipo === 'agua';
+  
+  const trecho = {
+    id: 'T' + Date.now(),
+    pv_ini: pvA, pv_fim: pvB,
+    dn_mm: isAgua ? 63 : 200,
+    material: isAgua ? 'PEAD' : 'PVC',
+    ext_m: Math.round(ext * 10) / 10,
+    decl_mm: 0,
+    tipo: state.tipo,
+    status: 'projeto',   // projeto / executado / medido
+    bm: null,
+    data_exec: null,
+    // Cadastro
+    ct_ini_real: null, cf_ini_real: null,
+    ct_fim_real: null, cf_fim_real: null,
+    dn_real: null, material_real: null,
+  };
+  
+  // Calculate declivity if cotas available
+  if (pA.cf && pB.cf && ext > 0) {
+    trecho.decl_mm = Math.round(((pA.cf - pB.cf) / ext) * 1000000) / 1000;
+  }
+  
+  state.trechos.push(trecho);
+  renderTubo(trecho);
+  selectTrecho(trecho.id);
+  updateStats();
+  toast(`Tubo ${pvA}→${pvB} criado · ${trecho.ext_m}m`);
+}
+
+function renderTubo(tr) {
+  if (tuboLines[tr.id]) tuboLayer.removeLayer(tuboLines[tr.id]);
+  
+  const pA = state.pvs[tr.pv_ini], pB = state.pvs[tr.pv_fim];
+  if (!pA || !pB) return;
+  
+  const color = CORES_DN[tr.dn_mm] || (tr.tipo === 'agua' ? '#00aaff' : '#00cc66');
+  const weight = state.selectedTrecho === tr.id ? 5 : 3;
+  const opacity = tr.status === 'executado' ? 1 : 0.7;
+  const dashArray = tr.status === 'projeto' ? '8,4' : null;
+  
+  const line = L.polyline([[pA.lat, pA.lng], [pB.lat, pB.lng]], {
+    color, weight, opacity, dashArray
+  }).addTo(tuboLayer);
+  
+  line.on('click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    if (state.tool === 'select') {
+      selectTrecho(tr.id);
+    } else if (state.tool === 'delete') {
+      deleteTrecho(tr.id);
+    }
+  });
+  
+  tuboLines[tr.id] = line;
+}
+
+function deleteTrecho(id) {
+  saveHistory();
+  state.trechos = state.trechos.filter(t => t.id !== id);
+  if (tuboLines[id]) tuboLayer.removeLayer(tuboLines[id]);
+  delete tuboLines[id];
+  if (state.selectedTrecho === id) state.selectedTrecho = null;
+  updateStats();
+  renderPanel();
+  toast('Tubo apagado');
+}
+
+function renderConnectedTubos(pvName) {
+  state.trechos.filter(t => t.pv_ini === pvName || t.pv_fim === pvName).forEach(renderTubo);
+}
+
+// ── SELECTION ──
+function selectPV(nome) {
+  deselectAll();
+  state.selectedPV = nome;
+  state.selectedTrecho = null;
+  renderAllPVs();
+  setTab('props');
+  renderPanel();
+}
+
+function selectTrecho(id) {
+  deselectAll();
+  state.selectedTrecho = id;
+  state.selectedPV = null;
+  renderAllTubos();
+  setTab('props');
+  renderPanel();
+}
+
+function deselectAll() {
+  state.selectedPV = null;
+  state.selectedTrecho = null;
+  renderAllPVs();
+  renderAllTubos();
+  renderPanel();
+}
+
+// ── RENDERING ──
+function renderAllPVs() { Object.keys(state.pvs).forEach(renderPV); }
+function renderAllTubos() { state.trechos.forEach(renderTubo); }
+function renderAll() { renderAllPVs(); renderAllTubos(); updateStats(); renderPanel(); }
+
+function updateStats() {
+  document.getElementById('st-pvs').textContent = Object.keys(state.pvs).length;
+  document.getElementById('st-tr').textContent = state.trechos.length;
+  const ext = state.trechos.reduce((s, t) => s + (t.ext_m || 0), 0);
+  document.getElementById('st-ext').textContent = Math.round(ext);
+}
+
+// ── HYDRAULIC CALCULATIONS ──
+function calcManning(dn_mm, decl_mm, material) {
+  const n = MANNING_N[material] || 0.013;
+  const D = dn_mm / 1000;
+  const I = Math.abs(decl_mm) / 1000;
+  if (I <= 0 || D <= 0) return { v: 0, q: 0, tau: 0 };
+  
+  const A = Math.PI * D * D / 4;
+  const Rh = D / 4;
+  const V = (1 / n) * Math.pow(Rh, 2/3) * Math.pow(I, 0.5);
+  const Q = V * A * 1000; // L/s
+  const tau = 9810 * Rh * I; // Pa
+  return { v: Math.round(V * 1000) / 1000, q: Math.round(Q * 1000) / 1000, tau: Math.round(tau * 100) / 100 };
+}
+
+function recalcAll() {
+  state.trechos.forEach(tr => {
+    const pA = state.pvs[tr.pv_ini], pB = state.pvs[tr.pv_fim];
+    if (pA && pB) {
+      tr.ext_m = Math.round(Math.sqrt((pA.x - pB.x) ** 2 + (pA.y - pB.y) ** 2) * 10) / 10;
+      if (pA.cf && pB.cf && tr.ext_m > 0) {
+        tr.decl_mm = Math.round(((pA.cf - pB.cf) / tr.ext_m) * 1000000) / 1000;
+      }
+    }
+  });
+}
+
+// ── PANEL RENDERING ──
+function setTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.ptab').forEach((el, i) => {
+    const tabs = ['props', 'ns', 'cadastro', 'custo'];
+    el.classList.toggle('active', tabs[i] === tab);
+  });
+  renderPanel();
+}
+
+function renderPanel() {
+  const body = document.getElementById('panel-body');
+  
+  if (state.tab === 'props') {
+    if (state.selectedPV) renderPVProps(body);
+    else if (state.selectedTrecho) renderTrechoProps(body);
+    else renderEmptyProps(body);
+  } else if (state.tab === 'ns') {
+    renderNSList(body);
+  } else if (state.tab === 'cadastro') {
+    renderCadastro(body);
+  } else if (state.tab === 'custo') {
+    renderCusto(body);
+  }
+}
+
+function renderPVProps(body) {
+  const pv = state.pvs[state.selectedPV];
+  if (!pv) return;
+  const isAgua = pv.tipo === 'agua';
+  
+  body.innerHTML = `
+    <div class="psec">
+      <h4>PV — ${state.selectedPV} ${isAgua ? '💧' : '🟢'}</h4>
+      <div class="field"><label>Nome</label><input id="pv-nome" value="${state.selectedPV}" onchange="renamePV(this.value)"></div>
+      <div class="field-row">
+        <div class="field"><label>Easting (E)</label><input value="${pv.x.toFixed(3)}" readonly></div>
+        <div class="field"><label>Northing (N)</label><input value="${pv.y.toFixed(3)}" readonly></div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Cotas</h4>
+      <div class="field-row">
+        <div class="field"><label>Cota Terreno (CT)</label><input type="number" step="0.01" value="${pv.ct||''}" onchange="updatePV('ct',parseFloat(this.value))" placeholder="m"></div>
+        <div class="field"><label>Cota Fundo (CF)</label><input type="number" step="0.01" value="${pv.cf||''}" onchange="updatePV('cf',parseFloat(this.value))" placeholder="m"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Profundidade</label><input value="${pv.ct&&pv.cf ? (pv.ct-pv.cf).toFixed(2)+'m' : '—'}" readonly></div>
+        <div class="field"><label>Material PV</label>
+          <select onchange="updatePV('material_pv',this.value)">
+            <option ${pv.material_pv==='CONCRETO'?'selected':''}>CONCRETO</option>
+            <option ${pv.material_pv==='PEAD'?'selected':''}>PEAD</option>
+            <option ${pv.material_pv==='FFD'?'selected':''}>FFD</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Trechos Conectados</h4>
+      ${state.trechos.filter(t=>t.pv_ini===state.selectedPV||t.pv_fim===state.selectedPV).map(t=>`
+        <div class="ns-item" onclick="selectTrecho('${t.id}')">
+          <div class="ns-head"><span class="id">${t.pv_ini}→${t.pv_fim}</span><span class="badge ${t.tipo==='agua'?'agua':'esg'}">DN${t.dn_mm}</span></div>
+          <div class="ns-det">${t.ext_m}m · ${t.material}</div>
+        </div>
+      `).join('') || '<p style="color:var(--dim);font-size:11px">Nenhum trecho</p>'}
+    </div>
+    <div class="psec">
+      <button class="btn btn-red btn-sm" onclick="deletePV('${state.selectedPV}')">✕ Apagar PV</button>
+    </div>
+  `;
+}
+
+function renderTrechoProps(body) {
+  const tr = state.trechos.find(t => t.id === state.selectedTrecho);
+  if (!tr) return;
+  const isAgua = tr.tipo === 'agua';
+  const dnOpts = isAgua ? DN_OPTIONS_AGUA : DN_OPTIONS_ESG;
+  const matOpts = isAgua ? MAT_OPTIONS_AGUA : MAT_OPTIONS_ESG;
+  const hyd = calcManning(tr.dn_mm, tr.decl_mm, tr.material);
+  
+  const vClass = hyd.v > 5 ? 'err' : hyd.v > 3 ? 'warn' : 'val';
+  const tauClass = hyd.tau < 1 && tr.tipo==='esgoto' ? 'err' : 'val';
+  
+  body.innerHTML = `
+    <div class="psec">
+      <h4>TUBO — ${tr.pv_ini} → ${tr.pv_fim} ${isAgua ? '💧' : '🟢'}</h4>
+      <div class="field-row">
+        <div class="field"><label>DN (mm)</label>
+          <select onchange="updateTrecho('dn_mm',parseInt(this.value))">
+            ${dnOpts.map(d=>`<option value="${d}" ${d===tr.dn_mm?'selected':''}>DN ${d}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Material</label>
+          <select onchange="updateTrecho('material',this.value)">
+            ${matOpts.map(m=>`<option ${m===tr.material?'selected':''}>${m}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Extensão (m)</label><input value="${tr.ext_m}" readonly></div>
+        <div class="field"><label>Declividade (‰)</label><input type="number" step="0.1" value="${tr.decl_mm||''}" onchange="updateTrecho('decl_mm',parseFloat(this.value))"></div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Hidráulica (Manning)</h4>
+      <div class="calc-result">
+        <div class="calc-row"><span class="lbl">Velocidade</span><span class="${vClass}">${hyd.v.toFixed(3)} m/s</span></div>
+        <div class="calc-row"><span class="lbl">Vazão</span><span class="val">${hyd.q.toFixed(3)} L/s</span></div>
+        ${tr.tipo==='esgoto'?`<div class="calc-row"><span class="lbl">Tensão Trativa</span><span class="${tauClass}">${hyd.tau.toFixed(2)} Pa ${hyd.tau<1?'⚠️ < 1Pa':''}</span></div>`:''}
+        <div class="calc-row"><span class="lbl">Manning n</span><span class="val">${MANNING_N[tr.material]||0.013}</span></div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Status</h4>
+      <div class="field"><label>Situação</label>
+        <select onchange="updateTrecho('status',this.value)">
+          <option value="projeto" ${tr.status==='projeto'?'selected':''}>📐 Projeto</option>
+          <option value="executado" ${tr.status==='executado'?'selected':''}>✅ Executado</option>
+          <option value="medido" ${tr.status==='medido'?'selected':''}>💰 Medido</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Boletim (BM)</label><input value="${tr.bm||''}" onchange="updateTrecho('bm',this.value)" placeholder="BM_01"></div>
+        <div class="field"><label>Data Execução</label><input type="date" value="${tr.data_exec||''}" onchange="updateTrecho('data_exec',this.value)"></div>
+      </div>
+    </div>
+    <div class="psec">
+      <button class="btn btn-red btn-sm" onclick="deleteTrecho('${tr.id}')">✕ Apagar Tubo</button>
+    </div>
+  `;
+}
+
+function renderEmptyProps(body) {
+  body.innerHTML = `
+    <div class="empty">
+      <div class="ico">↖</div>
+      <h3>Nenhum elemento selecionado</h3>
+      <p>Clique num PV ou tubo no mapa para editar.<br>Ou use as ferramentas à esquerda para criar.</p>
+    </div>
+    <div class="file-drop" onclick="importarJSON()">
+      <div class="ico">📂</div>
+      <p>Importar projeto existente (JSON)</p>
+    </div>
+    <div class="psec">
+      <h4>Atalhos</h4>
+      <div style="font-size:10px;color:var(--dim);font-family:var(--mono);line-height:2">
+        <b style="color:var(--acc)">P</b> → Adicionar PV<br>
+        <b style="color:var(--acc)">T</b> → Criar Tubo (clique 2 PVs)<br>
+        <b style="color:var(--acc)">V</b> → Selecionar<br>
+        <b style="color:var(--acc)">M</b> → Mover PV<br>
+        <b style="color:var(--acc)">Del</b> → Apagar<br>
+        <b style="color:var(--acc)">F</b> → Zoom Extents<br>
+        <b style="color:var(--acc)">Ctrl+Z</b> → Desfazer<br>
+      </div>
+    </div>
+  `;
+}
+
+function renderNSList(body) {
+  const trechos = state.trechos;
+  if (!trechos.length) {
+    body.innerHTML = '<div class="empty"><div class="ico">📋</div><h3>Nenhuma NS</h3><p>Crie PVs e tubos para gerar NS.</p></div>';
+    return;
+  }
+  
+  const exec = trechos.filter(t => t.status === 'executado' || t.status === 'medido').length;
+  const pend = trechos.length - exec;
+  
+  body.innerHTML = `
+    <div class="psec">
+      <h4>Notas de Serviço — ${trechos.length} total</h4>
+      <div style="display:flex;gap:12px;font-size:11px;margin-bottom:8px">
+        <span style="color:var(--acc)">✅ ${exec} executadas</span>
+        <span style="color:var(--yel)">⏳ ${pend} pendentes</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-acc btn-sm" onclick="exportarNS()">📋 Exportar NS (JSON)</button>
+      </div>
+    </div>
+    ${trechos.map((t, i) => {
+      const pA = state.pvs[t.pv_ini] || {};
+      const pB = state.pvs[t.pv_fim] || {};
+      const hyd = calcManning(t.dn_mm, t.decl_mm, t.material);
+      const statusClass = t.status === 'executado' || t.status === 'medido' ? 'exec' : 'pend';
+      const statusBadge = t.status === 'executado' ? '<span class="badge exec">EXEC</span>' : 
+                          t.status === 'medido' ? '<span class="badge exec">MEDIDO</span>' : 
+                          '<span class="badge pend">PEND</span>';
+      const tipoBadge = t.tipo === 'agua' ? '<span class="badge agua">ÁGUA</span>' : '<span class="badge esg">ESG</span>';
+      return `
+        <div class="ns-item ${statusClass}" onclick="selectTrecho('${t.id}');setTab('props')">
+          <div class="ns-head">
+            <span class="id">NS_${String(i+1).padStart(3,'0')}</span>
+            ${tipoBadge} ${statusBadge}
+          </div>
+          <div class="ns-det">
+            ${t.pv_ini}→${t.pv_fim} · DN${t.dn_mm} ${t.material} · ${t.ext_m}m · V=${hyd.v.toFixed(2)}m/s
+          </div>
+        </div>`;
+    }).join('')}
+  `;
+}
+
+function renderCadastro(body) {
+  const exec = state.trechos.filter(t => t.status === 'executado' || t.status === 'medido');
+  if (!exec.length) {
+    body.innerHTML = '<div class="empty"><div class="ico">📐</div><h3>Nenhum trecho executado</h3><p>Marque trechos como executados na aba Propriedades para preencher o cadastro.</p></div>';
+    return;
+  }
+  
+  const comCad = exec.filter(t => t.ct_ini_real && t.cf_ini_real);
+  
+  body.innerHTML = `
+    <div class="psec">
+      <h4>Cadastro As-Built — NTS 292</h4>
+      <div style="display:flex;gap:12px;font-size:11px;margin-bottom:8px">
+        <span style="color:var(--acc)">✅ ${comCad.length} com cadastro</span>
+        <span style="color:var(--yel)">⏳ ${exec.length - comCad.length} sem cadastro</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-blu btn-sm" onclick="exportarCadastro()">📐 Exportar Cadastro</button>
+      </div>
+    </div>
+    ${exec.map((t, i) => {
+      const hasCad = t.ct_ini_real && t.cf_ini_real;
+      return `
+        <div class="ns-item" onclick="selectTrechoForCadastro('${t.id}')">
+          <div class="ns-head">
+            <span class="id">${t.pv_ini}→${t.pv_fim}</span>
+            <div class="cad-status"><div class="cad-dot ${hasCad?'ok':'pend'}"></div><span style="font-size:9px;color:var(--dim)">${hasCad?'Cadastrado':'Pendente'}</span></div>
+          </div>
+          <div class="ns-det">
+            DN${t.dn_real||t.dn_mm} · ${t.ext_m}m · ${t.data_exec||'sem data'}
+          </div>
+        </div>`;
+    }).join('')}
+  `;
+}
+
+function selectTrechoForCadastro(id) {
+  const tr = state.trechos.find(t => t.id === id);
+  if (!tr) return;
+  
+  const body = document.getElementById('panel-body');
+  body.innerHTML = `
+    <div class="psec">
+      <h4>CADASTRO — ${tr.pv_ini} → ${tr.pv_fim}</h4>
+      <p style="font-size:10px;color:var(--dim);margin-bottom:10px">Dados medidos pela topografia (as-built)</p>
+    </div>
+    <div class="psec">
+      <h4>PV Montante — ${tr.pv_ini}</h4>
+      <div class="field-row">
+        <div class="field"><label>CT Real (m)</label><input type="number" step="0.001" value="${tr.ct_ini_real||''}" onchange="updateTrecho('ct_ini_real',parseFloat(this.value))"></div>
+        <div class="field"><label>CF Real (m)</label><input type="number" step="0.001" value="${tr.cf_ini_real||''}" onchange="updateTrecho('cf_ini_real',parseFloat(this.value))"></div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>PV Jusante — ${tr.pv_fim}</h4>
+      <div class="field-row">
+        <div class="field"><label>CT Real (m)</label><input type="number" step="0.001" value="${tr.ct_fim_real||''}" onchange="updateTrecho('ct_fim_real',parseFloat(this.value))"></div>
+        <div class="field"><label>CF Real (m)</label><input type="number" step="0.001" value="${tr.cf_fim_real||''}" onchange="updateTrecho('cf_fim_real',parseFloat(this.value))"></div>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Tubo Real</h4>
+      <div class="field-row">
+        <div class="field"><label>DN Real (mm)</label><input type="number" value="${tr.dn_real||tr.dn_mm}" onchange="updateTrecho('dn_real',parseInt(this.value))"></div>
+        <div class="field"><label>Material Real</label><input value="${tr.material_real||tr.material}" onchange="updateTrecho('material_real',this.value)"></div>
+      </div>
+      <div class="field"><label>Data Execução</label><input type="date" value="${tr.data_exec||''}" onchange="updateTrecho('data_exec',this.value)"></div>
+    </div>
+    <div class="psec">
+      <button class="btn btn-out btn-sm" onclick="setTab('cadastro')">← Voltar</button>
+    </div>
+  `;
+  state.selectedTrecho = id;
+}
+
+function renderCusto(body) {
+  body.innerHTML = `
+    <div class="psec">
+      <h4>Custos</h4>
+      <p style="font-size:11px;color:var(--dim);line-height:1.8">
+        Os custos serão calculados a partir da <b style="color:var(--yel)">tabela de preços do contrato</b> que você importar.
+      </p>
+      <div class="file-drop" style="margin:10px 0" onclick="toast('Importar tabela de preços — em construção')">
+        <div class="ico">💰</div>
+        <p>Importar Tabela de Preços (CSV/Excel)</p>
+      </div>
+    </div>
+    <div class="psec">
+      <h4>Resumo Estimado</h4>
+      <div class="calc-result">
+        <div class="calc-row"><span class="lbl">PVs</span><span class="val">${Object.keys(state.pvs).length} un</span></div>
+        <div class="calc-row"><span class="lbl">Extensão tubos</span><span class="val">${Math.round(state.trechos.reduce((s,t)=>s+t.ext_m,0))}m</span></div>
+        <div class="calc-row"><span class="lbl">Trechos</span><span class="val">${state.trechos.length}</span></div>
+        <div class="calc-row"><span class="lbl">Executados</span><span class="val">${state.trechos.filter(t=>t.status!=='projeto').length}</span></div>
+        <div class="calc-row"><span class="lbl">Medidos</span><span class="val">${state.trechos.filter(t=>t.status==='medido').length}</span></div>
+      </div>
+    </div>
+  `;
+}
+
+// ── UPDATE FUNCTIONS ──
+function updatePV(field, value) {
+  if (!state.selectedPV) return;
+  saveHistory();
+  state.pvs[state.selectedPV][field] = value;
+  
+  // Recalc profundidade
+  const pv = state.pvs[state.selectedPV];
+  if (field === 'ct' || field === 'cf') {
+    if (pv.ct && pv.cf) pv.prof = Math.round((pv.ct - pv.cf) * 100) / 100;
+    recalcAll();
+  }
+  renderPanel();
+}
+
+function updateTrecho(field, value) {
+  if (!state.selectedTrecho) return;
+  const tr = state.trechos.find(t => t.id === state.selectedTrecho);
+  if (!tr) return;
+  saveHistory();
+  tr[field] = value;
+  renderTubo(tr);
+  renderPanel();
+}
+
+function renamePV(newName) {
+  if (!state.selectedPV || newName === state.selectedPV) return;
+  if (state.pvs[newName]) { toast('Nome já existe!'); renderPanel(); return; }
+  saveHistory();
+  
+  state.pvs[newName] = state.pvs[state.selectedPV];
+  delete state.pvs[state.selectedPV];
+  
+  // Update trechos references
+  state.trechos.forEach(t => {
+    if (t.pv_ini === state.selectedPV) t.pv_ini = newName;
+    if (t.pv_fim === state.selectedPV) t.pv_fim = newName;
+  });
+  
+  if (pvMarkers[state.selectedPV]) pvLayer.removeLayer(pvMarkers[state.selectedPV]);
+  delete pvMarkers[state.selectedPV];
+  
+  state.selectedPV = newName;
+  renderAll();
+}
+
+// ── IMPORT/EXPORT ──
+function exportarJSON() {
+  const data = { pvs: state.pvs, trechos: state.trechos, meta: { plataforma: 'ConstruData - HydroNetwork', versao: '7.0', data: new Date().toISOString(), empresa: 'FCN Construções e Saneamento' }};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `REDE_${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); toast('Projeto exportado!');
+}
+
+function importarJSON() { document.getElementById('file-input').click(); }
+
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.pvs) {
+        state.pvs = data.pvs;
+        state.trechos = data.trechos || [];
+        // Find max PV number
+        const nums = Object.keys(state.pvs).map(n => parseInt(n.replace(/\D/g, '')) || 0);
+        state.nextPV = Math.max(...nums, 0) + 1;
+        renderAll();
+        fitBounds();
+        toast(`Importado: ${Object.keys(state.pvs).length} PVs · ${state.trechos.length} trechos`);
+      }
+    } catch (err) { toast('Erro ao importar: ' + err.message); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function exportarNS() {
+  const ns_list = state.trechos.map((t, i) => {
+    const pA = state.pvs[t.pv_ini] || {};
+    const pB = state.pvs[t.pv_fim] || {};
+    const hyd = calcManning(t.dn_mm, t.decl_mm, t.material);
+    return {
+      ns_id: i + 1, nucleo: 'ConstruData', tipo: t.tipo,
+      pv_ini: t.pv_ini, pv_fim: t.pv_fim,
+      dn_mm: t.dn_mm, material: t.material, ext_m: t.ext_m, decl_mm: t.decl_mm,
+      ct_ini: pA.ct, cf_ini: pA.cf, ct_fim: pB.ct, cf_fim: pB.cf,
+      v_ms: hyd.v, q_ls: hyd.q, tau_pa: hyd.tau,
+      status: t.status, bm: t.bm, data_exec: t.data_exec,
+      coord_ini: { E: pA.x, N: pA.y }, coord_fim: { E: pB.x, N: pB.y },
+    };
+  });
+  const blob = new Blob([JSON.stringify(ns_list, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `NS_${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); toast(`${ns_list.length} NS exportadas!`);
+}
+
+function exportarCadastro() {
+  const exec = state.trechos.filter(t => t.status !== 'projeto');
+  const blob = new Blob([JSON.stringify(exec, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `CADASTRO_${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); toast(`${exec.length} trechos exportados!`);
+}
+
+// ── MAP HELPERS ──
+function setBase(key) {
+  Object.values(baseLayers).forEach(l => map.removeLayer(l));
+  baseLayers[key].addTo(map);
+  document.querySelectorAll('.map-btn').forEach(el => el.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function fitBounds() {
+  const latlngs = Object.values(state.pvs).filter(p => p.lat).map(p => [p.lat, p.lng]);
+  if (latlngs.length) map.fitBounds(L.latLngBounds(latlngs).pad(0.2));
+}
+
+// ── HISTORY (undo) ──
+function saveHistory() {
+  state.history.push(JSON.stringify({ pvs: state.pvs, trechos: state.trechos, nextPV: state.nextPV }));
+  if (state.history.length > 50) state.history.shift();
+}
+
+function undo() {
+  if (!state.history.length) { toast('Nada para desfazer'); return; }
+  const prev = JSON.parse(state.history.pop());
+  state.pvs = prev.pvs;
+  state.trechos = prev.trechos;
+  state.nextPV = prev.nextPV;
+  state.selectedPV = null;
+  state.selectedTrecho = null;
+  
+  pvLayer.clearLayers();
+  tuboLayer.clearLayers();
+  Object.keys(pvMarkers).forEach(k => delete pvMarkers[k]);
+  Object.keys(tuboLines).forEach(k => delete tuboLines[k]);
+  
+  renderAll();
+  toast('Desfeito');
+}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'p' || e.key === 'P') setTool('pv');
+  else if (e.key === 't' || e.key === 'T') setTool('tubo');
+  else if (e.key === 'v' || e.key === 'V') setTool('select');
+  else if (e.key === 'm' || e.key === 'M') setTool('move');
+  else if (e.key === 'Delete' || e.key === 'Backspace') setTool('delete');
+  else if (e.key === 'f' || e.key === 'F') fitBounds();
+  else if (e.key === 'z' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); undo(); }
+  else if (e.key === 'Escape') { deselectAll(); setTool('select'); }
+});
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ── INIT ──
+renderPanel();
+toast('ConstruData HydroNetwork — Editor pronto');
+</script>
+</body>
+</html>

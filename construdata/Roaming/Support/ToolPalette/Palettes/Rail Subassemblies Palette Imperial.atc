@@ -1,0 +1,316 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{8BC24E72-042A-11E9-8EB2-F2801F1B9FD1}"/><Properties><ItemName resource="100" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2018-06-23T04:06:46" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{DE96592F-FD43-4F47-891E-1D110EDCF918}"/><Properties><ItemName resource="101" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C3C7AA43-53EB-46B1-B00A-BF81F8ADA022}"/><Properties><ItemName resource="2500" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\Dual_RailPlatform.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\Dual_RailPlatform.png"/></Images><Description resource="2501" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Dual_RailPlatform</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\Dual_RailPlatform\2767739c9d1842f68f2b4bb55055a98a.dll">Subassembly.Dual_RailPlatform</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Side DataType="long" TypeInfo="16" DisplayName="2502" Description="2503">0<Enum><Left DisplayName="2504">1</Left><Right DisplayName="2505">0</Right></Enum></Side>
+						<WallLink DataType="string" TypeInfo="16" DisplayName="2506" Description="2507">Wall</WallLink>
+						<ConcretePlinthHeight DataType="double" TypeInfo="16" DisplayName="2508" Description="2509">0.2</ConcretePlinthHeight>
+						<ConcretePlinthLink DataType="string" TypeInfo="16" DisplayName="2510" Description="2511">Concrete Plinth</ConcretePlinthLink>
+						<ConcreteUnitsHeight DataType="double" TypeInfo="16" DisplayName="2512" Description="2513">0.2</ConcreteUnitsHeight>
+						<ConcreteFlagLink DataType="string" TypeInfo="16" DisplayName="2514" Description="2515">Concrete Flag</ConcreteFlagLink>
+						<ConcreteUnitsShape DataType="string" TypeInfo="16" DisplayName="2516" Description="2517">Concrete Units</ConcreteUnitsShape>
+						<ConcreteFlagShape DataType="string" TypeInfo="16" DisplayName="2518" Description="2519">Concrete Flag</ConcreteFlagShape>
+						<ConcreteFlagHeight DataType="double" TypeInfo="16" DisplayName="2520" Description="2521">0.12</ConcreteFlagHeight>
+						<ConcreteFlagWidth DataType="double" TypeInfo="16" DisplayName="2522" Description="2523">0.7</ConcreteFlagWidth>
+						<ConcreteUnitsLink DataType="string" TypeInfo="16" DisplayName="2524" Description="2525">Concrete Units</ConcreteUnitsLink>
+						<SandBed DataType="double" TypeInfo="16" DisplayName="2526" Description="2527">0.07</SandBed>
+						<SandBedShape DataType="string" TypeInfo="16" DisplayName="2528" Description="2529">Sand</SandBedShape>
+						<WallShape DataType="string" TypeInfo="16" DisplayName="2530" Description="2531">Wall</WallShape>
+						<SandBedLink DataType="string" TypeInfo="16" DisplayName="2532" Description="2533">Sand</SandBedLink>
+						<ConcretePlinthShape DataType="string" TypeInfo="16" DisplayName="2534" Description="2535">Concrete Plinth</ConcretePlinthShape>
+						<FootwayShape DataType="string" TypeInfo="16" DisplayName="2536" Description="2537">Footway</FootwayShape>
+						<FoundationShift DataType="double" TypeInfo="16" DisplayName="2538" Description="2539">0.1</FoundationShift>
+						<FoundationDepth DataType="double" TypeInfo="16" DisplayName="2540" Description="2541">0.556</FoundationDepth>
+						<FoundationShape DataType="string" TypeInfo="16" DisplayName="2542" Description="2543">Foundation</FoundationShape>
+						<Overhang DataType="double" TypeInfo="16" DisplayName="2544" Description="2545">0.512</Overhang>
+						<FoundationLink DataType="string" TypeInfo="16" DisplayName="2546" Description="2547">Foundation</FoundationLink>
+						<FoundationBackWidth DataType="double" TypeInfo="16" DisplayName="2548" Description="2549">1.65</FoundationBackWidth>
+						<FootwayLink DataType="string" TypeInfo="16" DisplayName="2550" Description="2551">Footway</FootwayLink>
+						<SandBlinding DataType="double" TypeInfo="16" DisplayName="2552" Description="2553">0.1</SandBlinding>
+						<LeftRailPlatformOffset DataType="double" TypeInfo="16" DisplayName="2554" Description="2555">2</LeftRailPlatformOffset>
+						<RightRailPlatformOffset DataType="double" TypeInfo="16" DisplayName="2556" Description="2557">2</RightRailPlatformOffset>
+						<FoundationBaseHeight DataType="double" TypeInfo="16" DisplayName="2558" Description="2559">1.9</FoundationBaseHeight>
+						<PlatformEdge DataType="string" TypeInfo="16" DisplayName="2560" Description="2561">PlatformEdge</PlatformEdge>
+						<SandBlindingShape DataType="string" TypeInfo="16" DisplayName="2562" Description="2563">Sand Blinding</SandBlindingShape>
+						<HeightAboveRailInput DataType="double" TypeInfo="16" DisplayName="2564" Description="2565">2</HeightAboveRailInput>
+						<BackEdge DataType="string" TypeInfo="16" DisplayName="2566" Description="2567">BackEdge</BackEdge>
+						<SecondaryRailCLElevInput DataType="double" TypeInfo="16" DisplayName="2568" Description="2569">0</SecondaryRailCLElevInput>
+						<SecondaryRailCLInput DataType="double" TypeInfo="16" DisplayName="2570" Description="2571">10</SecondaryRailCLInput>
+						<HeightAboveRailInput2 DataType="double" TypeInfo="16" DisplayName="2572" Description="2573">2</HeightAboveRailInput2>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C821A4AC-5FF0-443E-89D5-5579109F1B47}"/><Properties><ItemName resource="2700" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\Internal_Multi_Track.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\Internal_Multi_Track.png"/></Images><Description resource="2701" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Internal_Multi_Track</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\Internal_Multi_Track\dc28caf553b74e6b9cd42221f84db4bb.dll">Subassembly.Internal_Multi_Track</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<SubballastCrownOffset DataType="double" TypeInfo="16" DisplayName="2702" Description="2703">10</SubballastCrownOffset>
+						<DefaultCant DataType="double" TypeInfo="16" DisplayName="2704" Description="2705">0</DefaultCant>
+						<BallastDepth DataType="double" TypeInfo="16" DisplayName="2706" Description="2707">2</BallastDepth>
+						<SubBallastDepth DataType="double" TypeInfo="16" DisplayName="2708" Description="2709">0.66666</SubBallastDepth>
+						<SubBallastSlopeLeft DataType="double" TypeInfo="10" DisplayName="2710" Description="2711">0.02</SubBallastSlopeLeft>
+						<SubBallastSlopeRight DataType="double" TypeInfo="10" DisplayName="2712" Description="2713">0.02</SubBallastSlopeRight>
+						<Gauge DataType="double" TypeInfo="16" DisplayName="2714" Description="2715">4.70833</Gauge>
+						<TieWidth DataType="double" TypeInfo="16" DisplayName="2716" Description="2717">8.5</TieWidth>
+						<RailHeadWidth DataType="double" TypeInfo="16" DisplayName="2718" Description="2719">0.22666</RailHeadWidth>
+						<OmitSubBase DataType="long" TypeInfo="16" DisplayName="2720" Description="2721">11<Enum><Yes DisplayName="2722">10</Yes><No DisplayName="2723">11</No></Enum></OmitSubBase>
+						<SoilFillExt DataType="double" TypeInfo="16" DisplayName="2724" Description="2725">0.5</SoilFillExt>
+						<SoilFillSlope DataType="double" TypeInfo="10" DisplayName="2726" Description="2727">1</SoilFillSlope>
+						<SoilFillDepth DataType="double" TypeInfo="16" DisplayName="2728" Description="2729">1</SoilFillDepth>
+						<OmitSoilFill DataType="long" TypeInfo="16" DisplayName="2730" Description="2731">11<Enum><Yes DisplayName="2732">10</Yes><No DisplayName="2733">11</No></Enum></OmitSoilFill>
+						<BallastSlope DataType="double" TypeInfo="10" DisplayName="2734" Description="2735">0.333333333333333</BallastSlope>
+						<TieDepth DataType="double" TypeInfo="16" DisplayName="2736" Description="2737">0.58333</TieDepth>
+						<LeftDrainageChannelDepth DataType="double" TypeInfo="16" DisplayName="2738" Description="2739">0.5</LeftDrainageChannelDepth>
+						<RightDrainageChannelDepth DataType="double" TypeInfo="16" DisplayName="2740" Description="2741">0.5</RightDrainageChannelDepth>
+						<LeftShoulderWidth DataType="double" TypeInfo="16" DisplayName="2742" Description="2743">1</LeftShoulderWidth>
+						<SubBaseDepth DataType="double" TypeInfo="16" DisplayName="2744" Description="2745">1</SubBaseDepth>
+						<SubBaseSlope DataType="double" TypeInfo="10" DisplayName="2746" Description="2747">1</SubBaseSlope>
+						<SubBaseExt DataType="double" TypeInfo="16" DisplayName="2748" Description="2749">0.5</SubBaseExt>
+						<RailDepth DataType="double" TypeInfo="16" DisplayName="2750" Description="2751">0.55208</RailDepth>
+						<RailBaseWidth DataType="double" TypeInfo="16" DisplayName="2752" Description="2753">0.45833</RailBaseWidth>
+						<TiePlateThickness DataType="double" TypeInfo="16" DisplayName="2754" Description="2755">0.08333</TiePlateThickness>
+						<RailBaseToBallast DataType="double" TypeInfo="16" DisplayName="2756" Description="2757">0.08333</RailBaseToBallast>
+						<OmitBallast DataType="long" TypeInfo="16" DisplayName="2758" Description="2759">11<Enum><Yes DisplayName="2760">10</Yes><No DisplayName="2761">11</No></Enum></OmitBallast>
+						<OmitSubBallast DataType="long" TypeInfo="16" DisplayName="2762" Description="2763">11<Enum><Yes DisplayName="2764">10</Yes><No DisplayName="2765">11</No></Enum></OmitSubBallast>
+						<MeasureSuperAt DataType="long" TypeInfo="16" DisplayName="2766" Description="2767">301<Enum><GaugeLine DisplayName="2768">302</GaugeLine><CLRail DisplayName="2769">301</CLRail></Enum></MeasureSuperAt>
+						<OmitRails DataType="long" TypeInfo="16" DisplayName="2770" Description="2771">11<Enum><Yes DisplayName="2772">10</Yes><No DisplayName="2773">11</No></Enum></OmitRails>
+						<OmitTie DataType="long" TypeInfo="16" DisplayName="2774" Description="2775">11<Enum><Yes DisplayName="2776">10</Yes><No DisplayName="2777">11</No></Enum></OmitTie>
+						<RightShoulderWidth DataType="double" TypeInfo="16" DisplayName="2778" Description="2779">1</RightShoulderWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{25308E51-AFB5-49ED-B8FC-85EEC30A016A}"/><Properties><ItemName resource="2900" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\leftTrack.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\leftTrack.png"/></Images><Description resource="2901" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Left_Hand_Multi_Track</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\Left_Hand_Multi_Track\5ae6aebc126b4667b7269e7b492a35a7.dll">Subassembly.Left_Hand_Multi_Track</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<SubballastCrownOffset DataType="double" TypeInfo="16" DisplayName="2902" Description="2903">10</SubballastCrownOffset>
+						<DefaultCant DataType="double" TypeInfo="16" DisplayName="2904" Description="2905">0</DefaultCant>
+						<BallastDepth DataType="double" TypeInfo="16" DisplayName="2906" Description="2907">2</BallastDepth>
+						<SubBallastDepth DataType="double" TypeInfo="16" DisplayName="2908" Description="2909">0.66666</SubBallastDepth>
+						<SubBallastSlopeLeft DataType="double" TypeInfo="10" DisplayName="2910" Description="2911">0.02</SubBallastSlopeLeft>
+						<SubBallastSlopeRight DataType="double" TypeInfo="10" DisplayName="2912" Description="2913">0.02</SubBallastSlopeRight>
+						<Gauge DataType="double" TypeInfo="16" DisplayName="2914" Description="2915">4.70833</Gauge>
+						<TieWidth DataType="double" TypeInfo="16" DisplayName="2916" Description="2917">8.5</TieWidth>
+						<RailHeadWidth DataType="double" TypeInfo="16" DisplayName="2918" Description="2919">0.22666</RailHeadWidth>
+						<OmitSubBase DataType="long" TypeInfo="16" DisplayName="2920" Description="2921">11<Enum><Yes DisplayName="2922">10</Yes><No DisplayName="2923">11</No></Enum></OmitSubBase>
+						<SoilFillExt DataType="double" TypeInfo="16" DisplayName="2924" Description="2925">0.5</SoilFillExt>
+						<SoilFillSlope DataType="double" TypeInfo="10" DisplayName="2926" Description="2927">1</SoilFillSlope>
+						<SoilFillDepth DataType="double" TypeInfo="16" DisplayName="2928" Description="2929">1</SoilFillDepth>
+						<OmitSoilFill DataType="long" TypeInfo="16" DisplayName="2930" Description="2931">11<Enum><Yes DisplayName="2932">10</Yes><No DisplayName="2933">11</No></Enum></OmitSoilFill>
+						<BallastSlope DataType="double" TypeInfo="10" DisplayName="2934" Description="2935">0.333333333333333</BallastSlope>
+						<TieDepth DataType="double" TypeInfo="16" DisplayName="2936" Description="2937">0.58333</TieDepth>
+						<LeftShoulderWidth DataType="double" TypeInfo="16" DisplayName="2938" Description="2939">1</LeftShoulderWidth>
+						<SubBaseDepth DataType="double" TypeInfo="16" DisplayName="2940" Description="2941">1</SubBaseDepth>
+						<SubBaseSlope DataType="double" TypeInfo="10" DisplayName="2942" Description="2943">1</SubBaseSlope>
+						<SubBaseExt DataType="double" TypeInfo="16" DisplayName="2944" Description="2945">0.5</SubBaseExt>
+						<RailDepth DataType="double" TypeInfo="16" DisplayName="2946" Description="2947">0.55208</RailDepth>
+						<RailBaseWidth DataType="double" TypeInfo="16" DisplayName="2948" Description="2949">0.45833</RailBaseWidth>
+						<LeftBallastSideSlope DataType="double" TypeInfo="10" DisplayName="2950" Description="2951">0.5</LeftBallastSideSlope>
+						<LeftSubBallastExt DataType="double" TypeInfo="16" DisplayName="2952" Description="2953">1</LeftSubBallastExt>
+						<LeftSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="2954" Description="2955">0.5</LeftSubBallastSideSlope>
+						<TiePlateThickness DataType="double" TypeInfo="16" DisplayName="2956" Description="2957">0.08333</TiePlateThickness>
+						<RailBaseToBallast DataType="double" TypeInfo="16" DisplayName="2958" Description="2959">0.08333</RailBaseToBallast>
+						<OmitBallast DataType="long" TypeInfo="16" DisplayName="2960" Description="2961">11<Enum><Yes DisplayName="2962">10</Yes><No DisplayName="2963">11</No></Enum></OmitBallast>
+						<OmitSubBallast DataType="long" TypeInfo="16" DisplayName="2964" Description="2965">11<Enum><Yes DisplayName="2966">10</Yes><No DisplayName="2967">11</No></Enum></OmitSubBallast>
+						<MeasureSuperAt DataType="long" TypeInfo="16" DisplayName="2968" Description="2969">301<Enum><GaugeLine DisplayName="2970">302</GaugeLine><CLRail DisplayName="2971">301</CLRail></Enum></MeasureSuperAt>
+						<OmitRails DataType="long" TypeInfo="16" DisplayName="2972" Description="2973">11<Enum><Yes DisplayName="2974">10</Yes><No DisplayName="2975">11</No></Enum></OmitRails>
+						<OmitTie DataType="long" TypeInfo="16" DisplayName="2976" Description="2977">11<Enum><Yes DisplayName="2978">10</Yes><No DisplayName="2979">11</No></Enum></OmitTie>
+						<RightShoulderWidth DataType="double" TypeInfo="16" DisplayName="2980" Description="2981">1</RightShoulderWidth>
+						<RightDrainageChannelDepth DataType="double" TypeInfo="16" DisplayName="2982" Description="2983">0.5</RightDrainageChannelDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3B40620B-09E7-45D7-B117-25CE42C2B31C}"/><Properties><ItemName resource="3100" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\doubleTrack.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\doubleTrack.png"/></Images><Description resource="3101" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RailDoubleTrackCANT_w_ExtraLayers</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\RailDoubleTrackCANT_w_ExtraLayers\65af9fc08bfa4f1c90c7ad37be30bb58.dll">Subassembly.RailDoubleTrackCANT_w_ExtraLayers</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<DefaultCant DataType="double" TypeInfo="16" DisplayName="3102" Description="3103">0</DefaultCant>
+						<BallastDepth DataType="double" TypeInfo="16" DisplayName="3104" Description="3105">1</BallastDepth>
+						<SubBallastDepth DataType="double" TypeInfo="16" DisplayName="3106" Description="3107">0.66666</SubBallastDepth>
+						<DrainageChannelDepth DataType="double" TypeInfo="16" DisplayName="3108" Description="3109">0.5</DrainageChannelDepth>
+						<SubBallastSlope DataType="double" TypeInfo="10" DisplayName="3110" Description="3111">0.05</SubBallastSlope>
+						<Gauge DataType="double" TypeInfo="16" DisplayName="3112" Description="3113">4.70833</Gauge>
+						<TieWidth DataType="double" TypeInfo="16" DisplayName="3114" Description="3115">8.5</TieWidth>
+						<RailHeadWidth DataType="double" TypeInfo="16" DisplayName="3116" Description="3117">0.22666</RailHeadWidth>
+						<TieDepth DataType="double" TypeInfo="16" DisplayName="3118" Description="3119">0.58333</TieDepth>
+						<LeftShoulderWidth DataType="double" TypeInfo="16" DisplayName="3120" Description="3121">1</LeftShoulderWidth>
+						<RightShoulderWidth DataType="double" TypeInfo="16" DisplayName="3122" Description="3123">1</RightShoulderWidth>
+						<RailDepth DataType="double" TypeInfo="16" DisplayName="3124" Description="3125">0.55208</RailDepth>
+						<RailBaseWidth DataType="double" TypeInfo="16" DisplayName="3126" Description="3127">0.45833</RailBaseWidth>
+						<LeftBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3128" Description="3129">0.5</LeftBallastSideSlope>
+						<RightBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3130" Description="3131">0.5</RightBallastSideSlope>
+						<LeftSubBallastExt DataType="double" TypeInfo="16" DisplayName="3132" Description="3133">1</LeftSubBallastExt>
+						<RightSubBallastExt DataType="double" TypeInfo="16" DisplayName="3134" Description="3135">1</RightSubBallastExt>
+						<LeftSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3136" Description="3137">0.5</LeftSubBallastSideSlope>
+						<RightSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3138" Description="3139">0.5</RightSubBallastSideSlope>
+						<TiePlateThickness DataType="double" TypeInfo="16" DisplayName="3140" Description="3141">0.08333</TiePlateThickness>
+						<LeftTrackElevDiff DataType="double" TypeInfo="16" DisplayName="3142" Description="3143">0</LeftTrackElevDiff>
+						<RightTrackElevDiff DataType="double" TypeInfo="16" DisplayName="3144" Description="3145">0</RightTrackElevDiff>
+						<RailBaseToBallast DataType="double" TypeInfo="16" DisplayName="3146" Description="3147">0.08333</RailBaseToBallast>
+						<OmitBallast DataType="long" TypeInfo="16" DisplayName="3148" Description="3149">11<Enum><Yes DisplayName="3150">10</Yes><No DisplayName="3151">11</No></Enum></OmitBallast>
+						<OmitSubBallast DataType="long" TypeInfo="16" DisplayName="3152" Description="3153">11<Enum><Yes DisplayName="3154">10</Yes><No DisplayName="3155">11</No></Enum></OmitSubBallast>
+						<MeasureSuperAt DataType="long" TypeInfo="16" DisplayName="3156" Description="3157">302<Enum><GaugeLine DisplayName="3158">303</GaugeLine><CLRail DisplayName="3159">302</CLRail></Enum></MeasureSuperAt>
+						<OmitRails DataType="long" TypeInfo="16" DisplayName="3160" Description="3161">11<Enum><Yes DisplayName="3162">10</Yes><No DisplayName="3163">11</No></Enum></OmitRails>
+						<OmitTie DataType="long" TypeInfo="16" DisplayName="3164" Description="3165">11<Enum><Yes DisplayName="3166">10</Yes><No DisplayName="3167">11</No></Enum></OmitTie>
+						<LeftTrackOffset DataType="double" TypeInfo="16" DisplayName="3168" Description="3169">-20</LeftTrackOffset>
+						<RightTrackOffset DataType="double" TypeInfo="16" DisplayName="3170" Description="3171">20</RightTrackOffset>
+						<SubballastCrownOffset DataType="double" TypeInfo="16" DisplayName="3172" Description="3173">10</SubballastCrownOffset>
+						<OmitSubBase DataType="long" TypeInfo="16" DisplayName="3174" Description="3175">11<Enum><Yes DisplayName="3176">10</Yes><No DisplayName="3177">11</No></Enum></OmitSubBase>
+						<SoilFillSlope DataType="double" TypeInfo="10" DisplayName="3178" Description="3179">1</SoilFillSlope>
+						<SoilFillExt DataType="double" TypeInfo="16" DisplayName="3180" Description="3181">0.5</SoilFillExt>
+						<SoilFillDepth DataType="double" TypeInfo="16" DisplayName="3182" Description="3183">1</SoilFillDepth>
+						<OmitSoilFill DataType="long" TypeInfo="16" DisplayName="3184" Description="3185">11<Enum><Yes DisplayName="3186">10</Yes><No DisplayName="3187">11</No></Enum></OmitSoilFill>
+						<SubBaseSlope DataType="double" TypeInfo="10" DisplayName="3188" Description="3189">1</SubBaseSlope>
+						<SubBaseDepth DataType="double" TypeInfo="16" DisplayName="3190" Description="3191">1</SubBaseDepth>
+						<SubBaseExt DataType="double" TypeInfo="16" DisplayName="3192" Description="3193">0.5</SubBaseExt>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8439221E-8788-4125-919E-5A0A8A7065F4}"/><Properties><ItemName resource="3300" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\platform.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\platform.png"/></Images><Description resource="3301" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RailPlatform</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\RailPlatform\f0421fc6bf51476a84133b279d4d1937.dll">Subassembly.RailPlatform</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Side DataType="long" TypeInfo="16" DisplayName="3302" Description="3303">0<Enum><Left DisplayName="3304">1</Left><Right DisplayName="3305">0</Right></Enum></Side>
+						<WallWidth DataType="double" TypeInfo="16" DisplayName="3306" Description="3307">2.782</WallWidth>
+						<WallLink DataType="string" TypeInfo="16" DisplayName="3308" Description="3309">Wall</WallLink>
+						<ConcretePlinthHeight DataType="double" TypeInfo="16" DisplayName="3310" Description="3311">0.2</ConcretePlinthHeight>
+						<ConcretePlinthLink DataType="string" TypeInfo="16" DisplayName="3312" Description="3313">Concrete Plinth</ConcretePlinthLink>
+						<ConcreteUnitsHeight DataType="double" TypeInfo="16" DisplayName="3314" Description="3315">0.2</ConcreteUnitsHeight>
+						<ConcreteFlagLink DataType="string" TypeInfo="16" DisplayName="3316" Description="3317">Concrete Flag</ConcreteFlagLink>
+						<ConcreteUnitsShape DataType="string" TypeInfo="16" DisplayName="3318" Description="3319">Concrete Units</ConcreteUnitsShape>
+						<ConcreteFlagShape DataType="string" TypeInfo="16" DisplayName="3320" Description="3321">Concrete Flag</ConcreteFlagShape>
+						<SandBlindingShape DataType="string" TypeInfo="16" DisplayName="3322" Description="3323">Sand Blinding</SandBlindingShape>
+						<FoundationBackShape DataType="string" TypeInfo="16" DisplayName="3324" Description="3325">Foundation Back</FoundationBackShape>
+						<ConcreteFlagHeight DataType="double" TypeInfo="16" DisplayName="3326" Description="3327">0.12</ConcreteFlagHeight>
+						<ConcreteFlagWidth DataType="double" TypeInfo="16" DisplayName="3328" Description="3329">0.7</ConcreteFlagWidth>
+						<ConcreteUnitsLink DataType="string" TypeInfo="16" DisplayName="3330" Description="3331">Concrete Units</ConcreteUnitsLink>
+						<SandBed DataType="double" TypeInfo="16" DisplayName="3332" Description="3333">0.07</SandBed>
+						<SandBedShape DataType="string" TypeInfo="16" DisplayName="3334" Description="3335">Sand</SandBedShape>
+						<WallShape DataType="string" TypeInfo="16" DisplayName="3336" Description="3337">Wall</WallShape>
+						<SandBedLink DataType="string" TypeInfo="16" DisplayName="3338" Description="3339">Sand</SandBedLink>
+						<ConcretePlinthShape DataType="string" TypeInfo="16" DisplayName="3340" Description="3341">Concrete Plinth</ConcretePlinthShape>
+						<FootwaySlope DataType="double" TypeInfo="10" DisplayName="3342" Description="3343">0.025</FootwaySlope>
+						<FootwayShape DataType="string" TypeInfo="16" DisplayName="3344" Description="3345">Footway</FootwayShape>
+						<FoundationShift DataType="double" TypeInfo="16" DisplayName="3346" Description="3347">0.1</FoundationShift>
+						<FoundationDepth DataType="double" TypeInfo="16" DisplayName="3348" Description="3349">0.556</FoundationDepth>
+						<FoundationShape DataType="string" TypeInfo="16" DisplayName="3350" Description="3351">Foundation</FoundationShape>
+						<Overhang DataType="double" TypeInfo="16" DisplayName="3352" Description="3353">0.512</Overhang>
+						<FoundationLink DataType="string" TypeInfo="16" DisplayName="3354" Description="3355">Foundation</FoundationLink>
+						<FoundationBackWidth DataType="double" TypeInfo="16" DisplayName="3356" Description="3357">1.65</FoundationBackWidth>
+						<FootwayLink DataType="string" TypeInfo="16" DisplayName="3358" Description="3359">Footway</FootwayLink>
+						<SandBlinding DataType="double" TypeInfo="16" DisplayName="3360" Description="3361">0.1</SandBlinding>
+						<FoundationBaseHeight DataType="double" TypeInfo="16" DisplayName="3362" Description="3363">1.9</FoundationBaseHeight>
+						<PlatformEdge DataType="string" TypeInfo="16" DisplayName="3364" Description="3365">PlatformEdge</PlatformEdge>
+						<PlatformHeightAboveRail DataType="double" TypeInfo="16" DisplayName="3366" Description="3367">2</PlatformHeightAboveRail>
+						<BackEdge DataType="string" TypeInfo="16" DisplayName="3368" Description="3369">BackEdge</BackEdge>
+						<OffsetFromCLInput DataType="double" TypeInfo="16" DisplayName="3370" Description="3371">2</OffsetFromCLInput>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0C3C0679-87D8-4050-8117-88FC5408C976}"/><Properties><ItemName resource="3500" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\Single.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\Single.png"/></Images><Description resource="3501" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RailSingleTrackCANT_w_ExtraLayers</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\RailSingleTrackCANT_w_ExtraLayers\32d7402772f94eec93174f17576f93c3.dll">Subassembly.RailSingleTrackCANT_w_ExtraLayers</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<DefaultCant DataType="double" TypeInfo="16" DisplayName="3502" Description="3503">0</DefaultCant>
+						<BallastDepth DataType="double" TypeInfo="16" DisplayName="3504" Description="3505">2</BallastDepth>
+						<SubBallastDepth DataType="double" TypeInfo="16" DisplayName="3506" Description="3507">0.66666</SubBallastDepth>
+						<SubBallastSlope DataType="double" TypeInfo="10" DisplayName="3508" Description="3509">0.02</SubBallastSlope>
+						<Gauge DataType="double" TypeInfo="16" DisplayName="3510" Description="3511">4.70833</Gauge>
+						<TieWidth DataType="double" TypeInfo="16" DisplayName="3512" Description="3513">8.5</TieWidth>
+						<RailHeadWidth DataType="double" TypeInfo="16" DisplayName="3514" Description="3515">0.22666</RailHeadWidth>
+						<OmitSubBase DataType="long" TypeInfo="16" DisplayName="3516" Description="3517">11<Enum><Yes DisplayName="3518">10</Yes><No DisplayName="3519">11</No></Enum></OmitSubBase>
+						<SoilFillExt DataType="double" TypeInfo="16" DisplayName="3520" Description="3521">0.5</SoilFillExt>
+						<SoilFillSlope DataType="double" TypeInfo="10" DisplayName="3522" Description="3523">1</SoilFillSlope>
+						<SoilFillDepth DataType="double" TypeInfo="16" DisplayName="3524" Description="3525">1</SoilFillDepth>
+						<OmitSoilFill DataType="long" TypeInfo="16" DisplayName="3526" Description="3527">11<Enum><Yes DisplayName="3528">10</Yes><No DisplayName="3529">11</No></Enum></OmitSoilFill>
+						<TieDepth DataType="double" TypeInfo="16" DisplayName="3530" Description="3531">0.58333</TieDepth>
+						<LeftShoulderWidth DataType="double" TypeInfo="16" DisplayName="3532" Description="3533">1</LeftShoulderWidth>
+						<SubBaseDepth DataType="double" TypeInfo="16" DisplayName="3534" Description="3535">1</SubBaseDepth>
+						<SubBaseSlope DataType="double" TypeInfo="10" DisplayName="3536" Description="3537">1</SubBaseSlope>
+						<SubBaseExt DataType="double" TypeInfo="16" DisplayName="3538" Description="3539">0.5</SubBaseExt>
+						<RightShoulderWidth DataType="double" TypeInfo="16" DisplayName="3540" Description="3541">1</RightShoulderWidth>
+						<RailDepth DataType="double" TypeInfo="16" DisplayName="3542" Description="3543">0.55208</RailDepth>
+						<RailBaseWidth DataType="double" TypeInfo="16" DisplayName="3544" Description="3545">0.45833</RailBaseWidth>
+						<LeftBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3546" Description="3547">0.5</LeftBallastSideSlope>
+						<RightBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3548" Description="3549">0.5</RightBallastSideSlope>
+						<LeftSubBallastExt DataType="double" TypeInfo="16" DisplayName="3550" Description="3551">1</LeftSubBallastExt>
+						<RightSubBallastExt DataType="double" TypeInfo="16" DisplayName="3552" Description="3553">1</RightSubBallastExt>
+						<LeftSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3554" Description="3555">0.5</LeftSubBallastSideSlope>
+						<RightSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3556" Description="3557">0.5</RightSubBallastSideSlope>
+						<TiePlateThickness DataType="double" TypeInfo="16" DisplayName="3558" Description="3559">0.08333</TiePlateThickness>
+						<RailBaseToBallast DataType="double" TypeInfo="16" DisplayName="3560" Description="3561">0.08333</RailBaseToBallast>
+						<OmitBallast DataType="long" TypeInfo="16" DisplayName="3562" Description="3563">11<Enum><Yes DisplayName="3564">10</Yes><No DisplayName="3565">11</No></Enum></OmitBallast>
+						<OmitSubBallast DataType="long" TypeInfo="16" DisplayName="3566" Description="3567">11<Enum><Yes DisplayName="3568">10</Yes><No DisplayName="3569">11</No></Enum></OmitSubBallast>
+						<MeasureSuperAt DataType="long" TypeInfo="16" DisplayName="3570" Description="3571">301<Enum><GaugeLine DisplayName="3572">302</GaugeLine><CLRail DisplayName="3573">301</CLRail></Enum></MeasureSuperAt>
+						<OmitRails DataType="long" TypeInfo="16" DisplayName="3574" Description="3575">11<Enum><Yes DisplayName="3576">10</Yes><No DisplayName="3577">11</No></Enum></OmitRails>
+						<OmitTie DataType="long" TypeInfo="16" DisplayName="3578" Description="3579">11<Enum><Yes DisplayName="3580">10</Yes><No DisplayName="3581">11</No></Enum></OmitTie>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5DEC464E-76F9-439E-B75B-19DC0A1F0FE6}"/><Properties><ItemName resource="3700" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Rail\64\light\rightTrack.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Rail\64\dark\rightTrack.png"/></Images><Description resource="3701" src="AeccXamlSubassemblyScriptsRC.dll"/><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Right_Hand_Multi_Track</HelpData></Help><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\XamlSubassemblies\Imperial\Right_Hand_Multi_Track\50eff96de74c4a528593d4048b898f39.dll">Subassembly.Right_Hand_Multi_Track</DotNetClass>
+					<Resource Module="AeccXamlSubassemblyScriptsRC.dll"/>
+					<Params>
+						<DefaultCant DataType="double" TypeInfo="16" DisplayName="3702" Description="3703">0</DefaultCant>
+						<BallastDepth DataType="double" TypeInfo="16" DisplayName="3704" Description="3705">2</BallastDepth>
+						<SubBallastDepth DataType="double" TypeInfo="16" DisplayName="3706" Description="3707">0.66666</SubBallastDepth>
+						<SubBallastSlopeLeft DataType="double" TypeInfo="10" DisplayName="3708" Description="3709">0.02</SubBallastSlopeLeft>
+						<SubBallastSlopeRight DataType="double" TypeInfo="10" DisplayName="3710" Description="3711">0.02</SubBallastSlopeRight>
+						<Gauge DataType="double" TypeInfo="16" DisplayName="3712" Description="3713">4.70833</Gauge>
+						<TieWidth DataType="double" TypeInfo="16" DisplayName="3714" Description="3715">8.5</TieWidth>
+						<RailHeadWidth DataType="double" TypeInfo="16" DisplayName="3716" Description="3717">0.22666</RailHeadWidth>
+						<OmitSubBase DataType="long" TypeInfo="16" DisplayName="3718" Description="3719">11<Enum><Yes DisplayName="3720">10</Yes><No DisplayName="3721">11</No></Enum></OmitSubBase>
+						<SoilFillExt DataType="double" TypeInfo="16" DisplayName="3722" Description="3723">0.5</SoilFillExt>
+						<SoilFillSlope DataType="double" TypeInfo="10" DisplayName="3724" Description="3725">1</SoilFillSlope>
+						<SoilFillDepth DataType="double" TypeInfo="16" DisplayName="3726" Description="3727">1</SoilFillDepth>
+						<OmitSoilFill DataType="long" TypeInfo="16" DisplayName="3728" Description="3729">11<Enum><Yes DisplayName="3730">10</Yes><No DisplayName="3731">11</No></Enum></OmitSoilFill>
+						<TieDepth DataType="double" TypeInfo="16" DisplayName="3732" Description="3733">0.58333</TieDepth>
+						<LeftShoulderWidth DataType="double" TypeInfo="16" DisplayName="3734" Description="3735">1</LeftShoulderWidth>
+						<SubBaseDepth DataType="double" TypeInfo="16" DisplayName="3736" Description="3737">1</SubBaseDepth>
+						<SubBaseSlope DataType="double" TypeInfo="10" DisplayName="3738" Description="3739">1</SubBaseSlope>
+						<SubBaseExt DataType="double" TypeInfo="16" DisplayName="3740" Description="3741">0.5</SubBaseExt>
+						<RightShoulderWidth DataType="double" TypeInfo="16" DisplayName="3742" Description="3743">1</RightShoulderWidth>
+						<RailDepth DataType="double" TypeInfo="16" DisplayName="3744" Description="3745">0.55208</RailDepth>
+						<RailBaseWidth DataType="double" TypeInfo="16" DisplayName="3746" Description="3747">0.45833</RailBaseWidth>
+						<RightBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3748" Description="3749">0.5</RightBallastSideSlope>
+						<RightSubBallastExt DataType="double" TypeInfo="16" DisplayName="3750" Description="3751">1</RightSubBallastExt>
+						<RightSubBallastSideSlope DataType="double" TypeInfo="10" DisplayName="3752" Description="3753">0.5</RightSubBallastSideSlope>
+						<TiePlateThickness DataType="double" TypeInfo="16" DisplayName="3754" Description="3755">0.08333</TiePlateThickness>
+						<RailBaseToBallast DataType="double" TypeInfo="16" DisplayName="3756" Description="3757">0.08333</RailBaseToBallast>
+						<OmitBallast DataType="long" TypeInfo="16" DisplayName="3758" Description="3759">11<Enum><Yes DisplayName="3760">10</Yes><No DisplayName="3761">11</No></Enum></OmitBallast>
+						<OmitSubBallast DataType="long" TypeInfo="16" DisplayName="3762" Description="3763">11<Enum><Yes DisplayName="3764">10</Yes><No DisplayName="3765">11</No></Enum></OmitSubBallast>
+						<MeasureSuperAt DataType="long" TypeInfo="16" DisplayName="3766" Description="3767">301<Enum><GaugeLine DisplayName="3768">302</GaugeLine><CLRail DisplayName="3769">301</CLRail></Enum></MeasureSuperAt>
+						<OmitRails DataType="long" TypeInfo="16" DisplayName="3770" Description="3771">11<Enum><Yes DisplayName="3772">10</Yes><No DisplayName="3773">11</No></Enum></OmitRails>
+						<OmitTie DataType="long" TypeInfo="16" DisplayName="3774" Description="3775">11<Enum><Yes DisplayName="3776">10</Yes><No DisplayName="3777">11</No></Enum></OmitTie>
+						<BallastSlope DataType="double" TypeInfo="10" DisplayName="3778" Description="3779">0.333333333333333</BallastSlope>
+						<SubballastCrownOffset DataType="double" TypeInfo="16" DisplayName="3780" Description="3781">10</SubballastCrownOffset>
+						<LeftDrainageChannelDepth DataType="double" TypeInfo="16" DisplayName="3782" Description="3783">0.5</LeftDrainageChannelDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DE96592F-FD43-4F47-891E-1D110EDCF918}"/><Properties><ItemName resource="101" src="AeccXamlSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

@@ -1,0 +1,80 @@
+﻿Subject,Type,Status,Start date,Finish date,Parent,Estimated time
+SLNR Santos — CT 11481051,Phase,New,2026-04-01,2028-07-14,,
+Verde e Teteu,Phase,New,2026-04-01,2026-11-13,SLNR Santos — CT 11481051,1808h
+Topografia + Cadastro,Task,New,2026-04-01,2026-04-22,Verde e Teteu,120h
+Projeto + Planejamento,Task,New,2026-04-22,2026-05-06,Verde e Teteu,80h
+Escavação,Task,New,2026-05-06,2026-06-24,Verde e Teteu,280h
+Assentamento Tubulação,Task,New,2026-06-24,2026-07-31,Verde e Teteu,216h
+Montagem PVs/PIs,Task,New,2026-07-31,2026-08-26,Verde e Teteu,144h
+Reaterro + Compactação,Task,New,2026-08-26,2026-09-21,Verde e Teteu,144h
+Teste Estanqueidade,Task,New,2026-09-21,2026-09-28,Verde e Teteu,40h
+Lavagem + Coliformes,Task,New,2026-09-28,2026-10-07,Verde e Teteu,56h
+Pavimentação CBUQ,Task,New,2026-09-21,2026-10-15,Verde e Teteu,144h
+Cadastro NTS 292,Task,New,2026-09-28,2026-10-12,Verde e Teteu,80h
+Ligações Prediais,Task,New,2026-10-07,2026-11-13,Verde e Teteu,216h
+Medição + BM,Task,New,2026-10-12,2026-10-19,Verde e Teteu,40h
+São Manoel,Phase,New,2026-04-15,2026-10-13,SLNR Santos — CT 11481051,1448h
+Topografia + Cadastro,Task,New,2026-04-15,2026-05-06,São Manoel,120h
+Projeto + Planejamento,Task,New,2026-05-06,2026-05-20,São Manoel,80h
+Escavação,Task,New,2026-05-20,2026-06-25,São Manoel,208h
+Assentamento Tubulação,Task,New,2026-06-25,2026-07-23,São Manoel,160h
+Montagem PVs/PIs,Task,New,2026-07-23,2026-08-11,São Manoel,104h
+Reaterro + Compactação,Task,New,2026-08-11,2026-08-28,São Manoel,104h
+Teste Estanqueidade,Task,New,2026-08-28,2026-09-04,São Manoel,40h
+Lavagem + Coliformes,Task,New,2026-09-04,2026-09-15,São Manoel,56h
+Pavimentação CBUQ,Task,New,2026-08-28,2026-09-16,São Manoel,104h
+Cadastro NTS 292,Task,New,2026-09-04,2026-09-18,São Manoel,80h
+Ligações Prediais,Task,New,2026-09-15,2026-10-13,São Manoel,160h
+Medição + BM,Task,New,2026-09-18,2026-09-25,São Manoel,40h
+Vila Israel,Phase,New,2026-04-29,2028-07-14,SLNR Santos — CT 11481051,6456h
+Topografia + Cadastro,Task,New,2026-04-29,2026-05-20,Vila Israel,120h
+Projeto + Planejamento,Task,New,2026-05-20,2026-06-03,Vila Israel,80h
+Escavação,Task,New,2026-06-03,2027-01-05,Vila Israel,1232h
+Assentamento Tubulação,Task,New,2027-01-05,2027-06-16,Vila Israel,928h
+Montagem PVs/PIs,Task,New,2027-06-16,2027-10-01,Vila Israel,616h
+Reaterro + Compactação,Task,New,2027-10-01,2028-01-18,Vila Israel,616h
+Teste Estanqueidade,Task,New,2028-01-18,2028-01-25,Vila Israel,40h
+Lavagem + Coliformes,Task,New,2028-01-25,2028-02-03,Vila Israel,56h
+Pavimentação CBUQ,Task,New,2028-01-18,2028-05-04,Vila Israel,616h
+Cadastro NTS 292,Task,New,2028-01-25,2028-02-08,Vila Israel,80h
+Ligações Prediais,Task,New,2028-02-03,2028-07-14,Vila Israel,928h
+Medição + BM,Task,New,2028-02-08,2028-02-15,Vila Israel,40h
+Pantanal Baixo,Phase,New,2026-05-13,2027-09-20,SLNR Santos — CT 11481051,3960h
+Topografia + Cadastro,Task,New,2026-05-13,2026-06-03,Pantanal Baixo,120h
+Projeto + Planejamento,Task,New,2026-06-03,2026-06-17,Pantanal Baixo,80h
+Escavação,Task,New,2026-06-17,2026-10-21,Pantanal Baixo,720h
+Assentamento Tubulação,Task,New,2026-10-21,2027-01-25,Pantanal Baixo,544h
+Montagem PVs/PIs,Task,New,2027-01-25,2027-03-29,Pantanal Baixo,360h
+Reaterro + Compactação,Task,New,2027-03-29,2027-05-31,Pantanal Baixo,360h
+Teste Estanqueidade,Task,New,2027-05-31,2027-06-07,Pantanal Baixo,40h
+Lavagem + Coliformes,Task,New,2027-06-07,2027-06-16,Pantanal Baixo,56h
+Pavimentação CBUQ,Task,New,2027-05-31,2027-08-02,Pantanal Baixo,360h
+Cadastro NTS 292,Task,New,2027-06-07,2027-06-21,Pantanal Baixo,80h
+Ligações Prediais,Task,New,2027-06-16,2027-09-20,Pantanal Baixo,544h
+Medição + BM,Task,New,2027-06-21,2027-06-28,Pantanal Baixo,40h
+Vila Criadores,Phase,New,2026-05-27,2027-09-01,SLNR Santos — CT 11481051,3696h
+Topografia + Cadastro,Task,New,2026-05-27,2026-06-17,Vila Criadores,120h
+Projeto + Planejamento,Task,New,2026-06-17,2026-07-01,Vila Criadores,80h
+Escavação,Task,New,2026-07-01,2026-10-26,Vila Criadores,664h
+Assentamento Tubulação,Task,New,2026-10-26,2027-01-21,Vila Criadores,504h
+Montagem PVs/PIs,Task,New,2027-01-21,2027-03-22,Vila Criadores,336h
+Reaterro + Compactação,Task,New,2027-03-22,2027-05-19,Vila Criadores,336h
+Teste Estanqueidade,Task,New,2027-05-19,2027-05-26,Vila Criadores,40h
+Lavagem + Coliformes,Task,New,2027-05-26,2027-06-04,Vila Criadores,56h
+Pavimentação CBUQ,Task,New,2027-05-19,2027-07-16,Vila Criadores,336h
+Cadastro NTS 292,Task,New,2027-05-26,2027-06-09,Vila Criadores,80h
+Ligações Prediais,Task,New,2027-06-04,2027-09-01,Vila Criadores,504h
+Medição + BM,Task,New,2027-06-09,2027-06-16,Vila Criadores,40h
+João Carlos,Phase,New,2026-06-10,2027-05-21,SLNR Santos — CT 11481051,2760h
+Topografia + Cadastro,Task,New,2026-06-10,2026-07-01,João Carlos,120h
+Projeto + Planejamento,Task,New,2026-07-01,2026-07-15,João Carlos,80h
+Escavação,Task,New,2026-07-15,2026-10-07,João Carlos,480h
+Assentamento Tubulação,Task,New,2026-10-07,2026-12-09,João Carlos,360h
+Montagem PVs/PIs,Task,New,2026-12-09,2027-01-20,João Carlos,240h
+Reaterro + Compactação,Task,New,2027-01-20,2027-03-03,João Carlos,240h
+Teste Estanqueidade,Task,New,2027-03-03,2027-03-10,João Carlos,40h
+Lavagem + Coliformes,Task,New,2027-03-10,2027-03-19,João Carlos,56h
+Pavimentação CBUQ,Task,New,2027-03-03,2027-04-14,João Carlos,240h
+Cadastro NTS 292,Task,New,2027-03-10,2027-03-24,João Carlos,80h
+Ligações Prediais,Task,New,2027-03-19,2027-05-21,João Carlos,360h
+Medição + BM,Task,New,2027-03-24,2027-03-31,João Carlos,40h

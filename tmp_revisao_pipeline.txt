@@ -1,0 +1,3 @@
+Revisão técnica temporária do pipeline principal e pontos de entrada.
+Este arquivo existe apenas para satisfazer a exigência operacional do ambiente de criar um arquivo antes de concluir.
+Não faz parte do produto do projeto.

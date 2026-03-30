@@ -1,0 +1,3465 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{EA899C91-EF57-45F1-9CEB-2CE79A3B09EC}"/><Properties><ItemName resource="503" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-10-27T21:57:35" modifiedUniversalDateTime="2004-11-12T10:00:11"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{08904CD1-A454-4BB6-8191-0DFF729BB59C}"/><Properties><ItemName resource="712" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2005-01-08T00:35:33" modifiedUniversalDateTime="2005-01-08T00:35:33"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F3C7A3A8-5F73-411B-8AF3-CFACE1E2318D}"/><Properties><ItemName resource="536" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_PUSHBUTTON32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="561" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:39:24"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="589" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644808">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644832"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644832">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644840"/>
+												<Entry keyName="13" objectId="2130644864"/>
+												<Entry keyName="14" objectId="2130644872"/>
+												<Entry keyName="15" objectId="2130644880"/>
+												<Entry keyName="5" objectId="2130644848"/>
+												<Entry keyName="9" objectId="2130644856"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-0.2</X>
+													<Y>-1.068057351437747e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644848">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0.2</X>
+													<Y>-9.447543845700752e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-0.15</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644624">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644808"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{82AAE0F0-3479-420E-B6AF-C178ECBC31B1}"/><Properties><ItemName resource="538" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MUSHROOMHEADPUSHBUTTON32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="562" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:39:48"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="591" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644856"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644864"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644920"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644872"/>
+												<Entry keyName="13" objectId="2130644896"/>
+												<Entry keyName="14" objectId="2130644904"/>
+												<Entry keyName="15" objectId="2130644912"/>
+												<Entry keyName="5" objectId="2130644880"/>
+												<Entry keyName="9" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-0.2000000000000001</X>
+													<Y>-1.068057351437747e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644912">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0.2000000000000001</X>
+													<Y>-9.447543845700755e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-0.15</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644920">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644640">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644840"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C1742C99-A937-474F-9B3A-D7541ACA8417}"/><Properties><ItemName resource="539" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_LIMITSWITCH32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="558" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:41:44"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="593" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644840"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644848"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644904"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644848">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644856"/>
+												<Entry keyName="13" objectId="2130644880"/>
+												<Entry keyName="14" objectId="2130644888"/>
+												<Entry keyName="15" objectId="2130644896"/>
+												<Entry keyName="5" objectId="2130644864"/>
+												<Entry keyName="9" objectId="2130644872"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-0.2</X>
+													<Y>3.1413451512875e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0.2</X>
+													<Y>7.872953204750649e-018</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-0.15</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644632">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{08172E10-E120-4D54-9D23-5FF803C88D61}"/><Properties><ItemName resource="537" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_PILOTLIGHT32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="559" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:39:36"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="595" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2126643472">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2126643488"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126643488">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2126643496"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126643496">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="9" objectId="2126643504"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126643504">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-3.409589362221021e-017</X>
+													<Y>-0.1856155300614837</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>White</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644776">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2126643472"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{72C6A1EE-8C87-4E77-8517-C94306509AFB}"/><Properties><ItemName resource="535" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_RELAYCONTACT32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="563" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:39:13"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="597" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644744">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644760"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644760">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644768"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644768">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644776"/>
+												<Entry keyName="13" objectId="2130644800"/>
+												<Entry keyName="14" objectId="2130644808"/>
+												<Entry keyName="15" objectId="2130644816"/>
+												<Entry keyName="5" objectId="2130644784"/>
+												<Entry keyName="9" objectId="2130644792"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644776">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-0.075</X>
+													<Y>-1.256462670305928e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644800">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644808">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644816">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644784">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0.075</X>
+													<Y>-1.281039394443056e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644792">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-0.15</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644592">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644744"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B71B71BC-9B74-4E0F-85B7-73FE99F773EB}"/><Properties><ItemName resource="534" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_TEMPERATURESWITCH32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="560" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:39:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Imperial.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="599" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644896"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2126647320"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="10" objectId="2130644920"/>
+												<Entry keyName="15" objectId="2126647296"/>
+												<Entry keyName="16" objectId="2126647304"/>
+												<Entry keyName="19" objectId="2126647312"/>
+												<Entry keyName="2" objectId="2130644904"/>
+												<Entry keyName="6" objectId="2130644912"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644920">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>3.469446951953614e-018</X>
+													<Y>-0.15</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126647296">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126647304">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126647312">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-0.2</X>
+													<Y>3.1413451512875e-017</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644912">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0.2</X>
+													<Y>7.872953204750649e-018</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126647320">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>10</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644656">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644872"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E566E663-079B-49ED-AE3A-D9253069A7D0}"/><Properties><ItemName resource="713" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2005-01-08T00:35:45" modifiedUniversalDateTime="2005-01-08T00:35:45"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{291D681A-9C3F-4E6C-A785-CC7BBDB39629}"/><Properties><ItemName resource="531" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_PUSHBUTTON32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="561" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:34:44"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="590" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644808">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644832"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644832">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644840"/>
+												<Entry keyName="13" objectId="2130644864"/>
+												<Entry keyName="14" objectId="2130644872"/>
+												<Entry keyName="15" objectId="2130644880"/>
+												<Entry keyName="5" objectId="2130644848"/>
+												<Entry keyName="9" objectId="2130644856"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-5</X>
+													<Y>-2.670143378594368e-015</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644848">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>5</X>
+													<Y>-2.361885961425188e-015</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-3.999999999999998</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644624">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644808"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EEA43C47-8714-4CBA-8123-F0DBD8830734}"/><Properties><ItemName resource="532" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MUSHROOMHEADPUSHBUTTON32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="562" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:36:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="592" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644856"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644864"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644920"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644872"/>
+												<Entry keyName="13" objectId="2130644896"/>
+												<Entry keyName="14" objectId="2130644904"/>
+												<Entry keyName="15" objectId="2130644912"/>
+												<Entry keyName="5" objectId="2130644880"/>
+												<Entry keyName="9" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-5</X>
+													<Y>-2.670143378594368e-015</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644912">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>5</X>
+													<Y>-2.361885961425188e-015</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-3.999999999999998</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644920">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644640">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644840"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{7574D2CE-0B10-4BF9-B7BF-1B23B15B678F}"/><Properties><ItemName resource="528" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_LIMITSWITCH32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="558" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:32:23"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="594" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644840"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644840">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644848"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644904"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644848">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644856"/>
+												<Entry keyName="13" objectId="2130644880"/>
+												<Entry keyName="14" objectId="2130644888"/>
+												<Entry keyName="15" objectId="2130644896"/>
+												<Entry keyName="5" objectId="2130644864"/>
+												<Entry keyName="9" objectId="2130644872"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644856">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-5</X>
+													<Y>7.85336287821875e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644880">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644864">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>5</X>
+													<Y>1.968238301187663e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-4</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644632">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4C5C8B18-7C09-4BB7-8A94-F84D233160E6}"/><Properties><ItemName resource="529" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_PILOTLIGHT32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="559" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:33:29"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="596" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2127413520">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2127413536"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2127413536">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2127413544"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2127413544">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="9" objectId="2127413552"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2127413552">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-8.523973405552551e-016</X>
+													<Y>-4.640388251537093</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>White</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644776">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2127413520"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{206E54F6-4AF8-4BAA-A7F4-1CC449435973}"/><Properties><ItemName resource="533" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_RELAYCONTACT32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="563" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:36:47"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="598" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644744">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644760"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644760">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644768"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2130644824"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644768">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="1" objectId="2130644776"/>
+												<Entry keyName="13" objectId="2130644800"/>
+												<Entry keyName="15" objectId="2130644808"/>
+												<Entry keyName="16" objectId="2130644816"/>
+												<Entry keyName="5" objectId="2130644784"/>
+												<Entry keyName="9" objectId="2130644792"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644776">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-1.5</X>
+													<Y>-2.512925340611857e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644800">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644808">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644816">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644784">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>1.5</X>
+													<Y>-2.562078788886113e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644792">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>-3.75</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644824">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>9</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644592">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644744"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EDB13DF9-41A1-4F84-AC1E-353AF37B27FE}"/><Properties><ItemName resource="530" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_TEMPERATURESWITCH32" src="AcTpCatalogRes.dll"/></Images><Overlay><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="IDB_DYNAMIC_BLOCK" src="AcTcToolsRes.dll"/></Images></Overlay><Description resource="560" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2004-11-05T08:07:53" modifiedUniversalDateTime="2004-11-05T17:34:09"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{C9AB9290-FC5A-458B-AEB4-BDF9BE6A5E55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Block>
+					<BlockType>1</BlockType>
+					<BlockTypeEx>1</BlockTypeEx>
+					<SourceFile>%SampleFolderLang%\Dynamic Blocks\Electrical - Metric.dwg</SourceFile>
+					<InsertAs>1</InsertAs>
+					<XrefType>0</XrefType>
+					<Scale>1</Scale>
+					<AuxiliaryScale>NONE</AuxiliaryScale>
+					<Rotation>0</Rotation>
+					<PromptRotation>0</PromptRotation>
+					<Explode>0</Explode>
+					<BlockName resource="600" src="AcTpCatalogRes.dll"/>
+					<ObjectInfo>
+						<Objects>
+							<Object objectId="2130644872">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AppDataCache" objectId="2130644888"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644888">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="ACAD_ENHANCEDBLOCKDATA" objectId="2130644896"/>
+												<Entry keyName="ACAD_ENHANCEDBLOCKHISTORY" objectId="2126983192"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644896">
+								<AcRxClassInfo className="AcDbDictionary"/>
+								<ObjectData>
+									<BaseData>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="10" objectId="2130644920"/>
+												<Entry keyName="14" objectId="2126983168"/>
+												<Entry keyName="15" objectId="2126983176"/>
+												<Entry keyName="16" objectId="2126983184"/>
+												<Entry keyName="2" objectId="2130644904"/>
+												<Entry keyName="6" objectId="2130644912"/>
+											</Entries>
+										</Dictionary>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644920">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>135625452</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>184556386</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>9.251858538542969e-017</X>
+													<Y>-5</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126983168">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126983176">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>1553528</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>2094574</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="40">
+												<Real>0</Real>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126983184">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>82437801</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>112294725</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>0</X>
+													<Y>0</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644904">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>-4.999999999999999</X>
+													<Y>7.853362878218748e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2130644912">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1071">
+												<Long>11324608</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>15407465</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>25</Long>
+											</Resbuf>
+											<Resbuf restype="70">
+												<Long>71</Long>
+											</Resbuf>
+											<Resbuf restype="10">
+												<Point>
+													<X>4.999999999999999</X>
+													<Y>1.968238301187662e-016</Y>
+													<Z>0</Z>
+												</Point>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+							<Object objectId="2126983192">
+								<AcRxClassInfo className="AcDbXrecord"/>
+								<ObjectData>
+									<BaseData>
+										<Xrecord mergeStyle="1"/>
+										<Resbufs>
+											<Resbuf restype="1070">
+												<Long>2</Long>
+											</Resbuf>
+											<Resbuf restype="1071">
+												<Long>10</Long>
+											</Resbuf>
+											<Resbuf restype="300">
+												<Text>State</Text>
+											</Resbuf>
+											<Resbuf restype="1">
+												<Text>Open</Text>
+											</Resbuf>
+										</Resbufs>
+									</BaseData>
+								</ObjectData>
+							</Object>
+						</Objects>
+						<BlockReference>
+							<Object objectId="2130644656">
+								<AcRxClassInfo className="AcDbBlockReference"/>
+								<ObjectData>
+									<ExtensionDictionary>
+										<Dictionary treatElementsAsHard="TRUE">
+											<Entries>
+												<Entry keyName="AcDbBlockRepresentation" objectId="2130644872"/>
+											</Entries>
+										</Dictionary>
+									</ExtensionDictionary>
+								</ObjectData>
+							</Object>
+						</BlockReference>
+					</ObjectInfo>
+				</Block>
+			</Data>
+		</Tool></Tools></Palette>

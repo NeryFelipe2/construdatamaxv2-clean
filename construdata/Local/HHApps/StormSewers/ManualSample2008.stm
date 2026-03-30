@@ -1,0 +1,232 @@
+"Hydraflow Storm Sewers 2008"
+"Project Name = ",""
+"SI Units? ",#FALSE#
+"Total No. Lines = ",2
+"Starting HGL = ",101.5
+"Return Period Index = ",5
+"Min Cover = ",4
+"Zero Min Cover at outfalls = ",#FALSE#
+"Design Vel = ",3
+"Min Slope = ",.1
+"Max Slope = ",10
+"Min Pipe Size = ",12
+"Max Pipe Size = ",96
+"Default Pipe n-value = ",.013
+"Omit 21-inch pipes = ",#TRUE#
+"Omit 27-inch pipes = ",#TRUE#
+"Omit 33-inch pipes = ",#FALSE#
+"Design Alignment = ",0
+"Allow smaller downstream pipe sizes = ",#FALSE#
+"N-Value of Inlets = ",.016
+"Grate Design Depth = ",.3
+"Composite C1 = ",.2
+"Composite C2 = ",.5
+"Composite C3 = ",.9
+"Min. Starting Depth = ","Normal"
+"Accumulate Known Qs = ",#TRUE#
+"Use Inlet Captured Flows in System = ",#FALSE#
+"Auto Compute Junct. Loss Coeff. = ",#TRUE#
+"Supress Pipe Travel Time = ",#FALSE#
+"Minimum Tc used to calc Intensity",5
+"Check for Inlet Control? = ",#FALSE#
+"Correct for EGL discrepancy = ",#TRUE#
+"Using HDS-5 Method? = ",#FALSE#
+"Curb Opening = ","Horiz"
+"LINE DATA ============================="
+"Line No. = ",1
+"Line ID = ","Outfall to Line 1"
+"Downstream Line No. = ",0
+"X,Y Coord Dn = ",158.944290161133,202.539947509766
+"X,Y Coord Up = ",218.944290161133,202.539947509766
+"Deflection Angle = ",0
+"Bearing = ",0
+"Known Q = ",0
+"Sub Drainage Area 1 = ",0
+"Sub Drainage Area 2 = ",0
+"Sub Drainage Area 3 = ",0
+"Drainage Area = ",0
+"Runoff Coeff. = ",0
+"Inlet Time = ",0
+"Line Length = ",60
+"Invert Elev Dn = ",100
+"Line Slope = ",-1.666667
+"Invert Elev Up = ",0
+"Rise = ",0
+"Span = ",0
+"No. Barrels = ",1
+"N-Value = ",.013
+"Line Type = ","Cir"
+"Junction Loss Coeff = ",.75
+"Ground / Rim Elev Dn = ",106.6
+"Ground / Rim Elev Up = ",107.75
+"Junction Type = ",0
+"User def. Sta = ",0,0
+"User"
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+"HGL Down = ",101.5
+"HGL Up = ",101.9254
+"HGL Junct = ",102.2309
+"Downstream Inlet No. = ",0
+"Inlet Length = ",6
+"Inlet throat height = ",3
+"Grate Opening Area = ",2
+"Grate Width = ",4
+"Grate Length = ",.03
+"Known Capacity = ",0
+"Gutter Width = ",2
+"Gutter Slope = ",0
+"Inlet Cross Slope Sw = ",2
+"Inlet Cross Slope Sx = ",.1
+"Inlet Sag = ",1
+"Inlet ID = ","MH1"
+"Local Inlet Depression = ",0
+"Gutter N-Value = ",.013
+"Structure Shape = ","Cir"
+"Structure Length = ",4
+"Structure Width = ",4
+"---------------------------------------"
+"Line No. = ",2
+"Line ID = ","Line 1 to Line 2"
+"Downstream Line No. = ",1
+"X,Y Coord Dn = ",218.944290161133,202.539947509766
+"X,Y Coord Up = ",254.299630555087,237.895285234466
+"Deflection Angle = ",-45
+"Bearing = ",-45
+"Known Q = ",0
+"Sub Drainage Area 1 = ",0
+"Sub Drainage Area 2 = ",0
+"Sub Drainage Area 3 = ",0
+"Drainage Area = ",3
+"Runoff Coeff. = ",.65
+"Inlet Time = ",15
+"Line Length = ",50
+"Invert Elev Dn = ",0
+"Line Slope = ",0
+"Invert Elev Up = ",0
+"Rise = ",0
+"Span = ",0
+"No. Barrels = ",1
+"N-Value = ",.013
+"Line Type = ","Cir"
+"Junction Loss Coeff = ",1
+"Ground / Rim Elev Dn = ",107.75
+"Ground / Rim Elev Up = ",107
+"Junction Type = ",7
+"User def. Sta = ",0,0
+"User"
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+""
+0
+0
+0
+0
+0
+"HGL Down = ",102.2309
+"HGL Up = ",102.6045
+"HGL Junct = ",103.0143
+"Downstream Inlet No. = ",1
+"Inlet Length = ",0
+"Inlet throat height = ",4
+"Grate Opening Area = ",2
+"Grate Width = ",2
+"Grate Length = ",4
+"Known Capacity = ",0
+"Gutter Width = ",2
+"Gutter Slope = ",0
+"Inlet Cross Slope Sw = ",.05
+"Inlet Cross Slope Sx = ",.05
+"Inlet Sag = ",1
+"Inlet ID = ","Inlet 2DC"
+"Local Inlet Depression = ",0
+"Gutter N-Value = ",.013
+"Structure Shape = ","Cir"
+"Structure Length = ",4
+"Structure Width = ",4
+"---------------------------------------"
+0
+"IDF Curves"
+"FHA"
+0,69.87033,0,79.25974,88.23514,102.6072,114.8193,127.1596
+0,13.10001,0,14.60002,15.50002,16.50003,17.20003,17.80003
+0,.8658344,0,.8369033,.8279132,.8217015,.819854,.818648
+0,0,0,0,0,0,0,0
+0,0,0,0
+5.7,4,2.686,1.7
+0,0,0,0
+6.57732,4.6976,3.301556,2.1466
+7.245359,5.2168,3.740692,2.4596
+8.253059,5.9888,4.375514,2.9065
+9.0486,6.596,4.871096,3.2542
+9.84,7.2,5.364,3.6
+"sampleFHA.IDF"
+#FALSE#,"",""
+1,0,1,0
+#FALSE#,"",""
+"Number of Parcel lines = ",0
+"Number of Parcel circles = ",0
+1,0,1,0
+"End of file"

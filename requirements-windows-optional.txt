@@ -1,0 +1,9 @@
+# Dependencias opcionais para GUI local, automacao Windows e integracoes AutoCAD/Civil 3D.
+# Nao usar no Render.
+
+pyautogui
+pygetwindow
+pywin32
+comtypes
+clipboard
+tkintermapview

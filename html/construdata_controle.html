@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ConstruDataMaxV2 | Controle NS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Outfit:wght@300;400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060c;--s1:#0c0c16;--s2:#14142a;--s3:#1c1c38;--brd:#252545;
+--acc:#00ff88;--red:#ff3355;--yel:#ffd000;--blu:#3388ff;--cyn:#00ddff;--ora:#ff8833;
+--txt:#d8d8ee;--dim:#556;--font:'Outfit',sans-serif;--mono:'IBM Plex Mono',monospace}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column}
+
+.top{background:var(--s1);border-bottom:1px solid var(--brd);height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+.logo{font-size:16px;font-weight:700;color:var(--acc)}.logo span{color:var(--dim);font-weight:300;font-size:13px}
+.sep{width:1px;height:20px;background:var(--brd)}
+.tab{padding:6px 14px;font-size:11px;font-weight:600;color:var(--dim);cursor:pointer;border-radius:4px;transition:.2s;border:1px solid transparent}
+.tab:hover{color:var(--txt);background:var(--s2)}.tab.on{color:var(--acc);background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.25)}
+.top .info{margin-left:auto;font-size:9px;color:var(--dim);font-family:var(--mono)}
+
+.main{flex:1;overflow:auto;padding:20px 24px;max-width:1400px;margin:0 auto;width:100%}
+.panel{display:none}.panel.on{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS BAR */
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.stat{background:var(--s1);border:1px solid var(--brd);border-radius:8px;padding:12px 16px;min-width:130px}
+.stat .val{font-size:24px;font-weight:700;font-family:var(--mono)}.stat .val.g{color:var(--acc)}.stat .val.y{color:var(--yel)}.stat .val.r{color:var(--red)}.stat .val.b{color:var(--blu)}
+.stat .lbl{font-size:10px;color:var(--dim);margin-top:2px}
+
+/* TABLE */
+.tw{background:var(--s1);border:1px solid var(--brd);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.tw .toolbar{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid var(--brd);align-items:center;flex-wrap:wrap}
+.tw .toolbar input,.tw .toolbar select{background:var(--s2);border:1px solid var(--brd);color:var(--txt);padding:5px 10px;border-radius:4px;font-family:var(--font);font-size:11px}
+.tw .toolbar input:focus,.tw .toolbar select:focus{border-color:var(--acc);outline:none}
+.tw .toolbar .spacer{flex:1}
+.btn2{padding:5px 12px;font-size:10px;border:1px solid var(--brd);border-radius:4px;background:var(--s2);color:var(--txt);cursor:pointer;font-weight:600;transition:.2s}
+.btn2:hover{border-color:var(--acc);color:var(--acc)}
+.btn2.primary{background:rgba(0,255,136,.12);border-color:rgba(0,255,136,.3);color:var(--acc)}
+.btn2.danger{background:rgba(255,51,85,.1);border-color:rgba(255,51,85,.3);color:var(--red)}
+
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead{background:var(--s2)}
+th{padding:7px 8px;text-align:left;font-weight:600;color:var(--acc);font-size:9px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
+td{padding:5px 8px;border-top:1px solid rgba(255,255,255,.03)}
+tr:hover td{background:rgba(0,255,136,.02)}
+.tbody-scroll{max-height:55vh;overflow-y:auto}
+
+.badge{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;font-family:var(--mono)}
+.badge.ok{background:rgba(0,255,136,.15);color:var(--acc)}
+.badge.pend{background:rgba(255,208,0,.15);color:var(--yel)}
+.badge.exec{background:rgba(51,136,255,.15);color:var(--blu)}
+.badge.fail{background:rgba(255,51,85,.15);color:var(--red)}
+.badge.med{background:rgba(0,221,255,.15);color:var(--cyn)}
+
+.editable{background:var(--s2);border:1px solid var(--brd);color:var(--cyn);padding:2px 5px;border-radius:3px;width:65px;font-family:var(--mono);font-size:10px;text-align:right}
+.editable:focus{border-color:var(--acc);outline:none;background:var(--s3)}
+
+/* CHART */
+.chart-wrap{background:var(--s1);border:1px solid var(--brd);border-radius:8px;padding:20px;margin-bottom:20px}
+.chart-wrap h3{font-size:13px;font-weight:700;color:var(--acc);margin-bottom:15px}
+canvas.chart{width:100%;height:350px;display:block}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+
+/* PROGRESS BAR */
+.prog{height:6px;background:var(--s2);border-radius:3px;overflow:hidden;margin:4px 0}
+.prog .fill{height:100%;border-radius:3px;transition:width .5s}
+.prog .fill.g{background:var(--acc)}.prog .fill.y{background:var(--yel)}.prog .fill.r{background:var(--red)}
+
+h2{font-size:17px;font-weight:700;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+h2 .cnt{font-size:12px;color:var(--dim);font-weight:400}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo">ConstruDataMaxV2 <span>NS</span></div>
+  <div class="sep"></div>
+  <div class="tab on" onclick="showTab('asbuilt',this)">📐 As-Built</div>
+  <div class="tab" onclick="showTab('medicao',this)">📊 Medição</div>
+  <div class="tab" onclick="showTab('curvas',this)">📈 Curva S</div>
+  <div class="tab" onclick="showTab('resumo',this)">💎 Resumo 5D</div>
+  <div class="info">CT 11481051 · Verde e Teteu · FCN Construções e Saneamento</div>
+</div>
+<div class="main">
+
+<!-- ═══════ AS-BUILT ═══════ -->
+<div id="asbuilt" class="panel on">
+  <h2>📐 Lançamento As-Built <span class="cnt">Dados de campo → Cadastro NTS 292</span></h2>
+  <div class="stats" id="ab-stats"></div>
+  <div class="tw">
+    <div class="toolbar">
+      <input type="text" placeholder="🔍 Buscar NS / PV..." id="ab-search" oninput="renderAB()">
+      <select id="ab-filter" onchange="renderAB()">
+        <option value="all">Todos</option>
+        <option value="pendente">Pendentes</option>
+        <option value="lancado">Lançados</option>
+      </select>
+      <div class="spacer"></div>
+      <button class="btn2 primary" onclick="exportAB()">📤 Exportar JSON</button>
+      <button class="btn2" onclick="gerarCadastro()">📐 Gerar Cadastro NTS 292</button>
+    </div>
+    <div class="tbody-scroll">
+      <table>
+        <thead><tr>
+          <th>NS</th><th>Trecho</th><th>DN</th><th>Ext</th>
+          <th style="color:var(--cyn)">CT mont ▼</th><th style="color:var(--cyn)">CF mont ▼</th>
+          <th style="color:var(--cyn)">CT jus ▼</th><th style="color:var(--cyn)">CF jus ▼</th>
+          <th style="color:var(--cyn)">DN real ▼</th><th style="color:var(--cyn)">Mat ▼</th>
+          <th style="color:var(--cyn)">Data ▼</th><th>Status</th>
+        </tr></thead>
+        <tbody id="ab-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MEDIÇÃO ═══════ -->
+<div id="medicao" class="panel">
+  <h2>📊 Boletim de Medição <span class="cnt">NS → BM → Pagamento (cond. ao cadastro)</span></h2>
+  <div class="stats" id="med-stats"></div>
+  <div class="grid2">
+    <div class="tw">
+      <div class="toolbar">
+        <b style="color:var(--acc);font-size:11px">Criar BM</b>
+        <div class="spacer"></div>
+        <select id="bm-num"><option>BM_03</option><option>BM_04</option><option>BM_05</option></select>
+        <input type="month" id="bm-periodo" value="2026-04">
+        <button class="btn2 primary" onclick="criarBM()">+ Criar</button>
+      </div>
+      <div class="tbody-scroll" style="max-height:35vh">
+        <table>
+          <thead><tr><th>BM</th><th>Período</th><th>Trechos</th><th>Valor</th><th>Status</th></tr></thead>
+          <tbody id="bm-list"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tw">
+      <div class="toolbar">
+        <b style="color:var(--acc);font-size:11px">Trechos do BM selecionado</b>
+        <div class="spacer"></div>
+        <button class="btn2" onclick="addTrechosBM()">+ Adicionar Trechos</button>
+      </div>
+      <div class="tbody-scroll" style="max-height:35vh">
+        <table>
+          <thead><tr><th>NS</th><th>Trecho</th><th>Ext</th><th>Custo</th><th>Cadastro</th><th>Med.</th></tr></thead>
+          <tbody id="bm-trechos"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="tw" style="padding:12px">
+    <p style="font-size:11px;color:var(--dim)">
+      ⚠️ <b style="color:var(--yel)">REGRA DO CONTRATO (pág. 64):</b> O pagamento da CONTRATADA está condicionado ao recebimento do Cadastro Técnico 
+      e "Declaração de Recebimento dos Serviços", validado pela FISCALIZAÇÃO. Sem cadastro aprovado = sem pagamento.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════ CURVA S ═══════ -->
+<div id="curvas" class="panel">
+  <h2>📈 Curva S — Custo Acumulado <span class="cnt">Previsto × Realizado</span></h2>
+  <div class="stats" id="curva-stats"></div>
+  <div class="chart-wrap">
+    <h3>Custo Acumulado (R$) × Tempo (Meses)</h3>
+    <canvas id="curvaChart" class="chart"></canvas>
+  </div>
+  <div class="grid2">
+    <div class="chart-wrap">
+      <h3>Custo Mensal — Previsto × Real</h3>
+      <canvas id="barChart" class="chart" style="height:250px"></canvas>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Mês</th><th>Previsto</th><th>Real</th><th>Acum. Prev</th><th>Acum. Real</th><th>Δ</th></tr></thead>
+        <tbody id="curva-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ RESUMO 5D ═══════ -->
+<div id="resumo" class="panel">
+  <h2>💎 Resumo BIM 5D <span class="cnt">Verde e Teteu — SLNR Santos</span></h2>
+  <div class="stats" id="res-stats"></div>
+  <div class="grid2">
+    <div class="chart-wrap"><h3>Custo por Categoria</h3><canvas id="pieChart" class="chart" style="height:280px"></canvas></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Categoria</th><th>Valor (R$)</th><th>%</th><th>Composição</th></tr></thead>
+        <tbody id="res-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="tw">
+    <div class="toolbar"><b style="color:var(--acc);font-size:11px">Progresso por Fase</b></div>
+    <div id="fase-progress" style="padding:12px"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const DATA = {"ns":[{"id":1,"a":"N_001","b":"PI_03","dn":200,"mat":"PVC","ext":16.4,"ct0":0,"cf0":0,"ct1":13.45,"cf1":12.85,"v":3.53,"c":2870.0,"ct":774.0,"ce":607.0,"cr":364.0,"cp":1125.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":2,"a":"PI_79","b":"PI_04","dn":200,"mat":"PVC","ext":17.7,"ct0":10.55,"cf0":9.95,"ct1":15.49,"cf1":14.89,"v":3.32,"c":2468.0,"ct":835.0,"ce":262.0,"cr":157.0,"cp":1214.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":3,"a":"PI_53","b":"PI_10","dn":200,"mat":"PVC","ext":17.8,"ct0":27.85,"cf0":27.25,"ct1":38.58,"cf1":37.98,"v":5.19,"c":2473.0,"ct":837.0,"ce":262.0,"cr":157.0,"cp":1216.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":4,"a":"PI_11","b":"PI_61","dn":200,"mat":"PVC","ext":16.9,"ct0":39.47,"cf0":38.87,"ct1":41.37,"cf1":39.94,"v":2.24,"c":2636.0,"ct":798.0,"ce":424.0,"cr":254.0,"cp":1160.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":5,"a":"PI_61","b":"PI_62","dn":200,"mat":"PVC","ext":14.2,"ct0":41.37,"cf0":39.94,"ct1":41.13,"cf1":39.91,"v":4.45,"c":2392.0,"ct":671.0,"ce":466.0,"cr":279.0,"cp":975.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":6,"a":"PI_13","b":"PI_15","dn":200,"mat":"PVC","ext":15.7,"ct0":47.35,"cf0":46.75,"ct1":55.65,"cf1":55.05,"v":5.61,"c":2183.0,"ct":739.0,"ce":232.0,"cr":139.0,"cp":1074.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":7,"a":"PI_17","b":"PI_19","dn":200,"mat":"PVC","ext":21.8,"ct0":62.69,"cf0":62.09,"ct1":73.75,"cf1":73.15,"v":5.05,"c":3031.0,"ct":1026.0,"ce":322.0,"cr":193.0,"cp":1491.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":8,"a":"PI_22","b":"PI_24","dn":200,"mat":"PVC","ext":7.2,"ct0":85.75,"cf0":85.15,"ct1":90.92,"cf1":90.32,"v":6.3,"c":1009.0,"ct":342.0,"ce":107.0,"cr":64.0,"cp":496.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":9,"a":"PI_23","b":"PI_25","dn":200,"mat":"PVC","ext":11.9,"ct0":87.41,"cf0":86.81,"ct1":93.62,"cf1":93.03,"v":4.54,"c":1661.0,"ct":562.0,"ce":176.0,"cr":106.0,"cp":817.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":10,"a":"PI_28","b":"PI_30","dn":200,"mat":"PVC","ext":10.6,"ct0":99.38,"cf0":98.78,"ct1":101.34,"cf1":100.74,"v":0.96,"c":1479.0,"ct":500.0,"ce":157.0,"cr":94.0,"cp":727.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":11,"a":"PI_31","b":"PI_30","dn":200,"mat":"PVC","ext":32.3,"ct0":95.56,"cf0":94.96,"ct1":101.34,"cf1":100.74,"v":4.26,"c":4493.0,"ct":1521.0,"ce":477.0,"cr":286.0,"cp":2210.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":12,"a":"N_006","b":"PI_35","dn":200,"mat":"PVC","ext":16.1,"ct0":0,"cf0":0,"ct1":15.38,"cf1":14.78,"v":4.62,"c":2819.0,"ct":761.0,"ce":596.0,"cr":357.0,"cp":1105.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":13,"a":"PI_40","b":"PI_36","dn":200,"mat":"PVC","ext":10.3,"ct0":19.57,"cf0":18.97,"ct1":17.64,"cf1":17.04,"v":4.97,"c":1433.0,"ct":485.0,"ce":152.0,"cr":91.0,"cp":705.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":14,"a":"PI_37","b":"PI_38","dn":200,"mat":"PVC","ext":13.1,"ct0":20.51,"cf0":19.91,"ct1":22.38,"cf1":21.78,"v":3.62,"c":1827.0,"ct":618.0,"ce":194.0,"cr":116.0,"cp":898.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":15,"a":"PI_37","b":"PI_39","dn":200,"mat":"PVC","ext":6.7,"ct0":20.51,"cf0":19.91,"ct1":22.57,"cf1":21.97,"v":4.95,"c":937.0,"ct":317.0,"ce":99.0,"cr":60.0,"cp":461.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":16,"a":"PI_40","b":"PI_42","dn":200,"mat":"PVC","ext":9.5,"ct0":19.57,"cf0":18.97,"ct1":16.7,"cf1":16.1,"v":4.21,"c":1321.0,"ct":447.0,"ce":140.0,"cr":84.0,"cp":650.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":17,"a":"N_006","b":"N_007","dn":200,"mat":"PVC","ext":4.0,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":5.72,"c":693.0,"ct":187.0,"ce":147.0,"cr":88.0,"cp":272.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":18,"a":"PI_69","b":"PI_45","dn":200,"mat":"PVC","ext":6.0,"ct0":27.15,"cf0":26.55,"ct1":23.71,"cf1":23.11,"v":6.27,"c":833.0,"ct":282.0,"ce":88.0,"cr":53.0,"cp":410.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":19,"a":"PI_44","b":"PI_47","dn":200,"mat":"PVC","ext":6.6,"ct0":21.57,"cf0":20.97,"ct1":29.73,"cf1":29.14,"v":6.02,"c":922.0,"ct":312.0,"ce":98.0,"cr":59.0,"cp":453.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":20,"a":"PI_272","b":"PI_68","dn":200,"mat":"PVC","ext":4.4,"ct0":26.73,"cf0":26.13,"ct1":29.46,"cf1":28.86,"v":5.32,"c":615.0,"ct":208.0,"ce":65.0,"cr":39.0,"cp":303.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":21,"a":"PI_68","b":"N_005","dn":200,"mat":"PVC","ext":3.5,"ct0":29.46,"cf0":28.86,"ct1":0,"cf1":0,"v":5.44,"c":606.0,"ct":164.0,"ce":128.0,"cr":77.0,"cp":238.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":22,"a":"N_005","b":"PI_50","dn":200,"mat":"PVC","ext":24.0,"ct0":0,"cf0":0,"ct1":33.23,"cf1":32.63,"v":0.74,"c":4192.0,"ct":1131.0,"ce":886.0,"cr":531.0,"cp":1644.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":23,"a":"PI_64","b":"PI_51","dn":200,"mat":"PVC","ext":18.9,"ct0":42.54,"cf0":41.94,"ct1":35.48,"cf1":34.88,"v":3.39,"c":2629.0,"ct":890.0,"ce":279.0,"cr":167.0,"cp":1293.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":24,"a":"PI_52","b":"PI_54","dn":200,"mat":"PVC","ext":16.4,"ct0":36.47,"cf0":35.87,"ct1":39.35,"cf1":38.75,"v":2.39,"c":2290.0,"ct":775.0,"ce":243.0,"cr":146.0,"cp":1126.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":25,"a":"PI_54","b":"PI_07","dn":200,"mat":"PVC","ext":22.0,"ct0":39.35,"cf0":38.75,"ct1":26.32,"cf1":25.72,"v":6.2,"c":3067.0,"ct":1038.0,"ce":325.0,"cr":195.0,"cp":1509.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":26,"a":"PI_08","b":"N_004","dn":200,"mat":"PVC","ext":6.0,"ct0":27.53,"cf0":26.93,"ct1":0,"cf1":0,"v":4.57,"c":1041.0,"ct":281.0,"ce":220.0,"cr":132.0,"cp":408.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":27,"a":"PI_54","b":"PI_56","dn":200,"mat":"PVC","ext":4.6,"ct0":39.35,"cf0":38.75,"ct1":44.41,"cf1":43.81,"v":6.71,"c":638.0,"ct":216.0,"ce":68.0,"cr":41.0,"cp":314.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":28,"a":"PI_63","b":"N_011","dn":200,"mat":"PVC","ext":15.6,"ct0":43.17,"cf0":42.57,"ct1":0,"cf1":0,"v":4.51,"c":2727.0,"ct":736.0,"ce":576.0,"cr":346.0,"cp":1069.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":29,"a":"N_020","b":"PI_59","dn":200,"mat":"PVC","ext":7.0,"ct0":0,"cf0":0,"ct1":41.89,"cf1":41.29,"v":6.14,"c":1223.0,"ct":330.0,"ce":258.0,"cr":155.0,"cp":479.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":30,"a":"PI_225","b":"PI_256","dn":200,"mat":"PVC","ext":5.8,"ct0":50.04,"cf0":49.44,"ct1":55.53,"cf1":54.93,"v":4.18,"c":810.0,"ct":274.0,"ce":86.0,"cr":52.0,"cp":399.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":31,"a":"PI_256","b":"PI_57","dn":200,"mat":"PVC","ext":4.0,"ct0":55.53,"cf0":54.93,"ct1":45.45,"cf1":44.85,"v":0.74,"c":558.0,"ct":189.0,"ce":59.0,"cr":36.0,"cp":275.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":32,"a":"PI_57","b":"PI_60","dn":200,"mat":"PVC","ext":4.3,"ct0":45.45,"cf0":44.85,"ct1":40.57,"cf1":39.97,"v":0.74,"c":596.0,"ct":202.0,"ce":63.0,"cr":38.0,"cp":293.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":33,"a":"N_013","b":"N_014","dn":200,"mat":"PVC","ext":3.0,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":3.57,"c":515.0,"ct":139.0,"ce":109.0,"cr":65.0,"cp":202.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":34,"a":"N_014","b":"N_012","dn":200,"mat":"PVC","ext":3.5,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":4.63,"c":617.0,"ct":166.0,"ce":130.0,"cr":78.0,"cp":242.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":35,"a":"N_012","b":"PI_66","dn":200,"mat":"PVC","ext":7.8,"ct0":0,"cf0":0,"ct1":39.35,"cf1":38.75,"v":4.65,"c":1357.0,"ct":366.0,"ce":287.0,"cr":172.0,"cp":532.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":36,"a":"PI_65","b":"PI_67","dn":300,"mat":"PVC","ext":24.5,"ct0":41.37,"cf0":40.77,"ct1":34.26,"cf1":33.66,"v":5.95,"c":4450.0,"ct":2192.0,"ce":362.0,"cr":217.0,"cp":1678.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":37,"a":"PI_70","b":"PI_72","dn":200,"mat":"PVC","ext":22.2,"ct0":24.47,"cf0":23.87,"ct1":12.69,"cf1":12.09,"v":5.93,"c":3087.0,"ct":1045.0,"ce":327.0,"cr":196.0,"cp":1518.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":38,"a":"PI_74","b":"PI_85","dn":200,"mat":"PVC","ext":12.6,"ct0":5.3,"cf0":4.7,"ct1":9.14,"cf1":8.14,"v":4.74,"c":1859.0,"ct":596.0,"ce":249.0,"cr":149.0,"cp":866.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":39,"a":"PI_85","b":"N_003","dn":200,"mat":"PVC","ext":13.3,"ct0":9.14,"cf0":8.14,"ct1":0,"cf1":0,"v":5.45,"c":2330.0,"ct":629.0,"ce":493.0,"cr":295.0,"cp":914.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":40,"a":"N_003","b":"PI_75","dn":200,"mat":"PVC","ext":23.5,"ct0":0,"cf0":0,"ct1":3.86,"cf1":3.26,"v":2.46,"c":4103.0,"ct":1107.0,"ce":867.0,"cr":520.0,"cp":1609.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":41,"a":"PI_75","b":"PI_76","dn":200,"mat":"PVC","ext":6.3,"ct0":3.86,"cf0":3.26,"ct1":3.69,"cf1":3.09,"v":1.48,"c":874.0,"ct":296.0,"ce":93.0,"cr":56.0,"cp":430.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":42,"a":"PI_76","b":"PI_77","dn":200,"mat":"PVC","ext":4.7,"ct0":3.69,"cf0":3.09,"ct1":3.4,"cf1":2.8,"v":2.09,"c":653.0,"ct":221.0,"ce":69.0,"cr":42.0,"cp":321.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":43,"a":"PI_77","b":"PI_78","dn":200,"mat":"PVC","ext":12.7,"ct0":3.4,"cf0":2.8,"ct1":3.38,"cf1":2.73,"v":0.74,"c":1775.0,"ct":597.0,"ce":195.0,"cr":117.0,"cp":867.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":44,"a":"PI_00","b":"PI_78","dn":300,"mat":"PVC","ext":15.3,"ct0":2.87,"cf0":2.27,"ct1":3.38,"cf1":2.73,"v":2.2,"c":2802.0,"ct":1373.0,"ce":236.0,"cr":142.0,"cp":1051.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":45,"a":"N_005","b":"PI_67","dn":200,"mat":"PVC","ext":7.1,"ct0":0,"cf0":0,"ct1":34.26,"cf1":33.66,"v":3.64,"c":1245.0,"ct":336.0,"ce":263.0,"cr":158.0,"cp":488.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":46,"a":"N_001","b":"PI_02","dn":200,"mat":"PVC","ext":7.9,"ct0":0,"cf0":0,"ct1":11.29,"cf1":10.7,"v":3.53,"c":1387.0,"ct":374.0,"ce":293.0,"cr":176.0,"cp":544.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":47,"a":"N_007","b":"PI_80","dn":200,"mat":"PVC","ext":10.7,"ct0":0,"cf0":0,"ct1":11.08,"cf1":10.48,"v":4.63,"c":1865.0,"ct":503.0,"ce":394.0,"cr":236.0,"cp":731.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":48,"a":"PI_81","b":"PI_41","dn":200,"mat":"PVC","ext":5.6,"ct0":8.76,"cf0":8.16,"ct1":13.66,"cf1":13.06,"v":5.64,"c":774.0,"ct":262.0,"ce":82.0,"cr":49.0,"cp":381.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":49,"a":"PI_82","b":"PI_83","dn":200,"mat":"PVC","ext":13.8,"ct0":4.27,"cf0":3.67,"ct1":3.65,"cf1":3.05,"v":2.04,"c":1919.0,"ct":649.0,"ce":204.0,"cr":122.0,"cp":944.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":50,"a":"N_003","b":"PI_87","dn":200,"mat":"PVC","ext":13.2,"ct0":0,"cf0":0,"ct1":14.38,"cf1":13.78,"v":4.9,"c":2304.0,"ct":622.0,"ce":487.0,"cr":292.0,"cp":903.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":51,"a":"PI_82","b":"PI_92","dn":200,"mat":"PVC","ext":23.6,"ct0":4.27,"cf0":3.67,"ct1":4.78,"cf1":4.18,"v":1.46,"c":3283.0,"ct":1111.0,"ce":348.0,"cr":209.0,"cp":1615.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":52,"a":"PI_32","b":"PI_94","dn":200,"mat":"PVC","ext":2.1,"ct0":4.58,"cf0":3.98,"ct1":4.77,"cf1":4.17,"v":2.11,"c":299.0,"ct":101.0,"ce":32.0,"cr":19.0,"cp":147.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":53,"a":"PI_32","b":"PI_83","dn":200,"mat":"PVC","ext":30.4,"ct0":4.58,"cf0":3.98,"ct1":3.65,"cf1":3.05,"v":1.93,"c":4227.0,"ct":1431.0,"ce":448.0,"cr":269.0,"cp":2079.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":54,"a":"PI_06","b":"PI_95","dn":200,"mat":"PVC","ext":15.5,"ct0":21.92,"cf0":21.32,"ct1":24.64,"cf1":24.04,"v":4.06,"c":2159.0,"ct":731.0,"ce":229.0,"cr":137.0,"cp":1062.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":55,"a":"PI_95","b":"PI_96","dn":200,"mat":"PVC","ext":8.6,"ct0":24.64,"cf0":24.04,"ct1":28.29,"cf1":27.49,"v":5.84,"c":1234.0,"ct":406.0,"ce":149.0,"cr":89.0,"cp":590.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":56,"a":"PI_96","b":"PI_97","dn":200,"mat":"PVC","ext":12.5,"ct0":28.29,"cf0":27.49,"ct1":28.29,"cf1":27.69,"v":1.22,"c":1794.0,"ct":590.0,"ce":216.0,"cr":129.0,"cp":858.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":57,"a":"PI_91","b":"PI_102","dn":200,"mat":"PVC","ext":10.8,"ct0":19.29,"cf0":18.69,"ct1":22.4,"cf1":21.8,"v":4.96,"c":1498.0,"ct":507.0,"ce":159.0,"cr":95.0,"cp":737.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":58,"a":"PI_101","b":"PI_103","dn":200,"mat":"PVC","ext":15.8,"ct0":19.43,"cf0":18.83,"ct1":27.31,"cf1":26.71,"v":5.42,"c":2203.0,"ct":745.0,"ce":234.0,"cr":140.0,"cp":1083.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":59,"a":"PI_104","b":"PI_106","dn":200,"mat":"PVC","ext":10.6,"ct0":28.73,"cf0":28.13,"ct1":34.27,"cf1":33.67,"v":3.45,"c":1472.0,"ct":498.0,"ce":156.0,"cr":94.0,"cp":724.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":60,"a":"N_012","b":"PI_112","dn":200,"mat":"PVC","ext":12.6,"ct0":0,"cf0":0,"ct1":44.7,"cf1":44.1,"v":2.96,"c":2208.0,"ct":596.0,"ce":467.0,"cr":280.0,"cp":866.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":61,"a":"N_014","b":"PI_111","dn":200,"mat":"PVC","ext":4.8,"ct0":0,"cf0":0,"ct1":42.81,"cf1":42.21,"v":2.03,"c":830.0,"ct":224.0,"ce":175.0,"cr":105.0,"cp":325.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":62,"a":"PI_113","b":"N_015","dn":200,"mat":"PVC","ext":10.8,"ct0":44.74,"cf0":44.14,"ct1":0,"cf1":0,"v":3.95,"c":1895.0,"ct":511.0,"ce":401.0,"cr":240.0,"cp":743.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":63,"a":"N_015","b":"PI_248","dn":200,"mat":"PVC","ext":3.9,"ct0":0,"cf0":0,"ct1":49.75,"cf1":47.8,"v":3.87,"c":683.0,"ct":184.0,"ce":144.0,"cr":87.0,"cp":268.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":64,"a":"PI_230","b":"PI_114","dn":200,"mat":"PVC","ext":9.4,"ct0":49.88,"cf0":49.08,"ct1":44.67,"cf1":42.87,"v":5.38,"c":1566.0,"ct":442.0,"ce":301.0,"cr":180.0,"cp":643.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":65,"a":"PI_114","b":"PI_108","dn":200,"mat":"PVC","ext":9.8,"ct0":44.67,"cf0":42.87,"ct1":38.29,"cf1":37.69,"v":3.98,"c":1589.0,"ct":460.0,"ce":288.0,"cr":173.0,"cp":668.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":66,"a":"PI_249","b":"PI_107","dn":200,"mat":"PVC","ext":5.5,"ct0":43.31,"cf0":42.91,"ct1":35.53,"cf1":34.93,"v":2.01,"c":740.0,"ct":258.0,"ce":67.0,"cr":40.0,"cp":375.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":67,"a":"PI_114","b":"PI_117","dn":200,"mat":"PVC","ext":10.8,"ct0":44.67,"cf0":42.87,"ct1":40.78,"cf1":40.18,"v":1.91,"c":1754.0,"ct":507.0,"ce":318.0,"cr":191.0,"cp":738.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":68,"a":"PI_115","b":"PI_118","dn":200,"mat":"PVC","ext":2.9,"ct0":40.34,"cf0":39.74,"ct1":40.85,"cf1":40.25,"v":1.21,"c":404.0,"ct":137.0,"ce":43.0,"cr":26.0,"cp":199.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":69,"a":"PI_119","b":"PI_120","dn":200,"mat":"PVC","ext":32.8,"ct0":44.58,"cf0":43.98,"ct1":48.7,"cf1":48.1,"v":3.57,"c":4572.0,"ct":1547.0,"ce":485.0,"cr":291.0,"cp":2249.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":70,"a":"PI_121","b":"PI_122","dn":200,"mat":"PVC","ext":34.1,"ct0":51.8,"cf0":51.2,"ct1":57.66,"cf1":57.06,"v":4.18,"c":4753.0,"ct":1609.0,"ce":504.0,"cr":302.0,"cp":2338.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":71,"a":"PI_131","b":"PI_132","dn":200,"mat":"PVC","ext":13.8,"ct0":86.16,"cf0":83.36,"ct1":83.82,"cf1":83.44,"v":0.74,"c":2454.0,"ct":649.0,"ce":539.0,"cr":323.0,"cp":943.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":72,"a":"PI_133","b":"PI_134","dn":200,"mat":"PVC","ext":7.9,"ct0":84.17,"cf0":83.57,"ct1":88.31,"cf1":87.51,"v":1.17,"c":1134.0,"ct":373.0,"ce":136.0,"cr":82.0,"cp":542.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":73,"a":"N_010","b":"PI_137","dn":200,"mat":"PVC","ext":5.7,"ct0":0,"cf0":0,"ct1":91.36,"cf1":90.76,"v":3.39,"c":990.0,"ct":267.0,"ce":209.0,"cr":126.0,"cp":388.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":74,"a":"PI_137","b":"PI_138","dn":200,"mat":"PVC","ext":15.8,"ct0":91.36,"cf0":90.76,"ct1":93.02,"cf1":92.42,"v":3.15,"c":2198.0,"ct":744.0,"ce":233.0,"cr":140.0,"cp":1081.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":75,"a":"PI_139","b":"N_021","dn":200,"mat":"PVC","ext":15.6,"ct0":92.53,"cf0":91.93,"ct1":0,"cf1":0,"v":1.71,"c":2725.0,"ct":735.0,"ce":576.0,"cr":345.0,"cp":1068.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":76,"a":"N_021","b":"PI_143","dn":200,"mat":"PVC","ext":12.4,"ct0":0,"cf0":0,"ct1":98.83,"cf1":98.22,"v":6.81,"c":2168.0,"ct":585.0,"ce":458.0,"cr":275.0,"cp":850.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":77,"a":"PI_145","b":"PI_146","dn":200,"mat":"PVC","ext":38.5,"ct0":118.62,"cf0":118.02,"ct1":124.85,"cf1":124.25,"v":4.07,"c":5366.0,"ct":1816.0,"ce":569.0,"cr":341.0,"cp":2639.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":78,"a":"PI_146","b":"PI_147","dn":200,"mat":"PVC","ext":6.3,"ct0":124.85,"cf0":124.25,"ct1":124.74,"cf1":124.14,"v":1.15,"c":883.0,"ct":299.0,"ce":94.0,"cr":56.0,"cp":434.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":79,"a":"PI_148","b":"PI_150","dn":200,"mat":"PVC","ext":21.2,"ct0":113.56,"cf0":112.96,"ct1":105.99,"cf1":105.39,"v":4.89,"c":2953.0,"ct":999.0,"ce":313.0,"cr":188.0,"cp":1452.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":80,"a":"PI_150","b":"PI_151","dn":200,"mat":"PVC","ext":55.5,"ct0":105.99,"cf0":105.39,"ct1":116.16,"cf1":115.56,"v":4.37,"c":7733.0,"ct":2617.0,"ce":820.0,"cr":492.0,"cp":3803.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":81,"a":"PI_151","b":"PI_152","dn":200,"mat":"PVC","ext":8.5,"ct0":116.16,"cf0":115.56,"ct1":120.51,"cf1":119.91,"v":6.59,"c":1183.0,"ct":401.0,"ce":126.0,"cr":75.0,"cp":582.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":82,"a":"PI_148","b":"PI_156","dn":200,"mat":"PVC","ext":25.9,"ct0":113.56,"cf0":112.96,"ct1":119.68,"cf1":119.08,"v":5.72,"c":3613.0,"ct":1223.0,"ce":383.0,"cr":230.0,"cp":1777.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":83,"a":"PI_149","b":"PI_148","dn":200,"mat":"PVC","ext":13.0,"ct0":111.18,"cf0":110.58,"ct1":113.56,"cf1":112.96,"v":3.97,"c":1814.0,"ct":614.0,"ce":192.0,"cr":115.0,"cp":892.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":84,"a":"PI_30","b":"PI_150","dn":200,"mat":"PVC","ext":17.4,"ct0":101.34,"cf0":100.74,"ct1":105.99,"cf1":105.39,"v":5.07,"c":2417.0,"ct":818.0,"ce":256.0,"cr":154.0,"cp":1189.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":85,"a":"PI_162","b":"PI_163","dn":300,"mat":"PVC","ext":60.7,"ct0":5.85,"cf0":5.25,"ct1":11.67,"cf1":11.07,"v":4.16,"c":11015.0,"ct":5427.0,"ce":896.0,"cr":537.0,"cp":4155.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":86,"a":"PI_164","b":"PI_165","dn":200,"mat":"PVC","ext":29.2,"ct0":25.68,"cf0":25.08,"ct1":29.74,"cf1":29.14,"v":3.74,"c":4060.0,"ct":1374.0,"ce":431.0,"cr":258.0,"cp":1997.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":87,"a":"PV_15","b":"PV_16","dn":200,"mat":"PVC","ext":36.7,"ct0":30.27,"cf0":29.67,"ct1":32.57,"cf1":31.97,"v":3.68,"c":5114.0,"ct":1731.0,"ce":542.0,"cr":325.0,"cp":2515.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":88,"a":"PV_16","b":"PI_167","dn":200,"mat":"PVC","ext":37.5,"ct0":32.57,"cf0":31.97,"ct1":39.55,"cf1":38.95,"v":3.68,"c":5228.0,"ct":1769.0,"ce":555.0,"cr":333.0,"cp":2571.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":89,"a":"PI_210","b":"PI_172","dn":200,"mat":"PVC","ext":4.6,"ct0":52.37,"cf0":50.97,"ct1":66.42,"cf1":65.82,"v":7.48,"c":711.0,"ct":216.0,"ce":113.0,"cr":68.0,"cp":314.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":90,"a":"PI_174","b":"PI_171","dn":200,"mat":"PVC","ext":23.4,"ct0":71.02,"cf0":70.42,"ct1":64.26,"cf1":63.66,"v":2.08,"c":3254.0,"ct":1101.0,"ce":345.0,"cr":207.0,"cp":1600.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":91,"a":"PI_202","b":"PI_175","dn":200,"mat":"PVC","ext":24.9,"ct0":59.87,"cf0":59.27,"ct1":71.71,"cf1":71.11,"v":1.66,"c":3465.0,"ct":1173.0,"ce":368.0,"cr":220.0,"cp":1704.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":92,"a":"PI_176","b":"N_049","dn":200,"mat":"PVC","ext":10.7,"ct0":76.95,"cf0":76.35,"ct1":0,"cf1":0,"v":6.6,"c":1874.0,"ct":506.0,"ce":396.0,"cr":238.0,"cp":735.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":93,"a":"PI_177","b":"PI_179","dn":200,"mat":"PVC","ext":20.2,"ct0":78.55,"cf0":77.95,"ct1":86.96,"cf1":86.36,"v":4.38,"c":2819.0,"ct":954.0,"ce":299.0,"cr":179.0,"cp":1387.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":94,"a":"PV_16","b":"PI_183","dn":200,"mat":"PVC","ext":34.0,"ct0":32.57,"cf0":31.97,"ct1":35.61,"cf1":35.01,"v":1.74,"c":4728.0,"ct":1600.0,"ce":502.0,"cr":301.0,"cp":2326.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":95,"a":"PV_17","b":"PI_184","dn":200,"mat":"PVC","ext":30.3,"ct0":35.38,"cf0":34.78,"ct1":38.55,"cf1":37.95,"v":3.13,"c":4217.0,"ct":1427.0,"ce":447.0,"cr":268.0,"cp":2074.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":96,"a":"PI_186","b":"PI_187","dn":200,"mat":"PVC","ext":3.3,"ct0":48.84,"cf0":48.24,"ct1":49.52,"cf1":48.91,"v":6.54,"c":455.0,"ct":154.0,"ce":48.0,"cr":29.0,"cp":224.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":97,"a":"PI_187","b":"PI_188","dn":200,"mat":"PVC","ext":5.0,"ct0":49.52,"cf0":48.91,"ct1":51.74,"cf1":51.14,"v":4.18,"c":698.0,"ct":236.0,"ce":74.0,"cr":44.0,"cp":343.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":98,"a":"PI_189","b":"PI_190","dn":200,"mat":"PVC","ext":10.9,"ct0":52.93,"cf0":52.33,"ct1":58.99,"cf1":57.49,"v":6.49,"c":1719.0,"ct":516.0,"ce":283.0,"cr":170.0,"cp":750.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":99,"a":"PI_190","b":"PI_191","dn":200,"mat":"PVC","ext":7.9,"ct0":58.99,"cf0":57.49,"ct1":58.97,"cf1":57.77,"v":1.71,"c":1333.0,"ct":372.0,"ce":263.0,"cr":157.0,"cp":541.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":100,"a":"PI_208","b":"N_036","dn":200,"mat":"PVC","ext":6.9,"ct0":62.57,"cf0":62.01,"ct1":0,"cf1":0,"v":0.74,"c":1205.0,"ct":325.0,"ce":255.0,"cr":153.0,"cp":473.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":101,"a":"N_036","b":"PI_197","dn":200,"mat":"PVC","ext":7.4,"ct0":0,"cf0":0,"ct1":69.45,"cf1":68.85,"v":5.57,"c":1287.0,"ct":347.0,"ce":272.0,"cr":163.0,"cp":505.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":102,"a":"PV_27","b":"N_026","dn":200,"mat":"PVC","ext":5.4,"ct0":63.38,"cf0":62.77,"ct1":0,"cf1":0,"v":7.56,"c":945.0,"ct":255.0,"ce":200.0,"cr":120.0,"cp":370.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":103,"a":"N_027","b":"PI_198","dn":200,"mat":"PVC","ext":4.2,"ct0":0,"cf0":0,"ct1":70.76,"cf1":70.16,"v":4.64,"c":742.0,"ct":200.0,"ce":157.0,"cr":94.0,"cp":291.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":104,"a":"N_025","b":"N_049","dn":200,"mat":"PVC","ext":25.8,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":4.9,"c":4499.0,"ct":1214.0,"ce":951.0,"cr":570.0,"cp":1764.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":105,"a":"N_025","b":"PI_199","dn":200,"mat":"PVC","ext":8.0,"ct0":0,"cf0":0,"ct1":68.41,"cf1":67.81,"v":4.97,"c":1392.0,"ct":376.0,"ce":294.0,"cr":176.0,"cp":546.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":106,"a":"PI_196","b":"PI_195","dn":200,"mat":"PVC","ext":6.8,"ct0":65.35,"cf0":64.75,"ct1":62.57,"cf1":61.97,"v":8.07,"c":945.0,"ct":320.0,"ce":100.0,"cr":60.0,"cp":465.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":107,"a":"PI_200","b":"N_024","dn":200,"mat":"PVC","ext":7.3,"ct0":62.92,"cf0":62.32,"ct1":0,"cf1":0,"v":4.49,"c":1284.0,"ct":346.0,"ce":271.0,"cr":163.0,"cp":503.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":108,"a":"N_024","b":"PI_203","dn":200,"mat":"PVC","ext":10.6,"ct0":0,"cf0":0,"ct1":58.07,"cf1":57.47,"v":6.46,"c":1858.0,"ct":501.0,"ce":393.0,"cr":236.0,"cp":729.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":109,"a":"N_036","b":"N_033","dn":200,"mat":"PVC","ext":5.0,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":0.74,"c":872.0,"ct":235.0,"ce":184.0,"cr":110.0,"cp":342.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":110,"a":"N_033","b":"PI_209","dn":200,"mat":"PVC","ext":16.9,"ct0":0,"cf0":0,"ct1":65.79,"cf1":63.99,"v":3.35,"c":2959.0,"ct":798.0,"ce":625.0,"cr":375.0,"cp":1160.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":111,"a":"PI_209","b":"PI_211","dn":200,"mat":"PVC","ext":3.3,"ct0":65.79,"cf0":63.99,"ct1":66.0,"cf1":64.05,"v":1.04,"c":629.0,"ct":156.0,"ce":153.0,"cr":92.0,"cp":227.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":112,"a":"PI_209","b":"N_051","dn":200,"mat":"PVC","ext":28.6,"ct0":65.79,"cf0":63.99,"ct1":0,"cf1":0,"v":6.15,"c":5002.0,"ct":1350.0,"ce":1058.0,"cr":634.0,"cp":1961.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":113,"a":"N_051","b":"PI_7","dn":200,"mat":"PVC","ext":22.9,"ct0":0,"cf0":0,"ct1":101.46,"cf1":0,"v":2.82,"c":3995.0,"ct":1078.0,"ce":844.0,"cr":506.0,"cp":1566.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":114,"a":"PI_213","b":"PI_214","dn":200,"mat":"PVC","ext":15.9,"ct0":77.21,"cf0":76.61,"ct1":79.37,"cf1":78.77,"v":3.59,"c":2214.0,"ct":749.0,"ce":235.0,"cr":141.0,"cp":1089.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":115,"a":"N_050","b":"PI_215","dn":200,"mat":"PVC","ext":13.7,"ct0":0,"cf0":0,"ct1":81.52,"cf1":80.92,"v":3.82,"c":2389.0,"ct":645.0,"ce":505.0,"cr":303.0,"cp":937.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":116,"a":"N_032","b":"N_034","dn":200,"mat":"PVC","ext":3.8,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":3.85,"c":660.0,"ct":178.0,"ce":140.0,"cr":84.0,"cp":259.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":117,"a":"N_035","b":"N_030","dn":200,"mat":"PVC","ext":5.1,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":6.93,"c":884.0,"ct":238.0,"ce":187.0,"cr":112.0,"cp":347.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":118,"a":"N_031","b":"N_028","dn":200,"mat":"PVC","ext":3.2,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":6.66,"c":555.0,"ct":150.0,"ce":117.0,"cr":70.0,"cp":218.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":119,"a":"N_029","b":"PI_217","dn":200,"mat":"PVC","ext":6.2,"ct0":0,"cf0":0,"ct1":66.73,"cf1":66.14,"v":5.62,"c":1078.0,"ct":291.0,"ce":228.0,"cr":137.0,"cp":423.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":120,"a":"PI_218","b":"PI_220","dn":200,"mat":"PVC","ext":6.4,"ct0":69.01,"cf0":68.41,"ct1":74.49,"cf1":73.89,"v":6.11,"c":888.0,"ct":301.0,"ce":94.0,"cr":57.0,"cp":437.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":121,"a":"PI_219","b":"PI_221","dn":200,"mat":"PVC","ext":12.4,"ct0":71.49,"cf0":70.89,"ct1":79.16,"cf1":78.56,"v":5.86,"c":1728.0,"ct":585.0,"ce":183.0,"cr":110.0,"cp":850.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":122,"a":"PI_211","b":"N_044","dn":200,"mat":"PVC","ext":26.2,"ct0":66.0,"cf0":64.05,"ct1":0,"cf1":0,"v":0.74,"c":4576.0,"ct":1235.0,"ce":967.0,"cr":580.0,"cp":1794.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":123,"a":"PI_222","b":"PI_223","dn":200,"mat":"PVC","ext":17.4,"ct0":64.59,"cf0":64.19,"ct1":66.34,"cf1":65.74,"v":0.74,"c":2355.0,"ct":820.0,"ce":214.0,"cr":128.0,"cp":1192.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":124,"a":"PI_223","b":"PI_224","dn":200,"mat":"PVC","ext":19.9,"ct0":66.34,"cf0":65.74,"ct1":68.53,"cf1":67.93,"v":3.27,"c":2776.0,"ct":940.0,"ce":295.0,"cr":177.0,"cp":1365.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":125,"a":"PI_232","b":"PI_223","dn":200,"mat":"PVC","ext":13.4,"ct0":68.83,"cf0":68.23,"ct1":66.34,"cf1":65.74,"v":4.15,"c":1867.0,"ct":632.0,"ce":198.0,"cr":119.0,"cp":918.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":126,"a":"PV_29","b":"PV_28","dn":200,"mat":"PVC","ext":6.4,"ct0":65.81,"cf0":65.45,"ct1":65.99,"cf1":65.39,"v":7.91,"c":861.0,"ct":302.0,"ce":75.0,"cr":45.0,"cp":439.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":127,"a":"N_043","b":"PI_233","dn":200,"mat":"PVC","ext":12.3,"ct0":0,"cf0":0,"ct1":73.88,"cf1":73.28,"v":6.83,"c":2148.0,"ct":580.0,"ce":454.0,"cr":272.0,"cp":842.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":128,"a":"PI_233","b":"PI_236","dn":200,"mat":"PVC","ext":8.4,"ct0":73.88,"cf0":73.28,"ct1":81.32,"cf1":80.84,"v":0.74,"c":1151.0,"ct":396.0,"ce":112.0,"cr":67.0,"cp":575.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":129,"a":"PI_234","b":"PI_237","dn":200,"mat":"PVC","ext":15.4,"ct0":75.08,"cf0":74.48,"ct1":84.18,"cf1":83.58,"v":4.09,"c":2148.0,"ct":727.0,"ce":228.0,"cr":137.0,"cp":1057.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":130,"a":"PI_238","b":"PI_180","dn":200,"mat":"PVC","ext":6.7,"ct0":86.9,"cf0":86.3,"ct1":89.37,"cf1":88.77,"v":5.7,"c":938.0,"ct":318.0,"ce":100.0,"cr":60.0,"cp":462.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":131,"a":"PI_224","b":"PI_240","dn":200,"mat":"PVC","ext":7.8,"ct0":68.53,"cf0":67.93,"ct1":80.27,"cf1":79.67,"v":8.55,"c":1092.0,"ct":369.0,"ce":116.0,"cr":69.0,"cp":537.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":132,"a":"N_040","b":"N_041","dn":200,"mat":"PVC","ext":6.5,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":7.74,"c":1134.0,"ct":306.0,"ce":240.0,"cr":144.0,"cp":444.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":133,"a":"N_042","b":"PI_241","dn":200,"mat":"PVC","ext":7.2,"ct0":0,"cf0":0,"ct1":85.64,"cf1":85.04,"v":7.79,"c":1263.0,"ct":341.0,"ce":267.0,"cr":160.0,"cp":495.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":134,"a":"PI_242","b":"N_039","dn":200,"mat":"PVC","ext":4.6,"ct0":85.6,"cf0":85.07,"ct1":0,"cf1":0,"v":0.74,"c":803.0,"ct":217.0,"ce":170.0,"cr":102.0,"cp":315.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":135,"a":"PI_244","b":"PI_247","dn":200,"mat":"PVC","ext":11.2,"ct0":90.88,"cf0":90.28,"ct1":100.11,"cf1":99.52,"v":3.26,"c":1564.0,"ct":529.0,"ce":166.0,"cr":99.0,"cp":769.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":136,"a":"PI_226","b":"PI_228","dn":200,"mat":"PVC","ext":13.5,"ct0":52.65,"cf0":52.05,"ct1":52.44,"cf1":51.84,"v":4.15,"c":1874.0,"ct":634.0,"ce":199.0,"cr":119.0,"cp":922.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":137,"a":"PI_228","b":"N_017","dn":200,"mat":"PVC","ext":6.4,"ct0":52.44,"cf0":51.84,"ct1":0,"cf1":0,"v":5.81,"c":1114.0,"ct":301.0,"ce":236.0,"cr":141.0,"cp":437.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":138,"a":"N_017","b":"N_019","dn":200,"mat":"PVC","ext":4.9,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":0.74,"c":851.0,"ct":229.0,"ce":180.0,"cr":108.0,"cp":333.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":139,"a":"N_019","b":"N_018","dn":200,"mat":"PVC","ext":2.5,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":5.23,"c":444.0,"ct":120.0,"ce":94.0,"cr":56.0,"cp":174.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":140,"a":"N_018","b":"PI_227","dn":200,"mat":"PVC","ext":7.3,"ct0":0,"cf0":0,"ct1":54.94,"cf1":54.34,"v":0.74,"c":1280.0,"ct":345.0,"ce":271.0,"cr":162.0,"cp":502.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":141,"a":"PI_230","b":"N_016","dn":200,"mat":"PVC","ext":5.4,"ct0":49.88,"cf0":49.08,"ct1":0,"cf1":0,"v":0.7,"c":938.0,"ct":253.0,"ce":198.0,"cr":119.0,"cp":368.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":142,"a":"PI_248","b":"N_016","dn":200,"mat":"PVC","ext":6.5,"ct0":49.75,"cf0":47.8,"ct1":0,"cf1":0,"v":3.87,"c":1142.0,"ct":308.0,"ce":241.0,"cr":145.0,"cp":448.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":143,"a":"N_016","b":"PI_227","dn":200,"mat":"PVC","ext":9.2,"ct0":0,"cf0":0,"ct1":54.94,"cf1":54.34,"v":6.78,"c":1607.0,"ct":434.0,"ce":340.0,"cr":204.0,"cp":630.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":144,"a":"PI_228","b":"PI_229","dn":200,"mat":"PVC","ext":10.2,"ct0":52.44,"cf0":51.84,"ct1":49.72,"cf1":49.12,"v":2.65,"c":1421.0,"ct":481.0,"ce":151.0,"cr":90.0,"cp":699.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":145,"a":"PI_229","b":"PI_250","dn":200,"mat":"PVC","ext":3.0,"ct0":49.72,"cf0":49.12,"ct1":51.62,"cf1":51.02,"v":5.94,"c":416.0,"ct":141.0,"ce":44.0,"cr":26.0,"cp":205.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":146,"a":"PI_250","b":"PI_251","dn":200,"mat":"PVC","ext":16.5,"ct0":51.62,"cf0":51.02,"ct1":49.88,"cf1":49.28,"v":1.44,"c":2301.0,"ct":779.0,"ce":244.0,"cr":146.0,"cp":1132.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":147,"a":"PI_251","b":"PI_252","dn":200,"mat":"PVC","ext":5.7,"ct0":49.88,"cf0":49.28,"ct1":49.52,"cf1":48.92,"v":7.48,"c":799.0,"ct":270.0,"ce":85.0,"cr":51.0,"cp":393.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":148,"a":"PI_252","b":"PI_254","dn":200,"mat":"PVC","ext":6.7,"ct0":49.52,"cf0":48.92,"ct1":45.58,"cf1":44.69,"v":0.74,"c":973.0,"ct":317.0,"ce":123.0,"cr":74.0,"cp":460.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":149,"a":"PI_253","b":"PI_255","dn":200,"mat":"PVC","ext":18.9,"ct0":45.34,"cf0":44.74,"ct1":43.76,"cf1":43.16,"v":2.05,"c":2637.0,"ct":892.0,"ce":280.0,"cr":168.0,"cp":1297.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":150,"a":"PI_255","b":"PI_118","dn":200,"mat":"PVC","ext":22.3,"ct0":43.76,"cf0":43.16,"ct1":40.85,"cf1":40.25,"v":3.58,"c":3105.0,"ct":1051.0,"ce":329.0,"cr":197.0,"cp":1527.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":151,"a":"PI_254","b":"PI_255","dn":200,"mat":"PVC","ext":2.7,"ct0":45.58,"cf0":44.69,"ct1":43.76,"cf1":43.16,"v":5.71,"c":395.0,"ct":129.0,"ce":50.0,"cr":30.0,"cp":187.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":152,"a":"PI_226","b":"PI_257","dn":200,"mat":"PVC","ext":11.1,"ct0":52.65,"cf0":52.05,"ct1":59.18,"cf1":58.58,"v":2.18,"c":1551.0,"ct":525.0,"ce":165.0,"cr":99.0,"cp":763.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":153,"a":"PI_258","b":"PI_259","dn":200,"mat":"PVC","ext":10.3,"ct0":61.0,"cf0":60.4,"ct1":62.83,"cf1":62.23,"v":5.6,"c":1434.0,"ct":485.0,"ce":152.0,"cr":91.0,"cp":705.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":154,"a":"PI_259","b":"PI_125","dn":200,"mat":"PVC","ext":3.2,"ct0":62.83,"cf0":62.23,"ct1":65.52,"cf1":64.92,"v":5.97,"c":440.0,"ct":149.0,"ce":47.0,"cr":28.0,"cp":216.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":155,"a":"PI_163","b":"PI_260","dn":200,"mat":"PVC","ext":22.7,"ct0":11.67,"cf0":11.07,"ct1":15.5,"cf1":14.9,"v":4.07,"c":3165.0,"ct":1071.0,"ce":336.0,"cr":201.0,"cp":1557.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":156,"a":"PI_262","b":"PI_263","dn":200,"mat":"PVC","ext":2.1,"ct0":17.15,"cf0":16.55,"ct1":17.82,"cf1":17.21,"v":4.01,"c":297.0,"ct":100.0,"ce":31.0,"cr":19.0,"cp":146.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":157,"a":"PV_13","b":"PI_265","dn":200,"mat":"PVC","ext":32.0,"ct0":24.81,"cf0":24.41,"ct1":19.2,"cf1":18.6,"v":4.53,"c":4330.0,"ct":1508.0,"ce":394.0,"cr":236.0,"cp":2191.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":158,"a":"PI_265","b":"PI_163","dn":200,"mat":"PVC","ext":44.1,"ct0":19.2,"cf0":18.6,"ct1":11.67,"cf1":11.07,"v":4.2,"c":6140.0,"ct":2078.0,"ce":651.0,"cr":391.0,"cp":3020.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":159,"a":"PI_267","b":"PI_269","dn":200,"mat":"PVC","ext":13.8,"ct0":20.28,"cf0":19.68,"ct1":23.45,"cf1":22.85,"v":4.19,"c":1916.0,"ct":648.0,"ce":203.0,"cr":122.0,"cp":942.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":160,"a":"PI_269","b":"PI_268","dn":200,"mat":"PVC","ext":10.9,"ct0":23.45,"cf0":22.85,"ct1":20.85,"cf1":20.25,"v":2.9,"c":1515.0,"ct":513.0,"ce":161.0,"cr":96.0,"cp":745.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":161,"a":"PI_269","b":"PI_270","dn":200,"mat":"PVC","ext":3.1,"ct0":23.45,"cf0":22.85,"ct1":24.48,"cf1":23.88,"v":4.23,"c":433.0,"ct":147.0,"ce":46.0,"cr":28.0,"cp":213.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":162,"a":"PV_04","b":"PV_06","dn":200,"mat":"PVC","ext":49.4,"ct0":7.69,"cf0":7.09,"ct1":14.55,"cf1":13.95,"v":3.03,"c":6872.0,"ct":2326.0,"ce":729.0,"cr":437.0,"cp":3380.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":163,"a":"PV_11","b":"PI_271","dn":200,"mat":"PVC","ext":4.4,"ct0":22.41,"cf0":21.81,"ct1":24.36,"cf1":23.76,"v":6.44,"c":613.0,"ct":207.0,"ce":65.0,"cr":39.0,"cp":301.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":164,"a":"PV_18","b":"PV_20","dn":200,"mat":"PVC","ext":14.5,"ct0":41.37,"cf0":40.77,"ct1":43.8,"cf1":43.2,"v":2.3,"c":2015.0,"ct":682.0,"ce":214.0,"cr":128.0,"cp":991.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":165,"a":"PV_25","b":"PI_194","dn":200,"mat":"PVC","ext":16.7,"ct0":52.18,"cf0":51.58,"ct1":60.11,"cf1":59.51,"v":4.48,"c":2324.0,"ct":786.0,"ce":247.0,"cr":148.0,"cp":1143.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":166,"a":"PV_26","b":"N_037","dn":200,"mat":"PVC","ext":34.4,"ct0":55.69,"cf0":55.09,"ct1":0,"cf1":0,"v":4.77,"c":6014.0,"ct":1622.0,"ce":1271.0,"cr":762.0,"cp":2358.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":167,"a":"N_038","b":"N_046","dn":200,"mat":"PVC","ext":37.0,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":2.69,"c":6466.0,"ct":1744.0,"ce":1367.0,"cr":820.0,"cp":2535.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":168,"a":"N_045","b":"N_048","dn":200,"mat":"PVC","ext":10.6,"ct0":0,"cf0":0,"ct1":0,"cf1":0,"v":0.74,"c":1844.0,"ct":498.0,"ce":390.0,"cr":234.0,"cp":723.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":169,"a":"N_047","b":"PI_239","dn":200,"mat":"PVC","ext":23.8,"ct0":0,"cf0":0,"ct1":75.39,"cf1":74.79,"v":4.02,"c":4164.0,"ct":1123.0,"ce":880.0,"cr":528.0,"cp":1633.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":170,"a":"PV_30","b":"PV_31","dn":200,"mat":"PVC","ext":33.5,"ct0":69.94,"cf0":69.34,"ct1":87.59,"cf1":86.99,"v":7.32,"c":4668.0,"ct":1580.0,"ce":495.0,"cr":297.0,"cp":2296.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":171,"a":"PV_01","b":"PI_78","dn":200,"mat":"PVC","ext":11.4,"ct0":3.96,"cf0":2.86,"ct1":3.38,"cf1":2.73,"v":0.8,"c":1708.0,"ct":536.0,"ce":245.0,"cr":147.0,"cp":779.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":172,"a":"PI_216","b":"PI_192","dn":200,"mat":"PVC","ext":34.0,"ct0":63.45,"cf0":62.84,"ct1":51.62,"cf1":51.02,"v":0.8,"c":4741.0,"ct":1604.0,"ce":503.0,"cr":302.0,"cp":2332.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":173,"a":"PV_24","b":"N_022","dn":200,"mat":"PVC","ext":7.4,"ct0":48.01,"cf0":47.41,"ct1":0,"cf1":0,"v":6.81,"c":1291.0,"ct":348.0,"ce":273.0,"cr":164.0,"cp":506.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":174,"a":"PI_205","b":"N_022","dn":200,"mat":"PVC","ext":17.6,"ct0":51.67,"cf0":51.07,"ct1":0,"cf1":0,"v":4.47,"c":3074.0,"ct":829.0,"ce":650.0,"cr":390.0,"cp":1205.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":175,"a":"PV_36","b":"PV_37","dn":300,"mat":"PVC","ext":22.2,"ct0":2.58,"cf0":1.97,"ct1":2.3,"cf1":1.6,"v":0.81,"c":4086.0,"ct":1989.0,"ce":359.0,"cr":215.0,"cp":1523.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":176,"a":"PV_37","b":"PV_38","dn":300,"mat":"PVC","ext":19.1,"ct0":2.3,"cf0":1.6,"ct1":2.06,"cf1":1.44,"v":1.73,"c":3513.0,"ct":1710.0,"ce":309.0,"cr":185.0,"cp":1309.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":177,"a":"PV_38","b":"PI_00","dn":300,"mat":"PVC","ext":73.3,"ct0":2.06,"cf0":1.44,"ct1":2.87,"cf1":2.27,"v":0.81,"c":13322.0,"ct":6556.0,"ce":1092.0,"cr":655.0,"cp":5019.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":178,"a":"PI_94","b":"N_002","dn":300,"mat":"PVC","ext":33.1,"ct0":4.77,"cf0":4.17,"ct1":0,"cf1":0,"v":4.63,"c":7193.0,"ct":2965.0,"ce":1224.0,"cr":734.0,"cp":2270.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":179,"a":"N_002","b":"PV_36","dn":300,"mat":"PVC","ext":18.9,"ct0":0,"cf0":0,"ct1":2.58,"cf1":1.97,"v":4.63,"c":4093.0,"ct":1687.0,"ce":696.0,"cr":418.0,"cp":1292.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"},{"id":180,"a":"PI_00","b":"PV_62","dn":400,"mat":"PVC","ext":11.3,"ct0":2.87,"cf0":2.27,"ct1":2.61,"cf1":1.61,"v":3.74,"c":2660.0,"ct":1529.0,"ce":223.0,"cr":134.0,"cp":775.0,"ab_ct0":0,"ab_cf0":0,"ab_ct1":0,"ab_cf1":0,"ab_dn":0,"ab_mat":"","ab_data":"","bm":0,"pct":0,"med_val":0,"status":"pendente"}],"total_cost":952527.0,"pv_cost":546790.0,"n_pvs":357,"n_trechos":180,"ext_total":2621.0,"cronograma":[{"mes":1,"label":"M\u00eas 1","custo_mes":83711.0,"custo_acum":83711.0,"pct_acum":8.8,"ns_ini":1,"ns_fim":15},{"mes":2,"label":"M\u00eas 2","custo_mes":23607.0,"custo_acum":107318.0,"pct_acum":11.3,"ns_ini":16,"ns_fim":30},{"mes":3,"label":"M\u00eas 3","custo_mes":26821.0,"custo_acum":134139.0,"pct_acum":14.1,"ns_ini":31,"ns_fim":45},{"mes":4,"label":"M\u00eas 4","custo_mes":28626.0,"custo_acum":162765.0,"pct_acum":17.1,"ns_ini":46,"ns_fim":60},{"mes":5,"label":"M\u00eas 5","custo_mes":28287.0,"custo_acum":191052.0,"pct_acum":20.1,"ns_ini":61,"ns_fim":75},{"mes":6,"label":"M\u00eas 6","custo_mes":57512.0,"custo_acum":248564.0,"pct_acum":26.1,"ns_ini":76,"ns_fim":90},{"mes":7,"label":"M\u00eas 7","custo_mes":31378.0,"custo_acum":279942.0,"pct_acum":29.4,"ns_ini":91,"ns_fim":105},{"mes":8,"label":"M\u00eas 8","custo_mes":26212.0,"custo_acum":306154.0,"pct_acum":32.1,"ns_ini":106,"ns_fim":120},{"mes":9,"label":"M\u00eas 9","custo_mes":26404.0,"custo_acum":332558.0,"pct_acum":34.9,"ns_ini":121,"ns_fim":135},{"mes":10,"label":"M\u00eas 10","custo_mes":20902.0,"custo_acum":353460.0,"pct_acum":37.1,"ns_ini":136,"ns_fim":150},{"mes":11,"label":"M\u00eas 11","custo_mes":306835.0,"custo_acum":660295.0,"pct_acum":69.3,"ns_ini":151,"ns_fim":165},{"mes":12,"label":"M\u00eas 12","custo_mes":342232.0,"custo_acum":1002527.0,"pct_acum":105.2,"ns_ini":166,"ns_fim":180}],"nucleo":"Verde e Teteu"};
+// ═══ STATE ═══
+let abData = JSON.parse(JSON.stringify(DATA.ns));
+let bms = [
+  {id:"BM_01",periodo:"2026-02",trechos:[],valor:0,status:"aprovado"},
+  {id:"BM_02",periodo:"2026-03",trechos:[],valor:0,status:"em_analise"}
+];
+let realCosts = [0,0,0,0,0,0,0,0,0,0,0,0]; // monthly actual spending
+
+function showTab(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(el)el.classList.add('on');
+  if(id==='curvas')drawCharts();
+  if(id==='resumo')drawPie();
+}
+
+// ═══════════════════════════════════════════════
+// AS-BUILT MODULE
+// ═══════════════════════════════════════════════
+function renderAB(){
+  const search=document.getElementById('ab-search').value.toLowerCase();
+  const filter=document.getElementById('ab-filter').value;
+  const tbody=document.getElementById('ab-tbody');
+  
+  let filtered=abData.filter(ns=>{
+    const matchSearch=!search||`NS${ns.id} ${ns.a} ${ns.b}`.toLowerCase().includes(search);
+    const isLancado=ns.ab_data&&ns.ab_data!=='';
+    const matchFilter=filter==='all'||(filter==='lancado'&&isLancado)||(filter==='pendente'&&!isLancado);
+    return matchSearch&&matchFilter;
+  });
+  
+  tbody.innerHTML=filtered.map(ns=>{
+    const lancado=ns.ab_data&&ns.ab_data!=='';
+    const st=lancado?'<span class="badge ok">LANÇADO</span>':'<span class="badge pend">PENDENTE</span>';
+    return `<tr>
+      <td><b>NS_${String(ns.id).padStart(3,'0')}</b></td>
+      <td style="font-family:var(--mono);font-size:10px">${ns.a}→${ns.b}</td>
+      <td>${ns.dn}</td><td>${ns.ext}m</td>
+      <td><input class="editable" value="${ns.ab_ct0||''}" placeholder="${ns.ct0}" onchange="updAB(${ns.id},'ab_ct0',this.value)"></td>
+      <td><input class="editable" value="${ns.ab_cf0||''}" placeholder="${ns.cf0}" onchange="updAB(${ns.id},'ab_cf0',this.value)"></td>
+      <td><input class="editable" value="${ns.ab_ct1||''}" placeholder="${ns.ct1}" onchange="updAB(${ns.id},'ab_ct1',this.value)"></td>
+      <td><input class="editable" value="${ns.ab_cf1||''}" placeholder="${ns.cf1}" onchange="updAB(${ns.id},'ab_cf1',this.value)"></td>
+      <td><input class="editable" style="width:50px" value="${ns.ab_dn||''}" placeholder="${ns.dn}" onchange="updAB(${ns.id},'ab_dn',this.value)"></td>
+      <td><select class="editable" style="width:60px" onchange="updAB(${ns.id},'ab_mat',this.value)">
+        <option value="">—</option><option ${ns.ab_mat==='PVC'?'selected':''}>PVC</option>
+        <option ${ns.ab_mat==='PEAD'?'selected':''}>PEAD</option></select></td>
+      <td><input class="editable" type="date" style="width:100px" value="${ns.ab_data||''}" onchange="updAB(${ns.id},'ab_data',this.value)"></td>
+      <td>${st}</td>
+    </tr>`;
+  }).join('');
+  
+  // Stats
+  const total=abData.length;
+  const lancados=abData.filter(n=>n.ab_data&&n.ab_data!=='').length;
+  const pct=total?Math.round(lancados/total*100):0;
+  document.getElementById('ab-stats').innerHTML=`
+    <div class="stat"><div class="val g">${lancados}</div><div class="lbl">Lançados</div></div>
+    <div class="stat"><div class="val y">${total-lancados}</div><div class="lbl">Pendentes</div></div>
+    <div class="stat"><div class="val b">${total}</div><div class="lbl">Total NS</div></div>
+    <div class="stat"><div class="val g">${pct}%</div><div class="lbl">Progresso</div>
+      <div class="prog"><div class="fill g" style="width:${pct}%"></div></div></div>
+  `;
+}
+
+function updAB(id,field,val){
+  const ns=abData.find(n=>n.id===id);
+  if(ns){ns[field]=field.includes('ct')||field.includes('cf')||field==='ab_dn'?parseFloat(val)||0:val;}
+  renderAB();
+}
+
+function exportAB(){
+  const lancados=abData.filter(n=>n.ab_data!=='');
+  const blob=new Blob([JSON.stringify(lancados,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASBUILT_${DATA.nucleo.replace(/ /g,'_')}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function gerarCadastro(){
+  const lancados=abData.filter(n=>n.ab_data!=='').length;
+  if(!lancados){alert('Nenhum trecho lançado! Preencha os dados as-built primeiro.');return;}
+  alert(`✅ Gerar Cadastro NTS 292 com ${lancados} trechos as-built.\n\nNo pipeline real:\nconstrudata_pipeline.py --asbuilt ASBUILT.json\n\n→ Gera DXF georref + PDF + meta JSON`);
+}
+
+// ═══════════════════════════════════════════════
+// MEDIÇÃO MODULE
+// ═══════════════════════════════════════════════
+function renderMed(){
+  // BM List
+  document.getElementById('bm-list').innerHTML=bms.map((bm,i)=>{
+    const st=bm.status==='aprovado'?'<span class="badge ok">APROVADO</span>':
+             bm.status==='em_analise'?'<span class="badge exec">EM ANÁLISE</span>':
+             '<span class="badge pend">RASCUNHO</span>';
+    return `<tr onclick="selectBM(${i})" style="cursor:pointer">
+      <td><b>${bm.id}</b></td><td>${bm.periodo}</td>
+      <td>${bm.trechos.length}</td><td style="color:var(--yel);font-family:var(--mono)">R$ ${bm.valor.toLocaleString('pt-BR')}</td>
+      <td>${st}</td></tr>`;
+  }).join('');
+  
+  // Stats
+  const totalMed=bms.reduce((s,b)=>s+b.valor,0);
+  const aprovado=bms.filter(b=>b.status==='aprovado').reduce((s,b)=>s+b.valor,0);
+  const trMedidos=bms.reduce((s,b)=>s+b.trechos.length,0);
+  const pctMed=DATA.n_trechos?Math.round(trMedidos/DATA.n_trechos*100):0;
+  
+  document.getElementById('med-stats').innerHTML=`
+    <div class="stat"><div class="val y">R$ ${(totalMed/1000).toFixed(0)}k</div><div class="lbl">Total Medido</div></div>
+    <div class="stat"><div class="val g">R$ ${(aprovado/1000).toFixed(0)}k</div><div class="lbl">Aprovado</div></div>
+    <div class="stat"><div class="val b">${bms.length}</div><div class="lbl">BMs</div></div>
+    <div class="stat"><div class="val b">${trMedidos}</div><div class="lbl">Trechos Medidos</div></div>
+    <div class="stat"><div class="val g">${pctMed}%</div><div class="lbl">% Medido</div>
+      <div class="prog"><div class="fill g" style="width:${pctMed}%"></div></div></div>
+  `;
+}
+
+let selBM=0;
+function selectBM(idx){
+  selBM=idx;
+  const bm=bms[idx];
+  document.getElementById('bm-trechos').innerHTML=bm.trechos.map(tid=>{
+    const ns=abData.find(n=>n.id===tid);if(!ns)return'';
+    const hasCadastro=ns.ab_data&&ns.ab_data!=='';
+    const cadSt=hasCadastro?'<span class="badge ok">OK</span>':'<span class="badge fail">SEM</span>';
+    return `<tr>
+      <td>NS_${String(ns.id).padStart(3,'0')}</td>
+      <td style="font-size:10px">${ns.a}→${ns.b}</td>
+      <td>${ns.ext}m</td>
+      <td style="color:var(--yel);font-family:var(--mono)">R$ ${ns.c.toLocaleString('pt-BR')}</td>
+      <td>${cadSt}</td>
+      <td><input class="editable" style="width:40px" value="${ns.pct||0}" onchange="updMedPct(${ns.id},this.value)">%</td>
+    </tr>`;
+  }).join('');
+}
+
+function criarBM(){
+  const id=document.getElementById('bm-num').value;
+  const per=document.getElementById('bm-periodo').value;
+  if(bms.find(b=>b.id===id)){alert('BM já existe!');return;}
+  bms.push({id,periodo:per,trechos:[],valor:0,status:'rascunho'});
+  renderMed();
+}
+
+function addTrechosBM(){
+  const bm=bms[selBM];if(!bm){alert('Selecione um BM');return;}
+  const jaMedidos=new Set(bms.flatMap(b=>b.trechos));
+  const disponiveis=abData.filter(ns=>!jaMedidos.has(ns.id)).slice(0,15);
+  if(!disponiveis.length){alert('Todos trechos já estão em BMs');return;}
+  disponiveis.forEach(ns=>{bm.trechos.push(ns.id);ns.bm=parseInt(bm.id.replace('BM_',''));ns.pct=100;});
+  bm.valor=bm.trechos.reduce((s,tid)=>{const ns=abData.find(n=>n.id===tid);return s+(ns?ns.c:0);},0);
+  renderMed();selectBM(selBM);
+}
+
+function updMedPct(id,val){
+  const ns=abData.find(n=>n.id===id);if(ns)ns.pct=parseInt(val)||0;
+}
+
+// ═══════════════════════════════════════════════
+// CURVA S
+// ═══════════════════════════════════════════════
+function drawCharts(){
+  // Simulate some real progress (first 4 months with variation)
+  realCosts=[48000,72000,85000,62000,0,0,0,0,0,0,0,0];
+  
+  const cron=DATA.cronograma;
+  const cvs=document.getElementById('curvaChart');
+  const ctx=cvs.getContext('2d');
+  const W=cvs.parentElement.clientWidth-40;
+  const H=350;
+  cvs.width=W;cvs.height=H;
+  ctx.clearRect(0,0,W,H);
+  
+  const pad={t:30,r:30,b:50,l:80};
+  const gW=W-pad.l-pad.r, gH=H-pad.t-pad.b;
+  const maxY=DATA.total_cost;
+  const n=cron.length;
+  
+  // Grid
+  ctx.strokeStyle='#1a1a35';ctx.lineWidth=1;
+  for(let i=0;i<=5;i++){
+    const y=pad.t+gH-gH*(i/5);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gW,y);ctx.stroke();
+    ctx.fillStyle='#556';ctx.font='10px IBM Plex Mono';ctx.textAlign='right';
+    ctx.fillText(`R$ ${((maxY*i/5)/1000).toFixed(0)}k`,pad.l-8,y+4);
+  }
+  // X labels
+  ctx.textAlign='center';
+  cron.forEach((c,i)=>{
+    const x=pad.l+(i/(n-1))*gW;
+    ctx.fillStyle='#556';ctx.fillText(`M${c.mes}`,x,H-pad.b+20);
+  });
+  
+  // Previsto line
+  ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=2.5;
+  cron.forEach((c,i)=>{
+    const x=pad.l+(i/(n-1))*gW;
+    const y=pad.t+gH-gH*(c.custo_acum/maxY);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // Dots
+  cron.forEach((c,i)=>{
+    const x=pad.l+(i/(n-1))*gW;
+    const y=pad.t+gH-gH*(c.custo_acum/maxY);
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#00ff88';ctx.fill();
+  });
+  
+  // Real line
+  let acumReal=0;
+  ctx.beginPath();ctx.strokeStyle='#ffd000';ctx.lineWidth=2.5;ctx.setLineDash([6,4]);
+  realCosts.forEach((rc,i)=>{
+    if(rc===0&&i>0)return;
+    acumReal+=rc;
+    const x=pad.l+(i/(n-1))*gW;
+    const y=pad.t+gH-gH*(acumReal/maxY);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();ctx.setLineDash([]);
+  // Real dots
+  acumReal=0;
+  realCosts.forEach((rc,i)=>{
+    if(rc===0&&i>0)return;
+    acumReal+=rc;
+    const x=pad.l+(i/(n-1))*gW;
+    const y=pad.t+gH-gH*(acumReal/maxY);
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#ffd000';ctx.fill();
+  });
+  
+  // Legend
+  ctx.fillStyle='#00ff88';ctx.fillRect(pad.l+20,pad.t+5,20,3);
+  ctx.fillStyle='#dde';ctx.font='11px Outfit';ctx.textAlign='left';ctx.fillText('Previsto',pad.l+45,pad.t+10);
+  ctx.fillStyle='#ffd000';ctx.fillRect(pad.l+120,pad.t+5,20,3);
+  ctx.fillStyle='#dde';ctx.fillText('Realizado',pad.l+145,pad.t+10);
+  
+  // Bar chart
+  const bcvs=document.getElementById('barChart');
+  const bctx=bcvs.getContext('2d');
+  bcvs.width=bcvs.parentElement.clientWidth-40;bcvs.height=250;
+  bctx.clearRect(0,0,bcvs.width,250);
+  const bW=bcvs.width, bH=250;
+  const bGW=bW-pad.l-pad.r, bGH=bH-pad.t-pad.b;
+  const maxBar=Math.max(...cron.map(c=>c.custo_mes),...realCosts)*1.1||100000;
+  const barW=bGW/n*0.35;
+  
+  cron.forEach((c,i)=>{
+    const x=pad.l+(i+0.5)/n*bGW;
+    // Previsto
+    const h1=bGH*(c.custo_mes/maxBar);
+    bctx.fillStyle='rgba(0,255,136,0.5)';
+    bctx.fillRect(x-barW,pad.t+bGH-h1,barW,h1);
+    // Real
+    const h2=bGH*((realCosts[i]||0)/maxBar);
+    bctx.fillStyle='rgba(255,208,0,0.5)';
+    bctx.fillRect(x,pad.t+bGH-h2,barW,h2);
+    // Label
+    bctx.fillStyle='#556';bctx.font='9px IBM Plex Mono';bctx.textAlign='center';
+    bctx.fillText(`M${i+1}`,x,bH-pad.b+15);
+  });
+  
+  // Curva table
+  let ap=0,ar=0;
+  document.getElementById('curva-tbody').innerHTML=cron.map((c,i)=>{
+    ap+=c.custo_mes;ar+=realCosts[i]||0;
+    const delta=ar-ap;const deltaColor=delta>=0?'var(--acc)':'var(--red)';
+    return `<tr>
+      <td>Mês ${c.mes}</td>
+      <td style="font-family:var(--mono)">R$ ${(c.custo_mes/1000).toFixed(0)}k</td>
+      <td style="font-family:var(--mono)">${realCosts[i]?'R$ '+(realCosts[i]/1000).toFixed(0)+'k':'—'}</td>
+      <td style="font-family:var(--mono)">R$ ${(ap/1000).toFixed(0)}k</td>
+      <td style="font-family:var(--mono)">${ar?'R$ '+(ar/1000).toFixed(0)+'k':'—'}</td>
+      <td style="font-family:var(--mono);color:${deltaColor}">${ar?'R$ '+(delta/1000).toFixed(0)+'k':'—'}</td>
+    </tr>`;
+  }).join('');
+  
+  // Stats
+  const totalPrev=DATA.total_cost;
+  const totalReal=realCosts.reduce((a,b)=>a+b,0);
+  document.getElementById('curva-stats').innerHTML=`
+    <div class="stat"><div class="val g">R$ ${(totalPrev/1000).toFixed(0)}k</div><div class="lbl">Custo Previsto Total</div></div>
+    <div class="stat"><div class="val y">R$ ${(totalReal/1000).toFixed(0)}k</div><div class="lbl">Custo Real Acum.</div></div>
+    <div class="stat"><div class="val b">${Math.round(totalReal/totalPrev*100)}%</div><div class="lbl">% Gasto</div></div>
+    <div class="stat"><div class="val ${totalReal<=totalPrev*0.3?'g':'r'}">${totalReal<=totalPrev*0.3?'DENTRO':'ATENÇÃO'}</div><div class="lbl">Status Orçamento</div></div>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+// RESUMO 5D + PIE
+// ═══════════════════════════════════════════════
+function drawPie(){
+  const cats=[
+    {name:'Tubulação',val:DATA.ns.reduce((s,n)=>s+n.ct,0),color:'#00ff88'},
+    {name:'Escavação',val:DATA.ns.reduce((s,n)=>s+n.ce,0),color:'#3388ff'},
+    {name:'Reaterro',val:DATA.ns.reduce((s,n)=>s+n.cr,0),color:'#00ddff'},
+    {name:'Reposição',val:DATA.ns.reduce((s,n)=>s+n.cp,0),color:'#ffd000'},
+    {name:'PVs/PIs',val:DATA.pv_cost,color:'#cc44ff'},
+  ];
+  const total=cats.reduce((s,c)=>s+c.val,0);
+  
+  const cvs=document.getElementById('pieChart');
+  const ctx=cvs.getContext('2d');
+  cvs.width=cvs.parentElement.clientWidth-40;cvs.height=280;
+  ctx.clearRect(0,0,cvs.width,280);
+  
+  const cx=140,cy=140,r=100;
+  let angle=-Math.PI/2;
+  cats.forEach(c=>{
+    const slice=c.val/total*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+slice);ctx.closePath();
+    ctx.fillStyle=c.color;ctx.fill();
+    // Label
+    const mid=angle+slice/2;
+    const lx=cx+Math.cos(mid)*(r+30);
+    const ly=cy+Math.sin(mid)*(r+30);
+    ctx.fillStyle='#dde';ctx.font='10px Outfit';ctx.textAlign=lx>cx?'left':'right';
+    ctx.fillText(`${c.name} ${Math.round(c.val/total*100)}%`,lx,ly);
+    angle+=slice;
+  });
+  
+  // Center hole
+  ctx.beginPath();ctx.arc(cx,cy,55,0,Math.PI*2);ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--s1');ctx.fill();
+  ctx.fillStyle='#ffd000';ctx.font='bold 14px IBM Plex Mono';ctx.textAlign='center';
+  ctx.fillText(`R$ ${(total/1000).toFixed(0)}k`,cx,cy+5);
+  
+  // Table
+  document.getElementById('res-tbody').innerHTML=cats.map(c=>`<tr>
+    <td><span style="color:${c.color}">■</span> ${c.name}</td>
+    <td style="font-family:var(--mono);color:var(--yel)">R$ ${c.val.toLocaleString('pt-BR',{maximumFractionDigits:0})}</td>
+    <td style="font-family:var(--mono)">${(c.val/total*100).toFixed(1)}%</td>
+    <td style="font-size:10px;color:var(--dim)">${c.name==='Tubulação'?'SINAPI × ext':c.name==='PVs/PIs'?'R$/un × qtd':'SINAPI × vol'}</td>
+  </tr>`).join('');
+  
+  // Stats
+  const exec=abData.filter(n=>n.ab_data!=='').length;
+  const medido=bms.reduce((s,b)=>s+b.trechos.length,0);
+  document.getElementById('res-stats').innerHTML=`
+    <div class="stat"><div class="val y">R$ ${(total/1000).toFixed(0)}k</div><div class="lbl">Custo 5D Total</div></div>
+    <div class="stat"><div class="val b">${DATA.n_trechos}</div><div class="lbl">Trechos</div></div>
+    <div class="stat"><div class="val b">${DATA.n_pvs}</div><div class="lbl">PVs/PIs</div></div>
+    <div class="stat"><div class="val b">${DATA.ext_total}m</div><div class="lbl">Extensão</div></div>
+    <div class="stat"><div class="val g">${exec}</div><div class="lbl">As-Built Lançados</div></div>
+    <div class="stat"><div class="val g">${medido}</div><div class="lbl">Trechos Medidos</div></div>
+  `;
+  
+  // Fases
+  const fases=['Mobilização','Topografia','Escavação','Assentamento','PVs','Reaterro','Pavimento','Ligações','Testes','Cadastro','BIM LOD500','Desmob.'];
+  const fpct=[100,80,30,15,10,5,0,0,0,0,0,0]; // simulated progress
+  document.getElementById('fase-progress').innerHTML=fases.map((f,i)=>{
+    const p=fpct[i];const c=p>=100?'g':p>0?'y':'r';
+    return `<div style="display:flex;align-items:center;gap:10px;margin:6px 0">
+      <span style="min-width:100px;font-size:11px">${i+1}. ${f}</span>
+      <div class="prog" style="flex:1"><div class="fill ${c}" style="width:${p}%"></div></div>
+      <span style="min-width:35px;font-size:11px;font-family:var(--mono);color:var(--${c});text-align:right">${p}%</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══ INIT ═══
+renderAB();
+renderMed();
+// Pre-populate BM_01 and BM_02 with some trechos
+[1,2,3,4,5,6,7,8,9,10].forEach(id=>{bms[0].trechos.push(id);abData.find(n=>n.id===id).bm=1;});
+[11,12,13,14,15,16,17,18,19,20].forEach(id=>{bms[1].trechos.push(id);abData.find(n=>n.id===id).bm=2;});
+bms[0].valor=bms[0].trechos.reduce((s,t)=>{const n=abData.find(x=>x.id===t);return s+(n?n.c:0);},0);
+bms[1].valor=bms[1].trechos.reduce((s,t)=>{const n=abData.find(x=>x.id===t);return s+(n?n.c:0);},0);
+// Simulate some as-built entries
+[1,2,3,4,5].forEach(id=>{const n=abData.find(x=>x.id===id);if(n){n.ab_ct0=n.ct0+0.02;n.ab_cf0=n.cf0-0.01;n.ab_ct1=n.ct1+0.03;n.ab_cf1=n.cf1-0.02;n.ab_dn=n.dn;n.ab_mat='PVC';n.ab_data='2026-03-15';}});
+renderAB();renderMed();selectBM(0);
+</script>
+</body>
+</html>

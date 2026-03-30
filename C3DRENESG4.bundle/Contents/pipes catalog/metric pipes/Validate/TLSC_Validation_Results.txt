@@ -1,0 +1,24 @@
+Begin Part Validation | TLSC
+
+Begin Part Family self validation test
+ERROR: Required Parameter not found: Between
+OK: Basic Table Row IDs validated
+OK: Part Domain parameter validated -- Pipe_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- Simples
+OK: Part Description parameter validated -- TLSC
+OK: Part Name parameter validated -- TLSC
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 8158D4D7-AB46-400C-8B3A-BA3004904171
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+ 
+
+Begin Pipe Component Table Validation | Type =  Pipe
+ERROR: Table Data Validation Failed | D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric pipes\Galeria_Circular\TLSC.xml
+
+ERROR: Part Validation Failed | Galeria_Circular\TLSC.xml

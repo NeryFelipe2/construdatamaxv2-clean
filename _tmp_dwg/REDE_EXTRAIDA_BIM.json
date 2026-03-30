@@ -1,0 +1,2970 @@
+{
+  "arquivo": "ESTUDO___CT_SAO_MANOEL_E_CT_JO.dwg",
+  "pvs": {
+    "PV-934": {
+      "x": 359332.017,
+      "y": 7353131.856,
+      "ct": 2.3,
+      "cf": 1.25,
+      "prof": 1.05,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-939": {
+      "x": 359357.157,
+      "y": 7353135.374,
+      "ct": 2.25,
+      "cf": 1.42,
+      "prof": 0.83,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1041": {
+      "x": 359409.178,
+      "y": 7353005.695,
+      "ct": 2.01,
+      "cf": 0.66,
+      "prof": 1.35,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1043": {
+      "x": 359293.949,
+      "y": 7352824.984,
+      "ct": 1.47,
+      "cf": 0.63,
+      "prof": 0.84,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1045": {
+      "x": 359418.357,
+      "y": 7353067.514,
+      "ct": 2.13,
+      "cf": 0.68,
+      "prof": 1.45,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1048": {
+      "x": 359336.107,
+      "y": 7353015.356,
+      "ct": 1.85,
+      "cf": 0.93,
+      "prof": 0.92,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1049": {
+      "x": 359706.407,
+      "y": 7353028.235,
+      "ct": 1.56,
+      "cf": 0.21,
+      "prof": 1.35,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1051": {
+      "x": 359652.207,
+      "y": 7353034.795,
+      "ct": 1.6,
+      "cf": -0.49,
+      "prof": 2.09,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1052": {
+      "x": 359464.157,
+      "y": 7352868.795,
+      "ct": 1.56,
+      "cf": -0.19,
+      "prof": 1.75,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1054": {
+      "x": 359455.488,
+      "y": 7352805.184,
+      "ct": 1.46,
+      "cf": 0.23,
+      "prof": 1.23,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1056": {
+      "x": 359565.638,
+      "y": 7352983.095,
+      "ct": 1.9,
+      "cf": -0.85,
+      "prof": 2.75,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1058": {
+      "x": 359760.728,
+      "y": 7353020.674,
+      "ct": 1.12,
+      "cf": 0.22,
+      "prof": 0.9,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1059": {
+      "x": 359289.267,
+      "y": 7352826.074,
+      "ct": 1.53,
+      "cf": 0.53,
+      "prof": 1.0,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1060": {
+      "x": 359471.628,
+      "y": 7352923.563,
+      "ct": 1.86,
+      "cf": -0.34,
+      "prof": 2.2,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1061": {
+      "x": 359296.667,
+      "y": 7352890.345,
+      "ct": 1.62,
+      "cf": 0.17,
+      "prof": 1.45,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1062": {
+      "x": 359373.749,
+      "y": 7352816.355,
+      "ct": 1.41,
+      "cf": 0.53,
+      "prof": 0.88,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1063": {
+      "x": 359310.607,
+      "y": 7352986.056,
+      "ct": 1.9,
+      "cf": -0.24,
+      "prof": 2.14,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1066": {
+      "x": 359398.449,
+      "y": 7352933.156,
+      "ct": 1.85,
+      "cf": 0.52,
+      "prof": 1.33,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1067": {
+      "x": 359583.149,
+      "y": 7352908.206,
+      "ct": 1.43,
+      "cf": -0.61,
+      "prof": 2.04,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1068": {
+      "x": 359283.878,
+      "y": 7353084.714,
+      "ct": 2.03,
+      "cf": -0.92,
+      "prof": 2.95,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1069": {
+      "x": 359220.127,
+      "y": 7353088.906,
+      "ct": 1.99,
+      "cf": -1.19,
+      "prof": 3.18,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1070": {
+      "x": 359313.649,
+      "y": 7352889.234,
+      "ct": 1.56,
+      "cf": 0.66,
+      "prof": 0.9,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1072": {
+      "x": 359644.849,
+      "y": 7352972.664,
+      "ct": 1.47,
+      "cf": -1.23,
+      "prof": 2.7,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1073": {
+      "x": 359323.499,
+      "y": 7353079.664,
+      "ct": 2.08,
+      "cf": -0.75,
+      "prof": 2.83,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1074": {
+      "x": 359243.038,
+      "y": 7352831.924,
+      "ct": 1.55,
+      "cf": 0.79,
+      "prof": 0.76,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1075": {
+      "x": 359392.149,
+      "y": 7352877.995,
+      "ct": 1.62,
+      "cf": 0.4,
+      "prof": 1.22,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1076": {
+      "x": 359575.138,
+      "y": 7353044.974,
+      "ct": 2.09,
+      "cf": 1.23,
+      "prof": 0.86,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1077": {
+      "x": 359516.367,
+      "y": 7353053.635,
+      "ct": 2.28,
+      "cf": 1.32,
+      "prof": 0.96,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1079": {
+      "x": 359251.928,
+      "y": 7352895.984,
+      "ct": 1.52,
+      "cf": 0.91,
+      "prof": 0.61,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1080": {
+      "x": 359326.299,
+      "y": 7352942.863,
+      "ct": 1.69,
+      "cf": 0.79,
+      "prof": 0.9,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1081": {
+      "x": 359498.057,
+      "y": 7353114.624,
+      "ct": 2.3,
+      "cf": 0.71,
+      "prof": 1.59,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1082": {
+      "x": 359480.778,
+      "y": 7352994.264,
+      "ct": 1.9,
+      "cf": -0.65,
+      "prof": 2.55,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1083": {
+      "x": 359339.278,
+      "y": 7353077.474,
+      "ct": 2.06,
+      "cf": 0.36,
+      "prof": 1.7,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1084": {
+      "x": 359489.257,
+      "y": 7353058.306,
+      "ct": 2.1,
+      "cf": 0.15,
+      "prof": 1.95,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1087": {
+      "x": 359278.449,
+      "y": 7353081.335,
+      "ct": 2.03,
+      "cf": -0.95,
+      "prof": 2.98,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1126": {
+      "x": 359556.057,
+      "y": 7352843.434,
+      "ct": 1.58,
+      "cf": 0.18,
+      "prof": 1.4,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1136": {
+      "x": 359518.028,
+      "y": 7352821.363,
+      "ct": 1.53,
+      "cf": 0.25,
+      "prof": 1.28,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1143": {
+      "x": 359537.099,
+      "y": 7352858.913,
+      "ct": 1.39,
+      "cf": -0.18,
+      "prof": 1.57,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1144": {
+      "x": 359745.718,
+      "y": 7352958.074,
+      "ct": 1.18,
+      "cf": -0.63,
+      "prof": 1.81,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1148": {
+      "x": 359476.699,
+      "y": 7352859.074,
+      "ct": 1.54,
+      "cf": 0.34,
+      "prof": 1.2,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1149": {
+      "x": 359480.838,
+      "y": 7352923.474,
+      "ct": 1.76,
+      "cf": 0.56,
+      "prof": 1.2,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1150": {
+      "x": 359465.367,
+      "y": 7352778.134,
+      "ct": 1.45,
+      "cf": 0.25,
+      "prof": 1.2,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1154": {
+      "x": 359726.018,
+      "y": 7352960.806,
+      "ct": 1.33,
+      "cf": -1.52,
+      "prof": 2.85,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1162": {
+      "x": 359742.868,
+      "y": 7352919.874,
+      "ct": 1.79,
+      "cf": -0.73,
+      "prof": 2.52,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1163": {
+      "x": 359665.678,
+      "y": 7352892.424,
+      "ct": 1.83,
+      "cf": -0.33,
+      "prof": 2.16,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1164": {
+      "x": 359582.407,
+      "y": 7352855.384,
+      "ct": 1.58,
+      "cf": 0.05,
+      "prof": 1.53,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1220": {
+      "x": 359534.457,
+      "y": 7352915.595,
+      "ct": 1.73,
+      "cf": 0.32,
+      "prof": 1.41,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1223": {
+      "x": 359733.199,
+      "y": 7352936.156,
+      "ct": 1.65,
+      "cf": 1.0,
+      "prof": 0.65,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1226": {
+      "x": 359746.789,
+      "y": 7352935.174,
+      "ct": 1.65,
+      "cf": 0.94,
+      "prof": 0.71,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1249": {
+      "x": 359427.917,
+      "y": 7353125.664,
+      "ct": 2.29,
+      "cf": 1.02,
+      "prof": 1.27,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-1312": {
+      "x": 359724.128,
+      "y": 7352951.714,
+      "ct": 0.725,
+      "cf": -0.61,
+      "prof": 1.335,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-11 - TRANSIÇÃO": {
+      "x": 359287.452,
+      "y": 7352834.673,
+      "ct": 1.5603,
+      "cf": 0.6515,
+      "prof": 0.909,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-10": {
+      "x": 359439.531,
+      "y": 7352714.106,
+      "ct": 2.0092,
+      "cf": 0.2278,
+      "prof": 1.781,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-09": {
+      "x": 359425.994,
+      "y": 7352705.953,
+      "ct": 2.2842,
+      "cf": 0.1743,
+      "prof": 2.11,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-08": {
+      "x": 359412.127,
+      "y": 7352700.41,
+      "ct": 2.1666,
+      "cf": 0.1237,
+      "prof": 2.043,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-07": {
+      "x": 359398.636,
+      "y": 7352695.244,
+      "ct": 2.1929,
+      "cf": 0.0747,
+      "prof": 2.118,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-06": {
+      "x": 359384.105,
+      "y": 7352694.737,
+      "ct": 2.1405,
+      "cf": 0.0254,
+      "prof": 2.115,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-05": {
+      "x": 359371.827,
+      "y": 7352701.461,
+      "ct": 2.1747,
+      "cf": -0.022,
+      "prof": 2.197,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-04": {
+      "x": 359361.393,
+      "y": 7352720.407,
+      "ct": 2.5006,
+      "cf": -0.0953,
+      "prof": 2.596,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-03": {
+      "x": 359351.309,
+      "y": 7352739.529,
+      "ct": 2.3409,
+      "cf": -0.1686,
+      "prof": 2.509,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-02": {
+      "x": 359344.691,
+      "y": 7352752.437,
+      "ct": 2.2409,
+      "cf": -0.2177,
+      "prof": 2.459,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-01": {
+      "x": 359308.972,
+      "y": 7352823.304,
+      "ct": 1.6172,
+      "cf": -1.3754,
+      "prof": 2.993,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-EEE": {
+      "x": 359718.878,
+      "y": 7352949.516,
+      "ct": 0.1331,
+      "cf": -1.6,
+      "prof": 1.733,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "14 ": {
+      "x": 359338.802,
+      "y": 7352654.511,
+      "ct": 3.4411,
+      "cf": 2.217,
+      "prof": 1.224,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "13": {
+      "x": 359348.903,
+      "y": 7352663.883,
+      "ct": 3.2522,
+      "cf": 1.52,
+      "prof": 1.732,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "19": {
+      "x": 359302.596,
+      "y": 7352655.545,
+      "ct": 3.3355,
+      "cf": 2.542,
+      "prof": 0.793,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "18": {
+      "x": 359302.111,
+      "y": 7352645.263,
+      "ct": 3.6016,
+      "cf": 2.049,
+      "prof": 1.553,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "12": {
+      "x": 359318.305,
+      "y": 7352690.445,
+      "ct": 2.4526,
+      "cf": 1.24,
+      "prof": 1.213,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "15": {
+      "x": 359363.37,
+      "y": 7352649.324,
+      "ct": 2.4223,
+      "cf": 1.65,
+      "prof": 0.772,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "23": {
+      "x": 359272.098,
+      "y": 7352679.907,
+      "ct": 2.3383,
+      "cf": 1.129,
+      "prof": 1.209,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "35": {
+      "x": 359210.405,
+      "y": 7352761.914,
+      "ct": 2.2439,
+      "cf": 1.654,
+      "prof": 0.59,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "28": {
+      "x": 359224.428,
+      "y": 7352720.337,
+      "ct": 2.2602,
+      "cf": 1.135,
+      "prof": 1.125,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "26": {
+      "x": 359206.491,
+      "y": 7352706.224,
+      "ct": 2.1073,
+      "cf": 1.576,
+      "prof": 0.531,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "25": {
+      "x": 359207.387,
+      "y": 7352710.993,
+      "ct": 2.1331,
+      "cf": 1.5,
+      "prof": 0.633,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "17": {
+      "x": 359384.577,
+      "y": 7352649.506,
+      "ct": 2.3756,
+      "cf": 1.872,
+      "prof": 0.504,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "16": {
+      "x": 359376.269,
+      "y": 7352654.065,
+      "ct": 2.2576,
+      "cf": 1.754,
+      "prof": 0.504,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "11": {
+      "x": 359320.647,
+      "y": 7352710.31,
+      "ct": 2.0346,
+      "cf": 1.531,
+      "prof": 0.504,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "10": {
+      "x": 359300.57,
+      "y": 7352731.841,
+      "ct": 1.9347,
+      "cf": 1.32,
+      "prof": 0.615,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "27": {
+      "x": 359205.122,
+      "y": 7352691.351,
+      "ct": 2.1895,
+      "cf": 1.737,
+      "prof": 0.453,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "32": {
+      "x": 359231.878,
+      "y": 7352749.135,
+      "ct": 2.0633,
+      "cf": 1.399,
+      "prof": 0.664,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "24": {
+      "x": 359224.02,
+      "y": 7352679.481,
+      "ct": 2.0452,
+      "cf": 1.415,
+      "prof": 0.63,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "34": {
+      "x": 359191.352,
+      "y": 7352733.062,
+      "ct": 2.1246,
+      "cf": 1.621,
+      "prof": 0.504,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "08": {
+      "x": 359320.637,
+      "y": 7352415.616,
+      "ct": 1.9136,
+      "cf": 0.9386,
+      "prof": 0.975,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "29": {
+      "x": 359225.572,
+      "y": 7352734.779,
+      "ct": 1.8583,
+      "cf": 1.221,
+      "prof": 0.637,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "21": {
+      "x": 359236.252,
+      "y": 7352625.787,
+      "ct": 1.8999,
+      "cf": 1.224,
+      "prof": 0.676,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "33": {
+      "x": 359195.342,
+      "y": 7352743.884,
+      "ct": 1.8521,
+      "cf": 1.452,
+      "prof": 0.4,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "31": {
+      "x": 359230.052,
+      "y": 7352743.985,
+      "ct": 1.7202,
+      "cf": 1.262,
+      "prof": 0.458,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "06": {
+      "x": 359221.073,
+      "y": 7352389.966,
+      "ct": 1.8186,
+      "cf": 0.8436,
+      "prof": 0.975,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "22": {
+      "x": 359220.866,
+      "y": 7352632.579,
+      "ct": 1.8266,
+      "cf": 1.323,
+      "prof": 0.504,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "30": {
+      "x": 359228.499,
+      "y": 7352743.578,
+      "ct": 1.7051,
+      "cf": 1.245,
+      "prof": 0.46,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "07": {
+      "x": 359218.717,
+      "y": 7352396.163,
+      "ct": 1.7736,
+      "cf": 0.7986,
+      "prof": 0.975,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "05": {
+      "x": 359301.697,
+      "y": 7352392.622,
+      "ct": 1.7576,
+      "cf": 0.7826,
+      "prof": 0.975,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "04": {
+      "x": 359240.991,
+      "y": 7352375.276,
+      "ct": 1.5656,
+      "cf": 0.6767,
+      "prof": 0.889,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "03": {
+      "x": 359248.999,
+      "y": 7352363.116,
+      "ct": 1.6206,
+      "cf": 0.6456,
+      "prof": 0.975,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "09": {
+      "x": 359310.487,
+      "y": 7352404.185,
+      "ct": 1.5941,
+      "cf": 0.6316,
+      "prof": 0.963,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "02": {
+      "x": 359258.529,
+      "y": 7352366.893,
+      "ct": 1.5103,
+      "cf": 0.4921,
+      "prof": 1.018,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "20": {
+      "x": 359223.38,
+      "y": 7352593.483,
+      "ct": 1.6476,
+      "cf": 1.045,
+      "prof": 0.603,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "01": {
+      "x": 359260.37,
+      "y": 7352362.515,
+      "ct": 1.4536,
+      "cf": 0.3786,
+      "prof": 1.075,
+      "tipo": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm"
+    },
+    "PV-27": {
+      "x": 359287.895,
+      "y": 7352359.069,
+      "ct": 1.4938,
+      "cf": 0.8402,
+      "prof": 0.654,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-26": {
+      "x": 359737.199,
+      "y": 7352849.469,
+      "ct": 2.09,
+      "cf": 1.4364,
+      "prof": 0.654,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-25": {
+      "x": 359684.355,
+      "y": 7352827.234,
+      "ct": 2.1821,
+      "cf": 1.142,
+      "prof": 1.04,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-24": {
+      "x": 359662.355,
+      "y": 7352817.146,
+      "ct": 2.1822,
+      "cf": 1.06,
+      "prof": 1.122,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-23": {
+      "x": 359650.937,
+      "y": 7352812.547,
+      "ct": 2.0478,
+      "cf": 1.0183,
+      "prof": 1.03,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-22": {
+      "x": 359640.742,
+      "y": 7352807.909,
+      "ct": 2.0601,
+      "cf": 0.9803,
+      "prof": 1.08,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-21": {
+      "x": 359621.744,
+      "y": 7352799.147,
+      "ct": 2.1291,
+      "cf": 0.9094,
+      "prof": 1.22,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-20": {
+      "x": 359615.238,
+      "y": 7352795.954,
+      "ct": 2.0164,
+      "cf": 0.8849,
+      "prof": 1.132,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-19": {
+      "x": 359589.697,
+      "y": 7352783.241,
+      "ct": 2.0106,
+      "cf": 0.7882,
+      "prof": 1.222,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-18": {
+      "x": 359562.021,
+      "y": 7352770.143,
+      "ct": 1.8392,
+      "cf": 0.6846,
+      "prof": 1.155,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-17": {
+      "x": 359546.682,
+      "y": 7352762.414,
+      "ct": 1.6793,
+      "cf": 0.6262,
+      "prof": 1.053,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-16": {
+      "x": 359538.389,
+      "y": 7352758.689,
+      "ct": 1.5156,
+      "cf": 0.5954,
+      "prof": 0.92,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-15": {
+      "x": 359518.262,
+      "y": 7352749.594,
+      "ct": 1.9099,
+      "cf": 0.5206,
+      "prof": 1.389,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-14": {
+      "x": 359501.382,
+      "y": 7352741.865,
+      "ct": 2.0274,
+      "cf": 0.4576,
+      "prof": 1.57,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-13": {
+      "x": 359478.051,
+      "y": 7352731.159,
+      "ct": 2.0984,
+      "cf": 0.3707,
+      "prof": 1.728,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-12": {
+      "x": 359463.211,
+      "y": 7352724.026,
+      "ct": 2.1851,
+      "cf": 0.3149,
+      "prof": 1.87,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-11": {
+      "x": 359448.347,
+      "y": 7352718.186,
+      "ct": 2.0457,
+      "cf": 0.2607,
+      "prof": 1.785,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    },
+    "PV-EEE SÃO MANOEL": {
+      "x": 359285.655,
+      "y": 7352821.557,
+      "ct": 1.6701,
+      "cf": -1.5151,
+      "prof": 3.185,
+      "tipo": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm"
+    }
+  },
+  "trechos": [
+    {
+      "nome": "TRECHO-01",
+      "pv_ini": "PV-1136",
+      "pv_fim": "PV-1126",
+      "dn_mm": 150,
+      "ext_m": 43.97,
+      "decl_mm": 1.592,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-02",
+      "pv_ini": "",
+      "pv_fim": "PV-1312",
+      "dn_mm": 300,
+      "ext_m": 4.98,
+      "decl_mm": 0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-03",
+      "pv_ini": "PV-1149",
+      "pv_fim": "PV-1220",
+      "dn_mm": 150,
+      "ext_m": 54.19,
+      "decl_mm": 4.429,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-46",
+      "pv_ini": "PV-1162",
+      "pv_fim": "PV-1144",
+      "dn_mm": 150,
+      "ext_m": 38.31,
+      "decl_mm": -2.611,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-54",
+      "pv_ini": "PV-1072",
+      "pv_fim": "PV-1154",
+      "dn_mm": 300,
+      "ext_m": 82.03,
+      "decl_mm": 3.535,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-55",
+      "pv_ini": "PV-1143",
+      "pv_fim": "PV-1067",
+      "dn_mm": 150,
+      "ext_m": 67.46,
+      "decl_mm": 6.375,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-59",
+      "pv_ini": "PV-1150",
+      "pv_fim": "PV-1143",
+      "dn_mm": 150,
+      "ext_m": 108.03,
+      "decl_mm": 3.98,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-60",
+      "pv_ini": "PV-1126",
+      "pv_fim": "PV-1164",
+      "dn_mm": 150,
+      "ext_m": 28.93,
+      "decl_mm": 4.493,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-61",
+      "pv_ini": "PV-1148",
+      "pv_fim": "PV-1143",
+      "dn_mm": 150,
+      "ext_m": 60.4,
+      "decl_mm": 4.47,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-62",
+      "pv_ini": "PV-1164",
+      "pv_fim": "PV-1163",
+      "dn_mm": 150,
+      "ext_m": 91.14,
+      "decl_mm": 4.17,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-70",
+      "pv_ini": "PV-1163",
+      "pv_fim": "PV-1162",
+      "dn_mm": 150,
+      "ext_m": 81.93,
+      "decl_mm": 4.883,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-71",
+      "pv_ini": "PV-1144",
+      "pv_fim": "PV-1154",
+      "dn_mm": 150,
+      "ext_m": 19.89,
+      "decl_mm": 44.749,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-190",
+      "pv_ini": "PV-1082",
+      "pv_fim": "PV-1056",
+      "dn_mm": 250,
+      "ext_m": 85.59,
+      "decl_mm": 2.337,
+      "material": "250 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-191",
+      "pv_ini": "PV-1080",
+      "pv_fim": "PV-1066",
+      "dn_mm": 150,
+      "ext_m": 72.8,
+      "decl_mm": 3.709,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-192",
+      "pv_ini": "PV-1062",
+      "pv_fim": "PV-1054",
+      "dn_mm": 150,
+      "ext_m": 82.5,
+      "decl_mm": 3.636,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-193",
+      "pv_ini": "PV-1073",
+      "pv_fim": "PV-1068",
+      "dn_mm": 150,
+      "ext_m": 39.94,
+      "decl_mm": 4.256,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-194",
+      "pv_ini": "PV-1084",
+      "pv_fim": "PV-1082",
+      "dn_mm": 200,
+      "ext_m": 64.6,
+      "decl_mm": 2.786,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-196",
+      "pv_ini": "PV-1063",
+      "pv_fim": "PV-1073",
+      "dn_mm": 150,
+      "ext_m": 94.49,
+      "decl_mm": 5.397,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-197",
+      "pv_ini": "PV-1059",
+      "pv_fim": "PV-1061",
+      "dn_mm": 150,
+      "ext_m": 64.7,
+      "decl_mm": 5.565,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-200",
+      "pv_ini": "PV-1058",
+      "pv_fim": "PV-1049",
+      "dn_mm": 150,
+      "ext_m": 54.84,
+      "decl_mm": 0.182,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-201",
+      "pv_ini": "PV-1056",
+      "pv_fim": "PV-1072",
+      "dn_mm": 250,
+      "ext_m": 79.89,
+      "decl_mm": 4.756,
+      "material": "250 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-203",
+      "pv_ini": "PV-1041",
+      "pv_fim": "PV-1082",
+      "dn_mm": 150,
+      "ext_m": 72.51,
+      "decl_mm": 10.482,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-205",
+      "pv_ini": "PV-1074",
+      "pv_fim": "PV-1059",
+      "dn_mm": 150,
+      "ext_m": 46.6,
+      "decl_mm": 5.58,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-207",
+      "pv_ini": "PV-1077",
+      "pv_fim": "PV-1076",
+      "dn_mm": 150,
+      "ext_m": 59.41,
+      "decl_mm": 1.515,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-208",
+      "pv_ini": "PV-1079",
+      "pv_fim": "PV-1061",
+      "dn_mm": 150,
+      "ext_m": 45.09,
+      "decl_mm": -2.218,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-211",
+      "pv_ini": "PV-1048",
+      "pv_fim": "PV-1041",
+      "dn_mm": 150,
+      "ext_m": 73.71,
+      "decl_mm": 3.663,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-212",
+      "pv_ini": "PV-1067",
+      "pv_fim": "PV-1072",
+      "dn_mm": 150,
+      "ext_m": 89.23,
+      "decl_mm": 2.354,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-213",
+      "pv_ini": "PV-1075",
+      "pv_fim": "PV-1052",
+      "dn_mm": 150,
+      "ext_m": 72.59,
+      "decl_mm": 6.061,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-214",
+      "pv_ini": "PV-1083",
+      "pv_fim": "PV-1045",
+      "dn_mm": 200,
+      "ext_m": 79.7,
+      "decl_mm": 3.513,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-216",
+      "pv_ini": "PV-1076",
+      "pv_fim": "PV-1051",
+      "dn_mm": 150,
+      "ext_m": 77.74,
+      "decl_mm": 17.623,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-217",
+      "pv_ini": "PV-1061",
+      "pv_fim": "PV-1063",
+      "dn_mm": 150,
+      "ext_m": 96.72,
+      "decl_mm": 4.239,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-219",
+      "pv_ini": "PV-1070",
+      "pv_fim": "PV-1075",
+      "dn_mm": 150,
+      "ext_m": 79.3,
+      "decl_mm": 3.279,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-220",
+      "pv_ini": "PV-1081",
+      "pv_fim": "PV-1084",
+      "dn_mm": 150,
+      "ext_m": 57.0,
+      "decl_mm": 9.824,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-221",
+      "pv_ini": "PV-1087",
+      "pv_fim": "PV-1069",
+      "dn_mm": 150,
+      "ext_m": 58.81,
+      "decl_mm": 4.081,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-222",
+      "pv_ini": "PV-1068",
+      "pv_fim": "PV-1087",
+      "dn_mm": 150,
+      "ext_m": 6.39,
+      "decl_mm": 4.691,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-223",
+      "pv_ini": "PV-1043",
+      "pv_fim": "PV-1059",
+      "dn_mm": 150,
+      "ext_m": 4.81,
+      "decl_mm": 20.804,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-224",
+      "pv_ini": "PV-1066",
+      "pv_fim": "PV-1060",
+      "dn_mm": 150,
+      "ext_m": 73.81,
+      "decl_mm": 5.42,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-225",
+      "pv_ini": "PV-1054",
+      "pv_fim": "PV-1052",
+      "dn_mm": 150,
+      "ext_m": 64.2,
+      "decl_mm": 6.542,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-227",
+      "pv_ini": "PV-1045",
+      "pv_fim": "PV-1084",
+      "dn_mm": 200,
+      "ext_m": 71.5,
+      "decl_mm": 7.413,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-229",
+      "pv_ini": "PV-1049",
+      "pv_fim": "PV-1051",
+      "dn_mm": 150,
+      "ext_m": 54.6,
+      "decl_mm": 3.846,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-232",
+      "pv_ini": "PV-1051",
+      "pv_fim": "PV-1072",
+      "dn_mm": 150,
+      "ext_m": 62.57,
+      "decl_mm": 1.279,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-234",
+      "pv_ini": "PV-934",
+      "pv_fim": "PV-1073",
+      "dn_mm": 150,
+      "ext_m": 52.88,
+      "decl_mm": 6.997,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-249",
+      "pv_ini": "PV-939",
+      "pv_fim": "PV-1249",
+      "dn_mm": 150,
+      "ext_m": 71.42,
+      "decl_mm": 5.6,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-264",
+      "pv_ini": "PV-1249",
+      "pv_fim": "PV-1081",
+      "dn_mm": 150,
+      "ext_m": 71.0,
+      "decl_mm": 4.366,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-267",
+      "pv_ini": "PV-1060",
+      "pv_fim": "PV-1082",
+      "dn_mm": 150,
+      "ext_m": 71.29,
+      "decl_mm": 4.348,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-269",
+      "pv_ini": "PV-1052",
+      "pv_fim": "PV-1060",
+      "dn_mm": 150,
+      "ext_m": 55.28,
+      "decl_mm": 2.714,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-277",
+      "pv_ini": "PV-1220",
+      "pv_fim": "PV-1067",
+      "dn_mm": 150,
+      "ext_m": 49.25,
+      "decl_mm": 18.883,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-278",
+      "pv_ini": "PV-1223",
+      "pv_fim": "PV-1226",
+      "dn_mm": 200,
+      "ext_m": 13.62,
+      "decl_mm": 2.936,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-279",
+      "pv_ini": "PV-1226",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 68.48,
+      "decl_mm": 4.819,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-282",
+      "pv_ini": "",
+      "pv_fim": "PV-1083",
+      "dn_mm": 150,
+      "ext_m": 43.07,
+      "decl_mm": -8.359,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-284",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 150,
+      "ext_m": 147.44,
+      "decl_mm": 0,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-293",
+      "pv_ini": "PV-1069",
+      "pv_fim": "",
+      "dn_mm": 150,
+      "ext_m": 86.93,
+      "decl_mm": 3.221,
+      "material": "150 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-398",
+      "pv_ini": "PV-1154",
+      "pv_fim": "",
+      "dn_mm": 300,
+      "ext_m": 13.56,
+      "decl_mm": -112.056,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-399",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 156.63,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-400",
+      "pv_ini": "PV-1312",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 69.14,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-401",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 130.91,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-402",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 241.23,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-403",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 69.58,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-404",
+      "pv_ini": "",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 461.67,
+      "decl_mm": 0,
+      "material": "200 mm TUBO DE FERRO"
+    },
+    {
+      "nome": "TRECHO-452",
+      "pv_ini": "PV-11 - TRANSIÇÃO",
+      "pv_fim": "PV-10",
+      "dn_mm": 300,
+      "ext_m": 40.87,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-453",
+      "pv_ini": "PV-10",
+      "pv_fim": "PV-09",
+      "dn_mm": 300,
+      "ext_m": 46.71,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-454",
+      "pv_ini": "PV-09",
+      "pv_fim": "PV-08",
+      "dn_mm": 300,
+      "ext_m": 53.52,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-455",
+      "pv_ini": "PV-08",
+      "pv_fim": "PV-07",
+      "dn_mm": 300,
+      "ext_m": 29.68,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-456",
+      "pv_ini": "PV-07",
+      "pv_fim": "PV-06",
+      "dn_mm": 300,
+      "ext_m": 18.97,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-457",
+      "pv_ini": "PV-06",
+      "pv_fim": "PV-05",
+      "dn_mm": 300,
+      "ext_m": 67.61,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-458",
+      "pv_ini": "PV-05",
+      "pv_fim": "PV-04",
+      "dn_mm": 300,
+      "ext_m": 77.68,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-459",
+      "pv_ini": "PV-04",
+      "pv_fim": "PV-03",
+      "dn_mm": 300,
+      "ext_m": 85.84,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-460",
+      "pv_ini": "PV-03",
+      "pv_fim": "PV-02",
+      "dn_mm": 300,
+      "ext_m": 71.26,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-461",
+      "pv_ini": "PV-02",
+      "pv_fim": "PV-01",
+      "dn_mm": 300,
+      "ext_m": 92.56,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-462",
+      "pv_ini": "PV-01",
+      "pv_fim": "PV-EEE",
+      "dn_mm": 300,
+      "ext_m": 8.5,
+      "decl_mm": 3.804,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-03",
+      "pv_ini": "03",
+      "pv_fim": "02",
+      "dn_mm": 200,
+      "ext_m": 10.25,
+      "decl_mm": 22.436,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-04",
+      "pv_ini": "02",
+      "pv_fim": "01",
+      "dn_mm": 200,
+      "ext_m": 4.75,
+      "decl_mm": 7.79,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-06",
+      "pv_ini": "04",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 38.23,
+      "decl_mm": 14.701,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-07",
+      "pv_ini": "05",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 18.31,
+      "decl_mm": 10.653,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-08",
+      "pv_ini": "07",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 54.06,
+      "decl_mm": 10.544,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-09",
+      "pv_ini": "06",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 53.85,
+      "decl_mm": 11.421,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-10",
+      "pv_ini": "09",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 28.23,
+      "decl_mm": 13.353,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-11",
+      "pv_ini": "08",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 37.92,
+      "decl_mm": 18.726,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-12",
+      "pv_ini": "01",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 22.8,
+      "decl_mm": 16.01,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-13",
+      "pv_ini": "11",
+      "pv_fim": "10",
+      "dn_mm": 200,
+      "ext_m": 29.44,
+      "decl_mm": 7.167,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-14",
+      "pv_ini": "27",
+      "pv_fim": "26",
+      "dn_mm": 150,
+      "ext_m": 14.94,
+      "decl_mm": 7.432,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-15",
+      "pv_ini": "26",
+      "pv_fim": "25",
+      "dn_mm": 200,
+      "ext_m": 4.85,
+      "decl_mm": 15.66,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-16",
+      "pv_ini": "25",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 65.1,
+      "decl_mm": 51.577,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-17",
+      "pv_ini": "17",
+      "pv_fim": "16",
+      "dn_mm": 200,
+      "ext_m": 9.48,
+      "decl_mm": 12.453,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-18",
+      "pv_ini": "16",
+      "pv_fim": "15",
+      "dn_mm": 200,
+      "ext_m": 13.74,
+      "decl_mm": 7.568,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-19",
+      "pv_ini": "15",
+      "pv_fim": "13",
+      "dn_mm": 200,
+      "ext_m": 20.53,
+      "decl_mm": 6.334,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-20",
+      "pv_ini": "14 ",
+      "pv_fim": "13",
+      "dn_mm": 200,
+      "ext_m": 13.78,
+      "decl_mm": 9.942,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-21",
+      "pv_ini": "",
+      "pv_fim": "26",
+      "dn_mm": 150,
+      "ext_m": 4.04,
+      "decl_mm": 0,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-22",
+      "pv_ini": "34",
+      "pv_fim": "33",
+      "dn_mm": 200,
+      "ext_m": 11.53,
+      "decl_mm": 14.652,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-23",
+      "pv_ini": "33",
+      "pv_fim": "29",
+      "dn_mm": 200,
+      "ext_m": 31.57,
+      "decl_mm": 5.416,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-25",
+      "pv_ini": "35",
+      "pv_fim": "32",
+      "dn_mm": 150,
+      "ext_m": 24.99,
+      "decl_mm": 10.213,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-26",
+      "pv_ini": "32",
+      "pv_fim": "31",
+      "dn_mm": 150,
+      "ext_m": 5.46,
+      "decl_mm": 25.072,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-27",
+      "pv_ini": "31",
+      "pv_fim": "30",
+      "dn_mm": 150,
+      "ext_m": 1.61,
+      "decl_mm": 10.59,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-28",
+      "pv_ini": "30",
+      "pv_fim": "29",
+      "dn_mm": 150,
+      "ext_m": 9.27,
+      "decl_mm": 2.588,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-29",
+      "pv_ini": "29",
+      "pv_fim": "28",
+      "dn_mm": 200,
+      "ext_m": 14.49,
+      "decl_mm": 5.936,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-30",
+      "pv_ini": "28",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 49.48,
+      "decl_mm": 155.986,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-31",
+      "pv_ini": "24",
+      "pv_fim": "23",
+      "dn_mm": 200,
+      "ext_m": 48.08,
+      "decl_mm": 5.949,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-32",
+      "pv_ini": "21",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 35.67,
+      "decl_mm": 0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-33",
+      "pv_ini": "19",
+      "pv_fim": "18",
+      "dn_mm": 150,
+      "ext_m": 10.29,
+      "decl_mm": 47.896,
+      "material": "DN 150 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-34",
+      "pv_ini": "18",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 20.6,
+      "decl_mm": 79.027,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-35",
+      "pv_ini": "20",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 14.37,
+      "decl_mm": 0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-36",
+      "pv_ini": "22",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 51.35,
+      "decl_mm": 0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-37",
+      "pv_ini": "13",
+      "pv_fim": "12",
+      "dn_mm": 200,
+      "ext_m": 40.52,
+      "decl_mm": 6.91,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-38",
+      "pv_ini": "12",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 37.85,
+      "decl_mm": 0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-39",
+      "pv_ini": "10",
+      "pv_fim": "",
+      "dn_mm": 200,
+      "ext_m": 17.29,
+      "decl_mm": 0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-507",
+      "pv_ini": "PV-27",
+      "pv_fim": "PV-26",
+      "dn_mm": 200,
+      "ext_m": 13.04,
+      "decl_mm": 3.0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-508",
+      "pv_ini": "PV-26",
+      "pv_fim": "PV-25",
+      "dn_mm": 200,
+      "ext_m": 12.87,
+      "decl_mm": 3.0,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-509",
+      "pv_ini": "PV-25",
+      "pv_fim": "PV-24",
+      "dn_mm": 300,
+      "ext_m": 15.33,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-510",
+      "pv_ini": "PV-24",
+      "pv_fim": "PV-23",
+      "dn_mm": 300,
+      "ext_m": 23.78,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-511",
+      "pv_ini": "PV-23",
+      "pv_fim": "PV-22",
+      "dn_mm": 300,
+      "ext_m": 14.3,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-512",
+      "pv_ini": "PV-22",
+      "pv_fim": "PV-21",
+      "dn_mm": 300,
+      "ext_m": 14.18,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-513",
+      "pv_ini": "PV-21",
+      "pv_fim": "PV-20",
+      "dn_mm": 300,
+      "ext_m": 18.84,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-514",
+      "pv_ini": "PV-20",
+      "pv_fim": "PV-19",
+      "dn_mm": 300,
+      "ext_m": 11.61,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-515",
+      "pv_ini": "PV-19",
+      "pv_fim": "PV-18",
+      "dn_mm": 300,
+      "ext_m": 12.64,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-516",
+      "pv_ini": "PV-18",
+      "pv_fim": "PV-17",
+      "dn_mm": 300,
+      "ext_m": 8.01,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-517",
+      "pv_ini": "PV-17",
+      "pv_fim": "PV-16",
+      "dn_mm": 300,
+      "ext_m": 17.67,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-518",
+      "pv_ini": "PV-16",
+      "pv_fim": "PV-15",
+      "dn_mm": 300,
+      "ext_m": 23.06,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-519",
+      "pv_ini": "PV-15",
+      "pv_fim": "PV-14",
+      "dn_mm": 300,
+      "ext_m": 7.54,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-520",
+      "pv_ini": "PV-14",
+      "pv_fim": "PV-13",
+      "dn_mm": 300,
+      "ext_m": 13.03,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-521",
+      "pv_ini": "PV-13",
+      "pv_fim": "PV-12",
+      "dn_mm": 300,
+      "ext_m": 18.49,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-522",
+      "pv_ini": "PV-12",
+      "pv_fim": "PV-11",
+      "dn_mm": 300,
+      "ext_m": 25.2,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-523",
+      "pv_ini": "PV-11",
+      "pv_fim": "PV-10",
+      "dn_mm": 300,
+      "ext_m": 28.04,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-524",
+      "pv_ini": "PV-10",
+      "pv_fim": "PV-09",
+      "dn_mm": 300,
+      "ext_m": 11.69,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-525",
+      "pv_ini": "PV-09",
+      "pv_fim": "PV-08",
+      "dn_mm": 300,
+      "ext_m": 33.77,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-526",
+      "pv_ini": "PV-08",
+      "pv_fim": "PV-07",
+      "dn_mm": 300,
+      "ext_m": 23.65,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-527",
+      "pv_ini": "PV-07",
+      "pv_fim": "PV-06",
+      "dn_mm": 300,
+      "ext_m": 33.83,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-528",
+      "pv_ini": "PV-06",
+      "pv_fim": "PV-05",
+      "dn_mm": 300,
+      "ext_m": 11.29,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-529",
+      "pv_ini": "PV-05",
+      "pv_fim": "PV-04",
+      "dn_mm": 300,
+      "ext_m": 16.57,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-530",
+      "pv_ini": "PV-04",
+      "pv_fim": "PV-03",
+      "dn_mm": 300,
+      "ext_m": 21.4,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-531",
+      "pv_ini": "PV-03",
+      "pv_fim": "PV-02",
+      "dn_mm": 300,
+      "ext_m": 2.82,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-531 (1)",
+      "pv_ini": "PV-02",
+      "pv_fim": "PV-01",
+      "dn_mm": 300,
+      "ext_m": 30.0,
+      "decl_mm": 3.0,
+      "material": "DN 300 mm - ESGOTO ARMADO-EA2"
+    },
+    {
+      "nome": "TRECHO-531 (1) (1)",
+      "pv_ini": "PV-01",
+      "pv_fim": "PV-EEE SÃO MANOEL",
+      "dn_mm": 300,
+      "ext_m": 4.0,
+      "decl_mm": 3.263,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-532",
+      "pv_ini": "PV-26",
+      "pv_fim": "PV-25",
+      "dn_mm": 200,
+      "ext_m": 57.33,
+      "decl_mm": 3.39,
+      "material": "DN 200 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-533",
+      "pv_ini": "PV-25",
+      "pv_fim": "PV-24",
+      "dn_mm": 300,
+      "ext_m": 24.2,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-534",
+      "pv_ini": "PV-24",
+      "pv_fim": "PV-23",
+      "dn_mm": 300,
+      "ext_m": 12.31,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-535",
+      "pv_ini": "PV-23",
+      "pv_fim": "PV-22",
+      "dn_mm": 300,
+      "ext_m": 11.2,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-536",
+      "pv_ini": "PV-22",
+      "pv_fim": "PV-21",
+      "dn_mm": 300,
+      "ext_m": 20.92,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-537",
+      "pv_ini": "PV-21",
+      "pv_fim": "PV-20",
+      "dn_mm": 300,
+      "ext_m": 7.25,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-538",
+      "pv_ini": "PV-20",
+      "pv_fim": "PV-19",
+      "dn_mm": 300,
+      "ext_m": 28.53,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-539",
+      "pv_ini": "PV-19",
+      "pv_fim": "PV-18",
+      "dn_mm": 300,
+      "ext_m": 30.62,
+      "decl_mm": 3.382,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-540",
+      "pv_ini": "PV-18",
+      "pv_fim": "PV-17",
+      "dn_mm": 300,
+      "ext_m": 17.18,
+      "decl_mm": 3.402,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-541",
+      "pv_ini": "PV-17",
+      "pv_fim": "PV-16",
+      "dn_mm": 300,
+      "ext_m": 9.09,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-542",
+      "pv_ini": "PV-16",
+      "pv_fim": "PV-15",
+      "dn_mm": 300,
+      "ext_m": 22.09,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-543",
+      "pv_ini": "PV-15",
+      "pv_fim": "PV-14",
+      "dn_mm": 300,
+      "ext_m": 18.56,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-544",
+      "pv_ini": "PV-14",
+      "pv_fim": "PV-13",
+      "dn_mm": 300,
+      "ext_m": 25.67,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-545",
+      "pv_ini": "PV-13",
+      "pv_fim": "PV-12",
+      "dn_mm": 300,
+      "ext_m": 16.47,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-546",
+      "pv_ini": "PV-12",
+      "pv_fim": "PV-11",
+      "dn_mm": 300,
+      "ext_m": 15.97,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-547",
+      "pv_ini": "PV-11",
+      "pv_fim": "PV-10",
+      "dn_mm": 300,
+      "ext_m": 9.71,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-548",
+      "pv_ini": "PV-10",
+      "pv_fim": "PV-09",
+      "dn_mm": 300,
+      "ext_m": 15.8,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-549",
+      "pv_ini": "PV-09",
+      "pv_fim": "PV-08",
+      "dn_mm": 300,
+      "ext_m": 14.93,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-550",
+      "pv_ini": "PV-08",
+      "pv_fim": "PV-07",
+      "dn_mm": 300,
+      "ext_m": 14.45,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-551",
+      "pv_ini": "PV-07",
+      "pv_fim": "PV-06",
+      "dn_mm": 300,
+      "ext_m": 14.54,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-552",
+      "pv_ini": "PV-06",
+      "pv_fim": "PV-05",
+      "dn_mm": 300,
+      "ext_m": 14.0,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-553",
+      "pv_ini": "PV-05",
+      "pv_fim": "PV-04",
+      "dn_mm": 300,
+      "ext_m": 21.63,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-554",
+      "pv_ini": "PV-04",
+      "pv_fim": "PV-03",
+      "dn_mm": 300,
+      "ext_m": 21.62,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-555",
+      "pv_ini": "PV-03",
+      "pv_fim": "PV-02",
+      "dn_mm": 300,
+      "ext_m": 14.51,
+      "decl_mm": 3.389,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-556",
+      "pv_ini": "PV-02",
+      "pv_fim": "PV-01",
+      "dn_mm": 300,
+      "ext_m": 79.36,
+      "decl_mm": 3.279,
+      "material": "DN 300 mm PVC-SN"
+    },
+    {
+      "nome": "TRECHO-557",
+      "pv_ini": "PV-01",
+      "pv_fim": "PV-01",
+      "dn_mm": 300,
+      "ext_m": 23.09,
+      "decl_mm": 5.486,
+      "material": "DN 300 mm PVC-SN"
+    }
+  ],
+  "agua_pipes": [
+    {
+      "nome": "Pressure Pipe - (1)",
+      "desc": "TUBO 300 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (2)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (3)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (4)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (5)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (6)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (7)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (8)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (9)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (10)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (11)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (12)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (13)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (14)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (15)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (16)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (17)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (18)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (19)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (20)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (21)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (22)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (23)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (24)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (25)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (26)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (27)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (28)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (29)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (30)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (31)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (32)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (33)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (34)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (35)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (36)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (37)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (38)",
+      "desc": "Pipe_ DN 50_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (39)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (40)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (41)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (42)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (43)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (44)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (45)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (46)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (47)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (48)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (49)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (50)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (51)",
+      "desc": "Pipe_ DN 90_ SPIG"
+    },
+    {
+      "nome": "Pressure Pipe - (55)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (56)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (57)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (58)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (59)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (60)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (61)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (62)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (63)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (64)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (65)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (66)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (67)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (68)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (69)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (70)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (71)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (72)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (73)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (74)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (75)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (76)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (77)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (78)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (79)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (80)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (81)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (82)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (83)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (84)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (85)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (86)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (87)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (88)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (89)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (90)",
+      "desc": "TUBO 1000 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (96)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (97)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (98)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (99)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (100)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (101)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (102)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (103)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (104)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (105)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (106)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (107)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (108)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (109)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (110)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (111)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (112)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (113)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (114)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (115)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (116)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (117)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (118)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (119)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (120)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (121)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (122)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (123)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (124)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (125)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (126)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (127)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (128)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (129)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (130)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (131)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (132)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (133)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (134)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (135)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (136)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (137)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (138)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (139)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (140)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (141)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (142)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (143)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (149)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (150)",
+      "desc": "TUBO 100 mm F°F°"
+    },
+    {
+      "nome": "Pressure Pipe - (151)",
+      "desc": "TUBO PEAD DN-110 - SDR-17 - PN-10 - ABNT NBR 15561"
+    }
+  ],
+  "networks": [
+    {
+      "nome": "1",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "3",
+      "tipo": "AeccDbPressurePipeNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "REDE SÃO MANOEL",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "TR PROV - BECO 8 D AO PV 14",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "Pressure Network - (4)",
+      "tipo": "AeccDbPressurePipeNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "1 (1)",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "CT SÃO MANOEL",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "LR SÃO MANOEL",
+      "tipo": "AeccDbPressurePipeNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "CT JÃO CARLOS DA SILVA",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    },
+    {
+      "nome": "2",
+      "tipo": "AeccDbNetwork",
+      "desc": ""
+    }
+  ],
+  "estatisticas": {
+    "total_pvs": 116,
+    "total_trechos": 158,
+    "total_agua": 138,
+    "pvs_com_ct": 116,
+    "total_networks": 10
+  }
+}

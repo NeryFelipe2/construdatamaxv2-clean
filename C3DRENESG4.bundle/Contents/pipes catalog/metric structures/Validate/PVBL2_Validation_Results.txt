@@ -1,0 +1,34 @@
+Begin Part Validation | PVBL2
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- PVBL
+OK: Part Description parameter validated -- PVBL2
+OK: Part Name parameter validated -- PVBL2
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- E03F65CC-8783-4546-B0FC-F4F26FA7F032
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA3 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA4 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA5 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter LenB2 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter SBSL uses Context=StructLength
+OK: Calc Parameter SBSW uses Context=StructWidth
+OK: Calc Parameter SFD uses Context=StructFrameDiameter
+OK: Calc Parameter SFL uses Context=StructFrameLength
+OK: Calc Parameter SVPC uses Context=StructVertPipeClearance
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+ 
+OK: Query validation successful
+
+OK: Part Validated | PVBL\PVBL2.xml

@@ -1,0 +1,40 @@
+
+================================================================================
+                    RELATÓRIO CONSOLIDADO - NOTAS DE SERVIÇO
+                    Projetos de Água e Esgoto
+================================================================================
+
+Data de Geração: 24/03/2026 14:06:45
+Caminho Base: C:\Users\felip\Downloads\PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018\MAPAS ÁGUA E ESGOTO PARA DXF\NOTAS DE SERVICO COMPLETAS 24-03-2026
+
+--------------------------------------------------------------------------------
+                              RESUMO GERAL
+--------------------------------------------------------------------------------
+
+Total de Notas de Serviço encontradas: 836
+
+Bairros/Localidades processados:
+  • JOAO_CARLOS: 43 NS
+  • MORRO_DO_TETEU: 115 NS
+  • PANTANAL_BAIXO: 137 NS
+  • PROL_CRIADORES: 70 NS
+  • PROL_PANTANAL_BAIXO: 25 NS
+  • PROL_SAO_MANOEL: 79 NS
+  • PROL_TETEU: 143 NS
+  • PROL_TETEU_ALT-01: 141 NS
+  • SAO_MANOEL: 43 NS
+  • VILA_CRIADORES: 23 NS
+  • VILA_ISRAEL: 17 NS
+
+--------------------------------------------------------------------------------
+                           ESTATÍSTICAS DE ARQUIVOS
+--------------------------------------------------------------------------------
+
+Arquivos de Desenho PDF:     809/836 (96.8%)
+Arquivos de Satélite PDF:    809/836 (96.8%)
+Arquivos A4 PDF:             809/836
+Arquivos JSON (dados):       809/836 (96.8%)
+Arquivos XLSX (OSE):         809/836 (96.8%)
+Arquivos HTML (mapas):       809/836 (96.8%)
+
+================================================================================

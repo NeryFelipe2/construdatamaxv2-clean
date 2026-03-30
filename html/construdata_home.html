@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConstruDataMaxV2 | Operacao NS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box}
+:root{
+  --bg:#08101a;--bg2:#0d1520;--panel:rgba(11,20,31,.84);--line:rgba(124,156,182,.15);
+  --text:#edf3f7;--muted:#94a5b4;--acc:#14d79c;--acc2:#0f8dcb;--warn:#eeaf53;--bad:#ef6357;
+  --mono:'IBM Plex Mono',monospace;--font:'Outfit',sans-serif;
+}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:var(--font);color:var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(20,215,156,.10), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(238,140,83,.12), transparent 26%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+}
+.page{max-width:1320px;margin:0 auto;padding:28px 18px 56px}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px}
+.eyebrow{margin:0 0 8px;color:#78d7c3;font:500 .78rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.16em}
+h1,h2,h3{margin:0;letter-spacing:-.04em}
+h1{font-size:clamp(2rem,3vw,3rem)}
+h2{font-size:clamp(1.35rem,2vw,1.85rem)}
+.subtitle{max-width:56ch;color:var(--muted);margin:12px 0 0}
+.health{display:inline-flex;align-items:center;gap:12px;padding:14px 18px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.dot{width:10px;height:10px;border-radius:999px;background:#6b7582}
+.dot.ok{background:var(--acc);box-shadow:0 0 0 6px rgba(20,215,156,.16)}
+.grid{display:grid;gap:18px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr);gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 24px 50px rgba(0,0,0,.18);backdrop-filter:blur(14px)}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
+.tag,.pill{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border-radius:999px;font:500 .78rem/1 var(--mono)}
+.tag{background:rgba(20,215,156,.10);color:#8ce6d3;border:1px solid rgba(20,215,156,.22)}
+.pill{background:rgba(124,156,182,.12);color:#ced9e2;border:1px solid rgba(124,156,182,.18)}
+.field{display:grid;gap:8px;margin-bottom:14px}
+.field span,.metric span,.meta span,.module span{color:var(--muted);font:500 .76rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.field input[type=text],.field input[type=file]{
+  width:100%;border:1px solid var(--line);background:rgba(6,12,20,.72);color:var(--text);
+  border-radius:16px;padding:14px 16px
+}
+.checkbox{display:flex;align-items:center;gap:10px;color:var(--text);margin-bottom:14px}
+.checkbox input{accent-color:var(--acc)}
+.hints{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.hint,.metric,.meta,.module,.artifact,.empty{background:rgba(5,11,19,.72);border:1px solid rgba(124,156,182,.12);border-radius:20px}
+.hint,.metric,.meta,.module,.artifact,.empty{padding:14px}
+.hint strong,.artifact strong,.module strong{display:block}
+.hint div,.artifact small,.module small,.muted{color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border-radius:16px;border:1px solid transparent;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#041119;font-weight:700}
+.btn.ghost{background:transparent;color:var(--text);border-color:rgba(124,156,182,.22)}
+.message{margin-top:12px;color:#9fe7d6}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.metric strong,.meta strong{display:block;margin-top:8px;font-size:1.2rem}
+.meta-grid,.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.artifact-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.artifact,.module{display:grid;gap:8px}
+.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
+.scope{display:flex;gap:10px;overflow:auto}
+.scope button{border:1px solid var(--line);background:rgba(5,11,19,.56);color:#d2dde6;border-radius:999px;min-height:40px;padding:0 14px;cursor:pointer;white-space:nowrap}
+.scope button.on{background:rgba(20,215,156,.10);color:#8ce6d3;border-color:rgba(20,215,156,.22)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid rgba(124,156,182,.12)}
+th{color:var(--muted);font:500 .78rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.table-wrap{overflow:auto}
+.nucleo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.nucleo{padding:18px;border-radius:22px;background:rgba(5,11,19,.72);border:1px solid rgba(124,156,182,.12)}
+.nucleo-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
+.nucleo strong{font-size:1.05rem}
+.nucleo small{display:block;color:var(--muted);margin-top:6px}
+.nucleo-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.nucleo-stats strong{display:block;margin-top:6px}
+.two-col{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px}
+@media (max-width:1180px){
+  .hero,.two-col,.metrics,.hints,.meta-grid,.module-grid,.artifact-list,.nucleo-grid,.nucleo-stats{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .page{padding:18px 14px 40px}
+  .top,.head,.section-head{flex-direction:column;align-items:flex-start}
+  .actions,.scope{width:100%}
+  .btn,.scope button{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div>
+      <p class="eyebrow">ConstruDataMaxV2</p>
+      <h1>Operacao NS V5</h1>
+      <p class="subtitle">Fluxo direto para importar projeto, gerar notas, baixar artefatos e abrir os modulos tecnicos sem depender de tela demo.</p>
+    </div>
+    <div class="health">
+      <span class="dot" id="health-dot"></span>
+      <div>
+        <strong id="health-text">Verificando backend...</strong>
+        <small id="health-sub">/health</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="hero">
+      <article class="panel">
+        <div class="head">
+          <div>
+            <p class="eyebrow">Fluxo principal</p>
+            <h2>Importar projeto e gerar NS</h2>
+          </div>
+          <span class="tag">JSON / LandXML / DXF</span>
+        </div>
+
+        <form id="import-form">
+          <label class="field">
+            <span>Nucleo</span>
+            <input type="text" id="nucleo" placeholder="Ex.: Verde e Teteu">
+          </label>
+          <label class="field">
+            <span>Arquivo do projeto</span>
+            <input type="file" id="arquivo" accept=".json,.xml,.landxml,.dxf" required>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="modo-rapido">
+            <span>Modo rapido: gera primeiro o essencial</span>
+          </label>
+          <div class="hints">
+            <div class="hint"><strong>Formato recomendado</strong><div>LandXML ou JSON com `pvs` + `trechos`.</div></div>
+            <div class="hint"><strong>Saida</strong><div>PDF A4, desenho, mapa HTML, DADOS.json e GeoJSON.</div></div>
+            <div class="hint"><strong>Observacao</strong><div>DWG continua fora da web. Use DXF ou exporte LandXML.</div></div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="submit-btn" type="submit">Importar e gerar</button>
+            <a class="btn ghost" href="/manage" target="_blank" rel="noreferrer">Abrir manage</a>
+          </div>
+          <div class="message" id="form-message"></div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <div class="head">
+          <div>
+            <p class="eyebrow">Ultimo processamento</p>
+            <h2 id="job-title">Nenhum processamento ainda</h2>
+          </div>
+          <span class="pill" id="job-status">aguardando</span>
+        </div>
+
+        <div class="meta-grid" id="job-meta">
+          <div class="meta"><span>Arquivo</span><strong>-</strong></div>
+          <div class="meta"><span>Fonte</span><strong>-</strong></div>
+          <div class="meta"><span>PVs / trechos</span><strong>-</strong></div>
+          <div class="meta"><span>Notas geradas</span><strong>-</strong></div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="section-head">
+            <strong>Artefatos</strong>
+            <small class="muted" id="job-created">-</small>
+          </div>
+          <div class="artifact-list" id="artifact-list">
+            <div class="empty">
+              <strong>Sem artefatos ainda</strong>
+              <p class="muted">Suba um projeto e os arquivos gerados aparecem aqui.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Pulso executivo</p>
+          <h2>Leitura rapida do escopo</h2>
+        </div>
+        <div class="scope" id="scope"></div>
+      </div>
+      <div class="metrics" id="metrics"></div>
+    </section>
+
+    <section class="two-col">
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Notas carregadas</p>
+            <h2>Ultimas NS</h2>
+          </div>
+          <small class="muted" id="ns-count">0 registros</small>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>NS</th><th>Trecho</th><th>Status</th><th>Extensao</th></tr>
+            </thead>
+            <tbody id="ns-table">
+              <tr><td colspan="4">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Acesso rapido</p>
+            <h2>Modulos nativos</h2>
+          </div>
+        </div>
+        <div class="module-grid">
+          <a class="module" href="/rdo" target="_blank" rel="noreferrer"><span>RDO</span><strong>Diario de obra e PDF</strong></a>
+          <a class="module" href="/campo" target="_blank" rel="noreferrer"><span>Campo</span><strong>Coleta e consulta em campo</strong></a>
+          <a class="module" href="/manage" target="_blank" rel="noreferrer"><span>Manage</span><strong>Rede 3D com dados reais</strong></a>
+          <a class="module" href="/controle" target="_blank" rel="noreferrer"><span>Controle</span><strong>Controle tecnico e medicao</strong></a>
+          <a class="module" href="/perdas" target="_blank" rel="noreferrer"><span>Perdas</span><strong>Motor de perdas</strong></a>
+          <a class="module" href="/editor" target="_blank" rel="noreferrer"><span>Editor</span><strong>Editor tecnico de apoio</strong></a>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Janela de obra</p>
+          <h2>Nucleos e fases</h2>
+        </div>
+        <small class="muted" id="empresa">Operacao NS</small>
+      </div>
+      <div class="nucleo-grid" id="nucleos"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const state = {
+  selectedNucleo: "",
+  cronograma: null,
+  dashboard: null,
+  latestJob: null,
+  nsItems: [],
+};
+
+function cleanText(value) {
+  if (typeof value !== "string") return value ?? "";
+  if (!/[ÃƒÃ¢Ã‚]/.test(value)) return value;
+  try {
+    const bytes = Uint8Array.from(value, (char) => char.charCodeAt(0));
+    return new TextDecoder("utf-8").decode(bytes);
+  } catch {
+    return value;
+  }
+}
+
+function formatInt(value) {
+  return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(Number(value || 0));
+}
+
+function formatMeters(value) {
+  return `${new Intl.NumberFormat("pt-BR", { maximumFractionDigits: Number(value || 0) >= 100 ? 0 : 1 }).format(Number(value || 0))} m`;
+}
+
+function formatPercent(value) {
+  return `${new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(Number(value || 0))}%`;
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(Number(value || 0));
+}
+
+function formatDate(value) {
+  if (!value) return "-";
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${value}T12:00:00`));
+}
+
+function formatDateTime(value) {
+  if (!value) return "-";
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+}
+
+function nsCode(item) {
+  const raw = item.codigo ?? item.codigo_ns ?? item.ns_codigo ?? item.ns ?? item.numero ?? item.id;
+  if (raw === undefined || raw === null || raw === "") return "NS";
+  if (typeof raw === "number") return `NS ${String(raw).padStart(3, "0")}`;
+  return cleanText(String(raw));
+}
+
+function nsTrecho(item) {
+  const pvIni = item.pv_ini ?? item.pv_montante ?? item.origem;
+  const pvFim = item.pv_fim ?? item.pv_jusante ?? item.destino;
+  if (pvIni || pvFim) return `${cleanText(String(pvIni ?? "-"))} -> ${cleanText(String(pvFim ?? "-"))}`;
+  return cleanText(String(item.trecho ?? "-"));
+}
+
+function statusClass(status) {
+  const value = cleanText(String(status ?? "")).toLowerCase();
+  if (value.includes("concl")) return "pill" + " " + "pill-ok";
+  if (value.includes("exec")) return "pill" + " " + "pill-warn";
+  if (value.includes("erro")) return "pill" + " " + "pill-bad";
+  return "pill";
+}
+
+function artifactHref(jobId, relPath) {
+  const safePath = relPath.split("/").map((chunk) => encodeURIComponent(chunk)).join("/");
+  return `/api/processamento/${jobId}/artefato/${safePath}`;
+}
+
+function currentPhase(nucleo) {
+  const now = Date.now();
+  for (const fase of nucleo.fases || []) {
+    const start = new Date(`${fase.inicio}T12:00:00`).getTime();
+    const end = new Date(`${fase.fim}T12:00:00`).getTime();
+    if (now >= start && now <= end) return fase;
+  }
+  return (nucleo.fases || [])[0] || null;
+}
+
+async function fetchJson(path, nucleo = "") {
+  const url = new URL(path, window.location.origin);
+  if (nucleo) url.searchParams.set("nucleo", nucleo);
+  const response = await fetch(url.toString());
+  if (!response.ok) throw new Error(`${path} -> ${response.status}`);
+  return response.json();
+}
+
+function renderMetrics() {
+  const dashboard = state.dashboard || {};
+  document.getElementById("metrics").innerHTML = [
+    ["NS totais", formatInt(dashboard.n_total || 0), `${formatInt(dashboard.n_execucao || 0)} em execucao`],
+    ["Avanco fisico", formatPercent(dashboard.pct_fisico || 0), `${formatMeters(dashboard.extensao_exec_m || 0)} executados`],
+    ["Avanco financeiro", formatPercent(dashboard.pct_financeiro || 0), formatCurrency(dashboard.valor_liberado || 0)],
+    ["Ritmo diario", formatMeters(dashboard.m_por_dia || 0), `${formatInt(dashboard.rdos || 0)} RDOs`],
+  ].map(([label, value, hint]) => `<article class="metric"><span>${label}</span><strong>${value}</strong><div class="muted">${hint}</div></article>`).join("");
+}
+
+function renderNs() {
+  const items = state.nsItems.slice(0, 10);
+  document.getElementById("ns-count").textContent = `${formatInt(state.nsItems.length)} registros`;
+  document.getElementById("ns-table").innerHTML = items.length
+    ? items.map((item) => `
+      <tr>
+        <td>${nsCode(item)}</td>
+        <td>${nsTrecho(item)}</td>
+        <td><span class="${statusClass(item.status)}">${cleanText(String(item.status ?? "planejada"))}</span></td>
+        <td>${formatMeters(item.extensao_m ?? item.extensao ?? item.ext_m ?? 0)}</td>
+      </tr>
+    `).join("")
+    : `<tr><td colspan="4">Nenhuma NS carregada ainda.</td></tr>`;
+}
+
+function renderJob() {
+  const job = state.latestJob;
+  if (!job || !job.job_id) {
+    document.getElementById("job-title").textContent = "Nenhum processamento ainda";
+    document.getElementById("job-status").textContent = "aguardando";
+    document.getElementById("job-created").textContent = "-";
+    document.getElementById("job-meta").innerHTML = `
+      <div class="meta"><span>Arquivo</span><strong>-</strong></div>
+      <div class="meta"><span>Fonte</span><strong>-</strong></div>
+      <div class="meta"><span>PVs / trechos</span><strong>-</strong></div>
+      <div class="meta"><span>Notas geradas</span><strong>-</strong></div>
+    `;
+    document.getElementById("artifact-list").innerHTML = `
+      <div class="empty">
+        <strong>Sem artefatos ainda</strong>
+        <p class="muted">Suba um projeto e os arquivos gerados aparecem aqui.</p>
+      </div>
+    `;
+    return;
+  }
+
+  document.getElementById("job-title").textContent = cleanText(job.nucleo || "Processamento recente");
+  document.getElementById("job-status").textContent = cleanText(job.status || "ok");
+  document.getElementById("job-status").className = statusClass(job.status);
+  document.getElementById("job-created").textContent = formatDateTime(job.created_at);
+  document.getElementById("job-meta").innerHTML = `
+    <div class="meta"><span>Arquivo</span><strong>${cleanText(job.arquivo || "-") || "-"}</strong></div>
+    <div class="meta"><span>Fonte</span><strong>${cleanText(job.fonte || "-") || "-"}</strong></div>
+    <div class="meta"><span>PVs / trechos</span><strong>${formatInt(job.n_pvs || 0)} / ${formatInt(job.n_trechos || 0)}</strong></div>
+    <div class="meta"><span>Notas geradas</span><strong>${formatInt(job.ns_geradas || 0)} ok / ${formatInt(job.ns_erros || 0)} erro</strong></div>
+  `;
+  document.getElementById("artifact-list").innerHTML = (job.artifacts || []).slice(0, 18).map((artifact) => `
+    <a class="artifact" href="${artifactHref(job.job_id, artifact.path)}" target="_blank" rel="noreferrer">
+      <span>${String(artifact.kind || "").toUpperCase()}</span>
+      <strong>${artifact.label}</strong>
+      <small>${artifact.path}</small>
+    </a>
+  `).join("") || `
+    <div class="empty">
+      <strong>Processado sem artefatos visiveis</strong>
+      <p class="muted">Confira o log do job e os diretorios gerados no backend.</p>
+    </div>
+  `;
+}
+
+function renderScope() {
+  const scope = document.getElementById("scope");
+  const nucleos = (state.cronograma?.nucleos || []).slice(0, 10);
+  scope.innerHTML = `<button class="${state.selectedNucleo === "" ? "on" : ""}" data-nucleo="">Todos</button>` +
+    nucleos.map((item) => `<button class="${state.selectedNucleo === item.nome ? "on" : ""}" data-nucleo="${item.nome}">${cleanText(item.nome)}</button>`).join("");
+  scope.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", async () => {
+      state.selectedNucleo = button.getAttribute("data-nucleo") || "";
+      renderScope();
+      await loadScope();
+    });
+  });
+}
+
+function renderNucleos() {
+  const target = document.getElementById("nucleos");
+  const pool = state.selectedNucleo
+    ? (state.cronograma?.nucleos || []).filter((item) => item.nome === state.selectedNucleo)
+    : (state.cronograma?.nucleos || []);
+  document.getElementById("empresa").textContent = cleanText(state.cronograma?.empresa || "Operacao NS");
+  target.innerHTML = pool.slice(0, 8).map((nucleo) => {
+    const phase = currentPhase(nucleo);
+    return `
+      <article class="nucleo">
+        <div class="nucleo-top">
+          <div>
+            <strong>${cleanText(nucleo.nome)}</strong>
+            <small>${formatDate(nucleo.inicio)} ate ${formatDate(nucleo.fim)}</small>
+          </div>
+          <span class="pill">${cleanText(phase?.nome || "Sem fase")}</span>
+        </div>
+        <div class="nucleo-stats">
+          <div><span>Extensao</span><strong>${formatMeters(nucleo.extensao_m)}</strong></div>
+          <div><span>Trechos</span><strong>${formatInt(nucleo.n_trechos)}</strong></div>
+          <div><span>Equipes</span><strong>${formatInt(nucleo.equipes)}</strong></div>
+          <div><span>Duracao</span><strong>${formatInt(nucleo.duracao_dias)} dias</strong></div>
+        </div>
+      </article>
+    `;
+  }).join("") || `<div class="empty"><strong>Cronograma indisponivel</strong><p class="muted">Assim que a API responder, os nucleos aparecem aqui.</p></div>`;
+}
+
+async function loadHealth() {
+  const data = await fetchJson("/health");
+  document.getElementById("health-dot").classList.toggle("ok", Boolean(data.ok));
+  document.getElementById("health-text").textContent = data.ok ? "Backend online" : "Sem resposta";
+  document.getElementById("health-sub").textContent = cleanText(data.display_name || "ConstruDataMaxV2");
+}
+
+async function loadBase() {
+  const [cronograma, latestJob] = await Promise.allSettled([
+    fetchJson("/api/cronograma"),
+    fetchJson("/api/processamento/ultimo"),
+  ]);
+  if (cronograma.status === "fulfilled") {
+    state.cronograma = cronograma.value;
+  }
+  if (latestJob.status === "fulfilled") {
+    state.latestJob = latestJob.value;
+  }
+  renderJob();
+  renderScope();
+  renderNucleos();
+}
+
+async function loadScope() {
+  const [dashboard, ns] = await Promise.allSettled([
+    fetchJson("/api/dashboard", state.selectedNucleo),
+    fetchJson("/api/ns", state.selectedNucleo),
+  ]);
+  if (dashboard.status === "fulfilled") state.dashboard = dashboard.value;
+  if (ns.status === "fulfilled") state.nsItems = ns.value.items || [];
+  renderMetrics();
+  renderNs();
+  renderNucleos();
+}
+
+document.getElementById("import-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const fileInput = document.getElementById("arquivo");
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) {
+    document.getElementById("form-message").textContent = "Escolha um arquivo antes de processar.";
+    return;
+  }
+
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.textContent = "Processando...";
+  submitBtn.disabled = true;
+  document.getElementById("form-message").textContent = "";
+
+  const formData = new FormData();
+  formData.append("arquivo", file);
+  formData.append("nucleo", document.getElementById("nucleo").value || "");
+  formData.append("modo_rapido", document.getElementById("modo-rapido").checked ? "true" : "false");
+
+  try {
+    const response = await fetch("/api/processamento/importar", { method: "POST", body: formData });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Falha ao importar projeto");
+    state.latestJob = data;
+    document.getElementById("form-message").textContent = `Projeto processado. ${formatInt(data.ns_geradas || 0)} NS geradas.`;
+    if (data.nucleo) {
+      state.selectedNucleo = data.nucleo;
+      renderScope();
+    }
+    renderJob();
+    await loadScope();
+  } catch (error) {
+    document.getElementById("form-message").textContent = error instanceof Error ? error.message : "Falha ao importar projeto";
+  } finally {
+    submitBtn.textContent = "Importar e gerar";
+    submitBtn.disabled = false;
+  }
+});
+
+(async function init() {
+  try {
+    await loadHealth();
+    await loadBase();
+    await loadScope();
+  } catch (error) {
+    document.getElementById("form-message").textContent = error instanceof Error ? error.message : "Falha ao inicializar a pagina";
+  }
+})();
+</script>
+</body>
+</html>

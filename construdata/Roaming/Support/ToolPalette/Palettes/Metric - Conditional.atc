@@ -1,0 +1,60 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{4E33B8D3-62AD-415B-9E79-8B7EFBB8FB26}"/><Properties><ItemName resource="51022" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:29:55" modifiedUniversalDateTime="2009-01-04T11:53:31"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{5F223619-1F19-4039-B0C5-3324394F487D}"/><Properties><ItemName resource="51024" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EBF08C6D-9DDF-4DFD-A0A3-6F969321354E}"/><Properties><ItemName resource="11801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Conditional\64\light\AeccConditionalCutOrFill.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Conditional\64\dark\AeccConditionalCutOrFill.png"/></Images><Description resource="11802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ConditionalCutOrFill subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ConditionalCutOrFill</HelpData></Help><Time createdUniversalDateTime="2008-04-03T21:58:00" modifiedUniversalDateTime="2008-04-03T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<ConditionalSubassembly>true</ConditionalSubassembly>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ConditionalCutOrFill</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="11803" Description="11804">R2019</Version>
+						<Side DataType="Long" DisplayName="11805" Description="11806">0
+		                    <Enum>
+								<Right DisplayName="11807">0</Right>
+								<Left DisplayName="11808">1</Left>
+							</Enum>
+						</Side>
+						<LayoutWidth DataType="Double" TypeInfo="16" DisplayName="11809" Description="11810">3.6</LayoutWidth>
+						<LayoutGrade DataType="Double" TypeInfo="10" DisplayName="11811" Description="11812">1.0</LayoutGrade>
+						<Type DataType="Long" DisplayName="11813" Description="11814">0
+		                    <Enum>
+								<Cut DisplayName="11815">0</Cut>
+								<Fill DisplayName="11816">1</Fill>
+							</Enum>
+						</Type>
+						<MinimumDistance DataType="Double" TypeInfo="16" DisplayName="11817" Description="11818">0.0</MinimumDistance>
+						<MaximumDistance DataType="Double" TypeInfo="16" DisplayName="11819" Description="11820">9999.0</MaximumDistance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EBF08C6E-9DDF-4DFD-A0A3-6F969321354E}"/><Properties><ItemName resource="12201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Conditional\64\light\AeccConditionalHorizontalTarget.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Conditional\64\dark\AeccConditionalHorizontalTarget.png"/></Images><Description resource="12202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ConditionalHorizontalTarget subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ConditionalHorizontalTarget</HelpData></Help><Time createdUniversalDateTime="2008-04-03T21:58:00" modifiedUniversalDateTime="2008-04-03T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<ConditionalSubassembly>true</ConditionalSubassembly>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ConditionalHorizontalTarget</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="12203" Description="12204">R2019</Version>
+						<Side DataType="Long" DisplayName="12205" Description="12206">0
+          <Enum>
+								<Right DisplayName="12207">0</Right>
+								<Left DisplayName="12208">1</Left>
+							</Enum>
+						</Side>
+						<LayoutWidth DataType="Double" TypeInfo="16" DisplayName="12209" Description="12210">12.0</LayoutWidth>
+						<LayoutGrade DataType="Double" TypeInfo="10" DisplayName="12211" Description="12212">1.0</LayoutGrade>
+						<Type DataType="Long" DisplayName="12213" Description="12214">1
+          <Enum>
+								<TargetNotFound DisplayName="12215">0</TargetNotFound>
+								<TargetFound DisplayName="12216">1</TargetFound>
+							</Enum>
+						</Type>
+						<MaximumDistance DataType="Double" TypeInfo="16" DisplayName="12219" Description="12220">9999.0</MaximumDistance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>
