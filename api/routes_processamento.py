@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 
 from core.config import SAIDA_ROOT
@@ -17,8 +17,8 @@ router = APIRouter(tags=["processamento"])
 
 JOBS_DIR = SAIDA_ROOT / "web_jobs"
 JOBS_DIR.mkdir(parents=True, exist_ok=True)
-ALLOWED_SUFFIXES = {".json", ".xml", ".landxml", ".dxf"}
-ARTEFACT_SUFFIXES = {".pdf", ".html", ".json", ".geojson", ".xlsx"}
+ALLOWED_SUFFIXES = {".json", ".xml", ".landxml", ".dxf", ".dwg"}
+ARTEFACT_SUFFIXES = {".pdf", ".html", ".json", ".geojson", ".xlsx", ".ifc", ".csv", ".xml", ".scr"}
 
 
 def _slugify(value: str) -> str:
@@ -99,10 +99,23 @@ def _latest_manifest() -> dict[str, Any] | None:
     return json.loads(manifests[0].read_text(encoding="utf-8"))
 
 
+def _list_manifests(limit: int = 10) -> list[dict[str, Any]]:
+    manifests = sorted(JOBS_DIR.glob("*/manifest.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    items: list[dict[str, Any]] = []
+    for manifest_path in manifests[:limit]:
+        items.append(json.loads(manifest_path.read_text(encoding="utf-8")))
+    return items
+
+
 @router.get("/api/processamento/ultimo")
 def api_processamento_ultimo():
     data = _latest_manifest()
     return data or {"job_id": None, "artifacts": [], "status": "empty"}
+
+
+@router.get("/api/processamento/logs")
+def api_processamento_logs(limit: int = Query(default=10, ge=1, le=50)):
+    return {"items": _list_manifests(limit=limit)}
 
 
 @router.get("/api/processamento/{job_id}")
@@ -125,6 +138,7 @@ def api_processamento_artefato(job_id: str, rel_path: str):
 async def api_processamento_importar(
     nucleo: str = Form(default=""),
     modo_rapido: bool = Form(default=False),
+    motor: str = Form(default="v9"),
     arquivo: UploadFile = File(...),
 ):
     filename = arquivo.filename or "projeto"
@@ -133,6 +147,8 @@ async def api_processamento_importar(
         raise HTTPException(status_code=400, detail="Formato nao suportado. Use JSON, XML/LandXML ou DXF.")
     if suffix == ".landxml":
         suffix = ".xml"
+
+    motor_escolhido = motor.strip().lower() if motor else "v9"
 
     job_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
     job_dir = JOBS_DIR / job_id
@@ -148,37 +164,74 @@ async def api_processamento_importar(
     meta: dict[str, Any] = {"motor": "web"}
 
     try:
-        if suffix == ".json":
-            payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
-            pvs, trechos = _extract_network_from_json(payload)
-            fonte = "JSON"
-        elif suffix == ".xml":
-            from ler_landxml import ler_landxml
+        if motor_escolhido == "v5":
+            # Motor NOVA NS v5
+            import construdata_sabesp_v5_FINAL as v5_engine
 
-            pvs, trechos, _, meta = ler_landxml(str(upload_path))
-            fonte = meta.get("motor") or "LandXML"
-        elif suffix == ".dxf":
-            try:
-                from ler_dxf_gdal import ler_dxf_gdal
-            except ImportError as exc:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"DXF web indisponivel neste ambiente: {exc}. Use LandXML ou JSON.",
-                ) from exc
-            pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
-            fonte = meta.get("motor") or "DXF"
+            if suffix == ".json":
+                json_path = str(upload_path)
+                dxf_path_arg = None
+                fonte = "JSON"
+            elif suffix in (".dxf", ".dwg"):
+                dxf_path_arg = str(upload_path)
+                json_path = None
+                fonte = "DWG" if suffix == ".dwg" else "DXF"
+            else:
+                raise HTTPException(status_code=400, detail="Motor v5 suporta apenas DXF, DWG e JSON.")
+
+            v5_engine.processar(
+                dxf_path=dxf_path_arg,
+                json_path=json_path,
+                pasta_saida=str(output_dir),
+                nucleo=nucleo_value,
+            )
+            n_ok = len(list(output_dir.rglob("*.pdf")))
+            n_err = 0
+            meta["motor"] = "v5"
         else:
-            raise HTTPException(status_code=400, detail="Formato nao suportado.")
+            # Motor v9 (padrao)
+            if suffix == ".json":
+                payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
+                pvs, trechos = _extract_network_from_json(payload)
+                fonte = "JSON"
+            elif suffix == ".xml":
+                from ler_landxml import ler_landxml
 
-        from gerar_ns import processar_nucleo_from_data
+                pvs, trechos, _, meta = ler_landxml(str(upload_path))
+                fonte = meta.get("motor") or "LandXML"
+            elif suffix == ".dxf":
+                try:
+                    from ler_dxf_gdal import ler_dxf_gdal
+                except ImportError as exc:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"DXF web indisponivel neste ambiente: {exc}. Use LandXML ou JSON.",
+                    ) from exc
+                pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
+                fonte = meta.get("motor") or "DXF"
+            elif suffix == ".dwg":
+                try:
+                    from ler_dwg_universal import ler_dwg_universal
+                except ImportError as exc:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"DWG web indisponivel neste ambiente: {exc}. Use DXF, LandXML ou JSON.",
+                    ) from exc
+                pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
+                fonte = meta.get("motor") or "DWG"
+            else:
+                raise HTTPException(status_code=400, detail="Formato nao suportado.")
 
-        n_ok, n_err = processar_nucleo_from_data(
-            pvs,
-            trechos,
-            nucleo_value,
-            str(output_dir),
-            modo_rapido=modo_rapido,
-        )
+            from gerar_ns import processar_nucleo_from_data
+
+            n_ok, n_err = processar_nucleo_from_data(
+                pvs,
+                trechos,
+                nucleo_value,
+                str(output_dir),
+                modo_rapido=modo_rapido,
+            )
+            meta["motor"] = "v9"
     except HTTPException:
         raise
     except Exception as exc:
@@ -191,9 +244,10 @@ async def api_processamento_importar(
         "nucleo": nucleo_value,
         "fonte": fonte,
         "modo_rapido": bool(modo_rapido),
+        "motor": motor_escolhido,
         "arquivo": filename,
-        "n_pvs": len(pvs),
-        "n_trechos": len(trechos),
+        "n_pvs": len(pvs) if motor_escolhido != "v5" else 0,
+        "n_trechos": len(trechos) if motor_escolhido != "v5" else 0,
         "ns_geradas": n_ok,
         "ns_erros": n_err,
         "artifacts": artifacts[:200],

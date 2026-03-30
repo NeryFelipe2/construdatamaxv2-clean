@@ -61,6 +61,7 @@ type ProcessJob = {
   status: string;
   nucleo?: string;
   fonte?: string;
+  motor?: string;
   modo_rapido?: boolean;
   arquivo?: string;
   n_pvs?: number;
@@ -71,6 +72,10 @@ type ProcessJob = {
   created_at?: string;
   detail?: string;
   meta?: Record<string, unknown>;
+};
+
+type ProcessLogList = {
+  items: ProcessJob[];
 };
 
 type RdoItem = {
@@ -111,6 +116,50 @@ type CurvaS = {
   n_total: number;
   ext_total: number;
   custo_total: number;
+};
+
+type LeanInsight = {
+  takt_metros_dia: number;
+  cycle_time_dias: number;
+  throughput_ns_semana: number;
+  ns_planejadas_semana: number;
+  ns_bloqueadas_semana: number;
+  ext_planejada_semana: number;
+  restricoes_lookahead: number;
+  alerta_lookahead: string;
+  valor_agregado_pct: number;
+  co2_total_ton: number;
+  custo_ciclo_vida_total: number;
+};
+
+type LossInsight = {
+  uarl_m3_ano: number;
+  uarl_litros_dia: number;
+  ili: number;
+  ili_classificacao: string;
+  risco_total_ano: number;
+  n_dmas: number;
+  custo_ineficiencia_ano: number;
+};
+
+type AnalyticsSummary = {
+  status: string;
+  gerado_em?: string;
+  algoritmo: string;
+  r2_test: number;
+  mae: number;
+  rmse: number;
+  n_modelos: number;
+  n_cenarios: number;
+  n_nucleos: number;
+  melhor_cenario?: Record<string, unknown>;
+  top_feature?: Record<string, unknown>;
+  origem?: string;
+};
+
+type NucleoCatalog = {
+  items: Array<{ nome: string }>;
+  total: number;
 };
 
 type GeoJsonFeature = {
@@ -214,6 +263,7 @@ const apiCatalog = [
   { method: "GET", path: "/health", note: "Saude do backend" },
   { method: "POST", path: "/api/processamento/importar", note: "Importa projeto e gera NS" },
   { method: "GET", path: "/api/processamento/ultimo", note: "Ultimo job processado" },
+  { method: "GET", path: "/api/processamento/logs", note: "Historico dos ultimos jobs" },
   { method: "GET", path: "/api/processamento/{job_id}", note: "JSON do job selecionado" },
   { method: "GET", path: "/api/processamento/{job_id}/artefato/{rel_path}", note: "Primeiro artefato do job" },
   { method: "GET", path: "/api/ns", note: "Lista de notas de servico" },
@@ -229,6 +279,10 @@ const apiCatalog = [
   { method: "GET", path: "/api/curva-s", note: "Curva S" },
   { method: "GET", path: "/api/cadastro/geojson", note: "Cadastro tecnico" },
   { method: "GET", path: "/api/manage/rede", note: "Dataset da rede real" },
+  { method: "GET", path: "/api/insights/lean-lps", note: "Lean, LPS e BIM 6D" },
+  { method: "GET", path: "/api/insights/perdas", note: "UARL, ILI e DMAs" },
+  { method: "GET", path: "/api/analytics/resumo", note: "Resumo do modulo de IA" },
+  { method: "GET", path: "/api/nucleos", note: "Catalogo de nucleos" },
   { method: "GET", path: "/api/fotos/{ns_id}", note: "Fotos da NS" },
   { method: "POST", path: "/webhook/whatsapp", note: "Entrada de webhook" },
 ];
@@ -440,7 +494,13 @@ export default function App() {
   const [uploadNucleo, setUploadNucleo] = useState("");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [quickMode, setQuickMode] = useState(false);
+  const [selectedMotor, setSelectedMotor] = useState("v5");
   const [uploadMessage, setUploadMessage] = useState("");
+  const [processLogs, setProcessLogs] = useState<ProcessLogList>({ items: [] });
+  const [leanInsight, setLeanInsight] = useState<LeanInsight | null>(null);
+  const [lossInsight, setLossInsight] = useState<LossInsight | null>(null);
+  const [analyticsSummary, setAnalyticsSummary] = useState<AnalyticsSummary | null>(null);
+  const [nucleoCatalog, setNucleoCatalog] = useState<NucleoCatalog>({ items: [], total: 0 });
   const [rdoForm, setRdoForm] = useState<RdoFormState>(makeDefaultRdoForm());
   const [rdoMessage, setRdoMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
@@ -451,11 +511,15 @@ export default function App() {
 
     async function loadBase() {
       setBooting(true);
-      const [healthResult, cronogramaResult, jobResult] = await Promise.allSettled([
+      const [healthResult, cronogramaResult, jobResult, logsResult, analyticsResult, nucleosResult] =
+        await Promise.allSettled([
         getJson<Health>("/health"),
         getJson<CronogramaData>("/api/cronograma"),
         getJson<ProcessJob>("/api/processamento/ultimo"),
-      ]);
+          getJson<ProcessLogList>("/api/processamento/logs"),
+          getJson<AnalyticsSummary>("/api/analytics/resumo"),
+          getJson<NucleoCatalog>("/api/nucleos"),
+        ]);
 
       if (!active) {
         return;
@@ -469,6 +533,15 @@ export default function App() {
       }
       if (jobResult.status === "fulfilled") {
         setLatestJob(jobResult.value);
+      }
+      if (logsResult.status === "fulfilled") {
+        setProcessLogs(logsResult.value);
+      }
+      if (analyticsResult.status === "fulfilled") {
+        setAnalyticsSummary(analyticsResult.value);
+      }
+      if (nucleosResult.status === "fulfilled") {
+        setNucleoCatalog(nucleosResult.value);
       }
 
       const failures = [healthResult, cronogramaResult].filter((item) => item.status === "rejected");
@@ -486,7 +559,7 @@ export default function App() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     let active = true;
@@ -540,6 +613,33 @@ export default function App() {
     }
 
     loadScope();
+    return () => {
+      active = false;
+    };
+  }, [selectedNucleo, refreshKey]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadInsights() {
+      const [leanResult, lossResult] = await Promise.allSettled([
+        getJson<LeanInsight>("/api/insights/lean-lps", selectedNucleo),
+        getJson<LossInsight>("/api/insights/perdas", selectedNucleo),
+      ]);
+
+      if (!active) {
+        return;
+      }
+
+      if (leanResult.status === "fulfilled") {
+        setLeanInsight(leanResult.value);
+      }
+      if (lossResult.status === "fulfilled") {
+        setLossInsight(lossResult.value);
+      }
+    }
+
+    loadInsights();
     return () => {
       active = false;
     };
@@ -602,6 +702,7 @@ export default function App() {
     payload.append("arquivo", uploadFile);
     payload.append("nucleo", uploadNucleo);
     payload.append("modo_rapido", quickMode ? "true" : "false");
+    payload.append("motor", selectedMotor);
 
     try {
       const response = await fetch(apiUrl("/api/processamento/importar"), {
@@ -613,7 +714,9 @@ export default function App() {
         throw new Error(data.detail || "Falha ao importar projeto");
       }
       setLatestJob(data);
-      setUploadMessage(`Projeto processado. ${data.ns_geradas ?? 0} NS geradas.`);
+      setUploadMessage(
+        `Projeto processado com ${cleanText(data.motor ?? selectedMotor).toUpperCase()}. ${data.ns_geradas ?? 0} NS geradas.`,
+      );
       if (data.nucleo) {
         setSelectedNucleo(data.nucleo);
       }
@@ -622,6 +725,18 @@ export default function App() {
       setUploadMessage(err instanceof Error ? err.message : "Falha ao importar projeto");
     } finally {
       setUploading(false);
+    }
+  }
+
+  function handleUploadFileChange(file: File | null) {
+    setUploadFile(file);
+    if (!file) {
+      return;
+    }
+
+    const lower = file.name.toLowerCase();
+    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) {
+      setSelectedMotor("v9");
     }
   }
 
@@ -736,12 +851,33 @@ export default function App() {
   const curvePrev = curvaS?.previsto.at(-1);
   const curveReal = curvaS?.realizado.at(-1);
   const manageCost = (manageData?.edges ?? []).reduce((acc, edge) => acc + asNumber(edge.c), 0);
+  const artifactKinds = (latestJob?.artifacts ?? []).reduce<Record<string, number>>((acc, artifact) => {
+    const kind = cleanText(artifact.kind).toLowerCase() || "outros";
+    acc[kind] = (acc[kind] ?? 0) + 1;
+    return acc;
+  }, {});
   const geoTrechos = (geoJson?.features ?? []).filter(
     (feature) => cleanText(feature.properties?.feature_type) === "trecho",
   ).length;
   const geoPvs = (geoJson?.features ?? []).filter(
     (feature) => cleanText(feature.properties?.feature_type) === "pv",
   ).length;
+  const nucleoNames = useMemo(() => {
+    const nomes = new Set<string>();
+    for (const item of nuclei) {
+      if (item.nome) {
+        nomes.add(cleanText(item.nome));
+      }
+    }
+    for (const item of nucleoCatalog.items) {
+      if (item.nome) {
+        nomes.add(cleanText(item.nome));
+      }
+    }
+    return [...nomes].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [nuclei, nucleoCatalog.items]);
+  const latestProcessLogs = processLogs.items.slice(0, 6);
+  const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5" : "Hydro v9";
 
   function catalogHref(path: string, method: string): string {
     if (method !== "GET") {
@@ -829,7 +965,7 @@ export default function App() {
                   <input
                     type="file"
                     accept=".json,.xml,.landxml,.dxf"
-                    onChange={(event) => setUploadFile(event.target.files?.[0] ?? null)}
+                    onChange={(event) => handleUploadFileChange(event.target.files?.[0] ?? null)}
                   />
                 </label>
 
@@ -842,18 +978,35 @@ export default function App() {
                   <span>Modo rapido</span>
                 </label>
 
+                <label className="field">
+                  <span>Motor de NS</span>
+                  <select
+                    value={selectedMotor}
+                    onChange={(event) => setSelectedMotor(event.target.value)}
+                  >
+                    <option value="v5">NOVA NS v5 (SABESP)</option>
+                    <option value="v9">NS v9 (padrao)</option>
+                  </select>
+                </label>
+
+                <p className="helper-text">
+                  {selectedMotor === "v5"
+                    ? "v5 aparece no frontend e processa DXF ou JSON. Para XML/LandXML, o frontend troca para v9 automaticamente."
+                    : "v9 aceita JSON, DXF e XML/LandXML e continua disponivel como caminho padrao do HydroNetwork."}
+                </p>
+
                 <div className="mini-grid">
                   <div className="micro-card">
                     <strong>Entradas aceitas</strong>
-                    <span>JSON, XML/LandXML, DXF</span>
+                    <span>{selectedMotor === "v5" ? "DXF, JSON" : "JSON, XML/LandXML, DXF"}</span>
                   </div>
                   <div className="micro-card">
                     <strong>Saidas</strong>
-                    <span>PDF, HTML, JSON, GeoJSON</span>
+                    <span>PDF, HTML, JSON, GeoJSON, IFC, CSV, XML, SCR</span>
                   </div>
                   <div className="micro-card">
                     <strong>Motor</strong>
-                    <span>NS V5 no backend real</span>
+                    <span>{selectedMotorLabel}</span>
                   </div>
                 </div>
 
@@ -879,17 +1032,21 @@ export default function App() {
                 <span className={toneClass(latestJob?.status)}>{cleanText(latestJob?.status ?? "empty")}</span>
               </div>
 
-              <div className="metrics-grid compact">
+                <div className="metrics-grid compact">
                 <div className="metric-card">
-                  <span>Arquivo</span>
-                  <strong>{cleanText(latestJob?.arquivo ?? "-") || "-"}</strong>
-                </div>
-                <div className="metric-card">
-                  <span>Fonte</span>
-                  <strong>{cleanText(latestJob?.fonte ?? "-") || "-"}</strong>
-                </div>
-                <div className="metric-card">
-                  <span>PVs / trechos</span>
+                    <span>Arquivo</span>
+                    <strong>{cleanText(latestJob?.arquivo ?? "-") || "-"}</strong>
+                  </div>
+                  <div className="metric-card">
+                    <span>Fonte</span>
+                    <strong>{cleanText(latestJob?.fonte ?? "-") || "-"}</strong>
+                  </div>
+                  <div className="metric-card">
+                    <span>Motor</span>
+                    <strong>{cleanText(latestJob?.motor ?? "-") || "-"}</strong>
+                  </div>
+                  <div className="metric-card">
+                    <span>PVs / trechos</span>
                   <strong>
                     {formatInt(latestJob?.n_pvs ?? 0)} / {formatInt(latestJob?.n_trechos ?? 0)}
                   </strong>
@@ -1048,6 +1205,215 @@ export default function App() {
                 ))}
               </div>
             </article>
+          </section>
+
+          <section className="panel">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Cockpit operacional</p>
+                <h2>Nova NS v5 exposta no frontend com os modulos dos prints</h2>
+              </div>
+              <span className={toneClass(latestJob?.motor ?? selectedMotorLabel)}>{selectedMotorLabel}</span>
+            </div>
+
+            <div className="operations-grid">
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[1] Processar</span>
+                  <strong>Entrada da Nova NS</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>Motor ativo</span>
+                    <strong>{selectedMotorLabel}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Ultimo arquivo</span>
+                    <strong>{cleanText(latestJob?.arquivo ?? "Sem upload")}</strong>
+                  </div>
+                </div>
+                <p className="muted">
+                  v5 agora aparece no frontend e envia o parametro `motor` para o backend.
+                </p>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[7] BIM</span>
+                  <strong>Pipeline BIM 5D</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>HTML</span>
+                    <strong>{formatInt(artifactKinds.html ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>IFC / CSV / XML</span>
+                    <strong>
+                      {formatInt((artifactKinds.ifc ?? 0) + (artifactKinds.csv ?? 0) + (artifactKinds.xml ?? 0))}
+                    </strong>
+                  </div>
+                </div>
+                <div className="ops-links">
+                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/arquitetura-bim")}>
+                    Arquitetura BIM
+                  </button>
+                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/fluxograma-bim")}>
+                    Fluxograma BIM
+                  </button>
+                </div>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[8] Lean/LPS</span>
+                  <strong>Lean Construction + BIM 6D</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>Takt</span>
+                    <strong>{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Cycle Time</span>
+                    <strong>{formatInt(leanInsight?.cycle_time_dias ?? 0)} dias</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>PPC / Lookahead</span>
+                    <strong>{formatInt(leanInsight?.restricoes_lookahead ?? 0)} restr.</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Custo 50 anos</span>
+                    <strong>{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</strong>
+                  </div>
+                </div>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[9] Perdas</span>
+                  <strong>IWA / UARL / ILI / DMA</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>UARL</span>
+                    <strong>{formatInt(lossInsight?.uarl_m3_ano ?? 0)} m3/ano</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>ILI</span>
+                    <strong>{cleanText(lossInsight?.ili_classificacao ?? "Projetado")}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>DMAs</span>
+                    <strong>{formatInt(lossInsight?.n_dmas ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Risco anual</span>
+                    <strong>{formatCurrency(lossInsight?.risco_total_ano ?? 0)}</strong>
+                  </div>
+                </div>
+                <div className="ops-links">
+                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/perdas")}>
+                    Abrir modulo
+                  </button>
+                </div>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[10] IA</span>
+                  <strong>Analytics ML</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>Algoritmo</span>
+                    <strong>{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>R2</span>
+                    <strong>{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>MAE</span>
+                    <strong>{(analyticsSummary?.mae ?? 0).toFixed(2)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Modelos</span>
+                    <strong>{formatInt(analyticsSummary?.n_modelos ?? 0)}</strong>
+                  </div>
+                </div>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[11] Nucleos</span>
+                  <strong>Catalogo operacional</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>Total</span>
+                    <strong>{formatInt(nucleoNames.length)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Selecionado</span>
+                    <strong>{cleanText(selectedNucleo || "Todos")}</strong>
+                  </div>
+                </div>
+                <p className="muted">{nucleoNames.slice(0, 6).join(" • ") || "Sem nucleos carregados."}</p>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[12] Log</span>
+                  <strong>Historico do backend</strong>
+                </div>
+                <ul className="ops-log-list">
+                  {latestProcessLogs.length ? (
+                    latestProcessLogs.map((item, index) => (
+                      <li key={`${item.job_id ?? "job"}-${index}`}>
+                        <strong>{cleanText(item.motor ?? "-").toUpperCase()}</strong>
+                        <span>{cleanText(item.arquivo ?? item.nucleo ?? "Sem arquivo")}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li>
+                      <strong>SEM LOG</strong>
+                      <span>Nenhum job encontrado.</span>
+                    </li>
+                  )}
+                </ul>
+              </article>
+
+              <article className="operations-card">
+                <div className="ops-head">
+                  <span className="ops-tab">[13] Gestao</span>
+                  <strong>Cronograma e controle</strong>
+                </div>
+                <div className="ops-stats">
+                  <div className="ops-stat">
+                    <span>% fisico</span>
+                    <strong>{formatPercent(dashboard?.pct_fisico ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>% financeiro</span>
+                    <strong>{formatPercent(dashboard?.pct_financeiro ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>RDOs</span>
+                    <strong>{formatInt(dashboard?.rdos ?? 0)}</strong>
+                  </div>
+                  <div className="ops-stat">
+                    <span>Curva realizada</span>
+                    <strong>{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</strong>
+                  </div>
+                </div>
+                <div className="ops-links">
+                  <button className="button ghost slim" type="button" onClick={() => setActiveModulePath("/controle")}>
+                    Abrir controle
+                  </button>
+                </div>
+              </article>
+            </div>
           </section>
 
           <section className="panel">
