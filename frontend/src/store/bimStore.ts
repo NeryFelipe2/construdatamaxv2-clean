@@ -475,28 +475,37 @@ export const useBimStore = create<BimState>((set, get) => ({
         const y2 = to ? (to.lat - ref.lat) * 110540 : 0
         const z2 = to?.elevation != null ? -to.elevation : -(to?.depth ?? 1.5)
 
+        const lengthM = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+        const avgDepthM = Math.abs((z1 + z2) / 2)
+
         return {
           id: seg.id,
           trechoCode: seg.label ?? `T${String(i + 1).padStart(3, '0')}`,
           vertices: [[x1, y1, z1], [x2, y2, z2]] as [number, number, number][],
+          attributes: {},
+          lengthM,
+          avgDepthM,
           diameter: seg.diameter ?? 200,
           material: seg.material ?? 'PVC',
           networkType: seg.networkType,
           layer: seg.networkType === 'sewer' ? 'REDE_ESGOTO' : seg.networkType === 'water' ? 'REDE_AGUA' : 'REDE_DRENAGEM',
           slope: seg.slope,
+          unitCostBRL: 0,
+          totalCostBRL: 0,
         }
       })
 
       const proj: BimProject = {
         id: `pipeline-${Date.now()}`,
         name: summary?.arquivo ?? 'Projeto Pipeline',
-        description: `Importado do pipeline — ${summary?.nucleo ?? 'N/A'}`,
         segments: bimSegments,
         layers: [
           { id: 'REDE_ESGOTO', name: 'Rede Esgoto', color: '#2abfdc', visible: true },
-          { id: 'REDE_AGUA', name: 'Rede Água', color: '#38bdf8', visible: true },
-          { id: 'REDE_DRENAGEM', name: 'Rede Drenagem', color: '#4ade80', visible: true },
+          { id: 'REDE_AGUA', name: 'Rede Água', color: '#2a7bdc', visible: true },
+          { id: 'REDE_DRENAGEM', name: 'Rede Drenagem', color: '#2adc7b', visible: true },
         ],
+        uploadedAt: new Date().toISOString(),
+        shapefileSourceName: summary?.arquivo ?? 'pipeline',
       }
 
       get().addProject(proj)
