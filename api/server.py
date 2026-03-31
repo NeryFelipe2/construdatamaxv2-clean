@@ -7,6 +7,7 @@ import tempfile
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.middleware.wsgi import WSGIMiddleware
 
 from api.routes_cadastro import router as cadastro_router
 from api.routes_campo import router as campo_router
@@ -33,6 +34,16 @@ app.include_router(cadastro_router)
 app.include_router(processamento_router)
 app.include_router(operacao_router)
 app.include_router(whatsapp_router)
+
+# Mount ConstruPlan Flask Offline Backend (Brutal Injection)
+try:
+    import sys
+    sys.path.append(str(Path(__file__).parent))
+    from construplan_flask_backend import app as flask_app
+    app.mount("/api_flask", WSGIMiddleware(flask_app))
+except Exception as exc:
+    import logging
+    logging.error(f"Failed to mount Flask Construplan Backend: {exc}")
 
 
 @app.on_event("startup")

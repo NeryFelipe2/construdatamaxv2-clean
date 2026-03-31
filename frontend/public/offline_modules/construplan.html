@@ -1,0 +1,4176 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>ConstruPlan · SE LIGA NA REDE · Controle Brutal</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+        <style>
+            /* ═══════════════════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════════════════ */
+            :root {
+                --bg: #040608;
+                --s1: #080c10;
+                --s2: #0d1520;
+                --s3: #112030;
+                --bd: #182840;
+                --bd2: #1e3555;
+
+                --g: #00e87a;
+                --g2: #00b85f;
+                --gd: rgba(0, 232, 122, 0.12);
+                --b: #3daeff;
+                --bd3: rgba(61, 174, 255, 0.12);
+                --y: #f5c842;
+                --r: #e8394a;
+                --o: #ff7a3d;
+                --p: #9d7ff5;
+                --c: #2de5c8;
+
+                --tx: #d4e4f7;
+                --tx2: #6e8fae;
+                --tx3: #2a4060;
+                --tx4: #152030;
+
+                --mono: "Space Mono", monospace;
+                --sans: "Sora", sans-serif;
+                --h: 52px;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+                background: var(--bg);
+            }
+            body {
+                color: var(--tx);
+                font-family: var(--sans);
+                font-size: 13px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════════════════ */
+            #top {
+                position: fixed;
+                inset: 0 0 auto;
+                height: var(--h);
+                z-index: 300;
+                background: rgba(4, 6, 8, 0.96);
+                border-bottom: 1px solid var(--bd2);
+                backdrop-filter: blur(16px);
+                display: flex;
+                align-items: center;
+            }
+            .logo {
+                width: 190px;
+                padding: 0 18px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-right: 1px solid var(--bd);
+            }
+            .logo-mark {
+                width: 30px;
+                height: 30px;
+                background: var(--g);
+                border-radius: 5px;
+                font-family: var(--mono);
+                font-weight: 700;
+                font-size: 12px;
+                color: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                letter-spacing: -1px;
+            }
+            .logo-txt .n {
+                font-family: var(--mono);
+                font-weight: 700;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+            }
+            .logo-txt .s {
+                font-size: 9px;
+                color: var(--tx3);
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+
+            .tabs {
+                display: flex;
+                height: var(--h);
+                padding: 0 6px;
+                gap: 2px;
+                align-items: center;
+            }
+            .tab {
+                height: 36px;
+                padding: 0 14px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                border-radius: 7px;
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--tx2);
+                background: none;
+                border: none;
+                transition: 0.14s;
+                letter-spacing: 0.2px;
+            }
+            .tab:hover {
+                color: var(--tx);
+                background: var(--s2);
+            }
+            .tab.on {
+                color: var(--g);
+                background: rgba(0, 232, 122, 0.07);
+                border: 1px solid rgba(0, 232, 122, 0.15);
+            }
+            .tab .ico {
+                font-size: 12px;
+            }
+
+            .top-r {
+                margin-left: auto;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 0 14px;
+            }
+            .live {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 10px;
+                color: var(--tx2);
+            }
+            .dot-live {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--g);
+                animation: blink 2s ease infinite;
+                box-shadow: 0 0 6px var(--g);
+            }
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.3;
+                }
+            }
+            .tag {
+                font-family: var(--mono);
+                font-size: 9px;
+                font-weight: 700;
+                padding: 3px 8px;
+                border-radius: 4px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+            .tag-ok {
+                background: rgba(0, 232, 122, 0.12);
+                color: var(--g);
+                border: 1px solid rgba(0, 232, 122, 0.2);
+            }
+            .tag-warn {
+                background: rgba(245, 200, 66, 0.1);
+                color: var(--y);
+                border: 1px solid rgba(245, 200, 66, 0.2);
+            }
+            .tag-crit {
+                background: rgba(232, 57, 74, 0.1);
+                color: var(--r);
+                border: 1px solid rgba(232, 57, 74, 0.2);
+            }
+            .tag-info {
+                background: rgba(61, 174, 255, 0.1);
+                color: var(--b);
+                border: 1px solid rgba(61, 174, 255, 0.2);
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════════════ */
+            #app {
+                display: flex;
+                height: 100vh;
+                padding-top: var(--h);
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════ */
+            #side {
+                width: 190px;
+                flex-shrink: 0;
+                background: var(--s1);
+                border-right: 1px solid var(--bd);
+                overflow-y: auto;
+                padding: 8px 0;
+            }
+            .sg {
+                padding: 14px 14px 4px;
+                font-size: 8px;
+                font-weight: 800;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                color: var(--tx4);
+            }
+            .sb {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 14px;
+                border: none;
+                background: none;
+                text-align: left;
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--tx2);
+                font-family: var(--sans);
+                transition: 0.12s;
+                border-left: 2px solid transparent;
+            }
+            .sb:hover {
+                color: var(--tx);
+                background: var(--s2);
+            }
+            .sb.on {
+                color: var(--g);
+                border-left-color: var(--g);
+                background: var(--gd);
+            }
+            .sb .si {
+                width: 14px;
+                text-align: center;
+                font-size: 12px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════════════════ */
+            #main {
+                flex: 1;
+                overflow-y: auto;
+                background: var(--bg);
+            }
+            .pg {
+                display: none;
+                padding: 20px 22px;
+                min-height: 100%;
+            }
+            .pg.on {
+                display: block;
+                animation: fade 0.18s ease;
+            }
+            @keyframes fade {
+                from {
+                    opacity: 0;
+                    transform: translateY(5px);
+                }
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            .ph {
+                margin-bottom: 20px;
+            }
+            .ph .over {
+                font-size: 9px;
+                font-weight: 800;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                color: var(--tx3);
+                margin-bottom: 3px;
+            }
+            .ph h1 {
+                font-size: 22px;
+                font-weight: 800;
+                line-height: 1.15;
+                letter-spacing: -0.3px;
+            }
+            .ph .sub {
+                font-size: 11px;
+                color: var(--tx2);
+                margin-top: 3px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   PAINEL
+═══════════════════════════════════════════════════════════ */
+            .p {
+                background: var(--s1);
+                border: 1px solid var(--bd);
+                border-radius: 12px;
+                padding: 16px;
+                margin-bottom: 14px;
+            }
+            .ph2 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 14px;
+            }
+            .pt {
+                font-size: 10px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: var(--tx2);
+            }
+            .pt .sub {
+                font-family: var(--mono);
+                font-size: 9px;
+                color: var(--tx3);
+                margin-left: 8px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   KPI GRID
+═══════════════════════════════════════════════════════════ */
+            .kgrid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+            .kpi {
+                background: var(--s1);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 13px 15px;
+                position: relative;
+                overflow: hidden;
+                cursor: default;
+                transition: 0.15s;
+            }
+            .kpi:hover {
+                border-color: var(--bd2);
+                transform: translateY(-1px);
+            }
+            .kpi::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: var(--c, var(--g));
+                opacity: 0.8;
+            }
+            .kl {
+                font-size: 8px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: var(--tx3);
+                margin-bottom: 7px;
+            }
+            .kv {
+                font-family: var(--mono);
+                font-size: 22px;
+                font-weight: 700;
+                line-height: 1;
+                color: var(--tx);
+            }
+            .ks {
+                font-size: 9px;
+                color: var(--tx3);
+                margin-top: 3px;
+            }
+            .kb {
+                height: 2px;
+                background: var(--bd);
+                border-radius: 2px;
+                margin-top: 9px;
+                overflow: hidden;
+            }
+            .kf {
+                height: 100%;
+                border-radius: 2px;
+                background: var(--c, var(--g));
+                transition: width 1s cubic-bezier(0.2, 0.8, 0.3, 1);
+            }
+            .kp {
+                font-family: var(--mono);
+                font-size: 10px;
+                font-weight: 700;
+                margin-top: 3px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   TABELA
+═══════════════════════════════════════════════════════════ */
+            .tw {
+                overflow-x: auto;
+                border-radius: 8px;
+                border: 1px solid var(--bd);
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11px;
+            }
+            th {
+                background: var(--s2);
+                padding: 8px 10px;
+                text-align: left;
+                font-size: 8px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: var(--tx3);
+                white-space: nowrap;
+                border-bottom: 1px solid var(--bd);
+            }
+            td {
+                padding: 7px 10px;
+                border-top: 1px solid var(--bd);
+                color: var(--tx);
+                vertical-align: middle;
+            }
+            tr:hover td {
+                background: rgba(255, 255, 255, 0.012);
+            }
+            .tr {
+                text-align: right;
+            }
+            .tn {
+                font-family: var(--mono);
+            }
+            .mono {
+                font-family: var(--mono);
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   MAPA DE CALOR
+═══════════════════════════════════════════════════════════ */
+            .hm-wrap {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 3px;
+            }
+            .hc {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border-radius: 7px;
+                padding: 6px 4px;
+                cursor: pointer;
+                transition: 0.15s;
+                border: 1.5px solid transparent;
+                font-family: var(--mono);
+                position: relative;
+            }
+            .hc:hover {
+                transform: scale(1.06);
+                border-color: rgba(255, 255, 255, 0.2);
+                z-index: 10;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            }
+            .hc-l {
+                font-size: 8px;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 3px;
+                opacity: 0.75;
+                letter-spacing: 0.3px;
+            }
+            .hc-v {
+                font-size: 14px;
+                font-weight: 700;
+                text-align: center;
+                line-height: 1;
+            }
+            .hc-s {
+                font-size: 8px;
+                opacity: 0.55;
+                text-align: center;
+                margin-top: 2px;
+            }
+
+            /* tooltip */
+            #tip {
+                position: fixed;
+                background: rgba(8, 12, 16, 0.97);
+                border: 1px solid var(--bd2);
+                border-radius: 9px;
+                padding: 10px 14px;
+                font-size: 11px;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.1s;
+                z-index: 9999;
+                min-width: 170px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+            }
+            #tip .tn {
+                font-family: var(--mono);
+                color: var(--g);
+                font-size: 14px;
+                font-weight: 700;
+                margin: 3px 0 5px;
+            }
+            #tip .td {
+                color: var(--tx2);
+                font-size: 10px;
+                line-height: 1.5;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   BARRAS
+═══════════════════════════════════════════════════════════ */
+            .br {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 5px;
+            }
+            .bl {
+                width: 60px;
+                font-size: 9px;
+                color: var(--tx3);
+                text-align: right;
+                flex-shrink: 0;
+            }
+            .bt {
+                flex: 1;
+                height: 8px;
+                background: var(--bd);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .bf {
+                height: 100%;
+                border-radius: 4px;
+                transition: width 0.7s;
+            }
+            .bf-ok {
+                background: var(--g);
+            }
+            .bf-w {
+                background: var(--y);
+            }
+            .bf-c {
+                background: var(--r);
+            }
+            .bv {
+                font-family: var(--mono);
+                font-size: 9px;
+                color: var(--tx2);
+                min-width: 75px;
+                text-align: right;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   FORMULÁRIO RDO
+═══════════════════════════════════════════════════════════ */
+            .fg {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .fl {
+                font-size: 8px;
+                font-weight: 800;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: var(--tx3);
+            }
+            input,
+            select,
+            textarea {
+                background: var(--s2);
+                border: 1px solid var(--bd);
+                border-radius: 7px;
+                padding: 8px 10px;
+                color: var(--tx);
+                font-size: 12px;
+                font-family: var(--sans);
+                width: 100%;
+                transition: 0.12s;
+            }
+            input:focus,
+            select:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--g);
+                box-shadow: 0 0 0 3px rgba(0, 232, 122, 0.07);
+            }
+            select option {
+                background: #0d1520;
+            }
+            .rdo-form {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            .prod-g {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+                margin-top: 12px;
+            }
+            .pi {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+            .pi input {
+                font-family: var(--mono);
+                font-size: 15px;
+                font-weight: 700;
+                text-align: center;
+                color: var(--g);
+                padding: 9px 4px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   BOTÕES
+═══════════════════════════════════════════════════════════ */
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 700;
+                font-family: var(--sans);
+                letter-spacing: 0.3px;
+                transition: 0.14s;
+            }
+            .btn-p {
+                background: var(--g);
+                color: #000;
+            }
+            .btn-p:hover {
+                background: #1af585;
+                transform: translateY(-1px);
+            }
+            .btn-g {
+                background: transparent;
+                color: var(--tx2);
+                border: 1px solid var(--bd);
+            }
+            .btn-g:hover {
+                background: var(--s2);
+                color: var(--tx);
+            }
+            .btn-r {
+                background: rgba(232, 57, 74, 0.12);
+                color: var(--r);
+                border: 1px solid rgba(232, 57, 74, 0.25);
+            }
+            .btn-row {
+                display: flex;
+                gap: 8px;
+                margin-top: 14px;
+                flex-wrap: wrap;
+            }
+            .btn-sm {
+                padding: 5px 10px;
+                font-size: 10px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   ALERTAS
+═══════════════════════════════════════════════════════════ */
+            .al {
+                display: flex;
+                gap: 10px;
+                padding: 10px 12px;
+                border-radius: 8px;
+                font-size: 11px;
+                margin-bottom: 6px;
+            }
+            .al-c {
+                background: rgba(232, 57, 74, 0.06);
+                border: 1px solid rgba(232, 57, 74, 0.2);
+            }
+            .al-w {
+                background: rgba(245, 200, 66, 0.05);
+                border: 1px solid rgba(245, 200, 66, 0.18);
+            }
+            .al-o {
+                background: rgba(0, 232, 122, 0.05);
+                border: 1px solid rgba(0, 232, 122, 0.18);
+            }
+            .al-i {
+                background: rgba(61, 174, 255, 0.05);
+                border: 1px solid rgba(61, 174, 255, 0.18);
+            }
+            .ai {
+                font-size: 15px;
+                flex-shrink: 0;
+                margin-top: -1px;
+            }
+            .ab .at {
+                font-weight: 700;
+                margin-bottom: 2px;
+            }
+            .ab .am {
+                color: var(--tx2);
+                font-size: 10px;
+                line-height: 1.5;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   SUPERLOG
+═══════════════════════════════════════════════════════════ */
+            .log-panel {
+                background: var(--bg);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                font-family: var(--mono);
+                font-size: 10px;
+                overflow-y: auto;
+                max-height: 400px;
+                padding: 8px;
+            }
+            .le {
+                display: flex;
+                gap: 10px;
+                padding: 5px 6px;
+                border-radius: 5px;
+                border-bottom: 1px solid var(--bd);
+            }
+            .le:last-child {
+                border-bottom: none;
+            }
+            .le-t {
+                color: var(--tx3);
+                min-width: 75px;
+                flex-shrink: 0;
+            }
+            .le-l {
+                font-size: 9px;
+                font-weight: 700;
+                padding: 1px 6px;
+                border-radius: 3px;
+                flex-shrink: 0;
+                letter-spacing: 0.5px;
+            }
+            .l-ok {
+                background: rgba(0, 232, 122, 0.12);
+                color: var(--g);
+            }
+            .l-w {
+                background: rgba(245, 200, 66, 0.1);
+                color: var(--y);
+            }
+            .l-e {
+                background: rgba(232, 57, 74, 0.1);
+                color: var(--r);
+            }
+            .l-i {
+                background: rgba(61, 174, 255, 0.1);
+                color: var(--b);
+            }
+            .le-m {
+                color: var(--tx2);
+                flex: 1;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   EQUIPE CARD
+═══════════════════════════════════════════════════════════ */
+            .eg {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+            }
+            .ec {
+                background: var(--s2);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 12px;
+                border-top: 2px solid var(--c, var(--g));
+            }
+            .en {
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 2px;
+            }
+            .enu {
+                font-size: 8px;
+                color: var(--tx3);
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                margin-bottom: 10px;
+            }
+            .estat {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
+            .ev {
+                background: var(--s1);
+                border-radius: 6px;
+                padding: 6px;
+                text-align: center;
+            }
+            .evl {
+                font-size: 7px;
+                color: var(--tx3);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+            .evv {
+                font-family: var(--mono);
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   CHART
+═══════════════════════════════════════════════════════════ */
+            .cw {
+                position: relative;
+                height: 260px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   GAUGE
+═══════════════════════════════════════════════════════════ */
+            .gauge-wrap {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px 0;
+            }
+            .gauge-val {
+                font-family: var(--mono);
+                font-size: 32px;
+                font-weight: 700;
+                line-height: 1;
+            }
+            .gauge-label {
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: var(--tx3);
+                margin-top: 4px;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   REPLAN TABLE
+═══════════════════════════════════════════════════════════ */
+            .rp-row {
+                display: grid;
+                grid-template-columns: 180px 80px 80px 80px 80px 1fr;
+                gap: 8px;
+                align-items: center;
+                padding: 8px 12px;
+                border-radius: 6px;
+                background: var(--s2);
+                border: 1px solid var(--bd);
+                margin-bottom: 6px;
+                font-family: var(--mono);
+                font-size: 11px;
+            }
+            .rp-head {
+                font-size: 8px;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: var(--tx3);
+                font-weight: 700;
+            }
+
+            /* LAYOUT AUX */
+            .split-2 {
+                display: grid;
+                grid-template-columns: 1.2fr 0.8fr;
+                gap: 12px;
+            }
+            .split-3 {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            .stack {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .line-list {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .line-item {
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                padding: 10px 12px;
+                border: 1px solid var(--bd);
+                border-radius: 8px;
+                background: var(--s2);
+            }
+            .line-item strong {
+                display: block;
+                font-size: 11px;
+            }
+            .line-item span {
+                display: block;
+                font-size: 10px;
+                color: var(--tx2);
+                line-height: 1.5;
+            }
+            .line-item .mono {
+                font-size: 10px;
+            }
+            .mini-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+                gap: 10px;
+            }
+            .mini-card {
+                background: var(--s2);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 12px;
+            }
+            .mini-card .ml {
+                font-size: 8px;
+                font-weight: 800;
+                letter-spacing: 1.6px;
+                text-transform: uppercase;
+                color: var(--tx3);
+                margin-bottom: 6px;
+            }
+            .mini-card .mv {
+                font-family: var(--mono);
+                font-size: 20px;
+                font-weight: 700;
+            }
+            .mini-card .ms {
+                font-size: 10px;
+                color: var(--tx2);
+                margin-top: 4px;
+                line-height: 1.5;
+            }
+            .table-actions {
+                display: flex;
+                gap: 6px;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
+            .check {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 10px;
+                border-radius: 7px;
+                background: var(--s2);
+                border: 1px solid var(--bd);
+                font-size: 11px;
+                color: var(--tx2);
+            }
+            .check input {
+                width: auto;
+            }
+            .empty {
+                color: var(--tx3);
+                font-size: 11px;
+                text-align: center;
+                padding: 18px;
+                border: 1px dashed var(--bd);
+                border-radius: 8px;
+            }
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 8px;
+                border-radius: 999px;
+                font-size: 9px;
+                font-weight: 800;
+                letter-spacing: 0.8px;
+                text-transform: uppercase;
+                border: 1px solid transparent;
+            }
+            .pill-ok {
+                background: rgba(0, 232, 122, 0.08);
+                color: var(--g);
+                border-color: rgba(0, 232, 122, 0.18);
+            }
+            .pill-warn {
+                background: rgba(245, 200, 66, 0.08);
+                color: var(--y);
+                border-color: rgba(245, 200, 66, 0.18);
+            }
+            .pill-crit {
+                background: rgba(232, 57, 74, 0.08);
+                color: var(--r);
+                border-color: rgba(232, 57, 74, 0.18);
+            }
+            .pill-info {
+                background: rgba(61, 174, 255, 0.08);
+                color: var(--b);
+                border-color: rgba(61, 174, 255, 0.18);
+            }
+            .code-box {
+                background: var(--bg);
+                border: 1px solid var(--bd);
+                border-radius: 8px;
+                padding: 10px 12px;
+                font-family: var(--mono);
+                font-size: 10px;
+                color: var(--tx2);
+                line-height: 1.6;
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   SCROLL
+═══════════════════════════════════════════════════════════ */
+            ::-webkit-scrollbar {
+                width: 4px;
+                height: 4px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--bd2);
+                border-radius: 2px;
+            }
+
+            @media (max-width: 1180px) {
+                html,
+                body {
+                    overflow: auto;
+                }
+                #app {
+                    flex-direction: column;
+                    height: auto;
+                    min-height: 100vh;
+                }
+                #side {
+                    width: 100%;
+                    border-right: none;
+                    border-bottom: 1px solid var(--bd);
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    padding: 10px 12px;
+                }
+                .sg {
+                    width: 100%;
+                    padding: 8px 0 2px;
+                }
+                .sb {
+                    width: auto;
+                    border-left: none;
+                    border: 1px solid var(--bd);
+                    border-radius: 8px;
+                    padding: 8px 10px;
+                }
+                .sb.on {
+                    border-left: none;
+                    border-color: rgba(0, 232, 122, 0.2);
+                }
+                .tabs {
+                    overflow-x: auto;
+                    scrollbar-width: none;
+                }
+                .split-2,
+                .split-3,
+                .rdo-form,
+                .prod-g {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 820px) {
+                #top {
+                    height: auto;
+                    flex-wrap: wrap;
+                    padding: 10px 12px;
+                    gap: 8px;
+                }
+                .logo {
+                    width: auto;
+                    border-right: none;
+                    padding: 0;
+                }
+                .tabs {
+                    width: 100%;
+                    padding: 0;
+                }
+                .top-r {
+                    width: 100%;
+                    padding: 0;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                }
+                #app {
+                    padding-top: 118px;
+                }
+                .pg {
+                    padding: 14px;
+                }
+                .split-2,
+                .split-3,
+                .rdo-form,
+                .prod-g,
+                .kgrid,
+                .eg {
+                    grid-template-columns: 1fr;
+                }
+                .rp-row {
+                    grid-template-columns: 1fr;
+                }
+                .table-actions {
+                    justify-content: flex-start;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tip"></div>
+
+        <!-- TOPBAR ────────────────────────────────────────────────── -->
+        <div id="top">
+            <div class="logo">
+                <div class="logo-mark">CP</div>
+                <div class="logo-txt">
+                    <div class="n">ConstruPlan</div>
+                    <div class="s">Se Liga · Santos</div>
+                </div>
+            </div>
+            <div class="tabs">
+                <button class="tab on" onclick="go('dash')">
+                    <span class="ico">▦</span>Dashboard
+                </button>
+                <button class="tab" onclick="go('rdo')">
+                    <span class="ico">✎</span>RDO
+                </button>
+                <button class="tab" onclick="go('calor')">
+                    <span class="ico">◈</span>Mapa de Calor
+                </button>
+                <button class="tab" onclick="go('equipes')">
+                    <span class="ico">◎</span>Equipes
+                </button>
+                <button class="tab" onclick="go('curvas')">
+                    <span class="ico">∿</span>Curvas S
+                </button>
+                <button class="tab" onclick="go('replan')">
+                    <span class="ico">↻</span>Replanejamento
+                </button>
+                <button class="tab" onclick="go('log')">
+                    <span class="ico">▤</span>SuperLog
+                </button>
+                <button class="tab" onclick="go('testes')">
+                    <span class="ico">✓</span>Testes
+                </button>
+            </div>
+            <div class="top-r">
+                <div class="live">
+                    <div class="dot-live"></div>
+                    <span>LIVE</span>
+                </div>
+                <span id="top-spi" class="tag tag-ok">SPI--</span>
+                <span
+                    id="top-data"
+                    style="
+                        font-family: var(--mono);
+                        font-size: 9px;
+                        color: var(--tx3);
+                    "
+                ></span>
+                <button
+                    class="btn btn-g btn-sm"
+                    onclick="document.getElementById('fi').click()"
+                >
+                    ↑ XLSX
+                </button>
+                <input
+                    type="file"
+                    id="fi"
+                    style="display: none"
+                    accept=".xlsx"
+                />
+            </div>
+        </div>
+
+        <div id="app">
+            <!-- SIDEBAR ───────────────────────────────────────────────── -->
+            <div id="side">
+                <div class="sg">Visão Geral</div>
+                <button class="sb on" onclick="gs('dash')">
+                    <span class="si">▦</span>Dashboard
+                </button>
+                <button class="sb" onclick="gs('rdo')">
+                    <span class="si">✎</span>Lançar RDO
+                </button>
+
+                <div class="sg">Análise</div>
+                <button class="sb" onclick="gs('calor')">
+                    <span class="si">◈</span>Mapa de Calor
+                </button>
+                <button class="sb" onclick="gs('equipes')">
+                    <span class="si">◎</span>Por Equipe
+                </button>
+                <button class="sb" onclick="gs('curvas')">
+                    <span class="si">∿</span>Curvas S + EVM
+                </button>
+
+                <div class="sg">Controle</div>
+                <button class="sb" onclick="gs('replan')">
+                    <span class="si">↻</span>Replanejamento
+                </button>
+                <button class="sb" onclick="gs('log')">
+                    <span class="si">▤</span>SuperLog
+                </button>
+                <button class="sb" onclick="gs('testes')">
+                    <span class="si">✓</span>Testes
+                </button>
+            </div>
+
+            <!-- MAIN ───────────────────────────────────────────────────── -->
+            <div id="main">
+                <!-- ══════════ DASHBOARD ══════════ -->
+                <div id="pg-dash" class="pg on">
+                    <div class="ph">
+                        <div class="over">
+                            SE LIGA NA REDE — SANTOS · Período 30/01 a
+                            18/03/2026
+                        </div>
+                        <h1>Dashboard de Controle</h1>
+                        <div class="sub">
+                            6 núcleos · 28 equipes · Meta SABESP: 1.044 lig /
+                            6.737m rede · 30 dias úteis
+                        </div>
+                    </div>
+                    <div class="kgrid" id="kgrid"></div>
+                    <div
+                        style="
+                            display: grid;
+                            grid-template-columns: 2fr 1fr;
+                            gap: 12px;
+                        "
+                    >
+                        <div class="p">
+                            <div class="ph2">
+                                <div class="pt">
+                                    Curva S — Ligações Acumuladas
+                                    <span>previsto × realizado</span>
+                                </div>
+                                <div
+                                    style="
+                                        display: flex;
+                                        gap: 10px;
+                                        font-size: 9px;
+                                        align-items: center;
+                                    "
+                                >
+                                    <span
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            color: var(--tx3);
+                                        "
+                                        ><span
+                                            style="
+                                                width: 18px;
+                                                height: 2px;
+                                                border-top: 2px dashed
+                                                    var(--tx3);
+                                                display: inline-block;
+                                            "
+                                        ></span
+                                        >Previsto</span
+                                    >
+                                    <span
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            color: var(--g);
+                                        "
+                                        ><span
+                                            style="
+                                                width: 18px;
+                                                height: 2px;
+                                                background: var(--g);
+                                                display: inline-block;
+                                            "
+                                        ></span
+                                        >Realizado</span
+                                    >
+                                    <span
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            color: var(--r);
+                                        "
+                                        ><span
+                                            style="
+                                                width: 18px;
+                                                height: 2px;
+                                                border-top: 2px dashed var(--r);
+                                                display: inline-block;
+                                            "
+                                        ></span
+                                        >Meta BAC</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="cw">
+                                <canvas id="chart-main"></canvas>
+                            </div>
+                        </div>
+                        <div
+                            class="p"
+                            style="overflow-y: auto; max-height: 326px"
+                        >
+                            <div class="ph2">
+                                <div class="pt">Alertas Críticos</div>
+                            </div>
+                            <div id="alertas"></div>
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">
+                                Por Núcleo <span>realizado completo</span>
+                            </div>
+                        </div>
+                        <div class="tw">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Núcleo</th>
+                                        <th class="tr">Equipes</th>
+                                        <th class="tr">LA</th>
+                                        <th class="tr">LE</th>
+                                        <th class="tr">PRA(m)</th>
+                                        <th class="tr">PRE(m)</th>
+                                        <th class="tr">Lig Total</th>
+                                        <th class="tr">Rede(m)</th>
+                                        <th class="tr">Lig/dia</th>
+                                        <th class="tr">Rede/dia</th>
+                                        <th class="tr">SPI</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb-nuc"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ RDO ══════════ -->
+                <div id="pg-rdo" class="pg">
+                    <div class="ph">
+                        <div class="over">Registro Diário de Obra</div>
+                        <h1>RDO — Lançamento Diário</h1>
+                        <div class="sub">
+                            Clona o modelo SE LIGA NA REDE · Campos: LA, LE,
+                            PRA, PRE, PVs, LIE, LIA, IHM
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">Dados do Dia</div>
+                        </div>
+                        <div class="rdo-form">
+                            <div class="fg">
+                                <label class="fl">Data</label
+                                ><input type="date" id="r-data" />
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Núcleo</label>
+                                <select id="r-nucleo" onchange="updEq()">
+                                    <option value="">— Selecionar —</option>
+                                    <option>MORRO DO TETÉU</option>
+                                    <option>PANTANAL BAIXO</option>
+                                    <option>JOÃO CARLOS</option>
+                                    <option>SÃO MANOEL</option>
+                                    <option>VILA ISRAEL</option>
+                                    <option>VILA CRIADORES</option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Equipe</label>
+                                <select id="r-equipe">
+                                    <option>— Selecionar núcleo —</option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Rua / Local</label>
+                                <input
+                                    type="text"
+                                    id="r-rua"
+                                    placeholder="ex: RUA DAS FLORES, BECO 12..."
+                                />
+                            </div>
+                            <div class="fg">
+                                <label class="fl">Dia Útil?</label>
+                                <select id="r-util">
+                                    <option value="S">SIM</option>
+                                    <option value="N">NÃO — Chuva</option>
+                                    <option value="N">NÃO — Feriado</option>
+                                    <option value="N">
+                                        NÃO — Impedimento Externo
+                                    </option>
+                                    <option value="N">
+                                        NÃO — Falta de Material
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label class="fl"
+                                    >Observação / Impedimento</label
+                                >
+                                <input
+                                    type="text"
+                                    id="r-obs"
+                                    placeholder="opcional..."
+                                />
+                            </div>
+                        </div>
+                        <div
+                            style="
+                                font-size: 8px;
+                                font-weight: 800;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
+                                color: var(--tx3);
+                                margin-top: 14px;
+                                margin-bottom: 8px;
+                            "
+                        >
+                            Produção do Dia ↓
+                        </div>
+                        <div class="prod-g">
+                            <div class="pi">
+                                <label class="fl">LA (Lig.Água)</label
+                                ><input
+                                    type="number"
+                                    id="p-la"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">LE (Lig.Esg.)</label
+                                ><input
+                                    type="number"
+                                    id="p-le"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">PRA (m Água)</label
+                                ><input
+                                    type="number"
+                                    id="p-pra"
+                                    value="0"
+                                    min="0"
+                                    step="0.1"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">PRE (m Esgoto)</label
+                                ><input
+                                    type="number"
+                                    id="p-pre"
+                                    value="0"
+                                    min="0"
+                                    step="0.1"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">PV's</label
+                                ><input
+                                    type="number"
+                                    id="p-pv"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">LIE (Intrà Esg.)</label
+                                ><input
+                                    type="number"
+                                    id="p-lie"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                        </div>
+                        <div class="prod-g" style="margin-top: 8px">
+                            <div class="pi">
+                                <label class="fl">LIA (Intrà Água)</label
+                                ><input
+                                    type="number"
+                                    id="p-lia"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                            <div class="pi">
+                                <label class="fl">IHM</label
+                                ><input
+                                    type="number"
+                                    id="p-ihm"
+                                    value="0"
+                                    min="0"
+                                />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn btn-p" onclick="saveRDO()">
+                                ✓ Salvar RDO
+                            </button>
+                            <button class="btn btn-g" onclick="clearRDO()">
+                                ↺ Limpar
+                            </button>
+                            <div
+                                id="rdo-status"
+                                style="
+                                    font-family: var(--mono);
+                                    font-size: 10px;
+                                    color: var(--g);
+                                    align-self: center;
+                                    margin-left: 8px;
+                                "
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">
+                                Últimos Lançamentos
+                                <span id="rdo-ct">0 registros</span>
+                            </div>
+                            <button
+                                class="btn btn-r btn-sm"
+                                onclick="clearAllRDO()"
+                            >
+                                🗑 Limpar Todos
+                            </button>
+                        </div>
+                        <div class="tw">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Data</th>
+                                        <th>Núcleo</th>
+                                        <th>Equipe</th>
+                                        <th>Rua</th>
+                                        <th class="tr">LA</th>
+                                        <th class="tr">LE</th>
+                                        <th class="tr">PRA</th>
+                                        <th class="tr">PRE</th>
+                                        <th class="tr">Lig</th>
+                                        <th class="tr">Rede</th>
+                                        <th>Útil</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rdo-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ MAPA DE CALOR ══════════ -->
+                <div id="pg-calor" class="pg">
+                    <div class="ph">
+                        <div class="over">Controle por Produtividade</div>
+                        <h1>Mapa de Calor</h1>
+                        <div class="sub">
+                            Selecione o atributo de análise — base para
+                            replanejamento
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">Atributo de Análise</div>
+                        </div>
+                        <div
+                            style="display: flex; flex-wrap: wrap; gap: 6px"
+                            id="hm-btns"
+                        ></div>
+                        <div
+                            style="
+                                margin-top: 10px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            "
+                        >
+                            <span
+                                style="
+                                    font-size: 9px;
+                                    font-weight: 800;
+                                    letter-spacing: 2px;
+                                    text-transform: uppercase;
+                                    color: var(--tx3);
+                                "
+                                >EXIBINDO:</span
+                            >
+                            <span
+                                id="hm-label"
+                                style="
+                                    color: var(--g);
+                                    font-weight: 700;
+                                    font-size: 11px;
+                                "
+                            ></span>
+                        </div>
+                    </div>
+                    <!-- Legenda -->
+                    <div
+                        style="
+                            display: flex;
+                            gap: 6px;
+                            align-items: center;
+                            flex-wrap: wrap;
+                            margin-bottom: 12px;
+                        "
+                    >
+                        <span
+                            style="
+                                font-size: 8px;
+                                font-weight: 800;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
+                                color: var(--tx3);
+                            "
+                            >ESCALA</span
+                        >
+                        <div
+                            style="
+                                display: flex;
+                                gap: 3px;
+                                align-items: center;
+                                font-size: 9px;
+                                color: var(--tx3);
+                            "
+                        >
+                            <span
+                                style="
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 2px;
+                                    background: #5a0f14;
+                                    display: inline-block;
+                                "
+                            ></span
+                            >Crítico
+                            <span
+                                style="
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 2px;
+                                    background: #7a1a1a;
+                                    display: inline-block;
+                                "
+                            ></span
+                            >Baixo
+                            <span
+                                style="
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 2px;
+                                    background: #1a4a30;
+                                    display: inline-block;
+                                "
+                            ></span
+                            >Médio
+                            <span
+                                style="
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 2px;
+                                    background: #0d7a45;
+                                    display: inline-block;
+                                "
+                            ></span
+                            >Alto
+                            <span
+                                style="
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 2px;
+                                    background: #00e87a;
+                                    display: inline-block;
+                                "
+                            ></span
+                            >Excelente
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2"><div class="pt">Por Núcleo</div></div>
+                        <div class="hm-wrap" id="hm-nuc"></div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2"><div class="pt">Por Equipe</div></div>
+                        <div class="hm-wrap" id="hm-eq"></div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">
+                                Ranking Completo
+                                <span id="hm-rank-label"></span>
+                            </div>
+                        </div>
+                        <div class="tw">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Equipe</th>
+                                        <th>Núcleo</th>
+                                        <th class="tr">LA</th>
+                                        <th class="tr">LE</th>
+                                        <th class="tr">PRA</th>
+                                        <th class="tr">PRE</th>
+                                        <th class="tr">Dias</th>
+                                        <th class="tr">Lig/dia</th>
+                                        <th class="tr">Rede/dia</th>
+                                        <th class="tr">Score</th>
+                                        <th class="tr">SPI</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hm-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ EQUIPES ══════════ -->
+                <div id="pg-equipes" class="pg">
+                    <div class="ph">
+                        <div class="over">Campo</div>
+                        <h1>Produtividade por Equipe</h1>
+                        <div class="sub">
+                            28 equipes · ranqueadas por score combinado (lig +
+                            rede/10) por dia
+                        </div>
+                    </div>
+                    <div class="eg" id="eq-grid"></div>
+                </div>
+
+                <!-- ══════════ CURVAS S + EVM ══════════ -->
+                <div id="pg-curvas" class="pg">
+                    <div class="ph">
+                        <div class="over">Performance</div>
+                        <h1>Curvas S + EVM</h1>
+                    </div>
+                    <div class="kgrid" id="evm-kgrid"></div>
+                    <div
+                        style="
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 12px;
+                        "
+                    >
+                        <div class="p">
+                            <div class="ph2">
+                                <div class="pt">Curva S — Ligações</div>
+                            </div>
+                            <div class="cw">
+                                <canvas id="chart-lig"></canvas>
+                            </div>
+                        </div>
+                        <div class="p">
+                            <div class="ph2">
+                                <div class="pt">Curva S — Rede (m)</div>
+                            </div>
+                            <div class="cw">
+                                <canvas id="chart-rede"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">
+                                Produção Diária — Ligações + Rede
+                            </div>
+                        </div>
+                        <div class="cw" style="height: 220px">
+                            <canvas id="chart-daily"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ REPLANEJAMENTO ══════════ -->
+                <div id="pg-replan" class="pg">
+                    <div class="ph">
+                        <div class="over">Do Controle ao Plano</div>
+                        <h1>Replanejamento Automático</h1>
+                        <div class="sub">
+                            SPI real → ajuste de equipes → nova data de
+                            conclusão
+                        </div>
+                    </div>
+                    <div id="replan-cont"></div>
+                </div>
+
+                <!-- ══════════ SUPERLOG ══════════ -->
+                <div id="pg-log" class="pg">
+                    <div class="ph">
+                        <div class="over">Sistema</div>
+                        <h1>SuperLog</h1>
+                        <div class="sub">
+                            Histórico persistente de todas as operações · max
+                            2000 entradas
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">
+                                Entradas <span id="log-ct">0</span>
+                            </div>
+                            <div style="display: flex; gap: 6px">
+                                <button
+                                    class="btn btn-g btn-sm"
+                                    onclick="filterLog('all')"
+                                >
+                                    Todos
+                                </button>
+                                <button
+                                    class="btn btn-g btn-sm"
+                                    onclick="filterLog('OK')"
+                                >
+                                    OK
+                                </button>
+                                <button
+                                    class="btn btn-g btn-sm"
+                                    onclick="filterLog('WARN')"
+                                >
+                                    WARN
+                                </button>
+                                <button
+                                    class="btn btn-g btn-sm"
+                                    onclick="filterLog('ERROR')"
+                                >
+                                    ERROR
+                                </button>
+                                <button
+                                    class="btn btn-r btn-sm"
+                                    onclick="clearLog()"
+                                >
+                                    🗑 Limpar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="log-panel" id="log-panel"></div>
+                    </div>
+                </div>
+
+                <!-- ══════════ TESTES ══════════ -->
+                <div id="pg-testes" class="pg">
+                    <div class="ph">
+                        <div class="over">QA Automático</div>
+                        <h1>Suite de Testes</h1>
+                        <div class="sub">
+                            Testa integridade dos dados, cálculos e engine de
+                            replanejamento
+                        </div>
+                    </div>
+                    <div class="p">
+                        <div class="ph2">
+                            <div class="pt">Resultados</div>
+                            <button class="btn btn-p" onclick="runTests()">
+                                ▶ Executar Todos
+                            </button>
+                        </div>
+                        <div id="test-results"></div>
+                    </div>
+                    <div class="p" style="margin-top: 0">
+                        <div class="ph2"><div class="pt">Console</div></div>
+                        <div
+                            class="log-panel"
+                            id="test-console"
+                            style="max-height: 300px; font-size: 10px"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /main -->
+        </div>
+        <!-- /app -->
+
+        <script>
+            /* ═══════════════════════════════════════════════════════════
+   DADOS REAIS — extraídos das planilhas
+═══════════════════════════════════════════════════════════ */
+            const DB = {
+                gerado: "2026-03-11 11:59",
+                metas: {
+                    LA: 433,
+                    LE: 611,
+                    PRA: 2717,
+                    PRE: 4020,
+                    LIG: 1044,
+                    REDE: 6737,
+                    DIAS: 30,
+                    LIG_DIA: 36,
+                    REDE_DIA: 232,
+                },
+                curva_real: [
+                    { d: "2026-01-05", lig: 0.0, rede: 6.0 },
+                    { d: "2026-01-06", lig: 0.0, rede: 48.0 },
+                    { d: "2026-01-07", lig: 0.0, rede: 54.0 },
+                    { d: "2026-01-08", lig: 17.0, rede: 122.0 },
+                    { d: "2026-01-09", lig: 47.0, rede: 269.1 },
+                    { d: "2026-01-10", lig: 72.0, rede: 367.1 },
+                    { d: "2026-01-12", lig: 118.0, rede: 530.1 },
+                    { d: "2026-01-13", lig: 165.0, rede: 777.1 },
+                    { d: "2026-01-14", lig: 187.0, rede: 923.1 },
+                    { d: "2026-01-15", lig: 209.0, rede: 1127.1 },
+                    { d: "2026-01-16", lig: 226.0, rede: 1261.1 },
+                    { d: "2026-01-17", lig: 235.0, rede: 1285.1 },
+                    { d: "2026-01-19", lig: 245.0, rede: 1372.1 },
+                    { d: "2026-01-20", lig: 264.0, rede: 1507.1 },
+                    { d: "2026-01-21", lig: 299.0, rede: 1748.2 },
+                    { d: "2026-01-22", lig: 311.0, rede: 1881.3 },
+                    { d: "2026-01-23", lig: 333.0, rede: 2120.5 },
+                    { d: "2026-01-24", lig: 333.0, rede: 2196.5 },
+                    { d: "2026-01-26", lig: 333.0, rede: 2214.5 },
+                    { d: "2026-01-27", lig: 351.0, rede: 2341.5 },
+                    { d: "2026-01-28", lig: 376.0, rede: 2711.5 },
+                    { d: "2026-01-29", lig: 415.0, rede: 2871.5 },
+                    { d: "2026-01-30", lig: 429.0, rede: 3013.5 },
+                    { d: "2026-01-31", lig: 454.0, rede: 3130.5 },
+                    { d: "2026-02-02", lig: 472.0, rede: 3320.5 },
+                    { d: "2026-02-03", lig: 509.0, rede: 3460.5 },
+                    { d: "2026-02-04", lig: 514.0, rede: 3660.5 },
+                    { d: "2026-02-05", lig: 514.0, rede: 3779.5 },
+                    { d: "2026-02-06", lig: 550.0, rede: 3950.5 },
+                    { d: "2026-02-07", lig: 564.0, rede: 4023.5 },
+                    { d: "2026-02-09", lig: 589.0, rede: 4311.0 },
+                    { d: "2026-02-10", lig: 659.0, rede: 4521.0 },
+                    { d: "2026-02-11", lig: 687.0, rede: 4774.5 },
+                    { d: "2026-02-12", lig: 711.0, rede: 4986.5 },
+                    { d: "2026-02-13", lig: 733.0, rede: 5146.5 },
+                    { d: "2026-02-16", lig: 755.0, rede: 5218.5 },
+                    { d: "2026-02-17", lig: 767.0, rede: 5237.6 },
+                    { d: "2026-02-18", lig: 799.0, rede: 5499.6 },
+                    { d: "2026-02-19", lig: 816.0, rede: 5665.9 },
+                    { d: "2026-02-20", lig: 831.0, rede: 5865.9 },
+                    { d: "2026-02-21", lig: 844.0, rede: 5901.9 },
+                    { d: "2026-02-23", lig: 914.0, rede: 6154.9 },
+                    { d: "2026-02-24", lig: 959.0, rede: 6342.9 },
+                    { d: "2026-02-25", lig: 1000.0, rede: 6513.9 },
+                    { d: "2026-02-27", lig: 1066.0, rede: 6595.9 },
+                    { d: "2026-02-28", lig: 1100.0, rede: 6627.9 },
+                    { d: "2026-03-02", lig: 1145.0, rede: 6801.9 },
+                    { d: "2026-03-03", lig: 1205.0, rede: 6986.6 },
+                    { d: "2026-03-04", lig: 1260.0, rede: 7120.6 },
+                    { d: "2026-03-05", lig: 1343.0, rede: 7344.6 },
+                    { d: "2026-03-06", lig: 1413.0, rede: 7609.6 },
+                    { d: "2026-03-07", lig: 1418.0, rede: 7609.6 },
+                    { d: "2026-03-09", lig: 1453.0, rede: 7642.6 },
+                ],
+                curva_prev: [
+                    { d: "2026-02-09", lig: 36.0, rede: 232.3, util: true },
+                    { d: "2026-02-10", lig: 72.0, rede: 464.6, util: true },
+                    { d: "2026-02-11", lig: 108.0, rede: 696.9, util: true },
+                    { d: "2026-02-12", lig: 144.0, rede: 929.2, util: true },
+                    { d: "2026-02-13", lig: 180.0, rede: 1161.6, util: true },
+                    { d: "2026-02-14", lig: 180.0, rede: 1161.6, util: false },
+                    { d: "2026-02-15", lig: 180.0, rede: 1161.6, util: false },
+                    { d: "2026-02-16", lig: 180.0, rede: 1161.6, util: false },
+                    { d: "2026-02-17", lig: 180.0, rede: 1161.6, util: false },
+                    { d: "2026-02-18", lig: 216.0, rede: 1393.9, util: true },
+                    { d: "2026-02-19", lig: 252.0, rede: 1626.2, util: true },
+                    { d: "2026-02-20", lig: 288.0, rede: 1858.5, util: true },
+                    { d: "2026-02-21", lig: 306.0, rede: 1974.6, util: true },
+                    { d: "2026-02-22", lig: 306.0, rede: 1974.6, util: false },
+                    { d: "2026-02-23", lig: 342.0, rede: 2206.9, util: true },
+                    { d: "2026-02-24", lig: 378.0, rede: 2439.3, util: true },
+                    { d: "2026-02-25", lig: 414.0, rede: 2671.6, util: true },
+                    { d: "2026-02-26", lig: 450.0, rede: 2903.9, util: true },
+                    { d: "2026-02-27", lig: 486.0, rede: 3136.2, util: true },
+                    { d: "2026-02-28", lig: 504.0, rede: 3252.3, util: true },
+                    { d: "2026-03-01", lig: 504.0, rede: 3252.3, util: false },
+                    { d: "2026-03-02", lig: 540.0, rede: 3484.7, util: true },
+                    { d: "2026-03-03", lig: 576.0, rede: 3717.0, util: true },
+                    { d: "2026-03-04", lig: 612.0, rede: 3949.3, util: true },
+                    { d: "2026-03-05", lig: 648.0, rede: 4181.6, util: true },
+                    { d: "2026-03-06", lig: 684.0, rede: 4413.9, util: true },
+                    { d: "2026-03-07", lig: 702.0, rede: 4530.1, util: true },
+                    { d: "2026-03-08", lig: 702.0, rede: 4530.1, util: false },
+                    { d: "2026-03-09", lig: 738.0, rede: 4762.4, util: true },
+                    { d: "2026-03-10", lig: 774.0, rede: 4994.7, util: true },
+                    { d: "2026-03-11", lig: 810.0, rede: 5227.0, util: true },
+                    { d: "2026-03-12", lig: 846.0, rede: 5459.3, util: true },
+                    { d: "2026-03-13", lig: 882.0, rede: 5691.6, util: true },
+                    { d: "2026-03-14", lig: 900.0, rede: 5807.8, util: true },
+                    { d: "2026-03-15", lig: 900.0, rede: 5807.8, util: false },
+                    { d: "2026-03-16", lig: 936.0, rede: 6040.1, util: true },
+                    { d: "2026-03-17", lig: 972.0, rede: 6272.4, util: true },
+                    { d: "2026-03-18", lig: 1008.0, rede: 6504.7, util: true },
+                    { d: "2026-03-19", lig: 1044.0, rede: 6737.0, util: true },
+                ],
+                prod_diaria: [
+                    { d: "2026-01-05", lig: 0.0, rede: 6.0 },
+                    { d: "2026-01-06", lig: 0.0, rede: 42.0 },
+                    { d: "2026-01-07", lig: 0.0, rede: 6.0 },
+                    { d: "2026-01-08", lig: 17.0, rede: 68.0 },
+                    { d: "2026-01-09", lig: 30.0, rede: 147.0 },
+                    { d: "2026-01-10", lig: 25.0, rede: 98.0 },
+                    { d: "2026-01-12", lig: 46.0, rede: 163.0 },
+                    { d: "2026-01-13", lig: 47.0, rede: 247.0 },
+                    { d: "2026-01-14", lig: 22.0, rede: 146.0 },
+                    { d: "2026-01-15", lig: 22.0, rede: 204.0 },
+                    { d: "2026-01-16", lig: 17.0, rede: 134.0 },
+                    { d: "2026-01-17", lig: 9.0, rede: 24.0 },
+                    { d: "2026-01-19", lig: 10.0, rede: 87.0 },
+                    { d: "2026-01-20", lig: 19.0, rede: 135.0 },
+                    { d: "2026-01-21", lig: 35.0, rede: 241.0 },
+                    { d: "2026-01-22", lig: 12.0, rede: 133.2 },
+                    { d: "2026-01-23", lig: 22.0, rede: 239.2 },
+                    { d: "2026-01-24", lig: 0.0, rede: 76.0 },
+                    { d: "2026-01-26", lig: 0.0, rede: 18.0 },
+                    { d: "2026-01-27", lig: 18.0, rede: 127.0 },
+                    { d: "2026-01-28", lig: 25.0, rede: 370.0 },
+                    { d: "2026-01-29", lig: 39.0, rede: 160.0 },
+                    { d: "2026-01-30", lig: 14.0, rede: 142.0 },
+                    { d: "2026-01-31", lig: 25.0, rede: 117.0 },
+                    { d: "2026-02-02", lig: 18.0, rede: 190.0 },
+                    { d: "2026-02-03", lig: 37.0, rede: 140.0 },
+                    { d: "2026-02-04", lig: 5.0, rede: 200.0 },
+                    { d: "2026-02-05", lig: 0.0, rede: 119.0 },
+                    { d: "2026-02-06", lig: 36.0, rede: 171.0 },
+                    { d: "2026-02-07", lig: 14.0, rede: 73.0 },
+                    { d: "2026-02-09", lig: 25.0, rede: 287.5 },
+                    { d: "2026-02-10", lig: 70.0, rede: 210.0 },
+                    { d: "2026-02-11", lig: 28.0, rede: 253.5 },
+                    { d: "2026-02-12", lig: 24.0, rede: 212.0 },
+                    { d: "2026-02-13", lig: 22.0, rede: 160.0 },
+                    { d: "2026-02-16", lig: 22.0, rede: 72.0 },
+                    { d: "2026-02-17", lig: 12.0, rede: 19.1 },
+                    { d: "2026-02-18", lig: 32.0, rede: 262.0 },
+                    { d: "2026-02-19", lig: 17.0, rede: 166.3 },
+                    { d: "2026-02-20", lig: 15.0, rede: 200.0 },
+                    { d: "2026-02-21", lig: 13.0, rede: 36.0 },
+                    { d: "2026-02-23", lig: 70.0, rede: 253.0 },
+                    { d: "2026-02-24", lig: 45.0, rede: 188.0 },
+                    { d: "2026-02-25", lig: 41.0, rede: 171.0 },
+                    { d: "2026-02-27", lig: 66.0, rede: 82.0 },
+                    { d: "2026-02-28", lig: 34.0, rede: 32.0 },
+                    { d: "2026-03-02", lig: 45.0, rede: 174.0 },
+                    { d: "2026-03-03", lig: 60.0, rede: 184.7 },
+                    { d: "2026-03-04", lig: 55.0, rede: 134.0 },
+                    { d: "2026-03-05", lig: 83.0, rede: 224.0 },
+                    { d: "2026-03-06", lig: 70.0, rede: 265.0 },
+                    { d: "2026-03-07", lig: 5.0, rede: 0.0 },
+                    { d: "2026-03-09", lig: 35.0, rede: 33.0 },
+                ],
+                equipes: [
+                    {
+                        nome: "CARLENADRO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 38.0,
+                        LE: 2.0,
+                        PRA: 0.0,
+                        PRE: 15.0,
+                        PVs: 1.0,
+                        IHM: 0.0,
+                        dias: 4,
+                        lig: 40.0,
+                        rede: 15.0,
+                        lig_dia: 10.0,
+                        rede_dia: 3.75,
+                        score: 10.38,
+                        ruas: 3,
+                    },
+                    {
+                        nome: "SANDRO",
+                        nucleo: "JOÃO CARLOS",
+                        LA: 23.0,
+                        LE: 2.0,
+                        PRA: 35.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 4,
+                        lig: 25.0,
+                        rede: 35.0,
+                        lig_dia: 6.25,
+                        rede_dia: 8.75,
+                        score: 7.12,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "CARLEANDRO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 8.0,
+                        LE: 0.0,
+                        PRA: 45.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 8.0,
+                        rede: 45.0,
+                        lig_dia: 4.0,
+                        rede_dia: 22.5,
+                        score: 6.25,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "RICARDO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 27.0,
+                        PRA: 0.0,
+                        PRE: 6.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 5,
+                        lig: 27.0,
+                        rede: 6.0,
+                        lig_dia: 5.4,
+                        rede_dia: 1.2,
+                        score: 5.52,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "EDUARDO",
+                        nucleo: "VILA ISRAEL",
+                        LA: 14.0,
+                        LE: 0.0,
+                        PRA: 15.0,
+                        PRE: 12.0,
+                        PVs: 1.0,
+                        IHM: 0.0,
+                        dias: 4,
+                        lig: 14.0,
+                        rede: 27.0,
+                        lig_dia: 3.5,
+                        rede_dia: 6.75,
+                        score: 4.17,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "CASSIO",
+                        nucleo: "PANTANAL BAIXO",
+                        LA: 8.0,
+                        LE: 44.0,
+                        PRA: 80.0,
+                        PRE: 60.0,
+                        PVs: 7.0,
+                        IHM: 0.0,
+                        dias: 17,
+                        lig: 52.0,
+                        rede: 140.0,
+                        lig_dia: 3.06,
+                        rede_dia: 8.24,
+                        score: 3.88,
+                        ruas: 5,
+                    },
+                    {
+                        nome: "PITBULL",
+                        nucleo: "MORRO DO TETÉU",
+                        LA: 2.0,
+                        LE: 21.0,
+                        PRA: 14.0,
+                        PRE: 64.0,
+                        PVs: 1.0,
+                        IHM: 2.0,
+                        dias: 8,
+                        lig: 23.0,
+                        rede: 78.0,
+                        lig_dia: 2.88,
+                        rede_dia: 9.75,
+                        score: 3.85,
+                        ruas: 5,
+                    },
+                    {
+                        nome: "DOUGLAS",
+                        nucleo: "JOÃO CARLOS",
+                        LA: 8.0,
+                        LE: 40.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 13,
+                        lig: 48.0,
+                        rede: 0.0,
+                        lig_dia: 3.69,
+                        rede_dia: 0.0,
+                        score: 3.69,
+                        ruas: 7,
+                    },
+                    {
+                        nome: "ZULU",
+                        nucleo: "MORRO DO TETÉU",
+                        LA: 9.0,
+                        LE: 7.0,
+                        PRA: 70.0,
+                        PRE: 6.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 7,
+                        lig: 16.0,
+                        rede: 76.0,
+                        lig_dia: 2.29,
+                        rede_dia: 10.86,
+                        score: 3.37,
+                        ruas: 4,
+                    },
+                    {
+                        nome: "PAULO",
+                        nucleo: "PANTANAL BAIXO",
+                        LA: 7.0,
+                        LE: 11.0,
+                        PRA: 116.0,
+                        PRE: 61.0,
+                        PVs: 1.0,
+                        IHM: 0.0,
+                        dias: 11,
+                        lig: 18.0,
+                        rede: 177.0,
+                        lig_dia: 1.64,
+                        rede_dia: 16.09,
+                        score: 3.25,
+                        ruas: 4,
+                    },
+                    {
+                        nome: "ALESSANDRO",
+                        nucleo: "VILA CRIADORES",
+                        LA: 29.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 47.0,
+                        dias: 9,
+                        lig: 29.0,
+                        rede: 0.0,
+                        lig_dia: 3.22,
+                        rede_dia: 0.0,
+                        score: 3.22,
+                        ruas: 4,
+                    },
+                    {
+                        nome: "JEFERSON",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 2.0,
+                        PRA: 6.0,
+                        PRE: 6.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 1,
+                        lig: 2.0,
+                        rede: 12.0,
+                        lig_dia: 2.0,
+                        rede_dia: 12.0,
+                        score: 3.2,
+                        ruas: 1,
+                    },
+                    {
+                        nome: "JAMILTON",
+                        nucleo: "JOÃO CARLOS",
+                        LA: 6.0,
+                        LE: 1.0,
+                        PRA: 140.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 7,
+                        lig: 7.0,
+                        rede: 140.0,
+                        lig_dia: 1.0,
+                        rede_dia: 20.0,
+                        score: 3.0,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "ANDERSON",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 6.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 6.0,
+                        rede: 0.0,
+                        lig_dia: 3.0,
+                        rede_dia: 0.0,
+                        score: 3.0,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "BRUNO",
+                        nucleo: "VILA CRIADORES",
+                        LA: 0.0,
+                        LE: 10.0,
+                        PRA: 0.0,
+                        PRE: 36.0,
+                        PVs: 1.0,
+                        IHM: 0.0,
+                        dias: 5,
+                        lig: 10.0,
+                        rede: 36.0,
+                        lig_dia: 2.0,
+                        rede_dia: 7.2,
+                        score: 2.72,
+                        ruas: 1,
+                    },
+                    {
+                        nome: "RENATO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 2.0,
+                        LE: 0.0,
+                        PRA: 80.0,
+                        PRE: 18.0,
+                        PVs: 2.0,
+                        IHM: 0.0,
+                        dias: 5,
+                        lig: 2.0,
+                        rede: 98.0,
+                        lig_dia: 0.4,
+                        rede_dia: 19.6,
+                        score: 2.36,
+                        ruas: 3,
+                    },
+                    {
+                        nome: "VICENTE",
+                        nucleo: "VILA CRIADORES",
+                        LA: 8.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 26.0,
+                        PVs: 1.0,
+                        IHM: 0.0,
+                        dias: 5,
+                        lig: 8.0,
+                        rede: 26.0,
+                        lig_dia: 1.6,
+                        rede_dia: 5.2,
+                        score: 2.12,
+                        ruas: 3,
+                    },
+                    {
+                        nome: "PETRUCIO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 6.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 2.0,
+                        IHM: 0.0,
+                        dias: 3,
+                        lig: 6.0,
+                        rede: 0.0,
+                        lig_dia: 2.0,
+                        rede_dia: 0.0,
+                        score: 2.0,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "VINICIUS",
+                        nucleo: "VILA ISRAEL",
+                        LA: 0.0,
+                        LE: 5.0,
+                        PRA: 0.0,
+                        PRE: 30.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 4,
+                        lig: 5.0,
+                        rede: 30.0,
+                        lig_dia: 1.25,
+                        rede_dia: 7.5,
+                        score: 2.0,
+                        ruas: 1,
+                    },
+                    {
+                        nome: "DANILO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 4.0,
+                        PRA: 0.0,
+                        PRE: 9.7,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 3,
+                        lig: 4.0,
+                        rede: 9.7,
+                        lig_dia: 1.33,
+                        rede_dia: 3.23,
+                        score: 1.66,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "IGOR",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 2.0,
+                        PRA: 0.0,
+                        PRE: 6.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 2.0,
+                        rede: 6.0,
+                        lig_dia: 1.0,
+                        rede_dia: 3.0,
+                        score: 1.3,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "ADILSIO",
+                        nucleo: "VILA ISRAEL",
+                        LA: 0.0,
+                        LE: 1.0,
+                        PRA: 0.0,
+                        PRE: 12.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 3,
+                        lig: 1.0,
+                        rede: 12.0,
+                        lig_dia: 0.33,
+                        rede_dia: 4.0,
+                        score: 0.73,
+                        ruas: 1,
+                    },
+                    {
+                        nome: "JOÃO",
+                        nucleo: "MORRO DO TETÉU",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 13.0,
+                        PVs: 3.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 0.0,
+                        rede: 13.0,
+                        lig_dia: 0.0,
+                        rede_dia: 6.5,
+                        score: 0.65,
+                        ruas: 1,
+                    },
+                    {
+                        nome: "MARIO",
+                        nucleo: "SÃO MANOEL",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 12.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 0.0,
+                        rede: 12.0,
+                        lig_dia: 0.0,
+                        rede_dia: 6.0,
+                        score: 0.6,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "GILVAN",
+                        nucleo: "PANTANAL BAIXO",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 18.0,
+                        PVs: 3.0,
+                        IHM: 0.0,
+                        dias: 4,
+                        lig: 0.0,
+                        rede: 18.0,
+                        lig_dia: 0.0,
+                        rede_dia: 4.5,
+                        score: 0.45,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "LEANDRO",
+                        nucleo: "PANTANAL BAIXO",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 3.0,
+                        PVs: 2.0,
+                        IHM: 0.0,
+                        dias: 2,
+                        lig: 0.0,
+                        rede: 3.0,
+                        lig_dia: 0.0,
+                        rede_dia: 1.5,
+                        score: 0.15,
+                        ruas: 2,
+                    },
+                    {
+                        nome: "TIM MAIA",
+                        nucleo: "MORRO DO TETÉU",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 7,
+                        lig: 0.0,
+                        rede: 0.0,
+                        lig_dia: 0.0,
+                        rede_dia: 0.0,
+                        score: 0.0,
+                        ruas: 3,
+                    },
+                    {
+                        nome: "ELOI",
+                        nucleo: "VILA ISRAEL",
+                        LA: 0.0,
+                        LE: 0.0,
+                        PRA: 0.0,
+                        PRE: 0.0,
+                        PVs: 0.0,
+                        IHM: 0.0,
+                        dias: 1,
+                        lig: 0.0,
+                        rede: 0.0,
+                        lig_dia: 0.0,
+                        rede_dia: 0.0,
+                        score: 0.0,
+                        ruas: 1,
+                    },
+                ],
+                nucleos: [
+                    {
+                        nome: "SÃO MANOEL",
+                        LA: 105.0,
+                        LE: 216.0,
+                        PRA: 1200.16,
+                        PRE: 1091.77,
+                        PVs: 19.0,
+                        dias: 43,
+                        equipes: 10,
+                        lig: 321.0,
+                        rede: 2291.93,
+                        lig_dia: 7.47,
+                        rede_dia: 53.3,
+                        spi: 1.943,
+                    },
+                    {
+                        nome: "MORRO DO TETÉU",
+                        LA: 176.0,
+                        LE: 213.0,
+                        PRA: 856.1,
+                        PRE: 693.1,
+                        PVs: 18.0,
+                        dias: 43,
+                        equipes: 4,
+                        lig: 389.0,
+                        rede: 1549.2,
+                        lig_dia: 9.05,
+                        rede_dia: 36.03,
+                        spi: 1.808,
+                    },
+                    {
+                        nome: "PANTANAL BAIXO",
+                        LA: 191.0,
+                        LE: 140.0,
+                        PRA: 585.0,
+                        PRE: 618.0,
+                        PVs: 24.0,
+                        dias: 46,
+                        equipes: 4,
+                        lig: 331.0,
+                        rede: 1203.0,
+                        lig_dia: 7.2,
+                        rede_dia: 26.15,
+                        spi: 1.487,
+                    },
+                    {
+                        nome: "JOÃO CARLOS",
+                        LA: 110.0,
+                        LE: 76.0,
+                        PRA: 696.0,
+                        PRE: 216.0,
+                        PVs: 24.0,
+                        dias: 46,
+                        equipes: 3,
+                        lig: 186.0,
+                        rede: 912.0,
+                        lig_dia: 4.04,
+                        rede_dia: 19.83,
+                        spi: 0.941,
+                    },
+                    {
+                        nome: "VILA CRIADORES",
+                        LA: 99.0,
+                        LE: 48.0,
+                        PRA: 263.0,
+                        PRE: 665.5,
+                        PVs: 22.0,
+                        dias: 49,
+                        equipes: 3,
+                        lig: 147.0,
+                        rede: 928.5,
+                        lig_dia: 3.0,
+                        rede_dia: 18.95,
+                        spi: 0.836,
+                    },
+                    {
+                        nome: "VILA ISRAEL",
+                        LA: 46.0,
+                        LE: 33.0,
+                        PRA: 335.0,
+                        PRE: 423.0,
+                        PVs: 43.0,
+                        dias: 33,
+                        equipes: 4,
+                        lig: 79.0,
+                        rede: 758.0,
+                        lig_dia: 2.39,
+                        rede_dia: 22.97,
+                        spi: 0.565,
+                    },
+                ],
+            };
+
+            /* ═══════════════════════════════════════════════════════════
+   SUPERLOG
+═══════════════════════════════════════════════════════════ */
+            const SUPERLOG = [];
+            const MAX_LOG = 2000;
+            let logFilter = "all";
+
+            function slog(level, msg, data = "") {
+                const ts = new Date().toLocaleTimeString("pt-BR", {
+                    hour12: false,
+                });
+                SUPERLOG.unshift({
+                    ts,
+                    level,
+                    msg,
+                    data:
+                        typeof data === "object"
+                            ? JSON.stringify(data)
+                            : String(data),
+                });
+                if (SUPERLOG.length > MAX_LOG) SUPERLOG.pop();
+                if (document.getElementById("pg-log").classList.contains("on"))
+                    renderLog();
+            }
+
+            function renderLog() {
+                const p = document.getElementById("log-panel");
+                document.getElementById("log-ct").textContent = SUPERLOG.length;
+                const items =
+                    logFilter === "all"
+                        ? SUPERLOG
+                        : SUPERLOG.filter((e) => e.level === logFilter);
+                p.innerHTML =
+                    items
+                        .slice(0, 300)
+                        .map(
+                            (e) => `
+    <div class="le">
+      <span class="le-t">${e.ts}</span>
+      <span class="le-l l-${e.level === "OK" ? "ok" : e.level === "WARN" ? "w" : e.level === "ERROR" ? "e" : "i"}">${e.level}</span>
+      <span class="le-m">${e.msg}${e.data ? ` <span style="color:var(--tx3)">${e.data}</span>` : ""}</span>
+    </div>
+  `,
+                        )
+                        .join("") ||
+                    '<div style="color:var(--tx3);padding:12px;text-align:center">Sem entradas.</div>';
+            }
+            function filterLog(f) {
+                logFilter = f;
+                renderLog();
+            }
+            function clearLog() {
+                SUPERLOG.length = 0;
+                renderLog();
+                slog("OK", "SuperLog limpo");
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   NAVEGAÇÃO
+═══════════════════════════════════════════════════════════ */
+            const PAGES = [
+                "dash",
+                "rdo",
+                "calor",
+                "equipes",
+                "curvas",
+                "replan",
+                "log",
+                "testes",
+            ];
+            function go(id) {
+                PAGES.forEach((p) => {
+                    document
+                        .getElementById(`pg-${p}`)
+                        .classList.toggle("on", p === id);
+                });
+                document.querySelectorAll(".tab").forEach((t) => {
+                    t.classList.toggle(
+                        "on",
+                        t.getAttribute("onclick").includes(`'${id}'`),
+                    );
+                });
+                gs(id);
+                slog("INFO", `Navegou para: ${id}`);
+                if (id === "dash") renderDash();
+                if (id === "calor") renderCalor();
+                if (id === "equipes") renderEquipes();
+                if (id === "curvas") renderCurvas();
+                if (id === "replan") renderReplan();
+                if (id === "log") renderLog();
+                if (id === "testes") {
+                }
+            }
+            function gs(id) {
+                document.querySelectorAll(".sb").forEach((b) => {
+                    b.classList.toggle(
+                        "on",
+                        b.getAttribute("onclick").includes(`'${id}'`),
+                    );
+                });
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   MAPA DE CALOR — CORES
+═══════════════════════════════════════════════════════════ */
+            function hmColor(val, min, max) {
+                if (max === min) return { bg: "#1a4a30", fg: "#fff" };
+                const t = Math.max(0, Math.min(1, (val - min) / (max - min)));
+                const stops = [
+                    [0.0, [90, 15, 20]],
+                    [0.2, [120, 26, 26]],
+                    [0.4, [26, 74, 48]],
+                    [0.6, [13, 122, 69]],
+                    [0.8, [0, 180, 100]],
+                    [1.0, [0, 232, 122]],
+                ];
+                for (let i = 1; i < stops.length; i++) {
+                    if (t <= stops[i][0]) {
+                        const lo = stops[i - 1],
+                            hi = stops[i];
+                        const f = (t - lo[0]) / (hi[0] - lo[0]);
+                        const c = lo[1].map((v, j) =>
+                            Math.round(v + f * (hi[1][j] - v)),
+                        );
+                        const lum =
+                            (c[0] * 299 + c[1] * 587 + c[2] * 114) / 1000;
+                        return {
+                            bg: `rgb(${c[0]},${c[1]},${c[2]})`,
+                            fg: lum > 100 ? "#000" : "#fff",
+                        };
+                    }
+                }
+                return { bg: "rgb(0,232,122)", fg: "#000" };
+            }
+
+            function tip(e, title, val, det) {
+                const t = document.getElementById("tip");
+                t.innerHTML = `<div style="font-size:11px;color:var(--tx2);margin-bottom:2px">${title}</div>
+    <div class="tn">${val}</div>
+    <div class="td">${det}</div>`;
+                t.style.opacity = "1";
+                t.style.left = e.clientX + 14 + "px";
+                t.style.top = e.clientY - 8 + "px";
+            }
+            function hideTip() {
+                document.getElementById("tip").style.opacity = "0";
+            }
+            document.addEventListener("mousemove", (e) => {
+                const t = document.getElementById("tip");
+                if (t.style.opacity === "1") {
+                    t.style.left = e.clientX + 14 + "px";
+                    t.style.top = e.clientY - 8 + "px";
+                }
+            });
+
+            /* ═══════════════════════════════════════════════════════════
+   CHARTS
+═══════════════════════════════════════════════════════════ */
+            const CH = {};
+            const CO = {
+                bg: "#040608",
+                gridColor: "#182840",
+                tickColor: "#2a4060",
+                legend: { labels: { color: "#6e8fae", font: { size: 10 } } },
+                scales() {
+                    return {
+                        x: {
+                            ticks: { color: this.tickColor, font: { size: 9 } },
+                            grid: { color: this.gridColor },
+                        },
+                        y: {
+                            ticks: { color: this.tickColor, font: { size: 9 } },
+                            grid: { color: this.gridColor },
+                        },
+                    };
+                },
+            };
+
+            function mkChart(id, cfg) {
+                if (CH[id]) CH[id].destroy();
+                CH[id] = new Chart(document.getElementById(id), cfg);
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════════════════ */
+            function getTotals() {
+                const base = DB.nucleos.reduce(
+                    (a, n) => ({
+                        LA: a.LA + n.LA,
+                        LE: a.LE + n.LE,
+                        PRA: a.PRA + n.PRA,
+                        PRE: a.PRE + n.PRE,
+                        lig: a.lig + n.lig,
+                        rede: a.rede + n.rede,
+                    }),
+                    { LA: 0, LE: 0, PRA: 0, PRE: 0, lig: 0, rede: 0 },
+                );
+                const rdo = RDO.reduce(
+                    (a, r) => ({
+                        LA: a.LA + r.LA,
+                        LE: a.LE + r.LE,
+                        PRA: a.PRA + r.PRA,
+                        PRE: a.PRE + r.PRE,
+                        lig: a.lig + r.LA + r.LE,
+                        rede: a.rede + r.PRA + r.PRE,
+                    }),
+                    { LA: 0, LE: 0, PRA: 0, PRE: 0, lig: 0, rede: 0 },
+                );
+                return {
+                    LA: base.LA + rdo.LA,
+                    LE: base.LE + rdo.LE,
+                    PRA: base.PRA + rdo.PRA,
+                    PRE: base.PRE + rdo.PRE,
+                    lig: base.lig + rdo.lig,
+                    rede: base.rede + rdo.rede,
+                };
+            }
+
+            function renderDash() {
+                const T = getTotals();
+                const M = DB.metas;
+                const spi_lig = +(T.lig / M.LIG).toFixed(2);
+                const spi_rede = +(T.rede / M.REDE).toFixed(2);
+                const spi_gl = +((spi_lig + spi_rede) / 2).toFixed(2);
+
+                // Update topbar SPI
+                const spiel = document.getElementById("top-spi");
+                spiel.textContent = `SPI ${spi_gl}`;
+                spiel.className = `tag ${spi_gl >= 1 ? "tag-ok" : spi_gl >= 0.8 ? "tag-warn" : "tag-crit"}`;
+
+                const kpis = [
+                    { l: "LA Lig.Água", v: T.LA, m: M.LA, c: "var(--b)" },
+                    { l: "LE Lig.Esgoto", v: T.LE, m: M.LE, c: "var(--c)" },
+                    {
+                        l: "PRA (m)",
+                        v: T.PRA.toFixed(0),
+                        m: M.PRA,
+                        c: "var(--p)",
+                    },
+                    {
+                        l: "PRE (m)",
+                        v: T.PRE.toFixed(0),
+                        m: M.PRE,
+                        c: "var(--o)",
+                    },
+                    { l: "Total Lig.", v: T.lig, m: M.LIG, c: "var(--g)" },
+                    {
+                        l: "Rede Total (m)",
+                        v: Math.round(T.rede),
+                        m: M.REDE,
+                        c: "var(--y)",
+                    },
+                    {
+                        l: "SPI Ligações",
+                        v: spi_lig,
+                        m: 1,
+                        c: spi_lig >= 1 ? "var(--g)" : "var(--r)",
+                    },
+                    {
+                        l: "SPI Rede",
+                        v: spi_rede,
+                        m: 1,
+                        c: spi_rede >= 1 ? "var(--g)" : "var(--r)",
+                    },
+                ];
+
+                document.getElementById("kgrid").innerHTML = kpis
+                    .map((k, i) => {
+                        const pct =
+                            k.m > 1
+                                ? Math.min(
+                                      Math.round((parseFloat(k.v) / k.m) * 100),
+                                      200,
+                                  )
+                                : Math.round(parseFloat(k.v) * 100);
+                        const bar =
+                            k.m > 1 ? Math.min(pct, 100) : Math.min(pct, 100);
+                        const pc = k.m > 1 ? pct : null;
+                        return `<div class="kpi" style="--c:${k.c};animation-delay:${i * 0.04}s">
+      <div class="kl">${k.l}</div>
+      <div class="kv">${typeof k.v === "number" && k.v > 100 ? Math.round(k.v).toLocaleString("pt-BR") : k.v}</div>
+      ${k.m > 1 ? `<div class="ks">Meta: ${k.m.toLocaleString("pt-BR")}</div>` : ""}
+      ${k.m > 1 ? `<div class="kb"><div class="kf" style="width:${bar}%"></div></div>` : ""}
+      ${pc !== null ? `<div class="kp" style="color:${pc >= 100 ? "var(--g)" : pc >= 70 ? "var(--y)" : "var(--r)"}">${pc}%</div>` : ""}
+    </div>`;
+                    })
+                    .join("");
+
+                // Alertas
+                const als = [];
+                DB.nucleos.forEach((n) => {
+                    if (n.spi < 0.7)
+                        als.push({
+                            t: "al-c",
+                            i: "🔴",
+                            a: `${n.nome} — SPI CRÍTICO: ${n.spi}`,
+                            m: `${n.lig_dia} lig/dia · Reforço urgente de equipes`,
+                        });
+                    else if (n.spi < 0.9)
+                        als.push({
+                            t: "al-w",
+                            i: "⚠️",
+                            a: `${n.nome} — Abaixo da meta`,
+                            m: `SPI=${n.spi} · ${n.lig_dia} lig/dia`,
+                        });
+                });
+                DB.equipes.forEach((e) => {
+                    if (e.score === 0 && e.dias >= 4)
+                        als.push({
+                            t: "al-c",
+                            i: "🚨",
+                            a: `Equipe ${e.nome} (${e.nucleo}) — ZERO PRODUÇÃO`,
+                            m: `${e.dias} dias sem ligações ou rede. Verificar impedimento.`,
+                        });
+                });
+                als.push({
+                    t: "al-i",
+                    i: "📋",
+                    a: "74 ligações pendentes — VILA CRIADORES",
+                    m: "Ligações concluídas mas aguardando liberação de lavagem SABESP",
+                });
+                als.push({
+                    t: "al-i",
+                    i: "📋",
+                    a: `RDO: ${RDO.length} lançamentos manuais`,
+                    m: "Clique em RDO para lançar novos registros diários",
+                });
+                als.push({
+                    t: "al-o",
+                    i: "✅",
+                    a: `Ligações: ${T.lig}/${M.LIG} (${Math.round((T.lig / M.LIG) * 100)}%)`,
+                    m: "Meta de ligações atingida",
+                });
+                als.push({
+                    t: "al-o",
+                    i: "✅",
+                    a: `Rede: ${Math.round(T.rede)}m/${M.REDE}m (${Math.round((T.rede / M.REDE) * 100)}%)`,
+                    m: "Meta de rede atingida",
+                });
+
+                document.getElementById("alertas").innerHTML = als
+                    .slice(0, 8)
+                    .map(
+                        (a) =>
+                            `<div class="al ${a.t}"><span class="ai">${a.i}</span><div class="ab"><div class="at">${a.a}</div><div class="am">${a.m}</div></div></div>`,
+                    )
+                    .join("");
+
+                // Tabela núcleos
+                document.getElementById("tb-nuc").innerHTML = DB.nucleos
+                    .map((n) => {
+                        const c =
+                            n.spi >= 1
+                                ? "var(--g)"
+                                : n.spi >= 0.8
+                                  ? "var(--y)"
+                                  : "var(--r)";
+                        const tag =
+                            n.spi >= 1
+                                ? `<span class="tag tag-ok">OK</span>`
+                                : n.spi >= 0.8
+                                  ? `<span class="tag tag-warn">ABA</span>`
+                                  : `<span class="tag tag-crit">CRIT</span>`;
+                        return `<tr>
+      <td class="mono" style="font-size:11px">${n.nome}</td>
+      <td class="tr mono">${n.equipes}</td>
+      <td class="tr mono">${n.LA}</td><td class="tr mono">${n.LE}</td>
+      <td class="tr mono">${n.PRA.toFixed(0)}</td><td class="tr mono">${n.PRE.toFixed(0)}</td>
+      <td class="tr mono" style="font-weight:700">${n.lig}</td>
+      <td class="tr mono" style="font-weight:700">${Math.round(n.rede)}</td>
+      <td class="tr mono">${n.lig_dia}</td><td class="tr mono">${n.rede_dia}</td>
+      <td class="tr mono" style="color:${c};font-weight:700">${n.spi}</td>
+      <td>${tag}</td>
+    </tr>`;
+                    })
+                    .join("");
+
+                // Curva S principal
+                renderChartMainCurva();
+                slog("OK", "Dashboard renderizado");
+            }
+
+            function renderChartMainCurva() {
+                const rl = DB.curva_real;
+                const pv = DB.curva_prev;
+                const M = DB.metas;
+                const labels = [
+                    ...new Set([...rl.map((d) => d.d), ...pv.map((d) => d.d)]),
+                ].sort();
+
+                const rMap = Object.fromEntries(rl.map((d) => [d.d, d.lig]));
+                const pMap = Object.fromEntries(pv.map((d) => [d.d, d.lig]));
+                const rData = labels.map((d) => rMap[d] ?? null);
+                const pData = labels.map((d) => pMap[d] ?? null);
+                const bac = labels.map(() => M.LIG);
+
+                const lshort = labels.map((d) => d.slice(5)); // MM-DD
+
+                mkChart("chart-main", {
+                    type: "line",
+                    data: {
+                        labels: lshort,
+                        datasets: [
+                            {
+                                label: "Previsto",
+                                data: pData,
+                                borderColor: "rgba(110,143,174,.5)",
+                                borderDash: [5, 4],
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 0,
+                                spanGaps: true,
+                            },
+                            {
+                                label: "Realizado",
+                                data: rData,
+                                borderColor: "#00e87a",
+                                backgroundColor: "rgba(0,232,122,.07)",
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointBackgroundColor: "#00e87a",
+                                spanGaps: false,
+                            },
+                            {
+                                label: "Meta BAC",
+                                data: bac,
+                                borderColor: "rgba(232,57,74,.3)",
+                                borderDash: [2, 3],
+                                fill: false,
+                                pointRadius: 0,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: CO.legend },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: CO.tickColor,
+                                    font: { size: 8 },
+                                    maxTicksLimit: 20,
+                                },
+                                grid: { color: CO.gridColor },
+                            },
+                            y: {
+                                ticks: {
+                                    color: CO.tickColor,
+                                    font: { size: 9 },
+                                },
+                                grid: { color: CO.gridColor },
+                            },
+                        },
+                    },
+                });
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   MAPA DE CALOR
+═══════════════════════════════════════════════════════════ */
+            let HM_ATRIB = "score";
+            const HM_DEFS = [
+                {
+                    k: "score",
+                    l: "Score Produt.",
+                    u: "pt/d",
+                    fmt: (v) => v.toFixed(1),
+                },
+                {
+                    k: "lig_dia",
+                    l: "Ligações/dia",
+                    u: "lig/d",
+                    fmt: (v) => v.toFixed(1),
+                },
+                {
+                    k: "rede_dia",
+                    l: "Rede/dia",
+                    u: "m/d",
+                    fmt: (v) => v.toFixed(1),
+                },
+                { k: "spi", l: "SPI", u: "", fmt: (v) => v.toFixed(2) },
+                {
+                    k: "lig",
+                    l: "Total Ligações",
+                    u: "lig",
+                    fmt: (v) => Math.round(v),
+                },
+                {
+                    k: "rede",
+                    l: "Total Rede",
+                    u: "m",
+                    fmt: (v) => Math.round(v),
+                },
+                { k: "dias", l: "Dias Trabalhados", u: "d", fmt: (v) => v },
+                {
+                    k: "pct_meta",
+                    l: "% Meta (SPI)",
+                    u: "%",
+                    fmt: (v) => Math.round(v * 100),
+                },
+            ];
+
+            function getHMVal(obj, k) {
+                if (k === "pct_meta") return obj.spi || 0;
+                return obj[k] || 0;
+            }
+
+            function renderCalor() {
+                // Botões
+                document.getElementById("hm-btns").innerHTML = HM_DEFS.map(
+                    (d) =>
+                        `<button class="btn ${d.k === HM_ATRIB ? "btn-p" : "btn-g"} btn-sm" onclick="setHMAtrib('${d.k}')">${d.l}</button>`,
+                ).join("");
+                const def = HM_DEFS.find((d) => d.k === HM_ATRIB) || HM_DEFS[0];
+                document.getElementById("hm-label").textContent = def.l;
+                document.getElementById("hm-rank-label").textContent = def.l;
+
+                // Núcleos
+                const nVals = DB.nucleos.map((n) => getHMVal(n, HM_ATRIB));
+                const nMin = Math.min(...nVals),
+                    nMax = Math.max(...nVals);
+                document.getElementById("hm-nuc").innerHTML = DB.nucleos
+                    .map((n, i) => {
+                        const v = nVals[i];
+                        const { bg, fg } = hmColor(v, nMin, nMax);
+                        const disp = def.fmt(v) + (def.u ? ` ${def.u}` : "");
+                        return `<div class="hc" style="background:${bg};color:${fg};width:130px;min-height:76px"
+      onmouseenter="tip(event,'${n.nome}','${disp}','${n.lig} lig · ${Math.round(n.rede)}m rede · ${n.equipes} equipes · SPI ${n.spi}')"
+      onmouseleave="hideTip()">
+      <div class="hc-l">${n.nome.replace("MORRO DO ", "").replace(" BAIXO", "")}</div>
+      <div class="hc-v">${def.fmt(v)}</div>
+      <div class="hc-s">${def.u}</div>
+    </div>`;
+                    })
+                    .join("");
+
+                // Equipes
+                const eVals = DB.equipes.map((e) => getHMVal(e, HM_ATRIB));
+                const eMin = Math.min(...eVals),
+                    eMax = Math.max(...eVals);
+                document.getElementById("hm-eq").innerHTML = DB.equipes
+                    .map((e, i) => {
+                        const v = eVals[i];
+                        const { bg, fg } = hmColor(v, eMin, eMax);
+                        const disp = def.fmt(v) + (def.u ? ` ${def.u}` : "");
+                        return `<div class="hc" style="background:${bg};color:${fg};width:80px;min-height:62px"
+      onmouseenter="tip(event,'${e.nome}','${disp}','${e.nucleo.split(" ")[0]} · ${e.lig}lig · ${e.rede}m · ${e.dias}d')"
+      onmouseleave="hideTip()">
+      <div class="hc-l">${e.nome}</div>
+      <div class="hc-v">${def.fmt(v)}</div>
+      <div class="hc-s">${e.nucleo.split(" ").slice(-1)[0]}</div>
+    </div>`;
+                    })
+                    .join("");
+
+                // Ranking tabela
+                const sorted = [...DB.equipes].sort(
+                    (a, b) => getHMVal(b, HM_ATRIB) - getHMVal(a, HM_ATRIB),
+                );
+                document.getElementById("hm-tb").innerHTML = sorted
+                    .map((e, i) => {
+                        const spi = e.score / 10.38; // normalizar para 0-1
+                        const sc = e.spi || spi;
+                        const stag =
+                            e.score >= 5
+                                ? `<span class="tag tag-ok">TOP</span>`
+                                : e.score >= 2
+                                  ? `<span class="tag tag-warn">MED</span>`
+                                  : `<span class="tag tag-crit">BAX</span>`;
+                        return `<tr>
+      <td class="mono" style="color:${i < 3 ? "var(--g)" : "var(--tx3)"};font-weight:700">${i + 1}</td>
+      <td style="font-weight:700">${e.nome}</td>
+      <td style="font-size:10px;color:var(--tx3)">${e.nucleo}</td>
+      <td class="tr mono">${e.LA}</td><td class="tr mono">${e.LE}</td>
+      <td class="tr mono">${e.PRA}</td><td class="tr mono">${e.PRE}</td>
+      <td class="tr mono">${e.dias}</td>
+      <td class="tr mono" style="color:var(--g);font-weight:700">${e.lig_dia}</td>
+      <td class="tr mono">${e.rede_dia}</td>
+      <td class="tr mono" style="color:${e.score >= 5 ? "var(--g)" : e.score >= 2 ? "var(--y)" : "var(--r)"};font-weight:700">${e.score.toFixed(1)}</td>
+      <td class="tr mono" style="color:${e.spi >= 1 ? "var(--g)" : e.spi >= 0.6 ? "var(--y)" : "var(--r)"}">${(e.spi || 0).toFixed(2)}</td>
+      <td>${stag}</td>
+    </tr>`;
+                    })
+                    .join("");
+
+                slog("OK", `Mapa de calor renderizado — atributo: ${HM_ATRIB}`);
+            }
+
+            function setHMAtrib(k) {
+                HM_ATRIB = k;
+                renderCalor();
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   EQUIPES
+═══════════════════════════════════════════════════════════ */
+            function renderEquipes() {
+                const cors = [
+                    "#00e87a",
+                    "#3daeff",
+                    "#9d7ff5",
+                    "#ff7a3d",
+                    "#2de5c8",
+                    "#f5c842",
+                    "#e8394a",
+                    "#ec4899",
+                ];
+                const maxScore = DB.equipes[0].score;
+                document.getElementById("eq-grid").innerHTML = DB.equipes
+                    .map((e, i) => {
+                        const cor = cors[i % cors.length];
+                        const pLig = Math.min(100, (e.lig_dia / 10) * 100);
+                        const pRede = Math.min(100, (e.rede_dia / 50) * 100);
+                        const pScore = Math.min(
+                            100,
+                            (e.score / maxScore) * 100,
+                        );
+                        const cls =
+                            e.score >= 5
+                                ? "bf-ok"
+                                : e.score >= 2
+                                  ? "bf-w"
+                                  : "bf-c";
+                        return `<div class="ec" style="--c:${cor}">
+      <div class="en">${e.nome}</div>
+      <div class="enu">${e.nucleo} · ${e.dias}d · ${e.ruas} ruas</div>
+      <div class="estat">
+        <div class="ev"><div class="evl">LA</div><div class="evv">${e.LA}</div></div>
+        <div class="ev"><div class="evl">LE</div><div class="evv">${e.LE}</div></div>
+        <div class="ev"><div class="evl">PRA</div><div class="evv">${e.PRA}</div></div>
+        <div class="ev"><div class="evl">PRE</div><div class="evv">${e.PRE}</div></div>
+      </div>
+      <div style="margin-top:10px">
+        <div class="br"><div class="bl">Lig/d</div><div class="bt"><div class="bf ${cls}" style="width:${pLig}%"></div></div><div class="bv">${e.lig_dia}</div></div>
+        <div class="br"><div class="bl">Rede/d</div><div class="bt"><div class="bf ${e.rede_dia > 5 ? "bf-ok" : "bf-c"}" style="width:${pRede}%"></div></div><div class="bv">${e.rede_dia}m</div></div>
+        <div class="br"><div class="bl">Score</div><div class="bt"><div class="bf ${cls}" style="width:${pScore}%"></div></div><div class="bv">${e.score.toFixed(1)}</div></div>
+      </div>
+    </div>`;
+                    })
+                    .join("");
+                slog("OK", "Equipes renderizadas");
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   CURVAS S + EVM
+═══════════════════════════════════════════════════════════ */
+            function renderCurvas() {
+                const M = DB.metas;
+                const T = getTotals();
+                const spi_lig = +(T.lig / M.LIG).toFixed(2);
+                const spi_rede = +(T.rede / M.REDE).toFixed(2);
+                const spi_gl = +((spi_lig + spi_rede) / 2).toFixed(2);
+                const EAC_lig = +(M.LIG / spi_lig).toFixed(0);
+                const EAC_rede = +(M.REDE / spi_rede).toFixed(0);
+                const VAC_lig = M.LIG - EAC_lig;
+
+                document.getElementById("evm-kgrid").innerHTML = [
+                    {
+                        l: "SPI Ligações",
+                        v: spi_lig,
+                        c: spi_lig >= 1 ? "var(--g)" : "var(--r)",
+                    },
+                    {
+                        l: "SPI Rede",
+                        v: spi_rede,
+                        c: spi_rede >= 1 ? "var(--g)" : "var(--r)",
+                    },
+                    {
+                        l: "SPI Global",
+                        v: spi_gl,
+                        c: spi_gl >= 1 ? "var(--g)" : "var(--r)",
+                    },
+                    { l: "BAC Lig.", v: M.LIG, c: "var(--b)" },
+                    { l: "EAC Lig.", v: EAC_lig, c: "var(--y)" },
+                    {
+                        l: "VAC Lig.",
+                        v: VAC_lig,
+                        c: VAC_lig >= 0 ? "var(--g)" : "var(--r)",
+                    },
+                    { l: "Realiz.Lig.", v: T.lig, c: "var(--g)" },
+                    {
+                        l: "Realiz.Rede",
+                        v: Math.round(T.rede) + "m",
+                        c: "var(--c)",
+                    },
+                ]
+                    .map(
+                        (k) => `<div class="kpi" style="--c:${k.c}">
+    <div class="kl">${k.l}</div>
+    <div class="kv" style="font-size:${String(k.v).length > 6 ? "16px" : "22px"}">${typeof k.v === "number" && Math.abs(k.v) > 100 ? k.v.toLocaleString("pt-BR") : k.v}</div>
+  </div>`,
+                    )
+                    .join("");
+
+                // Curva S ligações
+                const cr = DB.curva_real,
+                    cp = DB.curva_prev;
+                const allD = [
+                    ...new Set([...cr.map((d) => d.d), ...cp.map((d) => d.d)]),
+                ].sort();
+                const rMap = Object.fromEntries(cr.map((d) => [d.d, d.lig]));
+                const pMap = Object.fromEntries(cp.map((d) => [d.d, d.lig]));
+                const rRMap = Object.fromEntries(cr.map((d) => [d.d, d.rede]));
+                const pRMap = Object.fromEntries(cp.map((d) => [d.d, d.rede]));
+                const lbl = allD.map((d) => d.slice(5));
+
+                mkChart("chart-lig", {
+                    type: "line",
+                    data: {
+                        labels: lbl,
+                        datasets: [
+                            {
+                                label: "Prev",
+                                data: allD.map((d) => pMap[d] ?? null),
+                                borderColor: "rgba(110,143,174,.4)",
+                                borderDash: [5, 4],
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 0,
+                                spanGaps: true,
+                            },
+                            {
+                                label: "Real",
+                                data: allD.map((d) => rMap[d] ?? null),
+                                borderColor: "#00e87a",
+                                backgroundColor: "rgba(0,232,122,.07)",
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointBackgroundColor: "#00e87a",
+                                spanGaps: false,
+                            },
+                            {
+                                label: "BAC",
+                                data: allD.map(() => M.LIG),
+                                borderColor: "rgba(232,57,74,.3)",
+                                borderDash: [2, 3],
+                                fill: false,
+                                pointRadius: 0,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: CO.legend },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: CO.tickColor,
+                                    font: { size: 8 },
+                                    maxTicksLimit: 18,
+                                },
+                                grid: { color: CO.gridColor },
+                            },
+                            y: {
+                                ticks: { color: CO.tickColor },
+                                grid: { color: CO.gridColor },
+                            },
+                        },
+                    },
+                });
+
+                mkChart("chart-rede", {
+                    type: "line",
+                    data: {
+                        labels: lbl,
+                        datasets: [
+                            {
+                                label: "Prev",
+                                data: allD.map((d) => pRMap[d] ?? null),
+                                borderColor: "rgba(110,143,174,.4)",
+                                borderDash: [5, 4],
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 0,
+                                spanGaps: true,
+                            },
+                            {
+                                label: "Real",
+                                data: allD.map((d) => rRMap[d] ?? null),
+                                borderColor: "#9d7ff5",
+                                backgroundColor: "rgba(157,127,245,.07)",
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointBackgroundColor: "#9d7ff5",
+                                spanGaps: false,
+                            },
+                            {
+                                label: "BAC",
+                                data: allD.map(() => M.REDE),
+                                borderColor: "rgba(232,57,74,.3)",
+                                borderDash: [2, 3],
+                                fill: false,
+                                pointRadius: 0,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: CO.legend },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: CO.tickColor,
+                                    font: { size: 8 },
+                                    maxTicksLimit: 18,
+                                },
+                                grid: { color: CO.gridColor },
+                            },
+                            y: {
+                                ticks: { color: CO.tickColor },
+                                grid: { color: CO.gridColor },
+                            },
+                        },
+                    },
+                });
+
+                // Produção diária
+                const pd = DB.prod_diaria;
+                mkChart("chart-daily", {
+                    type: "bar",
+                    data: {
+                        labels: pd.map((d) => d.d.slice(5)),
+                        datasets: [
+                            {
+                                label: "Lig",
+                                data: pd.map((d) => d.lig),
+                                backgroundColor: "rgba(0,232,122,.7)",
+                                borderRadius: 3,
+                            },
+                            {
+                                label: "Rede÷10",
+                                data: pd.map((d) => +(d.rede / 10).toFixed(1)),
+                                backgroundColor: "rgba(157,127,245,.5)",
+                                borderRadius: 3,
+                            },
+                            {
+                                label: "Meta lig/d",
+                                data: pd.map(() => M.LIG_DIA),
+                                type: "line",
+                                borderColor: "rgba(245,200,66,.5)",
+                                borderDash: [3, 3],
+                                fill: false,
+                                pointRadius: 0,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: CO.legend },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: CO.tickColor,
+                                    font: { size: 8 },
+                                    maxTicksLimit: 30,
+                                },
+                                grid: { color: CO.gridColor },
+                            },
+                            y: {
+                                ticks: { color: CO.tickColor },
+                                grid: { color: CO.gridColor },
+                            },
+                        },
+                    },
+                });
+
+                slog("OK", "Curvas S + EVM renderizadas");
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   REPLANEJAMENTO
+═══════════════════════════════════════════════════════════ */
+            function renderReplan() {
+                const M = DB.metas,
+                    T = getTotals();
+                const saldo_lig = Math.max(0, M.LIG - T.lig);
+                const saldo_rede = Math.max(0, M.REDE - T.rede);
+                const spi_lig = +(T.lig / M.LIG).toFixed(2);
+                const spi_rede = +(T.rede / M.REDE).toFixed(2);
+                const lig_dia_real = DB.nucleos.reduce(
+                    (a, n) => a + n.lig_dia,
+                    0,
+                );
+                const rede_dia_real = DB.nucleos.reduce(
+                    (a, n) => a + n.rede_dia,
+                    0,
+                );
+                const dias_resto_lig =
+                    lig_dia_real > 0
+                        ? Math.ceil(saldo_lig / lig_dia_real)
+                        : 999;
+                const dias_resto_rede =
+                    rede_dia_real > 0
+                        ? Math.ceil(saldo_rede / rede_dia_real)
+                        : 999;
+
+                let html = `
+  <div class="kgrid">
+    ${[
+        { l: "Saldo Ligações", v: saldo_lig, c: "var(--y)" },
+        { l: "Saldo Rede", v: Math.round(saldo_rede) + "m", c: "var(--o)" },
+        {
+            l: "SPI Lig.",
+            v: spi_lig,
+            c: spi_lig >= 1 ? "var(--g)" : "var(--r)",
+        },
+        {
+            l: "SPI Rede",
+            v: spi_rede,
+            c: spi_rede >= 1 ? "var(--g)" : "var(--r)",
+        },
+        {
+            l: "Dias p/ fechar lig",
+            v: dias_resto_lig > 100 ? "✓ OK" : dias_resto_lig + "d",
+            c: saldo_lig === 0 ? "var(--g)" : "var(--y)",
+        },
+        {
+            l: "Dias p/ fechar rede",
+            v: dias_resto_rede > 100 ? "✓ OK" : dias_resto_rede + "d",
+            c: saldo_rede === 0 ? "var(--g)" : "var(--y)",
+        },
+    ]
+        .map(
+            (k) =>
+                `<div class="kpi" style="--c:${k.c}"><div class="kl">${k.l}</div><div class="kv" style="font-size:${String(k.v).length > 5 ? "16px" : "22px"}">${k.v}</div></div>`,
+        )
+        .join("")}
+  </div>
+
+  <div class="p">
+    <div class="ph2"><div class="pt">Análise por Núcleo + Recomendação de Equipes</div></div>
+    <div class="rp-row rp-head">
+      <span>Núcleo</span><span>SPI</span><span>Eq.Atual</span>
+      <span>Lig/dia</span><span>Rede/dia</span><span>Ação Recomendada</span>
+    </div>
+    ${DB.nucleos
+        .map((n) => {
+            const saldo_n = Math.max(0, Math.round(M.LIG / 6 - n.lig));
+            const eq_sugier =
+                n.spi < 1 ? Math.ceil(n.equipes / n.spi) : n.equipes;
+            const delta_eq = eq_sugier - n.equipes;
+            const rec =
+                n.spi >= 1
+                    ? `<span class="tag tag-ok">✓ Manter ${n.equipes} equipes</span>`
+                    : delta_eq > 0
+                      ? `<span class="tag tag-crit">+ ${delta_eq} equipe(s) · total ${eq_sugier} → SPI=1.0</span>`
+                      : `<span class="tag tag-warn">Verificar impedimento</span>`;
+            return `<div class="rp-row">
+        <span style="font-weight:700;font-size:11px">${n.nome}</span>
+        <span class="mono" style="color:${n.spi >= 1 ? "var(--g)" : n.spi >= 0.8 ? "var(--y)" : "var(--r)"};font-weight:700">${n.spi}</span>
+        <span class="mono">${n.equipes}</span>
+        <span class="mono">${n.lig_dia}</span>
+        <span class="mono">${n.rede_dia}</span>
+        <span>${rec}</span>
+      </div>`;
+        })
+        .join("")}
+  </div>
+
+  <div class="p">
+    <div class="ph2"><div class="pt">Diagnóstico e Plano de Ação</div></div>
+    <div class="al al-c"><span class="ai">🔴</span><div class="ab">
+      <div class="at">VILA ISRAEL — SPI 0.565 (Pior núcleo)</div>
+      <div class="am">4 equipes, apenas 79 lig executadas. Saldo ~95 lig. Ação: +3 equipes de reforço imediato. Redirecionar GILVAN e LEANDRO do Pantanal Baixo.</div>
+    </div></div>
+    <div class="al al-c"><span class="ai">🔴</span><div class="ab">
+      <div class="at">VILA CRIADORES — SPI 0.836 + 74 ligações travadas</div>
+      <div class="am">74 ligações concluídas aguardando liberação de lavagem SABESP. Ação: pressionar OS no sistema. Isso resolve ~50% do saldo imediatamente.</div>
+    </div></div>
+    <div class="al al-w"><span class="ai">⚠️</span><div class="ab">
+      <div class="at">JOÃO CARLOS — SPI 0.941 · Rede crítica</div>
+      <div class="am">Rede PRE apenas 216m de 670m (~32%). JAMILTON executa rede, DOUGLAS só ligações. Balancear alocação.</div>
+    </div></div>
+    <div class="al al-w"><span class="ai">⚠️</span><div class="ab">
+      <div class="at">Equipes TIM MAIA e ELOI — ZERO produção em todos os dias</div>
+      <div class="am">7 dias (TIM MAIA) e 1 dia (ELOI) sem nenhuma execução. Investigar e realocar ou encerrar contrato.</div>
+    </div></div>
+    <div class="al al-o"><span class="ai">💡</span><div class="ab">
+      <div class="at">SÃO MANOEL e TETÉU excederam meta — redistribuir capacidade</div>
+      <div class="am">SPI 1.94 e 1.81 respectivamente. Transferir 2-3 equipes para Vila Israel e Criadores até 18/03.</div>
+    </div></div>
+    <div class="al al-o"><span class="ai">💡</span><div class="ab">
+      <div class="at">Média lig/dia REAL: 27.4 vs meta 36 (-24%)</div>
+      <div class="am">Mas totais superam meta pois mais dias foram trabalhados. Objetivo: garantir fechamento de Vila Israel e Criadores antes de 18/03.</div>
+    </div></div>
+  </div>`;
+
+                document.getElementById("replan-cont").innerHTML = html;
+                slog("OK", "Replanejamento calculado e renderizado");
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   RDO
+═══════════════════════════════════════════════════════════ */
+            const RDO = [];
+            const EQ_MAP = {
+                "MORRO DO TETÉU": ["PITBULL", "ZULU", "TIM MAIA", "JOÃO"],
+                "PANTANAL BAIXO": ["CASSIO", "PAULO", "GILVAN", "LEANDRO"],
+                "JOÃO CARLOS": ["DOUGLAS", "SANDRO", "JAMILTON"],
+                "SÃO MANOEL": [
+                    "DANILO",
+                    "RICARDO",
+                    "JEFERSON",
+                    "RENATO",
+                    "CARLEANDRO",
+                    "PETRUCIO",
+                    "CARLENADRO",
+                    "IGOR",
+                    "ANDERSON",
+                    "MARIO",
+                ],
+                "VILA ISRAEL": ["VINICIUS", "ADILSIO", "ELOI", "EDUARDO"],
+                "VILA CRIADORES": ["BRUNO", "VICENTE", "ALESSANDRO"],
+            };
+
+            function updEq() {
+                const n = document.getElementById("r-nucleo").value;
+                const s = document.getElementById("r-equipe");
+                s.innerHTML = (EQ_MAP[n] || [])
+                    .concat(["+ Nova Equipe"])
+                    .map((e) => `<option>${e}</option>`)
+                    .join("");
+                slog("INFO", `Núcleo selecionado: ${n}`);
+            }
+
+            function saveRDO() {
+                const data = document.getElementById("r-data").value;
+                const nucleo = document.getElementById("r-nucleo").value;
+                const equipe = document.getElementById("r-equipe").value;
+                const rua = document.getElementById("r-rua").value;
+                const util = document.getElementById("r-util").value === "S";
+                const obs = document.getElementById("r-obs").value;
+
+                if (!data || !nucleo || !equipe) {
+                    slog(
+                        "ERROR",
+                        "RDO rejeitado — campos obrigatórios ausentes",
+                        { data, nucleo, equipe },
+                    );
+                    document.getElementById("rdo-status").textContent =
+                        "✗ Preencha data, núcleo e equipe";
+                    document.getElementById("rdo-status").style.color =
+                        "var(--r)";
+                    return;
+                }
+
+                const LA = +document.getElementById("p-la").value || 0;
+                const LE = +document.getElementById("p-le").value || 0;
+                const PRA = +document.getElementById("p-pra").value || 0;
+                const PRE = +document.getElementById("p-pre").value || 0;
+                const PVs = +document.getElementById("p-pv").value || 0;
+                const LIE = +document.getElementById("p-lie").value || 0;
+                const LIA = +document.getElementById("p-lia").value || 0;
+                const IHM = +document.getElementById("p-ihm").value || 0;
+
+                const rec = {
+                    id: Date.now(),
+                    data,
+                    nucleo,
+                    equipe,
+                    rua,
+                    util,
+                    obs,
+                    LA,
+                    LE,
+                    PRA,
+                    PRE,
+                    PVs,
+                    LIE,
+                    LIA,
+                    IHM,
+                };
+                RDO.unshift(rec);
+                renderRDOTabela();
+                clearRDO();
+                const msg = `RDO salvo: ${equipe}/${nucleo} · ${LA + LE}lig · ${PRA + PRE}m`;
+                document.getElementById("rdo-status").textContent = "✓ " + msg;
+                document.getElementById("rdo-status").style.color = "var(--g)";
+                slog("OK", msg, rec);
+                setTimeout(
+                    () =>
+                        (document.getElementById("rdo-status").textContent =
+                            ""),
+                    3000,
+                );
+            }
+
+            function renderRDOTabela() {
+                document.getElementById("rdo-ct").textContent =
+                    `${RDO.length} registros`;
+                const tb = document.getElementById("rdo-tb");
+                if (!RDO.length) {
+                    tb.innerHTML =
+                        '<tr><td colspan="13" style="text-align:center;color:var(--tx3);padding:20px">Nenhum lançamento. Use o formulário acima.</td></tr>';
+                    return;
+                }
+                tb.innerHTML = RDO.map((r, i) => {
+                    const lig = r.LA + r.LE,
+                        rede = r.PRA + r.PRE;
+                    const st =
+                        r.util && (lig > 0 || rede > 0)
+                            ? `<span class="tag tag-ok">OK</span>`
+                            : !r.util
+                              ? `<span class="tag tag-warn">NÃO ÚTIL</span>`
+                              : `<span class="tag tag-crit">SEM PROD</span>`;
+                    return `<tr>
+      <td class="mono" style="color:var(--tx3)">${i + 1}</td>
+      <td class="mono" style="font-size:10px">${r.data}</td>
+      <td style="font-size:10px;color:var(--tx2)">${r.nucleo.replace("MORRO DO ", "")}</td>
+      <td style="font-weight:700">${r.equipe}</td>
+      <td style="font-size:10px;color:var(--tx3);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.rua || "—"}</td>
+      <td class="tr mono">${r.LA}</td><td class="tr mono">${r.LE}</td>
+      <td class="tr mono">${r.PRA}</td><td class="tr mono">${r.PRE}</td>
+      <td class="tr mono" style="color:var(--g);font-weight:700">${lig}</td>
+      <td class="tr mono">${rede}</td>
+      <td class="mono" style="font-size:10px">${r.util ? "SIM" : "NÃO"}</td>
+      <td>${st}</td>
+    </tr>`;
+                }).join("");
+            }
+
+            function clearRDO() {
+                [
+                    "p-la",
+                    "p-le",
+                    "p-pra",
+                    "p-pre",
+                    "p-pv",
+                    "p-lie",
+                    "p-lia",
+                    "p-ihm",
+                ].forEach((id) => (document.getElementById(id).value = 0));
+                document.getElementById("r-rua").value = "";
+                document.getElementById("r-obs").value = "";
+            }
+            function clearAllRDO() {
+                if (!confirm("Remover todos os RDOs lançados?")) return;
+                RDO.length = 0;
+                renderRDOTabela();
+                slog("WARN", "Todos os RDOs foram removidos");
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   SUITE DE TESTES
+═══════════════════════════════════════════════════════════ */
+            function runTests() {
+                const log = [];
+                const cons = document.getElementById("test-console");
+                let pass = 0,
+                    fail = 0;
+
+                function tc(name, fn) {
+                    try {
+                        const r = fn();
+                        if (r === true || r === undefined) {
+                            pass++;
+                            log.push({ t: "OK", n: name, m: "Pass" });
+                        } else {
+                            fail++;
+                            log.push({ t: "FAIL", n: name, m: String(r) });
+                        }
+                    } catch (e) {
+                        fail++;
+                        log.push({ t: "FAIL", n: name, m: e.message });
+                    }
+                }
+
+                function assert(cond, msg) {
+                    if (!cond) throw new Error(msg || "assertion failed");
+                    return true;
+                }
+
+                // Dados
+                tc("DB.nucleos tem 6 núcleos", () =>
+                    assert(
+                        DB.nucleos.length === 6,
+                        "esperado 6, got " + DB.nucleos.length,
+                    ),
+                );
+                tc("DB.equipes tem 28 equipes", () =>
+                    assert(
+                        DB.equipes.length === 28,
+                        "esperado 28, got " + DB.equipes.length,
+                    ),
+                );
+                tc("curva_real tem 53 pontos", () =>
+                    assert(DB.curva_real.length === 53),
+                );
+                tc("curva_prev tem 39 pontos", () =>
+                    assert(DB.curva_prev.length === 39),
+                );
+                tc("prod_diaria tem 53 pontos", () =>
+                    assert(DB.prod_diaria.length === 53),
+                );
+
+                // Totais
+                tc("Total lig ≥ 1044 (meta atingida)", () => {
+                    const t = DB.nucleos.reduce((a, n) => a + n.lig, 0);
+                    assert(t >= 1044, "total lig=" + t);
+                });
+                tc("Total rede ≥ 6737", () => {
+                    const t = DB.nucleos.reduce((a, n) => a + n.rede, 0);
+                    assert(t >= 6737, "total rede=" + t.toFixed(0));
+                });
+                tc("LA+LE = lig em cada núcleo", () => {
+                    DB.nucleos.forEach((n) =>
+                        assert(
+                            Math.abs(n.LA + n.LE - n.lig) < 0.01,
+                            `${n.nome}: LA+LE=${n.LA + n.LE} ≠ lig=${n.lig}`,
+                        ),
+                    );
+                    return true;
+                });
+                tc("PRA+PRE ≈ rede em cada núcleo", () => {
+                    DB.nucleos.forEach((n) =>
+                        assert(
+                            Math.abs(n.PRA + n.PRE - n.rede) < 0.1,
+                            `${n.nome}: PRA+PRE=${n.PRA + n.PRE} ≈ rede=${n.rede}`,
+                        ),
+                    );
+                    return true;
+                });
+                tc("SPI: SÃO MANOEL > MORRO TETÉU > PANTANAL BAIXO", () => {
+                    const spis = DB.nucleos.map((n) => n.spi);
+                    assert(spis[0] > spis[1], "SÃO MANOEL SPI not max");
+                    assert(spis[1] > spis[2]);
+                });
+                tc("lig_dia = lig/dias em equipes", () => {
+                    DB.equipes.forEach((e) =>
+                        assert(
+                            Math.abs(e.lig_dia - e.lig / e.dias) < 0.05,
+                            `${e.nome}: lig_dia=${e.lig_dia} ≠ ${e.lig / e.dias}`,
+                        ),
+                    );
+                    return true;
+                });
+                tc("Score = (lig+rede/10)/dias", () => {
+                    DB.equipes.forEach((e) => {
+                        const expected = (e.lig + e.rede / 10) / e.dias;
+                        assert(
+                            Math.abs(e.score - expected) < 0.1,
+                            `${e.nome}: score=${e.score} expected=${expected.toFixed(2)}`,
+                        );
+                    });
+                    return true;
+                });
+                tc("Curva S real é monotonicamente crescente", () => {
+                    let prev = 0;
+                    DB.curva_real.forEach((p) => {
+                        assert(
+                            p.lig >= prev,
+                            `não monotônica: ${prev} > ${p.lig} em ${p.d}`,
+                        );
+                        prev = p.lig;
+                    });
+                    return true;
+                });
+                tc("Curva S previsto termina em meta BAC", () => {
+                    const last = DB.curva_prev[DB.curva_prev.length - 1];
+                    assert(
+                        Math.abs(last.lig - DB.metas.LIG) < 1,
+                        "último ponto previsto=" + last.lig,
+                    );
+                });
+                tc("Metas são coerentes (LIG = LA+LE, REDE = PRA+PRE)", () => {
+                    assert(
+                        DB.metas.LIG === DB.metas.LA + DB.metas.LE,
+                        `LIG=${DB.metas.LIG} ≠ LA+LE=${DB.metas.LA + DB.metas.LE}`,
+                    );
+                    assert(
+                        DB.metas.REDE === DB.metas.PRA + DB.metas.PRE,
+                        `REDE=${DB.metas.REDE} ≠ PRA+PRE=${DB.metas.PRA + DB.metas.PRE}`,
+                    );
+                });
+
+                // Mapa de calor
+                tc("hmColor retorna rgb válido", () => {
+                    const { bg } = hmColor(5, 0, 10);
+                    assert(bg.startsWith("rgb"), "não é rgb: " + bg);
+                });
+                tc("hmColor(max) = verde", () => {
+                    const { bg } = hmColor(10, 0, 10);
+                    assert(
+                        bg.includes("0,232,122") || bg.includes("0, 232, 122"),
+                    );
+                });
+                tc("hmColor(min) = vermelho", () => {
+                    const { bg } = hmColor(0, 0, 10);
+                    assert(
+                        bg.includes("90,15,20") || bg.includes("90, 15, 20"),
+                    );
+                });
+
+                // RDO
+                tc("saveRDO rejeita quando campos ausentes", () => {
+                    document.getElementById("r-data").value = "";
+                    document.getElementById("r-nucleo").value = "";
+                    const prevLen = RDO.length;
+                    saveRDO();
+                    assert(
+                        RDO.length === prevLen,
+                        "RDO foi salvo sem campos obrigatórios",
+                    );
+                });
+                tc("saveRDO salva com dados válidos", () => {
+                    document.getElementById("r-data").value = "2026-03-11";
+                    document.getElementById("r-nucleo").value =
+                        "MORRO DO TETÉU";
+                    updEq();
+                    document.getElementById("r-equipe").value = "PITBULL";
+                    document.getElementById("p-la").value = 5;
+                    document.getElementById("p-pre").value = 50;
+                    const prevLen = RDO.length;
+                    saveRDO();
+                    assert(
+                        RDO.length === prevLen + 1,
+                        "RDO não foi salvo. len=" + RDO.length,
+                    );
+                    // Limpar o RDO de teste
+                    RDO.shift();
+                });
+                tc("getTotals inclui RDO lançados", () => {
+                    RDO.unshift({
+                        LA: 10,
+                        LE: 5,
+                        PRA: 100,
+                        PRE: 50,
+                        lig: 15,
+                        rede: 150,
+                    });
+                    const t = getTotals();
+                    RDO.shift();
+                    const base = DB.nucleos.reduce((a, n) => a + n.lig, 0);
+                    assert(t.lig === base + 15, "getTotals não somou RDO");
+                });
+
+                // Replanejamento
+                tc("SPI calculado corretamente", () => {
+                    const T = getTotals();
+                    const spi = +(T.lig / DB.metas.LIG).toFixed(2);
+                    assert(spi > 1, "SPI lig deveria ser >1, got " + spi);
+                });
+                tc("SuperLog registra operações", () => {
+                    const prevLen = SUPERLOG.length;
+                    slog("OK", "Teste de log");
+                    assert(SUPERLOG.length === prevLen + 1);
+                });
+                tc("SuperLog limita a 2000 entradas", () => {
+                    const original = SUPERLOG.length;
+                    for (let i = 0; i < 10; i++)
+                        slog("INFO", "flood test " + i);
+                    assert(
+                        SUPERLOG.length <= MAX_LOG,
+                        "log excedeu 2000: " + SUPERLOG.length,
+                    );
+                    // remove os floods
+                    while (SUPERLOG.length > original) SUPERLOG.shift();
+                });
+
+                // Render
+                tc("PAGES existem no DOM", () => {
+                    PAGES.forEach((p) =>
+                        assert(
+                            document.getElementById("pg-" + p),
+                            "pg-" + p + " não encontrado",
+                        ),
+                    );
+                    return true;
+                });
+                tc("Todos IDs críticos existem", () => {
+                    [
+                        "kgrid",
+                        "alertas",
+                        "tb-nuc",
+                        "hm-nuc",
+                        "hm-eq",
+                        "hm-tb",
+                        "eq-grid",
+                        "chart-main",
+                        "chart-lig",
+                        "chart-rede",
+                        "log-panel",
+                    ].forEach((id) => {
+                        assert(
+                            document.getElementById(id),
+                            "id não encontrado: " + id,
+                        );
+                    });
+                    return true;
+                });
+
+                // Render final dos resultados
+                const total = pass + fail;
+                const pct = Math.round((pass / total) * 100);
+                document.getElementById("test-results").innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+      <div style="font-family:var(--mono);font-size:36px;font-weight:700;color:${fail === 0 ? "var(--g)" : "var(--r)"}">${pct}%</div>
+      <div>
+        <div style="font-size:16px;font-weight:700">${fail === 0 ? "✓ TODOS OS TESTES PASSARAM" : "✗ FALHAS DETECTADAS"}</div>
+        <div style="font-size:11px;color:var(--tx2);margin-top:2px">${pass}/${total} testes · ${fail} falha(s)</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      ${log
+          .map(
+              (l) => `
+        <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:${l.t === "OK" ? "rgba(0,232,122,.04)" : "rgba(232,57,74,.08)"};border-radius:5px;border:1px solid ${l.t === "OK" ? "rgba(0,232,122,.12)" : "rgba(232,57,74,.2)"}">
+          <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:${l.t === "OK" ? "var(--g)" : "var(--r)"}">[ ${l.t} ]</span>
+          <span style="font-size:11px;color:var(--tx)">${l.n}</span>
+          ${l.m !== "Pass" ? `<span style="font-size:10px;color:var(--tx2);margin-left:auto">${l.m}</span>` : ""}
+        </div>
+      `,
+          )
+          .join("")}
+    </div>`;
+
+                cons.innerHTML = log
+                    .map(
+                        (l) =>
+                            `<span style="color:${l.t === "OK" ? "var(--g)" : "var(--r)"}">[${l.t}]</span> ${l.n}${l.m !== "Pass" ? " — " + l.m : ""}\n`,
+                    )
+                    .join("");
+
+                log.forEach((l) =>
+                    slog(l.t === "OK" ? "OK" : "ERROR", `TEST: ${l.n}`, l.m),
+                );
+                slog(
+                    fail === 0 ? "OK" : "ERROR",
+                    `Suite de testes: ${pass}/${total} passes, ${fail} falhas`,
+                );
+            }
+
+            /* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+            (function init() {
+                const d = new Date();
+                document.getElementById("top-data").textContent =
+                    d.toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                    });
+
+                // Inicializar RDO data
+                document.getElementById("r-data").value = d
+                    .toISOString()
+                    .split("T")[0];
+
+                slog("OK", "Sistema inicializado — ConstruPlan Brutal");
+                slog(
+                    "INFO",
+                    `Dados: ${DB.equipes.length} equipes, ${DB.nucleos.length} núcleos, ${DB.curva_real.length} pontos de curva S`,
+                );
+                slog(
+                    "INFO",
+                    `Período: ${DB.curva_real[0].d} a ${DB.curva_real[DB.curva_real.length - 1].d}`,
+                );
+                slog(
+                    "INFO",
+                    `Meta SABESP: ${DB.metas.LIG} lig / ${DB.metas.REDE}m rede`,
+                );
+                slog("INFO", `Gerado em: ${DB.gerado}`);
+
+                renderDash();
+
+                // Executar testes silenciosamente e logar
+                setTimeout(() => {
+                    slog("INFO", "Executando validação de dados automática...");
+                    const lig = DB.nucleos.reduce((a, n) => a + n.lig, 0);
+                    const rede = DB.nucleos.reduce((a, n) => a + n.rede, 0);
+                    slog(
+                        lig >= DB.metas.LIG ? "OK" : "WARN",
+                        `Ligações totais: ${lig} / ${DB.metas.LIG} (${Math.round((lig / DB.metas.LIG) * 100)}%)`,
+                    );
+                    slog(
+                        rede >= DB.metas.REDE ? "OK" : "WARN",
+                        `Rede total: ${Math.round(rede)}m / ${DB.metas.REDE}m (${Math.round((rede / DB.metas.REDE) * 100)}%)`,
+                    );
+                    const zero = DB.equipes.filter((e) => e.score === 0);
+                    if (zero.length)
+                        slog(
+                            "WARN",
+                            `${zero.length} equipe(s) com ZERO produção`,
+                            zero.map((e) => e.nome).join(", "),
+                        );
+                    const crit = DB.nucleos.filter((n) => n.spi < 0.8);
+                    if (crit.length)
+                        slog(
+                            "WARN",
+                            `${crit.length} núcleo(s) com SPI<0.8`,
+                            crit.map((n) => n.nome).join(", "),
+                        );
+                    slog("OK", "Validação automática concluída");
+                }, 500);
+            })();
+        </script>
+        <script src="./construplan_extensao.js"></script>
+    </body>
+</html>
