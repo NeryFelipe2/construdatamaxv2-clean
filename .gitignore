@@ -24,3 +24,7 @@ fil32es/
 # IFC exemplo grande
 CONSTRUDATA_HYDRONETWORK_V7_FINAL/PACOTE_FINAL_V2/VERDE_TETEU_3D.ifc
 .aider*
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
