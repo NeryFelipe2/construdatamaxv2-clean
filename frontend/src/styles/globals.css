@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0d2040;
+  --color-surface: #112645;
+  --color-card: #14294e;
+  --color-card-hover: #1a3662;
+  --color-border: #20406a;
+  --color-border-strong: #244878;
+  --color-accent: #2abfdc;
+  --color-accent-hover: #1a9ab8;
+  --color-accent-muted: rgba(42, 191, 220, 0.12);
+  --color-muted: #284870;
+  --color-text-primary: #e4f2f8;
+  --color-text-secondary: #8fb3c8;
+  --color-text-muted: #5a8caa;
+  --color-success: #22c55e;
+  --color-success-muted: rgba(34, 197, 94, 0.12);
+  --color-warning: #eab308;
+  --color-warning-muted: rgba(234, 179, 8, 0.12);
+  --color-danger: #ef4444;
+  --color-danger-muted: rgba(239, 68, 68, 0.12);
+  --color-info: #38bdf8;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; padding: 0; }
+
+body {
+  background-color: #0d2040;
+  background-image: radial-gradient(circle, #1e3a62 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: #e4f2f8;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #112645; }
+::-webkit-scrollbar-thumb { background: #20406a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2abfdc; }
+
+input[type="file"] { display: none; }
+input[type="date"] { color-scheme: dark; }
