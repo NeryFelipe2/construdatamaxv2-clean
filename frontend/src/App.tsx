@@ -6,7 +6,7 @@ import {
   Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
   CalendarClock, Target, FileText, Calculator, Layers,
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
-  FileSearch, Monitor,
+  FileSearch, Monitor, MessageSquare,
 } from "lucide-react";
 
 // ─── Lazy-loaded Palantir modules ────────────────────────────────────────────
@@ -27,6 +27,7 @@ const RdoPage = lazy(() => import("@/features/rdo/index").then((m) => ({ default
 const QuantitativosPage = lazy(() => import("@/features/quantitativos/index").then((m) => ({ default: m.QuantitativosPage })));
 const ProjetosPage = lazy(() => import("@/features/projetos/index").then((m) => ({ default: m.ProjetosPage })));
 const PreConstrucaoPage = lazy(() => import("@/features/pre-construcao/index").then((m) => ({ default: m.PreConstrucaoPage })));
+const WhatsAppRdoPage = lazy(() => import("@/features/whatsapp-rdo/index").then((m) => ({ default: m.WhatsAppRdoPage })));
 
 // ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
 const LegacyApp = lazy(() => import("./LegacyApp"));
@@ -60,6 +61,9 @@ const navItems = [
   { label: "Frota", icon: Cpu, to: "/app/otimizacao-frota" },
   { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
   { label: "Pre-Constr.", icon: FileSearch, to: "/app/pre-construcao" },
+
+  { section: "WhatsApp" },
+  { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -238,6 +242,7 @@ export default function App() {
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
           <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
+          <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/ns-v5" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />

@@ -16,6 +16,7 @@ import {
   MOCK_RDO_FINANCIAL_ENTRIES,
   MOCK_RDO_BUDGET_BRL,
 } from '@/data/mockRdo'
+import { apiRdoList, apiRdoCreate, apiRdoClose } from '@/lib/api'
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -46,6 +47,11 @@ interface RdoState {
   // ── Demo / Clear ─────────────────────────────────────────────────────────────
   loadDemoData: () => void
   clearData:    () => void
+
+  // ── Backend sync ─────────────────────────────────────────────────────────────
+  fetchFromBackend:       (nucleo?: string) => Promise<void>
+  createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
+  closeRdoOnBackend:      (id: number) => Promise<void>
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -179,6 +185,48 @@ export const useRdoStore = create<RdoState>((set, get) => ({
       financialEntries: [],
       budgetBRL:        0,
     }),
+
+  // ── Backend sync ──────────────────────────────────────────────────────────────
+
+  fetchFromBackend: async (nucleo) => {
+    try {
+      const res = await apiRdoList(nucleo)
+      const mapped: RDO[] = (res.items ?? []).map((r: any) => ({
+        id:          String(r.id ?? crypto.randomUUID()),
+        number:      Number(r.numero ?? r.number ?? 0),
+        date:        String(r.data ?? r.date ?? ''),
+        status:      r.status ?? 'open',
+        nucleoId:    String(r.nucleo ?? r.nucleo_id ?? ''),
+        trechos:     (r.trechos as RdoTrechoEntry[]) ?? [],
+        workers:     r.workers ?? [],
+        equipment:   (r.equipment as RDO['equipment']) ?? [],
+        photos:      (r.photos as RDO['photos']) ?? [],
+        weather:     (r.weather as RDO['weather']) ?? 'sunny',
+        notes:       String(r.notas ?? r.notes ?? ''),
+        createdAt:   String(r.created_at ?? r.createdAt ?? new Date().toISOString()),
+        updatedAt:   String(r.updated_at ?? r.updatedAt ?? new Date().toISOString()),
+      })) as any
+      if (mapped.length > 0) set({ rdos: mapped })
+    } catch {
+      // fallback: keep existing mock data
+    }
+  },
+
+  createRdoOnBackend: async (payload) => {
+    try {
+      return await apiRdoCreate(payload)
+    } catch {
+      return null
+    }
+  },
+
+  closeRdoOnBackend: async (id) => {
+    try {
+      await apiRdoClose(id)
+    } catch {
+      // silent — local state already updated
+    }
+  },
 }))
 
 // ─── EVM helpers (pure, exported for components) ──────────────────────────────

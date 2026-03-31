@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { apiManageRede, apiGeoJson, apiNucleos } from '@/lib/api'
 import type {
   Rede360Tab, GridAssetTab, NetworkAsset, Rede360ServiceOrder, Outage,
   CircuitAsset, DeviceAsset, NWSWeatherStation, CustomerRecord,
@@ -44,9 +45,15 @@ interface Rede360State {
   updateAsset: (id: string, updates: Partial<NetworkAsset>) => void
   setLayerVisibility: (key: string, visible: boolean) => void
   loadDemoData: () => void
+  // Backend sync
+  fetchFromBackend: (nucleo?: string) => Promise<void>
+  nucleos: string[]
+  geoJsonFeatures: Array<Record<string, unknown>>
 }
 
 export const useRede360Store = create<Rede360State>((set) => ({
+  nucleos: [],
+  geoJsonFeatures: [],
   activeTab: 'home',
   assets: MOCK_ASSETS,
   serviceOrders: MOCK_SERVICE_ORDERS,
@@ -111,4 +118,50 @@ export const useRede360Store = create<Rede360State>((set) => ({
     vegetationPoints: MOCK_VEGETATION_POINTS,
     hardeningPoints: MOCK_HARDENING_POINTS,
   }),
+
+  fetchFromBackend: async (nucleo) => {
+    try {
+      const [redeRes, geoRes, nucleosRes] = await Promise.allSettled([
+        apiManageRede(nucleo),
+        apiGeoJson(nucleo),
+        apiNucleos(),
+      ])
+
+      if (redeRes.status === 'fulfilled') {
+        const { nodes, edges } = redeRes.value
+        const mappedAssets: any[] = (nodes ?? []).map((n: any) => ({
+          id:       String(n.id ?? crypto.randomUUID()),
+          name:     String(n.nome ?? n.name ?? n.id ?? ''),
+          type:     String(n.tipo ?? n.type ?? 'generic') as NetworkAsset['type'],
+          status:   (n.status as NetworkAsset['status']) ?? 'active',
+          lat:      Number(n.lat ?? n.y ?? 0),
+          lng:      Number(n.lng ?? n.x ?? 0),
+          metadata: (n.metadata as Record<string, unknown>) ?? {},
+        }))
+        const mappedCircuits: any[] = (edges ?? []).map((e: any, i: number) => ({
+          id:          String((e as Record<string,unknown>).id ?? `edge-${i}`),
+          name:        String((e as Record<string,unknown>).nome ?? (e as Record<string,unknown>).name ?? `Trecho ${i + 1}`),
+          voltage:     Number((e as Record<string,unknown>).tensao ?? 0),
+          lengthKm:    Number(e.ext ?? 0) / 1000,
+          status:      e.status ?? 'energized',
+          conductorType: String((e as Record<string,unknown>).condutor ?? 'unknown'),
+          phases:      Number((e as Record<string,unknown>).fases ?? 3),
+          capacity:    Number(e.c ?? 0),
+          metadata:    {},
+        }))
+        if (mappedAssets.length > 0) set({ assets: mappedAssets })
+        if (mappedCircuits.length > 0) set({ circuitAssets: mappedCircuits })
+      }
+
+      if (geoRes.status === 'fulfilled') {
+        set({ geoJsonFeatures: geoRes.value.features ?? [] })
+      }
+
+      if (nucleosRes.status === 'fulfilled') {
+        set({ nucleos: (nucleosRes.value.items ?? []).map((n) => n.nome) })
+      }
+    } catch {
+      // fallback: keep existing mock data
+    }
+  },
 }))
