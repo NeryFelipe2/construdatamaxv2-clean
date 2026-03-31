@@ -123,6 +123,9 @@ interface BimState {
   setForgeToken(token: string, expiry: number): void
   setForgeUrn(urn: string): void
   toggleDroneMode(): void
+
+  // Pipeline integration
+  loadFromPipeline(): void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -447,5 +450,56 @@ export const useBimStore = create<BimState>((set, get) => ({
     } catch { /* noop */ }
     set({ forgeClientId: clientId })
     void clientSecret  // stored in localStorage only, not in state
+  },
+
+  /**
+   * Carrega geometria do pipelineStore central (integração ConstruData).
+   * Converte nós e segmentos do pipeline em projeto BIM 3D.
+   */
+  loadFromPipeline() {
+    import('./pipelineStore').then(({ usePipelineStore }) => {
+      const { nodes, segments, hasRealData, summary } = usePipelineStore.getState()
+      if (!hasRealData || segments.length === 0) return
+
+      const nodeMap = new Map(nodes.map(n => [n.id, n]))
+
+      const bimSegments: BimSegment[] = segments.map((seg, i) => {
+        const from = nodeMap.get(seg.fromNodeId)
+        const to = nodeMap.get(seg.toNodeId)
+        // Convert lat/lng to local XY (meters from first node)
+        const ref = nodes[0] ?? { lat: 0, lng: 0 }
+        const x1 = from ? (from.lng - ref.lng) * 111320 * Math.cos(ref.lat * Math.PI / 180) : 0
+        const y1 = from ? (from.lat - ref.lat) * 110540 : 0
+        const z1 = from?.elevation != null ? -from.elevation : -(from?.depth ?? 1.5)
+        const x2 = to ? (to.lng - ref.lng) * 111320 * Math.cos(ref.lat * Math.PI / 180) : 0
+        const y2 = to ? (to.lat - ref.lat) * 110540 : 0
+        const z2 = to?.elevation != null ? -to.elevation : -(to?.depth ?? 1.5)
+
+        return {
+          id: seg.id,
+          trechoCode: seg.label ?? `T${String(i + 1).padStart(3, '0')}`,
+          vertices: [[x1, y1, z1], [x2, y2, z2]] as [number, number, number][],
+          diameter: seg.diameter ?? 200,
+          material: seg.material ?? 'PVC',
+          networkType: seg.networkType,
+          layer: seg.networkType === 'sewer' ? 'REDE_ESGOTO' : seg.networkType === 'water' ? 'REDE_AGUA' : 'REDE_DRENAGEM',
+          slope: seg.slope,
+        }
+      })
+
+      const proj: BimProject = {
+        id: `pipeline-${Date.now()}`,
+        name: summary?.arquivo ?? 'Projeto Pipeline',
+        description: `Importado do pipeline — ${summary?.nucleo ?? 'N/A'}`,
+        segments: bimSegments,
+        layers: [
+          { id: 'REDE_ESGOTO', name: 'Rede Esgoto', color: '#2abfdc', visible: true },
+          { id: 'REDE_AGUA', name: 'Rede Água', color: '#38bdf8', visible: true },
+          { id: 'REDE_DRENAGEM', name: 'Rede Drenagem', color: '#4ade80', visible: true },
+        ],
+      }
+
+      get().addProject(proj)
+    })
   },
 }))

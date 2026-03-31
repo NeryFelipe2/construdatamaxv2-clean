@@ -137,6 +137,9 @@ interface PlanejamentoState {
   // Demo / clear
   loadDemoData: () => void
   clearData:    () => void
+
+  // Pipeline integration
+  loadFromPipeline: () => void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -462,4 +465,39 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
       abcItems:          [],
       projectBudget:     0,
     }),
+
+  /**
+   * Carrega trechos reais do pipelineStore (integração central ConstruData).
+   * Converte segmentos do pipeline em trechos do Planejamento.
+   */
+  loadFromPipeline: () => {
+    import('./pipelineStore').then(({ usePipelineStore }) => {
+      const { segments, nodes, hasRealData, nsList } = usePipelineStore.getState()
+      if (!hasRealData || segments.length === 0) return
+
+      const nodeMap = new Map(nodes.map(n => [n.id, n]))
+
+      const newTrechos: PlanTrecho[] = segments.map((seg, idx) => {
+        const from = nodeMap.get(seg.fromNodeId)
+        const to = nodeMap.get(seg.toNodeId)
+        const depthFrom = from?.depth ?? 1.5
+        const depthTo = to?.depth ?? 1.5
+        return {
+          id: crypto.randomUUID(),
+          code: seg.label ?? `T${String(idx + 1).padStart(3, '0')}`,
+          description: `${from?.label ?? seg.fromNodeId} → ${to?.label ?? seg.toNodeId}`,
+          lengthM: seg.length ?? 50,
+          depthM: Math.max(depthFrom, depthTo),
+          diameterMm: seg.diameter ?? 200,
+          soilType: 'normal' as const,
+          requiresShoring: (Math.max(depthFrom, depthTo)) > 3,
+        }
+      })
+
+      set((s) => ({
+        trechos: newTrechos,
+        isScheduleDirty: true,
+      }))
+    })
+  },
 }))

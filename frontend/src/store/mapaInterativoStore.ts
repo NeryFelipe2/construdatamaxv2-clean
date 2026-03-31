@@ -156,6 +156,7 @@ interface MapaInterativoState {
   setMapMode: (mode: 'saneamento' | 'construcao' | null) => void
   setSelectedProjectId: (id: string | null) => void
   setActiveNetworkType: (t: MapNetworkType) => void
+  loadFromPipeline: () => void
 }
 
 // ─── Helper: push undo snapshot ───────────────────────────────────────────
@@ -284,4 +285,33 @@ export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
   setSelectedProjectId: (id) => set({ selectedProjectId: id }),
 
   setActiveNetworkType: (t) => set({ activeNetworkType: t }),
+
+  /**
+   * Carrega nós e trechos reais do pipelineStore (integração central).
+   * Chamado automaticamente quando o pipeline gera dados novos.
+   */
+  loadFromPipeline: () => {
+    import('./pipelineStore').then(({ usePipelineStore }) => {
+      const { nodes: pNodes, segments: pSegs, hasRealData } = usePipelineStore.getState()
+      if (!hasRealData || pNodes.length === 0) return
+      const mapped = pNodes.map((n) => ({
+        id: n.id,
+        lat: n.lat,
+        lng: n.lng,
+        label: n.label,
+        nodeType: n.nodeType,
+        elevation: n.elevation,
+      })) as MapNode[]
+      const mappedSegs = pSegs.map((s) => ({
+        id: s.id,
+        fromNodeId: s.fromNodeId,
+        toNodeId: s.toNodeId,
+        networkType: s.networkType,
+        diameter: s.diameter,
+        material: s.material,
+        label: s.label,
+      })) as MapSegment[]
+      set({ nodes: mapped, segments: mappedSegs, history: [], mapMode: 'saneamento' })
+    })
+  },
 }))

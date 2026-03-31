@@ -476,7 +476,21 @@ select {
 }
 
 .form-field input[type="file"] {
-  padding: 6px;
+  padding: 8px;
+  background: #111827;
+  border: 1px dashed #374151;
+  border-radius: 6px;
+  color: #e2e8f0;
+  cursor: pointer;
+  width: 100%;
+}
+.form-field input[type="file"]:hover {
+  border-color: #00e6a0;
+  background: #1a2332;
+}
+.form-field input[type="file"]:hover {
+  border-color: #00e6a0;
+  background: #1a2332;
 }
 
 .form-check {
@@ -565,6 +579,12 @@ select {
 
 .output-item .desc {
   color: #8899aa;
+}
+
+/* ─── LEAFLET Z-INDEX FIX ─── */
+
+.leaflet-container {
+  z-index: 0 !important;
 }
 
 /* ─── IFRAME MODULE ─── */

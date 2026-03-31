@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { usePipelineStore } from "@/store/pipelineStore";
 
 /* ─── Types ─── */
 
@@ -354,7 +355,34 @@ export default function LegacyApp() {
       setUploadMessage(`Projeto processado com ${cleanText(d.motor ?? selectedMotor).toUpperCase()}. ${d.ns_geradas ?? 0} NS geradas.`);
       if (d.nucleo) setSelectedNucleo(d.nucleo);
       setRefreshKey(v => v + 1);
+      // ── Publicar resultado na store central para integração com todos os módulos ──
+      usePipelineStore.getState().publishPipelineResult({
+        n_pvs: d.n_pvs ?? 0,
+        n_trechos: d.n_trechos ?? 0,
+        extensao_total_m: (d.meta as any)?.extensao_total_m ?? 0,
+        ns_geradas: d.ns_geradas ?? 0,
+        ns_erros: d.ns_erros ?? 0,
+        nucleo: d.nucleo ?? uploadNucleo,
+        motor: d.motor ?? selectedMotor,
+        arquivo: d.arquivo ?? uploadFile.name,
+        job_id: d.job_id,
+      });
     } catch (err) { setUploadMessage(err instanceof Error ? err.message : "Falha ao importar projeto"); }
+    finally { setUploading(false); }
+  }
+
+  async function handleApenasLer() {
+    if (!uploadFile) { setUploadMessage("Escolha um arquivo antes de ler."); return; }
+    setUploading(true); setUploadMessage("");
+    const fd = new FormData();
+    fd.append("arquivo", uploadFile);
+    try {
+      const r = await fetch(apiUrl("/api/processamento/apenas-ler"), { method: "POST", body: fd });
+      const d = (await r.json()) as ProcessJob & { detail?: string; rede?: { pvs: Record<string, any>; trechos: any[] } };
+      if (!r.ok) throw new Error(d.detail || "Falha ao ler arquivo");
+      setLatestJob(d);
+      setUploadMessage(`Arquivo lido: ${d.n_pvs ?? 0} PVs, ${d.n_trechos ?? 0} trechos, ${((d as any).extensao_total_m ?? 0).toFixed(1)}m. Clique IMPORTAR E GERAR para criar NS.`);
+    } catch (err) { setUploadMessage(err instanceof Error ? err.message : "Falha ao ler arquivo"); }
     finally { setUploading(false); }
   }
 
@@ -439,17 +467,18 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Pipeline de Processamento</div>
         <div className="action-row">
-          <button className="action-btn btn-green" type="button" onClick={() => document.getElementById("import-form")?.scrollIntoView()}>
-            PIPELINE COMPLETO
+          <button className="action-btn btn-green" type="button" onClick={() => {
+            document.getElementById("file-input")?.click();
+          }}>
+            📂 SELECIONAR ARQUIVO
           </button>
-          <button className="action-btn btn-cyan" type="button" onClick={() => {
-            const el = document.getElementById("file-input") as HTMLInputElement | null;
-            el?.click();
-          }}>APENAS LER</button>
-          <button className="action-btn btn-white" type="button" disabled>DWG SEMANTICO</button>
-          <button className="action-btn btn-white" type="button" disabled>DWG UNIVERSAL</button>
-          <button className="action-btn btn-purple" type="button" disabled>BATCH NUCLEOS</button>
-          <button className="action-btn btn-orange" type="button" disabled>BATCH PROLONGAMENTOS</button>
+          <button className="action-btn btn-cyan" type="button" onClick={handleApenasLer} disabled={uploading || !uploadFile}>
+            📄 APENAS LER
+          </button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG SEMANTICO</button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG UNIVERSAL</button>
+          <button className="action-btn btn-purple" type="button" disabled title="Em desenvolvimento">BATCH NUCLEOS</button>
+          <button className="action-btn btn-orange" type="button" disabled title="Em desenvolvimento">BATCH PROLONGAMENTOS</button>
           <a className="action-btn btn-dark" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR SAIDA</a>
           <a className="action-btn btn-white" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">EDITOR HTML</a>
         </div>
@@ -472,9 +501,19 @@ export default function LegacyApp() {
               <label>Nucleo</label>
               <input type="text" placeholder="Ex.: Teteu" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
             </div>
-            <div className="form-field">
-              <label>Arquivo</label>
-              <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} />
+            <div className="form-field" style={{ flex: 2 }}>
+              <label>Arquivo de Entrada (DXF, DWG, LandXML, JSON)</label>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                <button type="button" className="action-btn btn-cyan" onClick={() => document.getElementById("file-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
+                  📁 SELECIONAR ARQUIVO
+                </button>
+              </div>
+              {uploadFile && (
+                <div style={{ marginTop: 4, fontSize: 12, color: "#00ff88" }}>
+                  ✓ {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                </div>
+              )}
             </div>
             <div className="form-field">
               <label>Motor de NS</label>
@@ -489,8 +528,8 @@ export default function LegacyApp() {
             <label>Modo rapido</label>
           </div>
           <div className="action-row">
-            <button className="action-btn btn-green" type="submit" disabled={uploading}>
-              {uploading ? "Processando..." : "IMPORTAR E GERAR"}
+            <button className="action-btn btn-green" type="submit" disabled={uploading || !uploadFile}>
+              {uploading ? "⏳ Processando..." : "🚀 IMPORTAR E GERAR"}
             </button>
           </div>
         </form>

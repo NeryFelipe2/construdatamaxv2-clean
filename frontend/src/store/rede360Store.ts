@@ -164,4 +164,36 @@ export const useRede360Store = create<Rede360State>((set) => ({
       // fallback: keep existing mock data
     }
   },
+
+  /**
+   * Carrega dados do pipelineStore central (integração ConstruData).
+   * Converte nós e segmentos do pipeline em assets e circuitos da Rede 360.
+   */
+  loadFromPipeline: () => {
+    import('./pipelineStore').then(({ usePipelineStore }) => {
+      const { nodes, segments, geoJson, nucleos, hasRealData } = usePipelineStore.getState()
+      if (!hasRealData) return
+
+      if (nodes.length > 0) {
+        const mappedAssets: NetworkAsset[] = nodes.map((n) => ({
+          id: n.id,
+          name: n.label,
+          type: n.nodeType === 'structure' ? 'substation' : n.nodeType === 'endpoint' ? 'meter' : 'pole',
+          status: 'active',
+          lat: n.lat,
+          lng: n.lng,
+          metadata: { elevation: n.elevation, depth: n.depth },
+        })) as unknown as NetworkAsset[]
+        set({ assets: mappedAssets })
+      }
+
+      if (geoJson) {
+        set({ geoJsonFeatures: geoJson.features ?? [] })
+      }
+
+      if (nucleos.length > 0) {
+        set({ nucleos })
+      }
+    })
+  },
 }))
