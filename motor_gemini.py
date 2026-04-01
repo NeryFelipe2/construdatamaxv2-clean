@@ -33,7 +33,7 @@ FUNCIONALIDADES:
 pip install google-genai
 """
 
-import json, os, base64, sys
+import json, os, base64, sys, argparse
 from pathlib import Path
 from datetime import datetime
 
@@ -97,9 +97,9 @@ def _get_client():
 
 
 # Modelos disponíveis
-MODELO_RAPIDO = "gemini-2.5-flash"      # Rápido + barato. Bom pra fotos e consultas simples.
-MODELO_PRO = "gemini-2.5-pro"           # Mais inteligente. Bom pra análise complexa e PDFs.
-MODELO_FLASH3 = "gemini-3-flash-preview" # Mais recente. Testar disponibilidade.
+MODELO_RAPIDO = "gemini-1.5-flash"      # Rápido + barato.
+MODELO_PRO = "gemini-1.5-pro"           # Mais inteligente.
+MODELO_V2 = "gemini-2.0-flash-exp"      # Próxima geração.
 
 
 # ══════════════════════════════════════════════════════════
@@ -563,25 +563,102 @@ def verificar_conexao():
 # CLI
 # ══════════════════════════════════════════════════════════
 
+def main():
+    parser = argparse.ArgumentParser(description="ConstruData HydroNetwork — Gemini CLI")
+    subparsers = parser.add_subparsers(dest="command", help="Comandos disponíveis")
+    subparsers.add_parser("setup", help="Configurar API Key")
+    subparsers.add_parser("status", help="Verificar conexão")
+    
+    analyze_parser = subparsers.add_parser("analyze", help="Analisar foto")
+    analyze_parser.add_argument("path", help="Caminho da foto")
+    analyze_parser.add_argument("--type", choices=["vala", "pv", "geral", "auto"], default="auto")
+
+    ask_parser = subparsers.add_parser("ask", help="Perguntar sobre dados")
+    ask_parser.add_argument("query", help="Sua pergunta")
+    ask_parser.add_argument("--data", help="JSON com dados")
+
+    args = parser.parse_args()
+
+    if args.command == "setup":
+        setup_api_key()
+    elif args.command == "status":
+        s = verificar_conexao()
+        print(f"Status: {s['status']} | {s['msg']}")
+    elif args.command == "analyze":
+        res = analisar_foto(args.path, tipo=args.type)
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+    elif args.command == "ask":
+        pvs, trechos = {}, []
+        if args.data and os.path.exists(args.data):
+            with open(args.data, 'r') as f:
+                d = json.load(f)
+                pvs, trechos = d.get('pvs', {}), d.get('trechos', [])
+        print(consultar(args.query, pvs, trechos))
+    else:
+        parser.print_help()
+
+def main():
+    parser = argparse.ArgumentParser(description="ConstruData HydroNetwork — Gemini CLI")
+    subparsers = parser.add_subparsers(dest="command", help="Comandos disponíveis")
+
+    subparsers.add_parser("setup", help="Configurar API Key do Gemini")
+    subparsers.add_parser("status", help="Verificar conexão com Gemini")
+
+    analyze_parser = subparsers.add_parser("analyze", help="Analisar foto de obra ou projeto")
+    analyze_parser.add_argument("path", help="Caminho para a foto ou pasta")
+    analyze_parser.add_argument("--type", choices=["vala", "pv", "geral", "auto"], default="auto")
+
+    ask_parser = subparsers.add_parser("ask", help="Fazer pergunta técnica sobre dados")
+    ask_parser.add_argument("query", help="Sua pergunta em linguagem natural")
+    ask_parser.add_argument("--data", help="Caminho para arquivo JSON com dados (opcional)")
+
+    args = parser.parse_args()
+
+    if args.command == "setup":
+        setup_api_key()
+    elif args.command == "status":
+        s = verificar_conexao()
+        print(f"Status: {s['status']} | {s['msg']}")
+    elif args.command == "analyze":
+        p = Path(args.path)
+        if p.is_dir():
+            analisar_fotos_lote(args.path)
+        else:
+            res = analisar_foto(args.path, tipo=args.type)
+            print(json.dumps(res, indent=2, ensure_ascii=False))
+    elif args.command == "ask":
+        pvs, trechos = {}, []
+        if args.data and os.path.exists(args.data):
+            with open(args.data, 'r') as f:
+                d = json.load(f)
+                pvs, trechos = d.get('pvs', {}), d.get('trechos', [])
+        res = consultar(args.query, pvs, trechos)
+        print(f"\n[Gemini]: {res}")
+    else:
+        parser.print_help()
+
 if __name__ == "__main__":
-    print("╔══════════════════════════════════════════════════════════╗")
-    print("║  ConstruData HydroNetwork — Gemini Integration          ║")
-    print("╠══════════════════════════════════════════════════════════╣")
-    print("║  Funcionalidades:                                        ║")
-    print("║  1. analisar_foto(path)     → análise de foto de obra   ║")
-    print("║  2. ler_pdf_projeto(path)   → extrai dados de PDF       ║")
-    print("║  3. consultar(pergunta,...) → assistente inteligente     ║")
-    print("║  4. gerar_resumo_executivo()→ relatório gerencial       ║")
-    print("║  5. setup_api_key()         → configurar API            ║")
-    print("╚══════════════════════════════════════════════════════════╝")
-    
-    # Verificar status
-    status = verificar_conexao()
-    print(f"\n  Status: {status['status']} — {status['msg']}")
-    
-    if status["status"] == "SEM_KEY":
-        print("\n  Para configurar:")
-        print("    python motor_gemini.py setup")
+    if len(sys.argv) > 1:
+        main()
+    else:
+        print("╔══════════════════════════════════════════════════════════╗")
+        print("║  ConstruData HydroNetwork — Gemini Integration          ║")
+        print("╠══════════════════════════════════════════════════════════╣")
+        print("║  Funcionalidades:                                        ║")
+        print("║  1. analisar_foto(path)     → análise de foto de obra   ║")
+        print("║  2. ler_pdf_projeto(path)   → extrai dados de PDF       ║")
+        print("║  3. consultar(pergunta,...) → assistente inteligente     ║")
+        print("║  4. gerar_resumo_executivo()→ relatório gerencial       ║")
+        print("║  5. setup_api_key()         → configurar API            ║")
+        print("╚══════════════════════════════════════════════════════════╝")
+        
+        # Verificar status
+        status = verificar_conexao()
+        print(f"\n  Status: {status['status']} — {status['msg']}")
+        
+        if status["status"] == "SEM_KEY":
+            print("\n  Para configurar:")
+            print("    python motor_gemini.py setup")
     
     if len(sys.argv) > 1 and sys.argv[1] == "setup":
         setup_api_key()

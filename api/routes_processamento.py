@@ -134,6 +134,82 @@ def api_processamento_artefato(job_id: str, rel_path: str):
     return FileResponse(target, filename=target.name)
 
 
+@router.post("/api/processamento/apenas-ler")
+async def api_processamento_apenas_ler(
+    arquivo: UploadFile = File(...),
+):
+    """Apenas lê o arquivo e retorna a rede (PVs + trechos) sem gerar NS."""
+    filename = arquivo.filename or "projeto"
+    suffix = Path(filename).suffix.lower()
+    if suffix not in ALLOWED_SUFFIXES:
+        raise HTTPException(status_code=400, detail="Formato nao suportado. Use JSON, XML/LandXML, DXF ou DWG.")
+    if suffix == ".landxml":
+        suffix = ".xml"
+
+    job_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
+    job_dir = JOBS_DIR / job_id
+    input_dir = job_dir / "input"
+    input_dir.mkdir(parents=True, exist_ok=True)
+
+    upload_path = input_dir / f"projeto{suffix}"
+    _save_upload(arquivo, upload_path)
+
+    try:
+        if suffix == ".json":
+            payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
+            pvs, trechos = _extract_network_from_json(payload)
+            fonte = "JSON"
+        elif suffix == ".xml":
+            from ler_landxml import ler_landxml
+            pvs, trechos, _, meta = ler_landxml(str(upload_path))
+            fonte = meta.get("motor") or "LandXML"
+        elif suffix == ".dxf":
+            try:
+                from ler_dxf_gdal import ler_dxf_gdal
+            except ImportError as exc:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"DXF indisponivel: {exc}. Use LandXML ou JSON.",
+                ) from exc
+            pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
+            fonte = meta.get("motor") or "DXF"
+        elif suffix == ".dwg":
+            try:
+                from ler_dwg_universal import ler_dwg_universal
+            except ImportError as exc:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"DWG indisponivel: {exc}. Use DXF, LandXML ou JSON.",
+                ) from exc
+            pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
+            fonte = meta.get("motor") or "DWG"
+        else:
+            raise HTTPException(status_code=400, detail="Formato nao suportado.")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Falha ao ler arquivo: {exc}") from exc
+
+    ext_total = sum(t.get("ext_m", 0) for t in trechos)
+    manifest = {
+        "job_id": job_id,
+        "status": "ok",
+        "fonte": fonte,
+        "arquivo": filename,
+        "n_pvs": len(pvs),
+        "n_trechos": len(trechos),
+        "extensao_total_m": ext_total,
+        "ns_geradas": 0,
+        "ns_erros": 0,
+        "artifacts": [],
+        "created_at": datetime.now().isoformat(),
+        "rede": {"pvs": pvs, "trechos": trechos},
+    }
+    _job_manifest_path(job_id).write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+    return manifest
+
+
+
 @router.post("/api/processamento/importar")
 async def api_processamento_importar(
     nucleo: str = Form(default=""),

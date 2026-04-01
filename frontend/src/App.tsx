@@ -64,6 +64,10 @@ const navItems = [
 
   { section: "WhatsApp" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
+
+  { section: "Módulos Offline (Nativos)" },
+  { label: "Construplan Brutal", icon: Target, to: "/app/construplan-brutal" },
+  { label: "Dash Cenários", icon: LayoutDashboard, to: "/app/cenarios-offline" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -217,6 +221,15 @@ function NsV5Page() {
   );
 }
 
+// ─── Offline IFrame Wrapper Brutal ──────────────────────────────────────────
+function OfflineIframePage({ url }: { url: string }) {
+  return (
+    <div className="w-full h-full bg-[#040608] overflow-hidden">
+      <iframe src={url} className="w-full h-full border-none m-0 p-0 block" title="Módulo Offline" />
+    </div>
+  );
+}
+
 // ─── App ────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
@@ -243,6 +256,11 @@ export default function App() {
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
           <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
           <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
+          
+          {/* OFFLINE INTEGRATION */}
+          <Route path="construplan-brutal" element={<OfflineIframePage url="/offline_modules/construplan.html" />} />
+          <Route path="cenarios-offline" element={<OfflineIframePage url="/offline_modules/cenarios.html" />} />
+
           <Route path="*" element={<Navigate to="/app/ns-v5" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />

@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { usePipelineStore } from "@/store/pipelineStore";
 
 /* ─── Types ─── */
 
@@ -354,7 +355,34 @@ export default function LegacyApp() {
       setUploadMessage(`Projeto processado com ${cleanText(d.motor ?? selectedMotor).toUpperCase()}. ${d.ns_geradas ?? 0} NS geradas.`);
       if (d.nucleo) setSelectedNucleo(d.nucleo);
       setRefreshKey(v => v + 1);
+      // ── Publicar resultado na store central para integração com todos os módulos ──
+      usePipelineStore.getState().publishPipelineResult({
+        n_pvs: d.n_pvs ?? 0,
+        n_trechos: d.n_trechos ?? 0,
+        extensao_total_m: (d.meta as any)?.extensao_total_m ?? 0,
+        ns_geradas: d.ns_geradas ?? 0,
+        ns_erros: d.ns_erros ?? 0,
+        nucleo: d.nucleo ?? uploadNucleo,
+        motor: d.motor ?? selectedMotor,
+        arquivo: d.arquivo ?? uploadFile.name,
+        job_id: d.job_id,
+      });
     } catch (err) { setUploadMessage(err instanceof Error ? err.message : "Falha ao importar projeto"); }
+    finally { setUploading(false); }
+  }
+
+  async function handleApenasLer() {
+    if (!uploadFile) { setUploadMessage("Escolha um arquivo antes de ler."); return; }
+    setUploading(true); setUploadMessage("");
+    const fd = new FormData();
+    fd.append("arquivo", uploadFile);
+    try {
+      const r = await fetch(apiUrl("/api/processamento/apenas-ler"), { method: "POST", body: fd });
+      const d = (await r.json()) as ProcessJob & { detail?: string; rede?: { pvs: Record<string, any>; trechos: any[] } };
+      if (!r.ok) throw new Error(d.detail || "Falha ao ler arquivo");
+      setLatestJob(d);
+      setUploadMessage(`Arquivo lido: ${d.n_pvs ?? 0} PVs, ${d.n_trechos ?? 0} trechos, ${((d as any).extensao_total_m ?? 0).toFixed(1)}m. Clique IMPORTAR E GERAR para criar NS.`);
+    } catch (err) { setUploadMessage(err instanceof Error ? err.message : "Falha ao ler arquivo"); }
     finally { setUploading(false); }
   }
 
@@ -439,17 +467,18 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Pipeline de Processamento</div>
         <div className="action-row">
-          <button className="action-btn btn-green" type="button" onClick={() => document.getElementById("import-form")?.scrollIntoView()}>
-            PIPELINE COMPLETO
+          <button className="action-btn btn-green" type="button" onClick={() => {
+            document.getElementById("file-input")?.click();
+          }}>
+            📂 SELECIONAR ARQUIVO
           </button>
-          <button className="action-btn btn-cyan" type="button" onClick={() => {
-            const el = document.getElementById("file-input") as HTMLInputElement | null;
-            el?.click();
-          }}>APENAS LER</button>
-          <button className="action-btn btn-white" type="button" disabled>DWG SEMANTICO</button>
-          <button className="action-btn btn-white" type="button" disabled>DWG UNIVERSAL</button>
-          <button className="action-btn btn-purple" type="button" disabled>BATCH NUCLEOS</button>
-          <button className="action-btn btn-orange" type="button" disabled>BATCH PROLONGAMENTOS</button>
+          <button className="action-btn btn-cyan" type="button" onClick={handleApenasLer} disabled={uploading || !uploadFile}>
+            📄 APENAS LER
+          </button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG SEMANTICO</button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG UNIVERSAL</button>
+          <button className="action-btn btn-purple" type="button" disabled title="Em desenvolvimento">BATCH NUCLEOS</button>
+          <button className="action-btn btn-orange" type="button" disabled title="Em desenvolvimento">BATCH PROLONGAMENTOS</button>
           <a className="action-btn btn-dark" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR SAIDA</a>
           <a className="action-btn btn-white" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">EDITOR HTML</a>
         </div>
@@ -472,9 +501,19 @@ export default function LegacyApp() {
               <label>Nucleo</label>
               <input type="text" placeholder="Ex.: Teteu" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
             </div>
-            <div className="form-field">
-              <label>Arquivo</label>
-              <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} />
+            <div className="form-field" style={{ flex: 2 }}>
+              <label>Arquivo de Entrada (DXF, DWG, LandXML, JSON)</label>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                <button type="button" className="action-btn btn-cyan" onClick={() => document.getElementById("file-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
+                  📁 SELECIONAR ARQUIVO
+                </button>
+              </div>
+              {uploadFile && (
+                <div style={{ marginTop: 4, fontSize: 12, color: "#00ff88" }}>
+                  ✓ {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                </div>
+              )}
             </div>
             <div className="form-field">
               <label>Motor de NS</label>
@@ -489,8 +528,8 @@ export default function LegacyApp() {
             <label>Modo rapido</label>
           </div>
           <div className="action-row">
-            <button className="action-btn btn-green" type="submit" disabled={uploading}>
-              {uploading ? "Processando..." : "IMPORTAR E GERAR"}
+            <button className="action-btn btn-green" type="submit" disabled={uploading || !uploadFile}>
+              {uploading ? "⏳ Processando..." : "🚀 IMPORTAR E GERAR"}
             </button>
           </div>
         </form>
@@ -1072,50 +1111,68 @@ export default function LegacyApp() {
   }
 
   return (
-    <div className="shell">
-      {/* Header */}
-      <header className="header">
-        <div className="header-left">
-          <div className="header-logo">C</div>
-          <span className="header-title">
-            CONSTRUDATA<span className="header-title-accent"> HydroNetwork</span>
-          </span>
-          <span className="header-badge badge-green">v9.0</span>
-          <span className="badge-text">{selectedMotorLabel}</span>
-          <span className={`header-dot ${health?.ok ? "online" : ""}`} />
+    <div className="flex flex-col h-full bg-[#0a0e1a] text-[#c8d6e5] relative font-['IBM_Plex_Mono',monospace]">
+      <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-[#1a2035] bg-[#0d1120]/80 backdrop-blur-md sticky top-0 z-10">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00e6a0] to-[#0088cc] shadow-[0_0_15px_rgba(0,230,160,0.3)]">
+            <span className="font-bold text-[#0a0e1a] text-lg">C</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              Motor Principal NS
+              <span className="px-2 py-0.5 rounded-md bg-[#1a2035] text-xs text-[#00e6a0] uppercase tracking-wider font-semibold border border-[#00e6a0]/20">{selectedMotorLabel}</span>
+            </h1>
+            <p className="text-xs text-[#8899aa] mt-0.5">{projectName} • {companyName}</p>
+          </div>
         </div>
-        <div className="header-right">
-          <span>{companyName}</span>
-          <span className="header-user">{projectName}</span>
-          <button className="action-btn btn-ghost" style={{ padding: "4px 10px", fontSize: 11 }} onClick={() => setRefreshKey(v => v + 1)}>
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2 border border-[#1a2035] bg-[#0d1120] px-3 py-1.5 rounded-lg">
+            <span className="text-[10px] uppercase tracking-wider text-[#667788] font-semibold">Backend</span>
+            {health?.ok ? (
+              <span className="flex h-2.5 w-2.5 rounded-full bg-[#00e6a0] shadow-[0_0_8px_rgba(0,230,160,0.8)] animate-pulse" />
+            ) : (
+              <span className="flex h-2.5 w-2.5 rounded-full bg-red-500" />
+            )}
+          </div>
+          <button 
+            onClick={() => setRefreshKey(v => v + 1)}
+            className="px-4 py-2 border border-[#1a2035] bg-[#0d1120] hover:bg-[#1a2035] hover:text-white transition-colors rounded-lg text-xs font-semibold tracking-wider uppercase text-[#c8d6e5]"
+          >
             ATUALIZAR
           </button>
         </div>
       </header>
 
-      {/* Tab bar */}
-      <nav className="tab-bar">
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
+      <div className="shrink-0 border-b border-[#1a2035] bg-[#0a0e1a] px-2 pt-2">
+        <nav className="flex items-center gap-1 overflow-x-auto hide-scrollbar pb-2">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "whitespace-nowrap px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all duration-300 border focus:outline-none",
+                activeTab === tab.id 
+                  ? "bg-[#00e6a0]/10 text-[#00e6a0] border-[#00e6a0]/30 shadow-[0_0_10px_rgba(0,230,160,0.1)]" 
+                  : "text-[#667788] border-transparent hover:text-[#c8d6e5] hover:bg-[#1a2035]/50"
+              )}
+            >
+              {tab.label.replace(/^\[\d+\]\s*/, "")}
+            </button>
+          ))}
+        </nav>
+      </div>
 
-      {/* Error bar */}
       {error && (
-        <div className="msg msg-err" style={{ margin: 0, borderRadius: 0 }}>
+        <div className="shrink-0 border-b border-red-500/30 bg-red-500/10 px-6 py-3 text-xs font-medium text-red-500 flex items-center gap-2">
+          <span className="shrink-0 w-4 h-4 rounded-full border border-red-500 flex items-center justify-center font-bold">!</span>
           {error}
         </div>
       )}
 
-      {/* Tab content */}
-      <main className="tab-content">
-        {renderTabContent()}
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-gradient-to-b from-[#0a0e1a] to-[#05080f]">
+        <div className="max-w-[1600px] mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-20">
+          {renderTabContent()}
+        </div>
       </main>
     </div>
   );

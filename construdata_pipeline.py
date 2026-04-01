@@ -210,7 +210,7 @@ def _gerar_xlsx_automaticos(pvs, trechos, nucleo, out_dir):
     return resultado
 
 
-def run_pipeline(input_path, nucleo=None, out_dir=None, data_inicio=None):
+def run_pipeline(input_path, nucleo=None, out_dir=None, data_inicio=None, only_read=False):
     """
     Executa o pipeline completo.
 
@@ -274,9 +274,17 @@ def run_pipeline(input_path, nucleo=None, out_dir=None, data_inicio=None):
 
     ext_total = sum(t.get("ext_m", 0) for t in trechos)
     print(f"  ✓ {len(pvs)} PVs | {len(trechos)} trechos | {ext_total:.0f}m")
-    results["pvs"] = len(pvs)
-    results["trechos"] = len(trechos)
-    results["extensao_m"] = round(ext_total, 1)
+    results["n_pvs"] = len(pvs)
+    results["n_trechos"] = len(trechos)
+    results["pvs"] = pvs
+    results["trechos"] = trechos
+    results["extensao_total_m"] = round(ext_total, 1)
+    
+    if only_read:
+        return results
+    
+    if only_read:
+        return results
     results["meta_leitura"] = meta
 
     print("\n▶ ETAPA 2/6 - Pacote completo de NS + XLSX")

@@ -29,6 +29,7 @@ interface TorreActions {
   deleteRisk: (siteId: string, riskId: string) => void
   loadDemoData: () => void
   clearData: () => void
+  loadFromPipeline: () => void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -107,4 +108,58 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
 
   clearData: () =>
     set({ sites: [], selectedId: null }),
+
+  /**
+   * Carrega dados do pipelineStore central (integração ConstruData).
+   * Cria um site na Torre de Controle para cada núcleo com dados do pipeline.
+   */
+  loadFromPipeline: () => {
+    import('./pipelineStore').then(({ usePipelineStore }) => {
+      const { nodes, summary, nsList, hasRealData, dashboard } = usePipelineStore.getState()
+      if (!hasRealData || !summary) return
+
+      // Centro geográfico dos nós
+      const avgLat = nodes.length > 0 ? nodes.reduce((s, n) => s + n.lat, 0) / nodes.length : -23.55
+      const avgLng = nodes.length > 0 ? nodes.reduce((s, n) => s + n.lng, 0) / nodes.length : -46.63
+
+      const dash = dashboard as Record<string, unknown> | null
+      const pctFisico = dash?.pct_fisico != null ? Number(dash.pct_fisico) : 0
+
+      const newSite: ConstructionSite = {
+        id: `pipeline-${summary.nucleo || Date.now()}`,
+        code: `REDE-${summary.nucleo || 'PIPELINE'}`,
+        name: `Rede ${summary.nucleo || 'Pipeline'}`,
+        company: 'FCN Construções e Saneamento',
+        owner: 'SABESP',
+        manager: '',
+        description: `Rede de saneamento - ${summary.nucleo || 'Pipeline'}`,
+        status: pctFisico >= 100 ? 'completed' : pctFisico > 0 ? 'active' : 'planning',
+        street: '',
+        number: '',
+        district: '',
+        city: 'São Paulo',
+        state: 'SP',
+        cep: '',
+        buildingType: 'saneamento',
+        totalArea: dash?.ext_m_total != null ? Number(dash.ext_m_total) : 0,
+        floors: 1,
+        startDate: new Date().toISOString().slice(0, 10),
+        expectedEnd: '',
+        lat: avgLat,
+        lng: avgLng,
+        risks: [],
+      }
+
+      set((s) => {
+        // Atualiza se já existe, adiciona se não
+        const exists = s.sites.some(site => site.id === newSite.id)
+        return {
+          sites: exists
+            ? s.sites.map(site => site.id === newSite.id ? { ...site, ...newSite, risks: site.risks } : site)
+            : [...s.sites, newSite],
+          selectedId: newSite.id,
+        }
+      })
+    })
+  },
 }))
