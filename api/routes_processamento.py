@@ -210,12 +210,53 @@ async def api_processamento_apenas_ler(
 
 
 
+def _ler_upload(upload_path: Path, suffix: str) -> tuple[dict, list, dict]:
+    """Le arquivo enviado e retorna (pvs, trechos, meta)."""
+    if suffix == ".json":
+        payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
+        pvs, trechos = _extract_network_from_json(payload)
+        return pvs, trechos, {"motor": "JSON"}
+    elif suffix == ".xml":
+        from ler_landxml import ler_landxml
+        pvs, trechos, _, meta = ler_landxml(str(upload_path))
+        return pvs, trechos, meta
+    elif suffix == ".dxf":
+        from ler_dxf_gdal import ler_dxf_gdal
+        pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
+        return pvs, trechos, meta
+    elif suffix == ".dwg":
+        from ler_dwg_universal import ler_dwg_universal
+        pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
+        return pvs, trechos, meta
+    raise HTTPException(status_code=400, detail="Formato nao suportado.")
+
+
+def _interpolar_ruas_web(mapas_dir: Path, trechos: list, pvs: dict) -> int:
+    """Aplica interpolacao de ruas usando mapas enviados pelo usuario."""
+    total = 0
+    for mapa_file in sorted(mapas_dir.iterdir()):
+        if not mapa_file.is_file():
+            continue
+        ext = mapa_file.suffix.lower()
+        try:
+            if ext == ".gpkg":
+                from exportar_completo import _carregar_ruas_gpkg
+                total += _carregar_ruas_gpkg(str(mapa_file), trechos, pvs)
+            elif ext in (".dxf", ".dwg"):
+                from exportar_completo import _carregar_ruas_dxf
+                total += _carregar_ruas_dxf(str(mapa_file), trechos, pvs)
+        except Exception:
+            pass
+    return total
+
+
 @router.post("/api/processamento/importar")
 async def api_processamento_importar(
     nucleo: str = Form(default=""),
     modo_rapido: bool = Form(default=False),
     motor: str = Form(default="v9"),
     arquivo: UploadFile = File(...),
+    mapas: list[UploadFile] = File(default=[]),
 ):
     filename = arquivo.filename or "projeto"
     suffix = Path(filename).suffix.lower()
@@ -230,28 +271,36 @@ async def api_processamento_importar(
     job_dir = JOBS_DIR / job_id
     input_dir = job_dir / "input"
     output_dir = job_dir / "saida"
+    mapas_dir = job_dir / "mapas"
     input_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     upload_path = input_dir / f"projeto{suffix}"
     _save_upload(arquivo, upload_path)
 
+    # Salvar mapas de interpolacao
+    if mapas:
+        mapas_dir.mkdir(parents=True, exist_ok=True)
+        for mapa_upload in mapas:
+            if mapa_upload.filename:
+                mapa_path = mapas_dir / mapa_upload.filename
+                _save_upload(mapa_upload, mapa_path)
+
     nucleo_value = _nucleo_final(nucleo, filename)
     meta: dict[str, Any] = {"motor": "web"}
+    pvs: dict = {}
+    trechos: list = []
 
     try:
         if motor_escolhido == "v5":
-            # Motor NOVA NS v5
             import construdata_sabesp_v5_FINAL as v5_engine
 
             if suffix == ".json":
                 json_path = str(upload_path)
                 dxf_path_arg = None
-                fonte = "JSON"
             elif suffix in (".dxf", ".dwg"):
                 dxf_path_arg = str(upload_path)
                 json_path = None
-                fonte = "DWG" if suffix == ".dwg" else "DXF"
             else:
                 raise HTTPException(status_code=400, detail="Motor v5 suporta apenas DXF, DWG e JSON.")
 
@@ -264,39 +313,23 @@ async def api_processamento_importar(
             n_ok = len(list(output_dir.rglob("*.pdf")))
             n_err = 0
             meta["motor"] = "v5"
+            fonte = suffix.lstrip(".").upper()
         else:
-            # Motor v9 (padrao)
-            if suffix == ".json":
-                payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
-                pvs, trechos = _extract_network_from_json(payload)
-                fonte = "JSON"
-            elif suffix == ".xml":
-                from ler_landxml import ler_landxml
+            pvs, trechos, meta = _ler_upload(upload_path, suffix)
+            fonte = meta.get("motor") or suffix.lstrip(".").upper()
 
-                pvs, trechos, _, meta = ler_landxml(str(upload_path))
-                fonte = meta.get("motor") or "LandXML"
-            elif suffix == ".dxf":
-                try:
-                    from ler_dxf_gdal import ler_dxf_gdal
-                except ImportError as exc:
-                    raise HTTPException(
-                        status_code=400,
-                        detail=f"DXF web indisponivel neste ambiente: {exc}. Use LandXML ou JSON.",
-                    ) from exc
-                pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
-                fonte = meta.get("motor") or "DXF"
-            elif suffix == ".dwg":
-                try:
-                    from ler_dwg_universal import ler_dwg_universal
-                except ImportError as exc:
-                    raise HTTPException(
-                        status_code=400,
-                        detail=f"DWG web indisponivel neste ambiente: {exc}. Use DXF, LandXML ou JSON.",
-                    ) from exc
-                pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
-                fonte = meta.get("motor") or "DWG"
-            else:
-                raise HTTPException(status_code=400, detail="Formato nao suportado.")
+            # Enriquecer trechos
+            try:
+                from gerar_ns import enriquecer_trechos
+                trechos = enriquecer_trechos(trechos, pvs)
+            except Exception:
+                pass
+
+            # Interpolacao de ruas via mapas do usuario
+            n_ruas = 0
+            if mapas_dir.exists():
+                n_ruas = _interpolar_ruas_web(mapas_dir, trechos, pvs)
+            meta["n_ruas_interpoladas"] = n_ruas
 
             from gerar_ns import processar_nucleo_from_data
 
@@ -331,4 +364,221 @@ async def api_processamento_importar(
         "meta": meta,
     }
     _job_manifest_path(job_id).write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+    return manifest
+
+
+@router.post("/api/processamento/modular")
+async def api_processamento_modular(
+    nucleo: str = Form(default=""),
+    modulos: str = Form(default="tudo"),
+    equipes: int = Form(default=4),
+    prod_m_dia: float = Form(default=6.0),
+    arquivo: UploadFile = File(...),
+    mapas: list[UploadFile] = File(default=[]),
+):
+    """Pipeline modular: usuario escolhe quais modulos gerar.
+
+    modulos: separados por virgula. Opcoes:
+        ns_campo, ns_desenho, ns_satelite, ose, materiais, compras,
+        crono_ns, crono_micro, crono_macro, bim, lean, tudo
+    """
+    filename = arquivo.filename or "projeto"
+    suffix = Path(filename).suffix.lower()
+    if suffix not in ALLOWED_SUFFIXES:
+        raise HTTPException(status_code=400, detail="Formato nao suportado.")
+    if suffix == ".landxml":
+        suffix = ".xml"
+
+    job_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
+    job_dir = JOBS_DIR / job_id
+    input_dir = job_dir / "input"
+    output_dir = job_dir / "saida"
+    mapas_dir = job_dir / "mapas"
+    input_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    upload_path = input_dir / f"projeto{suffix}"
+    _save_upload(arquivo, upload_path)
+
+    if mapas:
+        mapas_dir.mkdir(parents=True, exist_ok=True)
+        for mapa_upload in mapas:
+            if mapa_upload.filename:
+                _save_upload(mapa_upload, mapas_dir / mapa_upload.filename)
+
+    nucleo_value = _nucleo_final(nucleo, filename)
+    mods = {m.strip().lower() for m in modulos.split(",")} if modulos else {"tudo"}
+    is_tudo = "tudo" in mods
+
+    try:
+        pvs, trechos, meta = _ler_upload(upload_path, suffix)
+        fonte = meta.get("motor") or suffix.lstrip(".").upper()
+
+        try:
+            from gerar_ns import enriquecer_trechos
+            trechos = enriquecer_trechos(trechos, pvs)
+        except Exception:
+            pass
+
+        if mapas_dir.exists():
+            _interpolar_ruas_web(mapas_dir, trechos, pvs)
+
+        # Criar subpastas
+        pastas = {}
+        for nome in ["01_NS_CAMPO", "02_DESENHOS", "03_HTML", "04_GIS",
+                      "05_PLANILHAS", "06_CUSTOS", "07_BIM_IFC", "08_LEAN_LPS",
+                      "09_MICROPLAN", "10_CRONOGRAMA", "11_POR_RUA"]:
+            p = output_dir / nome
+            p.mkdir(parents=True, exist_ok=True)
+            pastas[nome] = p
+
+        n_ok = n_err = 0
+        resultado = {"modulos_executados": []}
+
+        # NS CAMPO
+        if is_tudo or "ns_campo" in mods:
+            from gerar_ns import gerar_ns_a4, calcular_materiais, _ns_folder_name
+            for i, t in enumerate(trechos):
+                ns_id = i + 1
+                pv_i = t.get("pv_ini", "PVX"); pv_f = t.get("pv_fim", "PVY")
+                ns_dir = pastas["01_NS_CAMPO"] / _ns_folder_name(ns_id, pv_i, pv_f)
+                ns_dir.mkdir(parents=True, exist_ok=True)
+                try:
+                    gerar_ns_a4(ns_id, t, pvs, nucleo_value, str(ns_dir / f"NS{ns_id:03d}_A4.pdf"))
+                    n_ok += 1
+                except Exception:
+                    n_err += 1
+            resultado["modulos_executados"].append("ns_campo")
+
+        # NS DESENHO
+        if is_tudo or "ns_desenho" in mods:
+            try:
+                from gerar_ns import gerar_ns_desenho
+                for i, t in enumerate(trechos):
+                    try:
+                        gerar_ns_desenho(i+1, t, pvs, trechos, nucleo_value,
+                                        str(pastas["02_DESENHOS"] / f"NS{i+1:03d}_DESENHO.pdf"))
+                    except Exception: pass
+                resultado["modulos_executados"].append("ns_desenho")
+            except ImportError: pass
+
+        # NS SATELITE
+        if is_tudo or "ns_satelite" in mods:
+            try:
+                from gerar_ns import gerar_ns_sat
+                for i, t in enumerate(trechos):
+                    try:
+                        gerar_ns_sat(i+1, t, pvs, nucleo_value,
+                                    str(pastas["02_DESENHOS"] / f"NS{i+1:03d}_SAT.pdf"))
+                    except Exception: pass
+                resultado["modulos_executados"].append("ns_satelite")
+            except ImportError: pass
+
+        # OSE / MATERIAIS / COMPRAS
+        if is_tudo or mods & {"ose", "materiais", "compras"}:
+            try:
+                from exportar_completo import _gerar_planilha_trechos_completa, _slug
+                _gerar_planilha_trechos_completa(
+                    trechos, pvs, nucleo_value, "ESGOTO",
+                    pastas["05_PLANILHAS"] / f"TODOS_TRECHOS_{_slug(nucleo_value)}.xlsx"
+                )
+                resultado["modulos_executados"].append("ose_materiais_compras")
+            except Exception: pass
+            try:
+                from gerar_xlsx import gerar_xlsx_custos, gerar_xlsx_hidraulica
+                gerar_xlsx_custos(pvs, trechos, nucleo_value,
+                                 str(pastas["06_CUSTOS"] / f"CUSTOS_{_slug(nucleo_value)}.xlsx"))
+                gerar_xlsx_hidraulica(trechos, pvs, nucleo_value,
+                                     str(pastas["05_PLANILHAS"] / f"HIDRAULICA_{_slug(nucleo_value)}.xlsx"))
+            except Exception: pass
+
+        # CRONOGRAMA NS
+        if is_tudo or "crono_ns" in mods:
+            try:
+                from gerar_cronograma_macro import gerar_cronograma_por_ns
+                ns_lista = [
+                    {"ordem": i+1, "trecho_idx": i,
+                     "pv_ini": t.get("pv_ini", ""), "pv_fim": t.get("pv_fim", ""),
+                     "ext_m": t.get("ext_m", 0), "rua": t.get("rua", "")}
+                    for i, t in enumerate(trechos)
+                ]
+                gerar_cronograma_por_ns(
+                    ns_lista, data_inicio_str=datetime.now().strftime("%Y-%m-%d"),
+                    equipes=equipes, prod_m_dia=prod_m_dia,
+                    nucleo=nucleo_value, out_dir=str(pastas["10_CRONOGRAMA"])
+                )
+                resultado["modulos_executados"].append("crono_ns")
+            except Exception: pass
+
+        # CRONOGRAMA MICRO
+        if is_tudo or "crono_micro" in mods:
+            try:
+                from motor_microplanejamento import micro_planejar_nucleo
+                micro_planejar_nucleo(pvs, trechos, nucleo_value, equipes_max=equipes)
+                resultado["modulos_executados"].append("crono_micro")
+            except Exception: pass
+
+        # CRONOGRAMA MACRO
+        if is_tudo or "crono_macro" in mods:
+            try:
+                from gerar_cronograma_macro import (
+                    gerar_cronograma_macro, exportar_project_xml,
+                    exportar_primavera_xer, exportar_openproject_csv
+                )
+                ext_total = sum(t.get("ext_m", 0) for t in trechos)
+                wbs = gerar_cronograma_macro(
+                    [{"nome": nucleo_value, "extensao_m": ext_total,
+                      "n_trechos": len(trechos), "equipes": equipes}],
+                    datetime.now().strftime("%Y-%m-%d")
+                )
+                exportar_project_xml(wbs, str(pastas["10_CRONOGRAMA"] / "MACRO.xml"))
+                exportar_primavera_xer(wbs, str(pastas["10_CRONOGRAMA"] / "MACRO_P6.xer"))
+                exportar_openproject_csv(wbs, str(pastas["10_CRONOGRAMA"] / "MACRO_OPENPROJECT.csv"))
+                resultado["modulos_executados"].append("crono_macro")
+            except Exception: pass
+
+        # BIM IFC
+        if is_tudo or "bim" in mods:
+            try:
+                from gerar_ifc_lod500 import gerar_ifc_lod500
+                gerar_ifc_lod500(pvs, trechos, nucleo_value, str(pastas["07_BIM_IFC"]))
+                resultado["modulos_executados"].append("bim")
+            except Exception: pass
+
+        # LEAN/LPS
+        if is_tudo or "lean" in mods:
+            try:
+                from motor_lean_lps import gerar_relatorio_lean_lps, gerar_xlsx_lean_lps
+                from exportar_completo import _slug
+                rel = gerar_relatorio_lean_lps(pvs, trechos, nucleo=nucleo_value)
+                gerar_xlsx_lean_lps(rel, pvs, trechos, nucleo_value,
+                                   str(pastas["08_LEAN_LPS"] / f"LEAN_{_slug(nucleo_value)}.xlsx"))
+                resultado["modulos_executados"].append("lean")
+            except Exception: pass
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Falha no pipeline modular: {exc}") from exc
+
+    artifacts = _collect_artifacts(output_dir)
+    manifest = {
+        "job_id": job_id,
+        "status": "ok",
+        "nucleo": nucleo_value,
+        "fonte": fonte,
+        "motor": "v9_modular",
+        "modulos": list(mods),
+        "modulos_executados": resultado["modulos_executados"],
+        "arquivo": filename,
+        "n_pvs": len(pvs),
+        "n_trechos": len(trechos),
+        "ns_geradas": n_ok,
+        "ns_erros": n_err,
+        "artifacts": artifacts[:200],
+        "created_at": datetime.now().isoformat(),
+        "meta": meta,
+    }
+    _job_manifest_path(job_id).write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     return manifest

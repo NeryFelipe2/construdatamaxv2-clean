@@ -417,7 +417,7 @@ def gerar_cronograma_por_ns(ns_sequencia, data_inicio_str,
 
         tarefas.append({
             "ns_id":           ns.get("ordem", i + 1),
-            "nome":            f"NS{ns.get('ordem', i+1):03d} {ns.get('pv_ini','?')}→{ns.get('pv_fim','?')}",
+            "nome":            f"NS{ns.get('ordem', i+1):03d} {ns.get('pv_ini','?')}-{ns.get('pv_fim','?')}",
             "pv_ini":          ns.get("pv_ini", ""),
             "pv_fim":          ns.get("pv_fim", ""),
             "rua":             ns.get("rua", ""),
@@ -510,7 +510,7 @@ def _exportar_ns_xlsx(resultado, path):
 
         values = [
             f"NS{t['ns_id']:03d}",
-            f"{t['pv_ini']} → {t['pv_fim']}",
+            f"{t['pv_ini']} - {t['pv_fim']}",
             t["rua"],
             t["ext_m"],
             f"Equipe {eq}",
@@ -594,8 +594,8 @@ def _exportar_ns_gantt_html(resultado, path):
         ini_d = (datetime.strptime(t["inicio"], "%Y-%m-%d") - data_base).days
         eq = t["equipe"]
         cor = _CORES_EQUIPE[(eq - 1) % len(_CORES_EQUIPE)]
-        label = f"NS{t['ns_id']:03d} {t['pv_ini']}→{t['pv_fim']}"
-        tooltip = f"{label} | Equipe {eq} | {t['ext_m']}m | {t.get('rua','')} | {t['inicio']}→{t['fim']}"
+        label = f"NS{t['ns_id']:03d} {t['pv_ini']}-{t['pv_fim']}"
+        tooltip = f"{label} | Equipe {eq} | {t['ext_m']}m | {t.get('rua','')} | {t['inicio']}-{t['fim']}"
         rows_js.append(
             f"  {{label:{json.dumps(label)}, inicio:{ini_d}, dur:{t['duracao_dias']}, "
             f"equipe:{eq}, cor:{json.dumps(cor)}, tooltip:{json.dumps(tooltip)}}}"
@@ -630,7 +630,7 @@ canvas{{display:block}}
 </head>
 <body>
 <h1>Gantt — Sequência Executiva de NS</h1>
-<div class="sub">{nucleo} &nbsp;|&nbsp; {len(tarefas)} NS &nbsp;|&nbsp; {equipes} equipes &nbsp;|&nbsp; {resultado['extensao_total_m']:.0f} m &nbsp;|&nbsp; {resultado['data_inicio']} → {resultado['data_fim']}</div>
+<div class="sub">{nucleo} &nbsp;|&nbsp; {len(tarefas)} NS &nbsp;|&nbsp; {equipes} equipes &nbsp;|&nbsp; {resultado['extensao_total_m']:.0f} m &nbsp;|&nbsp; {resultado['data_inicio']} - {resultado['data_fim']}</div>
 <div class="legend">{leg_items}</div>
 <div id="gantt"><canvas id="c"></canvas></div>
 <div class="tooltip-box" id="tip"></div>
@@ -865,7 +865,7 @@ if __name__ == "__main__":
     print(f"  Início: {wbs['data_inicio']} | Fim: {wbs.get('data_fim','?')} | {wbs.get('duracao_total_dias',0)} dias")
     
     for nuc in wbs["nucleos"]:
-        print(f"\n  {nuc['nome']:20s} | {nuc['extensao_m']:>6.0f}m | {nuc['duracao_dias']:3d}d | {nuc['inicio']} → {nuc['fim']}")
+        print(f"\n  {nuc['nome']:20s} | {nuc['extensao_m']:>6.0f}m | {nuc['duracao_dias']:3d}d | {nuc['inicio']} - {nuc['fim']}")
     
     print(f"\n  Exportado:")
     for p in paths:

@@ -619,7 +619,27 @@ def ler_dxf_gdal(dxf_path):
     }
     
     _log(f"  Rede coletora: {len(trechos_ok)} trechos | {meta['ext_total']:.0f}m", "OK")
-    
+
+    # ── 12. ASSOCIAR RUAS AOS TRECHOS ────────────────────────────────────────
+    if ruas:
+        rua_xy = np.array([[r["x"], r["y"]] for r in ruas])
+        rua_txts = [r["text"] for r in ruas]
+        TOL_RUA = 50.0  # metros
+        n_rua = 0
+        for t in trechos_ok:
+            p0 = pvs.get(t["pv_ini"], {})
+            p1 = pvs.get(t["pv_fim"], {})
+            if not p0 or not p1:
+                continue
+            mx = (p0["x"] + p1["x"]) / 2
+            my = (p0["y"] + p1["y"]) / 2
+            dists = np.hypot(rua_xy[:, 0] - mx, rua_xy[:, 1] - my)
+            idx = int(np.argmin(dists))
+            if dists[idx] <= TOL_RUA:
+                t["rua"] = rua_txts[idx]
+                n_rua += 1
+        _log(f"  Ruas associadas: {n_rua}/{len(trechos_ok)}", "OK")
+
     return pvs, trechos_ok, ruas, meta
 
 
