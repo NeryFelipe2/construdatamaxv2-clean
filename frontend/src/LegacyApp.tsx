@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { usePipelineStore } from "@/store/pipelineStore";
+import { cn } from "@/lib/utils";
 
 /* ─── Types ─── */
 
