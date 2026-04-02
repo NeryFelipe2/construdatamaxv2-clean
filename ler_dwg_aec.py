@@ -38,11 +38,12 @@ LIBREDWG_PATH = "/tmp/libredwg/programs/dwg2dxf"
 LIBREDWG_LIB = "/tmp/libredwg/src/.libs"
 
 _ACAD_PATHS = [
+    r"C:\Program Files\Autodesk\Civil 3D 2026\accoreconsole.exe",
+    r"C:\Program Files\Autodesk\Civil 3D 2025\accoreconsole.exe",
+    r"C:\Program Files\Autodesk\Civil 3D 2024\accoreconsole.exe",
     r"C:\Program Files\Autodesk\AutoCAD 2026\accoreconsole.exe",
     r"C:\Program Files\Autodesk\AutoCAD 2025\accoreconsole.exe",
     r"C:\Program Files\Autodesk\AutoCAD 2024\accoreconsole.exe",
-    r"C:\Program Files\Autodesk\Civil 3D 2026\accoreconsole.exe",
-    r"C:\Program Files\Autodesk\Civil 3D 2025\accoreconsole.exe",
 ]
 
 LISP_SCRIPT = Path(__file__).resolve().parent / "extrair_pipe_network.lsp"
@@ -136,14 +137,13 @@ def _extrair_via_landxml(dwg_path):
     tmp_xml_fwd = tmp_xml.replace("\\", "/")
     tmp_dxf_fwd = tmp_dxf.replace("\\", "/")
 
-    # SCR: tentar LANDXMLOUT, depois SAVEAS DXF
-    # Nota: _AECTOACAD / _EXPORTTOAUTOCAD nao estao disponiveis em AutoCAD puro
-    # (requerem Civil 3D completo), entao nao os incluimos para evitar hangs.
-    # Usamos LISP com vl-catch-all para que erros nao bloqueiem o script.
+    # SCR: tentar LANDXMLOUT, depois tentar explodir para AutoCAD (AEC TO ACAD)
+    # se nada der certo, apenas salva DXF.
     scr_content = (
         f'(setvar "FILEDIA" 0)\r\n'
         f'(setvar "CMDECHO" 0)\r\n'
         f'(vl-catch-all-apply (function (lambda () (command "_.-LANDXMLOUT" "{tmp_xml_fwd}" ""))))\r\n'
+        f'(vl-catch-all-apply (function (lambda () (command "_AECTOACAD" "{tmp_dxf_fwd}" ""))))\r\n'
         f'(command "_SAVEAS" "DXF" "" "{tmp_dxf_fwd}")\r\n'
         f'(acad-quit)\r\n'
     )
@@ -409,7 +409,8 @@ def _extrair_pvs_de_dxf(dxf_path):
             for line in lines:
                 lu = line.upper().strip()
                 # Nome do PV
-                if re.match(r'^(PV|PI|PVEX)\s*[-_]?\s*\d', lu) and "CTF" not in lu and "CT=" not in lu:
+                # Nome do PV (mais liberal)
+                if re.search(r'\b(PV|PI|CAIXA|PVM|PVEX)\b\s*[-_]?\s*\d', lu) and "CTF" not in lu and "CT=" not in lu:
                     nome = re.sub(r'[\s\\N]', '', lu).replace("-", "")
                 # CTF (combinado)
                 if "CTF" in lu:
@@ -452,8 +453,8 @@ def _extrair_pvs_de_dxf(dxf_path):
             continue
 
         # ── Single-line: "P.V. 11", "PV-10", "PV10", "PVEX" ──
-        # PV names
-        m_pv = re.match(r'^(P\.?\s*V\.?|P\.?\s*I\.?)\s*[-_]?\s*(\d+\s*[A-Z]?)', tu)
+        # PV names (mais liberal)
+        m_pv = re.search(r'\b(P\.?\s*V\.?|P\.?\s*I\.?|CAIXA|PVM)\b\s*[-_]?\s*(\d+\s*[A-Z]?)', tu)
         if m_pv:
             tipo = "PV" if "V" in m_pv.group(1).upper() else "PI"
             num = m_pv.group(2).replace(" ", "")
@@ -813,9 +814,7 @@ def _extrair_via_com(dwg_path):
         return pvs if pvs else None, trechos if trechos else None
 
     except Exception as e:
-        import traceback
-        _log(f"COM falhou: {e}", "WARN")
-        traceback.print_exc()
+        _log(f"COM indisponível ou Civil 3D fechado: {e}", "INFO")
         return None, None
     finally:
         try:
@@ -1015,7 +1014,8 @@ def _merge_trechos(trechos_bim, trechos_topo):
 
 def ler_dwg_aec(path, dn_padrao=200):
     """
-    Le Pipe Network de DWG Civil 3D usando 3 camadas com fallback.
+    Le Pipe Network de DWG Civil 3D usando 4 camadas com prioridade:
+    LandXML -> LISP -> COM -> DXF.
 
     Args:
         path: caminho do .dwg ou .dxf
@@ -1035,36 +1035,44 @@ def ler_dwg_aec(path, dn_padrao=200):
     motor = "desconhecido"
 
     # ══════════════════════════════════════════════════════════
-    # CAMADA 1 (PRINCIPAL): COM automation — Civil 3D API
-    # Metodo mais confiavel: acessa AeccDbStructure/AeccDbPipe
-    # diretamente via COM com dados BIM completos.
-    # Filtra apenas tubos de GRAVIDADE (esgoto)
+    # CAMADA 1: LandXML / LISP via accoreconsole (Headless)
+    # Metodo BRUTAL: Rapido, silencioso e nao requer Civil 3D aberto.
     # ══════════════════════════════════════════════════════════
 
-    if path.lower().endswith('.dwg') and sys.platform == "win32":
-        pvs_com, trechos_com = _extrair_via_com(path)
-        if pvs_com:
-            n_ct = sum(1 for p in pvs_com.values() if p.get("ct", 0) != 0)
-            if n_ct > 0:
-                pvs_final = pvs_com
-                trechos_final = trechos_com or []
-                motor = "COM_BIM"
-                _log(f"COM BIM: {len(pvs_final)} PVs ({n_ct} com CT), "
-                     f"{len(trechos_final)} trechos", "OK")
+    _log("Camada 1: LandXML / LISP via accoreconsole")
+    pvs_xml, trechos_xml, ruas_xml, meta_xml = _extrair_via_landxml(path)
+    if pvs_xml:
+        pvs_final = pvs_xml
+        trechos_final = trechos_xml or []
+        motor = "LandXML_AEC"
+        _log(f"Camada 1 OK (LandXML): {len(pvs_final)} PVs", "OK")
+    else:
+        # Tenta LISP
+        pvs_lisp, trechos_lisp, textos_lisp = _extrair_via_lisp(path)
+        if pvs_lisp:
+            pvs_final = pvs_lisp
+            trechos_final = trechos_lisp or []
+            motor = "LISP_AEC"
+            _log(f"Camada 1 OK (LISP): {len(pvs_final)} PVs", "OK")
 
     # ══════════════════════════════════════════════════════════
     # CAMADA 2 (FALLBACK 1): LandXML via accoreconsole
     # Se COM falhou, tenta exportar LandXML (so funciona no Civil 3D completo)
     # ══════════════════════════════════════════════════════════
 
-    if not pvs_final:
-        _log("Camada 2: LandXML (fallback 1)")
-        pvs_xml, trechos_xml, ruas_xml, meta_xml = _extrair_via_landxml(path)
-        if pvs_xml:
-            pvs_final = pvs_xml
-            trechos_final = trechos_xml or []
-            motor = "LandXML"
-            _log(f"LandXML: {len(pvs_final)} PVs, {len(trechos_final)} trechos", "OK")
+    # ══════════════════════════════════════════════════════════
+    # CAMADA 2: COM Automation (Fundo/Precisão)
+    # Metodo de precisao: se Camada 1 falhou ou esta incompleta.
+    # ══════════════════════════════════════════════════════════
+    if not pvs_final or any(p.get("ct", 0) == 0 for p in pvs_final.values()):
+        _log("Camada 2: COM Automation (Fundo/Precisão)...", "INFO")
+        pvs_com, trechos_com = _extrair_via_com(path)
+        if pvs_com:
+            pvs_final = _merge_pvs(pvs_final, pvs_com)
+            if not trechos_final:
+                trechos_final = trechos_com or []
+            motor = "COM_BIM_AEC"
+            _log(f"Camada 2 OK (COM): {len(pvs_com)} PVs", "OK")
 
     # ══════════════════════════════════════════════════════════
     # CAMADA 3 (FALLBACK 2): DXF text parser

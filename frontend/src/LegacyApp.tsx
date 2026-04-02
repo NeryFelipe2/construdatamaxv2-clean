@@ -391,7 +391,15 @@ export default function LegacyApp() {
     setUploadFile(file);
     if (!file) return;
     const lower = file.name.toLowerCase();
-    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) setSelectedMotor("v9");
+    // Auto-detectar motor ideal baseado no tipo de arquivo
+    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) {
+      setSelectedMotor("v9");
+    } else if (lower.endsWith(".dxf")) {
+      // ProSaneamento vs Civil3D será detectado automaticamente no backend
+      setSelectedMotor("v9");
+    } else if (lower.endsWith(".dwg")) {
+      setSelectedMotor("v9");
+    }
   }
 
   async function handleNsStatusUpdate() {
@@ -459,7 +467,7 @@ export default function LegacyApp() {
     for (const n of nucleoCatalog.items) if (n.nome) s.add(cleanText(n.nome));
     return [...s].sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [nuclei, nucleoCatalog.items]);
-  const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5" : "Hydro v9";
+  const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5 (legado)" : "Hydro v9 (auto-detect)";
 
   // ── Tab renderers ──
 
@@ -519,8 +527,8 @@ export default function LegacyApp() {
             <div className="form-field">
               <label>Motor de NS</label>
               <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
-                <option value="v5">NOVA NS v5 (SABESP)</option>
-                <option value="v9">NS v9 (padrao)</option>
+                <option value="v9">NS v9 (auto-detect: XML/DXF/DWG)</option>
+                <option value="v5">NOVA NS v5 (SABESP legado)</option>
               </select>
             </div>
           </div>
@@ -800,13 +808,20 @@ export default function LegacyApp() {
           <a className="link-btn" href={nativeUrl("/fluxograma-bim")} target="_blank" rel="noreferrer">Fluxograma</a>
         </div>
 
-        <div className="section-title">SAIDAS DO PIPELINE</div>
+        <div className="section-title">SAIDAS DO PIPELINE (12 Pastas)</div>
         <div className="output-list">
-          <div className="output-item"><span className="folder">01_NS/</span><span className="desc">Notas de Servico: PDF A4 + JSON + HTML Leaflet + GeoJSON</span></div>
-          <div className="output-item"><span className="folder">02_CIVIL3D/</span><span className="desc">LandXML 1.2 + Cadastro DXF + Dynamo .py + AutoCAD .scr</span></div>
-          <div className="output-item"><span className="folder">03_CADASTRO_NTS292/</span><span className="desc">DXF As-Built georref SIRGAS 2000 UTM 23S + Meta JSON</span></div>
-          <div className="output-item"><span className="folder">04_BIM_LOD500/</span><span className="desc">IFC 3D real (SweptDiskSolid+ExtrudedAreaSolid) + CSV + JSON</span></div>
-          <div className="output-item"><span className="folder">05_CRONOGRAMA/</span><span className="desc">MS Project XML com WBS por fase + Resumo JSON</span></div>
+          <div className="output-item"><span className="folder">01_NS_CAMPO/</span><span className="desc">Notas de Serviço: PDF A4 + DESENHO + SAT + MAPA + JSON DADOS</span></div>
+          <div className="output-item"><span className="folder">02_DESENHOS/</span><span className="desc">PDFs A3 técnicos por NS (perfil + planta)</span></div>
+          <div className="output-item"><span className="folder">03_HTML/</span><span className="desc">Mapas Leaflet interativos por trecho</span></div>
+          <div className="output-item"><span className="folder">04_GIS/</span><span className="desc">GeoJSON georref SIRGAS 2000 UTM 23S</span></div>
+          <div className="output-item"><span className="folder">05_PLANILHAS/</span><span className="desc">Mestre PV a PV + Hidráulica + Curva S</span></div>
+          <div className="output-item"><span className="folder">06_CUSTOS/</span><span className="desc">XLSX custos com BDI + quantitativos</span></div>
+          <div className="output-item"><span className="folder">07_BIM_IFC/</span><span className="desc">IFC LOD 500 (SweptDiskSolid+ExtrudedAreaSolid) + CSV + JSON</span></div>
+          <div className="output-item"><span className="folder">08_LEAN_LPS/</span><span className="desc">Last Planner System + Lean completo</span></div>
+          <div className="output-item"><span className="folder">09_MICROPLAN/</span><span className="desc">Microplanejamento por equipes</span></div>
+          <div className="output-item"><span className="folder">10_CRONOGRAMA/</span><span className="desc">Gantt NS + MS Project XML + P6 XER + OpenProject CSV</span></div>
+          <div className="output-item"><span className="folder">11_POR_RUA/</span><span className="desc">Trechos separados por logradouro</span></div>
+          <div className="output-item"><span className="folder">12_LOG/</span><span className="desc">JSON de processamento e rastreabilidade</span></div>
         </div>
 
         <div className="kpi-strip">

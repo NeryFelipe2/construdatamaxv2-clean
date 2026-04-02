@@ -40,6 +40,7 @@ TOL_TEXTO_TUBO  = 30.0      # metros — distância máxima texto-tubo para DN/i
 TOL_GRUPO_X     = 3.0       # metros — agrupamento horizontal de textos
 TOL_GRUPO_Y     = 8.0       # metros — agrupamento vertical de textos
 TOL_SNAP_GENERICO = 10.0    # metros — snap para DXF genérico
+MODO_BRUTAL     = False     # Se True, aceita QUALQUER layer que tenha linhas > 2m
 
 
 def _log(msg, nivel="INFO"):
@@ -240,6 +241,9 @@ def _dedup_trechos(trechos):
     return list(por_par.values())
 
 
+    return tubos
+
+
 def _extrair_tubos_conservador(gdf):
     """
     Extrai tubos de layers que claramente representam tubulação.
@@ -287,6 +291,34 @@ def _extrair_tubos_conservador(gdf):
 
     tubos['ext_m'] = tubos.geometry.length
     tubos = tubos[tubos['ext_m'] > MIN_EXT_TUBO].copy()
+
+    return tubos
+
+
+def _extrair_tubos_brutal(gdf):
+    """
+    MODO BRUTAL: Aceita QUALQUER LineString ou MultiLineString que tenha comprimento > MIN_EXT_TUBO.
+    Ignora filtros de nomes de camadas. Útil para DXFs de 'Estudo' sem padrão.
+    Exclui apenas o que é comprovadamente texto/legenda se possível.
+    """
+    _log("MODO BRUTAL ATIVADO: Aceitando qualquer linha > 2m como tubo.", "WARN")
+    
+    # Filtra apenas por tipo de geometria e comprimento
+    tubos = gdf[
+        (gdf.geometry.geom_type.isin(['LineString', 'MultiLineString']))
+    ].copy()
+    
+    if len(tubos) == 0:
+        return tubos
+
+    tubos['ext_m'] = tubos.geometry.length
+    
+    # Filtro de comprimento mínimo para evitar pegar pedaços de símbolos/detalhes
+    tubos = tubos[tubos['ext_m'] > MIN_EXT_TUBO].copy()
+    
+    # Excluir layers que sabemos que NUNCA são tubos (ex: Molduras)
+    layers_nuncas = ["MOLDURA", "LEGENDA", "CARIMBO", "LINHA_CHAMADA"]
+    tubos = tubos[~tubos['Layer'].str.upper().isin(layers_nuncas)].copy()
 
     return tubos
 
@@ -424,13 +456,17 @@ def _detectar_tipo_rede(dxf_path, layers):
     return "esgoto"  # Default para ProSaneamento
 
 
-def ler_dxf_gdal(dxf_path):
+def ler_dxf_gdal(dxf_path, brutal=None):
     """
     Lê DXF via GDAL com topologia exata por clustering de endpoints.
     Versão v5: NUNCA INVENTA TUBOS, funciona com QUALQUER DXF do ProSaneamento.
     
     Retorna: (pvs, trechos, ruas, meta)
     """
+    # Preferência: parâmetro explícito > variável de ambiente > constante global
+    import os
+    if brutal is None:
+        brutal = os.environ.get("CONSTRUDATA_BRUTAL", "0") == "1" or MODO_BRUTAL
     dxf_path = str(dxf_path)
     if not Path(dxf_path).exists():
         raise FileNotFoundError(f"DXF não encontrado: {dxf_path}")
@@ -450,15 +486,26 @@ def ler_dxf_gdal(dxf_path):
     tipo_rede = _detectar_tipo_rede(dxf_path, layers)
     _log(f"  Tipo de rede: {tipo_rede.upper()}", "INFO")
     
-    # ── 2. EXTRAIR TUBOS (FILTRO CONSERVADOR v5) ─────────────────────────────
-    tubos = _extrair_tubos_conservador(gdf)
-    _log(f"  Tubos encontrados: {len(tubos)} (filtro conservador)", "OK")
+    # ── 2. EXTRAIR TUBOS ─────────────────────────────────────────────────────
+    if not brutal:
+        tubos = _extrair_tubos_conservador(gdf)
+        _log(f"  Tubos encontrados: {len(tubos)} (filtro conservador)", "OK")
+    else:
+        tubos = _extrair_tubos_brutal(gdf)
+        _log(f"  Tubos encontrados: {len(tubos)} (MODO BRUTAL)", "WARN")
     
+    if len(tubos) == 0 and not brutal:
+        _log("  Nenhum tubo no modo conservador. Tentando MODO BRUTAL...", "WARN")
+        tubos = _extrair_tubos_brutal(gdf)
+        if len(tubos) > 0:
+            brutal = True
+            _log(f"  Tubos encontrados via recovery BRUTAL: {len(tubos)}", "OK")
+
     if len(tubos) == 0:
         layers_info = _layers_info(gdf)
         _erro_importacao_nao_confiavel(
             dxf_path,
-            "nenhum tubo valido encontrado (layers filtradas: PERFIL, PONTOS, CAIXAS, etc.)",
+            "nenhum tubo valido encontrado (mesmo no modo BRUTAL)",
             layers_info,
         )
     
@@ -614,7 +661,7 @@ def ler_dxf_gdal(dxf_path):
         "n_pvs": len(pvs),
         "n_trechos": len(trechos_ok),
         "ext_total": sum(t['ext_m'] for t in trechos_ok),
-        "motor": "GDAL/OGR v5 (conservador)",
+        "motor": f"GDAL/OGR v5 ({'BRUTAL' if brutal else 'conservador'})",
         "n_pvs_genericos": sum(1 for p in pvs.values() if p.get("_generico")),
     }
     

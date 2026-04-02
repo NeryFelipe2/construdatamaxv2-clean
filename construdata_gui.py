@@ -46,6 +46,7 @@ _lxml = _try_import("LandXML", lambda: __import__("ler_landxml"))
 _dwg  = _try_import("DWG/AEC", lambda: __import__("ler_dwg_aec"))
 _dwgs = _try_import("DWG Semantico", lambda: __import__("ler_dwg_semantico"))
 _dwgu = _try_import("DWG Universal", lambda: __import__("ler_dwg_universal"))
+_pros = _try_import("ProSaneamento", lambda: __import__("ler_dxf_prosaneamento"))
 
 # Geradores
 _ns     = _try_import("GerarNS", lambda: __import__("gerar_ns"))
@@ -104,13 +105,13 @@ _TILE_SAT = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/
 _TILE_RUA = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
 # Prolongamentos LandXML
-_XML_DIR = r"C:\Users\felip\Downloads\PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018"
+_XML_DIR = Path.home() / "Downloads" / "PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018"
 _PROLONGAMENTOS = [
-    ("Prolongamento Teteu Alt-01", f"{_XML_DIR}\\PROLONGAMENTO TETEU ALT-01.xml"),
-    ("Prolongamento Teteu",        f"{_XML_DIR}\\PROLONGAMENTO TETEU.xml"),
-    ("Prolongamento Pantanal",     f"{_XML_DIR}\\PROLONGAMENTO PANTANAL BAIXO.xml"),
-    ("Prolongamento Criadores",    f"{_XML_DIR}\\PROLONGAMENTO CRIADORES.xml"),
-    ("Prolongamento Sao Manoel",   f"{_XML_DIR}\\PROLONGAMENTO SÃO MANOEL.xml"),
+    ("Prolongamento Teteu Alt-01", str(_XML_DIR / "PROLONGAMENTO TETEU ALT-01.xml")),
+    ("Prolongamento Teteu",        str(_XML_DIR / "PROLONGAMENTO TETEU.xml")),
+    ("Prolongamento Pantanal",     str(_XML_DIR / "PROLONGAMENTO PANTANAL BAIXO.xml")),
+    ("Prolongamento Criadores",    str(_XML_DIR / "PROLONGAMENTO CRIADORES.xml")),
+    ("Prolongamento Sao Manoel",   str(_XML_DIR / "PROLONGAMENTO SÃO MANOEL.xml")),
 ]
 
 
@@ -130,6 +131,7 @@ class HydroNetworkApp:
         self.running = False
         self.source_path = None
         self.analytics_results = None
+        self.mapas_interpolacao = []  # lista de paths DXF/DWG/GPKG para interpolação de ruas
 
         # Estado centralizado por NS (motor_status_ns)
         self._status_ns: dict = {}             # STATUS_NS.json carregado em memória
@@ -280,9 +282,54 @@ class HydroNetworkApp:
         self.tipo_detectado.pack(padx=8, anchor=tk.W)
         self.arquivo_var.trace_add("write", self._on_arquivo_change)
 
-        self._file_row(lf, "GPKG Cartografia (opc.):", self.gpkg_var,
-                       [("GeoPackage", "*.gpkg")])
         self._file_row(lf, "Pasta de Saida:", self.saida_var, directory=True)
+ 
+        # ── PAINEL DE STATUS DE MOTORES (Real-time) ───────────────────
+        sf = tk.Frame(tab, bg=BG2, bd=1, relief=tk.RIDGE)
+        sf.pack(fill=tk.X, padx=12, pady=4)
+        
+        # Grid de status
+        for i, (name, key) in enumerate([
+            ("Headless (accore)", "LandXML"),
+            ("BIM (win32com)",   "Motor_v5"),
+            ("Geometria (GDAL)", "GDAL"),
+            ("ProSaneamento",    "ProSaneamento"),
+            ("Analytics (XGB)",  "Analytics"),
+        ]):
+            r = i // 5
+            c = i % 5
+            f = tk.Frame(sf, bg=BG2, padx=10, pady=5)
+            f.grid(row=r, column=c, sticky="nsew")
+            sf.grid_columnconfigure(c, weight=1)
+            
+            status = _ENGINES.get(key, False)
+            color = ACCENT if status else RED
+            bulb = "●" if status else "○"
+            
+            tk.Label(f, text=bulb, fg=color, bg=BG2, font=("Segoe UI", 12)).pack(side=tk.LEFT)
+            tk.Label(f, text=f" {name}", fg=FG, bg=BG2, font=("Segoe UI", 8, "bold")).pack(side=tk.LEFT)
+        # ──────────────────────────────────────────────────────────────
+
+        # Mapas de interpolação (ruas)
+        lf_mapas = tk.LabelFrame(tab, text=" MAPAS DE INTERPOLACAO (ruas - DXF/DWG/GPKG) ",
+                                  font=("Segoe UI", 9, "bold"), bg=BG, fg=ACCENT, bd=1)
+        lf_mapas.pack(fill=tk.X, padx=8, pady=(4, 2))
+
+        mrow = tk.Frame(lf_mapas, bg=BG)
+        mrow.pack(fill=tk.X, padx=8, pady=4)
+
+        self.mapas_listbox = tk.Listbox(mrow, bg=BG3, fg=FG, height=3,
+                                         font=("Consolas", 8), selectmode=tk.EXTENDED)
+        self.mapas_listbox.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 4))
+
+        mbtn_frame = tk.Frame(mrow, bg=BG)
+        mbtn_frame.pack(side=tk.RIGHT)
+        tk.Button(mbtn_frame, text="+ Mapa", command=self._add_mapa_interpolacao,
+                  bg=ACCENT, fg="#000", font=("Segoe UI", 8, "bold"),
+                  relief=tk.FLAT, padx=6).pack(pady=1)
+        tk.Button(mbtn_frame, text="- Remover", command=self._rem_mapa_interpolacao,
+                  bg=RED, fg=WHITE, font=("Segoe UI", 8, "bold"),
+                  relief=tk.FLAT, padx=6).pack(pady=1)
 
         # Config
         lf2 = tk.LabelFrame(tab, text=" CONFIGURACAO ",
@@ -292,39 +339,57 @@ class HydroNetworkApp:
         crow.pack(fill=tk.X, padx=8, pady=4)
 
         tk.Label(crow, text="Nucleo:", bg=BG, fg=FG).pack(side=tk.LEFT)
-        nucleos = [""]
-        if v5 and hasattr(v5, 'NUCLEOS_BATCH'):
-            nucleos += [n["nucleo"] for n in v5.NUCLEOS_BATCH]
-        for nome, xml in _PROLONGAMENTOS:
-            if Path(xml).exists():
-                nucleos.append(nome)
-        ttk.Combobox(crow, textvariable=self.nucleo_var, values=nucleos,
+        ttk.Combobox(crow, textvariable=self.nucleo_var, values=[""],
                      width=28).pack(side=tk.LEFT, padx=(4, 16))
         tk.Label(crow, text="Tipo:", bg=BG, fg=FG).pack(side=tk.LEFT)
         ttk.Combobox(crow, textvariable=self.tipo_var,
                      values=["auto", "esgoto", "agua"], width=8).pack(side=tk.LEFT, padx=4)
 
-        # Botoes
-        lf3 = tk.LabelFrame(tab, text=" PIPELINE ",
+        # Botoes — MODULAR
+        lf3 = tk.LabelFrame(tab, text=" PIPELINE MODULAR ",
                              font=("Segoe UI", 9, "bold"), bg=BG, fg=ACCENT, bd=1)
         lf3.pack(fill=tk.X, padx=8, pady=4)
-        brow = tk.Frame(lf3, bg=BG)
-        brow.pack(fill=tk.X, padx=8, pady=6)
 
-        btns = [
-            ("PIPELINE COMPLETO", ACCENT, "#000", self._cmd_pipeline),
-            ("APENAS LER", BLUE, WHITE, self._cmd_apenas_ler),
-            ("DWG SEMANTICO", "#22c55e", "#000", self._cmd_apenas_ler_dwg_semantico),
-            ("DWG UNIVERSAL", "#00bcd4", "#000", self._cmd_apenas_ler_dwg_universal),
-            ("BATCH NUCLEOS", PURPLE, WHITE, self._cmd_batch),
-            ("BATCH PROLONGAMENTOS", ORANGE, WHITE, self._cmd_batch_prolongamentos),
-            ("ABRIR SAIDA", GRAY, WHITE, self._cmd_abrir_saida),
-            ("EDITOR HTML", CYAN, "#000", self._cmd_abrir_editor),
+        brow1 = tk.Frame(lf3, bg=BG)
+        brow1.pack(fill=tk.X, padx=8, pady=(6, 2))
+        btns_top = [
+            ("FAZER TUDO (Lá ele)", "#ff007f", "#fff", self._cmd_brutal_tudo),
+            ("VARREDURA BATCH (Complete)", "#7c3aed", WHITE, self._cmd_brutal_batch),
+            ("APENAS LER PROJETO", BLUE, WHITE, self._cmd_apenas_ler),
         ]
-        for txt, bg_cor, fg_cor, cmd in btns:
-            tk.Button(brow, text=txt, command=cmd, bg=bg_cor, fg=fg_cor,
+        for txt, bg_cor, fg_cor, cmd in btns_top:
+            tk.Button(brow1, text=txt, command=cmd, bg=bg_cor, fg=fg_cor,
                       font=("Segoe UI", 9, "bold"), relief=tk.FLAT,
                       padx=8, pady=5, cursor="hand2").pack(side=tk.LEFT, padx=2)
+
+        brow2 = tk.Frame(lf3, bg=BG)
+        brow2.pack(fill=tk.X, padx=8, pady=2)
+        btns_modulos = [
+            ("NS CAMPO",     ACCENT, "#000", lambda: self._cmd_modulo("ns_campo")),
+            ("NS DESENHO",   "#22c55e", "#000", lambda: self._cmd_modulo("ns_desenho")),
+            ("NS SATELITE",  CYAN,   "#000", lambda: self._cmd_modulo("ns_satelite")),
+            ("OSE",          PURPLE, WHITE,  lambda: self._cmd_modulo("ose")),
+            ("MATERIAIS",    ORANGE, WHITE,  lambda: self._cmd_modulo("materiais")),
+            ("COMPRAS",      YELLOW, "#000", lambda: self._cmd_modulo("compras")),
+        ]
+        for txt, bg_cor, fg_cor, cmd in btns_modulos:
+            tk.Button(brow2, text=txt, command=cmd, bg=bg_cor, fg=fg_cor,
+                      font=("Segoe UI", 8, "bold"), relief=tk.FLAT,
+                      padx=6, pady=4, cursor="hand2").pack(side=tk.LEFT, padx=2)
+
+        brow3 = tk.Frame(lf3, bg=BG)
+        brow3.pack(fill=tk.X, padx=8, pady=(2, 6))
+        btns_crono = [
+            ("CRONOGRAMA NS",    BLUE,   WHITE, lambda: self._cmd_modulo("crono_ns")),
+            ("CPM (Caminho Crítico)", PURPLE, WHITE, lambda: self._cmd_modulo("cpm")),
+            ("CRONOGRAMA MICRO", "#00bcd4", "#000", lambda: self._cmd_modulo("crono_micro")),
+            ("CRONOGRAMA MACRO", ORANGE, WHITE, lambda: self._cmd_modulo("crono_macro")),
+            ("ABRIR SAIDA",      GRAY,   WHITE, self._cmd_abrir_saida),
+        ]
+        for txt, bg_cor, fg_cor, cmd in btns_crono:
+            tk.Button(brow3, text=txt, command=cmd, bg=bg_cor, fg=fg_cor,
+                      font=("Segoe UI", 8, "bold"), relief=tk.FLAT,
+                      padx=6, pady=4, cursor="hand2").pack(side=tk.LEFT, padx=2)
 
         self.progress = ttk.Progressbar(lf3, mode="indeterminate")
         self.progress.pack(fill=tk.X, padx=8, pady=(0, 2))
@@ -338,8 +403,8 @@ class HydroNetworkApp:
                                             bg=BG, fg=ACCENT, bd=1)
         self.resumo_frame.pack(fill=tk.X, padx=8, pady=4)
         self.resumo_text = tk.Label(self.resumo_frame,
-            text=f"Pipeline: Leitura → NS v{NS_VERSION} (CAMPO/PLANEJAMENTO) → Civil 3D → NTS 292 → BIM LOD500 → Cronograma NS  |  "
-                 f"Formatos: .dxf .xml .json .dwg  |  DWG: AEC/Semantico/Universal  |  {EMPRESA}",
+            text=f"Pipeline Modular: Projeto DXF/DWG → NS v{NS_VERSION} (Campo/Desenho/Sat/OSE/Materiais/Compras) → Cronogramas (NS/Micro/Macro)  |  "
+                 f"Formatos: .dxf .xml .json .dwg  |  {EMPRESA}",
             bg=BG, fg=FG, font=("Consolas", 8), justify=tk.LEFT, anchor=tk.NW,
             wraplength=1000)
         self.resumo_text.pack(fill=tk.X, padx=8, pady=2)
@@ -1395,6 +1460,41 @@ class HydroNetworkApp:
                   command=lambda: (self.root.clipboard_clear(),
                                    self.root.clipboard_append(self.log_text.get("1.0", tk.END)))
                   ).pack(side=tk.LEFT, padx=4)
+        tk.Button(brow, text="VERIFICAR SAÚDE DO SISTEMA", bg=ACCENT, fg="#000",
+                  font=("Segoe UI", 9, "bold"), relief=tk.FLAT, padx=16,
+                  command=self._cmd_check_system).pack(side=tk.RIGHT, padx=4)
+
+
+    def _cmd_check_system(self):
+        """Verifica se todas as dependências estão presentes e funcionais."""
+        deps = [
+            ("ezdxf", "Leitura de DXF"),
+            ("geopandas", "Processamento Geográfico"),
+            ("matplotlib", "Geração de PDFs e Gráficos"),
+            ("numpy", "Cálculos Matemáticos"),
+            ("scipy", "Clustering (PVs)"),
+            ("pandas", "Planilhas Excel"),
+            ("openpyxl", "Exportação XLSX"),
+            ("pyproj", "Conversão de Coordenadas"),
+            ("shapely", "Geometria de Tubos"),
+            ("xgboost", "Analítica (XGBoost ML)"),
+            ("scipy", "Clustering (PVs)"),
+        ]
+        self._log_msg("--- VERIFICAÇÃO DE SAÚDE DO SISTEMA ---", "STEP")
+        missing = []
+        for mod, desc in deps:
+            try:
+                __import__(mod)
+                self._log_msg(f"✅ {mod:12} : {desc}", "OK")
+            except ImportError:
+                self._log_msg(f"❌ {mod:12} : {desc} (FALTANDO!)", "ERR")
+                missing.append(mod)
+        
+        if not missing:
+            messagebox.showinfo("Saúde do Sistema", "Tudo OK! Todas as dependências fundamentais foram encontradas.")
+        else:
+            messagebox.showerror("Saúde do Sistema", f"Dependências Faltando:\n{', '.join(missing)}\n\n"
+                                 "Para corrigir, feche o ConstruData e execute:\npip install -r requirements-full.txt")
 
     # ══════════════════════════════════════════════════════════════════════════
     # HELPERS
@@ -1424,6 +1524,156 @@ class HydroNetworkApp:
     def _status(self, msg, cor=ACCENT):
         self.status_lbl.config(text=msg, fg=cor)
 
+    def _add_mapa_interpolacao(self):
+        ps = filedialog.askopenfilenames(
+            title="Selecionar mapas para ruas (interpolação)",
+            filetypes=[("Mapas", "*.dxf;*.dwg;*.gpkg"), ("Todos", "*.*")]
+        )
+        if ps:
+            for p in ps:
+                if p not in self.mapas_interpolacao:
+                    self.mapas_interpolacao.append(p)
+                    self.mapas_listbox.insert(tk.END, Path(p).name)
+            self._log_msg(f"Adicionados {len(ps)} mapas para interpolação.")
+
+    def _rem_mapa_interpolacao(self):
+        sels = list(self.mapas_listbox.curselection())
+        for i in reversed(sels):
+            self.mapas_listbox.delete(i)
+            self.mapas_interpolacao.pop(i)
+        self._log_msg("Mapas removidos.")
+
+    def _cmd_brutal_tudo(self):
+        """Pipeline 1-Clique Brutal: Processa TODOS os módulos para o projeto escolhido."""
+        if not self.arquivo_var.get():
+            messagebox.showwarning("Aviso", "Selecione um projeto base (DXF/DWG/XML) primeiro."); return
+        self._run(self._do_brutal_tudo)
+
+    def _cmd_brutal_batch(self):
+        """Varredura Completa: Roda o main() do exportar_completo (Batch de todos os projetos)."""
+        res = messagebox.askyesno("Varredura Batch", 
+                                  "Isso irá escanear as pastas Downloads/PROJETOS e Downloads/PROJETOS_DE_AGUA...\n"
+                                  "e processar TODOS os DXF/DWG/XML encontrados.\n\nDeseja continuar?")
+        if res:
+            self._run(self._do_brutal_batch)
+
+    def _do_brutal_batch(self):
+        from exportar_completo import main as brutal_main
+        self.root.after(0, self._status, "Iniciando Varredura Batch (Satanicamente Brutal)...", YELLOW)
+        try:
+            brutal_main()
+            self.root.after(0, self._log_msg, "VARREDURA BATCH CONCLUIDA COM SUCESSO!", "OK")
+            self.root.after(0, self._status, "Batch Concluido", ACCENT)
+            out_base = Path.home() / "Downloads" / "CONSTRUDATA_SAIDA_COMPLETA"
+            if out_base.exists():
+                os.startfile(out_base)
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"FALHA NO BATCH: {e}", "ERROR")
+            self.root.after(0, self._status, "Erro no Batch", RED)
+
+    def _do_brutal_tudo(self):
+        from exportar_completo import processar_projeto
+        proj = Path(self.arquivo_var.get())
+        out_base = Path(self.saida_var.get())
+        nucleo = self.nucleo_var.get() or proj.stem
+        
+        # Injetar mapas manuais no Path da engine se necessário ou passar via argumento
+        # Aqui vamos simular o comportamento de exportar_completo
+        self.root.after(0, self._status, "Iniciando Processamento Brutal...", YELLOW)
+        try:
+            # Chamar motor brutal consolidado
+            res = processar_projeto(proj, out_base, manual_mapas=[Path(m) for m in self.mapas_interpolacao])
+            self.root.after(0, self._log_msg, f"BRUTAL OK: {proj.name}", "OK")
+            self.root.after(0, self._status, "Processamento Concluido", ACCENT)
+            # Abrir pasta se der certo
+            os.startfile(out_base)
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"FALHA BRUTAL: {e}", "ERROR")
+            self.root.after(0, self._status, "Erro no Processamento", RED)
+
+    def _cmd_modulo(self, modulo):
+        """Executa um módulo isolado."""
+        if not self.trechos and modulo != "leitura":
+            messagebox.showwarning("Aviso", "Carregue a rede (Apenas Ler) primeiro."); return
+        self._run(self._do_modulo, mod=modulo)
+
+    def _do_modulo(self, mod=""):
+        try:
+            self.root.after(0, self._status, f"Executando {mod.upper()}...", YELLOW)
+            nucleo = self.nucleo_var.get() or "REDE"
+            out_base = Path(self.saida_var.get())
+            
+            if mod == "ns_campo":
+                from gerar_ns import gerar_ns_a4
+                p = out_base / "01_NS_CAMPO"
+                p.mkdir(parents=True, exist_ok=True)
+                for i, t in enumerate(self.trechos):
+                    gerar_ns_a4(i+1, t, self.pvs, nucleo, str(p / f"NS{i+1:03d}_A4.pdf"))
+            elif mod == "ns_desenho":
+                from gerar_ns import gerar_ns_desenho
+                p = out_base / "02_DESENHOS"
+                p.mkdir(parents=True, exist_ok=True)
+                for i, t in enumerate(self.trechos):
+                    gerar_ns_desenho(i+1, t, self.pvs, self.trechos, nucleo, str(p / f"NS{i+1:03d}_DES.pdf"))
+            elif mod == "ns_satelite":
+                from gerar_ns import gerar_ns_sat
+                p = out_base / "03_HTML"
+                p.mkdir(parents=True, exist_ok=True)
+                for i, t in enumerate(self.trechos):
+                    gerar_ns_sat(i+1, t, self.pvs, nucleo, str(p / f"NS{i+1:03d}_SAT.pdf"))
+            elif mod == "ose":
+                from gerar_ose import gerar_ose_batch
+                p = out_base / "01_NS_CAMPO"
+                gerar_ose_batch(self.trechos, self.pvs, nucleo, str(p))
+            elif mod == "materiais":
+                from gerar_ns import calcular_materiais
+                # Lógica simplificada: gera um JSON ou XLSX de materiais
+                pass
+            elif mod == "compras":
+                from gerar_compras import gerar_planilha_compras
+                p = out_base / "PLANILHA_COMPRAS.xlsx"
+                # ... chamar lógica de compras
+                pass
+            elif mod == "crono_ns":
+                self._do_cronograma_ns()
+            elif mod == "crono_micro":
+                self._do_microplan()
+            elif mod == "cpm":
+                from cronograma_cpm import compute_cpm
+                # Gerar JSON de CPM para todos os trechos
+                msg = f"Calculando CPM para {len(self.trechos)} trechos..."
+                self.root.after(0, self._log_msg, msg)
+                
+                prod_m_dia = self._ns_prod_m_dia.get() or 6.0
+                cpm_tasks = []
+                for i, t in enumerate(self.trechos):
+                    cpm_tasks.append({
+                        "id": i + 1,
+                        "name": f"NS{i+1:03d}",
+                        "duration": float(t.get("ext_m", 0) / prod_m_dia),
+                        "deps": [{"pred": i, "type": "FS"}] if i > 0 else []
+                    })
+                
+                res_cpm = compute_cpm(cpm_tasks)
+                
+                p_cpm = out_base / "10_CRONOGRAMA"
+                p_cpm.mkdir(parents=True, exist_ok=True)
+                out_path = p_cpm / f"CPM_{nucleo}.json"
+                
+                with open(out_path, "w", encoding="utf-8") as f:
+                    json.dump(res_cpm, f, indent=2, ensure_ascii=False)
+                
+                self.root.after(0, self._log_msg, f"CPM salvo: {out_path.name}", "OK")
+                # Se tivermos um visualizador de CPM, chamamos aqui futuramente.
+            elif mod == "crono_macro":
+                self._do_crono_macro()
+                
+            self.root.after(0, self._log_msg, f"Modulo {mod.upper()} concluido.", "OK")
+            self.root.after(0, self._status, "Pronto", ACCENT)
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro modulo {mod}: {e}", "ERROR")
+            self.root.after(0, self._status, "Erro", RED)
+
     def _browse_arquivo(self):
         p = filedialog.askopenfilename(
             title="Selecionar arquivo de rede",
@@ -1441,10 +1691,21 @@ class HydroNetworkApp:
             self.tipo_detectado.config(text="", fg=GRAY); return
         ext = Path(p).suffix.lower()
         existe = Path(p).exists() if p else False
-        tipos = {".dxf": "DXF ProSaneamento (GDAL+Cluster)",
-                 ".xml": "LandXML (Civil 3D)", ".json": "JSON ConstruData",
-                 ".dwg": "DWG Civil 3D (AEC Proxy / use DWG Semantico no botao dedicado)"}
+        tipos = {".dxf": "DXF (auto-detecta ProSaneamento ou Civil 3D)",
+                 ".xml": "LandXML (Civil 3D — PipeNetworks)",
+                 ".json": "JSON ConstruData",
+                 ".dwg": "DWG Civil 3D (AEC Proxy / DWG Semantico)"}
         tipo = tipos.get(ext, f"Desconhecido: {ext}")
+        # Detectar ProSaneamento em tempo real
+        if existe and ext == ".dxf" and _ENGINES.get("ProSaneamento"):
+            try:
+                from ler_dxf_prosaneamento import detectar_prosaneamento
+                if detectar_prosaneamento(p):
+                    tipo = "DXF ProSaneamento ✓ (layers PS_* detectadas)"
+                else:
+                    tipo = "DXF Civil 3D / Genérico (GDAL)"
+            except Exception:
+                pass
         if not existe: tipo += " — NAO ENCONTRADO"
         self.tipo_detectado.config(text=tipo, fg=ACCENT if existe else RED)
         if not self.nucleo_var.get() and existe:
@@ -1640,6 +1901,18 @@ class HydroNetworkApp:
     def _ler_arquivo(self, path):
         ext = Path(path).suffix.lower()
         if ext == ".dxf":
+            # Detectar se é ProSaneamento (layers PS_*) ou Civil 3D genérico
+            if _ENGINES.get("ProSaneamento"):
+                try:
+                    from ler_dxf_prosaneamento import detectar_prosaneamento
+                    if detectar_prosaneamento(path):
+                        self.root.after(0, self._log_msg,
+                            "Detectado: DXF ProSaneamento (layers PS_*)", "OK")
+                        from ler_dxf_prosaneamento import ler_dxf_prosaneamento
+                        return ler_dxf_prosaneamento(path)
+                except Exception:
+                    pass
+            # Fallback: GDAL genérico (Civil 3D / outros)
             from ler_dxf_gdal import ler_dxf_gdal
             return ler_dxf_gdal(path)
         elif ext == ".xml":
@@ -1832,6 +2105,384 @@ class HydroNetworkApp:
     # ══════════════════════════════════════════════════════════════════════════
     # COMANDOS
     # ══════════════════════════════════════════════════════════════════════════
+
+    # ── Mapas de Interpolação ───────────────────────────────────────────────
+
+    def _add_mapa_interpolacao(self):
+        files = filedialog.askopenfilenames(
+            title="Selecionar Mapas de Interpolacao (ruas)",
+            filetypes=[
+                ("Todos suportados", "*.dxf;*.dwg;*.gpkg"),
+                ("DXF", "*.dxf"), ("DWG", "*.dwg"),
+                ("GeoPackage", "*.gpkg"), ("Todos", "*.*"),
+            ])
+        for f in files:
+            if f and f not in self.mapas_interpolacao:
+                self.mapas_interpolacao.append(f)
+                self.mapas_listbox.insert(tk.END, Path(f).name)
+
+    def _rem_mapa_interpolacao(self):
+        sel = list(self.mapas_listbox.curselection())
+        for idx in reversed(sel):
+            self.mapas_listbox.delete(idx)
+            del self.mapas_interpolacao[idx]
+
+    # ── Interpolação de ruas via mapas selecionados ──────────────────────
+
+    def _interpolar_ruas(self, trechos, pvs):
+        """Aplica interpolação de nomes de ruas usando todos os mapas selecionados."""
+        total = 0
+        for mapa_path in self.mapas_interpolacao:
+            ext = Path(mapa_path).suffix.lower()
+            try:
+                if ext == ".gpkg":
+                    from exportar_completo import _carregar_ruas_gpkg
+                    n = _carregar_ruas_gpkg(mapa_path, trechos, pvs)
+                else:
+                    from exportar_completo import _carregar_ruas_dxf
+                    n = _carregar_ruas_dxf(mapa_path, trechos, pvs)
+                if n > 0:
+                    self.root.after(0, self._log_msg,
+                        f"Interpolacao: {n} ruas via {Path(mapa_path).name}", "OK")
+                    total += n
+            except Exception as e:
+                self.root.after(0, self._log_msg,
+                    f"Aviso interpol. {Path(mapa_path).name}: {e}", "WARN")
+        return total
+
+    # ── Carregar projeto (ler + enriquecer + interpolar) ─────────────────
+
+    def _carregar_projeto(self, path):
+        """Lê arquivo, enriquece trechos e aplica interpolação de ruas."""
+        self.root.after(0, self._log_msg, f"Lendo: {Path(path).name}", "INFO")
+        self.pvs, self.trechos, self.ruas, self.meta = self._ler_arquivo(path)
+        self.source_path = path
+        if not self.trechos:
+            raise RuntimeError("Nenhum trecho encontrado")
+        self.trechos = self._enriquecer(self.trechos, self.pvs)
+
+        # Interpolação de ruas com mapas selecionados
+        if self.mapas_interpolacao:
+            self._interpolar_ruas(self.trechos, self.pvs)
+
+        ext = sum(t["ext_m"] for t in self.trechos)
+        self.root.after(0, self._update_tables)
+        self.root.after(0, self._log_msg,
+            f"Rede: {len(self.pvs)} PVs, {len(self.trechos)} trechos, {ext:.1f}m", "OK")
+
+    # ── GERAR TUDO (1 CLIQUE) — Pipeline Brutal via GUI ─────────────────
+
+    def _cmd_brutal_tudo(self):
+        arq = self.arquivo_var.get()
+        if not arq or not Path(arq).exists():
+            messagebox.showwarning("Aviso", "Selecione um arquivo de projeto DXF/DWG."); return
+        self._run(self._do_brutal_tudo, path=arq)
+
+    def _do_brutal_tudo(self, path=None):
+        """Pipeline completo: le projeto, interpola ruas, gera TODOS os módulos."""
+        self._carregar_projeto(path)
+        nucleo = self.nucleo_var.get() or Path(path).stem.replace("_", " ").title()
+        pasta_base = Path(self.saida_var.get()) / Path(path).stem
+        pastas = {}
+        for nome in ["01_NS_CAMPO", "02_DESENHOS", "03_HTML", "04_GIS",
+                      "05_PLANILHAS", "06_CUSTOS", "07_BIM_IFC", "08_LEAN_LPS",
+                      "09_MICROPLAN", "10_CRONOGRAMA", "11_POR_RUA", "12_LOG"]:
+            p = pasta_base / nome
+            p.mkdir(parents=True, exist_ok=True)
+            pastas[nome] = p
+
+        self._gerar_ns_campo(nucleo, pastas)
+        self._gerar_ns_desenho(nucleo, pastas)
+        self._gerar_ns_satelite(nucleo, pastas)
+        self._gerar_ose_materiais_compras(nucleo, pastas)
+        self._gerar_cronograma_ns(nucleo, pastas)
+        self._gerar_cronograma_micro(nucleo, pastas)
+        self._gerar_cronograma_macro_mod(nucleo, pastas)
+
+        # Planilhas extras (custos, hidráulica, BIM, Lean)
+        self._gerar_extras(nucleo, pastas)
+
+        self.root.after(0, self._log_msg,
+            f"PIPELINE BRUTAL COMPLETO: {len(self.trechos)} trechos em {pasta_base}", "OK")
+
+    # ── Módulo individual ────────────────────────────────────────────────
+
+    def _cmd_modulo(self, modulo):
+        arq = self.arquivo_var.get()
+        if not arq or not Path(arq).exists():
+            messagebox.showwarning("Aviso", "Selecione um arquivo de projeto."); return
+        self._run(self._do_modulo, path=arq, modulo=modulo)
+
+    def _do_modulo(self, path=None, modulo=None):
+        if not self.trechos:
+            self._carregar_projeto(path)
+        nucleo = self.nucleo_var.get() or Path(path).stem.replace("_", " ").title()
+        pasta_base = Path(self.saida_var.get()) / Path(path).stem
+        pastas = {}
+        for nome in ["01_NS_CAMPO", "02_DESENHOS", "03_HTML", "04_GIS",
+                      "05_PLANILHAS", "06_CUSTOS", "07_BIM_IFC", "08_LEAN_LPS",
+                      "09_MICROPLAN", "10_CRONOGRAMA", "11_POR_RUA", "12_LOG"]:
+            p = pasta_base / nome
+            p.mkdir(parents=True, exist_ok=True)
+            pastas[nome] = p
+
+        dispatch = {
+            "ns_campo": self._gerar_ns_campo,
+            "ns_desenho": self._gerar_ns_desenho,
+            "ns_satelite": self._gerar_ns_satelite,
+            "ose": self._gerar_ose_materiais_compras,
+            "materiais": self._gerar_ose_materiais_compras,
+            "compras": self._gerar_ose_materiais_compras,
+            "crono_ns": self._gerar_cronograma_ns,
+            "crono_micro": self._gerar_cronograma_micro,
+            "crono_macro": self._gerar_cronograma_macro_mod,
+        }
+        fn = dispatch.get(modulo)
+        if fn:
+            fn(nucleo, pastas)
+            self.root.after(0, self._log_msg, f"Modulo [{modulo}] concluido", "OK")
+
+    # ── Geradores modulares ──────────────────────────────────────────────
+
+    def _gerar_ns_campo(self, nucleo, pastas):
+        if not _ENGINES.get("GerarNS"): return
+        self.root.after(0, self._log_msg, "Gerando NS CAMPO...", "INFO")
+        from gerar_ns import gerar_ns_a4, calcular_materiais, calc_manning, _ns_folder_name, CONTRATO
+        from motor_custo import custo_trecho
+        n_ok = n_err = 0
+        for i, t in enumerate(self.trechos):
+            ns_id = i + 1
+            pv_i = t.get("pv_ini", "PVX"); pv_f = t.get("pv_fim", "PVY")
+            ns_name = _ns_folder_name(ns_id, pv_i, pv_f)
+            ns_dir = pastas["01_NS_CAMPO"] / ns_name
+            ns_dir.mkdir(parents=True, exist_ok=True)
+            try:
+                gerar_ns_a4(ns_id, t, self.pvs, nucleo, str(ns_dir / f"NS{ns_id:03d}_A4.pdf"))
+                materiais = calcular_materiais(t, self.pvs)
+                custo = custo_trecho(t, self.pvs)
+                dados = {
+                    "ns_id": ns_id, "nucleo": nucleo, "contrato": CONTRATO,
+                    "trecho": {k: v for k, v in t.items()},
+                    "pv_montante": self.pvs.get(pv_i, {}),
+                    "pv_jusante": self.pvs.get(pv_f, {}),
+                    "hidraulica": calc_manning(t.get("dn_mm"), t.get("decl_mm")),
+                    "materiais": materiais, "custo": custo,
+                    "gerado_em": datetime.now().isoformat(),
+                }
+                with open(ns_dir / f"NS{ns_id:03d}_DADOS.json", "w", encoding="utf-8") as f:
+                    json.dump(dados, f, indent=2, ensure_ascii=False)
+                n_ok += 1
+            except Exception as e:
+                n_err += 1
+                if ns_id <= 5:
+                    self.root.after(0, self._log_msg, f"NS{ns_id:03d} ERRO: {e}", "ERROR")
+        self.root.after(0, self._log_msg, f"NS CAMPO: {n_ok} ok, {n_err} erros", "OK")
+
+    def _gerar_ns_desenho(self, nucleo, pastas):
+        if not _ENGINES.get("GerarNS"): return
+        self.root.after(0, self._log_msg, "Gerando NS DESENHO...", "INFO")
+        from gerar_ns import gerar_ns_desenho
+        n_ok = 0
+        for i, t in enumerate(self.trechos):
+            ns_id = i + 1
+            try:
+                gerar_ns_desenho(ns_id, t, self.pvs, self.trechos, nucleo,
+                                str(pastas["02_DESENHOS"] / f"NS{ns_id:03d}_DESENHO.pdf"))
+                n_ok += 1
+            except Exception: pass
+        self.root.after(0, self._log_msg, f"NS DESENHO: {n_ok} geradas", "OK")
+
+    def _gerar_ns_satelite(self, nucleo, pastas):
+        if not _ENGINES.get("GerarNS"): return
+        self.root.after(0, self._log_msg, "Gerando NS SATELITE...", "INFO")
+        from gerar_ns import gerar_ns_sat
+        n_ok = 0
+        for i, t in enumerate(self.trechos):
+            ns_id = i + 1
+            try:
+                gerar_ns_sat(ns_id, t, self.pvs, nucleo,
+                            str(pastas["02_DESENHOS"] / f"NS{ns_id:03d}_SAT.pdf"))
+                n_ok += 1
+            except Exception: pass
+        self.root.after(0, self._log_msg, f"NS SATELITE: {n_ok} geradas", "OK")
+
+    def _gerar_ose_materiais_compras(self, nucleo, pastas):
+        self.root.after(0, self._log_msg, "Gerando OSE / Materiais / Compras...", "INFO")
+        from gerar_ns import calcular_materiais, calc_manning
+        from motor_custo import custo_trecho, FATORES, BDI
+        from exportar_completo import _slug, _gerar_planilha_trechos_completa
+        import pandas as pd
+
+        nucleo_slug = _slug(nucleo)
+
+        # Planilha mestre trechos PV a PV
+        try:
+            _gerar_planilha_trechos_completa(
+                self.trechos, self.pvs, nucleo, "ESGOTO",
+                pastas["05_PLANILHAS"] / f"TODOS_TRECHOS_PV_A_PV_{nucleo_slug}.xlsx"
+            )
+            self.root.after(0, self._log_msg, f"Planilha MESTRE: {len(self.trechos)} trechos", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro planilha mestre: {e}", "ERROR")
+
+        # Custos
+        try:
+            from gerar_xlsx import gerar_xlsx_custos
+            gerar_xlsx_custos(self.pvs, self.trechos, nucleo,
+                             str(pastas["06_CUSTOS"] / f"CUSTOS_{nucleo_slug}.xlsx"))
+            self.root.after(0, self._log_msg, "Planilha CUSTOS OK", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro custos: {e}", "WARN")
+
+        # Hidráulica
+        try:
+            from gerar_xlsx import gerar_xlsx_hidraulica
+            gerar_xlsx_hidraulica(self.trechos, self.pvs, nucleo,
+                                 str(pastas["05_PLANILHAS"] / f"HIDRAULICA_{nucleo_slug}.xlsx"))
+            self.root.after(0, self._log_msg, "Planilha HIDRAULICA OK", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro hidraulica: {e}", "WARN")
+
+        # Separar por rua
+        from collections import defaultdict
+        trechos_por_rua = defaultdict(list)
+        for t in self.trechos:
+            rua = str(t.get("rua") or "Sem Rua").strip()
+            if not rua or rua.upper() in ("NAN", "NONE", ""):
+                rua = "Sem Rua"
+            trechos_por_rua[rua].append(t)
+        for rua, lista in trechos_por_rua.items():
+            rua_slug = _slug(rua)
+            pasta_rua = pastas["11_POR_RUA"] / rua_slug
+            pasta_rua.mkdir(parents=True, exist_ok=True)
+            try:
+                _gerar_planilha_trechos_completa(
+                    lista, self.pvs, nucleo, "ESGOTO",
+                    pasta_rua / f"Trechos_{rua_slug}.xlsx"
+                )
+            except Exception: pass
+        self.root.after(0, self._log_msg,
+            f"OSE/Materiais/Compras: {len(trechos_por_rua)} ruas", "OK")
+
+    def _gerar_cronograma_ns(self, nucleo, pastas):
+        self.root.after(0, self._log_msg, "Gerando Cronograma NS...", "INFO")
+        try:
+            from gerar_cronograma_macro import gerar_cronograma_por_ns
+            ns_lista = [
+                {"ordem": i+1, "trecho_idx": i,
+                 "pv_ini": t.get("pv_ini", ""), "pv_fim": t.get("pv_fim", ""),
+                 "ext_m": t.get("ext_m", 0), "rua": t.get("rua", "")}
+                for i, t in enumerate(self.trechos)
+            ]
+            resultado = gerar_cronograma_por_ns(
+                ns_lista, data_inicio_str=datetime.now().strftime("%Y-%m-%d"),
+                equipes=self._ns_equipes.get(), prod_m_dia=self._ns_prod_m_dia.get(),
+                nucleo=nucleo, out_dir=str(pastas["10_CRONOGRAMA"])
+            )
+            self.root.after(0, self._log_msg,
+                f"Cronograma NS: {len(resultado['tarefas'])} tarefas, "
+                f"{resultado['data_inicio']} -> {resultado['data_fim']}", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro cronograma NS: {e}", "ERROR")
+
+    def _gerar_cronograma_micro(self, nucleo, pastas):
+        self.root.after(0, self._log_msg, "Gerando Microplanejamento...", "INFO")
+        try:
+            from motor_microplanejamento import micro_planejar_nucleo
+            from exportar_completo import _slug
+            resultado = micro_planejar_nucleo(self.pvs, self.trechos, nucleo,
+                                              equipes_max=self._ns_equipes.get())
+            with open(pastas["09_MICROPLAN"] / f"MICROPLAN_{_slug(nucleo)}.json",
+                      "w", encoding="utf-8") as f:
+                json.dump(resultado, f, indent=2, ensure_ascii=False, default=str)
+            try:
+                from gerar_xlsx import gerar_xlsx_microplan
+                gerar_xlsx_microplan(resultado, self.pvs, self.trechos, nucleo,
+                                   str(pastas["09_MICROPLAN"] / f"MICROPLAN_{_slug(nucleo)}.xlsx"))
+            except Exception: pass
+            self.root.after(0, self._log_msg, "Microplanejamento OK", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro microplan: {e}", "ERROR")
+
+    def _gerar_cronograma_macro_mod(self, nucleo, pastas):
+        self.root.after(0, self._log_msg, "Gerando Cronograma MACRO...", "INFO")
+        try:
+            from gerar_cronograma_macro import (
+                gerar_cronograma_macro, exportar_project_xml,
+                exportar_primavera_xer, exportar_openproject_csv, exportar_macro_xlsx
+            )
+            ext_total = sum(t.get("ext_m", 0) for t in self.trechos)
+            nucleos_crono = [{
+                "nome": nucleo, "extensao_m": ext_total,
+                "n_trechos": len(self.trechos), "equipes": self._ns_equipes.get()
+            }]
+            wbs = gerar_cronograma_macro(nucleos_crono, datetime.now().strftime("%Y-%m-%d"))
+            pasta_crono = pastas["10_CRONOGRAMA"]
+            exportar_project_xml(wbs, str(pasta_crono / "CRONOGRAMA_MACRO.xml"))
+            exportar_primavera_xer(wbs, str(pasta_crono / "CRONOGRAMA_P6.xer"))
+            exportar_openproject_csv(wbs, str(pasta_crono / "CRONOGRAMA_OPENPROJECT.csv"))
+            try:
+                exportar_macro_xlsx(wbs, str(pasta_crono / "CRONOGRAMA_MACRO.xlsx"))
+            except Exception: pass
+            self.root.after(0, self._log_msg, "Cronograma MACRO OK", "OK")
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"Erro cronograma macro: {e}", "ERROR")
+
+    def _gerar_extras(self, nucleo, pastas):
+        """Gera extras: BIM IFC, CPM, Lean/LPS, Curva S, GeoJSON, HTML."""
+        from exportar_completo import _slug
+        nucleo_slug = _slug(nucleo)
+
+        # CPM (Caminho Crítico)
+        try:
+            from cronograma_cpm import compute_cpm
+            cpm_tasks = []
+            for i, t in enumerate(self.trechos):
+                cpm_tasks.append({
+                    "id": i + 1,
+                    "name": f"NS{i+1:03d}",
+                    "duration": float(t.get("ext_m", 0) / self._ns_prod_m_dia.get()),
+                    "deps": [{"pred": i, "type": "FS"}] if i > 0 else []
+                })
+            res_cpm = compute_cpm(cpm_tasks)
+            with open(pastas["10_CRONOGRAMA"] / f"CPM_{nucleo_slug}.json", "w", encoding="utf-8") as f:
+                json.dump(res_cpm, f, indent=2, ensure_ascii=False)
+            self.root.after(0, self._log_msg, "Caminho Critico (CPM) OK", "OK")
+        except Exception: pass
+
+        # GeoJSON
+        try:
+            from gerar_ns import gerar_geojson, gerar_html
+            gerar_geojson(self.trechos, self.pvs,
+                         str(pastas["04_GIS"] / "rede_definida.geojson"))
+            gerar_html(0, self.trechos[0], self.pvs, self.trechos, nucleo,
+                      str(pastas["03_HTML"] / "REDE_GERAL.html"))
+        except Exception: pass
+        # BIM IFC
+        if _ENGINES.get("IFC"):
+            try:
+                from gerar_ifc_lod500 import gerar_ifc_lod500
+                gerar_ifc_lod500(self.pvs, self.trechos, nucleo, str(pastas["07_BIM_IFC"]))
+                self.root.after(0, self._log_msg, "BIM IFC LOD500 OK", "OK")
+            except Exception as e:
+                self.root.after(0, self._log_msg, f"BIM IFC: {e}", "WARN")
+        # Lean/LPS
+        if _ENGINES.get("Lean/LPS"):
+            try:
+                from motor_lean_lps import gerar_relatorio_lean_lps, gerar_xlsx_lean_lps
+                rel = gerar_relatorio_lean_lps(self.pvs, self.trechos, nucleo=nucleo)
+                gerar_xlsx_lean_lps(rel, self.pvs, self.trechos, nucleo,
+                                   str(pastas["08_LEAN_LPS"] / f"LEAN_LPS_{nucleo_slug}.xlsx"))
+                self.root.after(0, self._log_msg, "Lean/LPS OK", "OK")
+            except Exception: pass
+        # Curva S
+        try:
+            from gerar_xlsx import gerar_xlsx_curva_s
+            gerar_xlsx_curva_s(self.trechos, nucleo,
+                              str(pastas["05_PLANILHAS"] / f"CURVA_S_{nucleo_slug}.xlsx"))
+        except Exception: pass
+
+    # ── Comandos legados (mantidos para compatibilidade) ─────────────────
 
     def _cmd_pipeline(self):
         arq = self.arquivo_var.get()

@@ -29,13 +29,14 @@ from collections import Counter, defaultdict
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
-MOTOR_DIR = Path(r"C:\Users\felip\Downloads\NOVA NS Versao 5")
+MOTOR_DIR = Path(__file__).parent
 sys.path.insert(0, str(MOTOR_DIR))
 
 # ══════════════════════════════════════════════════════════════
 # IMPORTAÇÕES
 # ══════════════════════════════════════════════════════════════
-from ler_dxf_gdal import ler_dxf_gdal
+from ler_dwg_aec import ler_dwg_aec
+from ler_landxml import ler_landxml
 from gerar_ns import (
     gerar_ns_a4, gerar_ns_desenho, gerar_ns_sat, gerar_html,
     gerar_geojson, enriquecer_trechos, calcular_materiais,
@@ -54,6 +55,18 @@ from gerar_cronograma_macro import (
     exportar_primavera_xer, exportar_openproject_csv,
     exportar_macro_xlsx, gerar_cronograma_por_ns
 )
+from gerar_ose import gerar_ose
+try:
+    from cronograma_cpm import compute_cpm
+    HAS_CPM = True
+except ImportError:
+    HAS_CPM = False
+
+try:
+    from construdata_analytics import main as run_analytics
+    HAS_ANALYTICS = True
+except ImportError:
+    HAS_ANALYTICS = False
 
 try:
     import pandas as pd
@@ -74,13 +87,16 @@ except ImportError:
 # ══════════════════════════════════════════════════════════════
 # CONFIGURAÇÃO
 # ══════════════════════════════════════════════════════════════
-SRC_FOLDER = Path(r"C:\Users\felip\Desktop\PROJETOS")
-DST_FOLDER = Path(r"C:\Users\felip\Desktop\CONSTRUDATA_SAIDA_COMPLETA\POR_PROJETO")
+SRC_FOLDER = Path.home() / "Downloads" / "PROJETOS"
+DST_FOLDER = Path.home() / "Downloads" / "CONSTRUDATA_SAIDA_COMPLETA" / "POR_PROJETO"
 
 # PASTAS EXTRAS com projetos DWG/DXF (serão varridas também)
 SRC_FOLDERS_EXTRAS = [
-    Path(r"C:\Users\felip\Downloads\PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018\MAPAS ÁGUA E ESGOTO PARA DXF"),
+    Path.home() / "Downloads" / "PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018" / "MAPAS ÁGUA E ESGOTO PARA DXF",
+    Path.home() / "Downloads" / "PROJETOS",
 ]
+if not SRC_FOLDER.exists():
+    SRC_FOLDER = Path.home() / "Documents" / "PROJETOS"
 
 # ══════════════════════════════════════════════════════════════
 # AUTO-DESCOBERTA DE TODOS OS DXF + DWG
@@ -88,7 +104,7 @@ SRC_FOLDERS_EXTRAS = [
 # Palavras que identificam CARTOGRAFIA/MAPA (excluir da lista de projetos)
 _EXCLUIR_PALAVRAS = [
     "CARTOGRAFIA", "(QGIS)", "TOPOGRAFIA", "LOCAÇÃO",
-    "LEGENDA", "LAYOUT", "MODELO", "TEMPLATE",
+    "LEGENDA", "MODELO", "TEMPLATE", "MAPA", "ARRUAMENTO"
 ]
 
 # Palavras que identificam projeto de ÁGUA (excluir)
@@ -124,10 +140,10 @@ CARTOGRAFIAS = {
 # Mapas DXF/DWG extras para interpolação de ruas (becos, vielas, etc)
 # Esses arquivos NÃO são projetos — são usados APENAS para nomes de ruas
 MAPAS_INTERPOLACAO = [
-    Path(r"C:\Users\felip\Desktop\PROJETOS\CT JOÃO CARLOS DA SILVA.dwg"),
-    Path(r"C:\Users\felip\Desktop\PROJETOS\ESTUDO - SÃO MANOEL.dxf"),
-    Path(r"C:\Users\felip\Desktop\PROJETOS\ESTUDO - CT JOÃO CARLOS DA SILVA.dxf"),
-    Path(r"C:\Users\felip\Desktop\PROJETOS\ACAD-ESTUDO - CT SÃO MANOEL E CT JOÃO CARLOS DA SILVA2.dxf"),
+    SRC_FOLDER / "CT JOAO CARLOS DA SILVA.dwg",
+    SRC_FOLDER / "ESTUDO - SAO MANOEL.dxf",
+    SRC_FOLDER / "ESTUDO - CT JOAO CARLOS DA SILVA.dxf",
+    SRC_FOLDER / "ACAD-ESTUDO - CT SAO MANOEL E CT JOAO CARLOS DA SILVA2.dxf",
 ]
 
 # Associação mapa de interpolação → núcleo
@@ -139,19 +155,19 @@ MAPA_PARA_NUCLEO = {
 }
 
 
-def _e_cartografia(nome):
+def _e_cartografia(arq_path):
     """Verifica se o arquivo é cartografia/mapa (não projeto)."""
-    n = nome.upper()
+    nome = Path(arq_path).name.upper()
     # Excluir se contém palavras de cartografia
-    if any(p.upper() in n for p in _EXCLUIR_PALAVRAS):
+    if any(p.upper() in nome for p in _EXCLUIR_PALAVRAS):
         return True
-    # Excluir se começa com "MAPA " (mas NÃO "MAPA" dentro de outro nome)
-    if n.startswith("MAPA "):
+    
+    # Se está na pasta de MAPAS explicitly
+    if "MAPA" in Path(arq_path).parent.name.upper():
         return True
-    # Excluir se é um dos mapas de interpolação explícitos
-    stem = Path(nome).stem
-    if stem in MAPA_PARA_NUCLEO:
-        return True
+
+    # NÃO excluir se for um dos mapas de interpolação mas estiver fora de pastas de mapas, 
+    # pois pode ser o projeto em si (como Sao Manoel)
     return False
 
 
@@ -168,6 +184,11 @@ def _e_agua(nome):
 def _identificar_nucleo(nome):
     """Identifica o núcleo automaticamente pelo nome do arquivo."""
     n = nome.upper()
+    
+    # Caso especial: São Manoel + João Carlos
+    if ("SÃO MANOEL" in n or "SAO MANOEL" in n) and ("JOÃO CARLOS" in n or "JOAO CARLOS" in n):
+        return "Sao Manoel + Joao Carlos"
+
     # Verificar cada palavra-chave
     for chave, nucleo in _NUCLEO_MAP.items():
         if chave.upper() in n:
@@ -176,7 +197,7 @@ def _identificar_nucleo(nome):
                 return f"Prolongamento {nucleo}"
             return nucleo
     # Não reconhecido — usar o nome do arquivo como núcleo
-    return nome.replace(".dxf", "").replace(".dwg", "")
+    return nome.replace(".dxf", "").replace(".dwg", "").replace(".DWG", "").replace(".DXF", "")
 
 
 def _descobrir_projetos(pastas):
@@ -190,7 +211,7 @@ def _descobrir_projetos(pastas):
 
     projetos = []
     nomes_vistos = set()
-    extensoes = ["*.dxf", "*.dwg"]
+    extensoes = ["*.dxf", "*.dwg", "*.xml"]
 
     for pasta in pastas:
         if not pasta.exists():
@@ -200,7 +221,7 @@ def _descobrir_projetos(pastas):
                 nome = arq.name
 
                 # Pular cartografias
-                if _e_cartografia(nome):
+                if _e_cartografia(arq):
                     continue
 
                 # Pular projetos de água
@@ -397,8 +418,19 @@ def _gerar_planilha_trechos_completa(trechos, pvs, nucleo, tipo_rede, out_path):
     return rows
 
 
-def processar_projeto(proj_info, dst_base):
+def processar_projeto(proj_info, dst_base, manual_mapas=None):
     """Processa UM projeto DXF/DWG — TODOS os módulos da plataforma."""
+    if isinstance(proj_info, (str, Path)):
+        # Suporte para chamar passando apenas o Path do arquivo
+        p = Path(proj_info)
+        proj_info = {
+            "dxf": p.name,
+            "dxf_path": str(p),
+            "nucleo": p.stem,
+            "tipo": "esgoto",
+            "projeto": p.stem
+        }
+
     dxf_name = proj_info["dxf"]
     nucleo = proj_info["nucleo"]
     tipo_rede = proj_info["tipo"]
@@ -423,7 +455,13 @@ def processar_projeto(proj_info, dst_base):
 
     # ── 1. LEITURA DXF ──────────────────────────────────────────
     try:
-        pvs, trechos, ruas, meta = ler_dxf_gdal(str(dxf_path))
+        ext = Path(dxf_path).suffix.lower()
+        
+        if ext == ".xml":
+            pvs, trechos, ruas_xml, meta = ler_landxml(dxf_path)
+        else:
+            # Motor AEC v5 "Brutal": LandXML Headless -> LISP -> COM -> DXF
+            pvs, trechos, meta = ler_dwg_aec(dxf_path)
     except Exception as e:
         print(f"  ERRO LEITURA: {e}")
         traceback.print_exc()
@@ -460,12 +498,19 @@ def processar_projeto(proj_info, dst_base):
                 break
 
     # ── 2b. INTERPOLAÇÃO VIA MAPAS DXF/DWG EXTRAS (becos, vielas) ─────
-    for mapa_path in MAPAS_INTERPOLACAO:
+    mapas_para_tentar = list(MAPAS_INTERPOLACAO)
+    if manual_mapas:
+        mapas_para_tentar.extend([Path(m) for m in manual_mapas])
+
+    for mapa_path in mapas_para_tentar:
         if not mapa_path.exists():
             continue
-        # Verificar se este mapa corresponde ao núcleo do projeto
+        # Verificar se este mapa corresponde ao núcleo do projeto (se for manual, sempre tenta)
         mapa_nucleo = MAPA_PARA_NUCLEO.get(mapa_path.stem, "")
-        if mapa_nucleo and (mapa_nucleo.upper() in nucleo.upper() or mapa_nucleo.upper() in nucleo_base.upper()):
+        processar_mapa = (manual_mapas and Path(mapa_path) in [Path(m) for m in manual_mapas]) or \
+                         (mapa_nucleo and (mapa_nucleo.upper() in nucleo.upper() or mapa_nucleo.upper() in nucleo_base.upper()))
+        
+        if processar_mapa:
             n_ruas_dxf = _carregar_ruas_dxf(str(mapa_path), trechos, pvs)
             if n_ruas_dxf > 0:
                 print(f"  Mapa DXF interpolação: {n_ruas_dxf} ruas preenchidas via {mapa_path.name}")
@@ -479,6 +524,25 @@ def processar_projeto(proj_info, dst_base):
         p = pasta_projeto / nome
         p.mkdir(parents=True, exist_ok=True)
         pastas[nome] = p
+
+    # --- CPM (Critical Path Method) ---
+    cpm_results = {}
+    if HAS_CPM:
+        try:
+            prod_m_dia = 6.0 # Padrao
+            cpm_tasks = []
+            for i, t in enumerate(trechos):
+                cpm_tasks.append({
+                    "id": i + 1,
+                    "name": f"NS{i+1:03d}",
+                    "duration": float(t.get("ext_m", 0) / prod_m_dia),
+                    "deps": [{"pred": i, "type": "FS"}] if i > 0 else []
+                })
+            cpm_full = compute_cpm(cpm_tasks)
+            for t_res in cpm_full.get("tasks", []):
+                cpm_results[int(t_res["id"])] = t_res
+        except Exception as e:
+            print(f"  Erro pre-calculo CPM: {e}")
 
     # ── 4. NOTAS DE SERVIÇO ─────────────────────────────────────
     print(f"  Gerando NS...")
@@ -504,9 +568,28 @@ def processar_projeto(proj_info, dst_base):
                 gerar_html(ns_id, t, pvs, trechos, nucleo,
                           str(pastas["03_HTML"] / f"NS{ns_id:03d}.html"))
             except Exception: pass
+            try:
+                gerar_ose(ns_id, t, pvs, nucleo,
+                          str(pastas["01_NS_CAMPO"] / ns_name / f"OSE_{ns_id:03d}.xlsx"))
+            except Exception: pass
 
             materiais = calcular_materiais(t, pvs)
             custo = custo_trecho(t, pvs)
+            
+            # --- CPM (Critical Path Method) ---
+            cpm_data = {}
+            if ns_id in cpm_results:
+                tr = cpm_results[ns_id]
+                cpm_data = {
+                    "early_start": tr.get("early_start", 0),
+                    "early_finish": tr.get("early_finish", 0),
+                    "late_start": tr.get("late_start", 0),
+                    "late_finish": tr.get("late_finish", 0),
+                    "slack": tr.get("total_float", 0),
+                    "is_critical": tr.get("critical", False),
+                    "duration_days": tr.get("duration", 1)
+                }
+
             dados = {
                 "ns_id": ns_id, "nucleo": nucleo, "contrato": CONTRATO,
                 "tipo_rede": tipo_rede,
@@ -515,6 +598,7 @@ def processar_projeto(proj_info, dst_base):
                 "pv_jusante": pvs.get(pv_f, {}),
                 "hidraulica": calc_manning(t.get("dn_mm"), t.get("decl_mm")),
                 "materiais": materiais, "custo": custo,
+                "cpm": cpm_data,
                 "gerado_em": datetime.now().isoformat(),
             }
             with open(ns_dir / f"NS{ns_id:03d}_DADOS.json", "w", encoding="utf-8") as f:
@@ -1069,6 +1153,26 @@ def main():
     print(f"    ✓ Separação por Rua + Cartografia GPKG")
     print(f"    ✓ PLANILHA DE COMPRAS (por NS, por Núcleo, Geral)")
     print(f"    ✓ SLNR MEGA INTEGRADA (Trechos + Setorização)")
+    
+    # ══════════════════════════════════════════════════════════════
+    # ANALYTICS FINAL (DADOS CONSTRUDATA)
+    # ══════════════════════════════════════════════════════════════
+    if HAS_ANALYTICS:
+        print(f"\n  EXECUTANDO ANALYTICS XGBOOST...")
+        try:
+            # Tenta localizar arquivos de dados de treino
+            p_exec = Path(__file__).parent / "dados_contrato" / "EXECUCAO_DIARIA.json"
+            p_ml   = Path(__file__).parent / "dados_contrato" / "ML_DATA.json"
+            if p_exec.exists():
+                run_analytics(
+                    path_exec=str(p_exec),
+                    path_ml=str(p_ml) if p_ml.exists() else None,
+                    output_dir=str(pasta_rodada / "13_ANALYTICS")
+                )
+                print(f"    ✓ Relatórios de Analytics gerados em '13_ANALYTICS'")
+        except Exception as e:
+            print(f"    [!] Erro no Analytics: {e}")
+
     print(f"\n  {'='*72}")
     print(f"  MISSÃO CUMPRIDA! 🔥")
     print(f"  {'='*72}")

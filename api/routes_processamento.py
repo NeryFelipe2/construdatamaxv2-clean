@@ -164,15 +164,20 @@ async def api_processamento_apenas_ler(
             pvs, trechos, _, meta = ler_landxml(str(upload_path))
             fonte = meta.get("motor") or "LandXML"
         elif suffix == ".dxf":
+            # Detectar ProSaneamento automaticamente
             try:
+                from ler_dxf_prosaneamento import detectar_prosaneamento, ler_dxf_prosaneamento
+                if detectar_prosaneamento(str(upload_path)):
+                    pvs, trechos, _, meta = ler_dxf_prosaneamento(str(upload_path))
+                    fonte = "ProSaneamento"
+                else:
+                    from ler_dxf_gdal import ler_dxf_gdal
+                    pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
+                    fonte = meta.get("motor") or "DXF"
+            except ImportError:
                 from ler_dxf_gdal import ler_dxf_gdal
-            except ImportError as exc:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"DXF indisponivel: {exc}. Use LandXML ou JSON.",
-                ) from exc
-            pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
-            fonte = meta.get("motor") or "DXF"
+                pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
+                fonte = meta.get("motor") or "DXF"
         elif suffix == ".dwg":
             try:
                 from ler_dwg_universal import ler_dwg_universal
@@ -211,7 +216,11 @@ async def api_processamento_apenas_ler(
 
 
 def _ler_upload(upload_path: Path, suffix: str) -> tuple[dict, list, dict]:
-    """Le arquivo enviado e retorna (pvs, trechos, meta)."""
+    """Le arquivo enviado e retorna (pvs, trechos, meta).
+    
+    Para DXF, detecta automaticamente se eh ProSaneamento (layers PS_*)
+    ou Civil 3D generico (GDAL).
+    """
     if suffix == ".json":
         payload = json.loads(upload_path.read_text(encoding="utf-8-sig"))
         pvs, trechos = _extract_network_from_json(payload)
@@ -221,6 +230,14 @@ def _ler_upload(upload_path: Path, suffix: str) -> tuple[dict, list, dict]:
         pvs, trechos, _, meta = ler_landxml(str(upload_path))
         return pvs, trechos, meta
     elif suffix == ".dxf":
+        # Deteccao automatica: ProSaneamento (layers PS_*) vs GDAL generico
+        try:
+            from ler_dxf_prosaneamento import detectar_prosaneamento, ler_dxf_prosaneamento
+            if detectar_prosaneamento(str(upload_path)):
+                pvs, trechos, _, meta = ler_dxf_prosaneamento(str(upload_path))
+                return pvs, trechos, meta
+        except ImportError:
+            pass
         from ler_dxf_gdal import ler_dxf_gdal
         pvs, trechos, _, meta = ler_dxf_gdal(str(upload_path))
         return pvs, trechos, meta

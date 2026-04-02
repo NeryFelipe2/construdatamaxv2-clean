@@ -39,6 +39,8 @@ CONTRATO    = "11481051"
 NS_VERSION  = "9"
 CRS_EPSG    = "EPSG:31983"
 _PROSANE_DIR = Path(r"C:\pro_sane")
+if not _PROSANE_DIR.exists():
+    _PROSANE_DIR = Path.home() / "Downloads" / "pro_sane"
 
 
 # ── Helpers v9: estrutura CAMPO/PLANEJAMENTO ──────────────────────────────
@@ -112,8 +114,8 @@ def _ler_params_prosane():
 _PARAMS_PS  = _ler_params_prosane()
 N_MANNING   = _PARAMS_PS["n_manning"]
 
-DXF_DIR = r"C:\Users\felip\Downloads\PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018\MAPAS ÁGUA E ESGOTO PARA DXF"
-OUT_DIR = r"C:\Users\felip\Downloads\NOVA NS Versao 5\SAIDA"
+DXF_DIR = Path.home() / "Downloads" / "PROJETOS DE ÁGUA E ESGOTO - DWG E DXF 2018" / "MAPAS ÁGUA E ESGOTO PARA DXF"
+OUT_DIR = Path(__file__).parent / "SAIDA"
 
 NUCLEOS_BATCH = [
     {"nucleo": "Pantanal Baixo",  "dxf": f"{DXF_DIR}\\PANTANAL BAIXO\\PANTANAL_ESGOTO.dxf"},
