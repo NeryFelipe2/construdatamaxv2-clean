@@ -235,9 +235,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Renderiza a antiga versao monolítica diretamente sem a casca do novo */}
+        <Route path="/ns-v5" element={<NsV5Page />} />
+        
         <Route path="/app" element={<AppShell />}>
-          <Route index element={<Navigate to="/app/ns-v5" replace />} />
-          <Route path="ns-v5" element={<NsV5Page />} />
+          <Route index element={<Navigate to="/ns-v5" replace />} />
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
           <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
@@ -261,9 +263,9 @@ export default function App() {
           <Route path="construplan-brutal" element={<OfflineIframePage url="/offline_modules/construplan.html" />} />
           <Route path="cenarios-offline" element={<OfflineIframePage url="/offline_modules/cenarios.html" />} />
 
-          <Route path="*" element={<Navigate to="/app/ns-v5" replace />} />
+          <Route path="*" element={<Navigate to="/ns-v5" replace />} />
         </Route>
-        <Route path="*" element={<Navigate to="/app" replace />} />
+        <Route path="*" element={<Navigate to="/ns-v5" replace />} />
       </Routes>
     </BrowserRouter>
   );
