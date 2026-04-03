@@ -701,209 +701,235 @@ export default function LegacyApp() {
 
   function renderMapa() {
     return (
-      <>
-        <div className="section-title">Mapa da Rede</div>
-        <div className="action-row">
-          <a className="action-btn btn-green" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR EM NOVA GUIA</a>
+      <div className="p-panel border-t-2 border-t-[#38bdf8] flex flex-col h-[calc(100vh-200px)]">
+        <div className="panel-header mb-4">
+           <h2 className="panel-title"><span>Mapa da Rede (Integração Leaflet)</span> <span className="badge">ROUTING</span></h2>
+           <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR MAPA COMPLETO</a>
         </div>
-        <div className="module-frame-wrap">
+        <div className="frame-container flex-1 h-full min-h-[400px]">
           <iframe src={nativeUrl("/manage")} title="Mapa" />
         </div>
-      </>
+      </div>
     );
   }
 
   function renderRede() {
     return (
-      <>
-        <div className="section-title">Rede 3D — Manage Dataset</div>
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">Nos</span><span className="kpi-value">{formatInt(manageData?.nodes.length ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Arestas</span><span className="kpi-value">{formatInt(manageData?.edges.length ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Extensao</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Custo 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
+      <div className="p-panel border-t-2 border-t-[#8b5cf6] flex flex-col h-[calc(100vh-200px)]">
+        <div className="panel-header mb-4">
+           <h2 className="panel-title"><span>Rede 3D — Manage Dataset</span> <span className="badge">WEBGL</span></h2>
+           <div className="flex gap-2">
+             <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={apiUrl("/api/manage/rede")} target="_blank" rel="noreferrer">DATASET JSON</a>
+             <a className="btn btn-primary !py-1 !px-3 !text-[10px]" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">VIEWER 3D</a>
+           </div>
         </div>
-        <div className="action-row">
-          <a className="action-btn btn-cyan" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">VIEWER 3D</a>
-          <a className="action-btn btn-dark" href={apiUrl("/api/manage/rede")} target="_blank" rel="noreferrer">JSON BRUTO</a>
+        <div className="kpi-board mb-4">
+          <div className="kpi-card !py-3"><div className="kpi-label">Nos de Ligação</div><div className="kpi-value text-2xl">{formatInt(manageData?.nodes.length ?? 0)}</div></div>
+          <div className="kpi-card !py-3"><div className="kpi-label">Arestas Domiciliares</div><div className="kpi-value text-2xl">{formatInt(manageData?.edges.length ?? 0)}</div></div>
+          <div className="kpi-card !py-3"><div className="kpi-label">Extensao Total</div><div className="kpi-value text-2xl text-[#38bdf8]">{formatMeters(asNumber(manageData?.ext))}</div></div>
+          <div className="kpi-card !py-3"><div className="kpi-label">Custo 5D Estimado</div><div className="kpi-value text-2xl text-emerald-400">{formatCurrency(manageCost)}</div></div>
         </div>
-        <div className="module-frame-wrap">
+        <div className="frame-container flex-1 h-full min-h-[400px]">
           <iframe src={nativeUrl("/manage")} title="Rede" />
         </div>
-      </>
+      </div>
     );
   }
 
   function renderHidraulica() {
     return (
-      <>
-        <div className="section-title">Hidraulica — Notas de Servico</div>
-        <div className="section-subtitle">Selecione uma NS para ver detalhe, materiais, checklist e fotos</div>
+      <div className="p-panel border-t-2 border-t-[#38bdf8]">
+        <div className="panel-header mb-2">
+           <h2 className="panel-title"><span>Hidraulica — Notas de Servico</span> <span className="badge">INSPECTION</span></h2>
+        </div>
+        <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">Selecione uma NS para cruzar dados do checklist e fotos georreferenciadas na tabela de validação.</p>
 
-        <div className="scope-bar">
-          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
+        <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-6 overflow-x-auto hide-scrollbar">
+          <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
           {nucleoNames.slice(0, 10).map(n => (
-            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
+            <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
           ))}
         </div>
 
-        <div className="two-col">
-          <div>
-            <table className="data-table">
-              <thead>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
+          <div className="overflow-y-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
+            <table className="data-grid w-full">
+              <thead className="sticky top-0 z-10 shadow-sm border-b border-[var(--border-light)]">
                 <tr>
-                  <th>NS</th><th>Trecho</th><th>Status</th><th>DN</th><th>Ext</th>
+                  <th>NS ID</th><th>Trecho T.</th><th>Status</th><th>DN</th><th>Extensao</th>
                 </tr>
               </thead>
               <tbody>
                 {latestNs.length ? latestNs.map((item, i) => {
                   const id = asNumber(item.id);
+                  const isSelected = selectedNsId === id;
                   return (
-                    <tr key={`${id}-${i}`} className={selectedNsId === id ? "row-active" : ""} onClick={() => setSelectedNsId(id)}>
-                      <td>{nsCode(item)}</td>
-                      <td>{nsTrecho(item)}</td>
-                      <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
-                      <td>{formatInt(asNumber(item.dn_mm))}</td>
-                      <td>{formatMeters(asNumber(item.ext_m))}</td>
+                    <tr key={`${id}-${i}`} className={`cursor-pointer transition-colors ${isSelected ? "bg-[#38bdf8]/20" : "hover:bg-[rgba(255,255,255,0.02)]"}`} onClick={() => setSelectedNsId(id)}>
+                      <td className="font-bold text-white">{nsCode(item)}</td>
+                      <td className="font-mono">{nsTrecho(item)}</td>
+                      <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${cleanText(item.status) === 'CONCLUÍDA' ? 'text-emerald-400 bg-emerald-500/10' : 'text-[#f59e0b] bg-[#f59e0b]/10'}`}>{cleanText(item.status ?? "-")}</span></td>
+                      <td className="font-mono text-[var(--text-muted)]">{formatInt(asNumber(item.dn_mm))}</td>
+                      <td className="font-mono text-[#38bdf8]">{formatMeters(asNumber(item.ext_m))}</td>
                     </tr>
                   );
-                }) : <tr><td colSpan={5} className="empty">Nenhuma NS disponivel.</td></tr>}
+                }) : <tr><td colSpan={5} className="text-center py-8 text-[var(--text-muted)]">Nenhuma NS disponivel na pipeline.</td></tr>}
               </tbody>
             </table>
           </div>
 
-          <div>
+          <div className="bg-[#05080f] rounded-xl border border-[var(--border-light)] p-5 overflow-y-auto shadow-inner">
             {selectedNsDetail ? (
-              <div className="detail-panel">
-                <div className="section-title">{nsCode(selectedNsDetail)}</div>
-                <div className="detail-row"><span className="dlabel">Nucleo</span><span className="dvalue">{cleanText(selectedNsDetail.nucleo)}</span></div>
-                <div className="detail-row"><span className="dlabel">Rua</span><span className="dvalue">{cleanText(selectedNsDetail.rua ?? "-")}</span></div>
-                <div className="detail-row"><span className="dlabel">Material</span><span className="dvalue">{cleanText(selectedNsDetail.material ?? "-")}</span></div>
-                <div className="detail-row"><span className="dlabel">Checklist</span><span className="dvalue">{formatInt((selectedNsDetail.checklist ?? []).filter(c => Boolean(c.concluido)).length)} / {formatInt(selectedNsDetail.checklist?.length ?? 0)}</span></div>
+              <div className="flex flex-col gap-5">
+                <div className="border-b border-[var(--border-light)] pb-4">
+                   <h3 className="text-xl font-bold text-white mb-3">{nsCode(selectedNsDetail)}</h3>
+                   <div className="grid grid-cols-2 gap-y-2 text-xs">
+                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Nucleo de Origem</span><span className="text-white font-mono">{cleanText(selectedNsDetail.nucleo)}</span></div>
+                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Rua Identificada</span><span className="text-white truncate" title={cleanText(selectedNsDetail.rua ?? "-")}>{cleanText(selectedNsDetail.rua ?? "-")}</span></div>
+                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Material Inst.</span><span className="text-white">{cleanText(selectedNsDetail.material ?? "-")}</span></div>
+                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Progresso Checklist</span><span className="text-emerald-400 font-bold">{formatInt((selectedNsDetail.checklist ?? []).filter(c => Boolean(c.concluido)).length)} / {formatInt(selectedNsDetail.checklist?.length ?? 0)}</span></div>
+                   </div>
+                </div>
 
-                <div style={{ marginTop: 10 }}>
-                  <div className="form-row">
-                    <div className="form-field">
-                      <label>Status</label>
-                      <select value={pendingStatus} onChange={e => setPendingStatus(e.target.value)}>
-                        {NS_STATUS_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
-                      </select>
-                    </div>
+                <div className="bg-[var(--bg-base)] p-3 rounded-lg border border-[var(--border-light)]">
+                  <div className="text-[10px] uppercase text-[var(--text-muted)] font-bold tracking-wider mb-2">Controle de Status</div>
+                  <div className="flex gap-2">
+                    <select className="flex-1 bg-transparent border border-[var(--border-light)] text-sm rounded px-3 py-1.5 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[var(--border-accent)]" value={pendingStatus} onChange={e => setPendingStatus(e.target.value)}>
+                      {NS_STATUS_OPTIONS.map(o => <option key={o} value={o} className="bg-[var(--bg-panel)]">{o}</option>)}
+                    </select>
+                    <button className="btn btn-outline border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 !py-1" onClick={handleNsStatusUpdate}>ATUALIZAR STATUS</button>
                   </div>
-                  <button className="action-btn btn-green" onClick={handleNsStatusUpdate}>ATUALIZAR STATUS</button>
                 </div>
 
                 {(selectedNsDetail.materiais ?? []).length > 0 && (
-                  <div style={{ marginTop: 12 }}>
-                    <div className="section-title">Materiais</div>
-                    <ul className="mat-list">
+                  <div>
+                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3">Inventário de Materiais</h4>
+                    <ul className="flex flex-col gap-1.5">
                       {(selectedNsDetail.materiais ?? []).slice(0, 12).map((m, i) => (
-                        <li key={`${m.descricao}-${i}`}>{m.quantidade} {m.unidade} - {cleanText(m.descricao)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {(selectedNsDetail.checklist ?? []).length > 0 && (
-                  <div style={{ marginTop: 12 }}>
-                    <div className="section-title">Checklist</div>
-                    <ul className="checklist">
-                      {(selectedNsDetail.checklist ?? []).map(c => (
-                        <li key={String(c.id)}>
-                          <span className={c.concluido ? "check-ok" : "check-pend"}>{c.concluido ? "OK" : "PEND"}</span>{" "}
-                          {cleanText(c.item)}
+                        <li key={`${m.descricao}-${i}`} className="flex justify-between items-center bg-[rgba(255,255,255,0.02)] px-3 py-1.5 rounded text-xs">
+                          <span className="text-[var(--text-muted)] truncate max-w-[70%]">{cleanText(m.descricao)}</span>
+                          <strong className="text-white font-mono">{m.quantidade} {m.unidade}</strong>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
 
-                {selectedNsPhotos.length > 0 && (
-                  <div style={{ marginTop: 12 }}>
-                    <div className="section-title">Fotos</div>
-                    <ul className="mat-list">
-                      {selectedNsPhotos.map((p, i) => (
-                        <li key={`${p.caminho}-${i}`}>{cleanText(p.legenda || p.caminho || "Foto")} - {formatDateTime(p.data_hora)}</li>
+                {(selectedNsDetail.checklist ?? []).length > 0 && (
+                  <div>
+                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3 text-emerald-400">Auditoria (Checklist)</h4>
+                    <ul className="flex flex-col gap-2">
+                      {(selectedNsDetail.checklist ?? []).map(c => (
+                        <li key={String(c.id)} className="flex items-start gap-3">
+                          <span className={`mt-0.5 shrink-0 block w-4 h-4 flex items-center justify-center rounded-full border text-[8px] font-bold ${c.concluido ? 'border-emerald-500 text-emerald-500 bg-emerald-500/10' : 'border-[#94a3b8] text-transparent'}`}>✓</span>
+                          <span className={`text-xs ${c.concluido ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>{cleanText(c.item)}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
+                
+                {selectedNsPhotos.length > 0 && (
+                  <div>
+                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3 text-[#f59e0b]">Registro Fotográfico As-Built</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {selectedNsPhotos.map((p, i) => (
+                        <div key={`${p.caminho}-${i}`} className="relative group cursor-pointer border border-[var(--border-light)] rounded overflow-hidden h-24 bg-[var(--bg-base)] flex items-center justify-center text-xs text-[var(--text-muted)]">
+                          {/* We don't have actual images hosted so we show placeholders with the label */}
+                          <span className="absolute bottom-0 inset-x-0 bg-black/80 px-2 py-1 text-[9px] text-white truncate">{cleanText(p.legenda || "Foto")}</span>
+                          <span className="opacity-30">{formatDateTime(p.data_hora)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="empty">Selecione uma NS na tabela ao lado.</div>
+              <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                 <div className="w-12 h-12 rounded bg-[rgba(255,255,255,0.02)] border border-[var(--border-light)] mb-4 flex items-center justify-center text-[var(--text-muted)]">⛑</div>
+                 <h3 className="text-white font-bold mb-2">Nenhuma Ficha Selecionada</h3>
+                 <p className="text-xs text-[var(--text-muted)] max-w-[250px]">Selecione uma linha na tabela para visualizar o checklist de auditoria e lista de suprimentos.</p>
+              </div>
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   function renderTrechos() {
     return (
-      <>
-        <div className="section-title">Trechos e Cadastro Tecnico</div>
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">Feicoes GIS</span><span className="kpi-value">{formatInt(geoJson?.features.length ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Trechos</span><span className="kpi-value">{formatInt(geoTrechos)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">PVs / PIs</span><span className="kpi-value">{formatInt(geoPvs)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Extensao Total</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
+      <div className="p-panel border-t-2 border-t-[#38bdf8]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Trechos e Cadastro Tecnico</span> <span className="badge">BASE GIS</span></h2>
         </div>
-        <div className="action-row">
-          <a className="action-btn btn-cyan" href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">GEOJSON BRUTO</a>
-          <a className="action-btn btn-dark" href={nativeUrl("/campo")} target="_blank" rel="noreferrer">CAMPO</a>
+        <div className="action-row mb-6">
+          <a className="btn btn-outline" href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">GEOJSON BRUTO</a>
+          <a className="btn btn-outline" href={nativeUrl("/campo")} target="_blank" rel="noreferrer">APP CAMPO NATIVO</a>
         </div>
 
-        <table className="data-table">
-          <thead>
-            <tr><th>NS</th><th>Trecho</th><th>DN (mm)</th><th>Extensao</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            {nsList.items.slice(0, 30).map((item, i) => (
-              <tr key={`t-${asNumber(item.id)}-${i}`}>
-                <td>{nsCode(item)}</td>
-                <td>{nsTrecho(item)}</td>
-                <td>{formatInt(asNumber(item.dn_mm))}</td>
-                <td>{formatMeters(asNumber(item.ext_m))}</td>
-                <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Feicoes GIS</div><div className="kpi-value">{formatInt(geoJson?.features.length ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Trechos</div><div className="kpi-value text-[#38bdf8]">{formatInt(geoTrechos)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">PVs / PIs</div><div className="kpi-value text-[#10b981]">{formatInt(geoPvs)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Extensao Total</div><div className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</div></div>
+        </div>
+
+        <div className="overflow-x-auto w-full border border-[var(--border-light)] rounded-xl mt-6">
+          <table className="data-grid">
+            <thead>
+              <tr><th>NS</th><th>Trecho</th><th>DN (mm)</th><th>Extensao</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              {nsList.items.slice(0, 30).map((item, i) => (
+                <tr key={`t-${asNumber(item.id)}-${i}`}>
+                  <td className="font-mono text-[#38bdf8]">{nsCode(item)}</td>
+                  <td className="font-mono">{nsTrecho(item)}</td>
+                  <td>{formatInt(asNumber(item.dn_mm))}</td>
+                  <td>{formatMeters(asNumber(item.ext_m))}</td>
+                  <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold ${cleanText(item.status) === 'CONCLUIDO' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-[#1e293b] text-[#94a3b8]'}`}>{cleanText(item.status ?? "-")}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     );
   }
 
   function renderCustos() {
     return (
-      <>
-        <div className="section-title">Custos 5D — Resumo Financeiro</div>
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Valor Liberado</span><span className="kpi-value">{formatCurrency(dashboard?.valor_liberado ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Custo RDO Total</span><span className="kpi-value">{formatCurrency(dashboard?.custo_rdo_total ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Custo Rede 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
+      <div className="p-panel border-t-2 border-t-[#10b981]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Custos 5D — Resumo Financeiro</span> <span className="badge">FINANCEIRO</span></h2>
         </div>
-        <div className="action-row">
-          <a className="action-btn btn-cyan" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">CONTROLE</a>
-          <a className="action-btn btn-dark" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+        <div className="action-row mb-6">
+          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">CONTROLE NATIVO</a>
+          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">GERAR CURVA S JSON</a>
         </div>
 
-        <div className="two-col">
-          <div className="detail-panel">
-            <div className="section-title">Curva S — Previsto</div>
-            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
-            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curvePrev?.ext_acum))}</span></div>
-            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curvePrev?.custo_acum))}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">% Fisico Operacional</div><div className="kpi-value text-[#38bdf8]">{formatPercent(dashboard?.pct_fisico ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">% Financeiro Medido</div><div className="kpi-value text-[#10b981]">{formatPercent(dashboard?.pct_financeiro ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Valor Liberado Estimado</div><div className="kpi-value text-emerald-400">{formatCurrency(dashboard?.valor_liberado ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Custo RDO Total</div><div className="kpi-value text-rose-400">{formatCurrency(dashboard?.custo_rdo_total ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Custo Rede 5D Integral</div><div className="kpi-value">{formatCurrency(manageCost)}</div></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)] shadow-md">
+            <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4 border-b border-[var(--border-light)] pb-2">Curva S — Previsto (Baseline)</h3>
+            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Avanço % Acumulado</span><span className="text-white font-mono">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
+            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Extensao Paramétrica</span><span className="text-[#38bdf8] font-mono">{formatMeters(asNumber(curvePrev?.ext_acum))}</span></div>
+            <div className="flex justify-between py-2"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Custo Absorvido</span><span className="text-emerald-400 font-mono">{formatCurrency(asNumber(curvePrev?.custo_acum))}</span></div>
           </div>
-          <div className="detail-panel">
-            <div className="section-title">Curva S — Realizado</div>
-            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
-            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curveReal?.ext_acum))}</span></div>
-            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curveReal?.custo_acum))}</span></div>
+          <div className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)] shadow-md">
+            <h3 className="text-[#10b981] font-bold text-sm tracking-wider uppercase mb-4 border-b border-[var(--border-light)] pb-2">Curva S — Realizado (Campo)</h3>
+            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Avanço % Acumulado</span><span className="text-white font-mono">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
+            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Extensao Lançada</span><span className="text-[#38bdf8] font-mono">{formatMeters(asNumber(curveReal?.ext_acum))}</span></div>
+            <div className="flex justify-between py-2"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Custo Empenhado</span><span className="text-emerald-400 font-mono">{formatCurrency(asNumber(curveReal?.custo_acum))}</span></div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -915,195 +941,204 @@ export default function LegacyApp() {
     }, {});
 
     return (
-      <>
-        <div className="section-title">Pipeline de Saidas BIM 5D</div>
-        <div className="action-row">
-          <button className="action-btn btn-green" disabled>GERAR TUDO (6 etapas)</button>
-          <button className="action-btn btn-red" disabled>IFC LOD500</button>
-          <button className="action-btn btn-blue" disabled>LandXML</button>
-          <button className="action-btn btn-orange" disabled>Cadastro NTS292</button>
-          <button className="action-btn btn-red" disabled>Cadastro DXF</button>
-          <button className="action-btn btn-teal" disabled>Cronograma</button>
-          <button className="action-btn btn-purple" disabled>Dynamo</button>
-          <button className="action-btn btn-dark" disabled>SCR</button>
+      <div className="p-panel border-t-2 border-t-[#ef4444]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>BIM 3D/4D/5D Pipeline</span> <span className="badge">GENERADOR COMPLETO</span></h2>
+        </div>
+        <div className="action-row mb-6">
+          <button className="btn btn-primary" disabled>GERAR PACK COMPLETO (6 etapas)</button>
+          <button className="btn btn-outline border-[#ef4444]/30 text-[#ef4444]" disabled>IFC LOD500</button>
+          <button className="btn btn-outline text-[#38bdf8]" disabled>LandXML</button>
+          <button className="btn btn-outline text-[#f59e0b]" disabled>Cadastro NTS292</button>
+          <button className="btn btn-outline" disabled>Cadastro DXF</button>
+          <button className="btn btn-outline text-[#10b981]" disabled>Cronograma</button>
         </div>
 
-        <div className="link-row">
-          <span style={{ color: "#667788", marginRight: 8 }}>Interfaces HTML:</span>
-          <a className="link-btn" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">Editor EPANET</a>
-          <a className="link-btn" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">Viewer 3D</a>
-          <a className="link-btn" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">Controle As-Built</a>
-          <a className="link-btn" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">RDO Diario</a>
-          <a className="link-btn" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">Gestao Perdas</a>
-          <a className="link-btn" href={nativeUrl("/fluxograma-bim")} target="_blank" rel="noreferrer">Fluxograma</a>
+        <div className="flex flex-wrap gap-2 mb-8 bg-[#05080f] p-3 rounded-lg border border-[var(--border-light)] items-center">
+          <span className="text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider mr-2">Interfaces GUI:</span>
+          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">Viewer 3D</a>
+          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">Editor EPANET</a>
+          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">Controle As-Built</a>
         </div>
 
-        <div className="section-title">SAIDAS DO PIPELINE (12 Pastas)</div>
-        <div className="output-list">
-          <div className="output-item"><span className="folder">01_NS_CAMPO/</span><span className="desc">Notas de Serviço: PDF A4 + DESENHO + SAT + MAPA + JSON DADOS</span></div>
-          <div className="output-item"><span className="folder">02_DESENHOS/</span><span className="desc">PDFs A3 técnicos por NS (perfil + planta)</span></div>
-          <div className="output-item"><span className="folder">03_HTML/</span><span className="desc">Mapas Leaflet interativos por trecho</span></div>
-          <div className="output-item"><span className="folder">04_GIS/</span><span className="desc">GeoJSON georref SIRGAS 2000 UTM 23S</span></div>
-          <div className="output-item"><span className="folder">05_PLANILHAS/</span><span className="desc">Mestre PV a PV + Hidráulica + Curva S</span></div>
-          <div className="output-item"><span className="folder">06_CUSTOS/</span><span className="desc">XLSX custos com BDI + quantitativos</span></div>
-          <div className="output-item"><span className="folder">07_BIM_IFC/</span><span className="desc">IFC LOD 500 (SweptDiskSolid+ExtrudedAreaSolid) + CSV + JSON</span></div>
-          <div className="output-item"><span className="folder">08_LEAN_LPS/</span><span className="desc">Last Planner System + Lean completo</span></div>
-          <div className="output-item"><span className="folder">09_MICROPLAN/</span><span className="desc">Microplanejamento por equipes</span></div>
-          <div className="output-item"><span className="folder">10_CRONOGRAMA/</span><span className="desc">Gantt NS + MS Project XML + P6 XER + OpenProject CSV</span></div>
-          <div className="output-item"><span className="folder">11_POR_RUA/</span><span className="desc">Trechos separados por logradouro</span></div>
-          <div className="output-item"><span className="folder">12_LOG/</span><span className="desc">JSON de processamento e rastreabilidade</span></div>
+        <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Mapeamento de Saidas (12 Pastas Output)</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">01_NS_CAMPO/</code><span className="text-[10px] text-[var(--text-muted)]">Notas de Serviço: PDF A4 + DESENHO + SAT + MAPA + JSON</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">02_DESENHOS/</code><span className="text-[10px] text-[var(--text-muted)]">PDFs A3 técnicos por NS (perfil + planta)</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">03_HTML/</code><span className="text-[10px] text-[var(--text-muted)]">Mapas Leaflet interativos por trecho</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">04_GIS/</code><span className="text-[10px] text-[var(--text-muted)]">GeoJSON georref SIRGAS 2000 UTM 23S</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">05_PLANILHAS/</code><span className="text-[10px] text-[var(--text-muted)]">Mestre PV a PV + Hidráulica + Curva S</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">06_CUSTOS/</code><span className="text-[10px] text-[var(--text-muted)]">XLSX custos com BDI + quantitativos</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">07_BIM_IFC/</code><span className="text-[10px] text-[var(--text-muted)]">IFC LOD 500 + CSV + JSON</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">08_LEAN_LPS/</code><span className="text-[10px] text-[var(--text-muted)]">Last Planner System + Lean completo</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">09_MICROPLAN/</code><span className="text-[10px] text-[var(--text-muted)]">Microplanejamento por equipes em HTML</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">10_CRONOGRAMA/</code><span className="text-[10px] text-[var(--text-muted)]">Gantt NS + MS Project XML + CSV</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">11_POR_RUA/</code><span className="text-[10px] text-[var(--text-muted)]">Trechos agrupados por logradouro real</span></div>
+          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">12_LOG/</code><span className="text-[10px] text-[var(--text-muted)]">JSON de processamento e rastreabilidade</span></div>
         </div>
 
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">HTML</span><span className="kpi-value">{formatInt(kinds.html ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">PDF</span><span className="kpi-value">{formatInt(kinds.pdf ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">JSON</span><span className="kpi-value">{formatInt(kinds.json ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">IFC</span><span className="kpi-value">{formatInt(kinds.ifc ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">CSV</span><span className="kpi-value">{formatInt(kinds.csv ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">XML</span><span className="kpi-value">{formatInt(kinds.xml ?? 0)}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Artefatos HTML</div><div className="kpi-value">{formatInt(kinds.html ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Plotagens PDF</div><div className="kpi-value text-rose-400">{formatInt(kinds.pdf ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Datastores JSON</div><div className="kpi-value text-[#f59e0b]">{formatInt(kinds.json ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Modelos IFC</div><div className="kpi-value text-[#38bdf8]">{formatInt(kinds.ifc ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Datasets CSV</div><div className="kpi-value text-emerald-400">{formatInt(kinds.csv ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Cronogramas XML</div><div className="kpi-value">{formatInt(kinds.xml ?? 0)}</div></div>
         </div>
-      </>
+      </div>
     );
   }
 
   function renderLean() {
     return (
-      <>
-        <div className="section-title">Lean Construction + Last Planner System + BIM 6D</div>
-        <div className="action-row">
-          <button className="action-btn btn-green" disabled>RELATORIO LEAN+LPS</button>
-          <button className="action-btn btn-purple" disabled>TAKT TIME</button>
-          <button className="action-btn btn-blue" disabled>LOOKAHEAD 6 SEM</button>
-          <button className="action-btn btn-orange" disabled>BIM 6D (Ciclo Vida)</button>
+      <div className="p-panel border-t-2 border-t-[#8b5cf6]">
+        <div className="panel-header">
+          <h2 className="panel-title"><span>Lean Construction & LPS</span> <span className="badge">INSIGHTS OFF</span></h2>
+        </div>
+        <div className="action-row mb-6">
+          <button className="btn btn-outline" disabled>RELATORIO LEAN+LPS</button>
+          <button className="btn btn-outline" disabled>TAKT TIME</button>
+          <button className="btn btn-outline" disabled>LOOKAHEAD 6 SEM</button>
+          <button className="btn btn-outline" disabled>BIM 6D (Ciclo Vida)</button>
         </div>
 
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">Takt (m/dia)</span><span className="kpi-value">{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Cycle Time</span><span className="kpi-value">{formatInt(leanInsight?.cycle_time_dias ?? 0)} dias</span></div>
-          <div className="kpi-cell"><span className="kpi-label">PPC (%)</span><span className="kpi-value warn">{leanInsight?.restricoes_lookahead != null ? formatInt(leanInsight.restricoes_lookahead) : "-"}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">VA/NVA</span><span className="kpi-value">{leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "-"}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">CO2 (ton)</span><span className="kpi-value">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "-"}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Custo 50 anos</span><span className="kpi-value">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Takt (m/dia)</div><div className="kpi-value text-[#8b5cf6]">{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Cycle Time</div><div className="kpi-value">{formatInt(leanInsight?.cycle_time_dias ?? 0)} d</div></div>
+          <div className="kpi-card warn"><div className="kpi-label">PPC (%)</div><div className="kpi-value text-[#f59e0b]">{leanInsight?.restricoes_lookahead != null ? formatInt(leanInsight.restricoes_lookahead) : "-"}</div></div>
+          <div className="kpi-card"><div className="kpi-label">VA/NVA</div><div className="kpi-value">{leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "-"}</div></div>
+          <div className="kpi-card"><div className="kpi-label">CO2 (ton)</div><div className="kpi-value">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "-"}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Custo 50 anos</div><div className="kpi-value text-rose-400">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</div></div>
         </div>
 
         {leanInsight?.alerta_lookahead && (
-          <div className="resumo-box">
+          <div className="sys-msg msg-error mt-4">
             <strong>Alerta Lookahead:</strong> {cleanText(leanInsight.alerta_lookahead)}
           </div>
         )}
 
-        <div className="detail-panel">
-          <div className="detail-row"><span className="dlabel">Throughput</span><span className="dvalue">{formatInt(leanInsight?.throughput_ns_semana ?? 0)} NS/semana</span></div>
-          <div className="detail-row"><span className="dlabel">Planejadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_planejadas_semana ?? 0)}</span></div>
-          <div className="detail-row"><span className="dlabel">Bloqueadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 0)}</span></div>
-          <div className="detail-row"><span className="dlabel">Ext. planejada/sem</span><span className="dvalue">{formatMeters(leanInsight?.ext_planejada_semana ?? 0)}</span></div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Throughput</div><div className="text-lg text-white">{formatInt(leanInsight?.throughput_ns_semana ?? 0)} NS/sem</div></div>
+          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Planejadas/sem</div><div className="text-lg text-white">{formatInt(leanInsight?.ns_planejadas_semana ?? 0)}</div></div>
+          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Bloqueadas/sem</div><div className="text-lg text-rose-400">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 0)}</div></div>
+          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Ext. planejada/sem</div><div className="text-lg text-emerald-400">{formatMeters(leanInsight?.ext_planejada_semana ?? 0)}</div></div>
         </div>
-      </>
+      </div>
     );
   }
 
   function renderPerdas() {
     return (
-      <>
-        <div className="section-title">Gestao de Perdas — IWA / UARL / ILI / DMA</div>
-        <div className="action-row">
-          <button className="action-btn btn-green" disabled>RELATORIO PERDAS</button>
-          <button className="action-btn btn-red" disabled>MAPA RISCO</button>
-          <button className="action-btn btn-blue" disabled>CRIAR DMAs</button>
-          <button className="action-btn btn-teal" disabled>PDF PERDAS</button>
-          <button className="action-btn btn-orange" disabled>ANALISE TROCA</button>
+      <div className="p-panel border-t-2 border-t-[#0ea5e9]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Gestao de Perdas Reais & Aparentes</span> <span className="badge">IWA / UARL / ILI</span></h2>
+        </div>
+        <div className="action-row mb-6">
+          <button className="btn btn-outline" disabled>RELATORIO PERDAS</button>
+          <button className="btn btn-outline border-rose-500/30 text-rose-400" disabled>MAPA DE RISCO VAZAMENTOS</button>
+          <button className="btn btn-outline border-[#38bdf8]/30 text-[#38bdf8]" disabled>SETORIZAR DMAs</button>
+          <button className="btn btn-outline" disabled>PDF PARA A CONCESSIONARIA</button>
+          <button className="btn btn-primary ml-auto" disabled>ANALISE DE CUSTO/BENEFICIO TROCA DE REDE</button>
         </div>
 
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">UARL (m3/ano)</span><span className="kpi-value">{formatInt(lossInsight?.uarl_m3_ano ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">ILI</span><span className="kpi-value warn">{lossInsight?.ili != null ? lossInsight.ili.toFixed(2) : "-"}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Classif.</span><span className="kpi-value">{cleanText(lossInsight?.ili_classificacao ?? "-")}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Risco Alto</span><span className="kpi-value bad">{formatInt(lossInsight?.risco_total_ano ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">DMAs</span><span className="kpi-value">{formatInt(lossInsight?.n_dmas ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Perda R$/ano</span><span className="kpi-value">{formatCurrency(lossInsight?.custo_ineficiencia_ano ?? 0)}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">UARL (m3/ano)</div><div className="kpi-value">{formatInt(lossInsight?.uarl_m3_ano ?? 0)}</div></div>
+          <div className="kpi-card warn"><div className="kpi-label">ILI</div><div className="kpi-value text-[#f59e0b]">{lossInsight?.ili != null ? lossInsight.ili.toFixed(2) : "-"}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Classif. Bandeira</div><div className="kpi-value text-xs pt-2 font-mono uppercase tracking-widest">{cleanText(lossInsight?.ili_classificacao ?? "-")}</div></div>
+          <div className="kpi-card danger"><div className="kpi-label">Zonas de Risco Alto</div><div className="kpi-value text-[#ef4444]">{formatInt(lossInsight?.risco_total_ano ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">DMAs Sugeridos</div><div className="kpi-value">{formatInt(lossInsight?.n_dmas ?? 0)}</div></div>
+          <div className="kpi-card danger"><div className="kpi-label">Perda R$/ano</div><div className="kpi-value text-rose-400">{formatCurrency(lossInsight?.custo_ineficiencia_ano ?? 0)}</div></div>
         </div>
 
-        <div className="action-row">
-          <a className="action-btn btn-dark" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">ABRIR MODULO NATIVO</a>
+        <div className="action-row mt-6">
+          <a className="btn btn-outline w-full" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">ABRIR MOTOR NATIVO (REDE VRP/VMPs)</a>
         </div>
-      </>
+      </div>
     );
   }
 
   function renderIA() {
     return (
-      <>
-        <div className="section-title">Assistente IA + E-LLMs Gratuitos + Analytics ML</div>
-        <div className="action-row">
-          <button className="action-btn btn-green" disabled>GERAR RELATORIO</button>
-          <button className="action-btn btn-purple" disabled>ZERAR RELATORIO</button>
-          <button className="action-btn btn-orange" disabled>GERAR BENCHMARK</button>
-          <button className="action-btn btn-red" disabled>GERAR RISCOS</button>
-          <button className="action-btn btn-teal" disabled>MULTI PROV</button>
+      <div className="p-panel border-t-2 border-t-[#38bdf8]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Assistente IA Omen & Analytics ML</span> <span className="badge">MULTIMODEL</span></h2>
+        </div>
+        <div className="action-row mb-6">
+          <button className="btn btn-outline" disabled>GERAR RELATORIO DE PREVISAO EM MASSA</button>
+          <button className="btn btn-outline" disabled>LIMPAR CACHE DE TREINAMENTO</button>
+          <button className="btn btn-outline" disabled>GERAR BENCHMARK CUSTO</button>
+          <button className="btn btn-primary" disabled>AVALIAR RISCOS DA OBRA OMEN-7</button>
         </div>
 
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">Algoritmo</span><span className="kpi-value">{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">R2</span><span className="kpi-value">{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">MAE</span><span className="kpi-value">{(analyticsSummary?.mae ?? 0).toFixed(2)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">RMSE</span><span className="kpi-value">{(analyticsSummary?.rmse ?? 0).toFixed(2)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Modelos</span><span className="kpi-value">{formatInt(analyticsSummary?.n_modelos ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Cenarios</span><span className="kpi-value">{formatInt(analyticsSummary?.n_cenarios ?? 0)}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Algoritmo Ativo</div><div className="kpi-value text-xs font-mono uppercase tracking-widest pt-2 text-[#38bdf8]">{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</div></div>
+          <div className="kpi-card"><div className="kpi-label">R2 Score</div><div className="kpi-value text-[#10b981]">{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">MAE</div><div className="kpi-value">{(analyticsSummary?.mae ?? 0).toFixed(2)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">RMSE</div><div className="kpi-value">{(analyticsSummary?.rmse ?? 0).toFixed(2)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Modelos Ensembles</div><div className="kpi-value">{formatInt(analyticsSummary?.n_modelos ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Cenarios Cruzados</div><div className="kpi-value">{formatInt(analyticsSummary?.n_cenarios ?? 0)}</div></div>
         </div>
 
-        <div className="detail-panel">
-          <div className="detail-row"><span className="dlabel">Status</span><span className="dvalue">{cleanText(analyticsSummary?.status ?? "-")}</span></div>
-          <div className="detail-row"><span className="dlabel">Gerado em</span><span className="dvalue">{cleanText(analyticsSummary?.gerado_em ?? "-")}</span></div>
-          <div className="detail-row"><span className="dlabel">Nucleos</span><span className="dvalue">{formatInt(analyticsSummary?.n_nucleos ?? 0)}</span></div>
-          <div className="detail-row"><span className="dlabel">Origem</span><span className="dvalue">{cleanText(analyticsSummary?.origem ?? "-")}</span></div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Status API</div><div className={`text-sm font-bold ${analyticsSummary?.status ? 'text-emerald-400' : 'text-rose-400'}`}>{cleanText(analyticsSummary?.status ?? "OFFLINE")}</div></div>
+          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Ultimo Treino</div><div className="text-sm text-white font-mono">{cleanText(analyticsSummary?.gerado_em ?? "-")}</div></div>
+          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Dataset N de Nucleos</div><div className="text-sm text-white">{formatInt(analyticsSummary?.n_nucleos ?? 0)}</div></div>
+          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Database de Origem</div><div className="text-sm text-[#38bdf8] truncate px-2">{cleanText(analyticsSummary?.origem ?? "-")}</div></div>
         </div>
-      </>
+      </div>
     );
   }
 
   function renderNucleos() {
     return (
-      <>
-        <div className="section-title">Nucleos DXF (ProSaneamento)</div>
-        <table className="data-table">
-          <thead><tr><th>Nucleo</th><th>Extensao</th><th>Trechos</th><th>Equipes</th><th>Duracao</th><th>Fase</th></tr></thead>
-          <tbody>
-            {nuclei.length ? nuclei.map(n => {
-              const phase = currentPhase(n);
-              return (
-                <tr key={n.nome} onClick={() => setSelectedNucleo(n.nome)} className={selectedNucleo === n.nome ? "row-active" : ""}>
-                  <td style={{ color: "#00e6a0", fontWeight: 600 }}>{cleanText(n.nome)}</td>
-                  <td>{formatMeters(n.extensao_m)}</td>
-                  <td>{formatInt(n.n_trechos)}</td>
-                  <td>{formatInt(n.equipes)}</td>
-                  <td>{formatInt(n.duracao_dias)} dias</td>
-                  <td><span className={toneClass(phase?.id ?? "fase")}>{cleanText(phase?.nome ?? "-")}</span></td>
-                </tr>
-              );
-            }) : <tr><td colSpan={6} className="empty">Nenhum nucleo carregado.</td></tr>}
-          </tbody>
-        </table>
+      <div className="p-panel border-t-2 border-t-[#10b981]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Frentes de Lote (Macro)</span> <span className="badge">NUCLEOS ATIVOS</span></h2>
+        </div>
+
+        <div className="overflow-x-auto w-full border border-[var(--border-light)] rounded-xl mt-4 max-h-[400px]">
+          <table className="data-grid w-full text-left">
+            <thead className="sticky top-0 bg-[var(--bg-sidebar)] z-10 shadow-sm border-b border-[var(--border-light)]"><tr><th>Frente/Nucleo</th><th>Extensao</th><th>Trechos</th><th>Equipes</th><th>Duracao</th><th>Fase (LPS)</th></tr></thead>
+            <tbody>
+              {nuclei.length ? nuclei.map(n => {
+                const phase = currentPhase(n);
+                return (
+                  <tr key={n.nome} onClick={() => setSelectedNucleo(n.nome)} className={`cursor-pointer transition-colors ${selectedNucleo === n.nome ? "bg-[#38bdf8]/10" : "hover:bg-[rgba(255,255,255,0.02)]"}`}>
+                    <td className="font-bold text-white max-w-[200px] truncate">{cleanText(n.nome)}</td>
+                    <td className="text-[#38bdf8] font-mono">{formatMeters(n.extensao_m)}</td>
+                    <td className="font-mono">{formatInt(n.n_trechos)}</td>
+                    <td className="font-mono">{formatInt(n.equipes)}</td>
+                    <td className="font-mono">{formatInt(n.duracao_dias)} dias</td>
+                    <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${phase?.id === 'concluido' ? 'text-emerald-400 bg-emerald-500/10' : 'text-[#94a3b8] bg-[#1e293b]'}`}>{cleanText(phase?.nome ?? "-")}</span></td>
+                  </tr>
+                );
+              }) : <tr><td colSpan={6} className="text-center py-8 text-[var(--text-muted)] border-dashed">Nenhum agrupamento de núcleos detectado no storage local.</td></tr>}
+            </tbody>
+          </table>
+        </div>
 
         {nucleoCatalog.items.length > 0 && (
-          <>
-            <div className="section-title" style={{ marginTop: 16 }}>Catalogo de Nucleos ({formatInt(nucleoCatalog.total)})</div>
-            <table className="data-table">
-              <thead><tr><th>Nome</th><th>Existe</th></tr></thead>
-              <tbody>
-                {nucleoCatalog.items.map(n => (
-                  <tr key={n.nome}><td>{cleanText(n.nome)}</td><td style={{ color: "#00e6a0" }}>SIM</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </>
+          <div className="mt-8">
+            <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4 flex justify-between">
+              <span>Catalog Registry</span>
+              <span className="text-[var(--text-muted)]">{formatInt(nucleoCatalog.total)} entries</span>
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+               {nucleoCatalog.items.map(n => (
+                  <div key={n.nome} className="bg-[#05080f] px-3 py-2 rounded border border-[var(--border-light)] text-[11px] font-mono truncate text-white border-l-2 border-l-[#10b981]" title={n.nome}>
+                     {cleanText(n.nome)}
+                  </div>
+               ))}
+            </div>
+          </div>
         )}
 
-        <div className="action-row" style={{ marginTop: 14 }}>
-          <button className="action-btn btn-purple" disabled>BATCH NUCLEOS DXF</button>
-          <button className="action-btn btn-orange" disabled>BATCH PROLONGAMENTOS</button>
-          <button className="action-btn btn-green" disabled>BATCH TUDO</button>
+        <div className="action-row mt-8 pt-6 border-t border-[var(--border-light)]">
+          <button className="btn btn-outline" disabled>PROCESSAMENTO EM BATCH (DXF)</button>
+          <button className="btn btn-outline" disabled>INFERIR PROLONGAMENTOS FALTANTES</button>
+          <button className="btn btn-primary" disabled>RODAR TUDO SEQUENCIAL</button>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -1113,127 +1148,114 @@ export default function LegacyApp() {
     const ts = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
 
     return (
-      <>
-        <div className="log-area">
-          <div className="log-line"><span className="log-time">[{ts}]</span> ConstruData - HydroNetwork v9.0.0 | {selectedMotorLabel}</div>
-          <div className="log-line"><span className="log-time">[{ts}]</span> {companyName} - {projectName}</div>
-          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Backend: {health?.ok ? "ONLINE" : "OFFLINE"}</div>
-          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Motores: GDAL, LandXML, DWG/AEC, DWG Semantico, DWG Universal, GerarNS, Civil3D, NTS292, IFC, MSProject, Pipeline, Custo, Medicao, ML, Lean/LPS, Parametrico, MicroPlan, Perdas, CronoMacro, PdfPerdas, Gemini, Multi-LLM, Contratos, Analytics, SLNR_Mestre, Motor_v5</div>
-          {error && <div className="log-line" style={{ color: "#f44336" }}><span className="log-time">[{ts}]</span> [ERRO] {error}</div>}
-          <div className="log-line">&nbsp;</div>
-          <div className="log-line">--- Historico de jobs ---</div>
-          {logs.length ? logs.slice(0, 20).map((job, i) => (
-            <div className="log-line" key={`log-${job.job_id ?? i}`}>
-              <span className="log-time">[{formatDateTime(job.created_at)}]</span>{" "}
-              {cleanText(job.motor ?? "-").toUpperCase()} | {cleanText(job.arquivo ?? job.nucleo ?? "-")} | NS: {formatInt(job.ns_geradas ?? 0)} ok / {formatInt(job.ns_erros ?? 0)} erro | Status: {cleanText(job.status ?? "-")}
-            </div>
-          )) : <div className="log-line">Nenhum job registrado.</div>}
+      <div className="flex flex-col h-[calc(100vh-200px)]">
+        <div className="panel-header mb-4">
+           <h2 className="panel-title"><span>Kernel Execution Log</span> <span className="badge">LIVE TRACKING</span></h2>
+           <div className="flex gap-2">
+             <button className="btn btn-outline !py-1 !px-3 !text-[10px]" onClick={() => setRefreshKey(v => v + 1)}>REFRESH</button>
+             <button className="btn btn-outline !py-1 !px-3 !text-[10px]" onClick={() => {
+                const text = logs.map(j => `${j.created_at} | ${j.motor} | ${j.arquivo} | NS: ${j.ns_geradas} ok / ${j.ns_erros} erro`).join("\n");
+                navigator.clipboard.writeText(text);
+              }}>COPY BLOCK</button>
+           </div>
         </div>
 
-        <div className="bottom-bar">
-          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>Limpar</button>
-          <button className="action-btn btn-dark" onClick={() => {
-            const text = logs.map(j => `${j.created_at} | ${j.motor} | ${j.arquivo} | NS: ${j.ns_geradas} ok / ${j.ns_erros} erro`).join("\n");
-            navigator.clipboard.writeText(text);
-          }}>Copiar</button>
+        <div className="flex-1 bg-[#020617] rounded-xl border border-[var(--border-light)] p-5 overflow-y-auto font-mono text-[11px] leading-relaxed shadow-inner">
+          <div className="text-[#38bdf8] mb-1"><span className="opacity-50">[{ts}]</span> SYSTEM BOOT | ConstruData MaxSystem v9.0.0 | Engine: {selectedMotorLabel}</div>
+          <div className="text-white mb-1"><span className="opacity-50">[{ts}]</span> INFO    | Context: {companyName} - {projectName}</div>
+          <div className="text-emerald-400 mb-1"><span className="opacity-50">[{ts}]</span> STATUS  | Neural Backend: {health?.ok ? "ONLINE CONNECTED" : "OFFLINE DISCONNECTED"}</div>
+          <div className="text-[#94a3b8] mb-4 text-[10px] break-words"><span className="opacity-50 text-[11px]">[{ts}]</span> MODULES | Motores: GDAL, LandXML, DWG/AEC, DWG Semantico, DWG Universal, GerarNS, Civil3D, NTS292, IFC, MSProject, Pipeline, Custo, Medicao, ML, Lean/LPS, Parametrico, MicroPlan, Perdas, CronoMacro, PdfPerdas, Gemini, Multi-LLM, Contratos, Analytics, SLNR_Mestre, Motor_v5</div>
+          {error && <div className="text-rose-500 mb-4 bg-rose-500/10 p-2 rounded border border-rose-500/20"><span className="opacity-70">[{ts}]</span> FATAL   | {error}</div>}
+          
+          <div className="border-b border-dashed border-[rgba(255,255,255,0.1)] my-4"></div>
+          
+          <div className="text-[var(--text-muted)] mb-2 font-bold tracking-widest uppercase text-[10px]">Job History Trace</div>
+          {logs.length ? logs.slice(0, 50).map((job, i) => {
+            const isError = job.ns_erros && job.ns_erros > 0;
+            return (
+              <div className={`mb-1.5 flex gap-3 hover:bg-[rgba(255,255,255,0.02)] px-1 rounded transition-colors ${isError ? 'text-rose-400' : 'text-[#94a3b8]'}`} key={`log-${job.job_id ?? i}`}>
+                <span className="opacity-50 shrink-0 w-32">[{formatDateTime(job.created_at)}]</span>
+                <span className="shrink-0 w-24 text-white font-bold">{cleanText(job.motor ?? "-").toUpperCase()}</span>
+                <span className="truncate flex-1 max-w-[300px]" title={cleanText(job.arquivo ?? job.nucleo ?? "-")}>{cleanText(job.arquivo ?? job.nucleo ?? "-")}</span>
+                <span className="shrink-0 w-40 text-right">Extracted: <span className="text-emerald-400">{formatInt(job.ns_geradas ?? 0)}</span> / Err: <span className="text-rose-400">{formatInt(job.ns_erros ?? 0)}</span></span>
+                <span className="shrink-0 w-24 text-right uppercase tracking-wider text-[9px] mt-0.5">{cleanText(job.status ?? "-")}</span>
+              </div>
+            );
+          }) : <div className="text-[var(--text-muted)] italic">No jobs executed in this session. Awaiting terminal dispatch.</div>}
         </div>
-      </>
+      </div>
     );
   }
 
   function renderGestao() {
     return (
-      <>
-        <div className="section-title">Gestao & Cronograma</div>
+      <div className="p-panel border-t-2 border-t-[#0ea5e9]">
+        <div className="panel-header">
+           <h2 className="panel-title"><span>Gestao & Cronograma 360</span> <span className="badge">DASHBOARD MAIN</span></h2>
+        </div>
 
-        <div className="scope-bar">
-          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
+        <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-6 overflow-x-auto hide-scrollbar">
+          <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
           {nucleoNames.slice(0, 10).map(n => (
-            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
+            <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
           ))}
         </div>
 
-        <div className="action-row">
-          <a className="action-btn btn-green" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
-          <a className="action-btn btn-blue" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MEDIR RDO</a>
-          <a className="action-btn btn-orange" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">GERAR MACRO</a>
-          <a className="action-btn btn-purple" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
-          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR</button>
+        <div className="action-row mb-6">
+          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
+          <a className="btn btn-outline" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MEDIR RDO NATIVO</a>
+          <a className="btn btn-outline" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">GERAR MACRO</a>
+          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+          <button className="btn btn-primary ml-auto" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR DADOS</button>
         </div>
 
-        <div className="kpi-strip">
-          <div className="kpi-cell"><span className="kpi-label">NS Totais</span><span className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Em Execucao</span><span className="kpi-value warn">{formatInt(dashboard?.n_execucao ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">m/dia</span><span className="kpi-value">{formatMeters(dashboard?.m_por_dia ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">RDOs</span><span className="kpi-value">{formatInt(dashboard?.rdos ?? 0)}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Curva Prevista</span><span className="kpi-value">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
-          <div className="kpi-cell"><span className="kpi-label">Curva Realizada</span><span className="kpi-value">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">NS Totais</div><div className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</div></div>
+          <div className="kpi-card warn"><div className="kpi-label">Em Execucao</div><div className="kpi-value text-[#f59e0b]">{formatInt(dashboard?.n_execucao ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">% Fisico</div><div className="kpi-value text-[#38bdf8]">{formatPercent(dashboard?.pct_fisico ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">% Financeiro</div><div className="kpi-value text-[#10b981]">{formatPercent(dashboard?.pct_financeiro ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">M/Dia (Produtlv)</div><div className="kpi-value">{formatMeters(dashboard?.m_por_dia ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">RDOs</div><div className="kpi-value text-[#8b5cf6]">{formatInt(dashboard?.rdos ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Curva Prevista</div><div className="kpi-value">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Curva Realizada</div><div className="kpi-value">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</div></div>
         </div>
 
         {cronograma && (
-          <div className="resumo-box">
-            <strong>Projeto:</strong> {cleanText(cronograma.projeto)} | <strong>Empresa:</strong> {cleanText(cronograma.empresa)} | <strong>Inicio:</strong> {formatDate(cronograma.data_inicio)} | <strong>Fim:</strong> {formatDate(cronograma.data_fim)} | <strong>Duracao:</strong> {formatInt(cronograma.duracao_total_dias)} dias
+          <div className="sys-msg msg-info mt-6 bg-[#38bdf8]/5">
+             <div className="flex gap-4 items-center flex-wrap w-full text-[11px] font-mono">
+               <div><span className="opacity-50 mr-1 text-white">Proj:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.projeto)}</strong></div>
+               <div><span className="opacity-50 mr-1 text-white">Emp:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.empresa)}</strong></div>
+               <div><span className="opacity-50 mr-1 text-white">Periodo:</span> <strong className="text-[#38bdf8]">{formatDate(cronograma.data_inicio)} — {formatDate(cronograma.data_fim)}</strong></div>
+               <div className="ml-auto"><span className="opacity-50 mr-1 text-white">TOTAL:</span> <strong className="text-emerald-400">{formatInt(cronograma.duracao_total_dias)} DIAS</strong></div>
+             </div>
           </div>
         )}
 
-        <div className="two-col">
-          <div>
-            <div className="section-title">Cronograma por Nucleo</div>
+        <div className="grid grid-cols-1 mt-6">
+          <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Núcleos de Operação (Gantt Macro)</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {visibleNuclei.length ? visibleNuclei.map(n => {
               const phase = currentPhase(n);
               return (
-                <div className="nucleo-card" key={n.nome}>
-                  <h4>{cleanText(n.nome)} <span className={toneClass(phase?.id ?? "")}>{cleanText(phase?.nome ?? "-")}</span></h4>
-                  <div className="meta">{formatDate(n.inicio)} ate {formatDate(n.fim)} | {formatMeters(n.extensao_m)} | {formatInt(n.n_trechos)} trechos | {formatInt(n.equipes)} equipes</div>
+                <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)] hover:border-[#38bdf8]/40 transition-all shadow-md group" key={n.nome}>
+                  <div className="flex justify-between items-start mb-3">
+                    <h4 className="font-bold text-sm text-white group-hover:text-[#38bdf8] transition-colors line-clamp-2 max-w-[80%]">{cleanText(n.nome)}</h4>
+                    <span className="text-[8px] px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] text-[#bae6fd] uppercase border border-[rgba(255,255,255,0.1)]">{cleanText(phase?.nome ?? "-")}</span>
+                  </div>
+                  <div className="text-[10px] text-[var(--text-muted)] flex flex-col gap-1.5 mt-2 font-mono">
+                      <span>{formatDate(n.inicio)} - {formatDate(n.fim)}</span>
+                      <div className="flex justify-between items-center mt-2 border-t border-[var(--border-light)] pt-2">
+                        <span className="text-emerald-400">{formatMeters(n.extensao_m)}</span>
+                        <span>{formatInt(n.n_trechos)} TRCH</span>
+                        <span>{formatInt(n.equipes)} EQP</span>
+                      </div>
+                  </div>
                 </div>
               );
-            }) : <div className="empty">Nenhum nucleo disponivel.</div>}
-          </div>
-
-          <div>
-            <div className="section-title">RDO — Criar e Listar</div>
-            <form onSubmit={handleCreateRdo}>
-              <div className="form-row">
-                <div className="form-field"><label>Data</label><input type="date" value={rdoForm.data} onChange={e => setRdoForm(c => ({ ...c, data: e.target.value }))} /></div>
-                <div className="form-field"><label>Nucleo</label><input type="text" value={rdoForm.nucleo} onChange={e => setRdoForm(c => ({ ...c, nucleo: e.target.value }))} /></div>
-                <div className="form-field"><label>Responsavel</label><input type="text" value={rdoForm.responsavel} onChange={e => setRdoForm(c => ({ ...c, responsavel: e.target.value }))} /></div>
-              </div>
-              <div className="form-row">
-                <div className="form-field"><label>Servico</label><input type="text" value={rdoForm.servico} onChange={e => setRdoForm(c => ({ ...c, servico: e.target.value }))} /></div>
-                <div className="form-field"><label>Qtd</label><input type="number" step="0.01" value={rdoForm.quantidade} onChange={e => setRdoForm(c => ({ ...c, quantidade: e.target.value }))} /></div>
-                <div className="form-field"><label>DN</label><input type="number" value={rdoForm.dnMm} onChange={e => setRdoForm(c => ({ ...c, dnMm: e.target.value }))} /></div>
-              </div>
-              <div className="form-row">
-                <div className="form-field"><label>Clima manha</label><input type="text" value={rdoForm.climaManha} onChange={e => setRdoForm(c => ({ ...c, climaManha: e.target.value }))} /></div>
-                <div className="form-field"><label>Clima tarde</label><input type="text" value={rdoForm.climaTarde} onChange={e => setRdoForm(c => ({ ...c, climaTarde: e.target.value }))} /></div>
-              </div>
-              <div className="action-row">
-                <button className="action-btn btn-green" type="submit">SALVAR RDO</button>
-                <a className="action-btn btn-dark" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MODULO NATIVO</a>
-              </div>
-              {rdoMessage && <div className={rdoMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>{rdoMessage}</div>}
-            </form>
-
-            <div className="section-title" style={{ marginTop: 14 }}>RDOs Existentes ({formatInt(rdoList.items.length)})</div>
-            {latestRdos.length ? latestRdos.map(rdo => (
-              <div className="rdo-card" key={rdo.id}>
-                <div className="rdo-head">
-                  <strong>RDO {rdo.numero ?? rdo.id} - {formatDate(rdo.data)} - {cleanText(rdo.nucleo)}</strong>
-                  <span className={toneClass(rdo.status)}>{cleanText(rdo.status)}</span>
-                </div>
-                <div className="rdo-meta">Resp: {cleanText(rdo.responsavel ?? "-")} | Custo: {formatCurrency(asNumber(rdo.total_custo))} | Apontam: {formatInt(rdo.apontamentos?.length ?? 0)}</div>
-                <div className="action-row">
-                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">PDF</a>
-                  {cleanText(rdo.status) !== "FECHADO" && <button className="action-btn btn-red" onClick={() => handleCloseRdo(rdo.id)}>FECHAR</button>}
-                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.data}?nucleo=${encodeURIComponent(rdo.nucleo)}`)} target="_blank" rel="noreferrer">JSON</a>
-                </div>
-              </div>
-            )) : <div className="empty">Sem RDOs ainda.</div>}
+            }) : <div className="col-span-full p-8 text-center text-[var(--text-muted)] border border-dashed border-[var(--border-light)] rounded-xl">O sistema não carregou frentes de serviço (núcleos).</div>}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
