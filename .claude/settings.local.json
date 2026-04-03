@@ -171,7 +171,10 @@
       "Bash(wc -l tmp_dwg_test/_construdata_exports/*.csv)",
       "Bash(wc -l tmp_landxml_test/_construdata_exports/*.csv)",
       "Bash(wc -l tmp_hidden_export_test/_construdata_exports/*.csv)",
-      "Bash(find _tmp_dwg -type f -exec ls -lh {})"
+      "Bash(find _tmp_dwg -type f -exec ls -lh {})",
+      "Bash(grep -n \"^def ler_dxf_gdal\\\\|^def ler_dwg_universal\\\\|^def ler_landxml\" ler*.py)",
+      "Bash(ls -la *.py)",
+      "Bash(grep -l \"DWG\\\\|DXF\\\\|dwg\\\\|dxf\" *.py)"
     ],
     "additionalDirectories": [
       "C:\\Users\\felip\\Downloads",

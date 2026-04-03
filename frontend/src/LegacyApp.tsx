@@ -97,23 +97,55 @@ const NS_STATUS_OPTIONS = ["PLANEJADA", "EM_EXECUCAO", "CONCLUIDA", "MEDIDA", "B
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 const NATIVE_BASE = API_BASE || "";
 
-const TABS = [
-  { id: "processar", label: "[1] Processar" },
-  { id: "mapa", label: "[2] Mapa" },
-  { id: "rede", label: "[3] Rede" },
-  { id: "hidraulica", label: "[4] Hidraulica" },
-  { id: "trechos", label: "[5] Trechos" },
-  { id: "custos", label: "[6] Custos 5D" },
-  { id: "bim", label: "[7] BIM" },
-  { id: "lean", label: "[8] Lean/LPS" },
-  { id: "perdas", label: "[9] Perdas" },
-  { id: "ia", label: "[10] IA" },
-  { id: "nucleos", label: "[11] Nucleos" },
-  { id: "log", label: "[12] Log" },
-  { id: "gestao", label: "[13] Gestao" },
-] as const;
+// --- Palantir Sidebar Navigation ---
+const SIDEBAR_SECTIONS = [
+  {
+    title: "PALANTIR — GESTAO",
+    items: [
+      { id: "gestao", label: "Gestao 360", icon: "grid" },
+      { id: "processar", label: "Torre Controle", icon: "radio" },
+      { id: "log", label: "Relatorio 360", icon: "file-text" },
+      { id: "nucleos", label: "Projetos", icon: "folder" },
+    ]
+  },
+  {
+    title: "PLANEJAMENTO",
+    items: [
+      { id: "trechos", label: "Planejamento", icon: "calendar" },
+      { id: "agenda", label: "Agenda", icon: "clock" },
+      { id: "lean", label: "LPS/Lean", icon: "target" },
+    ]
+  },
+  {
+    title: "OPERACAO",
+    items: [
+      { id: "rdo", label: "RDO", icon: "clipboard" },
+      { id: "mapa", label: "Mapa Interativo", icon: "map" },
+      { id: "rede", label: "Rede 360", icon: "git-branch" },
+      { id: "bim", label: "BIM 3D/4D/5D", icon: "box" },
+    ]
+  },
+  {
+    title: "RECURSOS",
+    items: [
+      { id: "suprimentos", label: "Suprimentos", icon: "package" },
+      { id: "maodeobra", label: "Mao de Obra", icon: "users" },
+      { id: "equipamentos", label: "Gest. Equip.", icon: "tool" },
+      { id: "frota", label: "Frota", icon: "truck" },
+      { id: "hidraulica", label: "Quantitativos", icon: "calculator" },
+      { id: "preconstr", label: "Pre-Constr.", icon: "search" },
+    ]
+  },
+  {
+    title: "MÓDULOS OFFLINE (NATIVOS)",
+    items: [
+      { id: "native_brutal", label: "Construplan Brutal", icon: "disc", isNative: true, path: "/motor-brutal" },
+      { id: "native_cenarios", label: "Dash Cenários", icon: "layout", isNative: true, path: "/cenarios" },
+    ]
+  }
+];
 
-type TabId = (typeof TABS)[number]["id"];
+type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "agenda" | "suprimentos" | "maodeobra" | "equipamentos" | "frota" | "preconstr";
 
 /* ─── Helpers ─── */
 
@@ -241,6 +273,10 @@ export default function LegacyApp() {
   const [quickMode, setQuickMode] = useState(false);
   const [selectedMotor, setSelectedMotor] = useState("v5");
   const [uploadMessage, setUploadMessage] = useState("");
+  const [auditProjects, setAuditProjects] = useState<FileList | null>(null);
+  const [auditShapes, setAuditShapes] = useState<FileList | null>(null);
+  const [auditing, setAuditing] = useState(false);
+  const [auditMessage, setAuditMessage] = useState("");
   const [processLogs, setProcessLogs] = useState<ProcessLogList>({ items: [] });
   const [leanInsight, setLeanInsight] = useState<LeanInsight | null>(null);
   const [lossInsight, setLossInsight] = useState<LossInsight | null>(null);
@@ -449,6 +485,27 @@ export default function LegacyApp() {
     } catch (err) { setRdoMessage(err instanceof Error ? err.message : "Falha ao fechar RDO"); }
   }
 
+  async function handleAudit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!auditProjects || !auditShapes || auditProjects.length === 0 || auditShapes.length === 0) {
+      setAuditMessage("Selecione os projetos e os shapefiles."); return;
+    }
+    setAuditing(true); setAuditMessage("");
+    const fd = new FormData();
+    for (let i = 0; i < auditProjects.length; i++) fd.append("arquivos_projeto", auditProjects[i]);
+    for (let i = 0; i < auditShapes.length; i++) fd.append("arquivos_shapefile", auditShapes[i]);
+    
+    try {
+      const r = await fetch(apiUrl("/api/processamento/lote-auditoria"), { method: "POST", body: fd });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || "Falha na Auditoria");
+      setLatestJob(d);
+      setAuditMessage(`Auditoria concluída: ${d.n_projetos} projetos cruzados com sucesso.`);
+      setRefreshKey(v => v + 1);
+    } catch (err) { setAuditMessage(err instanceof Error ? err.message : "Falha na auditoria"); }
+    finally { setAuditing(false); }
+  }
+
   // ── Derived data ──
   const projectName = cleanText(cronograma?.projeto ?? health?.display_name ?? "ConstruDataMaxV2");
   const companyName = cleanText(cronograma?.empresa ?? "FCN Construcoes e Saneamento");
@@ -473,99 +530,172 @@ export default function LegacyApp() {
 
   function renderProcessar() {
     return (
-      <>
-        <div className="section-title">Pipeline de Processamento</div>
-        <div className="action-row">
-          <button className="action-btn btn-green" type="button" onClick={() => {
-            document.getElementById("file-input")?.click();
-          }}>
-            📂 SELECIONAR ARQUIVO
-          </button>
-          <button className="action-btn btn-cyan" type="button" onClick={handleApenasLer} disabled={uploading || !uploadFile}>
-            📄 APENAS LER
-          </button>
-          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG SEMANTICO</button>
-          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG UNIVERSAL</button>
-          <button className="action-btn btn-purple" type="button" disabled title="Em desenvolvimento">BATCH NUCLEOS</button>
-          <button className="action-btn btn-orange" type="button" disabled title="Em desenvolvimento">BATCH PROLONGAMENTOS</button>
-          <a className="action-btn btn-dark" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR SAIDA</a>
-          <a className="action-btn btn-white" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">EDITOR HTML</a>
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#0284c7]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+               <span className="w-8 h-8 rounded bg-[#0284c7]/20 flex items-center justify-center text-[#38bdf8] border border-[#0284c7]/50 shadow-[0_0_15px_rgba(2,132,199,0.5)]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+               </span>
+               Motor Central (BETA)
+               <span className="badge">ROTEAMENTO BASE</span>
+            </h2>
+          </div>
+          
+          <form id="import-form" onSubmit={handleImport}>
+            <div className="form-row">
+              <div className="form-field">
+                <label>Nucleo / Lote</label>
+                <input type="text" placeholder="ID do Nucleo" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
+              </div>
+              <div className="form-field" style={{ flex: 2 }}>
+                <label>Vetor de Origem (DXF, DWG, LandXML, JSON)</label>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                  <button type="button" className="btn btn-outline" onClick={() => document.getElementById("file-input")?.click()}>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                     PROCURAR
+                  </button>
+                </div>
+                {uploadFile && (
+                  <div className="text-[10px] text-[#38bdf8] font-mono mt-1 px-1 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-[#38bdf8] rounded-full animate-pulse"></span>
+                    {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                  </div>
+                )}
+              </div>
+              <div className="form-field">
+                <label>Interpretador</label>
+                <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
+                  <option value="v9">Geração 9 (XML/DXF Sintatico)</option>
+                  <option value="v5">Legado (SABESP v5 Brutal)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-[rgba(255,255,255,0.05)]">
+               <h3 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-4">Módulos de Inicialização (Engine Offline)</h3>
+               <div className="modular-grid">
+                  <button type="submit" onClick={()=>setQuickMode(false)} className="modular-btn active">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                     <span>PACK COMPLETO<br/>(Lá Ele)</span>
+                  </button>
+                  <button type="submit" onClick={()=>setQuickMode(true)} className="modular-btn">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                     <span>NS CAMPO / NS DESENHO</span>
+                  </button>
+                  <button type="button" onClick={handleApenasLer} className="modular-btn">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                     <span>APENAS LER / PARSE</span>
+                  </button>
+                  <button type="button" disabled className="modular-btn opacity-50 cursor-not-allowed">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                     <span>OSE / COMPRAS<br/>(Em Breve)</span>
+                  </button>
+               </div>
+            </div>
+
+            {uploading && (
+              <div className="w-full h-1 bg-[var(--bg-base)] rounded overflow-hidden mt-4">
+                <div className="h-full bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] animate-pulse w-full"></div>
+              </div>
+            )}
+            
+            {uploadMessage && (
+              <div className={uploadMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>
+                {uploadMessage}
+              </div>
+            )}
+          </form>
         </div>
 
-        {uploading && (
-          <div className="progress-wrap">
-            <div className="progress-fill" style={{ width: "60%" }} />
-          </div>
-        )}
-
-        {uploadMessage && (
-          <div className={uploadMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>
-            {uploadMessage}
-          </div>
-        )}
-
-        <form id="import-form" onSubmit={handleImport}>
-          <div className="form-row">
-            <div className="form-field">
-              <label>Nucleo</label>
-              <input type="text" placeholder="Ex.: Teteu" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
-            </div>
-            <div className="form-field" style={{ flex: 2 }}>
-              <label>Arquivo de Entrada (DXF, DWG, LandXML, JSON)</label>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
-                <button type="button" className="action-btn btn-cyan" onClick={() => document.getElementById("file-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
-                  📁 SELECIONAR ARQUIVO
-                </button>
-              </div>
-              {uploadFile && (
-                <div style={{ marginTop: 4, fontSize: 12, color: "#00ff88" }}>
-                  ✓ {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
-                </div>
-              )}
-            </div>
-            <div className="form-field">
-              <label>Motor de NS</label>
-              <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
-                <option value="v9">NS v9 (auto-detect: XML/DXF/DWG)</option>
-                <option value="v5">NOVA NS v5 (SABESP legado)</option>
-              </select>
-            </div>
-          </div>
-          <div className="form-check">
-            <input type="checkbox" checked={quickMode} onChange={e => setQuickMode(e.target.checked)} />
-            <label>Modo rapido</label>
-          </div>
-          <div className="action-row">
-            <button className="action-btn btn-green" type="submit" disabled={uploading || !uploadFile}>
-              {uploading ? "⏳ Processando..." : "🚀 IMPORTAR E GERAR"}
-            </button>
-          </div>
-        </form>
+        <div className="p-panel border-t-2 border-t-[#f59e0b]">
+           <div className="panel-header">
+             <h2 className="panel-title">
+               <span className="w-8 h-8 rounded bg-[#f59e0b]/20 flex items-center justify-center text-[#fcd34d] border border-[#f59e0b]/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline></svg>
+               </span>
+               Auditoria Executiva V4
+               <span className="badge border-[#f59e0b]/30 text-[#fcd34d] bg-[#f59e0b]/10">SHAPE X DWG</span>
+             </h2>
+           </div>
+           
+           <form id="audit-form" onSubmit={handleAudit}>
+             <div className="form-row">
+               <div className="form-field">
+                 <label>Base DWG/DXF/XML (Projeto)</label>
+                 <input type="file" multiple accept=".dxf,.dwg,.xml,.json" onChange={e => setAuditProjects(e.target.files)} />
+               </div>
+               <div className="form-field">
+                 <label>Camadas SHP (Soltos ou .zip)</label>
+                 <input type="file" multiple accept=".shp,.zip,.dbf,.shx,.cpg" onChange={e => setAuditShapes(e.target.files)} />
+               </div>
+             </div>
+             <div className="action-row mt-4">
+               <button className="btn btn-banana w-full" type="submit" disabled={auditing || !auditProjects || !auditShapes}>
+                 {auditing ? "PROCESSANDO BALANÇO..." : "📊 CRUZAR DADOS E GERAR V4"}
+               </button>
+             </div>
+             {auditMessage && (
+               <div className={auditMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>
+                 {auditMessage}
+               </div>
+             )}
+           </form>
+        </div>
 
         {latestJob && (
-          <>
-            <div className="section-title" style={{ marginTop: 16 }}>RESUMO</div>
-            <div className="resumo-box">
-              <strong>Arquivo:</strong> {cleanText(latestJob.arquivo ?? "-")} | <strong>Motor:</strong> {cleanText(latestJob.motor ?? "-").toUpperCase()} | <strong>Tipo:</strong> {cleanText(latestJob.fonte ?? "-")} | <strong>PVs:</strong> {formatInt(latestJob.n_pvs ?? 0)} | <strong>Trechos:</strong> {formatInt(latestJob.n_trechos ?? 0)} | <strong>NS:</strong> {formatInt(latestJob.ns_geradas ?? 0)} ok, {formatInt(latestJob.ns_erros ?? 0)} erro
+          <div className="p-panel border-t-2 border-t-[#10b981]">
+            <div className="panel-header">
+              <h2 className="panel-title">
+                 <span className="w-8 h-8 rounded bg-[#10b981]/20 flex items-center justify-center text-[#34d399] border border-[#10b981]/50 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                 </span>
+                 Telemetria de Processamento
+                 <span className="badge tracking-widest bg-emerald-500/10 text-emerald-400 border-emerald-500/20">JOB CONCLUIDO</span>
+              </h2>
+            </div>
+            
+            <div className="kpi-board mb-6">
+               <div className="kpi-card !p-4">
+                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">ORIGEM</div>
+                  <div className="text-xl font-mono text-[#e2e8f0] truncate">{cleanText(latestJob.arquivo ?? "-")}</div>
+               </div>
+               <div className="kpi-card !p-4">
+                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">INTERPRETADOR</div>
+                  <div className="text-xl font-mono text-[#38bdf8]">{cleanText(latestJob.motor ?? "-").toUpperCase()}</div>
+               </div>
+               <div className="kpi-card !p-4">
+                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">EXTENSÃO TOTAL</div>
+                  <div className="text-xl font-mono text-[#fcd34d] truncate">{formatInt(latestJob.n_trechos ?? 0)} T, {formatInt(latestJob.n_pvs ?? 0)} PV</div>
+               </div>
+               <div className="kpi-card !p-4">
+                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">TAXA DE SUCESSO</div>
+                  <div className="text-xl font-mono text-emerald-400">{formatInt(latestJob.ns_geradas ?? 0)} OK / <span className="text-red-400">{formatInt(latestJob.ns_erros ?? 0)} FAIL</span></div>
+               </div>
             </div>
 
             {latestJob.artifacts.length > 0 && (
               <>
-                <div className="section-title">SAIDAS DO PIPELINE</div>
-                <div className="output-list">
+                <h3 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">ARTEFATOS GERADOS</h3>
+                <div className="artifact-list">
                   {latestJob.artifacts.slice(0, 20).map(a => (
-                    <a className="output-item" key={`${latestJob.job_id}-${a.path}`} href={artifactHref(latestJob.job_id, a.path)} target="_blank" rel="noreferrer">
-                      <span className="folder">{a.kind.toUpperCase()}/</span>
-                      <span className="desc">{a.label}</span>
+                    <a className="artifact-item group" key={`${latestJob.job_id}-${a.path}`} href={artifactHref(latestJob.job_id, a.path)} target="_blank" rel="noreferrer">
+                       <div className="artifact-info">
+                         <span className="artifact-kind">{a.kind}</span>
+                         <span className="artifact-name" title={a.label}>{a.label}</span>
+                       </div>
+                       <span className="text-[10px] font-bold text-[#38bdf8] opacity-0 group-hover:opacity-100 transition-opacity">
+                         ACESSAR ARQUIVO ↗
+                       </span>
                     </a>
                   ))}
                 </div>
               </>
             )}
-          </>
+          </div>
         )}
-      </>
+      </div>
     );
   }
 
@@ -1123,70 +1253,166 @@ export default function LegacyApp() {
       case "nucleos": return renderNucleos();
       case "log": return renderLog();
       case "gestao": return renderGestao();
+      case "rdo": return renderRdoPanel();
+      case "suprimentos": return renderCustos(); // Mock mapping for now
+      default: return (
+        <div className="p-panel flex flex-col items-center justify-center p-20 text-center">
+          <div className="w-16 h-16 bg-[#38bdf8]/10 rounded-full flex items-center justify-center mb-6 border border-[#38bdf8]/30">
+            <span className="text-[#38bdf8] text-2xl font-bold">🔒</span>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">Módulo em Desenvolvimento</h2>
+          <p className="text-[var(--text-muted)] max-w-md">
+            O subsistema Palantir para esta operação está sendo integrado ao núcleo principal através da API Neural.
+          </p>
+        </div>
+      );
     }
   }
 
+  function renderRdoPanel() {
+    return (
+      <div className="p-panel border-t-2 border-t-[#38bdf8]">
+        <div className="panel-header">
+          <h2 className="panel-title"><span>RDO Diario</span> <span className="badge">OPERACAO CAMPO</span></h2>
+        </div>
+        
+        <div className="two-col mt-4">
+          <div>
+            <form onSubmit={handleCreateRdo} className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)]">
+              <div className="form-row">
+                <div className="form-field"><label>Data</label><input type="date" value={rdoForm.data} onChange={e => setRdoForm(c => ({ ...c, data: e.target.value }))} /></div>
+                <div className="form-field"><label>Nucleo</label><input type="text" value={rdoForm.nucleo} onChange={e => setRdoForm(c => ({ ...c, nucleo: e.target.value }))} /></div>
+                <div className="form-field"><label>Responsavel</label><input type="text" value={rdoForm.responsavel} onChange={e => setRdoForm(c => ({ ...c, responsavel: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Servico</label><input type="text" value={rdoForm.servico} onChange={e => setRdoForm(c => ({ ...c, servico: e.target.value }))} /></div>
+                <div className="form-field"><label>Qtd</label><input type="number" step="0.01" value={rdoForm.quantidade} onChange={e => setRdoForm(c => ({ ...c, quantidade: e.target.value }))} /></div>
+                <div className="form-field"><label>DN</label><input type="number" value={rdoForm.dnMm} onChange={e => setRdoForm(c => ({ ...c, dnMm: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Clima (Manhã)</label><input type="text" value={rdoForm.climaManha} onChange={e => setRdoForm(c => ({ ...c, climaManha: e.target.value }))} /></div>
+                <div className="form-field"><label>Clima (Tarde)</label><input type="text" value={rdoForm.climaTarde} onChange={e => setRdoForm(c => ({ ...c, climaTarde: e.target.value }))} /></div>
+              </div>
+              <div className="action-row mt-6">
+                <button className="btn btn-primary w-full" type="submit">TRANSMITIR RELATORIO (RDO)</button>
+              </div>
+              {rdoMessage && <div className={rdoMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>{rdoMessage}</div>}
+            </form>
+          </div>
+
+          <div>
+             <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase">Registros Ativos</h3>
+                <span className="text-xs text-[var(--text-muted)]">{formatInt(rdoList.items.length)} un</span>
+             </div>
+            {latestRdos.length ? latestRdos.map(rdo => (
+              <div className="kpi-card mb-3 !p-4 cursor-pointer hover:border-[#38bdf8]/50 transition-colors" key={rdo.id}>
+                <div className="flex justify-between items-center mb-2">
+                  <strong className="text-white text-sm">RDO {rdo.numero ?? rdo.id} — {formatDate(rdo.data)} — {cleanText(rdo.nucleo)}</strong>
+                  <span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold ${rdo.status === 'FECHADO' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-[#f59e0b]/10 text-[#f59e0b]'}`}>{cleanText(rdo.status)}</span>
+                </div>
+                <div className="text-xs text-[var(--text-muted)] mb-3">
+                  Resp: <span className="text-[#e2e8f0]">{cleanText(rdo.responsavel ?? "-")}</span> | 
+                  Custo RDO: <span className="text-rose-400">{formatCurrency(asNumber(rdo.total_custo))}</span>
+                </div>
+                <div className="flex gap-2">
+                  <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">Gerar PDF</a>
+                  {cleanText(rdo.status) !== "FECHADO" && <button className="btn btn-danger !py-1 !px-3 !text-[10px]" onClick={() => handleCloseRdo(rdo.id)}>FECHAR RDO</button>}
+                </div>
+              </div>
+            )) : <div className="text-center p-8 border border-dashed border-[var(--border-light)] rounded-xl text-[var(--text-muted)] text-sm">Aguardando inserção de RDOs operacionais no núcleo.</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full bg-[#0a0e1a] text-[#c8d6e5] relative font-['IBM_Plex_Mono',monospace]">
-      <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-[#1a2035] bg-[#0d1120]/80 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00e6a0] to-[#0088cc] shadow-[0_0_15px_rgba(0,230,160,0.3)]">
-            <span className="font-bold text-[#0a0e1a] text-lg">C</span>
+    <div className="palantir-app">
+      {/* Sidebar Navigation */}
+      <aside className="sidebar">
+        <div className="px-6 py-5 mb-4 border-b border-[var(--border-light)] flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-[#0ea5e9] to-[#0369a1] rounded flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+            C
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-              Motor Principal NS
-              <span className="px-2 py-0.5 rounded-md bg-[#1a2035] text-xs text-[#00e6a0] uppercase tracking-wider font-semibold border border-[#00e6a0]/20">{selectedMotorLabel}</span>
-            </h1>
-            <p className="text-xs text-[#8899aa] mt-0.5">{projectName} • {companyName}</p>
+            <h1 className="text-white font-bold tracking-widest text-sm leading-tight">CONSTRU</h1>
+            <p className="text-[10px] text-[#38bdf8] font-mono tracking-wider">MAX SYSTEM OS</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2 border border-[#1a2035] bg-[#0d1120] px-3 py-1.5 rounded-lg">
-            <span className="text-[10px] uppercase tracking-wider text-[#667788] font-semibold">Backend</span>
-            {health?.ok ? (
-              <span className="flex h-2.5 w-2.5 rounded-full bg-[#00e6a0] shadow-[0_0_8px_rgba(0,230,160,0.8)] animate-pulse" />
-            ) : (
-              <span className="flex h-2.5 w-2.5 rounded-full bg-red-500" />
-            )}
-          </div>
-          <button 
-            onClick={() => setRefreshKey(v => v + 1)}
-            className="px-4 py-2 border border-[#1a2035] bg-[#0d1120] hover:bg-[#1a2035] hover:text-white transition-colors rounded-lg text-xs font-semibold tracking-wider uppercase text-[#c8d6e5]"
-          >
-            ATUALIZAR
-          </button>
-        </div>
-      </header>
 
-      <div className="shrink-0 border-b border-[#1a2035] bg-[#0a0e1a] px-2 pt-2">
-        <nav className="flex items-center gap-1 overflow-x-auto hide-scrollbar pb-2">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "whitespace-nowrap px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all duration-300 border focus:outline-none",
-                activeTab === tab.id 
-                  ? "bg-[#00e6a0]/10 text-[#00e6a0] border-[#00e6a0]/30 shadow-[0_0_10px_rgba(0,230,160,0.1)]" 
-                  : "text-[#667788] border-transparent hover:text-[#c8d6e5] hover:bg-[#1a2035]/50"
-              )}
-            >
-              {tab.label.replace(/^\[\d+\]\s*/, "")}
-            </button>
+        <div className="flex-1">
+          {SIDEBAR_SECTIONS.map((section, sIdx) => (
+            <div key={sIdx} className="sidebar-section">
+              <h3 className="sidebar-title">{section.title}</h3>
+              <div className="flex flex-col gap-1">
+                {section.items.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                        if (item.isNative) {
+                            window.open(nativeUrl(item.path!), '_blank');
+                        } else {
+                            setActiveTab(item.id as TabId);
+                        }
+                    }}
+                    className={cn("nav-item", activeTab === item.id && !item.isNative ? "active" : "")}
+                  >
+                    {/* Fake Icons using spans for minimalist look */}
+                    <span className="w-4 h-4 flex items-center justify-center border border-current rounded-sm text-[8px] opacity-70">
+                      {item.icon[0].toUpperCase()}
+                    </span>
+                    {item.label}
+                    {item.isNative && <span className="ml-auto text-[8px] bg-[rgba(255,255,255,0.1)] px-1.5 py-0.5 rounded text-white font-mono">EXT</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
-        </nav>
-      </div>
-
-      {error && (
-        <div className="shrink-0 border-b border-red-500/30 bg-red-500/10 px-6 py-3 text-xs font-medium text-red-500 flex items-center gap-2">
-          <span className="shrink-0 w-4 h-4 rounded-full border border-red-500 flex items-center justify-center font-bold">!</span>
-          {error}
         </div>
-      )}
+        
+        <div className="px-6 py-4 border-t border-[var(--border-light)] mt-auto">
+          <div className="flex items-center gap-3">
+             <div className="relative">
+                <div className="w-2 h-2 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
+             </div>
+             <div>
+                <div className="text-[10px] text-[var(--text-muted)] font-mono">SERVER LINK</div>
+                <div className="text-xs text-white font-semibold">{health?.ok ? 'AWAITING METRICS' : 'OFFLINE'}</div>
+             </div>
+          </div>
+        </div>
+      </aside>
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-gradient-to-b from-[#0a0e1a] to-[#05080f]">
-        <div className="max-w-[1600px] mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-20">
+      {/* Main Content Area */}
+      <main className="main-content">
+        <header className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-light)]">
+           <div>
+              <div className="flex items-center gap-3 mb-1">
+                 <h2 className="text-2xl font-light text-white tracking-wide">{SIDEBAR_SECTIONS.flatMap(s=>s.items).find(i=>i.id === activeTab)?.label || "Módulo"}</h2>
+                 <span className="px-2.5 py-0.5 rounded-full bg-[#38bdf8]/10 text-[#38bdf8] text-[10px] uppercase font-bold border border-[#38bdf8]/20 tracking-wider font-mono">
+                    {selectedMotorLabel} CORE
+                 </span>
+              </div>
+              <p className="text-xs text-[var(--text-muted)] font-mono uppercase tracking-widest">{projectName} • {companyName}</p>
+           </div>
+           
+           <div className="flex items-center gap-3">
+               <button onClick={() => setRefreshKey(v => v + 1)} className="btn btn-outline !py-1.5">
+                   <span className="w-3 h-3 rounded-full border border-current flex items-center justify-center text-[7px]">R</span>
+                   SYNC OP
+               </button>
+           </div>
+        </header>
+
+        {error && (
+          <div className="sys-msg msg-error mb-6">
+            <span className="font-bold border border-current rounded-full w-4 h-4 flex items-center justify-center text-[10px]">!</span>
+            {error}
+          </div>
+        )}
+
+        <div className="w-full max-w-[1400px] pb-20">
           {renderTabContent()}
         </div>
       </main>

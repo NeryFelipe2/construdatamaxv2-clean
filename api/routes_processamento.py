@@ -599,3 +599,72 @@ async def api_processamento_modular(
     _job_manifest_path(job_id).write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     return manifest
+
+
+@router.post("/api/processamento/lote-auditoria")
+async def api_processamento_lote_auditoria(
+    arquivos_projeto: list[UploadFile] = File(...),
+    arquivos_shapefile: list[UploadFile] = File(...)
+):
+    job_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_auditoria_" + uuid.uuid4().hex[:4]
+    job_dir = JOBS_DIR / job_id
+    input_dir = job_dir / "input"
+    shp_dir = job_dir / "shapefiles"
+    output_dir = job_dir / "saida"
+    input_dir.mkdir(parents=True, exist_ok=True)
+    shp_dir.mkdir(parents=True, exist_ok=True)
+    
+    # 1. Salvar os shapefiles (extratores via ZIP ou soltos)
+    import zipfile
+    for shp_upload in arquivos_shapefile:
+        fn = shp_upload.filename
+        if not fn: continue
+        path = shp_dir / fn
+        _save_upload(shp_upload, path)
+        if fn.lower().endswith(".zip"):
+            with zipfile.ZipFile(path, 'r') as zip_ref:
+                zip_ref.extractall(shp_dir)
+                
+    # 2. Ler todos os projetos em memoria
+    projetos_carregados = []
+    for proj_upload in arquivos_projeto:
+        fn = proj_upload.filename
+        if not fn: continue
+        path = input_dir / fn
+        _save_upload(proj_upload, path)
+        
+        try:
+            pvs, trechos, meta = _ler_upload(path, Path(fn).suffix.lower())
+            nucleo = _nucleo_final("", fn)
+            tipo = "AGUA" if "agua" in nucleo.lower() else "ESGOTO"
+            projetos_carregados.append({
+                "nucleo": nucleo,
+                "tipo": tipo,
+                "pvs": pvs,
+                "trechos": trechos
+            })
+        except Exception as e:
+            print(f"Erro lendo projeto {fn}: {e}")
+            
+    # 3. Rodar Motor Auditoria V4
+    from motor_auditoria_v4 import processar_lote_auditoria
+    
+    try:
+        resultado = processar_lote_auditoria(projetos_carregados, shp_dir, output_dir)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Falha na Auditoria V4: {exc}") from exc
+        
+    artifacts = _collect_artifacts(output_dir)
+    manifest = {
+        "job_id": job_id,
+        "status": "ok",
+        "motor": "auditoria_v4_nts",
+        "n_projetos": len(projetos_carregados),
+        "stats_geral": resultado["status_geral"],
+        "artifacts": artifacts,
+        "created_at": datetime.now().isoformat()
+    }
+    _job_manifest_path(job_id).write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+        
+    return manifest
