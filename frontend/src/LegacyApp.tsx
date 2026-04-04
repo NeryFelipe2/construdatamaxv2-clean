@@ -97,55 +97,45 @@ const NS_STATUS_OPTIONS = ["PLANEJADA", "EM_EXECUCAO", "CONCLUIDA", "MEDIDA", "B
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 const NATIVE_BASE = API_BASE || "";
 
-// --- Palantir Sidebar Navigation ---
+// --- Palantir Sidebar Navigation (5 Pilares Consolidados) ---
 const SIDEBAR_SECTIONS = [
   {
-    title: "PALANTIR — GESTAO",
+    title: "COMANDO CENTRAL",
     items: [
       { id: "gestao", label: "Gestao 360", icon: "grid" },
-      { id: "processar", label: "Torre Controle", icon: "radio" },
-      { id: "log", label: "Relatorio 360", icon: "file-text" },
-      { id: "nucleos", label: "Projetos", icon: "folder" },
+      { id: "processar", label: "Torre de Controle", icon: "radio" },
+      { id: "nucleos", label: "Frentes & Nucleos", icon: "folder" },
+      { id: "log", label: "Kernel Log", icon: "file-text" },
     ]
   },
   {
-    title: "PLANEJAMENTO",
+    title: "ENGENHARIA & BIM",
     items: [
-      { id: "trechos", label: "Planejamento", icon: "calendar" },
-      { id: "agenda", label: "Agenda", icon: "clock" },
-      { id: "lean", label: "LPS/Lean", icon: "target" },
-    ]
-  },
-  {
-    title: "OPERACAO",
-    items: [
-      { id: "rdo", label: "RDO", icon: "clipboard" },
-      { id: "mapa", label: "Mapa Interativo", icon: "map" },
-      { id: "rede", label: "Rede 360", icon: "git-branch" },
       { id: "bim", label: "BIM 3D/4D/5D", icon: "box" },
+      { id: "mapa", label: "Mapa Interativo", icon: "map" },
+      { id: "rede", label: "Rede 3D", icon: "git-branch" },
+      { id: "trechos", label: "Trechos & Cadastro", icon: "list" },
+      { id: "hidraulica", label: "Hidraulica / NS", icon: "calculator" },
     ]
   },
   {
-    title: "RECURSOS",
+    title: "PLANEJAMENTO 4D",
     items: [
-      { id: "suprimentos", label: "Suprimentos", icon: "package" },
-      { id: "maodeobra", label: "Mao de Obra", icon: "users" },
-      { id: "equipamentos", label: "Gest. Equip.", icon: "tool" },
-      { id: "frota", label: "Frota", icon: "truck" },
-      { id: "hidraulica", label: "Quantitativos", icon: "calculator" },
-      { id: "preconstr", label: "Pre-Constr.", icon: "search" },
+      { id: "lean", label: "LPS / Lean", icon: "target" },
+      { id: "custos", label: "Custos 5D", icon: "dollar" },
+      { id: "perdas", label: "Gestao Perdas", icon: "alert" },
     ]
   },
   {
-    title: "MÓDULOS OFFLINE (NATIVOS)",
+    title: "OPERACOES DE CAMPO",
     items: [
-      { id: "native_brutal", label: "Construplan Brutal", icon: "disc", isNative: true, path: "/motor-brutal" },
-      { id: "native_cenarios", label: "Dash Cenários", icon: "layout", isNative: true, path: "/cenarios" },
+      { id: "rdo", label: "RDO Diario", icon: "clipboard" },
+      { id: "ia", label: "IA & Analytics", icon: "cpu" },
     ]
-  }
+  },
 ];
 
-type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "agenda" | "suprimentos" | "maodeobra" | "equipamentos" | "frota" | "preconstr";
+type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo";
 
 /* ─── Helpers ─── */
 
@@ -1263,31 +1253,20 @@ export default function LegacyApp() {
   function renderTabContent() {
     switch (activeTab) {
       case "processar": return renderProcessar();
-      case "mapa": return renderMapa();
-      case "rede": return renderRede();
+      case "gestao":    return renderGestao();
+      case "nucleos":   return renderNucleos();
+      case "log":       return renderLog();
+      case "bim":       return renderBim();
+      case "mapa":      return renderMapa();
+      case "rede":      return renderRede();
+      case "trechos":   return renderTrechos();
       case "hidraulica": return renderHidraulica();
-      case "trechos": return renderTrechos();
-      case "custos": return renderCustos();
-      case "bim": return renderBim();
-      case "lean": return renderLean();
-      case "perdas": return renderPerdas();
-      case "ia": return renderIA();
-      case "nucleos": return renderNucleos();
-      case "log": return renderLog();
-      case "gestao": return renderGestao();
-      case "rdo": return renderRdoPanel();
-      case "suprimentos": return renderCustos(); // Mock mapping for now
-      default: return (
-        <div className="p-panel flex flex-col items-center justify-center p-20 text-center">
-          <div className="w-16 h-16 bg-[#38bdf8]/10 rounded-full flex items-center justify-center mb-6 border border-[#38bdf8]/30">
-            <span className="text-[#38bdf8] text-2xl font-bold">🔒</span>
-          </div>
-          <h2 className="text-xl font-bold text-white mb-2">Módulo em Desenvolvimento</h2>
-          <p className="text-[var(--text-muted)] max-w-md">
-            O subsistema Palantir para esta operação está sendo integrado ao núcleo principal através da API Neural.
-          </p>
-        </div>
-      );
+      case "lean":      return renderLean();
+      case "custos":    return renderCustos();
+      case "perdas":    return renderPerdas();
+      case "rdo":       return renderRdoPanel();
+      case "ia":        return renderIA();
+      default:          return renderProcessar();
     }
   }
 
@@ -1371,21 +1350,13 @@ export default function LegacyApp() {
                 {section.items.map(item => (
                   <button
                     key={item.id}
-                    onClick={() => {
-                        if (item.isNative) {
-                            window.open(nativeUrl(item.path!), '_blank');
-                        } else {
-                            setActiveTab(item.id as TabId);
-                        }
-                    }}
-                    className={cn("nav-item", activeTab === item.id && !item.isNative ? "active" : "")}
+                    onClick={() => setActiveTab(item.id as TabId)}
+                    className={cn("nav-item", activeTab === item.id ? "active" : "")}
                   >
-                    {/* Fake Icons using spans for minimalist look */}
                     <span className="w-4 h-4 flex items-center justify-center border border-current rounded-sm text-[8px] opacity-70">
                       {item.icon[0].toUpperCase()}
                     </span>
                     {item.label}
-                    {item.isNative && <span className="ml-auto text-[8px] bg-[rgba(255,255,255,0.1)] px-1.5 py-0.5 rounded text-white font-mono">EXT</span>}
                   </button>
                 ))}
               </div>

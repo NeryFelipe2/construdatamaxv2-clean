@@ -32,42 +32,33 @@ const WhatsAppRdoPage = lazy(() => import("@/features/whatsapp-rdo/index").then(
 // ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
 const LegacyApp = lazy(() => import("./LegacyApp"));
 
-// ─── Nav items ──────────────────────────────────────────────────────────────
+// ─── Nav items (5 Pilares Consolidados) ─────────────────────────────────────
 const navItems = [
-  { section: "NS V5 — Motor Principal" },
-  { label: "NS V5 (13 abas)", icon: Monitor, to: "/app/ns-v5" },
+  { section: "COMANDO CENTRAL" },
+  { label: "Torre NS V5",      icon: Monitor,         to: "/ns-v5" },
+  { label: "Gestao 360",       icon: LayoutDashboard,  to: "/app/gestao-360" },
+  { label: "Torre Controle",   icon: Radio,            to: "/app/torre-de-controle" },
+  { label: "Projetos",         icon: FolderKanban,     to: "/app/projetos" },
 
-  { section: "Palantir — Gestao" },
-  { label: "Gestao 360", icon: LayoutDashboard, to: "/app/gestao-360" },
-  { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
-  { label: "Relatorio 360", icon: ClipboardList, to: "/app/relatorio360" },
-  { label: "Projetos", icon: FolderKanban, to: "/app/projetos" },
+  { section: "ENGENHARIA & BIM" },
+  { label: "BIM 3D/4D/5D",    icon: Layers,           to: "/app/bim" },
+  { label: "Mapa & Rede",     icon: Map,              to: "/app/mapa-interativo" },
+  { label: "Quantitativos",   icon: Calculator,       to: "/app/quantitativos" },
+  { label: "Pre-Construcao",  icon: FileSearch,       to: "/app/pre-construcao" },
 
-  { section: "Planejamento" },
-  { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
-  { label: "Agenda", icon: Calendar, to: "/app/agenda" },
-  { label: "LPS/Lean", icon: Target, to: "/app/lps-lean" },
+  { section: "PLANEJAMENTO 4D" },
+  { label: "Planejamento",    icon: CalendarClock,    to: "/app/planejamento" },
+  { label: "LPS / Lean",      icon: Target,           to: "/app/lps-lean" },
 
-  { section: "Operacao" },
-  { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "Mapa Interativo", icon: Map, to: "/app/mapa-interativo" },
-  { label: "Rede 360", icon: Network, to: "/app/rede-360" },
-  { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
+  { section: "OPERACOES DE CAMPO" },
+  { label: "RDO Diario",      icon: FileText,         to: "/app/rdo" },
+  { label: "Relatorio 360",   icon: ClipboardList,    to: "/app/relatorio360" },
+  { label: "WhatsApp RDO",    icon: MessageSquare,    to: "/app/whatsapp-rdo" },
 
-  { section: "Recursos" },
-  { label: "Suprimentos", icon: PackageSearch, to: "/app/suprimentos" },
-  { label: "Mao de Obra", icon: Users, to: "/app/mao-de-obra" },
-  { label: "Gest. Equip.", icon: Wrench, to: "/app/gestao-equipamentos" },
-  { label: "Frota", icon: Cpu, to: "/app/otimizacao-frota" },
-  { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
-  { label: "Pre-Constr.", icon: FileSearch, to: "/app/pre-construcao" },
-
-  { section: "WhatsApp" },
-  { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
-
-  { section: "Módulos Offline (Nativos)" },
-  { label: "Construplan Brutal", icon: Target, to: "/app/construplan-brutal" },
-  { label: "Dash Cenários", icon: LayoutDashboard, to: "/app/cenarios-offline" },
+  { section: "LOGISTICA & RH" },
+  { label: "Suprimentos",     icon: PackageSearch,    to: "/app/suprimentos" },
+  { label: "Mao de Obra",     icon: Users,            to: "/app/mao-de-obra" },
+  { label: "Equip. & Frota",  icon: Wrench,           to: "/app/gestao-equipamentos" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -235,36 +226,49 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Renderiza a antiga versao monolítica diretamente sem a casca do novo */}
+        {/* Torre NS V5 — roda fullscreen, sem casca AppShell */}
         <Route path="/ns-v5" element={<NsV5Page />} />
-        
+
+        {/* Módulos Palantir — dentro do AppShell com sidebar */}
         <Route path="/app" element={<AppShell />}>
           <Route index element={<Navigate to="/ns-v5" replace />} />
+
+          {/* COMANDO CENTRAL */}
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
-          <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
           <Route path="projetos" element={<LazyRoute><ProjetosPage /></LazyRoute>} />
+
+          {/* ENGENHARIA & BIM */}
+          <Route path="bim" element={<LazyRoute><BimPage /></LazyRoute>} />
+          <Route path="mapa-interativo" element={<LazyRoute><MapaInterativoPage /></LazyRoute>} />
+          <Route path="rede-360" element={<LazyRoute><Rede360Page /></LazyRoute>} />
+          <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
+          <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
+
+          {/* PLANEJAMENTO 4D */}
           <Route path="planejamento" element={<LazyRoute><PlanejamentoPage /></LazyRoute>} />
           <Route path="agenda" element={<LazyRoute><AgendaPage /></LazyRoute>} />
           <Route path="lps-lean" element={<LazyRoute><LpsPage /></LazyRoute>} />
+
+          {/* OPERACOES DE CAMPO */}
           <Route path="rdo" element={<LazyRoute><RdoPage /></LazyRoute>} />
-          <Route path="mapa-interativo" element={<LazyRoute><MapaInterativoPage /></LazyRoute>} />
-          <Route path="rede-360" element={<LazyRoute><Rede360Page /></LazyRoute>} />
-          <Route path="bim" element={<LazyRoute><BimPage /></LazyRoute>} />
+          <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
+          <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
+
+          {/* LOGISTICA & RH */}
           <Route path="suprimentos" element={<LazyRoute><SuprimentosPage /></LazyRoute>} />
           <Route path="mao-de-obra" element={<LazyRoute><MaoDeObraPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
-          <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
-          <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
-          <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
-          <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
-          
-          {/* OFFLINE INTEGRATION */}
+
+          {/* Aliases — rotas antigas apontam para os novos consolidados */}
+          <Route path="otimizacao-frota" element={<Navigate to="/app/gestao-equipamentos" replace />} />
           <Route path="construplan-brutal" element={<OfflineIframePage url="/offline_modules/construplan.html" />} />
           <Route path="cenarios-offline" element={<OfflineIframePage url="/offline_modules/cenarios.html" />} />
 
           <Route path="*" element={<Navigate to="/ns-v5" replace />} />
         </Route>
+
+        {/* Fallback global */}
         <Route path="*" element={<Navigate to="/ns-v5" replace />} />
       </Routes>
     </BrowserRouter>
