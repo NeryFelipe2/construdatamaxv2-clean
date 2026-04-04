@@ -97,7 +97,7 @@ const NS_STATUS_OPTIONS = ["PLANEJADA", "EM_EXECUCAO", "CONCLUIDA", "MEDIDA", "B
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 const NATIVE_BASE = API_BASE || "";
 
-// --- Palantir Sidebar Navigation (5 Pilares Consolidados) ---
+// --- Palantir Sidebar Navigation (6 Pilares Táticos) ---
 const SIDEBAR_SECTIONS = [
   {
     title: "COMANDO CENTRAL",
@@ -123,19 +123,28 @@ const SIDEBAR_SECTIONS = [
     items: [
       { id: "lean", label: "LPS / Lean", icon: "target" },
       { id: "custos", label: "Custos 5D", icon: "dollar" },
-      { id: "perdas", label: "Gestao Perdas", icon: "alert" },
+      { id: "atrasos", label: "Analise Atrasos", icon: "clock" },
     ]
   },
   {
     title: "OPERACOES DE CAMPO",
     items: [
       { id: "rdo", label: "RDO Diario", icon: "clipboard" },
+      { id: "seguranca", label: "Seguranca DDS", icon: "shield" },
+      { id: "punchlist", label: "Punch List", icon: "check" },
+    ]
+  },
+  {
+    title: "INTELIGENCIA",
+    items: [
+      { id: "cashflow", label: "Cash Flow", icon: "trending" },
+      { id: "perdas", label: "Gestao Perdas", icon: "alert" },
       { id: "ia", label: "IA & Analytics", icon: "cpu" },
     ]
   },
 ];
 
-type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo";
+type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "seguranca" | "cashflow" | "atrasos" | "punchlist";
 
 /* ─── Helpers ─── */
 
@@ -1178,72 +1187,534 @@ export default function LegacyApp() {
   }
 
   function renderGestao() {
+    // ── War Room Computed Values ──
+    const pctFisico = asNumber(dashboard?.pct_fisico);
+    const pctFin = asNumber(dashboard?.pct_financeiro);
+    const totalLiberado = asNumber(dashboard?.valor_liberado);
+    const custoRdo = asNumber(dashboard?.custo_rdo_total);
+    const extTotal = asNumber(dashboard?.extensao_total_m);
+    const extExec = asNumber(dashboard?.extensao_exec_m);
+    const mDia = asNumber(dashboard?.m_por_dia);
+    const diasTotal = cronograma?.duracao_total_dias ?? 0;
+    const diasDecorridos = cronograma ? Math.max(0, Math.floor((Date.now() - new Date(`${cronograma.data_inicio}T12:00:00`).getTime()) / 86400000)) : 0;
+    const pctTempo = diasTotal > 0 ? (diasDecorridos / diasTotal) * 100 : 0;
+    const spi = pctTempo > 0 ? pctFisico / pctTempo : 1;
+    const cpi = pctFin > 0 ? pctFisico / pctFin : 1;
+    const extRestante = extTotal - extExec;
+    const diasProjetados = mDia > 0 ? Math.ceil(extRestante / mDia) : 999;
+    const saldo = totalLiberado - custoRdo;
+    const burnRate = (dashboard?.dias_medidos ?? 0) > 0 ? custoRdo / (dashboard?.dias_medidos ?? 1) : 0;
+
+    // ── Alert Engine ──
+    const alerts: Array<{ level: "critical" | "warning" | "ok"; msg: string }> = [];
+    if (spi < 0.85) alerts.push({ level: "critical", msg: `SPI ${spi.toFixed(2)} — Atraso severo detectado. Mobilizar equipes extras.` });
+    else if (spi < 0.95) alerts.push({ level: "warning", msg: `SPI ${spi.toFixed(2)} — Atenção: ritmo abaixo do planejado.` });
+    if (cpi < 0.9) alerts.push({ level: "critical", msg: `CPI ${cpi.toFixed(2)} — Custo acima do previsto. Revisar orçamento.` });
+    if (saldo < 0) alerts.push({ level: "critical", msg: `Saldo contratual NEGATIVO: ${formatCurrency(saldo)}` });
+    else if (burnRate > 0 && saldo / burnRate < 15) alerts.push({ level: "warning", msg: `Autonomia financeira: apenas ${Math.round(saldo / burnRate)} dias restantes.` });
+    if (leanInsight && leanInsight.restricoes_lookahead > 0) alerts.push({ level: "warning", msg: `${leanInsight.restricoes_lookahead} restrições no Lookahead. ${leanInsight.alerta_lookahead}` });
+    if (alerts.length === 0) alerts.push({ level: "ok", msg: "Sistema operando dentro dos parâmetros. Nenhum alerta ativo." });
+
     return (
-      <div className="p-panel border-t-2 border-t-[#0ea5e9]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Gestao & Cronograma 360</span> <span className="badge">DASHBOARD MAIN</span></h2>
+      <div className="space-y-6">
+        {/* ── Header War Room ── */}
+        <div className="p-panel border-t-2 border-t-[#0ea5e9]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#0ea5e9]/20 flex items-center justify-center text-[#38bdf8] border border-[#0ea5e9]/50 shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              </span>
+              War Room — Gestão 360
+              <span className="badge">TACTICAL OVERVIEW</span>
+            </h2>
+          </div>
+
+          {/* Nucleo filter */}
+          <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-4 overflow-x-auto hide-scrollbar mt-4">
+            <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
+            {nucleoNames.slice(0, 10).map(n => (
+              <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
+            ))}
+          </div>
         </div>
 
-        <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-6 overflow-x-auto hide-scrollbar">
-          <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
-          {nucleoNames.slice(0, 10).map(n => (
-            <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
+        {/* ── ALERT PANEL ── */}
+        <div className="space-y-2">
+          {alerts.map((a, i) => (
+            <div key={i} className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-xs font-medium ${
+              a.level === "critical" ? "bg-red-500/5 border-red-500/20 text-red-400" :
+              a.level === "warning" ? "bg-[#f59e0b]/5 border-[#f59e0b]/20 text-[#fcd34d]" :
+              "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
+            }`}>
+              <span className={`w-2 h-2 rounded-full shrink-0 ${a.level === "critical" ? "bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" : a.level === "warning" ? "bg-[#f59e0b] animate-pulse" : "bg-emerald-500"}`} />
+              {a.msg}
+            </div>
           ))}
         </div>
 
-        <div className="action-row mb-6">
-          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
-          <a className="btn btn-outline" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MEDIR RDO NATIVO</a>
-          <a className="btn btn-outline" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">GERAR MACRO</a>
-          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
-          <button className="btn btn-primary ml-auto" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR DADOS</button>
-        </div>
-
+        {/* ── MAIN KPIs ── */}
         <div className="kpi-board">
           <div className="kpi-card"><div className="kpi-label">NS Totais</div><div className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</div></div>
-          <div className="kpi-card warn"><div className="kpi-label">Em Execucao</div><div className="kpi-value text-[#f59e0b]">{formatInt(dashboard?.n_execucao ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">% Fisico</div><div className="kpi-value text-[#38bdf8]">{formatPercent(dashboard?.pct_fisico ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">% Financeiro</div><div className="kpi-value text-[#10b981]">{formatPercent(dashboard?.pct_financeiro ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">M/Dia (Produtlv)</div><div className="kpi-value">{formatMeters(dashboard?.m_por_dia ?? 0)}</div></div>
+          <div className="kpi-card warn"><div className="kpi-label">Em Execução</div><div className="kpi-value text-[#f59e0b]">{formatInt(dashboard?.n_execucao ?? 0)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Concluídas</div><div className="kpi-value text-emerald-400">{formatInt(dashboard?.n_concluidas ?? 0)}</div></div>
           <div className="kpi-card"><div className="kpi-label">RDOs</div><div className="kpi-value text-[#8b5cf6]">{formatInt(dashboard?.rdos ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Curva Prevista</div><div className="kpi-value">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Curva Realizada</div><div className="kpi-value">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</div></div>
         </div>
 
+        {/* ── PROGRESS BARS (Physical + Financial + Timeline) ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { label: "Progresso Físico", value: pctFisico, color: "#38bdf8", gradient: "from-[#0284c7] to-[#38bdf8]" },
+            { label: "Progresso Financeiro", value: pctFin, color: "#10b981", gradient: "from-[#065f46] to-[#10b981]" },
+            { label: "Linha do Tempo", value: pctTempo, color: pctFisico >= pctTempo ? "#10b981" : "#ef4444", gradient: pctFisico >= pctTempo ? "from-[#065f46] to-[#10b981]" : "from-[#7f1d1d] to-[#ef4444]" },
+          ].map(bar => (
+            <div key={bar.label} className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">{bar.label}</span>
+                <span className="text-lg font-mono font-bold" style={{ color: bar.color }}>{bar.value.toFixed(1)}%</span>
+              </div>
+              <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden border border-[rgba(255,255,255,0.05)]">
+                <div className={`h-full rounded-full bg-gradient-to-r ${bar.gradient} transition-all duration-1000 ease-out`} style={{ width: `${Math.min(bar.value, 100)}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── EARNED VALUE PANEL ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">SPI (Schedule)</div>
+            <div className={`text-2xl font-mono font-bold ${spi >= 0.95 ? 'text-emerald-400' : spi >= 0.8 ? 'text-[#fcd34d]' : 'text-rose-400'}`}>{spi.toFixed(3)}</div>
+            <div className="text-[9px] text-[var(--text-muted)] mt-1">{spi >= 1 ? "Adiantado" : spi >= 0.95 ? "No prazo" : "Atrasado"}</div>
+          </div>
+          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">CPI (Cost)</div>
+            <div className={`text-2xl font-mono font-bold ${cpi >= 0.95 ? 'text-emerald-400' : cpi >= 0.8 ? 'text-[#fcd34d]' : 'text-rose-400'}`}>{cpi.toFixed(3)}</div>
+            <div className="text-[9px] text-[var(--text-muted)] mt-1">{cpi >= 1 ? "Eficiente" : cpi >= 0.9 ? "Aceitável" : "Acima do custo"}</div>
+          </div>
+          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">Produtividade</div>
+            <div className="text-2xl font-mono font-bold text-[#38bdf8]">{mDia.toFixed(1)}</div>
+            <div className="text-[9px] text-[var(--text-muted)] mt-1">metros/dia</div>
+          </div>
+          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">ETC (Dias p/ Fim)</div>
+            <div className={`text-2xl font-mono font-bold ${diasProjetados <= diasTotal - diasDecorridos ? 'text-emerald-400' : 'text-rose-400'}`}>{formatInt(diasProjetados)}</div>
+            <div className="text-[9px] text-[var(--text-muted)] mt-1">{formatMeters(extRestante)} restantes</div>
+          </div>
+        </div>
+
+        {/* ── OPERATIONAL STATUS BOARD ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: "Motor NS", status: health?.ok ? "ONLINE" : "OFFLINE", ok: !!health?.ok },
+            { label: "Pipeline", status: latestJob?.status === "concluido" ? "PRONTO" : "AGUARDANDO", ok: latestJob?.status === "concluido" },
+            { label: "Cronograma", status: cronograma ? "CARREGADO" : "VAZIO", ok: !!cronograma },
+            { label: "GeoJSON", status: geoJson && geoJson.features.length > 0 ? `${geoJson.features.length} feat.` : "VAZIO", ok: !!(geoJson && geoJson.features.length > 0) },
+          ].map(s => (
+            <div key={s.label} className="bg-[#05080f] p-3 rounded-lg border border-[var(--border-light)] flex items-center gap-3">
+              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${s.ok ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.7)]'} animate-pulse`} />
+              <div>
+                <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest">{s.label}</div>
+                <div className={`text-xs font-mono font-bold ${s.ok ? 'text-emerald-400' : 'text-rose-400'}`}>{s.status}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── CRONOGRAMA INFO BAR ── */}
         {cronograma && (
-          <div className="sys-msg msg-info mt-6 bg-[#38bdf8]/5">
+          <div className="sys-msg msg-info bg-[#38bdf8]/5">
              <div className="flex gap-4 items-center flex-wrap w-full text-[11px] font-mono">
                <div><span className="opacity-50 mr-1 text-white">Proj:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.projeto)}</strong></div>
                <div><span className="opacity-50 mr-1 text-white">Emp:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.empresa)}</strong></div>
-               <div><span className="opacity-50 mr-1 text-white">Periodo:</span> <strong className="text-[#38bdf8]">{formatDate(cronograma.data_inicio)} — {formatDate(cronograma.data_fim)}</strong></div>
+               <div><span className="opacity-50 mr-1 text-white">Período:</span> <strong className="text-[#38bdf8]">{formatDate(cronograma.data_inicio)} — {formatDate(cronograma.data_fim)}</strong></div>
                <div className="ml-auto"><span className="opacity-50 mr-1 text-white">TOTAL:</span> <strong className="text-emerald-400">{formatInt(cronograma.duracao_total_dias)} DIAS</strong></div>
              </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 mt-6">
-          <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Núcleos de Operação (Gantt Macro)</h3>
+        {/* ── FINANCIAL SNAPSHOT ── */}
+        <div className="p-panel border-t-2 border-t-[#10b981]">
+          <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Snapshot Financeiro</h3>
+          <div className="kpi-board">
+            <div className="kpi-card"><div className="kpi-label">Valor Liberado</div><div className="kpi-value text-emerald-400">{formatCurrency(totalLiberado)}</div></div>
+            <div className="kpi-card"><div className="kpi-label">Custo Realizado</div><div className="kpi-value text-rose-400">{formatCurrency(custoRdo)}</div></div>
+            <div className="kpi-card"><div className="kpi-label">Saldo</div><div className="kpi-value" style={{ color: saldo >= 0 ? "#34d399" : "#f87171" }}>{formatCurrency(saldo)}</div></div>
+            <div className="kpi-card"><div className="kpi-label">Burn Rate/Dia</div><div className="kpi-value text-[#f59e0b]">{formatCurrency(burnRate)}</div></div>
+          </div>
+        </div>
+
+        {/* ── QUICK ACTIONS ── */}
+        <div className="action-row">
+          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
+          <a className="btn btn-outline" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">RDO NATIVO</a>
+          <a className="btn btn-outline" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">CRONOGRAMA JSON</a>
+          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S</a>
+          <button className="btn btn-primary ml-auto" onClick={() => setRefreshKey(v => v + 1)}>SYNC DADOS</button>
+        </div>
+
+        {/* ── NUCLEOS GRID ── */}
+        <div>
+          <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Frentes de Serviço (Gantt Visual)</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {visibleNuclei.length ? visibleNuclei.map(n => {
               const phase = currentPhase(n);
+              const nStart = new Date(`${n.inicio}T12:00:00`).getTime();
+              const nEnd = new Date(`${n.fim}T12:00:00`).getTime();
+              const now = Date.now();
+              const ganttPct = nEnd > nStart ? Math.min(100, Math.max(0, ((now - nStart) / (nEnd - nStart)) * 100)) : 0;
+              const isComplete = now > nEnd;
               return (
-                <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)] hover:border-[#38bdf8]/40 transition-all shadow-md group" key={n.nome}>
-                  <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-sm text-white group-hover:text-[#38bdf8] transition-colors line-clamp-2 max-w-[80%]">{cleanText(n.nome)}</h4>
-                    <span className="text-[8px] px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] text-[#bae6fd] uppercase border border-[rgba(255,255,255,0.1)]">{cleanText(phase?.nome ?? "-")}</span>
+                <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)] hover:border-[#38bdf8]/40 transition-all shadow-md group" key={n.nome} onClick={() => setSelectedNucleo(n.nome)}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-bold text-sm text-white group-hover:text-[#38bdf8] transition-colors line-clamp-2 max-w-[75%] cursor-pointer">{cleanText(n.nome)}</h4>
+                    <span className={`text-[8px] px-1.5 py-0.5 rounded uppercase font-bold border ${isComplete ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-[#bae6fd] bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)]'}`}>{isComplete ? "OK" : cleanText(phase?.nome ?? "-")}</span>
                   </div>
-                  <div className="text-[10px] text-[var(--text-muted)] flex flex-col gap-1.5 mt-2 font-mono">
-                      <span>{formatDate(n.inicio)} - {formatDate(n.fim)}</span>
-                      <div className="flex justify-between items-center mt-2 border-t border-[var(--border-light)] pt-2">
-                        <span className="text-emerald-400">{formatMeters(n.extensao_m)}</span>
-                        <span>{formatInt(n.n_trechos)} TRCH</span>
-                        <span>{formatInt(n.equipes)} EQP</span>
-                      </div>
+                  {/* Gantt micro-bar */}
+                  <div className="w-full h-1.5 bg-[#0d1117] rounded-full overflow-hidden my-3 border border-[rgba(255,255,255,0.03)]">
+                    <div className={`h-full rounded-full transition-all duration-700 ${isComplete ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#0284c7] to-[#38bdf8]'}`} style={{ width: `${ganttPct}%` }} />
+                  </div>
+                  <div className="text-[10px] text-[var(--text-muted)] flex flex-col gap-1 font-mono">
+                    <span>{formatDate(n.inicio)} → {formatDate(n.fim)}</span>
+                    <div className="flex justify-between items-center mt-1 pt-1.5 border-t border-[var(--border-light)]">
+                      <span className="text-emerald-400">{formatMeters(n.extensao_m)}</span>
+                      <span>{formatInt(n.n_trechos)} T</span>
+                      <span>{formatInt(n.equipes)} EQ</span>
+                      <span className="text-[#f59e0b]">{formatInt(n.duracao_dias)}d</span>
+                    </div>
                   </div>
                 </div>
               );
-            }) : <div className="col-span-full p-8 text-center text-[var(--text-muted)] border border-dashed border-[var(--border-light)] rounded-xl">O sistema não carregou frentes de serviço (núcleos).</div>}
+            }) : <div className="col-span-full p-8 text-center text-[var(--text-muted)] border border-dashed border-[var(--border-light)] rounded-xl">O sistema não carregou frentes de serviço.</div>}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── MÓDULO: SEGURANÇA DDS (NR-18 / Inspeções) ──
+  function renderSeguranca() {
+    const today = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
+    const safetyCats = [
+      { cat: "EPI Operacional", items: ["Capacete com jugular", "Luva de raspa", "Bota com biqueira", "Óculos de proteção", "Protetor auricular"], color: "#38bdf8" },
+      { cat: "Sinalização Viária", items: ["Cones e cavaletes posicionados", "Placas de desvio atualizadas", "Sinaleiro comunicando via rádio", "Fitas zebradas nas valas"], color: "#f59e0b" },
+      { cat: "Escavação & Vala", items: ["Escoramento conforme NR-18.6", "Talude dentro do ângulo seguro", "Bomba de esgotamento ligada", "Passarela de travessia", "Solo armazenado a 1m da borda"], color: "#ef4444" },
+      { cat: "Máquinas & Equipamentos", items: ["Check-list diário da retro", "Extintor na cabine", "Alarme de ré funcionando", "Operador habilitado presente"], color: "#10b981" },
+    ];
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#ef4444]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#ef4444]/20 flex items-center justify-center text-[#f87171] border border-[#ef4444]/50 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </span>
+              Segurança & DDS Diário
+              <span className="badge border-[#ef4444]/30 text-[#f87171] bg-[#ef4444]/10">NR-18 COMPLIANCE</span>
+            </h2>
+          </div>
+          <div className="sys-msg msg-info mt-2 bg-[#ef4444]/5 !border-[#ef4444]/20">
+            <span className="text-[#f87171] font-bold">DDS — {today}</span>
+            <span className="text-[var(--text-muted)] ml-2">| Responsável: {cleanText(rdoForm.responsavel || "Engenheiro de Campo")}</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {safetyCats.map(sc => (
+            <div key={sc.cat} className="p-panel" style={{ borderTop: `2px solid ${sc.color}` }}>
+              <h3 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: sc.color }}>{sc.cat}</h3>
+              <div className="space-y-2">
+                {sc.items.map((item, idx) => (
+                  <label key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-[#05080f] border border-[var(--border-light)] hover:border-[rgba(255,255,255,0.15)] transition-colors cursor-pointer group">
+                    <input type="checkbox" className="w-4 h-4 rounded border-2 accent-emerald-500" />
+                    <span className="text-xs text-[var(--text-muted)] group-hover:text-white transition-colors">{item}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="p-panel border-t-2 border-t-[#10b981]">
+          <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Registro de Ocorrência de Segurança</h3>
+          <div className="form-row">
+            <div className="form-field"><label>Tipo</label>
+              <select><option>Quase-Acidente</option><option>Acidente Leve</option><option>Acidente Grave</option><option>Condição Insegura</option><option>Ato Inseguro</option></select>
+            </div>
+            <div className="form-field" style={{ flex: 2 }}><label>Descrição</label><input type="text" placeholder="Descreva a ocorrência de segurança..." /></div>
+          </div>
+          <div className="action-row mt-4"><button className="btn btn-danger w-full">REGISTRAR OCORRÊNCIA</button></div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── MÓDULO: CASH FLOW (Previsão Financeira) ──
+  function renderCashFlow() {
+    const totalLiberado = asNumber(dashboard?.valor_liberado);
+    const custoRdo = asNumber(dashboard?.custo_rdo_total);
+    const saldo = totalLiberado - custoRdo;
+    const burnRate = dashboard?.dias_medidos ? custoRdo / dashboard.dias_medidos : 0;
+    const diasRestantes = burnRate > 0 ? Math.round(saldo / burnRate) : 999;
+    const extTotal = asNumber(dashboard?.extensao_total_m);
+    const extExec = asNumber(dashboard?.extensao_exec_m);
+    const custoM = extExec > 0 ? custoRdo / extExec : 0;
+    const projecaoTotal = custoM * extTotal;
+    const desvio = totalLiberado > 0 ? ((projecaoTotal - totalLiberado) / totalLiberado) * 100 : 0;
+
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#10b981]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#10b981]/20 flex items-center justify-center text-[#34d399] border border-[#10b981]/50 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </span>
+              Cash Flow Forecast
+              <span className="badge border-[#10b981]/30 text-[#34d399] bg-[#10b981]/10">S-CURVE FINANCEIRA</span>
+            </h2>
+          </div>
+        </div>
+
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Valor Liberado</div><div className="kpi-value text-emerald-400">{formatCurrency(totalLiberado)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Custo Realizado</div><div className="kpi-value text-rose-400">{formatCurrency(custoRdo)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Saldo Contratual</div><div className="kpi-value" style={{ color: saldo >= 0 ? "#34d399" : "#f87171" }}>{formatCurrency(saldo)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Burn Rate / Dia</div><div className="kpi-value text-[#f59e0b]">{formatCurrency(burnRate)}</div></div>
+        </div>
+
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Custo / Metro</div><div className="kpi-value text-[#38bdf8]">{formatCurrency(custoM)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Projeção Final</div><div className="kpi-value text-[#8b5cf6]">{formatCurrency(projecaoTotal)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Desvio Orçamentário</div><div className="kpi-value" style={{ color: Math.abs(desvio) < 5 ? "#34d399" : desvio > 0 ? "#f87171" : "#f59e0b" }}>{desvio > 0 ? "+" : ""}{desvio.toFixed(1)}%</div></div>
+          <div className="kpi-card"><div className="kpi-label">Autonomia (dias)</div><div className="kpi-value" style={{ color: diasRestantes > 30 ? "#34d399" : "#f87171" }}>{formatInt(diasRestantes)} dias</div></div>
+        </div>
+
+        <div className="p-panel border-t-2 border-t-[#f59e0b]">
+          <h3 className="text-sm font-bold text-[#fcd34d] uppercase tracking-widest mb-4">Projeção de Desembolso</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {["Mês Atual", "Próximo Mês", "Trimestre"].map((periodo, i) => (
+              <div key={periodo} className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)]">
+                <div className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-2">{periodo}</div>
+                <div className="text-xl font-mono text-[#fcd34d]">{formatCurrency(burnRate * [30, 30, 90][i])}</div>
+                <div className="text-[10px] text-[var(--text-muted)] mt-1">{formatMeters(asNumber(dashboard?.m_por_dia) * [30, 30, 90][i])} projetados</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── MÓDULO: ANÁLISE DE ATRASOS (Schedule Delay Analysis) ──
+  function renderAtrasos() {
+    const diasTotal = cronograma?.duracao_total_dias ?? 0;
+    const diasDecorridos = cronograma ? Math.max(0, Math.floor((Date.now() - new Date(`${cronograma.data_inicio}T12:00:00`).getTime()) / 86400000)) : 0;
+    const pctTempo = diasTotal > 0 ? (diasDecorridos / diasTotal) * 100 : 0;
+    const pctFisico = asNumber(dashboard?.pct_fisico);
+    const spi = pctTempo > 0 ? pctFisico / pctTempo : 0;
+    const desvioTempo = pctFisico - pctTempo;
+    const diasAtraso = diasTotal > 0 ? Math.round((-desvioTempo / 100) * diasTotal) : 0;
+    const dataFimPrevista = cronograma?.data_fim ?? "-";
+    const dataFimProjetada = cronograma ? new Date(new Date(`${cronograma.data_fim}T12:00:00`).getTime() + diasAtraso * 86400000).toISOString().slice(0, 10) : "-";
+
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#8b5cf6]/20 flex items-center justify-center text-[#a78bfa] border border-[#8b5cf6]/50 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </span>
+              Análise de Atrasos (SPI)
+              <span className={`badge ${spi >= 0.95 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : spi >= 0.8 ? 'bg-[#f59e0b]/10 text-[#fcd34d] border-[#f59e0b]/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
+                SPI {spi.toFixed(2)}
+              </span>
+            </h2>
+          </div>
+        </div>
+
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">% Tempo Decorrido</div><div className="kpi-value text-[#38bdf8]">{formatPercent(pctTempo)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">% Físico Realizado</div><div className="kpi-value" style={{ color: pctFisico >= pctTempo ? "#34d399" : "#f87171" }}>{formatPercent(pctFisico)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Desvio (Δ)</div><div className="kpi-value" style={{ color: desvioTempo >= 0 ? "#34d399" : "#f87171" }}>{desvioTempo >= 0 ? "+" : ""}{desvioTempo.toFixed(1)}%</div></div>
+          <div className="kpi-card"><div className="kpi-label">Dias Atraso</div><div className="kpi-value" style={{ color: diasAtraso <= 0 ? "#34d399" : "#f87171" }}>{diasAtraso > 0 ? `+${diasAtraso}` : diasAtraso} dias</div></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-panel border-t-2 border-t-[#38bdf8]">
+            <h3 className="text-sm font-bold text-[#38bdf8] uppercase tracking-widest mb-4">Linha do Tempo</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between text-xs">
+                <span className="text-[var(--text-muted)]">Início Contratual</span>
+                <span className="text-white font-mono">{formatDate(cronograma?.data_inicio)}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-[var(--text-muted)]">Término Contratual</span>
+                <span className="text-[#38bdf8] font-mono font-bold">{formatDate(dataFimPrevista)}</span>
+              </div>
+              <div className="flex justify-between text-xs border-t border-[var(--border-light)] pt-3">
+                <span className="text-[var(--text-muted)]">Término Projetado</span>
+                <span className={`font-mono font-bold ${diasAtraso > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>{formatDate(dataFimProjetada)}</span>
+              </div>
+              <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden mt-4 border border-[var(--border-light)]">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${Math.min(pctTempo, 100)}%`, background: `linear-gradient(90deg, #38bdf8, ${pctFisico >= pctTempo ? '#10b981' : '#ef4444'})` }} />
+              </div>
+              <div className="flex justify-between text-[10px] text-[var(--text-muted)]">
+                <span>{formatInt(diasDecorridos)} dias</span>
+                <span>{formatInt(diasTotal)} dias</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-panel border-t-2 border-t-[#f59e0b]">
+            <h3 className="text-sm font-bold text-[#fcd34d] uppercase tracking-widest mb-4">Diagnóstico</h3>
+            <div className="space-y-3">
+              {[
+                { label: "Schedule Performance Index", value: spi.toFixed(3), color: spi >= 0.95 ? "#34d399" : spi >= 0.8 ? "#fcd34d" : "#f87171" },
+                { label: "Earned Value (%)", value: formatPercent(pctFisico), color: "#38bdf8" },
+                { label: "Planned Value (%)", value: formatPercent(pctTempo), color: "#8b5cf6" },
+                { label: "Produtividade Média", value: formatMeters(asNumber(dashboard?.m_por_dia)) + "/dia", color: "#fcd34d" },
+              ].map(kpi => (
+                <div key={kpi.label} className="flex justify-between items-center p-3 bg-[#05080f] rounded-lg border border-[var(--border-light)]">
+                  <span className="text-xs text-[var(--text-muted)]">{kpi.label}</span>
+                  <span className="font-mono font-bold text-sm" style={{ color: kpi.color }}>{kpi.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {spi < 0.9 && (
+          <div className="sys-msg msg-error">
+            <span className="font-bold text-rose-400">⚠ ALERTA CRÍTICO:</span> <span className="text-[var(--text-muted)]">O SPI de {spi.toFixed(2)} indica atraso significativo. Recomenda-se mobilização de equipe extra e revisão do caminho crítico.</span>
+          </div>
+        )}
+        {spi >= 0.95 && spi <= 1.05 && (
+          <div className="sys-msg msg-success">
+            <span className="font-bold text-emerald-400">✓ NO PRAZO:</span> <span className="text-[var(--text-muted)]">Cronograma aderente. SPI = {spi.toFixed(2)} dentro da faixa ideal.</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── MÓDULO: PUNCH LIST / PENDÊNCIAS ──
+  function renderPunchList() {
+    const punchCategories = [
+      {
+        cat: "Escavação & Vala", color: "#ef4444", priority: "ALTA",
+        items: [
+          { desc: "Recompor passeio Rua XV de Novembro", status: "pendente" },
+          { desc: "Escoramento faltante no PV-12", status: "pendente" },
+          { desc: "Liberação ART no trecho 08", status: "resolvido" },
+          { desc: "Solo contaminado trecho João Carlos", status: "pendente" },
+        ]
+      },
+      {
+        cat: "Montagem & Rede", color: "#f59e0b", priority: "MÉDIA",
+        items: [
+          { desc: "Teste hidrostático rede DN 150 — Lote 3", status: "pendente" },
+          { desc: "Substituir junta elástica PV-07/PV-08", status: "pendente" },
+          { desc: "Selagem do anel de borracha PV-15", status: "resolvido" },
+        ]
+      },
+      {
+        cat: "Reaterro & Compactação", color: "#8b5cf6", priority: "MÉDIA",
+        items: [
+          { desc: "Grau de compactação abaixo de 95% — trecho 04", status: "pendente" },
+          { desc: "Reaterro com material inadequado na Rua B", status: "pendente" },
+          { desc: "Ensaio Proctor enviado ao laboratório", status: "em_analise" },
+        ]
+      },
+      {
+        cat: "Pavimentação & Acabamento", color: "#38bdf8", priority: "BAIXA",
+        items: [
+          { desc: "Recomposição asfáltica Av. Principal", status: "pendente" },
+          { desc: "Pintura de tampa PV — padrão SABESP", status: "pendente" },
+          { desc: "Sinalização horizontal definitiva", status: "pendente" },
+          { desc: "Limpeza final da faixa de obra", status: "pendente" },
+        ]
+      },
+    ];
+    const totalItems = punchCategories.reduce((a, c) => a + c.items.length, 0);
+    const resolved = punchCategories.reduce((a, c) => a + c.items.filter(i => i.status === "resolvido").length, 0);
+    const pending = totalItems - resolved;
+    const pctResolvido = totalItems > 0 ? (resolved / totalItems) * 100 : 0;
+
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#f59e0b]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#f59e0b]/20 flex items-center justify-center text-[#fcd34d] border border-[#f59e0b]/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+              </span>
+              Punch List — Pendências de Obra
+              <span className="badge border-[#f59e0b]/30 text-[#fcd34d] bg-[#f59e0b]/10">FIELD OPS</span>
+            </h2>
+          </div>
+        </div>
+
+        {/* Summary KPIs */}
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Total Itens</div><div className="kpi-value">{formatInt(totalItems)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Pendentes</div><div className="kpi-value text-rose-400">{formatInt(pending)}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Resolvidos</div><div className="kpi-value text-emerald-400">{formatInt(resolved)}</div></div>
+          <div className="kpi-card">
+            <div className="kpi-label">% Conclusão</div>
+            <div className="kpi-value text-[#38bdf8]">{pctResolvido.toFixed(0)}%</div>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">Progresso Geral do Punch List</span>
+            <span className="text-sm font-mono font-bold text-emerald-400">{resolved}/{totalItems}</span>
+          </div>
+          <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden border border-[rgba(255,255,255,0.05)]">
+            <div className="h-full rounded-full bg-gradient-to-r from-[#065f46] to-[#10b981] transition-all duration-1000" style={{ width: `${pctResolvido}%` }} />
+          </div>
+        </div>
+
+        {/* Categories */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {punchCategories.map(cat => (
+            <div key={cat.cat} className="p-panel" style={{ borderTop: `2px solid ${cat.color}` }}>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-sm font-bold uppercase tracking-widest" style={{ color: cat.color }}>{cat.cat}</h3>
+                <span className={`text-[8px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${
+                  cat.priority === "ALTA" ? "bg-red-500/10 text-red-400 border border-red-500/20" :
+                  cat.priority === "MÉDIA" ? "bg-[#f59e0b]/10 text-[#fcd34d] border border-[#f59e0b]/20" :
+                  "bg-[#38bdf8]/10 text-[#38bdf8] border border-[#38bdf8]/20"
+                }`}>{cat.priority}</span>
+              </div>
+              <div className="space-y-2">
+                {cat.items.map((item, idx) => (
+                  <div key={idx} className={`flex items-center gap-3 p-3 rounded-lg border transition-all group ${
+                    item.status === "resolvido"
+                      ? "bg-emerald-500/5 border-emerald-500/15"
+                      : item.status === "em_analise"
+                      ? "bg-[#8b5cf6]/5 border-[#8b5cf6]/15"
+                      : "bg-[#05080f] border-[var(--border-light)] hover:border-[rgba(255,255,255,0.15)]"
+                  }`}>
+                    <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-[9px] font-bold shrink-0 ${
+                      item.status === "resolvido" ? "border-emerald-500 text-emerald-500 bg-emerald-500/10" :
+                      item.status === "em_analise" ? "border-[#8b5cf6] text-[#8b5cf6] bg-[#8b5cf6]/10" :
+                      "border-[#475569] text-transparent"
+                    }`}>{item.status === "resolvido" ? "✓" : item.status === "em_analise" ? "…" : ""}</span>
+                    <span className={`text-xs flex-1 ${item.status === "resolvido" ? "text-[#6b7280] line-through" : "text-[var(--text-muted)] group-hover:text-white transition-colors"}`}>{item.desc}</span>
+                    <span className={`text-[8px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest ${
+                      item.status === "resolvido" ? "text-emerald-400 bg-emerald-500/10" :
+                      item.status === "em_analise" ? "text-[#a78bfa] bg-[#8b5cf6]/10" :
+                      "text-rose-400 bg-rose-500/10"
+                    }`}>{item.status === "em_analise" ? "ANÁLISE" : item.status === "resolvido" ? "OK" : "PENDENTE"}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -1266,6 +1737,10 @@ export default function LegacyApp() {
       case "perdas":    return renderPerdas();
       case "rdo":       return renderRdoPanel();
       case "ia":        return renderIA();
+      case "seguranca": return renderSeguranca();
+      case "cashflow":  return renderCashFlow();
+      case "atrasos":   return renderAtrasos();
+      case "punchlist": return renderPunchList();
       default:          return renderProcessar();
     }
   }
