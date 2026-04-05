@@ -238,6 +238,7 @@ export default function LegacyApp() {
   const [uploading, setUploading] = useState(false);
   const [uploadNucleo, setUploadNucleo] = useState("");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [cartoFile, setCartoFile] = useState<File | null>(null);
   const [quickMode, setQuickMode] = useState(false);
   const [selectedMotor, setSelectedMotor] = useState("v5");
   const [uploadMessage, setUploadMessage] = useState("");
@@ -348,6 +349,7 @@ export default function LegacyApp() {
     fd.append("nucleo", uploadNucleo);
     fd.append("modo_rapido", quickMode ? "true" : "false");
     fd.append("motor", selectedMotor);
+    if (cartoFile) fd.append("cartografia", cartoFile);
     try {
       const r = await fetch(apiUrl("/api/processamento/importar"), { method: "POST", body: fd });
       const d = (await r.json()) as ProcessJob & { detail?: string };
@@ -522,6 +524,22 @@ export default function LegacyApp() {
                 <option value="v5">NOVA NS v5 (SABESP)</option>
                 <option value="v9">NS v9 (padrao)</option>
               </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-field" style={{ flex: 2 }}>
+              <label>Base Cartografica (opcional — SHP, DXF com ruas/lotes)</label>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input id="carto-input" type="file" accept=".shp,.dbf,.shx,.prj,.zip,.dxf,.geojson,.json" onChange={e => setCartoFile(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                <button type="button" className="action-btn btn-purple" onClick={() => document.getElementById("carto-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
+                  🗺️ CARTOGRAFIA
+                </button>
+              </div>
+              {cartoFile && (
+                <div style={{ marginTop: 4, fontSize: 12, color: "#a78bfa" }}>
+                  ✓ {cartoFile.name} ({(cartoFile.size / 1024).toFixed(1)} KB)
+                </div>
+              )}
             </div>
           </div>
           <div className="form-check">
