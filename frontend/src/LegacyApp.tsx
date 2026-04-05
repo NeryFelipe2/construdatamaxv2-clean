@@ -290,8 +290,13 @@ export default function LegacyApp() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
   
-  // Equipe
-  const [equipe, setEquipe] = useState<{ id: string; nome: string; celular: string; cargo: string }[]>([]);
+  // Equipe — modelo completo de canteiro
+  type TeamMember = { id: string; nome: string; celular: string; cargo: string; equipeNome: string; projeto: string; status: string };
+  const [equipe, setEquipe] = useState<TeamMember[]>([]);
+  const [showTeamForm, setShowTeamForm] = useState(false);
+  const [teamForm, setTeamForm] = useState({ nome: "", celular: "", cargo: "Ajudante", equipeNome: "Rede Esgoto", projeto: "", status: "Ativo" });
+  const [teamFilter, setTeamFilter] = useState("");
+
   useEffect(() => {
     fetch('http://localhost:8090/api/team')
       .then(r => r.json())
@@ -299,7 +304,7 @@ export default function LegacyApp() {
       .catch(e => console.log('Sem team data', e));
   }, []);
   
-  async function salvarEquipe(novaEquipe: any) {
+  async function salvarEquipe(novaEquipe: TeamMember[]) {
     setEquipe(novaEquipe);
     try {
       await fetch('http://localhost:8090/api/team', {
@@ -1855,67 +1860,145 @@ export default function LegacyApp() {
   }
 
   function renderEquipes() {
+    const CARGOS = ["Líder de Equipe","Encarregado","Engenheiro","Técnico de Segurança","Apontador","Pedreiro","Encanador","Ajudante","Operador de Máquina","Motorista","Topógrafo","Almoxarife","Mestre de Obras","Coordenador","Diretor"];
+    const EQUIPES = ["Rede Esgoto","Rede Água","Ligação Domiciliar","Pavimentação","Topografia","Administração","Segurança","Apoio Geral"];
+    
     function adicionarMembro() {
-      const nome = prompt("Nome completo ou Cargo do Funcionario:");
-      if (!nome) return;
-      const calcargo = prompt("Especialidade ou Cargo? (ex: Lider Rede, Operador de Máquina, Pedreiro)");
-      const celular = prompt("WhatsApp com DDI e DDD? (ex: 5511999999999)");
-      if (!celular) return;
-      const novamembro = { id: Date.now().toString(), nome, cargo: calcargo || "Geral", celular };
-      salvarEquipe([...equipe, novamembro]);
+      if (!teamForm.nome || !teamForm.celular) return alert("Preencha ao menos o Nome e o WhatsApp.");
+      const novo: TeamMember = { id: Date.now().toString(), ...teamForm };
+      salvarEquipe([...equipe, novo]);
+      setTeamForm({ nome: "", celular: "", cargo: "Ajudante", equipeNome: "Rede Esgoto", projeto: "", status: "Ativo" });
+      setShowTeamForm(false);
     }
     
     function removerMembro(id: string) {
-       if(confirm("Remover este contato?")) salvarEquipe(equipe.filter(m => m.id !== id));
+       if(confirm("Tem certeza que deseja remover este contato da operação?")) salvarEquipe(equipe.filter(m => m.id !== id));
     }
+
+    function toggleStatus(id: string) {
+      salvarEquipe(equipe.map(m => m.id === id ? { ...m, status: m.status === "Ativo" ? "Inativo" : "Ativo" } : m));
+    }
+
+    const filtered = teamFilter ? equipe.filter(m => m.equipeNome === teamFilter || m.cargo === teamFilter) : equipe;
+    const ativos = equipe.filter(m => m.status === "Ativo").length;
+    const porEquipe = EQUIPES.map(eq => ({ nome: eq, qtd: equipe.filter(m => m.equipeNome === eq && m.status === "Ativo").length })).filter(e => e.qtd > 0);
     
     return (
       <div className="space-y-6">
+        {/* HEADER */}
         <div className="p-panel border-t-2 border-t-[#8b5cf6]">
           <div className="panel-header flex justify-between items-center">
             <h2 className="panel-title">
                <span className="w-8 h-8 rounded bg-[#8b5cf6]/20 flex items-center justify-center text-[#a78bfa] border border-[#8b5cf6]/50 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                </span>
-               Lista de Contatos de Operação
+               Gestão de Equipes — Efetivo de Campo
                <span className="badge border-[#8b5cf6]/30 text-[#8b5cf6] bg-[#8b5cf6]/10">RH & DISPATCH</span>
             </h2>
-            <button onClick={adicionarMembro} className="btn btn-primary bg-[#8b5cf6] hover:bg-[#7c3aed] text-white">
-              + NOVO CONTATO
+            <button onClick={() => setShowTeamForm(!showTeamForm)} className="btn btn-primary bg-[#8b5cf6] hover:bg-[#7c3aed] text-white">
+              {showTeamForm ? "✕ CANCELAR" : "+ CADASTRAR FUNCIONÁRIO"}
             </button>
           </div>
-          <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">
-            Sincronizado automaticamente com o Motor do WhatsApp. Ao disparar uma tarefa no Fluxograma Operacional,
-            o sistema buscará os funcionários correspondentes e enviará a notificação programática ao seu WhatsApp.
+          <p className="text-[var(--text-muted)] text-xs mb-4 max-w-3xl">
+            Cadastre cada profissional da obra. O WhatsApp será utilizado automaticamente ao disparar tarefas no Fluxograma.
+            Quando um diretor/coordenador atribuir uma atividade ao "Bruno", o sistema busca o celular dele aqui e manda a mensagem direto.
           </p>
+        </div>
 
-          <div className="overflow-x-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Funcionário / Líder</th>
-                  <th>Especialidade</th>
-                  <th>WhatsApp</th>
-                  <th className="text-right">Ação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {equipe.map(m => (
-                  <tr key={m.id}>
-                    <td className="font-bold text-white">{m.nome}</td>
-                    <td>{m.cargo}</td>
-                    <td className="font-mono text-[#38bdf8]">{m.celular}</td>
-                    <td className="text-right">
-                       <button onClick={() => removerMembro(m.id)} className="text-rose-400 hover:text-rose-300 text-xs uppercase font-bold">X Remover</button>
-                    </td>
-                  </tr>
-                ))}
-                {equipe.length === 0 && (
-                  <tr><td colSpan={4} className="text-center text-[var(--text-muted)] italic py-8">Nenhum funcionário cadastrado nesta obra.</td></tr>
-                )}
-              </tbody>
-            </table>
+        {/* KPIs Efetivo */}
+        <div className="kpi-board">
+          <div className="kpi-card"><div className="kpi-label">Total Cadastrados</div><div className="kpi-value text-[#a78bfa]">{equipe.length}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Ativos em Campo</div><div className="kpi-value text-emerald-400">{ativos}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Inativos / Afastados</div><div className="kpi-value text-rose-400">{equipe.length - ativos}</div></div>
+          <div className="kpi-card"><div className="kpi-label">Equipes Distintas</div><div className="kpi-value text-[#38bdf8]">{porEquipe.length}</div></div>
+        </div>
+
+        {/* Mini resumo por equipe */}
+        {porEquipe.length > 0 && (
+          <div className="flex gap-2 flex-wrap">
+            {porEquipe.map(eq => (
+              <button key={eq.nome} onClick={() => setTeamFilter(teamFilter === eq.nome ? "" : eq.nome)}
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all ${teamFilter === eq.nome ? "bg-[#8b5cf6]/20 border-[#8b5cf6]/50 text-[#a78bfa]" : "bg-[#05080f] border-[var(--border-light)] text-[var(--text-muted)] hover:text-white"}`}>
+                {eq.nome} ({eq.qtd})
+              </button>
+            ))}
+            {teamFilter && <button onClick={() => setTeamFilter("")} className="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase text-rose-400 border border-rose-500/20 bg-rose-500/5">✕ Limpar Filtro</button>}
           </div>
+        )}
+
+        {/* FORMULÁRIO DE CADASTRO INLINE */}
+        {showTeamForm && (
+          <div className="p-panel border-t-2 border-t-emerald-500 animate-in">
+            <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Novo Funcionário</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="form-field">
+                <label>Nome Completo *</label>
+                <input type="text" placeholder="Ex: Bruno Silva" value={teamForm.nome} onChange={e => setTeamForm({...teamForm, nome: e.target.value})} />
+              </div>
+              <div className="form-field">
+                <label>WhatsApp (com DDI+DDD) *</label>
+                <input type="text" placeholder="5511999999999" value={teamForm.celular} onChange={e => setTeamForm({...teamForm, celular: e.target.value})} />
+              </div>
+              <div className="form-field">
+                <label>Cargo / Função</label>
+                <select value={teamForm.cargo} onChange={e => setTeamForm({...teamForm, cargo: e.target.value})}>
+                  {CARGOS.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="form-field">
+                <label>Equipe</label>
+                <select value={teamForm.equipeNome} onChange={e => setTeamForm({...teamForm, equipeNome: e.target.value})}>
+                  {EQUIPES.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                </select>
+              </div>
+              <div className="form-field">
+                <label>Projeto / Frente</label>
+                <input type="text" placeholder="Ex: Núcleo São Manoel" value={teamForm.projeto} onChange={e => setTeamForm({...teamForm, projeto: e.target.value})} />
+              </div>
+              <div className="form-field flex items-end">
+                <button onClick={adicionarMembro} className="btn btn-primary bg-emerald-600 hover:bg-emerald-500 text-white w-full" style={{height:'42px'}}>
+                  ✓ SALVAR FUNCIONÁRIO
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TABELA */}
+        <div className="overflow-x-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Funcionário</th>
+                <th>Cargo</th>
+                <th>Equipe</th>
+                <th>Projeto</th>
+                <th>WhatsApp</th>
+                <th className="text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(m => (
+                <tr key={m.id} className={m.status !== "Ativo" ? "opacity-40" : ""}>
+                  <td>
+                    <button onClick={() => toggleStatus(m.id)} className={`w-3 h-3 rounded-full ${m.status === "Ativo" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]" : "bg-red-500"}`} title={m.status} />
+                  </td>
+                  <td className="font-bold text-white">{m.nome}</td>
+                  <td><span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[var(--border-light)] text-[var(--text-muted)]">{m.cargo}</span></td>
+                  <td className="text-[#a78bfa] font-medium">{m.equipeNome || "-"}</td>
+                  <td className="text-[var(--text-muted)]">{m.projeto || "-"}</td>
+                  <td className="font-mono text-[#38bdf8]">{m.celular}</td>
+                  <td className="text-right">
+                     <button onClick={() => removerMembro(m.id)} className="text-rose-400 hover:text-rose-300 text-[10px] uppercase font-bold tracking-wider">REMOVER</button>
+                  </td>
+                </tr>
+              ))}
+              {filtered.length === 0 && (
+                <tr><td colSpan={7} className="text-center text-[var(--text-muted)] italic py-8">{teamFilter ? "Nenhum funcionário nesta equipe." : "Nenhum funcionário cadastrado. Clique em '+ CADASTRAR FUNCIONÁRIO' acima."}</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     );

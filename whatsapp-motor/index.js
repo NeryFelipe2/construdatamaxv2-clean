@@ -1,11 +1,20 @@
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const cors = require('cors');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// ── SUPABASE ──
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+console.log('[SUPABASE] Conectado a', process.env.SUPABASE_URL ? process.env.SUPABASE_URL.slice(0,30)+'...' : 'SEM URL!');
 
 console.log('Iniciando Motor do WhatsApp...');
 
@@ -129,22 +138,69 @@ client.on('message', async message => {
     } catch (e) {
         console.error('Falha ao escrever no log do Obsidian:', e);
     }
+
+    // GRAVAR TAMBÉM NO SUPABASE (nuvem)
+    try {
+        await supabase.from('logs_rdo').insert({
+            emissor,
+            mensagem: message.body,
+            foto_url: (typeof mediaPath !== 'undefined' && mediaPath) ? mediaPath : null,
+            tipo: isRDO ? 'rdo' : (resposta === 'OK' ? 'tarefa_ok' : 'mensagem'),
+            task_id: lastTaskMap[message.from] || null
+        });
+        console.log(`[SUPABASE] Log persistido na nuvem!`);
+    } catch(e) {
+        console.error('[SUPABASE] Erro gravando log:', e);
+    }
 });
 
-// Gerenciar Equipes (Contato Book)
-const TEAM_FILE = 'C:\\Users\\felip\\Downloads\\construdatamaxv2-clean\\frontend\\src\\data\\team.json';
-app.get('/api/team', (req, res) => {
+// ── Gerenciar Equipes (SUPABASE) ──
+app.get('/api/team', async (req, res) => {
     try {
-        if(fs.existsSync(TEAM_FILE)) res.send(fs.readFileSync(TEAM_FILE, 'utf8'));
-        else res.json([]);
-    } catch(e) { res.json([]); }
+        const { data, error } = await supabase.from('equipes').select('*').order('created_at');
+        if (error) throw error;
+        // Mapear para o formato que o frontend espera
+        const mapped = (data || []).map(d => ({
+            id: d.id, nome: d.nome, celular: d.celular, cargo: d.cargo,
+            equipeNome: d.equipe_nome, projeto: d.projeto, status: d.status
+        }));
+        res.json(mapped);
+    } catch(e) {
+        console.error('[SUPABASE] Erro lendo equipes:', e.message);
+        // Fallback: tenta ler do arquivo local
+        const TEAM_FILE = 'C:\\Users\\felip\\Downloads\\construdatamaxv2-clean\\frontend\\src\\data\\team.json';
+        try { if(fs.existsSync(TEAM_FILE)) return res.send(fs.readFileSync(TEAM_FILE, 'utf8')); } catch(_){}
+        res.json([]);
+    }
 });
 
-app.post('/api/team', (req, res) => {
+app.post('/api/team', async (req, res) => {
     try {
-        fs.writeFileSync(TEAM_FILE, JSON.stringify(req.body, null, 2));
+        const membros = req.body; // array do frontend
+        // Limpa tabela e reinsere (sync total)
+        await supabase.from('equipes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+        if (membros.length > 0) {
+            const rows = membros.map(m => ({
+                nome: m.nome, celular: m.celular, cargo: m.cargo,
+                equipe_nome: m.equipeNome || m.equipe_nome || '', projeto: m.projeto || '', status: m.status || 'Ativo'
+            }));
+            const { error } = await supabase.from('equipes').insert(rows);
+            if (error) throw error;
+        }
         res.json({ success: true });
-    } catch(e) { res.status(500).json({ error: 'Falha gravando team' }); }
+    } catch(e) {
+        console.error('[SUPABASE] Erro salvando equipes:', e.message);
+        res.status(500).json({ error: 'Falha gravando equipe no Supabase' });
+    }
+});
+
+// ── Logs RDO (SUPABASE) ──
+app.get('/api/logs', async (req, res) => {
+    try {
+        const { data, error } = await supabase.from('logs_rdo').select('*').order('created_at', { ascending: false }).limit(100);
+        if (error) throw error;
+        res.json(data || []);
+    } catch(e) { res.json([]); }
 });
 
 // Endpoint chamado pelo nosso FastAPI
