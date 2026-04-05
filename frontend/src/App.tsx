@@ -9,7 +9,7 @@ import {
   CalendarClock, Target, FileText, Calculator, Layers,
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
   FileSearch, Monitor, MessageSquare, Building2, UserCog,
-  GitBranch, CheckSquare, Sun, Moon,
+  GitBranch, CheckSquare, Sun, Moon, Brain,
 } from "lucide-react";
 
 // ─── Lazy-loaded Palantir modules ────────────────────────────────────────────
@@ -36,6 +36,7 @@ const WhatsAppRdoPage = lazy(() => import("@/features/whatsapp-rdo/index").then(
 const GestaoContatosPage = lazy(() => import("@/features/gestao-contatos/index").then((m) => ({ default: m.GestaoContatosPage })));
 const FluxoOperacionalPage = lazy(() => import("@/features/fluxo-operacional/index").then((m) => ({ default: m.FluxoOperacionalPage })));
 const PunchListPage = lazy(() => import("@/features/punch-list/index").then((m) => ({ default: m.PunchListPage })));
+const IaAnalyticsPage = lazy(() => import("@/features/ia-analytics/index").then((m) => ({ default: m.IaAnalyticsPage })));
 
 // ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
 const LegacyApp = lazy(() => import("./LegacyApp"));
@@ -69,6 +70,9 @@ const navItems = [
   { label: "Frota", icon: Cpu, to: "/app/otimizacao-frota" },
   { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
   { label: "Pre-Constr.", icon: FileSearch, to: "/app/pre-construcao" },
+
+  { section: "IA & Inteligencia" },
+  { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
 
   { section: "Campo & WhatsApp" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
@@ -392,6 +396,7 @@ export default function App() {
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
           <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
+          <Route path="ia-analytics" element={<LazyRoute><IaAnalyticsPage /></LazyRoute>} />
           <Route path="gestao-contatos" element={<LazyRoute><GestaoContatosPage /></LazyRoute>} />
           <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
           <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />
