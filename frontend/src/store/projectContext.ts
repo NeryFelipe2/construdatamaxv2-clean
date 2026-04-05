@@ -13,16 +13,20 @@ interface ProjectContextState {
   activeProjectId: string | null
   loading: boolean
 
-  // derived
-  activeProjeto: () => DbProjeto | null
-  frentesDoProjetoAtivo: () => DbFrente[]
-
   // actions
   setActiveProject: (id: string) => void
   fetchProjetos: () => Promise<void>
   fetchFrentes: (projetoId: string) => Promise<void>
   addProjeto: (p: Omit<DbProjeto, 'id' | 'created_at'>) => Promise<DbProjeto | null>
   addFrente: (f: Omit<DbFrente, 'id'>) => Promise<DbFrente | null>
+}
+
+// Derived selectors (use outside of store to avoid infinite loops)
+export function selectActiveProjeto(s: ProjectContextState): DbProjeto | null {
+  return s.projetos.find(p => p.id === s.activeProjectId) ?? null
+}
+export function selectFrentesDoProjetoAtivo(s: ProjectContextState): DbFrente[] {
+  return s.frentes.filter(f => f.projeto_id === s.activeProjectId)
 }
 
 // Demo data when Supabase is not connected
@@ -56,16 +60,6 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
     try { return localStorage.getItem(STORAGE_KEY) || DEMO_PROJETOS[0]?.id || null } catch { return DEMO_PROJETOS[0]?.id || null }
   })(),
   loading: false,
-
-  activeProjeto: () => {
-    const { projetos, activeProjectId } = get()
-    return projetos.find(p => p.id === activeProjectId) ?? null
-  },
-
-  frentesDoProjetoAtivo: () => {
-    const { frentes, activeProjectId } = get()
-    return frentes.filter(f => f.projeto_id === activeProjectId)
-  },
 
   setActiveProject: (id) => {
     try { localStorage.setItem(STORAGE_KEY, id) } catch { /* noop */ }

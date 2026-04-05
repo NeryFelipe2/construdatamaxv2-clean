@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { CheckSquare, Plus, Camera, X, Filter } from "lucide-react"
 import { useProjectContext } from "@/store/projectContext"
 
@@ -28,7 +28,9 @@ const STATUS_COLORS = {
 }
 
 export function PunchListPage() {
-  const frentes = useProjectContext(s => s.frentesDoProjetoAtivo())
+  const allFrentes = useProjectContext(s => s.frentes)
+  const activeProjectId = useProjectContext(s => s.activeProjectId)
+  const frentes = useMemo(() => allFrentes.filter(f => f.projeto_id === activeProjectId), [allFrentes, activeProjectId])
   const [items, setItems] = useState<PunchItem[]>(DEMO_ITEMS)
   const [showNew, setShowNew] = useState(false)
   const [filterStatus, setFilterStatus] = useState<string>("all")

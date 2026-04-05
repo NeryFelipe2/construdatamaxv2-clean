@@ -3,7 +3,7 @@
  * Mobile-first, com dropdowns pre-configurados para evitar erros.
  * Segue exatamente a estrutura pedida: Equipes → Atividades → Materiais → Equipamentos → Mao de Obra → Fotos → Ocorrencias.
  */
-import { useState, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
 import {
   Plus, Trash2, Camera, ChevronDown, ChevronRight, Send, X,
   CloudSun, Users, Wrench, Package, HardHat, AlertTriangle, Upload,
@@ -90,10 +90,13 @@ function SelectInput({ value, onChange, options, placeholder }: { value: string;
 // ─── Main Form ──────────────────────────────────────────────────────────────
 
 export function RdoCampoForm() {
-  const activeProjeto = useProjectContext(s => s.activeProjeto())
-  const frentes = useProjectContext(s => s.frentesDoProjetoAtivo())
+  const projetos = useProjectContext(s => s.projetos)
+  const allFrentes = useProjectContext(s => s.frentes)
   const activeProjectId = useProjectContext(s => s.activeProjectId)
-  const lideres = useContatosStore(s => s.lideres(activeProjectId ?? ""))
+  const contatos = useContatosStore(s => s.contatos)
+  const activeProjeto = useMemo(() => projetos.find(p => p.id === activeProjectId) ?? null, [projetos, activeProjectId])
+  const frentes = useMemo(() => allFrentes.filter(f => f.projeto_id === activeProjectId), [allFrentes, activeProjectId])
+  const lideres = useMemo(() => contatos.filter(c => c.projeto_id === activeProjectId && ['Encarregado', 'Mestre', 'Engenheiro'].includes(c.cargo)), [contatos, activeProjectId])
 
   // Cabecalho
   const [data] = useState(new Date().toISOString().slice(0, 10))

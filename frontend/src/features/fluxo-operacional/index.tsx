@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { GitBranch, Plus, Bell, Clock, AlertTriangle, CheckCircle, Trash2, ToggleLeft, ToggleRight } from "lucide-react"
 import { useProjectContext } from "@/store/projectContext"
 
@@ -40,7 +40,9 @@ const DEMO_LOGS: LogExecucao[] = [
 ]
 
 export function FluxoOperacionalPage() {
-  const activeProjeto = useProjectContext(s => s.activeProjeto())
+  const projetos = useProjectContext(s => s.projetos)
+  const activeProjectId = useProjectContext(s => s.activeProjectId)
+  const activeProjeto = useMemo(() => projetos.find(p => p.id === activeProjectId) ?? null, [projetos, activeProjectId])
   const [regras, setRegras] = useState<AutomacaoRegra[]>(DEMO_REGRAS)
   const [logs] = useState<LogExecucao[]>(DEMO_LOGS)
   const [showNew, setShowNew] = useState(false)
