@@ -697,3 +697,33 @@
   background: rgba(15, 23, 42, 0.2);
 }
 
+/* ── LIGHT MODE: Global text-white override ── */
+[data-theme="light"] .text-white {
+  color: #1e293b !important;
+}
+
+/* Manter branco em botões/badges que tem fundo escuro */
+[data-theme="light"] .btn-primary .text-white,
+[data-theme="light"] .btn-primary.text-white,
+[data-theme="light"] .bg-gradient-to-br .text-white,
+[data-theme="light"] [class*="bg-emerald"] .text-white,
+[data-theme="light"] [class*="bg-\\[\\#10b981"] .text-white,
+[data-theme="light"] .bg-black\\/80 .text-white {
+  color: #ffffff !important;
+}
+
+/* Hardcoded dark backgrounds → light */
+[data-theme="light"] .bg-\[\#05080f\],
+[data-theme="light"] .bg-\[\#0f172a\] {
+  background-color: #f1f5f9 !important;
+}
+
+[data-theme="light"] .bg-\[\#1e293b\] {
+  background-color: #e2e8f0 !important;
+}
+
+/* Header do módulo ativo */
+[data-theme="light"] .palantir-app .main-content h2.text-2xl {
+  color: #1e293b !important;
+}
+
