@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { usePipelineStore } from "@/store/pipelineStore";
 import { cn } from "@/lib/utils";
+import { FLUXOGRAMA_DATA } from "./fluxograma";
+import workflowStatus from "./data/workflow_status.json";
 
 /* ─── Types ─── */
 
@@ -124,6 +126,8 @@ const SIDEBAR_SECTIONS = [
       { id: "lean", label: "LPS / Lean", icon: "target" },
       { id: "custos", label: "Custos 5D", icon: "dollar" },
       { id: "atrasos", label: "Analise Atrasos", icon: "clock" },
+      { id: "fluxograma", label: "Fluxo Operacional", icon: "map" },
+      { id: "equipes", label: "Gestão Equipes / Contatos", icon: "users" },
     ]
   },
   {
@@ -144,7 +148,7 @@ const SIDEBAR_SECTIONS = [
   },
 ];
 
-type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "seguranca" | "cashflow" | "atrasos" | "punchlist";
+type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "seguranca" | "cashflow" | "atrasos" | "punchlist" | "fluxograma" | "equipes";
 
 /* ─── Helpers ─── */
 
@@ -285,6 +289,26 @@ export default function LegacyApp() {
   const [rdoMessage, setRdoMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
+  
+  // Equipe
+  const [equipe, setEquipe] = useState<{ id: string; nome: string; celular: string; cargo: string }[]>([]);
+  useEffect(() => {
+    fetch('http://localhost:8090/api/team')
+      .then(r => r.json())
+      .then(d => setEquipe(d))
+      .catch(e => console.log('Sem team data', e));
+  }, []);
+  
+  async function salvarEquipe(novaEquipe: any) {
+    setEquipe(novaEquipe);
+    try {
+      await fetch('http://localhost:8090/api/team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novaEquipe)
+      });
+    } catch(e) { console.error('Erro ao salvar equipe', e); }
+  }
 
   // ── Data loading ──
   useEffect(() => {
@@ -577,7 +601,7 @@ export default function LegacyApp() {
                <div className="modular-grid">
                   <button type="submit" onClick={()=>setQuickMode(false)} className="modular-btn active">
                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                     <span>PACK COMPLETO<br/>(Lá Ele)</span>
+                     <span>EXECUÇÃO TOTAL<br/>(Todas as Etapas)</span>
                   </button>
                   <button type="submit" onClick={()=>setQuickMode(true)} className="modular-btn">
                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -945,7 +969,7 @@ export default function LegacyApp() {
            <h2 className="panel-title"><span>BIM 3D/4D/5D Pipeline</span> <span className="badge">GENERADOR COMPLETO</span></h2>
         </div>
         <div className="action-row mb-6">
-          <button className="btn btn-primary" disabled>GERAR PACK COMPLETO (6 etapas)</button>
+          <button className="btn btn-primary" disabled>GERAR PACOTE EXECUTIVO (6 Etapas)</button>
           <button className="btn btn-outline border-[#ef4444]/30 text-[#ef4444]" disabled>IFC LOD500</button>
           <button className="btn btn-outline text-[#38bdf8]" disabled>LandXML</button>
           <button className="btn btn-outline text-[#f59e0b]" disabled>Cadastro NTS292</button>
@@ -1721,8 +1745,185 @@ export default function LegacyApp() {
   }
 
   // ── Tab content dispatch ──
+  async function dispararFluxoWhats(tarefa: any) {
+     const assignedName = (tarefa.assign || "").toLowerCase();
+     const membro = equipe.find(m => m.nome.toLowerCase() === assignedName || assignedName.includes(m.nome.toLowerCase()));
+     
+     let n = '';
+     if (membro && membro.celular) {
+        n = membro.celular;
+        console.log(`Auto-assigned to ${membro.nome}: ${n}`);
+     } else {
+        n = prompt(`Atenção: O funcionário '${tarefa.assign}' não está na GESTÃO DE EQUIPES.\nPor favor, digite o número de WhatsApp dele agora: (Ex: 5511999999999)`);
+     }
+     
+     if (!n) return;
+
+     try {
+       const mensagemPronta = `⚠️ *NOVA TAREFA DESIGNADA* ⚠️\n\nFala ${tarefa.assign || membro?.nome},\nVocê tem uma nova tarefa pendente no Fluxograma de Gestão de Obra do ConstruDataMax:\n\n📌 *Tarefa:* ${tarefa.task}\n🆔 *Etapa:* ${tarefa.id}\n\nResponda com '*OK*' nesta exata conversa quando concluir o serviço.`;
+       
+       const res = await fetch(`http://localhost:8090/api/send`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+            number: n,
+            taskId: tarefa.id,
+            text: mensagemPronta
+         })
+       });
+       if(res.ok) alert(`✅ Mensagem disparada para ${n} com sucesso!`);
+       else alert("❌ Erro ao comunicar com o Motor WhatsApp Node.js.");
+     } catch(e) {
+       console.error(e);
+       alert("🚨 Motor WhatsApp local está desligado! Ligue-o usando 'npm start' na pasta whatsapp-motor.");
+     }
+  }
+
+  function renderFluxograma() {
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#38bdf8]">
+          <div className="panel-header">
+            <h2 className="panel-title">
+              <span className="w-8 h-8 rounded bg-[#38bdf8]/20 flex items-center justify-center text-[#38bdf8] border border-[#38bdf8]/50 shadow-[0_0_15px_rgba(56,189,248,0.5)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+              </span>
+              Fluxograma Gestão de Obra
+              <span className="badge border-[#38bdf8]/30 text-[#38bdf8] bg-[#38bdf8]/10">STANDARD OPS</span>
+            </h2>
+          </div>
+          <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">Visualização interativa das 20 Macro-Fases de Operação ponta a ponta importadas do Fluxograma Diretivo.</p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          {FLUXOGRAMA_DATA.filter(t => t.id.endsWith(".0")).map(macro => {
+            const children = FLUXOGRAMA_DATA.filter(t => t.id.startsWith(macro.id.split(".")[0] + ".") && !t.id.endsWith(".0"));
+            return (
+              <div key={macro.id} className="p-panel !p-4 border-l-4 border-l-[#38bdf8]">
+                <div className="flex justify-between items-center mb-3 border-b border-[var(--border-light)] pb-2">
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-white">
+                    <span className="text-[#38bdf8] mr-2">{macro.id}</span>
+                    {macro.task}
+                  </h3>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">{children.length} TAREFAS</span>
+                </div>
+                <div className="space-y-2">
+                  {children.map(child => {
+                    // @ts-ignore
+                    const isDone = workflowStatus[child.id] === 'DONE';
+                    return (
+                    <div key={child.id} className={cn(
+                      "flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border transition-colors group",
+                      isDone ? "border-[#10b981] bg-[#10b981]/10" : "border-[var(--border-light)] bg-[#05080f] hover:border-[#38bdf8]/50"
+                    )}>
+                      <div className={cn("flex-1 flex gap-3 text-xs transition-colors", isDone ? "text-[#10b981]" : "text-[var(--text-muted)] group-hover:text-white")}>
+                        <span className={isDone ? "text-[#10b981] font-bold shrink-0" : "text-[#38bdf8] font-bold shrink-0"}>
+                          {isDone ? '✅ ' : ''}{child.id}
+                        </span>
+                        <span className={isDone ? "line-through opacity-70" : ""}>{child.task}</span>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        {!isDone && (
+                          <button 
+                               onClick={() => dispararFluxoWhats(child)} 
+                               className="btn btn-primary !py-0.5 !px-2 !text-[9px] bg-[#10b981] hover:bg-[#059669] text-white border-none shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                          >
+                               📱 AVISAR
+                          </button>
+                        )}
+                        {child.assign && (
+                           <span className="px-2 py-0.5 rounded text-[9px] uppercase font-bold text-white bg-[#0f172a] border border-[var(--border-light)]">
+                             👤 {child.assign}
+                           </span>
+                        )}
+                        {child.obs && (
+                           <span className="px-2 py-0.5 rounded text-[9px] uppercase font-bold text-[#f59e0b] bg-[#f59e0b]/10 border border-[#f59e0b]/20 flex items-center gap-1">
+                             {child.obs}
+                           </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {children.length === 0 && <div className="p-2 text-xs text-[var(--text-muted)] italic">Nenhuma sub-tarefa detalhada.</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  function renderEquipes() {
+    function adicionarMembro() {
+      const nome = prompt("Nome completo ou Cargo do Funcionario:");
+      if (!nome) return;
+      const calcargo = prompt("Especialidade ou Cargo? (ex: Lider Rede, Operador de Máquina, Pedreiro)");
+      const celular = prompt("WhatsApp com DDI e DDD? (ex: 5511999999999)");
+      if (!celular) return;
+      const novamembro = { id: Date.now().toString(), nome, cargo: calcargo || "Geral", celular };
+      salvarEquipe([...equipe, novamembro]);
+    }
+    
+    function removerMembro(id: string) {
+       if(confirm("Remover este contato?")) salvarEquipe(equipe.filter(m => m.id !== id));
+    }
+    
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
+          <div className="panel-header flex justify-between items-center">
+            <h2 className="panel-title">
+               <span className="w-8 h-8 rounded bg-[#8b5cf6]/20 flex items-center justify-center text-[#a78bfa] border border-[#8b5cf6]/50 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+               </span>
+               Lista de Contatos de Operação
+               <span className="badge border-[#8b5cf6]/30 text-[#8b5cf6] bg-[#8b5cf6]/10">RH & DISPATCH</span>
+            </h2>
+            <button onClick={adicionarMembro} className="btn btn-primary bg-[#8b5cf6] hover:bg-[#7c3aed] text-white">
+              + NOVO CONTATO
+            </button>
+          </div>
+          <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">
+            Sincronizado automaticamente com o Motor do WhatsApp. Ao disparar uma tarefa no Fluxograma Operacional,
+            o sistema buscará os funcionários correspondentes e enviará a notificação programática ao seu WhatsApp.
+          </p>
+
+          <div className="overflow-x-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Funcionário / Líder</th>
+                  <th>Especialidade</th>
+                  <th>WhatsApp</th>
+                  <th className="text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {equipe.map(m => (
+                  <tr key={m.id}>
+                    <td className="font-bold text-white">{m.nome}</td>
+                    <td>{m.cargo}</td>
+                    <td className="font-mono text-[#38bdf8]">{m.celular}</td>
+                    <td className="text-right">
+                       <button onClick={() => removerMembro(m.id)} className="text-rose-400 hover:text-rose-300 text-xs uppercase font-bold">X Remover</button>
+                    </td>
+                  </tr>
+                ))}
+                {equipe.length === 0 && (
+                  <tr><td colSpan={4} className="text-center text-[var(--text-muted)] italic py-8">Nenhum funcionário cadastrado nesta obra.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function renderTabContent() {
     switch (activeTab) {
+      case "equipes":   return renderEquipes();
       case "processar": return renderProcessar();
       case "gestao":    return renderGestao();
       case "nucleos":   return renderNucleos();
@@ -1741,6 +1942,7 @@ export default function LegacyApp() {
       case "cashflow":  return renderCashFlow();
       case "atrasos":   return renderAtrasos();
       case "punchlist": return renderPunchList();
+      case "fluxograma": return renderFluxograma();
       default:          return renderProcessar();
     }
   }

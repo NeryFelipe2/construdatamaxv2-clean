@@ -137,3 +137,30 @@ def enviar_mensagem(payload: dict):
         })
         _save(RDOS_FILE, rdos)
     return {"ok": True, "telefone": telefone, "campos_rdo": campos_rdo or None}
+@router.post("/workflow_dispatch")
+def disparar_etapa_fluxograma(payload: dict):
+    # payload: {"step_id": "1.1", "task": "...", "assignee_telefone": "5511999999999", "responsavel": "Comercial"}
+    telefone = payload.get("assignee_telefone")
+    task = payload.get("task")
+    responsavel = payload.get("responsavel")
+    
+    if not telefone or not task:
+        raise HTTPException(status_code=400, detail="assignee_telefone e task obrigatorios")
+    
+    mensagem = (
+        f"⚠️ *NOVA TAREFA DESIGNADA* ⚠️\n\n"
+        f"Olá {responsavel},\n"
+        f"Você tem uma nova tarefa pendente no Fluxograma de Gestão de Obra do ConstruDataMax:\n\n"
+        f"📌 *Tarefa:* {task}\n"
+        f"🆔 *Etapa:* {payload.get('step_id')}\n\n"
+        f"Responda 'OK' quando concluir ou acesse a Torre de Controle."
+    )
+    
+    # Integração direta com nosso Motor Local Node.js (whatsapp-web.js)
+    try:
+        httpx.post("http://localhost:8090/api/send", json={"number": telefone, "text": mensagem}, timeout=5.0)
+        print(f"[{datetime.utcnow().isoformat()}] MSG WHATSAPP ENVIADA para {telefone}")
+    except Exception as e:
+        print(f"[{datetime.utcnow().isoformat()}] AVISO: Motor de WhatsApp offline ({e}).")
+        
+    return {"ok": True, "disparado": True, "telefone": telefone, "preview": mensagem}
