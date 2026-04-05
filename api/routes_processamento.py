@@ -186,7 +186,13 @@ async def api_processamento_apenas_ler(
                     status_code=400,
                     detail=f"DWG indisponivel: {exc}. Use DXF, LandXML ou JSON.",
                 ) from exc
-            pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
+            result = ler_dwg_universal(str(upload_path))
+            if len(result) == 4:
+                pvs, trechos, _, meta = result
+            elif len(result) == 3:
+                pvs, trechos, meta = result
+            else:
+                raise HTTPException(status_code=500, detail=f"DWG retornou {len(result)} valores")
             fonte = meta.get("motor") or "DWG"
         else:
             raise HTTPException(status_code=400, detail="Formato nao suportado.")
@@ -243,7 +249,13 @@ def _ler_upload(upload_path: Path, suffix: str) -> tuple[dict, list, dict]:
         return pvs, trechos, meta
     elif suffix == ".dwg":
         from ler_dwg_universal import ler_dwg_universal
-        pvs, trechos, _, meta = ler_dwg_universal(str(upload_path))
+        result = ler_dwg_universal(str(upload_path))
+        if len(result) == 4:
+            pvs, trechos, _, meta = result
+        elif len(result) == 3:
+            pvs, trechos, meta = result
+        else:
+            raise HTTPException(status_code=500, detail=f"ler_dwg_universal retornou {len(result)} valores (esperava 3 ou 4)")
         return pvs, trechos, meta
     raise HTTPException(status_code=400, detail="Formato nao suportado.")
 
