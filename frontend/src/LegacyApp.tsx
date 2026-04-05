@@ -290,6 +290,13 @@ export default function LegacyApp() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
   
+  // Tema Dark/Light
+  const [theme, setTheme] = useState<"dark"|"light">(() => (localStorage.getItem("cdm-theme") as "dark"|"light") || "dark");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("cdm-theme", theme);
+  }, [theme]);
+  
   // Equipe — modelo completo de canteiro
   type TeamMember = { id: string; nome: string; celular: string; cargo: string; equipeNome: string; projeto: string; status: string };
   const [equipe, setEquipe] = useState<TeamMember[]>([]);
@@ -2125,14 +2132,23 @@ export default function LegacyApp() {
         </div>
         
         <div className="px-6 py-4 border-t border-[var(--border-light)] mt-auto">
-          <div className="flex items-center gap-3">
-             <div className="relative">
-                <div className="w-2 h-2 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-             </div>
-             <div>
-                <div className="text-[10px] text-[var(--text-muted)] font-mono">SERVER LINK</div>
-                <div className="text-xs text-white font-semibold">{health?.ok ? 'AWAITING METRICS' : 'OFFLINE'}</div>
-             </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+               <div className="relative">
+                  <div className="w-2 h-2 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
+               </div>
+               <div>
+                  <div className="text-[10px] text-[var(--text-muted)] font-mono">SERVER LINK</div>
+                  <div className="text-xs text-[var(--text-primary)] font-semibold">{health?.ok ? 'AWAITING METRICS' : 'OFFLINE'}</div>
+               </div>
+            </div>
+            <button 
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="w-8 h-8 rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-medium)] transition-all"
+              title={theme === "dark" ? "Mudar para Tema Claro" : "Mudar para Tema Escuro"}
+            >
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
           </div>
         </div>
       </aside>
