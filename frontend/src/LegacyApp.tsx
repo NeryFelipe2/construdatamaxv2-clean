@@ -1809,7 +1809,7 @@ export default function LegacyApp() {
 
         <div className="grid grid-cols-1 gap-4">
           {FLUXOGRAMA_DATA.filter(t => t.id.endsWith(".0")).map(macro => {
-            const children = FLUXOGRAMA_DATA.filter(t => t.id.startsWith(macro.id.split(".")[0] + ".") && !t.id.endsWith(".0"));
+            const subTasks = FLUXOGRAMA_DATA.filter(t => t.id.startsWith(macro.id.split(".")[0] + ".") && !t.id.endsWith(".0"));
             return (
               <div key={macro.id} className="p-panel !p-4 border-l-4 border-l-[#38bdf8]">
                 <div className="flex justify-between items-center mb-3 border-b border-[var(--border-light)] pb-2">
@@ -1817,10 +1817,10 @@ export default function LegacyApp() {
                     <span className="text-[#38bdf8] mr-2">{macro.id}</span>
                     {macro.task}
                   </h3>
-                  <span className="text-[10px] text-[var(--text-muted)] font-mono">{children.length} TAREFAS</span>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">{subTasks.length} TAREFAS</span>
                 </div>
                 <div className="space-y-2">
-                  {children.map(child => {
+                  {subTasks.map(child => {
                     // @ts-ignore
                     const isDone = workflowStatus[child.id] === 'DONE';
                     return (
@@ -1855,8 +1855,9 @@ export default function LegacyApp() {
                         )}
                       </div>
                     </div>
-                  ))}
-                  {children.length === 0 && <div className="p-2 text-xs text-[var(--text-muted)] italic">Nenhuma sub-tarefa detalhada.</div>}
+                    );
+                  })}
+                  {subTasks.length === 0 && <div className="p-2 text-xs text-[var(--text-muted)] italic">Nenhuma sub-tarefa detalhada.</div>}
                 </div>
               </div>
             );
