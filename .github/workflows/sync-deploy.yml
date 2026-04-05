@@ -1,0 +1,13 @@
+name: Sync master to main & Deploy
+on:
+  push:
+    branches: [master]
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push master to main
+        run: git push origin master:main --force
