@@ -251,6 +251,7 @@ export default function LegacyApp() {
   const [rdoMessage, setRdoMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
+  const [embeddedUrl, setEmbeddedUrl] = useState<string | null>(null);
 
   // ── Data loading ──
   useEffect(() => {
@@ -445,7 +446,7 @@ export default function LegacyApp() {
 
   // ── Derived data ──
   const projectName = cleanText(cronograma?.projeto ?? health?.display_name ?? "ConstruDataMaxV2");
-  const companyName = cleanText(cronograma?.empresa ?? "FCN Construcoes e Saneamento");
+  const companyName = cleanText(cronograma?.empresa ?? "");
   const nuclei = cronograma?.nucleos ?? [];
   const visibleNuclei = useMemo(() => selectedNucleo ? nuclei.filter(n => n.nome === selectedNucleo) : nuclei, [nuclei, selectedNucleo]);
   const latestNs = nsList.items.slice(0, 20);
@@ -482,8 +483,8 @@ export default function LegacyApp() {
           <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG UNIVERSAL</button>
           <button className="action-btn btn-purple" type="button" disabled title="Em desenvolvimento">BATCH NUCLEOS</button>
           <button className="action-btn btn-orange" type="button" disabled title="Em desenvolvimento">BATCH PROLONGAMENTOS</button>
-          <a className="action-btn btn-dark" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR SAIDA</a>
-          <a className="action-btn btn-white" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">EDITOR HTML</a>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>ABRIR SAIDA</button>
+          <button className="action-btn btn-white" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/editor"))}>EDITOR HTML</button>
         </div>
 
         {uploading && (
@@ -584,7 +585,7 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Mapa da Rede</div>
         <div className="action-row">
-          <a className="action-btn btn-green" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR EM NOVA GUIA</a>
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>ABRIR MAPA</button>
         </div>
         <div className="module-frame-wrap">
           <iframe src={nativeUrl("/manage")} title="Mapa" />
@@ -604,8 +605,8 @@ export default function LegacyApp() {
           <div className="kpi-cell"><span className="kpi-label">Custo 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
         </div>
         <div className="action-row">
-          <a className="action-btn btn-cyan" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">VIEWER 3D</a>
-          <a className="action-btn btn-dark" href={apiUrl("/api/manage/rede")} target="_blank" rel="noreferrer">JSON BRUTO</a>
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>VIEWER 3D</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/manage/rede"))}>JSON BRUTO</button>
         </div>
         <div className="module-frame-wrap">
           <iframe src={nativeUrl("/manage")} title="Rede" />
@@ -729,8 +730,8 @@ export default function LegacyApp() {
           <div className="kpi-cell"><span className="kpi-label">Extensao Total</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
         </div>
         <div className="action-row">
-          <a className="action-btn btn-cyan" href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">GEOJSON BRUTO</a>
-          <a className="action-btn btn-dark" href={nativeUrl("/campo")} target="_blank" rel="noreferrer">CAMPO</a>
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/cadastro/geojson"))}>GEOJSON BRUTO</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/campo"))}>CAMPO</button>
         </div>
 
         <table className="data-table">
@@ -765,8 +766,8 @@ export default function LegacyApp() {
           <div className="kpi-cell"><span className="kpi-label">Custo Rede 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
         </div>
         <div className="action-row">
-          <a className="action-btn btn-cyan" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">CONTROLE</a>
-          <a className="action-btn btn-dark" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>CONTROLE</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/curva-s"))}>CURVA S JSON</button>
         </div>
 
         <div className="two-col">
@@ -810,12 +811,12 @@ export default function LegacyApp() {
 
         <div className="link-row">
           <span style={{ color: "#667788", marginRight: 8 }}>Interfaces HTML:</span>
-          <a className="link-btn" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">Editor EPANET</a>
-          <a className="link-btn" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">Viewer 3D</a>
-          <a className="link-btn" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">Controle As-Built</a>
-          <a className="link-btn" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">RDO Diario</a>
-          <a className="link-btn" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">Gestao Perdas</a>
-          <a className="link-btn" href={nativeUrl("/fluxograma-bim")} target="_blank" rel="noreferrer">Fluxograma</a>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/editor"))}>Editor EPANET</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>Viewer 3D</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>Controle As-Built</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>RDO Diario</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/perdas"))}>Gestao Perdas</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/fluxograma-bim"))}>Fluxograma</button>
         </div>
 
         <div className="section-title">SAIDAS DO PIPELINE</div>
@@ -897,7 +898,7 @@ export default function LegacyApp() {
         </div>
 
         <div className="action-row">
-          <a className="action-btn btn-dark" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">ABRIR MODULO NATIVO</a>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/perdas"))}>ABRIR MODULO</button>
         </div>
       </>
     );
@@ -1027,10 +1028,10 @@ export default function LegacyApp() {
         </div>
 
         <div className="action-row">
-          <a className="action-btn btn-green" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
-          <a className="action-btn btn-blue" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MEDIR RDO</a>
-          <a className="action-btn btn-orange" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">GERAR MACRO</a>
-          <a className="action-btn btn-purple" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S JSON</a>
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>MEDIR MACRO</button>
+          <button className="action-btn btn-blue" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>MEDIR RDO</button>
+          <button className="action-btn btn-orange" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/cronograma"))}>GERAR MACRO</button>
+          <button className="action-btn btn-purple" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/curva-s"))}>CURVA S JSON</button>
           <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR</button>
         </div>
 
@@ -1084,7 +1085,7 @@ export default function LegacyApp() {
               </div>
               <div className="action-row">
                 <button className="action-btn btn-green" type="submit">SALVAR RDO</button>
-                <a className="action-btn btn-dark" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">MODULO NATIVO</a>
+                <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>MODULO RDO</button>
               </div>
               {rdoMessage && <div className={rdoMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>{rdoMessage}</div>}
             </form>
@@ -1193,6 +1194,17 @@ export default function LegacyApp() {
           {renderTabContent()}
         </div>
       </main>
+
+      {/* Painel embutido — abre conteudo do backend DENTRO da plataforma */}
+      {embeddedUrl && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex flex-col" onClick={() => setEmbeddedUrl(null)}>
+          <div className="flex items-center justify-between px-4 py-2 bg-[#0d1120] border-b border-[#1a2035] shrink-0" onClick={e => e.stopPropagation()}>
+            <span className="text-xs text-[#667788] font-mono truncate flex-1">{embeddedUrl}</span>
+            <button onClick={() => setEmbeddedUrl(null)} className="ml-4 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-bold hover:bg-rose-500/20 transition-colors">FECHAR</button>
+          </div>
+          <iframe src={embeddedUrl} className="flex-1 w-full border-none" title="Painel Embutido" onClick={e => e.stopPropagation()} />
+        </div>
+      )}
     </div>
   );
 }
