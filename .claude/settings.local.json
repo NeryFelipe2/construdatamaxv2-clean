@@ -174,7 +174,15 @@
       "Bash(find _tmp_dwg -type f -exec ls -lh {})",
       "Bash(grep -n \"^def ler_dxf_gdal\\\\|^def ler_dwg_universal\\\\|^def ler_landxml\" ler*.py)",
       "Bash(ls -la *.py)",
-      "Bash(grep -l \"DWG\\\\|DXF\\\\|dwg\\\\|dxf\" *.py)"
+      "Bash(grep -l \"DWG\\\\|DXF\\\\|dwg\\\\|dxf\" *.py)",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__get_deployment_build_logs",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__list_teams",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__list_projects",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__get_project",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__list_deployments",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__get_deployment",
+      "mcp__65bccb77-f80f-408a-b976-226fae0c7ec7__search_vercel_documentation",
+      "mcp__Claude_Preview__preview_start"
     ],
     "additionalDirectories": [
       "C:\\Users\\felip\\Downloads",
