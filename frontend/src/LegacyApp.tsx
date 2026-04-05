@@ -445,8 +445,8 @@ export default function LegacyApp() {
   }
 
   // ── Derived data ──
-  const projectName = cleanText(cronograma?.projeto ?? health?.display_name ?? "ConstruDataMaxV2");
-  const companyName = cleanText(cronograma?.empresa ?? "");
+  const projectName = cleanText(cronograma?.projeto ?? "Motor de Processamento");
+  const companyName = "";
   const nuclei = cronograma?.nucleos ?? [];
   const visibleNuclei = useMemo(() => selectedNucleo ? nuclei.filter(n => n.nome === selectedNucleo) : nuclei, [nuclei, selectedNucleo]);
   const latestNs = nsList.items.slice(0, 20);
