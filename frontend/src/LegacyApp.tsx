@@ -1,8 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { usePipelineStore } from "@/store/pipelineStore";
 import { cn } from "@/lib/utils";
-import { FLUXOGRAMA_DATA } from "./fluxograma";
-import workflowStatus from "./data/workflow_status.json";
 
 /* ─── Types ─── */
 
@@ -99,56 +97,23 @@ const NS_STATUS_OPTIONS = ["PLANEJADA", "EM_EXECUCAO", "CONCLUIDA", "MEDIDA", "B
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 const NATIVE_BASE = API_BASE || "";
 
-// --- Palantir Sidebar Navigation (6 Pilares Táticos) ---
-const SIDEBAR_SECTIONS = [
-  {
-    title: "COMANDO CENTRAL",
-    items: [
-      { id: "gestao", label: "Gestao 360", icon: "grid" },
-      { id: "processar", label: "Torre de Controle", icon: "radio" },
-      { id: "nucleos", label: "Frentes & Nucleos", icon: "folder" },
-      { id: "log", label: "Kernel Log", icon: "file-text" },
-    ]
-  },
-  {
-    title: "ENGENHARIA & BIM",
-    items: [
-      { id: "bim", label: "BIM 3D/4D/5D", icon: "box" },
-      { id: "mapa", label: "Mapa Interativo", icon: "map" },
-      { id: "rede", label: "Rede 3D", icon: "git-branch" },
-      { id: "trechos", label: "Trechos & Cadastro", icon: "list" },
-      { id: "hidraulica", label: "Hidraulica / NS", icon: "calculator" },
-    ]
-  },
-  {
-    title: "PLANEJAMENTO 4D",
-    items: [
-      { id: "lean", label: "LPS / Lean", icon: "target" },
-      { id: "custos", label: "Custos 5D", icon: "dollar" },
-      { id: "atrasos", label: "Analise Atrasos", icon: "clock" },
-      { id: "fluxograma", label: "Fluxo Operacional", icon: "map" },
-      { id: "equipes", label: "Gestão Equipes / Contatos", icon: "users" },
-    ]
-  },
-  {
-    title: "OPERACOES DE CAMPO",
-    items: [
-      { id: "rdo", label: "RDO Diario", icon: "clipboard" },
-      { id: "seguranca", label: "Seguranca DDS", icon: "shield" },
-      { id: "punchlist", label: "Punch List", icon: "check" },
-    ]
-  },
-  {
-    title: "INTELIGENCIA",
-    items: [
-      { id: "cashflow", label: "Cash Flow", icon: "trending" },
-      { id: "perdas", label: "Gestao Perdas", icon: "alert" },
-      { id: "ia", label: "IA & Analytics", icon: "cpu" },
-    ]
-  },
-];
+const TABS = [
+  { id: "processar", label: "[1] Processar" },
+  { id: "mapa", label: "[2] Mapa" },
+  { id: "rede", label: "[3] Rede" },
+  { id: "hidraulica", label: "[4] Hidraulica" },
+  { id: "trechos", label: "[5] Trechos" },
+  { id: "custos", label: "[6] Custos 5D" },
+  { id: "bim", label: "[7] BIM" },
+  { id: "lean", label: "[8] Lean/LPS" },
+  { id: "perdas", label: "[9] Perdas" },
+  { id: "ia", label: "[10] IA" },
+  { id: "nucleos", label: "[11] Nucleos" },
+  { id: "log", label: "[12] Log" },
+  { id: "gestao", label: "[13] Gestao" },
+] as const;
 
-type TabId = "processar" | "mapa" | "rede" | "hidraulica" | "trechos" | "custos" | "bim" | "lean" | "perdas" | "ia" | "nucleos" | "log" | "gestao" | "rdo" | "seguranca" | "cashflow" | "atrasos" | "punchlist" | "fluxograma" | "equipes";
+type TabId = (typeof TABS)[number]["id"];
 
 /* ─── Helpers ─── */
 
@@ -273,13 +238,10 @@ export default function LegacyApp() {
   const [uploading, setUploading] = useState(false);
   const [uploadNucleo, setUploadNucleo] = useState("");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [cartoFile, setCartoFile] = useState<File | null>(null);
   const [quickMode, setQuickMode] = useState(false);
   const [selectedMotor, setSelectedMotor] = useState("v5");
   const [uploadMessage, setUploadMessage] = useState("");
-  const [auditProjects, setAuditProjects] = useState<FileList | null>(null);
-  const [auditShapes, setAuditShapes] = useState<FileList | null>(null);
-  const [auditing, setAuditing] = useState(false);
-  const [auditMessage, setAuditMessage] = useState("");
   const [processLogs, setProcessLogs] = useState<ProcessLogList>({ items: [] });
   const [leanInsight, setLeanInsight] = useState<LeanInsight | null>(null);
   const [lossInsight, setLossInsight] = useState<LossInsight | null>(null);
@@ -289,38 +251,7 @@ export default function LegacyApp() {
   const [rdoMessage, setRdoMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
-  
-  // Tema Dark/Light
-  const [theme, setTheme] = useState<"dark"|"light">(() => (localStorage.getItem("cdm-theme") as "dark"|"light") || "dark");
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("cdm-theme", theme);
-  }, [theme]);
-  
-  // Equipe — modelo completo de canteiro
-  type TeamMember = { id: string; nome: string; celular: string; cargo: string; equipeNome: string; projeto: string; status: string };
-  const [equipe, setEquipe] = useState<TeamMember[]>([]);
-  const [showTeamForm, setShowTeamForm] = useState(false);
-  const [teamForm, setTeamForm] = useState({ nome: "", celular: "", cargo: "Ajudante", equipeNome: "Rede Esgoto", projeto: "", status: "Ativo" });
-  const [teamFilter, setTeamFilter] = useState("");
-
-  useEffect(() => {
-    fetch('http://localhost:8090/api/team')
-      .then(r => r.json())
-      .then(d => setEquipe(d))
-      .catch(e => console.log('Sem team data', e));
-  }, []);
-  
-  async function salvarEquipe(novaEquipe: TeamMember[]) {
-    setEquipe(novaEquipe);
-    try {
-      await fetch('http://localhost:8090/api/team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(novaEquipe)
-      });
-    } catch(e) { console.error('Erro ao salvar equipe', e); }
-  }
+  const [embeddedUrl, setEmbeddedUrl] = useState<string | null>(null);
 
   // ── Data loading ──
   useEffect(() => {
@@ -419,6 +350,7 @@ export default function LegacyApp() {
     fd.append("nucleo", uploadNucleo);
     fd.append("modo_rapido", quickMode ? "true" : "false");
     fd.append("motor", selectedMotor);
+    if (cartoFile) fd.append("cartografia", cartoFile);
     try {
       const r = await fetch(apiUrl("/api/processamento/importar"), { method: "POST", body: fd });
       const d = (await r.json()) as ProcessJob & { detail?: string };
@@ -462,15 +394,7 @@ export default function LegacyApp() {
     setUploadFile(file);
     if (!file) return;
     const lower = file.name.toLowerCase();
-    // Auto-detectar motor ideal baseado no tipo de arquivo
-    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) {
-      setSelectedMotor("v9");
-    } else if (lower.endsWith(".dxf")) {
-      // ProSaneamento vs Civil3D será detectado automaticamente no backend
-      setSelectedMotor("v9");
-    } else if (lower.endsWith(".dwg")) {
-      setSelectedMotor("v9");
-    }
+    if (lower.endsWith(".xml") || lower.endsWith(".landxml")) setSelectedMotor("v9");
   }
 
   async function handleNsStatusUpdate() {
@@ -520,30 +444,9 @@ export default function LegacyApp() {
     } catch (err) { setRdoMessage(err instanceof Error ? err.message : "Falha ao fechar RDO"); }
   }
 
-  async function handleAudit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!auditProjects || !auditShapes || auditProjects.length === 0 || auditShapes.length === 0) {
-      setAuditMessage("Selecione os projetos e os shapefiles."); return;
-    }
-    setAuditing(true); setAuditMessage("");
-    const fd = new FormData();
-    for (let i = 0; i < auditProjects.length; i++) fd.append("arquivos_projeto", auditProjects[i]);
-    for (let i = 0; i < auditShapes.length; i++) fd.append("arquivos_shapefile", auditShapes[i]);
-    
-    try {
-      const r = await fetch(apiUrl("/api/processamento/lote-auditoria"), { method: "POST", body: fd });
-      const d = await r.json();
-      if (!r.ok) throw new Error(d.detail || "Falha na Auditoria");
-      setLatestJob(d);
-      setAuditMessage(`Auditoria concluída: ${d.n_projetos} projetos cruzados com sucesso.`);
-      setRefreshKey(v => v + 1);
-    } catch (err) { setAuditMessage(err instanceof Error ? err.message : "Falha na auditoria"); }
-    finally { setAuditing(false); }
-  }
-
   // ── Derived data ──
   const projectName = cleanText(cronograma?.projeto ?? health?.display_name ?? "ConstruDataMaxV2");
-  const companyName = cleanText(cronograma?.empresa ?? "FCN Construcoes e Saneamento");
+  const companyName = cleanText(cronograma?.empresa ?? "");
   const nuclei = cronograma?.nucleos ?? [];
   const visibleNuclei = useMemo(() => selectedNucleo ? nuclei.filter(n => n.nome === selectedNucleo) : nuclei, [nuclei, selectedNucleo]);
   const latestNs = nsList.items.slice(0, 20);
@@ -559,524 +462,329 @@ export default function LegacyApp() {
     for (const n of nucleoCatalog.items) if (n.nome) s.add(cleanText(n.nome));
     return [...s].sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [nuclei, nucleoCatalog.items]);
-  const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5 (legado)" : "Hydro v9 (auto-detect)";
+  const selectedMotorLabel = selectedMotor === "v5" ? "Nova NS v5" : "Hydro v9";
 
   // ── Tab renderers ──
 
   function renderProcessar() {
     return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#0284c7]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-               <span className="w-8 h-8 rounded bg-[#0284c7]/20 flex items-center justify-center text-[#38bdf8] border border-[#0284c7]/50 shadow-[0_0_15px_rgba(2,132,199,0.5)]">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-               </span>
-               Motor Central (BETA)
-               <span className="badge">ROTEAMENTO BASE</span>
-            </h2>
+      <>
+        <div className="section-title">Pipeline de Processamento</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" type="button" onClick={() => {
+            document.getElementById("file-input")?.click();
+          }}>
+            📂 SELECIONAR ARQUIVO
+          </button>
+          <button className="action-btn btn-cyan" type="button" onClick={handleApenasLer} disabled={uploading || !uploadFile}>
+            📄 APENAS LER
+          </button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG SEMANTICO</button>
+          <button className="action-btn btn-white" type="button" disabled title="Em desenvolvimento">DWG UNIVERSAL</button>
+          <button className="action-btn btn-purple" type="button" disabled title="Em desenvolvimento">BATCH NUCLEOS</button>
+          <button className="action-btn btn-orange" type="button" disabled title="Em desenvolvimento">BATCH PROLONGAMENTOS</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>ABRIR SAIDA</button>
+          <button className="action-btn btn-white" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/editor"))}>EDITOR HTML</button>
+        </div>
+
+        {uploading && (
+          <div className="progress-wrap">
+            <div className="progress-fill" style={{ width: "60%" }} />
           </div>
-          
-          <form id="import-form" onSubmit={handleImport}>
-            <div className="form-row">
-              <div className="form-field">
-                <label>Nucleo / Lote</label>
-                <input type="text" placeholder="ID do Nucleo" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
+        )}
+
+        {uploadMessage && (
+          <div className={uploadMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>
+            {uploadMessage}
+          </div>
+        )}
+
+        <form id="import-form" onSubmit={handleImport}>
+          <div className="form-row">
+            <div className="form-field">
+              <label>Nucleo</label>
+              <input type="text" placeholder="Ex.: Teteu" value={uploadNucleo} onChange={e => setUploadNucleo(e.target.value)} />
+            </div>
+            <div className="form-field" style={{ flex: 2 }}>
+              <label>Arquivo de Entrada (DXF, DWG, LandXML, JSON)</label>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                <button type="button" className="action-btn btn-cyan" onClick={() => document.getElementById("file-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
+                  📁 SELECIONAR ARQUIVO
+                </button>
               </div>
-              <div className="form-field" style={{ flex: 2 }}>
-                <label>Vetor de Origem (DXF, DWG, LandXML, JSON)</label>
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                  <input id="file-input" type="file" accept=".json,.xml,.landxml,.dxf,.dwg" onChange={e => handleUploadFileChange(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
-                  <button type="button" className="btn btn-outline" onClick={() => document.getElementById("file-input")?.click()}>
-                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                     PROCURAR
-                  </button>
+              {uploadFile && (
+                <div style={{ marginTop: 4, fontSize: 12, color: "#00ff88" }}>
+                  ✓ {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
                 </div>
-                {uploadFile && (
-                  <div className="text-[10px] text-[#38bdf8] font-mono mt-1 px-1 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-[#38bdf8] rounded-full animate-pulse"></span>
-                    {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
-                  </div>
-                )}
-              </div>
-              <div className="form-field">
-                <label>Interpretador</label>
-                <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
-                  <option value="v9">Geração 9 (XML/DXF Sintatico)</option>
-                  <option value="v5">Legado (SABESP v5 Brutal)</option>
-                </select>
-              </div>
+              )}
             </div>
-            
-            <div className="mt-8 pt-6 border-t border-[rgba(255,255,255,0.05)]">
-               <h3 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-4">Módulos de Inicialização (Engine Offline)</h3>
-               <div className="modular-grid">
-                  <button type="submit" onClick={()=>setQuickMode(false)} className="modular-btn active">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                     <span>EXECUÇÃO TOTAL<br/>(Todas as Etapas)</span>
-                  </button>
-                  <button type="submit" onClick={()=>setQuickMode(true)} className="modular-btn">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                     <span>NS CAMPO / NS DESENHO</span>
-                  </button>
-                  <button type="button" onClick={handleApenasLer} className="modular-btn">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                     <span>APENAS LER / PARSE</span>
-                  </button>
-                  <button type="button" disabled className="modular-btn opacity-50 cursor-not-allowed">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                     <span>OSE / COMPRAS<br/>(Em Breve)</span>
-                  </button>
-               </div>
+            <div className="form-field">
+              <label>Motor de NS</label>
+              <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value)}>
+                <option value="v5">NOVA NS v5 (SABESP)</option>
+                <option value="v9">NS v9 (padrao)</option>
+              </select>
             </div>
-
-            {uploading && (
-              <div className="w-full h-1 bg-[var(--bg-base)] rounded overflow-hidden mt-4">
-                <div className="h-full bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] animate-pulse w-full"></div>
+          </div>
+          <div className="form-row">
+            <div className="form-field" style={{ flex: 2 }}>
+              <label>Base Cartografica (opcional — SHP, DXF com ruas/lotes)</label>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input id="carto-input" type="file" accept=".shp,.dbf,.shx,.prj,.zip,.dxf,.geojson,.json" onChange={e => setCartoFile(e.target.files?.[0] ?? null)} style={{ flex: 1 }} />
+                <button type="button" className="action-btn btn-purple" onClick={() => document.getElementById("carto-input")?.click()} style={{ whiteSpace: "nowrap", padding: "6px 14px" }}>
+                  🗺️ CARTOGRAFIA
+                </button>
               </div>
-            )}
-            
-            {uploadMessage && (
-              <div className={uploadMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>
-                {uploadMessage}
-              </div>
-            )}
-          </form>
-        </div>
-
-        <div className="p-panel border-t-2 border-t-[#f59e0b]">
-           <div className="panel-header">
-             <h2 className="panel-title">
-               <span className="w-8 h-8 rounded bg-[#f59e0b]/20 flex items-center justify-center text-[#fcd34d] border border-[#f59e0b]/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline></svg>
-               </span>
-               Auditoria Executiva V4
-               <span className="badge border-[#f59e0b]/30 text-[#fcd34d] bg-[#f59e0b]/10">SHAPE X DWG</span>
-             </h2>
-           </div>
-           
-           <form id="audit-form" onSubmit={handleAudit}>
-             <div className="form-row">
-               <div className="form-field">
-                 <label>Base DWG/DXF/XML (Projeto)</label>
-                 <input type="file" multiple accept=".dxf,.dwg,.xml,.json" onChange={e => setAuditProjects(e.target.files)} />
-               </div>
-               <div className="form-field">
-                 <label>Camadas SHP (Soltos ou .zip)</label>
-                 <input type="file" multiple accept=".shp,.zip,.dbf,.shx,.cpg" onChange={e => setAuditShapes(e.target.files)} />
-               </div>
-             </div>
-             <div className="action-row mt-4">
-               <button className="btn btn-banana w-full" type="submit" disabled={auditing || !auditProjects || !auditShapes}>
-                 {auditing ? "PROCESSANDO BALANÇO..." : "📊 CRUZAR DADOS E GERAR V4"}
-               </button>
-             </div>
-             {auditMessage && (
-               <div className={auditMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>
-                 {auditMessage}
-               </div>
-             )}
-           </form>
-        </div>
+              {cartoFile && (
+                <div style={{ marginTop: 4, fontSize: 12, color: "#a78bfa" }}>
+                  ✓ {cartoFile.name} ({(cartoFile.size / 1024).toFixed(1)} KB)
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="form-check">
+            <input type="checkbox" checked={quickMode} onChange={e => setQuickMode(e.target.checked)} />
+            <label>Modo rapido</label>
+          </div>
+          <div className="action-row">
+            <button className="action-btn btn-green" type="submit" disabled={uploading || !uploadFile}>
+              {uploading ? "⏳ Processando..." : "🚀 IMPORTAR E GERAR"}
+            </button>
+          </div>
+        </form>
 
         {latestJob && (
-          <div className="p-panel border-t-2 border-t-[#10b981]">
-            <div className="panel-header">
-              <h2 className="panel-title">
-                 <span className="w-8 h-8 rounded bg-[#10b981]/20 flex items-center justify-center text-[#34d399] border border-[#10b981]/50 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                 </span>
-                 Telemetria de Processamento
-                 <span className="badge tracking-widest bg-emerald-500/10 text-emerald-400 border-emerald-500/20">JOB CONCLUIDO</span>
-              </h2>
-            </div>
-            
-            <div className="kpi-board mb-6">
-               <div className="kpi-card !p-4">
-                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">ORIGEM</div>
-                  <div className="text-xl font-mono text-[#e2e8f0] truncate">{cleanText(latestJob.arquivo ?? "-")}</div>
-               </div>
-               <div className="kpi-card !p-4">
-                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">INTERPRETADOR</div>
-                  <div className="text-xl font-mono text-[#38bdf8]">{cleanText(latestJob.motor ?? "-").toUpperCase()}</div>
-               </div>
-               <div className="kpi-card !p-4">
-                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">EXTENSÃO TOTAL</div>
-                  <div className="text-xl font-mono text-[#fcd34d] truncate">{formatInt(latestJob.n_trechos ?? 0)} T, {formatInt(latestJob.n_pvs ?? 0)} PV</div>
-               </div>
-               <div className="kpi-card !p-4">
-                  <div className="text-[10px] text-[var(--text-muted)] font-bold mb-1">TAXA DE SUCESSO</div>
-                  <div className="text-xl font-mono text-emerald-400">{formatInt(latestJob.ns_geradas ?? 0)} OK / <span className="text-red-400">{formatInt(latestJob.ns_erros ?? 0)} FAIL</span></div>
-               </div>
+          <>
+            <div className="section-title" style={{ marginTop: 16 }}>RESUMO</div>
+            <div className="resumo-box">
+              <strong>Arquivo:</strong> {cleanText(latestJob.arquivo ?? "-")} | <strong>Motor:</strong> {cleanText(latestJob.motor ?? "-").toUpperCase()} | <strong>Tipo:</strong> {cleanText(latestJob.fonte ?? "-")} | <strong>PVs:</strong> {formatInt(latestJob.n_pvs ?? 0)} | <strong>Trechos:</strong> {formatInt(latestJob.n_trechos ?? 0)} | <strong>NS:</strong> {formatInt(latestJob.ns_geradas ?? 0)} ok, {formatInt(latestJob.ns_erros ?? 0)} erro
             </div>
 
             {latestJob.artifacts.length > 0 && (
               <>
-                <h3 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">ARTEFATOS GERADOS</h3>
-                <div className="artifact-list">
+                <div className="section-title">SAIDAS DO PIPELINE</div>
+                <div className="output-list">
                   {latestJob.artifacts.slice(0, 20).map(a => (
-                    <a className="artifact-item group" key={`${latestJob.job_id}-${a.path}`} href={artifactHref(latestJob.job_id, a.path)} target="_blank" rel="noreferrer">
-                       <div className="artifact-info">
-                         <span className="artifact-kind">{a.kind}</span>
-                         <span className="artifact-name" title={a.label}>{a.label}</span>
-                       </div>
-                       <span className="text-[10px] font-bold text-[#38bdf8] opacity-0 group-hover:opacity-100 transition-opacity">
-                         ACESSAR ARQUIVO ↗
-                       </span>
+                    <a className="output-item" key={`${latestJob.job_id}-${a.path}`} href={artifactHref(latestJob.job_id, a.path)} target="_blank" rel="noreferrer">
+                      <span className="folder">{a.kind.toUpperCase()}/</span>
+                      <span className="desc">{a.label}</span>
                     </a>
                   ))}
                 </div>
               </>
             )}
-          </div>
+          </>
         )}
-      </div>
+      </>
     );
   }
 
   function renderMapa() {
     return (
-      <div className="p-panel border-t-2 border-t-[#38bdf8] flex flex-col h-[calc(100vh-200px)]">
-        <div className="panel-header mb-4">
-           <h2 className="panel-title"><span>Mapa da Rede (Integração Leaflet)</span> <span className="badge">ROUTING</span></h2>
-           <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">ABRIR MAPA COMPLETO</a>
+      <>
+        <div className="section-title">Mapa da Rede</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>ABRIR MAPA</button>
         </div>
-        <div className="frame-container flex-1 h-full min-h-[400px]">
+        <div className="module-frame-wrap">
           <iframe src={nativeUrl("/manage")} title="Mapa" />
         </div>
-      </div>
+      </>
     );
   }
 
   function renderRede() {
     return (
-      <div className="p-panel border-t-2 border-t-[#8b5cf6] flex flex-col h-[calc(100vh-200px)]">
-        <div className="panel-header mb-4">
-           <h2 className="panel-title"><span>Rede 3D — Manage Dataset</span> <span className="badge">WEBGL</span></h2>
-           <div className="flex gap-2">
-             <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={apiUrl("/api/manage/rede")} target="_blank" rel="noreferrer">DATASET JSON</a>
-             <a className="btn btn-primary !py-1 !px-3 !text-[10px]" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">VIEWER 3D</a>
-           </div>
+      <>
+        <div className="section-title">Rede 3D — Manage Dataset</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Nos</span><span className="kpi-value">{formatInt(manageData?.nodes.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Arestas</span><span className="kpi-value">{formatInt(manageData?.edges.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Extensao</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
         </div>
-        <div className="kpi-board mb-4">
-          <div className="kpi-card !py-3"><div className="kpi-label">Nos de Ligação</div><div className="kpi-value text-2xl">{formatInt(manageData?.nodes.length ?? 0)}</div></div>
-          <div className="kpi-card !py-3"><div className="kpi-label">Arestas Domiciliares</div><div className="kpi-value text-2xl">{formatInt(manageData?.edges.length ?? 0)}</div></div>
-          <div className="kpi-card !py-3"><div className="kpi-label">Extensao Total</div><div className="kpi-value text-2xl text-[#38bdf8]">{formatMeters(asNumber(manageData?.ext))}</div></div>
-          <div className="kpi-card !py-3"><div className="kpi-label">Custo 5D Estimado</div><div className="kpi-value text-2xl text-emerald-400">{formatCurrency(manageCost)}</div></div>
+        <div className="action-row">
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>VIEWER 3D</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/manage/rede"))}>JSON BRUTO</button>
         </div>
-        <div className="frame-container flex-1 h-full min-h-[400px]">
+        <div className="module-frame-wrap">
           <iframe src={nativeUrl("/manage")} title="Rede" />
         </div>
-      </div>
+      </>
     );
   }
 
   function renderHidraulica() {
     return (
-      <div className="p-panel border-t-2 border-t-[#38bdf8]">
-        <div className="panel-header mb-2">
-           <h2 className="panel-title"><span>Hidraulica — Notas de Servico</span> <span className="badge">INSPECTION</span></h2>
-        </div>
-        <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">Selecione uma NS para cruzar dados do checklist e fotos georreferenciadas na tabela de validação.</p>
+      <>
+        <div className="section-title">Hidraulica — Notas de Servico</div>
+        <div className="section-subtitle">Selecione uma NS para ver detalhe, materiais, checklist e fotos</div>
 
-        <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-6 overflow-x-auto hide-scrollbar">
-          <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
+        <div className="scope-bar">
+          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
           {nucleoNames.slice(0, 10).map(n => (
-            <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
+            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
-          <div className="overflow-y-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
-            <table className="data-grid w-full">
-              <thead className="sticky top-0 z-10 shadow-sm border-b border-[var(--border-light)]">
+        <div className="two-col">
+          <div>
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <th>NS ID</th><th>Trecho T.</th><th>Status</th><th>DN</th><th>Extensao</th>
+                  <th>NS</th><th>Trecho</th><th>Status</th><th>DN</th><th>Ext</th>
                 </tr>
               </thead>
               <tbody>
                 {latestNs.length ? latestNs.map((item, i) => {
                   const id = asNumber(item.id);
-                  const isSelected = selectedNsId === id;
                   return (
-                    <tr key={`${id}-${i}`} className={`cursor-pointer transition-colors ${isSelected ? "bg-[#38bdf8]/20" : "hover:bg-[rgba(255,255,255,0.02)]"}`} onClick={() => setSelectedNsId(id)}>
-                      <td className="font-bold text-white">{nsCode(item)}</td>
-                      <td className="font-mono">{nsTrecho(item)}</td>
-                      <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${cleanText(item.status) === 'CONCLUÍDA' ? 'text-emerald-400 bg-emerald-500/10' : 'text-[#f59e0b] bg-[#f59e0b]/10'}`}>{cleanText(item.status ?? "-")}</span></td>
-                      <td className="font-mono text-[var(--text-muted)]">{formatInt(asNumber(item.dn_mm))}</td>
-                      <td className="font-mono text-[#38bdf8]">{formatMeters(asNumber(item.ext_m))}</td>
+                    <tr key={`${id}-${i}`} className={selectedNsId === id ? "row-active" : ""} onClick={() => setSelectedNsId(id)}>
+                      <td>{nsCode(item)}</td>
+                      <td>{nsTrecho(item)}</td>
+                      <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
+                      <td>{formatInt(asNumber(item.dn_mm))}</td>
+                      <td>{formatMeters(asNumber(item.ext_m))}</td>
                     </tr>
                   );
-                }) : <tr><td colSpan={5} className="text-center py-8 text-[var(--text-muted)]">Nenhuma NS disponivel na pipeline.</td></tr>}
+                }) : <tr><td colSpan={5} className="empty">Nenhuma NS disponivel.</td></tr>}
               </tbody>
             </table>
           </div>
 
-          <div className="bg-[#05080f] rounded-xl border border-[var(--border-light)] p-5 overflow-y-auto shadow-inner">
+          <div>
             {selectedNsDetail ? (
-              <div className="flex flex-col gap-5">
-                <div className="border-b border-[var(--border-light)] pb-4">
-                   <h3 className="text-xl font-bold text-white mb-3">{nsCode(selectedNsDetail)}</h3>
-                   <div className="grid grid-cols-2 gap-y-2 text-xs">
-                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Nucleo de Origem</span><span className="text-white font-mono">{cleanText(selectedNsDetail.nucleo)}</span></div>
-                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Rua Identificada</span><span className="text-white truncate" title={cleanText(selectedNsDetail.rua ?? "-")}>{cleanText(selectedNsDetail.rua ?? "-")}</span></div>
-                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Material Inst.</span><span className="text-white">{cleanText(selectedNsDetail.material ?? "-")}</span></div>
-                     <div><span className="text-[var(--text-muted)] uppercase tracking-wider block text-[9px] mb-0.5">Progresso Checklist</span><span className="text-emerald-400 font-bold">{formatInt((selectedNsDetail.checklist ?? []).filter(c => Boolean(c.concluido)).length)} / {formatInt(selectedNsDetail.checklist?.length ?? 0)}</span></div>
-                   </div>
-                </div>
+              <div className="detail-panel">
+                <div className="section-title">{nsCode(selectedNsDetail)}</div>
+                <div className="detail-row"><span className="dlabel">Nucleo</span><span className="dvalue">{cleanText(selectedNsDetail.nucleo)}</span></div>
+                <div className="detail-row"><span className="dlabel">Rua</span><span className="dvalue">{cleanText(selectedNsDetail.rua ?? "-")}</span></div>
+                <div className="detail-row"><span className="dlabel">Material</span><span className="dvalue">{cleanText(selectedNsDetail.material ?? "-")}</span></div>
+                <div className="detail-row"><span className="dlabel">Checklist</span><span className="dvalue">{formatInt((selectedNsDetail.checklist ?? []).filter(c => Boolean(c.concluido)).length)} / {formatInt(selectedNsDetail.checklist?.length ?? 0)}</span></div>
 
-                <div className="bg-[var(--bg-base)] p-3 rounded-lg border border-[var(--border-light)]">
-                  <div className="text-[10px] uppercase text-[var(--text-muted)] font-bold tracking-wider mb-2">Controle de Status</div>
-                  <div className="flex gap-2">
-                    <select className="flex-1 bg-transparent border border-[var(--border-light)] text-sm rounded px-3 py-1.5 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[var(--border-accent)]" value={pendingStatus} onChange={e => setPendingStatus(e.target.value)}>
-                      {NS_STATUS_OPTIONS.map(o => <option key={o} value={o} className="bg-[var(--bg-panel)]">{o}</option>)}
-                    </select>
-                    <button className="btn btn-outline border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 !py-1" onClick={handleNsStatusUpdate}>ATUALIZAR STATUS</button>
+                <div style={{ marginTop: 10 }}>
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Status</label>
+                      <select value={pendingStatus} onChange={e => setPendingStatus(e.target.value)}>
+                        {NS_STATUS_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
                   </div>
+                  <button className="action-btn btn-green" onClick={handleNsStatusUpdate}>ATUALIZAR STATUS</button>
                 </div>
 
                 {(selectedNsDetail.materiais ?? []).length > 0 && (
-                  <div>
-                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3">Inventário de Materiais</h4>
-                    <ul className="flex flex-col gap-1.5">
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Materiais</div>
+                    <ul className="mat-list">
                       {(selectedNsDetail.materiais ?? []).slice(0, 12).map((m, i) => (
-                        <li key={`${m.descricao}-${i}`} className="flex justify-between items-center bg-[rgba(255,255,255,0.02)] px-3 py-1.5 rounded text-xs">
-                          <span className="text-[var(--text-muted)] truncate max-w-[70%]">{cleanText(m.descricao)}</span>
-                          <strong className="text-white font-mono">{m.quantidade} {m.unidade}</strong>
-                        </li>
+                        <li key={`${m.descricao}-${i}`}>{m.quantidade} {m.unidade} - {cleanText(m.descricao)}</li>
                       ))}
                     </ul>
                   </div>
                 )}
 
                 {(selectedNsDetail.checklist ?? []).length > 0 && (
-                  <div>
-                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3 text-emerald-400">Auditoria (Checklist)</h4>
-                    <ul className="flex flex-col gap-2">
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Checklist</div>
+                    <ul className="checklist">
                       {(selectedNsDetail.checklist ?? []).map(c => (
-                        <li key={String(c.id)} className="flex items-start gap-3">
-                          <span className={`mt-0.5 shrink-0 block w-4 h-4 flex items-center justify-center rounded-full border text-[8px] font-bold ${c.concluido ? 'border-emerald-500 text-emerald-500 bg-emerald-500/10' : 'border-[#94a3b8] text-transparent'}`}>✓</span>
-                          <span className={`text-xs ${c.concluido ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>{cleanText(c.item)}</span>
+                        <li key={String(c.id)}>
+                          <span className={c.concluido ? "check-ok" : "check-pend"}>{c.concluido ? "OK" : "PEND"}</span>{" "}
+                          {cleanText(c.item)}
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-                
+
                 {selectedNsPhotos.length > 0 && (
-                  <div>
-                    <h4 className="text-[#38bdf8] font-bold text-xs tracking-wider uppercase mb-3 text-[#f59e0b]">Registro Fotográfico As-Built</h4>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div style={{ marginTop: 12 }}>
+                    <div className="section-title">Fotos</div>
+                    <ul className="mat-list">
                       {selectedNsPhotos.map((p, i) => (
-                        <div key={`${p.caminho}-${i}`} className="relative group cursor-pointer border border-[var(--border-light)] rounded overflow-hidden h-24 bg-[var(--bg-base)] flex items-center justify-center text-xs text-[var(--text-muted)]">
-                          {/* We don't have actual images hosted so we show placeholders with the label */}
-                          <span className="absolute bottom-0 inset-x-0 bg-black/80 px-2 py-1 text-[9px] text-white truncate">{cleanText(p.legenda || "Foto")}</span>
-                          <span className="opacity-30">{formatDateTime(p.data_hora)}</span>
-                        </div>
+                        <li key={`${p.caminho}-${i}`}>{cleanText(p.legenda || p.caminho || "Foto")} - {formatDateTime(p.data_hora)}</li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                 <div className="w-12 h-12 rounded bg-[rgba(255,255,255,0.02)] border border-[var(--border-light)] mb-4 flex items-center justify-center text-[var(--text-muted)]">⛑</div>
-                 <h3 className="text-white font-bold mb-2">Nenhuma Ficha Selecionada</h3>
-                 <p className="text-xs text-[var(--text-muted)] max-w-[250px]">Selecione uma linha na tabela para visualizar o checklist de auditoria e lista de suprimentos.</p>
-              </div>
+              <div className="empty">Selecione uma NS na tabela ao lado.</div>
             )}
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   function renderTrechos() {
     return (
-      <div className="p-panel border-t-2 border-t-[#38bdf8]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Trechos e Cadastro Tecnico</span> <span className="badge">BASE GIS</span></h2>
+      <>
+        <div className="section-title">Trechos e Cadastro Tecnico</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Feicoes GIS</span><span className="kpi-value">{formatInt(geoJson?.features.length ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Trechos</span><span className="kpi-value">{formatInt(geoTrechos)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PVs / PIs</span><span className="kpi-value">{formatInt(geoPvs)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Extensao Total</span><span className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</span></div>
         </div>
-        <div className="action-row mb-6">
-          <a className="btn btn-outline" href={apiUrl("/api/cadastro/geojson")} target="_blank" rel="noreferrer">GEOJSON BRUTO</a>
-          <a className="btn btn-outline" href={nativeUrl("/campo")} target="_blank" rel="noreferrer">APP CAMPO NATIVO</a>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Feicoes GIS</div><div className="kpi-value">{formatInt(geoJson?.features.length ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Trechos</div><div className="kpi-value text-[#38bdf8]">{formatInt(geoTrechos)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">PVs / PIs</div><div className="kpi-value text-[#10b981]">{formatInt(geoPvs)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Extensao Total</div><div className="kpi-value">{formatMeters(asNumber(manageData?.ext))}</div></div>
+        <div className="action-row">
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/cadastro/geojson"))}>GEOJSON BRUTO</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/campo"))}>CAMPO</button>
         </div>
 
-        <div className="overflow-x-auto w-full border border-[var(--border-light)] rounded-xl mt-6">
-          <table className="data-grid">
-            <thead>
-              <tr><th>NS</th><th>Trecho</th><th>DN (mm)</th><th>Extensao</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-              {nsList.items.slice(0, 30).map((item, i) => (
-                <tr key={`t-${asNumber(item.id)}-${i}`}>
-                  <td className="font-mono text-[#38bdf8]">{nsCode(item)}</td>
-                  <td className="font-mono">{nsTrecho(item)}</td>
-                  <td>{formatInt(asNumber(item.dn_mm))}</td>
-                  <td>{formatMeters(asNumber(item.ext_m))}</td>
-                  <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold ${cleanText(item.status) === 'CONCLUIDO' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-[#1e293b] text-[#94a3b8]'}`}>{cleanText(item.status ?? "-")}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <table className="data-table">
+          <thead>
+            <tr><th>NS</th><th>Trecho</th><th>DN (mm)</th><th>Extensao</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            {nsList.items.slice(0, 30).map((item, i) => (
+              <tr key={`t-${asNumber(item.id)}-${i}`}>
+                <td>{nsCode(item)}</td>
+                <td>{nsTrecho(item)}</td>
+                <td>{formatInt(asNumber(item.dn_mm))}</td>
+                <td>{formatMeters(asNumber(item.ext_m))}</td>
+                <td><span className={toneClass(item.status)}>{cleanText(item.status ?? "-")}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
     );
   }
 
   function renderCustos() {
-    const costHistory = [120, 135, 128, 142, 155, 148, 162, 170, 165, 178, 185, 192];
-    const budgetLine = [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150];
-
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      const fill = pts + ` ${w},${h} 0,${h}`;
-      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={fill} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
-    };
-
-    const itens = [
-      { id: 1, desc: "Tubo PVC DN200 - 6m", qtd: "340 barras", custo: "R$ 89.760", status: "comprado", pct: 100 },
-      { id: 2, desc: "Escavacao Mecanica", qtd: "2.450 m3", custo: "R$ 122.500", status: "andamento", pct: 65 },
-      { id: 3, desc: "CBUQ Reposicao Pavimento", qtd: "1.200 m2", custo: "R$ 96.000", status: "pendente", pct: 0 },
-      { id: 4, desc: "Poco de Visita D600", qtd: "28 un", custo: "R$ 67.200", status: "andamento", pct: 45 },
-      { id: 5, desc: "Reaterro Compactado", qtd: "1.800 m3", custo: "R$ 54.000", status: "andamento", pct: 30 },
-      { id: 6, desc: "Ligacao Domiciliar", qtd: "156 un", custo: "R$ 46.800", status: "pendente", pct: 0 },
-    ];
-
-    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-      comprado: { label: "Comprado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-      andamento: { label: "Em Exec.", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
-      pendente: { label: "Pendente", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
-    };
-
     return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#10b981]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Custos 5D</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#10b981]/15 text-[#10b981] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-            <div className="flex gap-2">
-              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:border-[#10b981]/40 transition-all font-mono uppercase tracking-wider">Exportar PDF</button>
-              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#10b981]/15 border border-[#10b981]/30 text-[#10b981] hover:bg-[#10b981]/25 transition-all font-mono uppercase tracking-wider">+ Novo Item</button>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "Orcamento Total", value: "R$ 1.8M", color: "#10b981", spark: null as number[] | null, trend: "Base" },
-              { label: "Executado", value: "R$ 476k", color: "#38bdf8", spark: costHistory, trend: "+12%" },
-              { label: "% Executado", value: "26.4%", color: "#8b5cf6", spark: null as number[] | null, trend: "+3.1%" },
-              { label: "Desvio", value: "+R$ 32k", color: "#f59e0b", spark: null as number[] | null, trend: "+1.8%" },
-              { label: "BDI Medio", value: "28.5%", color: "#6b7280", spark: null as number[] | null, trend: "NTS" },
-              { label: "Saldo Restante", value: "R$ 1.32M", color: "#ef4444", spark: null as number[] | null, trend: "-12%" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#10b981]/40 transition-all cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className={`text-[9px] font-mono ${kpi.trend.startsWith("+") ? "text-emerald-400" : kpi.trend.startsWith("-") ? "text-rose-400" : "text-gray-400"}`}>{kpi.trend}</span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
-                </div>
-              </div>
-            ))}
-          </div>
+      <>
+        <div className="section-title">Custos 5D — Resumo Financeiro</div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Valor Liberado</span><span className="kpi-value">{formatCurrency(dashboard?.valor_liberado ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo RDO Total</span><span className="kpi-value">{formatCurrency(dashboard?.custo_rdo_total ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo Rede 5D</span><span className="kpi-value">{formatCurrency(manageCost)}</span></div>
+        </div>
+        <div className="action-row">
+          <button className="action-btn btn-cyan" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>CONTROLE</button>
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/curva-s"))}>CURVA S JSON</button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          <div className="lg:col-span-3 p-panel">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Curva S — Orcado vs Executado</h3>
-              <span className="text-[9px] font-mono text-[var(--text-muted)]">12 MESES</span>
-            </div>
-            <svg viewBox="0 0 500 180" className="w-full" preserveAspectRatio="xMidYMid meet">
-              {[0, 50, 100, 150, 200].map((v, i) => {
-                const y = 160 - (v / 200) * 140;
-                return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}k</text></g>);
-              })}
-              {(() => {
-                const pts = costHistory.map((v, i) => ({ x: 50 + (i / (costHistory.length - 1)) * 430, y: 160 - (v / 200) * 140 }));
-                const bl = budgetLine.map((v, i) => ({ x: 50 + (i / (budgetLine.length - 1)) * 430, y: 160 - (v / 200) * 140 }));
-                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
-                const area = line + ` ${pts[pts.length-1].x},160 ${pts[0].x},160`;
-                const bline = bl.map(p => `${p.x},${p.y}`).join(" ");
-                return (<g>
-                  <defs><linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity="0.3" /><stop offset="100%" stopColor="#10b981" stopOpacity="0.02" /></linearGradient></defs>
-                  <polygon points={area} fill="url(#costGrad)" />
-                  <polyline points={bline} fill="none" stroke="#ef4444" strokeWidth="1" strokeDasharray="5,3" />
-                  <polyline points={line} fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" />
-                  {pts.map((p, i) => (<circle key={i} cx={p.x} cy={p.y} r="3" fill="#10b981" stroke="var(--bg-card)" strokeWidth="1.5" />))}
-                </g>);
-              })()}
-              {costHistory.map((_, i) => (<text key={i} x={50 + (i / (costHistory.length - 1)) * 430} y={175} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">M{i + 1}</text>))}
-            </svg>
+        <div className="two-col">
+          <div className="detail-panel">
+            <div className="section-title">Curva S — Previsto</div>
+            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
+            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curvePrev?.ext_acum))}</span></div>
+            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curvePrev?.custo_acum))}</span></div>
           </div>
-          <div className="lg:col-span-2 p-panel">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Distribuicao por Categoria</h3>
-            <div className="space-y-3">
-              {[
-                { nome: "Tubulacao", valor: 45, cor: "#10b981" },
-                { nome: "Escavacao", valor: 25, cor: "#38bdf8" },
-                { nome: "Pavimentacao", valor: 15, cor: "#f59e0b" },
-                { nome: "PVs / Estruturas", valor: 10, cor: "#8b5cf6" },
-                { nome: "Outros", valor: 5, cor: "#6b7280" },
-              ].map((c, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span>
-                    <span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${c.valor * 2}%`, backgroundColor: c.cor, opacity: 0.8 }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="detail-panel">
+            <div className="section-title">Curva S — Realizado</div>
+            <div className="detail-row"><span className="dlabel">% Acumulado</span><span className="dvalue">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
+            <div className="detail-row"><span className="dlabel">Extensao</span><span className="dvalue">{formatMeters(asNumber(curveReal?.ext_acum))}</span></div>
+            <div className="detail-row"><span className="dlabel">Custo</span><span className="dvalue">{formatCurrency(asNumber(curveReal?.custo_acum))}</span></div>
           </div>
         </div>
-
-        <div className="p-panel">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Itens de Custo</h3>
-              <span className="text-[10px] text-[var(--text-muted)] font-mono">{itens.length} ITENS</span>
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
-              <thead><tr className="border-b border-[var(--border-light)]">
-                {["Descricao", "Quantidade", "Custo", "Progresso", "Status"].map((h, i) => (
-                  <th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>
-                ))}
-              </tr></thead>
-              <tbody>
-                {itens.map((t) => {
-                  const s = sc[t.status] || sc.pendente;
-                  return (
-                    <tr key={t.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors cursor-pointer">
-                      <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${s.dot} flex-shrink-0`}></span><span className="text-[var(--text-primary)] font-medium">{t.desc}</span></div></td>
-                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.qtd}</td>
-                      <td className="py-3 px-3 text-center font-mono text-[11px] text-emerald-400 font-bold">{t.custo}</td>
-                      <td className="py-3 px-3"><div className="flex items-center gap-2 justify-center"><div className="w-16 h-1.5 rounded-full bg-[var(--bg-base)] overflow-hidden"><div className={`h-full rounded-full ${s.dot}`} style={{ width: `${t.pct}%` }} /></div><span className="text-[10px] text-[var(--text-muted)] font-mono w-8">{t.pct}%</span></div></td>
-                      <td className="py-3 px-3 text-center"><span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider ${s.bg} ${s.text}`}>{s.label}</span></td>
-                    </tr>);
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      </>
     );
   }
 
@@ -1088,408 +796,188 @@ export default function LegacyApp() {
     }, {});
 
     return (
-      <div className="p-panel border-t-2 border-t-[#ef4444]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>BIM 3D/4D/5D Pipeline</span> <span className="badge">GENERADOR COMPLETO</span></h2>
-        </div>
-        <div className="action-row mb-6">
-          <button className="btn btn-primary" disabled>GERAR PACOTE EXECUTIVO (6 Etapas)</button>
-          <button className="btn btn-outline border-[#ef4444]/30 text-[#ef4444]" disabled>IFC LOD500</button>
-          <button className="btn btn-outline text-[#38bdf8]" disabled>LandXML</button>
-          <button className="btn btn-outline text-[#f59e0b]" disabled>Cadastro NTS292</button>
-          <button className="btn btn-outline" disabled>Cadastro DXF</button>
-          <button className="btn btn-outline text-[#10b981]" disabled>Cronograma</button>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-8 bg-[#05080f] p-3 rounded-lg border border-[var(--border-light)] items-center">
-          <span className="text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider mr-2">Interfaces GUI:</span>
-          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/manage")} target="_blank" rel="noreferrer">Viewer 3D</a>
-          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/editor")} target="_blank" rel="noreferrer">Editor EPANET</a>
-          <a className="text-[10px] bg-[#1e293b] text-[#94a3b8] px-2 py-1 rounded tracking-wider uppercase hover:bg-[#334155] hover:text-white transition-colors" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">Controle As-Built</a>
+      <>
+        <div className="section-title">Pipeline de Saidas BIM 5D</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>GERAR TUDO (6 etapas)</button>
+          <button className="action-btn btn-red" disabled>IFC LOD500</button>
+          <button className="action-btn btn-blue" disabled>LandXML</button>
+          <button className="action-btn btn-orange" disabled>Cadastro NTS292</button>
+          <button className="action-btn btn-red" disabled>Cadastro DXF</button>
+          <button className="action-btn btn-teal" disabled>Cronograma</button>
+          <button className="action-btn btn-purple" disabled>Dynamo</button>
+          <button className="action-btn btn-dark" disabled>SCR</button>
         </div>
 
-        <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Mapeamento de Saidas (12 Pastas Output)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">01_NS_CAMPO/</code><span className="text-[10px] text-[var(--text-muted)]">Notas de Serviço: PDF A4 + DESENHO + SAT + MAPA + JSON</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">02_DESENHOS/</code><span className="text-[10px] text-[var(--text-muted)]">PDFs A3 técnicos por NS (perfil + planta)</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">03_HTML/</code><span className="text-[10px] text-[var(--text-muted)]">Mapas Leaflet interativos por trecho</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">04_GIS/</code><span className="text-[10px] text-[var(--text-muted)]">GeoJSON georref SIRGAS 2000 UTM 23S</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">05_PLANILHAS/</code><span className="text-[10px] text-[var(--text-muted)]">Mestre PV a PV + Hidráulica + Curva S</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">06_CUSTOS/</code><span className="text-[10px] text-[var(--text-muted)]">XLSX custos com BDI + quantitativos</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">07_BIM_IFC/</code><span className="text-[10px] text-[var(--text-muted)]">IFC LOD 500 + CSV + JSON</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">08_LEAN_LPS/</code><span className="text-[10px] text-[var(--text-muted)]">Last Planner System + Lean completo</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">09_MICROPLAN/</code><span className="text-[10px] text-[var(--text-muted)]">Microplanejamento por equipes em HTML</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">10_CRONOGRAMA/</code><span className="text-[10px] text-[var(--text-muted)]">Gantt NS + MS Project XML + CSV</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">11_POR_RUA/</code><span className="text-[10px] text-[var(--text-muted)]">Trechos agrupados por logradouro real</span></div>
-          <div className="bg-[var(--bg-base)] p-3 rounded border border-[var(--border-light)]"><code className="text-[#f59e0b] block mb-1 font-bold text-xs">12_LOG/</code><span className="text-[10px] text-[var(--text-muted)]">JSON de processamento e rastreabilidade</span></div>
+        <div className="link-row">
+          <span style={{ color: "#667788", marginRight: 8 }}>Interfaces HTML:</span>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/editor"))}>Editor EPANET</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/manage"))}>Viewer 3D</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>Controle As-Built</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>RDO Diario</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/perdas"))}>Gestao Perdas</button>
+          <button className="link-btn" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/fluxograma-bim"))}>Fluxograma</button>
         </div>
 
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Artefatos HTML</div><div className="kpi-value">{formatInt(kinds.html ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Plotagens PDF</div><div className="kpi-value text-rose-400">{formatInt(kinds.pdf ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Datastores JSON</div><div className="kpi-value text-[#f59e0b]">{formatInt(kinds.json ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Modelos IFC</div><div className="kpi-value text-[#38bdf8]">{formatInt(kinds.ifc ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Datasets CSV</div><div className="kpi-value text-emerald-400">{formatInt(kinds.csv ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Cronogramas XML</div><div className="kpi-value">{formatInt(kinds.xml ?? 0)}</div></div>
+        <div className="section-title">SAIDAS DO PIPELINE</div>
+        <div className="output-list">
+          <div className="output-item"><span className="folder">01_NS/</span><span className="desc">Notas de Servico: PDF A4 + JSON + HTML Leaflet + GeoJSON</span></div>
+          <div className="output-item"><span className="folder">02_CIVIL3D/</span><span className="desc">LandXML 1.2 + Cadastro DXF + Dynamo .py + AutoCAD .scr</span></div>
+          <div className="output-item"><span className="folder">03_CADASTRO_NTS292/</span><span className="desc">DXF As-Built georref SIRGAS 2000 UTM 23S + Meta JSON</span></div>
+          <div className="output-item"><span className="folder">04_BIM_LOD500/</span><span className="desc">IFC 3D real (SweptDiskSolid+ExtrudedAreaSolid) + CSV + JSON</span></div>
+          <div className="output-item"><span className="folder">05_CRONOGRAMA/</span><span className="desc">MS Project XML com WBS por fase + Resumo JSON</span></div>
         </div>
-      </div>
+
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">HTML</span><span className="kpi-value">{formatInt(kinds.html ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PDF</span><span className="kpi-value">{formatInt(kinds.pdf ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">JSON</span><span className="kpi-value">{formatInt(kinds.json ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">IFC</span><span className="kpi-value">{formatInt(kinds.ifc ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">CSV</span><span className="kpi-value">{formatInt(kinds.csv ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">XML</span><span className="kpi-value">{formatInt(kinds.xml ?? 0)}</span></div>
+        </div>
+      </>
     );
   }
 
   function renderLean() {
-    const ppcHistory = [62, 68, 71, 65, 74, 78, 72, 80, 76, 83, 78, 85];
-    const taktHistory = [4.2, 5.1, 4.8, 5.5, 6.0, 5.8, 6.2, 5.9, 6.4, 6.1, 6.5, 6.2];
-    const blockHistory = [12, 10, 14, 8, 11, 6, 9, 5, 7, 4, 8, 3];
-
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      const fill = pts + ` ${w},${h} 0,${h}`;
-      return (
-        <svg width={w} height={h} className="inline-block ml-2 opacity-80">
-          <polygon points={fill} fill={color} fillOpacity="0.15" />
-          <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      );
-    };
-
-    const tarefas = [
-      { id: 1, nome: "Assentamento Tubo DN200 - Rua A", resp: "Eq. Bruno", inicio: "01/04", fim: "05/04", status: "concluido", pct: 100 },
-      { id: 2, nome: "Escavacao PV-12 a PV-15", resp: "Eq. Marcos", inicio: "03/04", fim: "07/04", status: "andamento", pct: 65 },
-      { id: 3, nome: "Reaterro + Compactacao Rua B", resp: "Eq. Carlos", inicio: "05/04", fim: "09/04", status: "andamento", pct: 30 },
-      { id: 4, nome: "Ligacao Domiciliar Lote 14-22", resp: "Eq. Bruno", inicio: "07/04", fim: "10/04", status: "planejado", pct: 0 },
-      { id: 5, nome: "CBUQ Pavimentacao Rua A", resp: "Terceiro", inicio: "08/04", fim: "12/04", status: "bloqueado", pct: 0 },
-      { id: 6, nome: "Teste Estanqueidade PV-01/PV-08", resp: "Eq. Marcos", inicio: "10/04", fim: "11/04", status: "planejado", pct: 0 },
-      { id: 7, nome: "Poco de Visita PV-16 (novo)", resp: "Eq. Carlos", inicio: "06/04", fim: "08/04", status: "andamento", pct: 45 },
-    ];
-
-    const statusConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-      concluido: { label: "Concluido", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-      andamento: { label: "Em Andamento", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
-      planejado: { label: "Planejado", bg: "bg-gray-500/15", text: "text-gray-400", dot: "bg-gray-400" },
-      bloqueado: { label: "Bloqueado", bg: "bg-rose-500/15", text: "text-rose-400", dot: "bg-rose-400" },
-    };
-
-    const causas = [
-      { nome: "Material Pendente", valor: 35, cor: "#ef4444" },
-      { nome: "Clima / Chuva", valor: 25, cor: "#f59e0b" },
-      { nome: "Mao de Obra", valor: 20, cor: "#3b82f6" },
-      { nome: "Retrabalho", valor: 12, cor: "#8b5cf6" },
-      { nome: "Licenca / Aprovacao", valor: 8, cor: "#6b7280" },
-    ];
-    const maxCausa = Math.max(...causas.map(c => c.valor));
-
     return (
-      <div className="space-y-6">
-        {/* ═══ HEADER BAR ═══ */}
-        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">LPS / Lean Construction</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-            <div className="flex gap-2">
-              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[#8b5cf6]/40 transition-all font-mono uppercase tracking-wider">Lookahead 6 sem</button>
-              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[#8b5cf6]/40 transition-all font-mono uppercase tracking-wider">Takt Time</button>
-              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#8b5cf6]/15 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-all font-mono uppercase tracking-wider">+ Nova Tarefa</button>
-            </div>
-          </div>
-
-          {/* ═══ KPI CARDS WITH SPARKLINES ═══ */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "PPC Semanal", value: `${leanInsight?.restricoes_lookahead ?? 78}%`, color: "#8b5cf6", spark: ppcHistory, trend: "+3.2%" },
-              { label: "Takt Time", value: `${formatMeters(leanInsight?.takt_metros_dia ?? 6.2)}`, color: "#38bdf8", spark: taktHistory, trend: "+0.4 m/d" },
-              { label: "Cycle Time", value: `${formatInt(leanInsight?.cycle_time_dias ?? 14)} dias`, color: "#10b981", spark: null as number[] | null, trend: "-2 dias" },
-              { label: "Throughput", value: `${formatInt(leanInsight?.throughput_ns_semana ?? 8)} NS/sem`, color: "#f59e0b", spark: null as number[] | null, trend: "+1 NS" },
-              { label: "Bloqueios", value: `${formatInt(leanInsight?.ns_bloqueadas_semana ?? 3)}`, color: "#ef4444", spark: blockHistory, trend: "-5" },
-              { label: "VA / NVA", value: leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "72%", color: "#10b981", spark: null as number[] | null, trend: "+1.8%" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#8b5cf6]/40 transition-all group cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className={`text-[9px] font-mono ${kpi.trend.startsWith("+") ? "text-emerald-400" : kpi.label === "Bloqueios" ? "text-emerald-400" : "text-rose-400"}`}>{kpi.trend}</span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
-                </div>
-              </div>
-            ))}
-          </div>
+      <>
+        <div className="section-title">Lean Construction + Last Planner System + BIM 6D</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>RELATORIO LEAN+LPS</button>
+          <button className="action-btn btn-purple" disabled>TAKT TIME</button>
+          <button className="action-btn btn-blue" disabled>LOOKAHEAD 6 SEM</button>
+          <button className="action-btn btn-orange" disabled>BIM 6D (Ciclo Vida)</button>
         </div>
 
-        {/* ═══ CHARTS ROW ═══ */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          {/* PPC Area Chart */}
-          <div className="lg:col-span-3 p-panel">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Evolucao PPC Semanal</h3>
-              <div className="flex gap-1">
-                {["4 sem", "8 sem", "12 sem"].map((p, i) => (
-                  <button key={i} className={`px-2 py-0.5 text-[9px] rounded ${i === 2 ? "bg-[#8b5cf6]/20 text-[#8b5cf6]" : "text-[var(--text-muted)]"} font-mono`}>{p}</button>
-                ))}
-              </div>
-            </div>
-            <svg viewBox="0 0 500 180" className="w-full" preserveAspectRatio="xMidYMid meet">
-              {[0, 25, 50, 75, 100].map((v, i) => {
-                const y = 160 - (v / 100) * 140;
-                return (
-                  <g key={i}>
-                    <line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" />
-                    <text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}%</text>
-                  </g>
-                );
-              })}
-              {(() => {
-                const pts = ppcHistory.map((v, i) => ({ x: 50 + (i / (ppcHistory.length - 1)) * 430, y: 160 - (v / 100) * 140 }));
-                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
-                const area = line + ` ${pts[pts.length-1].x},160 ${pts[0].x},160`;
-                return (
-                  <g>
-                    <defs>
-                      <linearGradient id="ppcGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.02" />
-                      </linearGradient>
-                    </defs>
-                    <polygon points={area} fill="url(#ppcGrad)" />
-                    <polyline points={line} fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    {pts.map((p, i) => (
-                      <circle key={i} cx={p.x} cy={p.y} r="3" fill="#8b5cf6" stroke="var(--bg-card)" strokeWidth="1.5" />
-                    ))}
-                  </g>
-                );
-              })()}
-              {ppcHistory.map((_, i) => (
-                <text key={i} x={50 + (i / (ppcHistory.length - 1)) * 430} y={175} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">S{i + 1}</text>
-              ))}
-              <line x1="40" y1={160 - (80 / 100) * 140} x2="490" y2={160 - (80 / 100) * 140} stroke="#10b981" strokeWidth="1" strokeDasharray="5,3" />
-              <text x="492" y={160 - (80 / 100) * 140 + 3} fontSize="7" fill="#10b981" fontFamily="monospace">Meta 80%</text>
-            </svg>
-          </div>
-
-          {/* Blocking Causes */}
-          <div className="lg:col-span-2 p-panel">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Causas de Nao-Conclusao</h3>
-            <div className="space-y-3">
-              {causas.map((c, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span>
-                    <span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(c.valor / maxCausa) * 100}%`, backgroundColor: c.cor, opacity: 0.8 }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-3 border-t border-[var(--border-light)]">
-              <div className="flex justify-between text-[10px]">
-                <span className="text-[var(--text-muted)]">Total bloqueios semana:</span>
-                <span className="text-rose-400 font-bold">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 3)}</span>
-              </div>
-            </div>
-          </div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Takt (m/dia)</span><span className="kpi-value">{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Cycle Time</span><span className="kpi-value">{formatInt(leanInsight?.cycle_time_dias ?? 0)} dias</span></div>
+          <div className="kpi-cell"><span className="kpi-label">PPC (%)</span><span className="kpi-value warn">{leanInsight?.restricoes_lookahead != null ? formatInt(leanInsight.restricoes_lookahead) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">VA/NVA</span><span className="kpi-value">{leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">CO2 (ton)</span><span className="kpi-value">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Custo 50 anos</span><span className="kpi-value">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</span></div>
         </div>
 
-        {/* ═══ TASK TABLE ═══ */}
-        <div className="p-panel">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Tarefas Lookahead</h3>
-              <span className="text-[10px] text-[var(--text-muted)] font-mono">{tarefas.length} ITENS</span>
-            </div>
-            <div className="flex gap-2">
-              {Object.entries(statusConfig).map(([key, cfg]) => (
-                <span key={key} className={`flex items-center gap-1 text-[9px] ${cfg.text} font-mono uppercase`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`}></span>
-                  {cfg.label}
-                </span>
-              ))}
-            </div>
+        {leanInsight?.alerta_lookahead && (
+          <div className="resumo-box">
+            <strong>Alerta Lookahead:</strong> {cleanText(leanInsight.alerta_lookahead)}
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
-              <thead>
-                <tr className="border-b border-[var(--border-light)]">
-                  {["Tarefa", "Responsavel", "Inicio", "Fim", "Progresso", "Status"].map((h, i) => (
-                    <th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {tarefas.map((t) => {
-                  const sc = statusConfig[t.status] || statusConfig.planejado;
-                  return (
-                    <tr key={t.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors cursor-pointer">
-                      <td className="py-3 px-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-1.5 h-1.5 rounded-full ${sc.dot} flex-shrink-0`}></span>
-                          <span className="text-[var(--text-primary)] font-medium">{t.nome}</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.resp}</td>
-                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.inicio}</td>
-                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.fim}</td>
-                      <td className="py-3 px-3">
-                        <div className="flex items-center gap-2 justify-center">
-                          <div className="w-16 h-1.5 rounded-full bg-[var(--bg-base)] overflow-hidden">
-                            <div className={`h-full rounded-full ${sc.dot}`} style={{ width: `${t.pct}%` }} />
-                          </div>
-                          <span className="text-[10px] text-[var(--text-muted)] font-mono w-8">{t.pct}%</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 text-center">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider ${sc.bg} ${sc.text}`}>
-                          {sc.label}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        )}
 
-        {/* ═══ BOTTOM STATS ═══ */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="p-panel text-center">
-            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">Ext. Planejada/Sem</div>
-            <div className="text-xl font-bold text-emerald-400">{formatMeters(leanInsight?.ext_planejada_semana ?? 42)}</div>
-          </div>
-          <div className="p-panel text-center">
-            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">NS Planejadas</div>
-            <div className="text-xl font-bold text-[#38bdf8]">{formatInt(leanInsight?.ns_planejadas_semana ?? 12)}</div>
-          </div>
-          <div className="p-panel text-center">
-            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">CO2 Estimado</div>
-            <div className="text-xl font-bold text-[#f59e0b]">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "2.4"} ton</div>
-          </div>
-          <div className="p-panel text-center">
-            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">Custo Ciclo Vida</div>
-            <div className="text-xl font-bold text-rose-400">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</div>
-          </div>
+        <div className="detail-panel">
+          <div className="detail-row"><span className="dlabel">Throughput</span><span className="dvalue">{formatInt(leanInsight?.throughput_ns_semana ?? 0)} NS/semana</span></div>
+          <div className="detail-row"><span className="dlabel">Planejadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_planejadas_semana ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Bloqueadas/sem</span><span className="dvalue">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Ext. planejada/sem</span><span className="dvalue">{formatMeters(leanInsight?.ext_planejada_semana ?? 0)}</span></div>
         </div>
-      </div>
+      </>
     );
   }
 
   function renderPerdas() {
     return (
-      <div className="p-panel border-t-2 border-t-[#0ea5e9]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Gestao de Perdas Reais & Aparentes</span> <span className="badge">IWA / UARL / ILI</span></h2>
-        </div>
-        <div className="action-row mb-6">
-          <button className="btn btn-outline" disabled>RELATORIO PERDAS</button>
-          <button className="btn btn-outline border-rose-500/30 text-rose-400" disabled>MAPA DE RISCO VAZAMENTOS</button>
-          <button className="btn btn-outline border-[#38bdf8]/30 text-[#38bdf8]" disabled>SETORIZAR DMAs</button>
-          <button className="btn btn-outline" disabled>PDF PARA A CONCESSIONARIA</button>
-          <button className="btn btn-primary ml-auto" disabled>ANALISE DE CUSTO/BENEFICIO TROCA DE REDE</button>
+      <>
+        <div className="section-title">Gestao de Perdas — IWA / UARL / ILI / DMA</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>RELATORIO PERDAS</button>
+          <button className="action-btn btn-red" disabled>MAPA RISCO</button>
+          <button className="action-btn btn-blue" disabled>CRIAR DMAs</button>
+          <button className="action-btn btn-teal" disabled>PDF PERDAS</button>
+          <button className="action-btn btn-orange" disabled>ANALISE TROCA</button>
         </div>
 
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">UARL (m3/ano)</div><div className="kpi-value">{formatInt(lossInsight?.uarl_m3_ano ?? 0)}</div></div>
-          <div className="kpi-card warn"><div className="kpi-label">ILI</div><div className="kpi-value text-[#f59e0b]">{lossInsight?.ili != null ? lossInsight.ili.toFixed(2) : "-"}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Classif. Bandeira</div><div className="kpi-value text-xs pt-2 font-mono uppercase tracking-widest">{cleanText(lossInsight?.ili_classificacao ?? "-")}</div></div>
-          <div className="kpi-card danger"><div className="kpi-label">Zonas de Risco Alto</div><div className="kpi-value text-[#ef4444]">{formatInt(lossInsight?.risco_total_ano ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">DMAs Sugeridos</div><div className="kpi-value">{formatInt(lossInsight?.n_dmas ?? 0)}</div></div>
-          <div className="kpi-card danger"><div className="kpi-label">Perda R$/ano</div><div className="kpi-value text-rose-400">{formatCurrency(lossInsight?.custo_ineficiencia_ano ?? 0)}</div></div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">UARL (m3/ano)</span><span className="kpi-value">{formatInt(lossInsight?.uarl_m3_ano ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">ILI</span><span className="kpi-value warn">{lossInsight?.ili != null ? lossInsight.ili.toFixed(2) : "-"}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Classif.</span><span className="kpi-value">{cleanText(lossInsight?.ili_classificacao ?? "-")}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Risco Alto</span><span className="kpi-value bad">{formatInt(lossInsight?.risco_total_ano ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">DMAs</span><span className="kpi-value">{formatInt(lossInsight?.n_dmas ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Perda R$/ano</span><span className="kpi-value">{formatCurrency(lossInsight?.custo_ineficiencia_ano ?? 0)}</span></div>
         </div>
 
-        <div className="action-row mt-6">
-          <a className="btn btn-outline w-full" href={nativeUrl("/perdas")} target="_blank" rel="noreferrer">ABRIR MOTOR NATIVO (REDE VRP/VMPs)</a>
+        <div className="action-row">
+          <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/perdas"))}>ABRIR MODULO</button>
         </div>
-      </div>
+      </>
     );
   }
 
   function renderIA() {
     return (
-      <div className="p-panel border-t-2 border-t-[#38bdf8]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Assistente IA Omen & Analytics ML</span> <span className="badge">MULTIMODEL</span></h2>
-        </div>
-        <div className="action-row mb-6">
-          <button className="btn btn-outline" disabled>GERAR RELATORIO DE PREVISAO EM MASSA</button>
-          <button className="btn btn-outline" disabled>LIMPAR CACHE DE TREINAMENTO</button>
-          <button className="btn btn-outline" disabled>GERAR BENCHMARK CUSTO</button>
-          <button className="btn btn-primary" disabled>AVALIAR RISCOS DA OBRA OMEN-7</button>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Algoritmo Ativo</div><div className="kpi-value text-xs font-mono uppercase tracking-widest pt-2 text-[#38bdf8]">{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</div></div>
-          <div className="kpi-card"><div className="kpi-label">R2 Score</div><div className="kpi-value text-[#10b981]">{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">MAE</div><div className="kpi-value">{(analyticsSummary?.mae ?? 0).toFixed(2)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">RMSE</div><div className="kpi-value">{(analyticsSummary?.rmse ?? 0).toFixed(2)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Modelos Ensembles</div><div className="kpi-value">{formatInt(analyticsSummary?.n_modelos ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Cenarios Cruzados</div><div className="kpi-value">{formatInt(analyticsSummary?.n_cenarios ?? 0)}</div></div>
+      <>
+        <div className="section-title">Assistente IA + E-LLMs Gratuitos + Analytics ML</div>
+        <div className="action-row">
+          <button className="action-btn btn-green" disabled>GERAR RELATORIO</button>
+          <button className="action-btn btn-purple" disabled>ZERAR RELATORIO</button>
+          <button className="action-btn btn-orange" disabled>GERAR BENCHMARK</button>
+          <button className="action-btn btn-red" disabled>GERAR RISCOS</button>
+          <button className="action-btn btn-teal" disabled>MULTI PROV</button>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Status API</div><div className={`text-sm font-bold ${analyticsSummary?.status ? 'text-emerald-400' : 'text-rose-400'}`}>{cleanText(analyticsSummary?.status ?? "OFFLINE")}</div></div>
-          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Ultimo Treino</div><div className="text-sm text-white font-mono">{cleanText(analyticsSummary?.gerado_em ?? "-")}</div></div>
-          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Dataset N de Nucleos</div><div className="text-sm text-white">{formatInt(analyticsSummary?.n_nucleos ?? 0)}</div></div>
-          <div className="bg-[#05080f] p-4 rounded-lg flex flex-col justify-center text-center border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Database de Origem</div><div className="text-sm text-[#38bdf8] truncate px-2">{cleanText(analyticsSummary?.origem ?? "-")}</div></div>
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">Algoritmo</span><span className="kpi-value">{cleanText(analyticsSummary?.algoritmo ?? "Indisponivel")}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">R2</span><span className="kpi-value">{(analyticsSummary?.r2_test ?? 0).toFixed(3)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">MAE</span><span className="kpi-value">{(analyticsSummary?.mae ?? 0).toFixed(2)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">RMSE</span><span className="kpi-value">{(analyticsSummary?.rmse ?? 0).toFixed(2)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Modelos</span><span className="kpi-value">{formatInt(analyticsSummary?.n_modelos ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Cenarios</span><span className="kpi-value">{formatInt(analyticsSummary?.n_cenarios ?? 0)}</span></div>
         </div>
-      </div>
+
+        <div className="detail-panel">
+          <div className="detail-row"><span className="dlabel">Status</span><span className="dvalue">{cleanText(analyticsSummary?.status ?? "-")}</span></div>
+          <div className="detail-row"><span className="dlabel">Gerado em</span><span className="dvalue">{cleanText(analyticsSummary?.gerado_em ?? "-")}</span></div>
+          <div className="detail-row"><span className="dlabel">Nucleos</span><span className="dvalue">{formatInt(analyticsSummary?.n_nucleos ?? 0)}</span></div>
+          <div className="detail-row"><span className="dlabel">Origem</span><span className="dvalue">{cleanText(analyticsSummary?.origem ?? "-")}</span></div>
+        </div>
+      </>
     );
   }
 
   function renderNucleos() {
     return (
-      <div className="p-panel border-t-2 border-t-[#10b981]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Frentes de Lote (Macro)</span> <span className="badge">NUCLEOS ATIVOS</span></h2>
-        </div>
-
-        <div className="overflow-x-auto w-full border border-[var(--border-light)] rounded-xl mt-4 max-h-[400px]">
-          <table className="data-grid w-full text-left">
-            <thead className="sticky top-0 bg-[var(--bg-sidebar)] z-10 shadow-sm border-b border-[var(--border-light)]"><tr><th>Frente/Nucleo</th><th>Extensao</th><th>Trechos</th><th>Equipes</th><th>Duracao</th><th>Fase (LPS)</th></tr></thead>
-            <tbody>
-              {nuclei.length ? nuclei.map(n => {
-                const phase = currentPhase(n);
-                return (
-                  <tr key={n.nome} onClick={() => setSelectedNucleo(n.nome)} className={`cursor-pointer transition-colors ${selectedNucleo === n.nome ? "bg-[#38bdf8]/10" : "hover:bg-[rgba(255,255,255,0.02)]"}`}>
-                    <td className="font-bold text-white max-w-[200px] truncate">{cleanText(n.nome)}</td>
-                    <td className="text-[#38bdf8] font-mono">{formatMeters(n.extensao_m)}</td>
-                    <td className="font-mono">{formatInt(n.n_trechos)}</td>
-                    <td className="font-mono">{formatInt(n.equipes)}</td>
-                    <td className="font-mono">{formatInt(n.duracao_dias)} dias</td>
-                    <td><span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${phase?.id === 'concluido' ? 'text-emerald-400 bg-emerald-500/10' : 'text-[#94a3b8] bg-[#1e293b]'}`}>{cleanText(phase?.nome ?? "-")}</span></td>
-                  </tr>
-                );
-              }) : <tr><td colSpan={6} className="text-center py-8 text-[var(--text-muted)] border-dashed">Nenhum agrupamento de núcleos detectado no storage local.</td></tr>}
-            </tbody>
-          </table>
-        </div>
+      <>
+        <div className="section-title">Nucleos DXF (ProSaneamento)</div>
+        <table className="data-table">
+          <thead><tr><th>Nucleo</th><th>Extensao</th><th>Trechos</th><th>Equipes</th><th>Duracao</th><th>Fase</th></tr></thead>
+          <tbody>
+            {nuclei.length ? nuclei.map(n => {
+              const phase = currentPhase(n);
+              return (
+                <tr key={n.nome} onClick={() => setSelectedNucleo(n.nome)} className={selectedNucleo === n.nome ? "row-active" : ""}>
+                  <td style={{ color: "#00e6a0", fontWeight: 600 }}>{cleanText(n.nome)}</td>
+                  <td>{formatMeters(n.extensao_m)}</td>
+                  <td>{formatInt(n.n_trechos)}</td>
+                  <td>{formatInt(n.equipes)}</td>
+                  <td>{formatInt(n.duracao_dias)} dias</td>
+                  <td><span className={toneClass(phase?.id ?? "fase")}>{cleanText(phase?.nome ?? "-")}</span></td>
+                </tr>
+              );
+            }) : <tr><td colSpan={6} className="empty">Nenhum nucleo carregado.</td></tr>}
+          </tbody>
+        </table>
 
         {nucleoCatalog.items.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4 flex justify-between">
-              <span>Catalog Registry</span>
-              <span className="text-[var(--text-muted)]">{formatInt(nucleoCatalog.total)} entries</span>
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-               {nucleoCatalog.items.map(n => (
-                  <div key={n.nome} className="bg-[#05080f] px-3 py-2 rounded border border-[var(--border-light)] text-[11px] font-mono truncate text-white border-l-2 border-l-[#10b981]" title={n.nome}>
-                     {cleanText(n.nome)}
-                  </div>
-               ))}
-            </div>
-          </div>
+          <>
+            <div className="section-title" style={{ marginTop: 16 }}>Catalogo de Nucleos ({formatInt(nucleoCatalog.total)})</div>
+            <table className="data-table">
+              <thead><tr><th>Nome</th><th>Existe</th></tr></thead>
+              <tbody>
+                {nucleoCatalog.items.map(n => (
+                  <tr key={n.nome}><td>{cleanText(n.nome)}</td><td style={{ color: "#00e6a0" }}>SIM</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </>
         )}
 
-        <div className="action-row mt-8 pt-6 border-t border-[var(--border-light)]">
-          <button className="btn btn-outline" disabled>PROCESSAMENTO EM BATCH (DXF)</button>
-          <button className="btn btn-outline" disabled>INFERIR PROLONGAMENTOS FALTANTES</button>
-          <button className="btn btn-primary" disabled>RODAR TUDO SEQUENCIAL</button>
+        <div className="action-row" style={{ marginTop: 14 }}>
+          <button className="action-btn btn-purple" disabled>BATCH NUCLEOS DXF</button>
+          <button className="action-btn btn-orange" disabled>BATCH PROLONGAMENTOS</button>
+          <button className="action-btn btn-green" disabled>BATCH TUDO</button>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -1499,1099 +987,224 @@ export default function LegacyApp() {
     const ts = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
 
     return (
-      <div className="flex flex-col h-[calc(100vh-200px)]">
-        <div className="panel-header mb-4">
-           <h2 className="panel-title"><span>Kernel Execution Log</span> <span className="badge">LIVE TRACKING</span></h2>
-           <div className="flex gap-2">
-             <button className="btn btn-outline !py-1 !px-3 !text-[10px]" onClick={() => setRefreshKey(v => v + 1)}>REFRESH</button>
-             <button className="btn btn-outline !py-1 !px-3 !text-[10px]" onClick={() => {
-                const text = logs.map(j => `${j.created_at} | ${j.motor} | ${j.arquivo} | NS: ${j.ns_geradas} ok / ${j.ns_erros} erro`).join("\n");
-                navigator.clipboard.writeText(text);
-              }}>COPY BLOCK</button>
-           </div>
+      <>
+        <div className="log-area">
+          <div className="log-line"><span className="log-time">[{ts}]</span> ConstruData - HydroNetwork v9.0.0 | {selectedMotorLabel}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> {companyName} - {projectName}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Backend: {health?.ok ? "ONLINE" : "OFFLINE"}</div>
+          <div className="log-line"><span className="log-time">[{ts}]</span> [OK] Motores: GDAL, LandXML, DWG/AEC, DWG Semantico, DWG Universal, GerarNS, Civil3D, NTS292, IFC, MSProject, Pipeline, Custo, Medicao, ML, Lean/LPS, Parametrico, MicroPlan, Perdas, CronoMacro, PdfPerdas, Gemini, Multi-LLM, Contratos, Analytics, SLNR_Mestre, Motor_v5</div>
+          {error && <div className="log-line" style={{ color: "#f44336" }}><span className="log-time">[{ts}]</span> [ERRO] {error}</div>}
+          <div className="log-line">&nbsp;</div>
+          <div className="log-line">--- Historico de jobs ---</div>
+          {logs.length ? logs.slice(0, 20).map((job, i) => (
+            <div className="log-line" key={`log-${job.job_id ?? i}`}>
+              <span className="log-time">[{formatDateTime(job.created_at)}]</span>{" "}
+              {cleanText(job.motor ?? "-").toUpperCase()} | {cleanText(job.arquivo ?? job.nucleo ?? "-")} | NS: {formatInt(job.ns_geradas ?? 0)} ok / {formatInt(job.ns_erros ?? 0)} erro | Status: {cleanText(job.status ?? "-")}
+            </div>
+          )) : <div className="log-line">Nenhum job registrado.</div>}
         </div>
 
-        <div className="flex-1 bg-[#020617] rounded-xl border border-[var(--border-light)] p-5 overflow-y-auto font-mono text-[11px] leading-relaxed shadow-inner">
-          <div className="text-[#38bdf8] mb-1"><span className="opacity-50">[{ts}]</span> SYSTEM BOOT | ConstruData MaxSystem v9.0.0 | Engine: {selectedMotorLabel}</div>
-          <div className="text-white mb-1"><span className="opacity-50">[{ts}]</span> INFO    | Context: {companyName} - {projectName}</div>
-          <div className="text-emerald-400 mb-1"><span className="opacity-50">[{ts}]</span> STATUS  | Neural Backend: {health?.ok ? "ONLINE CONNECTED" : "OFFLINE DISCONNECTED"}</div>
-          <div className="text-[#94a3b8] mb-4 text-[10px] break-words"><span className="opacity-50 text-[11px]">[{ts}]</span> MODULES | Motores: GDAL, LandXML, DWG/AEC, DWG Semantico, DWG Universal, GerarNS, Civil3D, NTS292, IFC, MSProject, Pipeline, Custo, Medicao, ML, Lean/LPS, Parametrico, MicroPlan, Perdas, CronoMacro, PdfPerdas, Gemini, Multi-LLM, Contratos, Analytics, SLNR_Mestre, Motor_v5</div>
-          {error && <div className="text-rose-500 mb-4 bg-rose-500/10 p-2 rounded border border-rose-500/20"><span className="opacity-70">[{ts}]</span> FATAL   | {error}</div>}
-          
-          <div className="border-b border-dashed border-[rgba(255,255,255,0.1)] my-4"></div>
-          
-          <div className="text-[var(--text-muted)] mb-2 font-bold tracking-widest uppercase text-[10px]">Job History Trace</div>
-          {logs.length ? logs.slice(0, 50).map((job, i) => {
-            const isError = job.ns_erros && job.ns_erros > 0;
-            return (
-              <div className={`mb-1.5 flex gap-3 hover:bg-[rgba(255,255,255,0.02)] px-1 rounded transition-colors ${isError ? 'text-rose-400' : 'text-[#94a3b8]'}`} key={`log-${job.job_id ?? i}`}>
-                <span className="opacity-50 shrink-0 w-32">[{formatDateTime(job.created_at)}]</span>
-                <span className="shrink-0 w-24 text-white font-bold">{cleanText(job.motor ?? "-").toUpperCase()}</span>
-                <span className="truncate flex-1 max-w-[300px]" title={cleanText(job.arquivo ?? job.nucleo ?? "-")}>{cleanText(job.arquivo ?? job.nucleo ?? "-")}</span>
-                <span className="shrink-0 w-40 text-right">Extracted: <span className="text-emerald-400">{formatInt(job.ns_geradas ?? 0)}</span> / Err: <span className="text-rose-400">{formatInt(job.ns_erros ?? 0)}</span></span>
-                <span className="shrink-0 w-24 text-right uppercase tracking-wider text-[9px] mt-0.5">{cleanText(job.status ?? "-")}</span>
-              </div>
-            );
-          }) : <div className="text-[var(--text-muted)] italic">No jobs executed in this session. Awaiting terminal dispatch.</div>}
+        <div className="bottom-bar">
+          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>Limpar</button>
+          <button className="action-btn btn-dark" onClick={() => {
+            const text = logs.map(j => `${j.created_at} | ${j.motor} | ${j.arquivo} | NS: ${j.ns_geradas} ok / ${j.ns_erros} erro`).join("\n");
+            navigator.clipboard.writeText(text);
+          }}>Copiar</button>
         </div>
-      </div>
+      </>
     );
   }
 
   function renderGestao() {
-    // ── War Room Computed Values ──
-    const pctFisico = asNumber(dashboard?.pct_fisico);
-    const pctFin = asNumber(dashboard?.pct_financeiro);
-    const totalLiberado = asNumber(dashboard?.valor_liberado);
-    const custoRdo = asNumber(dashboard?.custo_rdo_total);
-    const extTotal = asNumber(dashboard?.extensao_total_m);
-    const extExec = asNumber(dashboard?.extensao_exec_m);
-    const mDia = asNumber(dashboard?.m_por_dia);
-    const diasTotal = cronograma?.duracao_total_dias ?? 0;
-    const diasDecorridos = cronograma ? Math.max(0, Math.floor((Date.now() - new Date(`${cronograma.data_inicio}T12:00:00`).getTime()) / 86400000)) : 0;
-    const pctTempo = diasTotal > 0 ? (diasDecorridos / diasTotal) * 100 : 0;
-    const spi = pctTempo > 0 ? pctFisico / pctTempo : 1;
-    const cpi = pctFin > 0 ? pctFisico / pctFin : 1;
-    const extRestante = extTotal - extExec;
-    const diasProjetados = mDia > 0 ? Math.ceil(extRestante / mDia) : 999;
-    const saldo = totalLiberado - custoRdo;
-    const burnRate = (dashboard?.dias_medidos ?? 0) > 0 ? custoRdo / (dashboard?.dias_medidos ?? 1) : 0;
-
-    // ── Alert Engine ──
-    const alerts: Array<{ level: "critical" | "warning" | "ok"; msg: string }> = [];
-    if (spi < 0.85) alerts.push({ level: "critical", msg: `SPI ${spi.toFixed(2)} — Atraso severo detectado. Mobilizar equipes extras.` });
-    else if (spi < 0.95) alerts.push({ level: "warning", msg: `SPI ${spi.toFixed(2)} — Atenção: ritmo abaixo do planejado.` });
-    if (cpi < 0.9) alerts.push({ level: "critical", msg: `CPI ${cpi.toFixed(2)} — Custo acima do previsto. Revisar orçamento.` });
-    if (saldo < 0) alerts.push({ level: "critical", msg: `Saldo contratual NEGATIVO: ${formatCurrency(saldo)}` });
-    else if (burnRate > 0 && saldo / burnRate < 15) alerts.push({ level: "warning", msg: `Autonomia financeira: apenas ${Math.round(saldo / burnRate)} dias restantes.` });
-    if (leanInsight && leanInsight.restricoes_lookahead > 0) alerts.push({ level: "warning", msg: `${leanInsight.restricoes_lookahead} restrições no Lookahead. ${leanInsight.alerta_lookahead}` });
-    if (alerts.length === 0) alerts.push({ level: "ok", msg: "Sistema operando dentro dos parâmetros. Nenhum alerta ativo." });
-
     return (
-      <div className="space-y-6">
-        {/* ── Header War Room ── */}
-        <div className="p-panel border-t-2 border-t-[#0ea5e9]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#0ea5e9]/20 flex items-center justify-center text-[#38bdf8] border border-[#0ea5e9]/50 shadow-[0_0_15px_rgba(14,165,233,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-              </span>
-              War Room — Gestão 360
-              <span className="badge">TACTICAL OVERVIEW</span>
-            </h2>
-          </div>
+      <>
+        <div className="section-title">Gestao & Cronograma</div>
 
-          {/* Nucleo filter */}
-          <div className="flex gap-2 p-2 bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] mb-4 overflow-x-auto hide-scrollbar mt-4">
-            <button className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === "" ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo("")}>Todos</button>
-            {nucleoNames.slice(0, 10).map(n => (
-              <button key={n} className={cn("px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap", selectedNucleo === n ? "bg-[#38bdf8]/10 text-[#38bdf8]" : "text-[var(--text-muted)] hover:text-white")} onClick={() => setSelectedNucleo(n)}>{n}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── ALERT PANEL ── */}
-        <div className="space-y-2">
-          {alerts.map((a, i) => (
-            <div key={i} className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-xs font-medium ${
-              a.level === "critical" ? "bg-red-500/5 border-red-500/20 text-red-400" :
-              a.level === "warning" ? "bg-[#f59e0b]/5 border-[#f59e0b]/20 text-[#fcd34d]" :
-              "bg-emerald-500/5 border-emerald-500/20 text-emerald-400"
-            }`}>
-              <span className={`w-2 h-2 rounded-full shrink-0 ${a.level === "critical" ? "bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" : a.level === "warning" ? "bg-[#f59e0b] animate-pulse" : "bg-emerald-500"}`} />
-              {a.msg}
-            </div>
+        <div className="scope-bar">
+          <button className={selectedNucleo === "" ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo("")}>Todos</button>
+          {nucleoNames.slice(0, 10).map(n => (
+            <button key={n} className={selectedNucleo === n ? "scope-btn active" : "scope-btn"} onClick={() => setSelectedNucleo(n)}>{n}</button>
           ))}
         </div>
 
-        {/* ── MAIN KPIs ── */}
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">NS Totais</div><div className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</div></div>
-          <div className="kpi-card warn"><div className="kpi-label">Em Execução</div><div className="kpi-value text-[#f59e0b]">{formatInt(dashboard?.n_execucao ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Concluídas</div><div className="kpi-value text-emerald-400">{formatInt(dashboard?.n_concluidas ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">RDOs</div><div className="kpi-value text-[#8b5cf6]">{formatInt(dashboard?.rdos ?? 0)}</div></div>
+        <div className="action-row">
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/controle"))}>MEDIR MACRO</button>
+          <button className="action-btn btn-blue" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>MEDIR RDO</button>
+          <button className="action-btn btn-orange" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/cronograma"))}>GERAR MACRO</button>
+          <button className="action-btn btn-purple" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/curva-s"))}>CURVA S JSON</button>
+          <button className="action-btn btn-dark" onClick={() => setRefreshKey(v => v + 1)}>ATUALIZAR</button>
         </div>
 
-        {/* ── PROGRESS BARS (Physical + Financial + Timeline) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { label: "Progresso Físico", value: pctFisico, color: "#38bdf8", gradient: "from-[#0284c7] to-[#38bdf8]" },
-            { label: "Progresso Financeiro", value: pctFin, color: "#10b981", gradient: "from-[#065f46] to-[#10b981]" },
-            { label: "Linha do Tempo", value: pctTempo, color: pctFisico >= pctTempo ? "#10b981" : "#ef4444", gradient: pctFisico >= pctTempo ? "from-[#065f46] to-[#10b981]" : "from-[#7f1d1d] to-[#ef4444]" },
-          ].map(bar => (
-            <div key={bar.label} className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">{bar.label}</span>
-                <span className="text-lg font-mono font-bold" style={{ color: bar.color }}>{bar.value.toFixed(1)}%</span>
-              </div>
-              <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden border border-[rgba(255,255,255,0.05)]">
-                <div className={`h-full rounded-full bg-gradient-to-r ${bar.gradient} transition-all duration-1000 ease-out`} style={{ width: `${Math.min(bar.value, 100)}%` }} />
-              </div>
-            </div>
-          ))}
+        <div className="kpi-strip">
+          <div className="kpi-cell"><span className="kpi-label">NS Totais</span><span className="kpi-value">{formatInt(dashboard?.n_total ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Em Execucao</span><span className="kpi-value warn">{formatInt(dashboard?.n_execucao ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Fisico</span><span className="kpi-value">{formatPercent(dashboard?.pct_fisico ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">% Financeiro</span><span className="kpi-value">{formatPercent(dashboard?.pct_financeiro ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">m/dia</span><span className="kpi-value">{formatMeters(dashboard?.m_por_dia ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">RDOs</span><span className="kpi-value">{formatInt(dashboard?.rdos ?? 0)}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Curva Prevista</span><span className="kpi-value">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
+          <div className="kpi-cell"><span className="kpi-label">Curva Realizada</span><span className="kpi-value">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
         </div>
 
-        {/* ── EARNED VALUE PANEL ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">SPI (Schedule)</div>
-            <div className={`text-2xl font-mono font-bold ${spi >= 0.95 ? 'text-emerald-400' : spi >= 0.8 ? 'text-[#fcd34d]' : 'text-rose-400'}`}>{spi.toFixed(3)}</div>
-            <div className="text-[9px] text-[var(--text-muted)] mt-1">{spi >= 1 ? "Adiantado" : spi >= 0.95 ? "No prazo" : "Atrasado"}</div>
-          </div>
-          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">CPI (Cost)</div>
-            <div className={`text-2xl font-mono font-bold ${cpi >= 0.95 ? 'text-emerald-400' : cpi >= 0.8 ? 'text-[#fcd34d]' : 'text-rose-400'}`}>{cpi.toFixed(3)}</div>
-            <div className="text-[9px] text-[var(--text-muted)] mt-1">{cpi >= 1 ? "Eficiente" : cpi >= 0.9 ? "Aceitável" : "Acima do custo"}</div>
-          </div>
-          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">Produtividade</div>
-            <div className="text-2xl font-mono font-bold text-[#38bdf8]">{mDia.toFixed(1)}</div>
-            <div className="text-[9px] text-[var(--text-muted)] mt-1">metros/dia</div>
-          </div>
-          <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-            <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-1">ETC (Dias p/ Fim)</div>
-            <div className={`text-2xl font-mono font-bold ${diasProjetados <= diasTotal - diasDecorridos ? 'text-emerald-400' : 'text-rose-400'}`}>{formatInt(diasProjetados)}</div>
-            <div className="text-[9px] text-[var(--text-muted)] mt-1">{formatMeters(extRestante)} restantes</div>
-          </div>
-        </div>
-
-        {/* ── OPERATIONAL STATUS BOARD ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Motor NS", status: health?.ok ? "ONLINE" : "OFFLINE", ok: !!health?.ok },
-            { label: "Pipeline", status: latestJob?.status === "concluido" ? "PRONTO" : "AGUARDANDO", ok: latestJob?.status === "concluido" },
-            { label: "Cronograma", status: cronograma ? "CARREGADO" : "VAZIO", ok: !!cronograma },
-            { label: "GeoJSON", status: geoJson && geoJson.features.length > 0 ? `${geoJson.features.length} feat.` : "VAZIO", ok: !!(geoJson && geoJson.features.length > 0) },
-          ].map(s => (
-            <div key={s.label} className="bg-[#05080f] p-3 rounded-lg border border-[var(--border-light)] flex items-center gap-3">
-              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${s.ok ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.7)]'} animate-pulse`} />
-              <div>
-                <div className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-widest">{s.label}</div>
-                <div className={`text-xs font-mono font-bold ${s.ok ? 'text-emerald-400' : 'text-rose-400'}`}>{s.status}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ── CRONOGRAMA INFO BAR ── */}
         {cronograma && (
-          <div className="sys-msg msg-info bg-[#38bdf8]/5">
-             <div className="flex gap-4 items-center flex-wrap w-full text-[11px] font-mono">
-               <div><span className="opacity-50 mr-1 text-white">Proj:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.projeto)}</strong></div>
-               <div><span className="opacity-50 mr-1 text-white">Emp:</span> <strong className="text-[#38bdf8]">{cleanText(cronograma.empresa)}</strong></div>
-               <div><span className="opacity-50 mr-1 text-white">Período:</span> <strong className="text-[#38bdf8]">{formatDate(cronograma.data_inicio)} — {formatDate(cronograma.data_fim)}</strong></div>
-               <div className="ml-auto"><span className="opacity-50 mr-1 text-white">TOTAL:</span> <strong className="text-emerald-400">{formatInt(cronograma.duracao_total_dias)} DIAS</strong></div>
-             </div>
+          <div className="resumo-box">
+            <strong>Projeto:</strong> {cleanText(cronograma.projeto)} | <strong>Empresa:</strong> {cleanText(cronograma.empresa)} | <strong>Inicio:</strong> {formatDate(cronograma.data_inicio)} | <strong>Fim:</strong> {formatDate(cronograma.data_fim)} | <strong>Duracao:</strong> {formatInt(cronograma.duracao_total_dias)} dias
           </div>
         )}
 
-        {/* ── FINANCIAL SNAPSHOT ── */}
-        <div className="p-panel border-t-2 border-t-[#10b981]">
-          <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Snapshot Financeiro</h3>
-          <div className="kpi-board">
-            <div className="kpi-card"><div className="kpi-label">Valor Liberado</div><div className="kpi-value text-emerald-400">{formatCurrency(totalLiberado)}</div></div>
-            <div className="kpi-card"><div className="kpi-label">Custo Realizado</div><div className="kpi-value text-rose-400">{formatCurrency(custoRdo)}</div></div>
-            <div className="kpi-card"><div className="kpi-label">Saldo</div><div className="kpi-value" style={{ color: saldo >= 0 ? "#34d399" : "#f87171" }}>{formatCurrency(saldo)}</div></div>
-            <div className="kpi-card"><div className="kpi-label">Burn Rate/Dia</div><div className="kpi-value text-[#f59e0b]">{formatCurrency(burnRate)}</div></div>
-          </div>
-        </div>
-
-        {/* ── QUICK ACTIONS ── */}
-        <div className="action-row">
-          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">MEDIR MACRO</a>
-          <a className="btn btn-outline" href={nativeUrl("/rdo")} target="_blank" rel="noreferrer">RDO NATIVO</a>
-          <a className="btn btn-outline" href={apiUrl("/api/cronograma")} target="_blank" rel="noreferrer">CRONOGRAMA JSON</a>
-          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">CURVA S</a>
-          <button className="btn btn-primary ml-auto" onClick={() => setRefreshKey(v => v + 1)}>SYNC DADOS</button>
-        </div>
-
-        {/* ── NUCLEOS GRID ── */}
-        <div>
-          <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4">Frentes de Serviço (Gantt Visual)</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="two-col">
+          <div>
+            <div className="section-title">Cronograma por Nucleo</div>
             {visibleNuclei.length ? visibleNuclei.map(n => {
               const phase = currentPhase(n);
-              const nStart = new Date(`${n.inicio}T12:00:00`).getTime();
-              const nEnd = new Date(`${n.fim}T12:00:00`).getTime();
-              const now = Date.now();
-              const ganttPct = nEnd > nStart ? Math.min(100, Math.max(0, ((now - nStart) / (nEnd - nStart)) * 100)) : 0;
-              const isComplete = now > nEnd;
               return (
-                <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)] hover:border-[#38bdf8]/40 transition-all shadow-md group" key={n.nome} onClick={() => setSelectedNucleo(n.nome)}>
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-sm text-white group-hover:text-[#38bdf8] transition-colors line-clamp-2 max-w-[75%] cursor-pointer">{cleanText(n.nome)}</h4>
-                    <span className={`text-[8px] px-1.5 py-0.5 rounded uppercase font-bold border ${isComplete ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-[#bae6fd] bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)]'}`}>{isComplete ? "OK" : cleanText(phase?.nome ?? "-")}</span>
-                  </div>
-                  {/* Gantt micro-bar */}
-                  <div className="w-full h-1.5 bg-[#0d1117] rounded-full overflow-hidden my-3 border border-[rgba(255,255,255,0.03)]">
-                    <div className={`h-full rounded-full transition-all duration-700 ${isComplete ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#0284c7] to-[#38bdf8]'}`} style={{ width: `${ganttPct}%` }} />
-                  </div>
-                  <div className="text-[10px] text-[var(--text-muted)] flex flex-col gap-1 font-mono">
-                    <span>{formatDate(n.inicio)} → {formatDate(n.fim)}</span>
-                    <div className="flex justify-between items-center mt-1 pt-1.5 border-t border-[var(--border-light)]">
-                      <span className="text-emerald-400">{formatMeters(n.extensao_m)}</span>
-                      <span>{formatInt(n.n_trechos)} T</span>
-                      <span>{formatInt(n.equipes)} EQ</span>
-                      <span className="text-[#f59e0b]">{formatInt(n.duracao_dias)}d</span>
-                    </div>
-                  </div>
+                <div className="nucleo-card" key={n.nome}>
+                  <h4>{cleanText(n.nome)} <span className={toneClass(phase?.id ?? "")}>{cleanText(phase?.nome ?? "-")}</span></h4>
+                  <div className="meta">{formatDate(n.inicio)} ate {formatDate(n.fim)} | {formatMeters(n.extensao_m)} | {formatInt(n.n_trechos)} trechos | {formatInt(n.equipes)} equipes</div>
                 </div>
               );
-            }) : <div className="col-span-full p-8 text-center text-[var(--text-muted)] border border-dashed border-[var(--border-light)] rounded-xl">O sistema não carregou frentes de serviço.</div>}
+            }) : <div className="empty">Nenhum nucleo disponivel.</div>}
           </div>
-        </div>
-      </div>
-    );
-  }
 
-  // ── MÓDULO: SEGURANÇA DDS (NR-18 / Inspeções) ──
-  function renderSeguranca() {
-    const accidentHistory = [0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0];
+          <div>
+            <div className="section-title">RDO — Criar e Listar</div>
+            <form onSubmit={handleCreateRdo}>
+              <div className="form-row">
+                <div className="form-field"><label>Data</label><input type="date" value={rdoForm.data} onChange={e => setRdoForm(c => ({ ...c, data: e.target.value }))} /></div>
+                <div className="form-field"><label>Nucleo</label><input type="text" value={rdoForm.nucleo} onChange={e => setRdoForm(c => ({ ...c, nucleo: e.target.value }))} /></div>
+                <div className="form-field"><label>Responsavel</label><input type="text" value={rdoForm.responsavel} onChange={e => setRdoForm(c => ({ ...c, responsavel: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Servico</label><input type="text" value={rdoForm.servico} onChange={e => setRdoForm(c => ({ ...c, servico: e.target.value }))} /></div>
+                <div className="form-field"><label>Qtd</label><input type="number" step="0.01" value={rdoForm.quantidade} onChange={e => setRdoForm(c => ({ ...c, quantidade: e.target.value }))} /></div>
+                <div className="form-field"><label>DN</label><input type="number" value={rdoForm.dnMm} onChange={e => setRdoForm(c => ({ ...c, dnMm: e.target.value }))} /></div>
+              </div>
+              <div className="form-row">
+                <div className="form-field"><label>Clima manha</label><input type="text" value={rdoForm.climaManha} onChange={e => setRdoForm(c => ({ ...c, climaManha: e.target.value }))} /></div>
+                <div className="form-field"><label>Clima tarde</label><input type="text" value={rdoForm.climaTarde} onChange={e => setRdoForm(c => ({ ...c, climaTarde: e.target.value }))} /></div>
+              </div>
+              <div className="action-row">
+                <button className="action-btn btn-green" type="submit">SALVAR RDO</button>
+                <button className="action-btn btn-dark" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/rdo"))}>MODULO RDO</button>
+              </div>
+              {rdoMessage && <div className={rdoMessage.includes("Falha") ? "msg msg-err" : "msg msg-ok"}>{rdoMessage}</div>}
+            </form>
 
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data, 1); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
-    };
-
-    const dds = [
-      { id: 1, tema: "Trabalho em Espacos Confinados", data: "05/04", presentes: 12, status: "realizado" },
-      { id: 2, tema: "Protecao contra Queda", data: "04/04", presentes: 14, status: "realizado" },
-      { id: 3, tema: "Manuseio de Materiais Pesados", data: "03/04", presentes: 11, status: "realizado" },
-      { id: 4, tema: "Sinalizacao de Vias", data: "06/04", presentes: 0, status: "pendente" },
-      { id: 5, tema: "Primeiros Socorros", data: "07/04", presentes: 0, status: "agendado" },
-    ];
-
-    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-      realizado: { label: "Realizado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-      pendente: { label: "Pendente", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
-      agendado: { label: "Agendado", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#ef4444]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Seguranca DDS</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#ef4444]/15 text-[#ef4444] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-            <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#ef4444]/15 border border-[#ef4444]/30 text-[#ef4444] hover:bg-[#ef4444]/25 transition-all font-mono uppercase tracking-wider">+ Novo DDS</button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "Dias Sem Acidente", value: "47", color: "#10b981", spark: null as number[] | null, trend: "RECORD" },
-              { label: "DDS Realizados", value: "23", color: "#38bdf8", spark: null as number[] | null, trend: "+3/sem" },
-              { label: "Taxa Presenca", value: "92%", color: "#8b5cf6", spark: null as number[] | null, trend: "+2%" },
-              { label: "Incidentes/Mes", value: "0", color: "#10b981", spark: accidentHistory, trend: "ZERO" },
-              { label: "EPIs Conformes", value: "98%", color: "#10b981", spark: null as number[] | null, trend: "+1%" },
-              { label: "Treinamentos", value: "4/4", color: "#38bdf8", spark: null as number[] | null, trend: "100%" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#ef4444]/40 transition-all cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className={`text-[9px] font-mono ${kpi.trend === "RECORD" || kpi.trend === "ZERO" ? "text-emerald-400" : "text-[var(--text-muted)]"}`}>{kpi.trend}</span>
+            <div className="section-title" style={{ marginTop: 14 }}>RDOs Existentes ({formatInt(rdoList.items.length)})</div>
+            {latestRdos.length ? latestRdos.map(rdo => (
+              <div className="rdo-card" key={rdo.id}>
+                <div className="rdo-head">
+                  <strong>RDO {rdo.numero ?? rdo.id} - {formatDate(rdo.data)} - {cleanText(rdo.nucleo)}</strong>
+                  <span className={toneClass(rdo.status)}>{cleanText(rdo.status)}</span>
                 </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                <div className="rdo-meta">Resp: {cleanText(rdo.responsavel ?? "-")} | Custo: {formatCurrency(asNumber(rdo.total_custo))} | Apontam: {formatInt(rdo.apontamentos?.length ?? 0)}</div>
+                <div className="action-row">
+                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">PDF</a>
+                  {cleanText(rdo.status) !== "FECHADO" && <button className="action-btn btn-red" onClick={() => handleCloseRdo(rdo.id)}>FECHAR</button>}
+                  <a className="action-btn btn-dark" href={apiUrl(`/api/rdo/${rdo.data}?nucleo=${encodeURIComponent(rdo.nucleo)}`)} target="_blank" rel="noreferrer">JSON</a>
                 </div>
               </div>
-            ))}
+            )) : <div className="empty">Sem RDOs ainda.</div>}
           </div>
         </div>
-        <div className="p-panel">
-          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Registro DDS</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{dds.length} ITENS</span></div>
-          <table className="w-full text-[12px]">
-            <thead><tr className="border-b border-[var(--border-light)]">
-              {["Tema", "Data", "Presentes", "Status"].map((h, i) => (<th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
-            </tr></thead>
-            <tbody>{dds.map((d) => {
-              const s = sc[d.status] || sc.pendente;
-              return (<tr key={d.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
-                <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}></span><span className="text-[var(--text-primary)]">{d.tema}</span></div></td>
-                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{d.data}</td>
-                <td className="py-3 px-3 text-center font-mono text-[11px] font-bold text-[#38bdf8]">{d.presentes || "-"}</td>
-                <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${s.bg} ${s.text}`}>{s.label}</span></td>
-              </tr>);
-            })}</tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
-
-  // ── MÓDULO: CASH FLOW (Previsão Financeira) ──
-  function renderCashFlow() {
-    const receitas = [80, 120, 95, 140, 110, 150, 130, 160, 145, 170, 155, 180];
-    const despesas = [90, 100, 110, 105, 120, 115, 125, 130, 128, 135, 140, 145];
-    const saldo = receitas.map((r, i) => r - despesas[i]);
-
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#38bdf8]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Cash Flow</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#38bdf8]/15 text-[#38bdf8] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "Receita Total", value: "R$ 1.63M", color: "#10b981", spark: receitas, trend: "+8%" },
-              { label: "Despesa Total", value: "R$ 1.44M", color: "#ef4444", spark: despesas, trend: "+3%" },
-              { label: "Saldo Liquido", value: "R$ 190k", color: "#38bdf8", spark: saldo, trend: "+35k" },
-              { label: "Margem", value: "11.6%", color: "#8b5cf6", spark: null as number[] | null, trend: "+2.1%" },
-              { label: "Medicoes Aprovadas", value: "8/12", color: "#f59e0b", spark: null as number[] | null, trend: "67%" },
-              { label: "A Receber", value: "R$ 245k", color: "#10b981", spark: null as number[] | null, trend: "30 dias" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#38bdf8]/40 transition-all cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className="text-[9px] font-mono text-emerald-400">{kpi.trend}</span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="p-panel">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Receitas vs Despesas — 12 Meses</h3>
-          <svg viewBox="0 0 500 200" className="w-full" preserveAspectRatio="xMidYMid meet">
-            {[0, 50, 100, 150, 200].map((v, i) => {
-              const y = 170 - (v / 200) * 150;
-              return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}k</text></g>);
-            })}
-            {receitas.map((_, i) => {
-              const x = 50 + (i / (receitas.length - 1)) * 430;
-              const w = 14;
-              const hr = 170 - (receitas[i] / 200) * 150;
-              const hd = 170 - (despesas[i] / 200) * 150;
-              return (<g key={i}>
-                <rect x={x - w} y={hr} width={w} height={170 - hr} fill="#10b981" opacity="0.6" rx="2" />
-                <rect x={x} y={hd} width={w} height={170 - hd} fill="#ef4444" opacity="0.4" rx="2" />
-                <text x={x} y={185} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">M{i + 1}</text>
-              </g>);
-            })}
-          </svg>
-          <div className="flex gap-4 justify-center mt-2">
-            <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono"><span className="w-2 h-2 rounded-sm bg-emerald-500/60"></span>Receitas</span>
-            <span className="flex items-center gap-1 text-[10px] text-rose-400 font-mono"><span className="w-2 h-2 rounded-sm bg-rose-500/40"></span>Despesas</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── MÓDULO: ANÁLISE DE ATRASOS (Schedule Delay Analysis) ──
-  function renderAtrasos() {
-    const delayHistory = [5, 8, 6, 12, 9, 15, 11, 8, 14, 10, 7, 12];
-
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
-    };
-
-    const atrasos = [
-      { id: 1, tarefa: "Pavimentacao Rua das Flores", causa: "Chuva forte 3 dias", dias: 5, impacto: "R$ 15.000", gravidade: "alta" },
-      { id: 2, tarefa: "Ligacao Domiciliar Lote 8-14", causa: "Material em transito", dias: 3, impacto: "R$ 8.200", gravidade: "media" },
-      { id: 3, tarefa: "PV-22 Execucao poco", causa: "Solo rochoso imprevisto", dias: 7, impacto: "R$ 22.000", gravidade: "critica" },
-      { id: 4, tarefa: "Teste hidraulico trecho 5", causa: "Equipe realocada", dias: 2, impacto: "R$ 4.500", gravidade: "baixa" },
-      { id: 5, tarefa: "CBUQ Reposicao Rua B", causa: "Falta de usina asfalto", dias: 4, impacto: "R$ 18.000", gravidade: "alta" },
-    ];
-
-    const gravConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-      critica: { label: "Critica", bg: "bg-rose-500/15", text: "text-rose-400", dot: "bg-rose-400" },
-      alta: { label: "Alta", bg: "bg-orange-500/15", text: "text-orange-400", dot: "bg-orange-400" },
-      media: { label: "Media", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
-      baixa: { label: "Baixa", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#f59e0b]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Analise de Atrasos</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#f59e0b]/15 text-[#f59e0b] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "Dias Atrasados", value: "12", color: "#ef4444", spark: delayHistory, trend: "+3" },
-              { label: "Tarefas Afetadas", value: "5", color: "#f59e0b", spark: null as number[] | null, trend: "+1" },
-              { label: "Impacto Total", value: "R$ 67.7k", color: "#ef4444", spark: null as number[] | null, trend: "+22k" },
-              { label: "Causa #1", value: "Clima", color: "#38bdf8", spark: null as number[] | null, trend: "38%" },
-              { label: "Recuperaveis", value: "3/5", color: "#10b981", spark: null as number[] | null, trend: "60%" },
-              { label: "Criticos", value: "1", color: "#ef4444", spark: null as number[] | null, trend: "ALERTA" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#f59e0b]/40 transition-all cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className="text-[9px] font-mono text-[var(--text-muted)]">{kpi.trend}</span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          <div className="lg:col-span-3 p-panel">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Timeline de Atrasos Acumulados</h3>
-            <svg viewBox="0 0 500 160" className="w-full" preserveAspectRatio="xMidYMid meet">
-              {[0, 5, 10, 15].map((v, i) => {
-                const y = 140 - (v / 15) * 120;
-                return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}d</text></g>);
-              })}
-              {(() => {
-                const pts = delayHistory.map((v, i) => ({ x: 50 + (i / (delayHistory.length - 1)) * 430, y: 140 - (v / 15) * 120 }));
-                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
-                const area = line + ` ${pts[pts.length-1].x},140 ${pts[0].x},140`;
-                return (<g>
-                  <defs><linearGradient id="delayGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" /><stop offset="100%" stopColor="#f59e0b" stopOpacity="0.02" /></linearGradient></defs>
-                  <polygon points={area} fill="url(#delayGrad)" />
-                  <polyline points={line} fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" />
-                  {pts.map((p, i) => (<circle key={i} cx={p.x} cy={p.y} r="3" fill="#f59e0b" stroke="var(--bg-card)" strokeWidth="1.5" />))}
-                </g>);
-              })()}
-              {delayHistory.map((_, i) => (<text key={i} x={50 + (i / (delayHistory.length - 1)) * 430} y={155} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">S{i + 1}</text>))}
-            </svg>
-          </div>
-          <div className="lg:col-span-2 p-panel">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Causas Raiz</h3>
-            <div className="space-y-3">
-              {[
-                { nome: "Condicoes Climaticas", valor: 38, cor: "#38bdf8" },
-                { nome: "Falta Material", valor: 28, cor: "#ef4444" },
-                { nome: "Solo Imprevisto", valor: 18, cor: "#f59e0b" },
-                { nome: "Falta Equipe", valor: 10, cor: "#8b5cf6" },
-                { nome: "Outros", valor: 6, cor: "#6b7280" },
-              ].map((c, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-center mb-1"><span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span><span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span></div>
-                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden"><div className="h-full rounded-full transition-all duration-700" style={{ width: `${c.valor * 2.6}%`, backgroundColor: c.cor, opacity: 0.8 }} /></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="p-panel">
-          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Registro de Atrasos</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{atrasos.length} ITENS</span></div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
-              <thead><tr className="border-b border-[var(--border-light)]">
-                {["Tarefa", "Causa", "Dias", "Impacto", "Gravidade"].map((h, i) => (<th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
-              </tr></thead>
-              <tbody>{atrasos.map((a) => {
-                const g = gravConfig[a.gravidade] || gravConfig.baixa;
-                return (<tr key={a.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
-                  <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${g.dot}`}></span><span className="text-[var(--text-primary)]">{a.tarefa}</span></div></td>
-                  <td className="py-3 px-3 text-center text-[var(--text-muted)] text-[11px]">{a.causa}</td>
-                  <td className="py-3 px-3 text-center font-mono font-bold text-[#f59e0b]">{a.dias}d</td>
-                  <td className="py-3 px-3 text-center font-mono text-rose-400 text-[11px]">{a.impacto}</td>
-                  <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${g.bg} ${g.text}`}>{g.label}</span></td>
-                </tr>);
-              })}</tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── MÓDULO: PUNCH LIST / PENDÊNCIAS ──
-  function renderPunchList() {
-    const punchCategories = [
-      {
-        cat: "Escavação & Vala", color: "#ef4444", priority: "ALTA",
-        items: [
-          { desc: "Recompor passeio Rua XV de Novembro", status: "pendente" },
-          { desc: "Escoramento faltante no PV-12", status: "pendente" },
-          { desc: "Liberação ART no trecho 08", status: "resolvido" },
-          { desc: "Solo contaminado trecho João Carlos", status: "pendente" },
-        ]
-      },
-      {
-        cat: "Montagem & Rede", color: "#f59e0b", priority: "MÉDIA",
-        items: [
-          { desc: "Teste hidrostático rede DN 150 — Lote 3", status: "pendente" },
-          { desc: "Substituir junta elástica PV-07/PV-08", status: "pendente" },
-          { desc: "Selagem do anel de borracha PV-15", status: "resolvido" },
-        ]
-      },
-      {
-        cat: "Reaterro & Compactação", color: "#8b5cf6", priority: "MÉDIA",
-        items: [
-          { desc: "Grau de compactação abaixo de 95% — trecho 04", status: "pendente" },
-          { desc: "Reaterro com material inadequado na Rua B", status: "pendente" },
-          { desc: "Ensaio Proctor enviado ao laboratório", status: "em_analise" },
-        ]
-      },
-      {
-        cat: "Pavimentação & Acabamento", color: "#38bdf8", priority: "BAIXA",
-        items: [
-          { desc: "Recomposição asfáltica Av. Principal", status: "pendente" },
-          { desc: "Pintura de tampa PV — padrão SABESP", status: "pendente" },
-          { desc: "Sinalização horizontal definitiva", status: "pendente" },
-          { desc: "Limpeza final da faixa de obra", status: "pendente" },
-        ]
-      },
-    ];
-    const totalItems = punchCategories.reduce((a, c) => a + c.items.length, 0);
-    const resolved = punchCategories.reduce((a, c) => a + c.items.filter(i => i.status === "resolvido").length, 0);
-    const pending = totalItems - resolved;
-    const pctResolvido = totalItems > 0 ? (resolved / totalItems) * 100 : 0;
-
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#f59e0b]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#f59e0b]/20 flex items-center justify-center text-[#fcd34d] border border-[#f59e0b]/50 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-              </span>
-              Punch List — Pendências de Obra
-              <span className="badge border-[#f59e0b]/30 text-[#fcd34d] bg-[#f59e0b]/10">FIELD OPS</span>
-            </h2>
-          </div>
-        </div>
-
-        {/* Summary KPIs */}
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Total Itens</div><div className="kpi-value">{formatInt(totalItems)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Pendentes</div><div className="kpi-value text-rose-400">{formatInt(pending)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Resolvidos</div><div className="kpi-value text-emerald-400">{formatInt(resolved)}</div></div>
-          <div className="kpi-card">
-            <div className="kpi-label">% Conclusão</div>
-            <div className="kpi-value text-[#38bdf8]">{pctResolvido.toFixed(0)}%</div>
-          </div>
-        </div>
-
-        {/* Progress bar */}
-        <div className="bg-[#05080f] p-4 rounded-xl border border-[var(--border-light)]">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">Progresso Geral do Punch List</span>
-            <span className="text-sm font-mono font-bold text-emerald-400">{resolved}/{totalItems}</span>
-          </div>
-          <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden border border-[rgba(255,255,255,0.05)]">
-            <div className="h-full rounded-full bg-gradient-to-r from-[#065f46] to-[#10b981] transition-all duration-1000" style={{ width: `${pctResolvido}%` }} />
-          </div>
-        </div>
-
-        {/* Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {punchCategories.map(cat => (
-            <div key={cat.cat} className="p-panel" style={{ borderTop: `2px solid ${cat.color}` }}>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-sm font-bold uppercase tracking-widest" style={{ color: cat.color }}>{cat.cat}</h3>
-                <span className={`text-[8px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${
-                  cat.priority === "ALTA" ? "bg-red-500/10 text-red-400 border border-red-500/20" :
-                  cat.priority === "MÉDIA" ? "bg-[#f59e0b]/10 text-[#fcd34d] border border-[#f59e0b]/20" :
-                  "bg-[#38bdf8]/10 text-[#38bdf8] border border-[#38bdf8]/20"
-                }`}>{cat.priority}</span>
-              </div>
-              <div className="space-y-2">
-                {cat.items.map((item, idx) => (
-                  <div key={idx} className={`flex items-center gap-3 p-3 rounded-lg border transition-all group ${
-                    item.status === "resolvido"
-                      ? "bg-emerald-500/5 border-emerald-500/15"
-                      : item.status === "em_analise"
-                      ? "bg-[#8b5cf6]/5 border-[#8b5cf6]/15"
-                      : "bg-[#05080f] border-[var(--border-light)] hover:border-[rgba(255,255,255,0.15)]"
-                  }`}>
-                    <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-[9px] font-bold shrink-0 ${
-                      item.status === "resolvido" ? "border-emerald-500 text-emerald-500 bg-emerald-500/10" :
-                      item.status === "em_analise" ? "border-[#8b5cf6] text-[#8b5cf6] bg-[#8b5cf6]/10" :
-                      "border-[#475569] text-transparent"
-                    }`}>{item.status === "resolvido" ? "✓" : item.status === "em_analise" ? "…" : ""}</span>
-                    <span className={`text-xs flex-1 ${item.status === "resolvido" ? "text-[#6b7280] line-through" : "text-[var(--text-muted)] group-hover:text-white transition-colors"}`}>{item.desc}</span>
-                    <span className={`text-[8px] px-1.5 py-0.5 rounded uppercase font-bold tracking-widest ${
-                      item.status === "resolvido" ? "text-emerald-400 bg-emerald-500/10" :
-                      item.status === "em_analise" ? "text-[#a78bfa] bg-[#8b5cf6]/10" :
-                      "text-rose-400 bg-rose-500/10"
-                    }`}>{item.status === "em_analise" ? "ANÁLISE" : item.status === "resolvido" ? "OK" : "PENDENTE"}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      </>
     );
   }
 
   // ── Tab content dispatch ──
-  async function dispararFluxoWhats(tarefa: any) {
-     const assignedName = (tarefa.assign || "").toLowerCase();
-     const membro = equipe.find(m => m.nome.toLowerCase() === assignedName || assignedName.includes(m.nome.toLowerCase()));
-     
-     let n = '';
-     if (membro && membro.celular) {
-        n = membro.celular;
-        console.log(`Auto-assigned to ${membro.nome}: ${n}`);
-     } else {
-        n = prompt(`Atenção: O funcionário '${tarefa.assign}' não está na GESTÃO DE EQUIPES.\nPor favor, digite o número de WhatsApp dele agora: (Ex: 5511999999999)`);
-     }
-     
-     if (!n) return;
-
-     try {
-       const mensagemPronta = `⚠️ *NOVA TAREFA DESIGNADA* ⚠️\n\nFala ${tarefa.assign || membro?.nome},\nVocê tem uma nova tarefa pendente no Fluxograma de Gestão de Obra do ConstruDataMax:\n\n📌 *Tarefa:* ${tarefa.task}\n🆔 *Etapa:* ${tarefa.id}\n\nResponda com '*OK*' nesta exata conversa quando concluir o serviço.`;
-       
-       const res = await fetch(`http://localhost:8090/api/send`, {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({
-            number: n,
-            taskId: tarefa.id,
-            text: mensagemPronta
-         })
-       });
-       if(res.ok) alert(`✅ Mensagem disparada para ${n} com sucesso!`);
-       else alert("❌ Erro ao comunicar com o Motor WhatsApp Node.js.");
-     } catch(e) {
-       console.error(e);
-       alert("🚨 Motor WhatsApp local está desligado! Ligue-o usando 'npm start' na pasta whatsapp-motor.");
-     }
-  }
-
-  function renderFluxograma() {
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#38bdf8]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#38bdf8]/20 flex items-center justify-center text-[#38bdf8] border border-[#38bdf8]/50 shadow-[0_0_15px_rgba(56,189,248,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
-              </span>
-              Fluxograma Gestão de Obra
-              <span className="badge border-[#38bdf8]/30 text-[#38bdf8] bg-[#38bdf8]/10">STANDARD OPS</span>
-            </h2>
-          </div>
-          <p className="text-[var(--text-muted)] text-xs mb-6 max-w-2xl">Visualização interativa das 20 Macro-Fases de Operação ponta a ponta importadas do Fluxograma Diretivo.</p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4">
-          {FLUXOGRAMA_DATA.filter(t => t.id.endsWith(".0")).map(macro => {
-            const subTasks = FLUXOGRAMA_DATA.filter(t => t.id.startsWith(macro.id.split(".")[0] + ".") && !t.id.endsWith(".0"));
-            return (
-              <div key={macro.id} className="p-panel !p-4 border-l-4 border-l-[#38bdf8]">
-                <div className="flex justify-between items-center mb-3 border-b border-[var(--border-light)] pb-2">
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-white">
-                    <span className="text-[#38bdf8] mr-2">{macro.id}</span>
-                    {macro.task}
-                  </h3>
-                  <span className="text-[10px] text-[var(--text-muted)] font-mono">{subTasks.length} TAREFAS</span>
-                </div>
-                <div className="space-y-2">
-                  {subTasks.map(child => {
-                    // @ts-ignore
-                    const isDone = workflowStatus[child.id] === 'DONE';
-                    return (
-                    <div key={child.id} className={cn(
-                      "flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border transition-colors group",
-                      isDone ? "border-[#10b981] bg-[#10b981]/10" : "border-[var(--border-light)] bg-[#05080f] hover:border-[#38bdf8]/50"
-                    )}>
-                      <div className={cn("flex-1 flex gap-3 text-xs transition-colors", isDone ? "text-[#10b981]" : "text-[var(--text-muted)] group-hover:text-white")}>
-                        <span className={isDone ? "text-[#10b981] font-bold shrink-0" : "text-[#38bdf8] font-bold shrink-0"}>
-                          {isDone ? '✅ ' : ''}{child.id}
-                        </span>
-                        <span className={isDone ? "line-through opacity-70" : ""}>{child.task}</span>
-                      </div>
-                      <div className="flex items-center gap-3 shrink-0">
-                        {!isDone && (
-                          <button 
-                               onClick={() => dispararFluxoWhats(child)} 
-                               className="btn btn-primary !py-0.5 !px-2 !text-[9px] bg-[#10b981] hover:bg-[#059669] text-white border-none shadow-[0_0_8px_rgba(16,185,129,0.4)]"
-                          >
-                               📱 AVISAR
-                          </button>
-                        )}
-                        {child.assign && (
-                           <span className="px-2 py-0.5 rounded text-[9px] uppercase font-bold text-white bg-[#0f172a] border border-[var(--border-light)]">
-                             👤 {child.assign}
-                           </span>
-                        )}
-                        {child.obs && (
-                           <span className="px-2 py-0.5 rounded text-[9px] uppercase font-bold text-[#f59e0b] bg-[#f59e0b]/10 border border-[#f59e0b]/20 flex items-center gap-1">
-                             {child.obs}
-                           </span>
-                        )}
-                      </div>
-                    </div>
-                    );
-                  })}
-                  {subTasks.length === 0 && <div className="p-2 text-xs text-[var(--text-muted)] italic">Nenhuma sub-tarefa detalhada.</div>}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  function renderEquipes() {
-    const CARGOS = ["Líder de Equipe","Encarregado","Engenheiro","Técnico de Segurança","Apontador","Pedreiro","Encanador","Ajudante","Operador de Máquina","Motorista","Topógrafo","Almoxarife","Mestre de Obras","Coordenador","Diretor"];
-    const EQUIPES = ["Rede Esgoto","Rede Água","Ligação Domiciliar","Pavimentação","Topografia","Administração","Segurança","Apoio Geral"];
-    
-    function adicionarMembro() {
-      if (!teamForm.nome || !teamForm.celular) return alert("Preencha ao menos o Nome e o WhatsApp.");
-      const novo: TeamMember = { id: Date.now().toString(), ...teamForm };
-      salvarEquipe([...equipe, novo]);
-      setTeamForm({ nome: "", celular: "", cargo: "Ajudante", equipeNome: "Rede Esgoto", projeto: "", status: "Ativo" });
-      setShowTeamForm(false);
-    }
-    
-    function removerMembro(id: string) {
-       if(confirm("Tem certeza que deseja remover este contato da operação?")) salvarEquipe(equipe.filter(m => m.id !== id));
-    }
-
-    function toggleStatus(id: string) {
-      salvarEquipe(equipe.map(m => m.id === id ? { ...m, status: m.status === "Ativo" ? "Inativo" : "Ativo" } : m));
-    }
-
-    const filtered = teamFilter ? equipe.filter(m => m.equipeNome === teamFilter || m.cargo === teamFilter) : equipe;
-    const ativos = equipe.filter(m => m.status === "Ativo").length;
-    const porEquipe = EQUIPES.map(eq => ({ nome: eq, qtd: equipe.filter(m => m.equipeNome === eq && m.status === "Ativo").length })).filter(e => e.qtd > 0);
-    
-    return (
-      <div className="space-y-6">
-        {/* HEADER */}
-        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
-          <div className="panel-header flex justify-between items-center">
-            <h2 className="panel-title">
-               <span className="w-8 h-8 rounded bg-[#8b5cf6]/20 flex items-center justify-center text-[#a78bfa] border border-[#8b5cf6]/50 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-               </span>
-               Gestão de Equipes — Efetivo de Campo
-               <span className="badge border-[#8b5cf6]/30 text-[#8b5cf6] bg-[#8b5cf6]/10">RH & DISPATCH</span>
-            </h2>
-            <button onClick={() => setShowTeamForm(!showTeamForm)} className="btn btn-primary bg-[#8b5cf6] hover:bg-[#7c3aed] text-white">
-              {showTeamForm ? "✕ CANCELAR" : "+ CADASTRAR FUNCIONÁRIO"}
-            </button>
-          </div>
-          <p className="text-[var(--text-muted)] text-xs mb-4 max-w-3xl">
-            Cadastre cada profissional da obra. O WhatsApp será utilizado automaticamente ao disparar tarefas no Fluxograma.
-            Quando um diretor/coordenador atribuir uma atividade ao "Bruno", o sistema busca o celular dele aqui e manda a mensagem direto.
-          </p>
-        </div>
-
-        {/* KPIs Efetivo */}
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Total Cadastrados</div><div className="kpi-value text-[#a78bfa]">{equipe.length}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Ativos em Campo</div><div className="kpi-value text-emerald-400">{ativos}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Inativos / Afastados</div><div className="kpi-value text-rose-400">{equipe.length - ativos}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Equipes Distintas</div><div className="kpi-value text-[#38bdf8]">{porEquipe.length}</div></div>
-        </div>
-
-        {/* Mini resumo por equipe */}
-        {porEquipe.length > 0 && (
-          <div className="flex gap-2 flex-wrap">
-            {porEquipe.map(eq => (
-              <button key={eq.nome} onClick={() => setTeamFilter(teamFilter === eq.nome ? "" : eq.nome)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all ${teamFilter === eq.nome ? "bg-[#8b5cf6]/20 border-[#8b5cf6]/50 text-[#a78bfa]" : "bg-[#05080f] border-[var(--border-light)] text-[var(--text-muted)] hover:text-white"}`}>
-                {eq.nome} ({eq.qtd})
-              </button>
-            ))}
-            {teamFilter && <button onClick={() => setTeamFilter("")} className="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase text-rose-400 border border-rose-500/20 bg-rose-500/5">✕ Limpar Filtro</button>}
-          </div>
-        )}
-
-        {/* FORMULÁRIO DE CADASTRO INLINE */}
-        {showTeamForm && (
-          <div className="p-panel border-t-2 border-t-emerald-500 animate-in">
-            <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Novo Funcionário</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="form-field">
-                <label>Nome Completo *</label>
-                <input type="text" placeholder="Ex: Bruno Silva" value={teamForm.nome} onChange={e => setTeamForm({...teamForm, nome: e.target.value})} />
-              </div>
-              <div className="form-field">
-                <label>WhatsApp (com DDI+DDD) *</label>
-                <input type="text" placeholder="5511999999999" value={teamForm.celular} onChange={e => setTeamForm({...teamForm, celular: e.target.value})} />
-              </div>
-              <div className="form-field">
-                <label>Cargo / Função</label>
-                <select value={teamForm.cargo} onChange={e => setTeamForm({...teamForm, cargo: e.target.value})}>
-                  {CARGOS.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
-              <div className="form-field">
-                <label>Equipe</label>
-                <select value={teamForm.equipeNome} onChange={e => setTeamForm({...teamForm, equipeNome: e.target.value})}>
-                  {EQUIPES.map(eq => <option key={eq} value={eq}>{eq}</option>)}
-                </select>
-              </div>
-              <div className="form-field">
-                <label>Projeto / Frente</label>
-                <input type="text" placeholder="Ex: Núcleo São Manoel" value={teamForm.projeto} onChange={e => setTeamForm({...teamForm, projeto: e.target.value})} />
-              </div>
-              <div className="form-field flex items-end">
-                <button onClick={adicionarMembro} className="btn btn-primary bg-emerald-600 hover:bg-emerald-500 text-white w-full" style={{height:'42px'}}>
-                  ✓ SALVAR FUNCIONÁRIO
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TABELA */}
-        <div className="overflow-x-auto border border-[var(--border-light)] rounded-xl bg-[#05080f]">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Funcionário</th>
-                <th>Cargo</th>
-                <th>Equipe</th>
-                <th>Projeto</th>
-                <th>WhatsApp</th>
-                <th className="text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(m => (
-                <tr key={m.id} className={m.status !== "Ativo" ? "opacity-40" : ""}>
-                  <td>
-                    <button onClick={() => toggleStatus(m.id)} className={`w-3 h-3 rounded-full ${m.status === "Ativo" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]" : "bg-red-500"}`} title={m.status} />
-                  </td>
-                  <td className="font-bold text-white">{m.nome}</td>
-                  <td><span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[var(--border-light)] text-[var(--text-muted)]">{m.cargo}</span></td>
-                  <td className="text-[#a78bfa] font-medium">{m.equipeNome || "-"}</td>
-                  <td className="text-[var(--text-muted)]">{m.projeto || "-"}</td>
-                  <td className="font-mono text-[#38bdf8]">{m.celular}</td>
-                  <td className="text-right">
-                     <button onClick={() => removerMembro(m.id)} className="text-rose-400 hover:text-rose-300 text-[10px] uppercase font-bold tracking-wider">REMOVER</button>
-                  </td>
-                </tr>
-              ))}
-              {filtered.length === 0 && (
-                <tr><td colSpan={7} className="text-center text-[var(--text-muted)] italic py-8">{teamFilter ? "Nenhum funcionário nesta equipe." : "Nenhum funcionário cadastrado. Clique em '+ CADASTRAR FUNCIONÁRIO' acima."}</td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
-
   function renderTabContent() {
     switch (activeTab) {
-      case "equipes":   return renderEquipes();
       case "processar": return renderProcessar();
-      case "gestao":    return renderGestao();
-      case "nucleos":   return renderNucleos();
-      case "log":       return renderLog();
-      case "bim":       return renderBim();
-      case "mapa":      return renderMapa();
-      case "rede":      return renderRede();
-      case "trechos":   return renderTrechos();
+      case "mapa": return renderMapa();
+      case "rede": return renderRede();
       case "hidraulica": return renderHidraulica();
-      case "lean":      return renderLean();
-      case "custos":    return renderCustos();
-      case "perdas":    return renderPerdas();
-      case "rdo":       return renderRdoPanel();
-      case "ia":        return renderIA();
-      case "seguranca": return renderSeguranca();
-      case "cashflow":  return renderCashFlow();
-      case "atrasos":   return renderAtrasos();
-      case "punchlist": return renderPunchList();
-      case "fluxograma": return renderFluxograma();
-      default:          return renderProcessar();
+      case "trechos": return renderTrechos();
+      case "custos": return renderCustos();
+      case "bim": return renderBim();
+      case "lean": return renderLean();
+      case "perdas": return renderPerdas();
+      case "ia": return renderIA();
+      case "nucleos": return renderNucleos();
+      case "log": return renderLog();
+      case "gestao": return renderGestao();
     }
-  }
-
-  function renderRdoPanel() {
-    const rdoHistory = [3, 4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4];
-
-    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
-      const max = Math.max(...data); const min = Math.min(...data);
-      const range = max - min || 1;
-      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
-    };
-
-    const rdos = [
-      { id: 1, data: "05/04/2026", clima: "Ensolarado", equipe: 14, horas: 8, ocorrencias: 0, fotos: 6, status: "aprovado" },
-      { id: 2, data: "04/04/2026", clima: "Nublado", equipe: 12, horas: 8, ocorrencias: 1, fotos: 4, status: "aprovado" },
-      { id: 3, data: "03/04/2026", clima: "Chuvoso", equipe: 8, horas: 4, ocorrencias: 2, fotos: 3, status: "revisao" },
-      { id: 4, data: "02/04/2026", clima: "Ensolarado", equipe: 14, horas: 9, ocorrencias: 0, fotos: 8, status: "aprovado" },
-      { id: 5, data: "01/04/2026", clima: "Ensolarado", equipe: 13, horas: 8, ocorrencias: 0, fotos: 5, status: "aprovado" },
-    ];
-
-    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-      aprovado: { label: "Aprovado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
-      revisao: { label: "Revisao", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
-      pendente: { label: "Pendente", bg: "bg-gray-500/15", text: "text-gray-400", dot: "bg-gray-400" },
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">RDO Diario</h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
-            </div>
-            <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#8b5cf6]/15 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-all font-mono uppercase tracking-wider">+ Novo RDO</button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[
-              { label: "RDOs do Mes", value: "22", color: "#8b5cf6", spark: rdoHistory, trend: "+4" },
-              { label: "Horas Trabalhadas", value: "176h", color: "#38bdf8", spark: null as number[] | null, trend: "+8h" },
-              { label: "Equipe Media", value: "12.4", color: "#10b981", spark: null as number[] | null, trend: "Normal" },
-              { label: "Ocorrencias", value: "3", color: "#f59e0b", spark: null as number[] | null, trend: "-2" },
-              { label: "Fotos Anexadas", value: "134", color: "#38bdf8", spark: null as number[] | null, trend: "+26" },
-              { label: "Dias Chuva", value: "4", color: "#6b7280", spark: null as number[] | null, trend: "18%" },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#8b5cf6]/40 transition-all cursor-default">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
-                  <span className="text-[9px] font-mono text-[var(--text-muted)]">{kpi.trend}</span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
-                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="p-panel">
-          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Historico RDOs</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{rdos.length} ULTIMOS</span></div>
-          <table className="w-full text-[12px]">
-            <thead><tr className="border-b border-[var(--border-light)]">
-              {["Data", "Clima", "Equipe", "Horas", "Ocorr.", "Fotos", "Status"].map((h, i) => (<th key={i} className={`text-center py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
-            </tr></thead>
-            <tbody>{rdos.map((r) => {
-              const s = sc[r.status] || sc.pendente;
-              const clima = r.clima === "Ensolarado" ? "text-amber-400" : r.clima === "Chuvoso" ? "text-blue-400" : "text-gray-400";
-              return (<tr key={r.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
-                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-primary)]">{r.data}</td>
-                <td className={`py-3 px-3 text-center text-[11px] ${clima}`}>{r.clima}</td>
-                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{r.equipe}</td>
-                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{r.horas}h</td>
-                <td className={`py-3 px-3 text-center font-mono text-[11px] font-bold ${r.ocorrencias > 0 ? "text-rose-400" : "text-emerald-400"}`}>{r.ocorrencias}</td>
-                <td className="py-3 px-3 text-center font-mono text-[11px] text-[#38bdf8]">{r.fotos}</td>
-                <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${s.bg} ${s.text}`}>{s.label}</span></td>
-              </tr>);
-            })}</tbody>
-          </table>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className="palantir-app">
-      {/* Sidebar Navigation */}
-      <aside className="sidebar">
-        <div className="px-6 py-5 mb-4 border-b border-[var(--border-light)] flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#0ea5e9] to-[#0369a1] rounded flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(14,165,233,0.3)]">
-            C
+    <div className="flex flex-col h-full bg-[#0a0e1a] text-[#c8d6e5] relative font-['IBM_Plex_Mono',monospace]">
+      <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-[#1a2035] bg-[#0d1120]/80 backdrop-blur-md sticky top-0 z-10">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#00e6a0] to-[#0088cc] shadow-[0_0_15px_rgba(0,230,160,0.3)]">
+            <span className="font-bold text-[#0a0e1a] text-lg">C</span>
           </div>
           <div>
-            <h1 className="text-[var(--text-primary)] font-bold tracking-widest text-sm leading-tight">CONSTRU</h1>
-            <p className="text-[10px] text-[#38bdf8] font-mono tracking-wider">MAX SYSTEM OS</p>
+            <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              Motor Principal NS
+              <span className="px-2 py-0.5 rounded-md bg-[#1a2035] text-xs text-[#00e6a0] uppercase tracking-wider font-semibold border border-[#00e6a0]/20">{selectedMotorLabel}</span>
+            </h1>
+            <p className="text-xs text-[#8899aa] mt-0.5">{projectName} • {companyName}</p>
           </div>
         </div>
-
-        <div className="flex-1">
-          {SIDEBAR_SECTIONS.map((section, sIdx) => (
-            <div key={sIdx} className="sidebar-section">
-              <h3 className="sidebar-title">{section.title}</h3>
-              <div className="flex flex-col gap-1">
-                {section.items.map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveTab(item.id as TabId)}
-                    className={cn("nav-item", activeTab === item.id ? "active" : "")}
-                  >
-                    <span className="w-4 h-4 flex items-center justify-center border border-current rounded-sm text-[8px] opacity-70">
-                      {item.icon[0].toUpperCase()}
-                    </span>
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2 border border-[#1a2035] bg-[#0d1120] px-3 py-1.5 rounded-lg">
+            <span className="text-[10px] uppercase tracking-wider text-[#667788] font-semibold">Backend</span>
+            {health?.ok ? (
+              <span className="flex h-2.5 w-2.5 rounded-full bg-[#00e6a0] shadow-[0_0_8px_rgba(0,230,160,0.8)] animate-pulse" />
+            ) : (
+              <span className="flex h-2.5 w-2.5 rounded-full bg-red-500" />
+            )}
+          </div>
+          <button 
+            onClick={() => setRefreshKey(v => v + 1)}
+            className="px-4 py-2 border border-[#1a2035] bg-[#0d1120] hover:bg-[#1a2035] hover:text-white transition-colors rounded-lg text-xs font-semibold tracking-wider uppercase text-[#c8d6e5]"
+          >
+            ATUALIZAR
+          </button>
         </div>
-        
-        <div className="px-6 py-4 border-t border-[var(--border-light)] mt-auto">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-               <div className="relative">
-                  <div className="w-2 h-2 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-               </div>
-               <div>
-                  <div className="text-[10px] text-[var(--text-muted)] font-mono">SERVER LINK</div>
-                  <div className="text-xs text-[var(--text-primary)] font-semibold">{health?.ok ? 'AWAITING METRICS' : 'OFFLINE'}</div>
-               </div>
-            </div>
-            <button 
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-8 h-8 rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-medium)] transition-all"
-              title={theme === "dark" ? "Mudar para Tema Claro" : "Mudar para Tema Escuro"}
+      </header>
+
+      <div className="shrink-0 border-b border-[#1a2035] bg-[#0a0e1a] px-2 pt-2">
+        <nav className="flex items-center gap-1 overflow-x-auto hide-scrollbar pb-2">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "whitespace-nowrap px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all duration-300 border focus:outline-none",
+                activeTab === tab.id 
+                  ? "bg-[#00e6a0]/10 text-[#00e6a0] border-[#00e6a0]/30 shadow-[0_0_10px_rgba(0,230,160,0.1)]" 
+                  : "text-[#667788] border-transparent hover:text-[#c8d6e5] hover:bg-[#1a2035]/50"
+              )}
             >
-              {theme === "dark" ? "☀️" : "🌙"}
+              {tab.label.replace(/^\[\d+\]\s*/, "")}
             </button>
-          </div>
+          ))}
+        </nav>
+      </div>
+
+      {error && (
+        <div className="shrink-0 border-b border-red-500/30 bg-red-500/10 px-6 py-3 text-xs font-medium text-red-500 flex items-center gap-2">
+          <span className="shrink-0 w-4 h-4 rounded-full border border-red-500 flex items-center justify-center font-bold">!</span>
+          {error}
         </div>
-      </aside>
+      )}
 
-      {/* Main Content Area */}
-      <main className="main-content">
-        <header className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-light)]">
-           <div>
-              <div className="flex items-center gap-3 mb-1">
-                 <h2 className="text-2xl font-light text-[var(--text-primary)] tracking-wide">{SIDEBAR_SECTIONS.flatMap(s=>s.items).find(i=>i.id === activeTab)?.label || "Módulo"}</h2>
-                 <span className="px-2.5 py-0.5 rounded-full bg-[#38bdf8]/10 text-[#38bdf8] text-[10px] uppercase font-bold border border-[#38bdf8]/20 tracking-wider font-mono">
-                    {selectedMotorLabel} CORE
-                 </span>
-              </div>
-              <p className="text-xs text-[var(--text-muted)] font-mono uppercase tracking-widest">{projectName} • {companyName}</p>
-           </div>
-           
-           <div className="flex items-center gap-3">
-               <button onClick={() => setRefreshKey(v => v + 1)} className="btn btn-outline !py-1.5">
-                   <span className="w-3 h-3 rounded-full border border-current flex items-center justify-center text-[7px]">R</span>
-                   SYNC OP
-               </button>
-           </div>
-        </header>
-
-        {error && (
-          <div className="sys-msg msg-error mb-6">
-            <span className="font-bold border border-current rounded-full w-4 h-4 flex items-center justify-center text-[10px]">!</span>
-            {error}
-          </div>
-        )}
-
-        <div className="w-full max-w-[1400px] pb-20">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-gradient-to-b from-[#0a0e1a] to-[#05080f]">
+        <div className="max-w-[1600px] mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-20">
           {renderTabContent()}
         </div>
       </main>
+
+      {/* Painel embutido — abre conteudo do backend DENTRO da plataforma */}
+      {embeddedUrl && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex flex-col" onClick={() => setEmbeddedUrl(null)}>
+          <div className="flex items-center justify-between px-4 py-2 bg-[#0d1120] border-b border-[#1a2035] shrink-0" onClick={e => e.stopPropagation()}>
+            <span className="text-xs text-[#667788] font-mono truncate flex-1">{embeddedUrl}</span>
+            <button onClick={() => setEmbeddedUrl(null)} className="ml-4 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-bold hover:bg-rose-500/20 transition-colors">FECHAR</button>
+          </div>
+          <iframe src={embeddedUrl} className="flex-1 w-full border-none" title="Painel Embutido" onClick={e => e.stopPropagation()} />
+        </div>
+      )}
     </div>
   );
 }
