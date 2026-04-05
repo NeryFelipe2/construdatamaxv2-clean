@@ -44,47 +44,41 @@ const LegacyApp = lazy(() => import("./LegacyApp"));
 
 // ─── Nav items ──────────────────────────────────────────────────────────────
 const navItems = [
-  { section: "NS V5 — Motor Principal" },
-  { label: "NS V5 (13 abas)", icon: Monitor, to: "/app/ns-v5" },
-
-  { section: "Palantir — Gestao" },
+  { section: "Gestao" },
   { label: "Gestao 360", icon: LayoutDashboard, to: "/app/gestao-360" },
   { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
-  { label: "Relatorio 360", icon: ClipboardList, to: "/app/relatorio360" },
   { label: "Projetos", icon: FolderKanban, to: "/app/projetos" },
+
+  { section: "Engenharia" },
+  { label: "Motor NS V5", icon: Monitor, to: "/app/ns-v5" },
+  { label: "Mapa / GIS", icon: Map, to: "/app/mapa-interativo" },
+  { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
+  { label: "Rede 360", icon: Network, to: "/app/rede-360" },
+  { label: "Pre-Construcao", icon: FileSearch, to: "/app/pre-construcao" },
 
   { section: "Planejamento" },
   { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },
   { label: "LPS/Lean", icon: Target, to: "/app/lps-lean" },
 
-  { section: "Operacao" },
+  { section: "Operacao de Campo" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "Mapa Interativo", icon: Map, to: "/app/mapa-interativo" },
-  { label: "Rede 360", icon: Network, to: "/app/rede-360" },
-  { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
+  { label: "Relatorio 360", icon: ClipboardList, to: "/app/relatorio360" },
+  { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
 
   { section: "Recursos" },
   { label: "Suprimentos", icon: PackageSearch, to: "/app/suprimentos" },
   { label: "Mao de Obra", icon: Users, to: "/app/mao-de-obra" },
-  { label: "Gest. Equip.", icon: Wrench, to: "/app/gestao-equipamentos" },
-  { label: "Frota", icon: Cpu, to: "/app/otimizacao-frota" },
+  { label: "Equipamentos", icon: Wrench, to: "/app/gestao-equipamentos" },
   { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
-  { label: "Pre-Constr.", icon: FileSearch, to: "/app/pre-construcao" },
 
   { section: "IA & Inteligencia" },
   { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
-  { label: "Editor GIS", icon: Map, to: "/app/gis-editor" },
 
-  { section: "Campo & WhatsApp" },
+  { section: "Comunicacao" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
   { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
-  { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
-
-  { section: "Módulos Offline (Nativos)" },
-  { label: "Construplan Brutal", icon: Target, to: "/app/construplan-brutal" },
-  { label: "Dash Cenários", icon: LayoutDashboard, to: "/app/cenarios-offline" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -379,7 +373,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/app" element={<AppShell />}>
-          <Route index element={<Navigate to="/app/ns-v5" replace />} />
+          <Route index element={<Navigate to="/app/gestao-360" replace />} />
           <Route path="ns-v5" element={<NsV5Page />} />
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
@@ -405,11 +399,9 @@ export default function App() {
           <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />
           <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
           
-          {/* OFFLINE INTEGRATION */}
-          <Route path="construplan-brutal" element={<OfflineIframePage url="/offline_modules/construplan.html" />} />
-          <Route path="cenarios-offline" element={<OfflineIframePage url="/offline_modules/cenarios.html" />} />
+          {/* Legacy offline routes removed — all modules now integrated */}
 
-          <Route path="*" element={<Navigate to="/app/ns-v5" replace />} />
+          <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
