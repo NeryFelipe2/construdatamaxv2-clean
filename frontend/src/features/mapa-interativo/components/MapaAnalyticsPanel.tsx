@@ -33,7 +33,7 @@ const NETWORK_COST_PER_M: Record<MapNetworkType, number> = {
 }
 
 const NETWORK_COLOR: Record<MapNetworkType, string> = {
-  sewer:    '#2abfdc',
+  sewer:    '#f97316',
   water:    '#38bdf8',
   drainage: '#a78bfa',
   civil:    '#22c55e',
@@ -125,7 +125,7 @@ function Tab3D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
       <div className="flex gap-4 px-4 pt-3">
         {[
           { label: 'Elevação Mín.', value: `${minE.toFixed(2)} m`, color: 'text-[#38bdf8]' },
-          { label: 'Elevação Máx.', value: `${maxE.toFixed(2)} m`, color: 'text-[#2abfdc]' },
+          { label: 'Elevação Máx.', value: `${maxE.toFixed(2)} m`, color: 'text-[#f97316]' },
           { label: 'Elevação Média', value: `${avgE.toFixed(2)} m`, color: 'text-[#a3a3a3]' },
           { label: 'Comprimento Total', value: `${(maxDist / 1000).toFixed(3)} km`, color: 'text-[#22c55e]' },
         ].map((k) => (
@@ -141,15 +141,15 @@ function Tab3D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
         <svg width={W} height={H} className="font-mono">
           <defs>
             <linearGradient id="elev-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2abfdc" stopOpacity={0.35} />
-              <stop offset="100%" stopColor="#2abfdc" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="#f97316" stopOpacity={0.35} />
+              <stop offset="100%" stopColor="#f97316" stopOpacity={0.02} />
             </linearGradient>
           </defs>
 
           {/* Grid lines */}
           {yTicks.map((e, i) => (
             <g key={i}>
-              <line x1={PAD.l} y1={yOf(e)} x2={PAD.l + iW} y2={yOf(e)} stroke="#20406a" strokeWidth={1} />
+              <line x1={PAD.l} y1={yOf(e)} x2={PAD.l + iW} y2={yOf(e)} stroke="#525252" strokeWidth={1} />
               <text x={PAD.l - 4} y={yOf(e) + 4} fill="#6b6b6b" fontSize={9} textAnchor="end">{e.toFixed(1)}</text>
             </g>
           ))}
@@ -162,11 +162,11 @@ function Tab3D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
           <polygon points={area} fill="url(#elev-grad)" />
 
           {/* Elevation line */}
-          <polyline points={polyline} fill="none" stroke="#2abfdc" strokeWidth={2} strokeLinejoin="round" />
+          <polyline points={polyline} fill="none" stroke="#f97316" strokeWidth={2} strokeLinejoin="round" />
 
           {/* Points */}
           {points.map((p, i) => (
-            <circle key={i} cx={xOf(p.dist)} cy={yOf(p.elev)} r={2.5} fill="#2abfdc" />
+            <circle key={i} cx={xOf(p.dist)} cy={yOf(p.elev)} r={2.5} fill="#f97316" />
           ))}
 
           {/* X axis: distance labels (every ~5 points max) */}
@@ -259,7 +259,7 @@ function Tab4D({ segments }: { segments: MapSegment[] }) {
           return (
             <g key={r.code}>
               <text x={0} y={y + 10} fill="#9ca3af" fontSize={10}>{label}</text>
-              <rect x={x1} y={y} width={bw} height={14} rx={3} fill="#2abfdc" opacity={0.75} />
+              <rect x={x1} y={y} width={bw} height={14} rx={3} fill="#f97316" opacity={0.75} />
             </g>
           )
         })}
@@ -313,7 +313,7 @@ function Tab5D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
       <div className="flex items-center gap-4">
         <div className="flex flex-col">
           <span className="text-[9px] uppercase tracking-widest text-[#6b6b6b]">Custo Total Estimado</span>
-          <span className="text-xl font-bold font-mono text-[#2abfdc]">{fmtBRL(grandTotal)}</span>
+          <span className="text-xl font-bold font-mono text-[#f97316]">{fmtBRL(grandTotal)}</span>
         </div>
         <div className="flex flex-col">
           <span className="text-[9px] uppercase tracking-widest text-[#6b6b6b]">Custo Médio/metro</span>
@@ -348,10 +348,10 @@ function Tab5D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
       </svg>
 
       {/* Detail table */}
-      <div className="rounded-xl border border-[#20406a] overflow-hidden">
+      <div className="rounded-xl border border-[#525252] overflow-hidden">
         <table className="w-full text-xs">
           <thead>
-            <tr className="bg-[#0d2040] border-b border-[#20406a]">
+            <tr className="bg-[#2c2c2c] border-b border-[#525252]">
               {['Tipo de Rede', 'Trechos', 'Extensão', 'R$/m', 'Custo Est.'].map((h) => (
                 <th key={h} className="text-left px-3 py-2 text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">{h}</th>
               ))}
@@ -359,7 +359,7 @@ function Tab5D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
           </thead>
           <tbody>
             {types.map((t, i) => (
-              <tr key={t.type} className={i < types.length - 1 ? 'border-b border-[#14294e]' : ''}>
+              <tr key={t.type} className={i < types.length - 1 ? 'border-b border-[#3d3d3d]' : ''}>
                 <td className="px-3 py-2.5">
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full inline-block" style={{ background: NETWORK_COLOR[t.type] }} />
@@ -369,7 +369,7 @@ function Tab5D({ nodes, segments }: { nodes: MapNode[]; segments: MapSegment[] }
                 <td className="px-3 py-2.5 font-mono text-[#a3a3a3]">{t.count}</td>
                 <td className="px-3 py-2.5 font-mono text-[#a3a3a3]">{(t.totalM / 1000).toFixed(3)} km</td>
                 <td className="px-3 py-2.5 font-mono text-[#a3a3a3]">R$ {NETWORK_COST_PER_M[t.type]}/m</td>
-                <td className="px-3 py-2.5 font-mono text-[#2abfdc] font-semibold">{fmtBRL(t.totalCost)}</td>
+                <td className="px-3 py-2.5 font-mono text-[#f97316] font-semibold">{fmtBRL(t.totalCost)}</td>
               </tr>
             ))}
           </tbody>
@@ -395,17 +395,17 @@ export function MapaAnalyticsPanel() {
   ]
 
   return (
-    <div className="border-t border-[#20406a] bg-[#0d2040]" style={{ maxHeight: 320, overflowY: 'auto' }}>
+    <div className="border-t border-[#525252] bg-[#2c2c2c]" style={{ maxHeight: 320, overflowY: 'auto' }}>
       {/* Tab bar */}
-      <div className="flex items-center gap-0 px-4 pt-2 border-b border-[#20406a] bg-[#081321]">
-        <BarChart2 size={12} className="text-[#2abfdc] mr-3" />
+      <div className="flex items-center gap-0 px-4 pt-2 border-b border-[#525252] bg-[#081321]">
+        <BarChart2 size={12} className="text-[#f97316] mr-3" />
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold border-b-2 -mb-px transition-colors ${
               activeTab === t.id
-                ? 'text-[#2abfdc] border-[#2abfdc]'
+                ? 'text-[#f97316] border-[#f97316]'
                 : 'text-[#6b6b6b] border-transparent hover:text-[#a3a3a3]'
             }`}
           >

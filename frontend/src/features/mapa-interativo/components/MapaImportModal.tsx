@@ -294,24 +294,24 @@ export function MapaImportModal({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-lg shadow-2xl">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-lg shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
           <h3 className="text-sm font-bold text-white">Importar Arquivo</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-300"><X size={16} /></button>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
         </div>
 
         {/* Body */}
         <div className="px-6 py-5 flex flex-col gap-4">
           {/* Drop zone */}
           <div
-            className="border-2 border-dashed border-gray-700 rounded-xl p-6 text-center cursor-pointer hover:border-orange-500 transition-colors"
+            className="border-2 border-dashed border-[#525252] rounded-xl p-6 text-center cursor-pointer hover:border-orange-500 transition-colors"
             onClick={() => fileRef.current?.click()}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
           >
-            <Upload size={28} className="mx-auto text-gray-500 mb-2" />
-            <p className="text-sm text-gray-400">Arraste ou clique para selecionar</p>
+            <Upload size={28} className="mx-auto text-[#6b6b6b] mb-2" />
+            <p className="text-sm text-[#a3a3a3]">Arraste ou clique para selecionar</p>
             <p className="text-[10px] text-gray-600 mt-1">.txt .csv .dxf .shp .json .ifc .dwg</p>
             {fileName && <p className="text-xs text-orange-400 mt-2 font-semibold">{fileName}</p>}
           </div>
@@ -330,21 +330,21 @@ export function MapaImportModal({ onClose }: Props) {
               <p className="text-xs text-blue-300 font-semibold">🌐 Coordenadas UTM detectadas</p>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase block mb-1">Zona UTM</label>
+                  <label className="text-[10px] text-[#6b6b6b] uppercase block mb-1">Zona UTM</label>
                   <input
                     type="number" min={1} max={60} value={utmZone}
                     onChange={(e) => { setUtmZone(Number(e.target.value)); }}
                     onBlur={reparse}
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-xs text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1.5 text-xs text-white text-center focus:outline-none focus:border-orange-500"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase block mb-1">Hemisfério</label>
+                  <label className="text-[10px] text-[#6b6b6b] uppercase block mb-1">Hemisfério</label>
                   <select
                     value={utmHemi}
                     onChange={(e) => { setUtmHemi(e.target.value as 'N' | 'S'); }}
                     onBlur={reparse}
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
                   >
                     <option value="S">Sul (S)</option>
                     <option value="N">Norte (N)</option>
@@ -359,16 +359,16 @@ export function MapaImportModal({ onClose }: Props) {
                   onChange={(e) => setConnectSeq(e.target.checked)}
                   className="accent-orange-500"
                 />
-                <span className="text-xs text-gray-300">Conectar como sequência de trechos</span>
+                <span className="text-xs text-[#f5f5f5]">Conectar como sequência de trechos</span>
               </label>
 
               {connectSeq && (
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase block mb-1">Tipo de Rede</label>
+                  <label className="text-[10px] text-[#6b6b6b] uppercase block mb-1">Tipo de Rede</label>
                   <select
                     value={netType}
                     onChange={(e) => setNetType(e.target.value as MapNetworkType)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
                   >
                     {(Object.keys(NETWORK_LABELS) as MapNetworkType[]).map((k) => (
                       <option key={k} value={k}>{NETWORK_LABELS[k]}</option>
@@ -387,7 +387,7 @@ export function MapaImportModal({ onClose }: Props) {
           )}
 
           {/* Result */}
-          {loading && <p className="text-xs text-gray-400 text-center">Analisando arquivo...</p>}
+          {loading && <p className="text-xs text-[#a3a3a3] text-center">Analisando arquivo...</p>}
           {result && (
             <div className={`flex items-start gap-3 p-3 rounded-lg text-xs ${
               result.ok ? 'bg-green-900/30 border border-green-800' : 'bg-red-900/30 border border-red-800'
@@ -401,16 +401,16 @@ export function MapaImportModal({ onClose }: Props) {
 
           {/* Format info */}
           <div className="text-[10px] text-gray-600 space-y-0.5">
-            <p><span className="text-gray-500">.txt/.csv</span> — lat,lng ou <span className="text-blue-500">easting,northing[,elevação]</span> (UTM auto-detectado)</p>
-            <p><span className="text-gray-500">.dxf</span> — entidades LINE e LWPOLYLINE → nós e trechos</p>
-            <p><span className="text-gray-500">.shp</span> — importa bounding box como 4 nós de canto</p>
-            <p><span className="text-gray-500">.json</span> — formato nativo da plataforma &#123; nodes, segments &#125;</p>
+            <p><span className="text-[#6b6b6b]">.txt/.csv</span> — lat,lng ou <span className="text-blue-500">easting,northing[,elevação]</span> (UTM auto-detectado)</p>
+            <p><span className="text-[#6b6b6b]">.dxf</span> — entidades LINE e LWPOLYLINE → nós e trechos</p>
+            <p><span className="text-[#6b6b6b]">.shp</span> — importa bounding box como 4 nós de canto</p>
+            <p><span className="text-[#6b6b6b]">.json</span> — formato nativo da plataforma &#123; nodes, segments &#125;</p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-700">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#525252]">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-[#a3a3a3] hover:text-white transition-colors">
             Cancelar
           </button>
           <button

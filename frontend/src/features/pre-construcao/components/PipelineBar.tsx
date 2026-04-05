@@ -37,8 +37,8 @@ export function PipelineBar({ currentStep }: PipelineBarProps) {
               <div
                 className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors',
-                  isCompleted && 'bg-[#2abfdc] text-white',
-                  isActive    && 'bg-[#2abfdc] text-white ring-2 ring-[#2abfdc]/40',
+                  isCompleted && 'bg-[#f97316] text-white',
+                  isActive    && 'bg-[#f97316] text-white ring-2 ring-[#f97316]/40',
                   isPending   && 'border-2 border-[#1f3c5e] text-[#6b6b6b] bg-transparent',
                 )}
               >
@@ -63,7 +63,7 @@ export function PipelineBar({ currentStep }: PipelineBarProps) {
               <div
                 className={cn(
                   'flex-1 h-0.5 mx-2 mb-4 rounded-full',
-                  idx < currentIdx ? 'bg-[#2abfdc]' : 'bg-[#1f3c5e]',
+                  idx < currentIdx ? 'bg-[#f97316]' : 'bg-[#1f3c5e]',
                 )}
               />
             )}
