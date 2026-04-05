@@ -932,36 +932,148 @@ export default function LegacyApp() {
   }
 
   function renderCustos() {
+    const costHistory = [120, 135, 128, 142, 155, 148, 162, 170, 165, 178, 185, 192];
+    const budgetLine = [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150];
+
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      const fill = pts + ` ${w},${h} 0,${h}`;
+      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={fill} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
+    };
+
+    const itens = [
+      { id: 1, desc: "Tubo PVC DN200 - 6m", qtd: "340 barras", custo: "R$ 89.760", status: "comprado", pct: 100 },
+      { id: 2, desc: "Escavacao Mecanica", qtd: "2.450 m3", custo: "R$ 122.500", status: "andamento", pct: 65 },
+      { id: 3, desc: "CBUQ Reposicao Pavimento", qtd: "1.200 m2", custo: "R$ 96.000", status: "pendente", pct: 0 },
+      { id: 4, desc: "Poco de Visita D600", qtd: "28 un", custo: "R$ 67.200", status: "andamento", pct: 45 },
+      { id: 5, desc: "Reaterro Compactado", qtd: "1.800 m3", custo: "R$ 54.000", status: "andamento", pct: 30 },
+      { id: 6, desc: "Ligacao Domiciliar", qtd: "156 un", custo: "R$ 46.800", status: "pendente", pct: 0 },
+    ];
+
+    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+      comprado: { label: "Comprado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+      andamento: { label: "Em Exec.", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
+      pendente: { label: "Pendente", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
+    };
+
     return (
-      <div className="p-panel border-t-2 border-t-[#10b981]">
-        <div className="panel-header">
-           <h2 className="panel-title"><span>Custos 5D — Resumo Financeiro</span> <span className="badge">FINANCEIRO</span></h2>
-        </div>
-        <div className="action-row mb-6">
-          <a className="btn btn-outline" href={nativeUrl("/controle")} target="_blank" rel="noreferrer">CONTROLE NATIVO</a>
-          <a className="btn btn-outline" href={apiUrl("/api/curva-s")} target="_blank" rel="noreferrer">GERAR CURVA S JSON</a>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">% Fisico Operacional</div><div className="kpi-value text-[#38bdf8]">{formatPercent(dashboard?.pct_fisico ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">% Financeiro Medido</div><div className="kpi-value text-[#10b981]">{formatPercent(dashboard?.pct_financeiro ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Valor Liberado Estimado</div><div className="kpi-value text-emerald-400">{formatCurrency(dashboard?.valor_liberado ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Custo RDO Total</div><div className="kpi-value text-rose-400">{formatCurrency(dashboard?.custo_rdo_total ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Custo Rede 5D Integral</div><div className="kpi-value">{formatCurrency(manageCost)}</div></div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)] shadow-md">
-            <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase mb-4 border-b border-[var(--border-light)] pb-2">Curva S — Previsto (Baseline)</h3>
-            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Avanço % Acumulado</span><span className="text-white font-mono">{formatPercent(asNumber(curvePrev?.pct_acum ?? curvePrev?.acum_pct))}</span></div>
-            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Extensao Paramétrica</span><span className="text-[#38bdf8] font-mono">{formatMeters(asNumber(curvePrev?.ext_acum))}</span></div>
-            <div className="flex justify-between py-2"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Custo Absorvido</span><span className="text-emerald-400 font-mono">{formatCurrency(asNumber(curvePrev?.custo_acum))}</span></div>
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#10b981]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Custos 5D</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#10b981]/15 text-[#10b981] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
+            </div>
+            <div className="flex gap-2">
+              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:border-[#10b981]/40 transition-all font-mono uppercase tracking-wider">Exportar PDF</button>
+              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#10b981]/15 border border-[#10b981]/30 text-[#10b981] hover:bg-[#10b981]/25 transition-all font-mono uppercase tracking-wider">+ Novo Item</button>
+            </div>
           </div>
-          <div className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)] shadow-md">
-            <h3 className="text-[#10b981] font-bold text-sm tracking-wider uppercase mb-4 border-b border-[var(--border-light)] pb-2">Curva S — Realizado (Campo)</h3>
-            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Avanço % Acumulado</span><span className="text-white font-mono">{formatPercent(asNumber(curveReal?.pct_acum ?? curveReal?.acum_pct))}</span></div>
-            <div className="flex justify-between py-2 border-b border-[rgba(255,255,255,0.05)]"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Extensao Lançada</span><span className="text-[#38bdf8] font-mono">{formatMeters(asNumber(curveReal?.ext_acum))}</span></div>
-            <div className="flex justify-between py-2"><span className="text-[var(--text-muted)] text-xs uppercase font-bold tracking-wider">Custo Empenhado</span><span className="text-emerald-400 font-mono">{formatCurrency(asNumber(curveReal?.custo_acum))}</span></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "Orcamento Total", value: "R$ 1.8M", color: "#10b981", spark: null as number[] | null, trend: "Base" },
+              { label: "Executado", value: "R$ 476k", color: "#38bdf8", spark: costHistory, trend: "+12%" },
+              { label: "% Executado", value: "26.4%", color: "#8b5cf6", spark: null as number[] | null, trend: "+3.1%" },
+              { label: "Desvio", value: "+R$ 32k", color: "#f59e0b", spark: null as number[] | null, trend: "+1.8%" },
+              { label: "BDI Medio", value: "28.5%", color: "#6b7280", spark: null as number[] | null, trend: "NTS" },
+              { label: "Saldo Restante", value: "R$ 1.32M", color: "#ef4444", spark: null as number[] | null, trend: "-12%" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#10b981]/40 transition-all cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className={`text-[9px] font-mono ${kpi.trend.startsWith("+") ? "text-emerald-400" : kpi.trend.startsWith("-") ? "text-rose-400" : "text-gray-400"}`}>{kpi.trend}</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3 p-panel">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Curva S — Orcado vs Executado</h3>
+              <span className="text-[9px] font-mono text-[var(--text-muted)]">12 MESES</span>
+            </div>
+            <svg viewBox="0 0 500 180" className="w-full" preserveAspectRatio="xMidYMid meet">
+              {[0, 50, 100, 150, 200].map((v, i) => {
+                const y = 160 - (v / 200) * 140;
+                return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}k</text></g>);
+              })}
+              {(() => {
+                const pts = costHistory.map((v, i) => ({ x: 50 + (i / (costHistory.length - 1)) * 430, y: 160 - (v / 200) * 140 }));
+                const bl = budgetLine.map((v, i) => ({ x: 50 + (i / (budgetLine.length - 1)) * 430, y: 160 - (v / 200) * 140 }));
+                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
+                const area = line + ` ${pts[pts.length-1].x},160 ${pts[0].x},160`;
+                const bline = bl.map(p => `${p.x},${p.y}`).join(" ");
+                return (<g>
+                  <defs><linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity="0.3" /><stop offset="100%" stopColor="#10b981" stopOpacity="0.02" /></linearGradient></defs>
+                  <polygon points={area} fill="url(#costGrad)" />
+                  <polyline points={bline} fill="none" stroke="#ef4444" strokeWidth="1" strokeDasharray="5,3" />
+                  <polyline points={line} fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" />
+                  {pts.map((p, i) => (<circle key={i} cx={p.x} cy={p.y} r="3" fill="#10b981" stroke="var(--bg-card)" strokeWidth="1.5" />))}
+                </g>);
+              })()}
+              {costHistory.map((_, i) => (<text key={i} x={50 + (i / (costHistory.length - 1)) * 430} y={175} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">M{i + 1}</text>))}
+            </svg>
+          </div>
+          <div className="lg:col-span-2 p-panel">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Distribuicao por Categoria</h3>
+            <div className="space-y-3">
+              {[
+                { nome: "Tubulacao", valor: 45, cor: "#10b981" },
+                { nome: "Escavacao", valor: 25, cor: "#38bdf8" },
+                { nome: "Pavimentacao", valor: 15, cor: "#f59e0b" },
+                { nome: "PVs / Estruturas", valor: 10, cor: "#8b5cf6" },
+                { nome: "Outros", valor: 5, cor: "#6b7280" },
+              ].map((c, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span>
+                    <span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${c.valor * 2}%`, backgroundColor: c.cor, opacity: 0.8 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-panel">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Itens de Custo</h3>
+              <span className="text-[10px] text-[var(--text-muted)] font-mono">{itens.length} ITENS</span>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[12px]">
+              <thead><tr className="border-b border-[var(--border-light)]">
+                {["Descricao", "Quantidade", "Custo", "Progresso", "Status"].map((h, i) => (
+                  <th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {itens.map((t) => {
+                  const s = sc[t.status] || sc.pendente;
+                  return (
+                    <tr key={t.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors cursor-pointer">
+                      <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${s.dot} flex-shrink-0`}></span><span className="text-[var(--text-primary)] font-medium">{t.desc}</span></div></td>
+                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.qtd}</td>
+                      <td className="py-3 px-3 text-center font-mono text-[11px] text-emerald-400 font-bold">{t.custo}</td>
+                      <td className="py-3 px-3"><div className="flex items-center gap-2 justify-center"><div className="w-16 h-1.5 rounded-full bg-[var(--bg-base)] overflow-hidden"><div className={`h-full rounded-full ${s.dot}`} style={{ width: `${t.pct}%` }} /></div><span className="text-[10px] text-[var(--text-muted)] font-mono w-8">{t.pct}%</span></div></td>
+                      <td className="py-3 px-3 text-center"><span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider ${s.bg} ${s.text}`}>{s.label}</span></td>
+                    </tr>);
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1634,56 +1746,77 @@ export default function LegacyApp() {
 
   // ── MÓDULO: SEGURANÇA DDS (NR-18 / Inspeções) ──
   function renderSeguranca() {
-    const today = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
-    const safetyCats = [
-      { cat: "EPI Operacional", items: ["Capacete com jugular", "Luva de raspa", "Bota com biqueira", "Óculos de proteção", "Protetor auricular"], color: "#38bdf8" },
-      { cat: "Sinalização Viária", items: ["Cones e cavaletes posicionados", "Placas de desvio atualizadas", "Sinaleiro comunicando via rádio", "Fitas zebradas nas valas"], color: "#f59e0b" },
-      { cat: "Escavação & Vala", items: ["Escoramento conforme NR-18.6", "Talude dentro do ângulo seguro", "Bomba de esgotamento ligada", "Passarela de travessia", "Solo armazenado a 1m da borda"], color: "#ef4444" },
-      { cat: "Máquinas & Equipamentos", items: ["Check-list diário da retro", "Extintor na cabine", "Alarme de ré funcionando", "Operador habilitado presente"], color: "#10b981" },
+    const accidentHistory = [0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0];
+
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data, 1); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
+    };
+
+    const dds = [
+      { id: 1, tema: "Trabalho em Espacos Confinados", data: "05/04", presentes: 12, status: "realizado" },
+      { id: 2, tema: "Protecao contra Queda", data: "04/04", presentes: 14, status: "realizado" },
+      { id: 3, tema: "Manuseio de Materiais Pesados", data: "03/04", presentes: 11, status: "realizado" },
+      { id: 4, tema: "Sinalizacao de Vias", data: "06/04", presentes: 0, status: "pendente" },
+      { id: 5, tema: "Primeiros Socorros", data: "07/04", presentes: 0, status: "agendado" },
     ];
+
+    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+      realizado: { label: "Realizado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+      pendente: { label: "Pendente", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
+      agendado: { label: "Agendado", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
+    };
+
     return (
       <div className="space-y-6">
         <div className="p-panel border-t-2 border-t-[#ef4444]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#ef4444]/20 flex items-center justify-center text-[#f87171] border border-[#ef4444]/50 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </span>
-              Segurança & DDS Diário
-              <span className="badge border-[#ef4444]/30 text-[#f87171] bg-[#ef4444]/10">NR-18 COMPLIANCE</span>
-            </h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Seguranca DDS</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#ef4444]/15 text-[#ef4444] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
+            </div>
+            <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#ef4444]/15 border border-[#ef4444]/30 text-[#ef4444] hover:bg-[#ef4444]/25 transition-all font-mono uppercase tracking-wider">+ Novo DDS</button>
           </div>
-          <div className="sys-msg msg-info mt-2 bg-[#ef4444]/5 !border-[#ef4444]/20">
-            <span className="text-[#f87171] font-bold">DDS — {today}</span>
-            <span className="text-[var(--text-muted)] ml-2">| Responsável: {cleanText(rdoForm.responsavel || "Engenheiro de Campo")}</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {safetyCats.map(sc => (
-            <div key={sc.cat} className="p-panel" style={{ borderTop: `2px solid ${sc.color}` }}>
-              <h3 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: sc.color }}>{sc.cat}</h3>
-              <div className="space-y-2">
-                {sc.items.map((item, idx) => (
-                  <label key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-[#05080f] border border-[var(--border-light)] hover:border-[rgba(255,255,255,0.15)] transition-colors cursor-pointer group">
-                    <input type="checkbox" className="w-4 h-4 rounded border-2 accent-emerald-500" />
-                    <span className="text-xs text-[var(--text-muted)] group-hover:text-white transition-colors">{item}</span>
-                  </label>
-                ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "Dias Sem Acidente", value: "47", color: "#10b981", spark: null as number[] | null, trend: "RECORD" },
+              { label: "DDS Realizados", value: "23", color: "#38bdf8", spark: null as number[] | null, trend: "+3/sem" },
+              { label: "Taxa Presenca", value: "92%", color: "#8b5cf6", spark: null as number[] | null, trend: "+2%" },
+              { label: "Incidentes/Mes", value: "0", color: "#10b981", spark: accidentHistory, trend: "ZERO" },
+              { label: "EPIs Conformes", value: "98%", color: "#10b981", spark: null as number[] | null, trend: "+1%" },
+              { label: "Treinamentos", value: "4/4", color: "#38bdf8", spark: null as number[] | null, trend: "100%" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#ef4444]/40 transition-all cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className={`text-[9px] font-mono ${kpi.trend === "RECORD" || kpi.trend === "ZERO" ? "text-emerald-400" : "text-[var(--text-muted)]"}`}>{kpi.trend}</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="p-panel border-t-2 border-t-[#10b981]">
-          <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Registro de Ocorrência de Segurança</h3>
-          <div className="form-row">
-            <div className="form-field"><label>Tipo</label>
-              <select><option>Quase-Acidente</option><option>Acidente Leve</option><option>Acidente Grave</option><option>Condição Insegura</option><option>Ato Inseguro</option></select>
-            </div>
-            <div className="form-field" style={{ flex: 2 }}><label>Descrição</label><input type="text" placeholder="Descreva a ocorrência de segurança..." /></div>
+            ))}
           </div>
-          <div className="action-row mt-4"><button className="btn btn-danger w-full">REGISTRAR OCORRÊNCIA</button></div>
+        </div>
+        <div className="p-panel">
+          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Registro DDS</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{dds.length} ITENS</span></div>
+          <table className="w-full text-[12px]">
+            <thead><tr className="border-b border-[var(--border-light)]">
+              {["Tema", "Data", "Presentes", "Status"].map((h, i) => (<th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
+            </tr></thead>
+            <tbody>{dds.map((d) => {
+              const s = sc[d.status] || sc.pendente;
+              return (<tr key={d.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
+                <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}></span><span className="text-[var(--text-primary)]">{d.tema}</span></div></td>
+                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{d.data}</td>
+                <td className="py-3 px-3 text-center font-mono text-[11px] font-bold text-[#38bdf8]">{d.presentes || "-"}</td>
+                <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${s.bg} ${s.text}`}>{s.label}</span></td>
+              </tr>);
+            })}</tbody>
+          </table>
         </div>
       </div>
     );
@@ -1691,55 +1824,71 @@ export default function LegacyApp() {
 
   // ── MÓDULO: CASH FLOW (Previsão Financeira) ──
   function renderCashFlow() {
-    const totalLiberado = asNumber(dashboard?.valor_liberado);
-    const custoRdo = asNumber(dashboard?.custo_rdo_total);
-    const saldo = totalLiberado - custoRdo;
-    const burnRate = dashboard?.dias_medidos ? custoRdo / dashboard.dias_medidos : 0;
-    const diasRestantes = burnRate > 0 ? Math.round(saldo / burnRate) : 999;
-    const extTotal = asNumber(dashboard?.extensao_total_m);
-    const extExec = asNumber(dashboard?.extensao_exec_m);
-    const custoM = extExec > 0 ? custoRdo / extExec : 0;
-    const projecaoTotal = custoM * extTotal;
-    const desvio = totalLiberado > 0 ? ((projecaoTotal - totalLiberado) / totalLiberado) * 100 : 0;
+    const receitas = [80, 120, 95, 140, 110, 150, 130, 160, 145, 170, 155, 180];
+    const despesas = [90, 100, 110, 105, 120, 115, 125, 130, 128, 135, 140, 145];
+    const saldo = receitas.map((r, i) => r - despesas[i]);
+
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
+    };
 
     return (
       <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#10b981]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#10b981]/20 flex items-center justify-center text-[#34d399] border border-[#10b981]/50 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              </span>
-              Cash Flow Forecast
-              <span className="badge border-[#10b981]/30 text-[#34d399] bg-[#10b981]/10">S-CURVE FINANCEIRA</span>
-            </h2>
+        <div className="p-panel border-t-2 border-t-[#38bdf8]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Cash Flow</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#38bdf8]/15 text-[#38bdf8] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "Receita Total", value: "R$ 1.63M", color: "#10b981", spark: receitas, trend: "+8%" },
+              { label: "Despesa Total", value: "R$ 1.44M", color: "#ef4444", spark: despesas, trend: "+3%" },
+              { label: "Saldo Liquido", value: "R$ 190k", color: "#38bdf8", spark: saldo, trend: "+35k" },
+              { label: "Margem", value: "11.6%", color: "#8b5cf6", spark: null as number[] | null, trend: "+2.1%" },
+              { label: "Medicoes Aprovadas", value: "8/12", color: "#f59e0b", spark: null as number[] | null, trend: "67%" },
+              { label: "A Receber", value: "R$ 245k", color: "#10b981", spark: null as number[] | null, trend: "30 dias" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#38bdf8]/40 transition-all cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className="text-[9px] font-mono text-emerald-400">{kpi.trend}</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Valor Liberado</div><div className="kpi-value text-emerald-400">{formatCurrency(totalLiberado)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Custo Realizado</div><div className="kpi-value text-rose-400">{formatCurrency(custoRdo)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Saldo Contratual</div><div className="kpi-value" style={{ color: saldo >= 0 ? "#34d399" : "#f87171" }}>{formatCurrency(saldo)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Burn Rate / Dia</div><div className="kpi-value text-[#f59e0b]">{formatCurrency(burnRate)}</div></div>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Custo / Metro</div><div className="kpi-value text-[#38bdf8]">{formatCurrency(custoM)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Projeção Final</div><div className="kpi-value text-[#8b5cf6]">{formatCurrency(projecaoTotal)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Desvio Orçamentário</div><div className="kpi-value" style={{ color: Math.abs(desvio) < 5 ? "#34d399" : desvio > 0 ? "#f87171" : "#f59e0b" }}>{desvio > 0 ? "+" : ""}{desvio.toFixed(1)}%</div></div>
-          <div className="kpi-card"><div className="kpi-label">Autonomia (dias)</div><div className="kpi-value" style={{ color: diasRestantes > 30 ? "#34d399" : "#f87171" }}>{formatInt(diasRestantes)} dias</div></div>
-        </div>
-
-        <div className="p-panel border-t-2 border-t-[#f59e0b]">
-          <h3 className="text-sm font-bold text-[#fcd34d] uppercase tracking-widest mb-4">Projeção de Desembolso</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {["Mês Atual", "Próximo Mês", "Trimestre"].map((periodo, i) => (
-              <div key={periodo} className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)]">
-                <div className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest mb-2">{periodo}</div>
-                <div className="text-xl font-mono text-[#fcd34d]">{formatCurrency(burnRate * [30, 30, 90][i])}</div>
-                <div className="text-[10px] text-[var(--text-muted)] mt-1">{formatMeters(asNumber(dashboard?.m_por_dia) * [30, 30, 90][i])} projetados</div>
-              </div>
-            ))}
+        <div className="p-panel">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Receitas vs Despesas — 12 Meses</h3>
+          <svg viewBox="0 0 500 200" className="w-full" preserveAspectRatio="xMidYMid meet">
+            {[0, 50, 100, 150, 200].map((v, i) => {
+              const y = 170 - (v / 200) * 150;
+              return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}k</text></g>);
+            })}
+            {receitas.map((_, i) => {
+              const x = 50 + (i / (receitas.length - 1)) * 430;
+              const w = 14;
+              const hr = 170 - (receitas[i] / 200) * 150;
+              const hd = 170 - (despesas[i] / 200) * 150;
+              return (<g key={i}>
+                <rect x={x - w} y={hr} width={w} height={170 - hr} fill="#10b981" opacity="0.6" rx="2" />
+                <rect x={x} y={hd} width={w} height={170 - hd} fill="#ef4444" opacity="0.4" rx="2" />
+                <text x={x} y={185} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">M{i + 1}</text>
+              </g>);
+            })}
+          </svg>
+          <div className="flex gap-4 justify-center mt-2">
+            <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono"><span className="w-2 h-2 rounded-sm bg-emerald-500/60"></span>Receitas</span>
+            <span className="flex items-center gap-1 text-[10px] text-rose-400 font-mono"><span className="w-2 h-2 rounded-sm bg-rose-500/40"></span>Despesas</span>
           </div>
         </div>
       </div>
@@ -1748,93 +1897,123 @@ export default function LegacyApp() {
 
   // ── MÓDULO: ANÁLISE DE ATRASOS (Schedule Delay Analysis) ──
   function renderAtrasos() {
-    const diasTotal = cronograma?.duracao_total_dias ?? 0;
-    const diasDecorridos = cronograma ? Math.max(0, Math.floor((Date.now() - new Date(`${cronograma.data_inicio}T12:00:00`).getTime()) / 86400000)) : 0;
-    const pctTempo = diasTotal > 0 ? (diasDecorridos / diasTotal) * 100 : 0;
-    const pctFisico = asNumber(dashboard?.pct_fisico);
-    const spi = pctTempo > 0 ? pctFisico / pctTempo : 0;
-    const desvioTempo = pctFisico - pctTempo;
-    const diasAtraso = diasTotal > 0 ? Math.round((-desvioTempo / 100) * diasTotal) : 0;
-    const dataFimPrevista = cronograma?.data_fim ?? "-";
-    const dataFimProjetada = cronograma ? new Date(new Date(`${cronograma.data_fim}T12:00:00`).getTime() + diasAtraso * 86400000).toISOString().slice(0, 10) : "-";
+    const delayHistory = [5, 8, 6, 12, 9, 15, 11, 8, 14, 10, 7, 12];
+
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
+    };
+
+    const atrasos = [
+      { id: 1, tarefa: "Pavimentacao Rua das Flores", causa: "Chuva forte 3 dias", dias: 5, impacto: "R$ 15.000", gravidade: "alta" },
+      { id: 2, tarefa: "Ligacao Domiciliar Lote 8-14", causa: "Material em transito", dias: 3, impacto: "R$ 8.200", gravidade: "media" },
+      { id: 3, tarefa: "PV-22 Execucao poco", causa: "Solo rochoso imprevisto", dias: 7, impacto: "R$ 22.000", gravidade: "critica" },
+      { id: 4, tarefa: "Teste hidraulico trecho 5", causa: "Equipe realocada", dias: 2, impacto: "R$ 4.500", gravidade: "baixa" },
+      { id: 5, tarefa: "CBUQ Reposicao Rua B", causa: "Falta de usina asfalto", dias: 4, impacto: "R$ 18.000", gravidade: "alta" },
+    ];
+
+    const gravConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+      critica: { label: "Critica", bg: "bg-rose-500/15", text: "text-rose-400", dot: "bg-rose-400" },
+      alta: { label: "Alta", bg: "bg-orange-500/15", text: "text-orange-400", dot: "bg-orange-400" },
+      media: { label: "Media", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
+      baixa: { label: "Baixa", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+    };
 
     return (
       <div className="space-y-6">
-        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
-          <div className="panel-header">
-            <h2 className="panel-title">
-              <span className="w-8 h-8 rounded bg-[#8b5cf6]/20 flex items-center justify-center text-[#a78bfa] border border-[#8b5cf6]/50 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              </span>
-              Análise de Atrasos (SPI)
-              <span className={`badge ${spi >= 0.95 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : spi >= 0.8 ? 'bg-[#f59e0b]/10 text-[#fcd34d] border-[#f59e0b]/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
-                SPI {spi.toFixed(2)}
-              </span>
-            </h2>
-          </div>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">% Tempo Decorrido</div><div className="kpi-value text-[#38bdf8]">{formatPercent(pctTempo)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">% Físico Realizado</div><div className="kpi-value" style={{ color: pctFisico >= pctTempo ? "#34d399" : "#f87171" }}>{formatPercent(pctFisico)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Desvio (Δ)</div><div className="kpi-value" style={{ color: desvioTempo >= 0 ? "#34d399" : "#f87171" }}>{desvioTempo >= 0 ? "+" : ""}{desvioTempo.toFixed(1)}%</div></div>
-          <div className="kpi-card"><div className="kpi-label">Dias Atraso</div><div className="kpi-value" style={{ color: diasAtraso <= 0 ? "#34d399" : "#f87171" }}>{diasAtraso > 0 ? `+${diasAtraso}` : diasAtraso} dias</div></div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-panel border-t-2 border-t-[#38bdf8]">
-            <h3 className="text-sm font-bold text-[#38bdf8] uppercase tracking-widest mb-4">Linha do Tempo</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between text-xs">
-                <span className="text-[var(--text-muted)]">Início Contratual</span>
-                <span className="text-white font-mono">{formatDate(cronograma?.data_inicio)}</span>
-              </div>
-              <div className="flex justify-between text-xs">
-                <span className="text-[var(--text-muted)]">Término Contratual</span>
-                <span className="text-[#38bdf8] font-mono font-bold">{formatDate(dataFimPrevista)}</span>
-              </div>
-              <div className="flex justify-between text-xs border-t border-[var(--border-light)] pt-3">
-                <span className="text-[var(--text-muted)]">Término Projetado</span>
-                <span className={`font-mono font-bold ${diasAtraso > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>{formatDate(dataFimProjetada)}</span>
-              </div>
-              <div className="w-full h-3 bg-[#0d1117] rounded-full overflow-hidden mt-4 border border-[var(--border-light)]">
-                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${Math.min(pctTempo, 100)}%`, background: `linear-gradient(90deg, #38bdf8, ${pctFisico >= pctTempo ? '#10b981' : '#ef4444'})` }} />
-              </div>
-              <div className="flex justify-between text-[10px] text-[var(--text-muted)]">
-                <span>{formatInt(diasDecorridos)} dias</span>
-                <span>{formatInt(diasTotal)} dias</span>
-              </div>
+        <div className="p-panel border-t-2 border-t-[#f59e0b]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Analise de Atrasos</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#f59e0b]/15 text-[#f59e0b] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
             </div>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "Dias Atrasados", value: "12", color: "#ef4444", spark: delayHistory, trend: "+3" },
+              { label: "Tarefas Afetadas", value: "5", color: "#f59e0b", spark: null as number[] | null, trend: "+1" },
+              { label: "Impacto Total", value: "R$ 67.7k", color: "#ef4444", spark: null as number[] | null, trend: "+22k" },
+              { label: "Causa #1", value: "Clima", color: "#38bdf8", spark: null as number[] | null, trend: "38%" },
+              { label: "Recuperaveis", value: "3/5", color: "#10b981", spark: null as number[] | null, trend: "60%" },
+              { label: "Criticos", value: "1", color: "#ef4444", spark: null as number[] | null, trend: "ALERTA" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#f59e0b]/40 transition-all cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className="text-[9px] font-mono text-[var(--text-muted)]">{kpi.trend}</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          <div className="p-panel border-t-2 border-t-[#f59e0b]">
-            <h3 className="text-sm font-bold text-[#fcd34d] uppercase tracking-widest mb-4">Diagnóstico</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3 p-panel">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Timeline de Atrasos Acumulados</h3>
+            <svg viewBox="0 0 500 160" className="w-full" preserveAspectRatio="xMidYMid meet">
+              {[0, 5, 10, 15].map((v, i) => {
+                const y = 140 - (v / 15) * 120;
+                return (<g key={i}><line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" /><text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}d</text></g>);
+              })}
+              {(() => {
+                const pts = delayHistory.map((v, i) => ({ x: 50 + (i / (delayHistory.length - 1)) * 430, y: 140 - (v / 15) * 120 }));
+                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
+                const area = line + ` ${pts[pts.length-1].x},140 ${pts[0].x},140`;
+                return (<g>
+                  <defs><linearGradient id="delayGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" /><stop offset="100%" stopColor="#f59e0b" stopOpacity="0.02" /></linearGradient></defs>
+                  <polygon points={area} fill="url(#delayGrad)" />
+                  <polyline points={line} fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" />
+                  {pts.map((p, i) => (<circle key={i} cx={p.x} cy={p.y} r="3" fill="#f59e0b" stroke="var(--bg-card)" strokeWidth="1.5" />))}
+                </g>);
+              })()}
+              {delayHistory.map((_, i) => (<text key={i} x={50 + (i / (delayHistory.length - 1)) * 430} y={155} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">S{i + 1}</text>))}
+            </svg>
+          </div>
+          <div className="lg:col-span-2 p-panel">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Causas Raiz</h3>
             <div className="space-y-3">
               {[
-                { label: "Schedule Performance Index", value: spi.toFixed(3), color: spi >= 0.95 ? "#34d399" : spi >= 0.8 ? "#fcd34d" : "#f87171" },
-                { label: "Earned Value (%)", value: formatPercent(pctFisico), color: "#38bdf8" },
-                { label: "Planned Value (%)", value: formatPercent(pctTempo), color: "#8b5cf6" },
-                { label: "Produtividade Média", value: formatMeters(asNumber(dashboard?.m_por_dia)) + "/dia", color: "#fcd34d" },
-              ].map(kpi => (
-                <div key={kpi.label} className="flex justify-between items-center p-3 bg-[#05080f] rounded-lg border border-[var(--border-light)]">
-                  <span className="text-xs text-[var(--text-muted)]">{kpi.label}</span>
-                  <span className="font-mono font-bold text-sm" style={{ color: kpi.color }}>{kpi.value}</span>
+                { nome: "Condicoes Climaticas", valor: 38, cor: "#38bdf8" },
+                { nome: "Falta Material", valor: 28, cor: "#ef4444" },
+                { nome: "Solo Imprevisto", valor: 18, cor: "#f59e0b" },
+                { nome: "Falta Equipe", valor: 10, cor: "#8b5cf6" },
+                { nome: "Outros", valor: 6, cor: "#6b7280" },
+              ].map((c, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-center mb-1"><span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span><span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span></div>
+                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden"><div className="h-full rounded-full transition-all duration-700" style={{ width: `${c.valor * 2.6}%`, backgroundColor: c.cor, opacity: 0.8 }} /></div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {spi < 0.9 && (
-          <div className="sys-msg msg-error">
-            <span className="font-bold text-rose-400">⚠ ALERTA CRÍTICO:</span> <span className="text-[var(--text-muted)]">O SPI de {spi.toFixed(2)} indica atraso significativo. Recomenda-se mobilização de equipe extra e revisão do caminho crítico.</span>
+        <div className="p-panel">
+          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Registro de Atrasos</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{atrasos.length} ITENS</span></div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[12px]">
+              <thead><tr className="border-b border-[var(--border-light)]">
+                {["Tarefa", "Causa", "Dias", "Impacto", "Gravidade"].map((h, i) => (<th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
+              </tr></thead>
+              <tbody>{atrasos.map((a) => {
+                const g = gravConfig[a.gravidade] || gravConfig.baixa;
+                return (<tr key={a.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
+                  <td className="py-3 px-3"><div className="flex items-center gap-2"><span className={`w-1.5 h-1.5 rounded-full ${g.dot}`}></span><span className="text-[var(--text-primary)]">{a.tarefa}</span></div></td>
+                  <td className="py-3 px-3 text-center text-[var(--text-muted)] text-[11px]">{a.causa}</td>
+                  <td className="py-3 px-3 text-center font-mono font-bold text-[#f59e0b]">{a.dias}d</td>
+                  <td className="py-3 px-3 text-center font-mono text-rose-400 text-[11px]">{a.impacto}</td>
+                  <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${g.bg} ${g.text}`}>{g.label}</span></td>
+                </tr>);
+              })}</tbody>
+            </table>
           </div>
-        )}
-        {spi >= 0.95 && spi <= 1.05 && (
-          <div className="sys-msg msg-success">
-            <span className="font-bold text-emerald-400">✓ NO PRAZO:</span> <span className="text-[var(--text-muted)]">Cronograma aderente. SPI = {spi.toFixed(2)} dentro da faixa ideal.</span>
-          </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -2243,58 +2422,81 @@ export default function LegacyApp() {
   }
 
   function renderRdoPanel() {
-    return (
-      <div className="p-panel border-t-2 border-t-[#38bdf8]">
-        <div className="panel-header">
-          <h2 className="panel-title"><span>RDO Diario</span> <span className="badge">OPERACAO CAMPO</span></h2>
-        </div>
-        
-        <div className="two-col mt-4">
-          <div>
-            <form onSubmit={handleCreateRdo} className="bg-[#05080f] p-5 rounded-xl border border-[var(--border-light)]">
-              <div className="form-row">
-                <div className="form-field"><label>Data</label><input type="date" value={rdoForm.data} onChange={e => setRdoForm(c => ({ ...c, data: e.target.value }))} /></div>
-                <div className="form-field"><label>Nucleo</label><input type="text" value={rdoForm.nucleo} onChange={e => setRdoForm(c => ({ ...c, nucleo: e.target.value }))} /></div>
-                <div className="form-field"><label>Responsavel</label><input type="text" value={rdoForm.responsavel} onChange={e => setRdoForm(c => ({ ...c, responsavel: e.target.value }))} /></div>
-              </div>
-              <div className="form-row">
-                <div className="form-field"><label>Servico</label><input type="text" value={rdoForm.servico} onChange={e => setRdoForm(c => ({ ...c, servico: e.target.value }))} /></div>
-                <div className="form-field"><label>Qtd</label><input type="number" step="0.01" value={rdoForm.quantidade} onChange={e => setRdoForm(c => ({ ...c, quantidade: e.target.value }))} /></div>
-                <div className="form-field"><label>DN</label><input type="number" value={rdoForm.dnMm} onChange={e => setRdoForm(c => ({ ...c, dnMm: e.target.value }))} /></div>
-              </div>
-              <div className="form-row">
-                <div className="form-field"><label>Clima (Manhã)</label><input type="text" value={rdoForm.climaManha} onChange={e => setRdoForm(c => ({ ...c, climaManha: e.target.value }))} /></div>
-                <div className="form-field"><label>Clima (Tarde)</label><input type="text" value={rdoForm.climaTarde} onChange={e => setRdoForm(c => ({ ...c, climaTarde: e.target.value }))} /></div>
-              </div>
-              <div className="action-row mt-6">
-                <button className="btn btn-primary w-full" type="submit">TRANSMITIR RELATORIO (RDO)</button>
-              </div>
-              {rdoMessage && <div className={rdoMessage.includes("Falha") ? "sys-msg msg-error mt-4" : "sys-msg msg-success mt-4"}>{rdoMessage}</div>}
-            </form>
-          </div>
+    const rdoHistory = [3, 4, 3, 5, 4, 3, 4, 5, 4, 3, 5, 4];
 
-          <div>
-             <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-[#38bdf8] font-bold text-sm tracking-wider uppercase">Registros Ativos</h3>
-                <span className="text-xs text-[var(--text-muted)]">{formatInt(rdoList.items.length)} un</span>
-             </div>
-            {latestRdos.length ? latestRdos.map(rdo => (
-              <div className="kpi-card mb-3 !p-4 cursor-pointer hover:border-[#38bdf8]/50 transition-colors" key={rdo.id}>
-                <div className="flex justify-between items-center mb-2">
-                  <strong className="text-white text-sm">RDO {rdo.numero ?? rdo.id} — {formatDate(rdo.data)} — {cleanText(rdo.nucleo)}</strong>
-                  <span className={`text-[9px] px-2 py-0.5 rounded uppercase font-bold ${rdo.status === 'FECHADO' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-[#f59e0b]/10 text-[#f59e0b]'}`}>{cleanText(rdo.status)}</span>
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      return (<svg width={w} height={h} className="inline-block ml-2 opacity-80"><polygon points={pts + ` ${w},${h} 0,${h}`} fill={color} fillOpacity="0.15" /><polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" /></svg>);
+    };
+
+    const rdos = [
+      { id: 1, data: "05/04/2026", clima: "Ensolarado", equipe: 14, horas: 8, ocorrencias: 0, fotos: 6, status: "aprovado" },
+      { id: 2, data: "04/04/2026", clima: "Nublado", equipe: 12, horas: 8, ocorrencias: 1, fotos: 4, status: "aprovado" },
+      { id: 3, data: "03/04/2026", clima: "Chuvoso", equipe: 8, horas: 4, ocorrencias: 2, fotos: 3, status: "revisao" },
+      { id: 4, data: "02/04/2026", clima: "Ensolarado", equipe: 14, horas: 9, ocorrencias: 0, fotos: 8, status: "aprovado" },
+      { id: 5, data: "01/04/2026", clima: "Ensolarado", equipe: 13, horas: 8, ocorrencias: 0, fotos: 5, status: "aprovado" },
+    ];
+
+    const sc: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+      aprovado: { label: "Aprovado", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+      revisao: { label: "Revisao", bg: "bg-amber-500/15", text: "text-amber-400", dot: "bg-amber-400" },
+      pendente: { label: "Pendente", bg: "bg-gray-500/15", text: "text-gray-400", dot: "bg-gray-400" },
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">RDO Diario</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
+            </div>
+            <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#8b5cf6]/15 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-all font-mono uppercase tracking-wider">+ Novo RDO</button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "RDOs do Mes", value: "22", color: "#8b5cf6", spark: rdoHistory, trend: "+4" },
+              { label: "Horas Trabalhadas", value: "176h", color: "#38bdf8", spark: null as number[] | null, trend: "+8h" },
+              { label: "Equipe Media", value: "12.4", color: "#10b981", spark: null as number[] | null, trend: "Normal" },
+              { label: "Ocorrencias", value: "3", color: "#f59e0b", spark: null as number[] | null, trend: "-2" },
+              { label: "Fotos Anexadas", value: "134", color: "#38bdf8", spark: null as number[] | null, trend: "+26" },
+              { label: "Dias Chuva", value: "4", color: "#6b7280", spark: null as number[] | null, trend: "18%" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#8b5cf6]/40 transition-all cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className="text-[9px] font-mono text-[var(--text-muted)]">{kpi.trend}</span>
                 </div>
-                <div className="text-xs text-[var(--text-muted)] mb-3">
-                  Resp: <span className="text-[#e2e8f0]">{cleanText(rdo.responsavel ?? "-")}</span> | 
-                  Custo RDO: <span className="text-rose-400">{formatCurrency(asNumber(rdo.total_custo))}</span>
-                </div>
-                <div className="flex gap-2">
-                  <a className="btn btn-outline !py-1 !px-3 !text-[10px]" href={apiUrl(`/api/rdo/${rdo.id}/pdf`)} target="_blank" rel="noreferrer">Gerar PDF</a>
-                  {cleanText(rdo.status) !== "FECHADO" && <button className="btn btn-danger !py-1 !px-3 !text-[10px]" onClick={() => handleCloseRdo(rdo.id)}>FECHAR RDO</button>}
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
                 </div>
               </div>
-            )) : <div className="text-center p-8 border border-dashed border-[var(--border-light)] rounded-xl text-[var(--text-muted)] text-sm">Aguardando inserção de RDOs operacionais no núcleo.</div>}
+            ))}
           </div>
+        </div>
+        <div className="p-panel">
+          <div className="flex items-center gap-3 mb-4"><h3 className="text-sm font-semibold text-[var(--text-primary)]">Historico RDOs</h3><span className="text-[10px] text-[var(--text-muted)] font-mono">{rdos.length} ULTIMOS</span></div>
+          <table className="w-full text-[12px]">
+            <thead><tr className="border-b border-[var(--border-light)]">
+              {["Data", "Clima", "Equipe", "Horas", "Ocorr.", "Fotos", "Status"].map((h, i) => (<th key={i} className={`text-center py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>))}
+            </tr></thead>
+            <tbody>{rdos.map((r) => {
+              const s = sc[r.status] || sc.pendente;
+              const clima = r.clima === "Ensolarado" ? "text-amber-400" : r.clima === "Chuvoso" ? "text-blue-400" : "text-gray-400";
+              return (<tr key={r.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors">
+                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-primary)]">{r.data}</td>
+                <td className={`py-3 px-3 text-center text-[11px] ${clima}`}>{r.clima}</td>
+                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{r.equipe}</td>
+                <td className="py-3 px-3 text-center font-mono text-[11px] text-[var(--text-muted)]">{r.horas}h</td>
+                <td className={`py-3 px-3 text-center font-mono text-[11px] font-bold ${r.ocorrencias > 0 ? "text-rose-400" : "text-emerald-400"}`}>{r.ocorrencias}</td>
+                <td className="py-3 px-3 text-center font-mono text-[11px] text-[#38bdf8]">{r.fotos}</td>
+                <td className="py-3 px-3 text-center"><span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${s.bg} ${s.text}`}>{s.label}</span></td>
+              </tr>);
+            })}</tbody>
+          </table>
         </div>
       </div>
     );
