@@ -38,6 +38,9 @@ const FluxoOperacionalPage = lazy(() => import("@/features/fluxo-operacional/ind
 const PunchListPage = lazy(() => import("@/features/punch-list/index").then((m) => ({ default: m.PunchListPage })));
 const IaAnalyticsPage = lazy(() => import("@/features/ia-analytics/index").then((m) => ({ default: m.IaAnalyticsPage })));
 const GisEditorPage = lazy(() => import("@/features/gis-editor/index").then((m) => ({ default: m.GisEditorPage })));
+const EvmPage = lazy(() => import("@/features/evm/index").then((m) => ({ default: m.EvmPage })));
+const PlanejamentoMestrePage = lazy(() => import("@/features/planejamento-mestre/index").then((m) => ({ default: m.PlanejamentoMestrePage })));
+const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").then((m) => ({ default: m.OperacaoCampoPage })));
 
 // ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
 const LegacyApp = lazy(() => import("./LegacyApp"));
@@ -58,8 +61,10 @@ const navItems = [
 
   { section: "Planejamento" },
   { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
+  { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },
   { label: "LPS/Lean", icon: Target, to: "/app/lps-lean" },
+  { label: "EVM / Curva S", icon: Calculator, to: "/app/evm" },
 
   { section: "Operacao de Campo" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
@@ -394,6 +399,9 @@ export default function App() {
           <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
           <Route path="ia-analytics" element={<LazyRoute><IaAnalyticsPage /></LazyRoute>} />
           <Route path="gis-editor" element={<LazyRoute><GisEditorPage /></LazyRoute>} />
+          <Route path="evm" element={<LazyRoute><EvmPage /></LazyRoute>} />
+          <Route path="planejamento-mestre" element={<LazyRoute><PlanejamentoMestrePage /></LazyRoute>} />
+          <Route path="operacao-campo" element={<LazyRoute><OperacaoCampoPage /></LazyRoute>} />
           <Route path="gestao-contatos" element={<LazyRoute><GestaoContatosPage /></LazyRoute>} />
           <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
           <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />

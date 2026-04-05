@@ -16,7 +16,7 @@ import { MapaTransformCrsModal }  from './MapaTransformCrsModal'
 import type { MapTool, MapNetworkType } from '@/types'
 
 const NETWORK_TYPE_OPTIONS: { id: MapNetworkType; label: string; color: string }[] = [
-  { id: 'sewer',    label: 'Esgoto',   color: '#2abfdc' },
+  { id: 'sewer',    label: 'Esgoto',   color: '#f97316' },
   { id: 'water',    label: 'Água',     color: '#38bdf8' },
   { id: 'drainage', label: 'Drenagem', color: '#4ade80' },
   { id: 'civil',    label: 'Civil',    color: '#94a3b8' },
@@ -152,7 +152,7 @@ export function MapaHeader({
 
   return (
     <>
-      <div className="bg-gray-900 border-b border-gray-800 px-3 py-2 flex flex-col gap-2">
+      <div className="bg-[#2c2c2c] border-b border-[#3d3d3d] px-3 py-2 flex flex-col gap-2">
         {/* Row 1: Title + counters */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 shrink-0">
@@ -161,7 +161,7 @@ export function MapaHeader({
             </div>
             <span className="text-sm font-bold text-white hidden sm:block">Mapa Interativo</span>
           </div>
-          <span className="text-xs text-gray-500 font-mono">
+          <span className="text-xs text-[#6b6b6b] font-mono">
             {nodes.length} pts · {segments.length} trechos
           </span>
         </div>
@@ -175,7 +175,7 @@ export function MapaHeader({
           <ToolBtn label="Salvar" icon={<Save size={13} />} onClick={handleSave} />
           <ToolBtn label="Carregar" icon={<FolderOpen size={13} />} onClick={handleLoad} />
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Editing tools */}
           {TOOL_BUTTONS.map((tb) => (
@@ -191,25 +191,25 @@ export function MapaHeader({
 
           <ToolBtn label="Mover em Massa" icon={<Move size={13} />} onClick={() => {}} />
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* CRS + UTM */}
           <ToolBtn label="Transf. CRS" icon={<ArrowRightLeft size={13} />} onClick={() => setShowTransform(true)} />
           <select
             value={utmZone}
             onChange={(e) => useMapaInterativoStore.setState({ utmZone: e.target.value })}
-            className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-xs text-gray-300 focus:outline-none"
+            className="bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none"
           >
             {UTM_ZONES.map((z) => <option key={z} value={z}>{z}</option>)}
           </select>
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Basemap */}
           <select
             value={basemap}
             onChange={(e) => setBasemap(e.target.value as typeof basemap)}
-            className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-xs text-gray-300 focus:outline-none"
+            className="bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none"
           >
             <option value="satellite">Satélite</option>
             <option value="streets">Ruas (Voyager)</option>
@@ -218,19 +218,19 @@ export function MapaHeader({
             <option value="outdoors">Relevo</option>
           </select>
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Import BIM / Planejamento */}
           <ToolBtn label="Importar BIM"    icon={<ZoomIn size={13} />}  onClick={handleImportBim} />
           <ToolBtn label="Import. Trechos" icon={<ZoomOut size={13} />} onClick={handleImportPlanejamento} />
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Import / Export */}
           <ToolBtn label="Importar" icon={<Upload size={13} />}   onClick={() => setShowImport(true)} />
           <ToolBtn label="Exportar" icon={<Download size={13} />} onClick={() => setShowExport(true)} />
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Analytics toggle */}
           <ToolBtn
@@ -240,13 +240,13 @@ export function MapaHeader({
             onClick={() => onToggleAnalytics?.()}
           />
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Project selector */}
           <select
             value={selectedProjectId ?? ''}
             onChange={(e) => setSelectedProjectId(e.target.value || null)}
-            className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-xs text-gray-300 focus:outline-none max-w-[140px]"
+            className="bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none max-w-[140px]"
           >
             <option value="">(Nenhum projeto)</option>
             {projects.map((p) => (
@@ -254,10 +254,10 @@ export function MapaHeader({
             ))}
           </select>
 
-          <div className="w-px h-5 bg-gray-700 mx-1" />
+          <div className="w-px h-5 bg-[#484848] mx-1" />
 
           {/* Network type pills (for connect tool) */}
-          <span className="text-[10px] text-gray-500 self-center">Tipo:</span>
+          <span className="text-[10px] text-[#6b6b6b] self-center">Tipo:</span>
           {NETWORK_TYPE_OPTIONS.map((opt) => (
             <button
               key={opt.id}
@@ -266,7 +266,7 @@ export function MapaHeader({
               className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
                 activeNetworkType === opt.id
                   ? 'text-white border-transparent'
-                  : 'bg-gray-800 border-gray-700 text-gray-400 hover:text-gray-200'
+                  : 'bg-[#3d3d3d] border-[#525252] text-[#a3a3a3] hover:text-[#f5f5f5]'
               }`}
               style={activeNetworkType === opt.id ? { background: opt.color, borderColor: opt.color } : {}}
             >
@@ -305,7 +305,7 @@ function ToolBtn({
           ? 'bg-orange-600 text-white'
           : danger
             ? 'bg-red-900/40 text-red-400 hover:bg-red-900/70'
-            : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+            : 'bg-[#3d3d3d] text-[#f5f5f5] hover:bg-[#484848] hover:text-white'
       }`}
     >
       {icon}

@@ -141,7 +141,7 @@ export function NormalizacaoView() {
       {/* Header stats */}
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-[#f5f5f5] text-sm font-semibold">Normalização de Itens</span>
-        <span className="px-2 py-0.5 rounded-full bg-[#2abfdc]/20 text-[#2abfdc] text-xs">
+        <span className="px-2 py-0.5 rounded-full bg-[#f97316]/20 text-[#f97316] text-xs">
           {withSuggestions} sugestões
         </span>
         <span className="px-2 py-0.5 rounded-full bg-[#16a34a]/20 text-[#4ade80] text-xs">
@@ -166,10 +166,10 @@ export function NormalizacaoView() {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto overflow-x-auto bg-[#0d2040] border border-[#20406a] rounded-xl">
+      <div className="flex-1 overflow-auto overflow-x-auto bg-[#2c2c2c] border border-[#525252] rounded-xl">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr className="bg-[#1a3662]">
+            <tr className="bg-[#484848]">
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2 w-8"></th>
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Original</th>
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Sugestão</th>
@@ -181,7 +181,7 @@ export function NormalizacaoView() {
             {suggestions.map(({ item, hasSuggestion, suggestedDesc, suggestedQty, suggestedUnit, reason, acceptedOrRejected }) => (
               <tr
                 key={item.id}
-                className="border-t border-[#20406a] hover:bg-[#1a3662]/50 transition-colors"
+                className="border-t border-[#525252] hover:bg-[#484848]/50 transition-colors"
               >
                 {/* Status indicator */}
                 <td className="px-3 py-2">
@@ -204,7 +204,7 @@ export function NormalizacaoView() {
                 <td className="px-3 py-2">
                   {hasSuggestion ? (
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[#2abfdc] text-xs">{suggestedDesc}</span>
+                      <span className="text-[#f97316] text-xs">{suggestedDesc}</span>
                       <span className="text-[#a3a3a3] text-[10px]">
                         {suggestedQty.toLocaleString('pt-BR', { maximumFractionDigits: 4 })} {suggestedUnit}
                       </span>
@@ -283,7 +283,7 @@ export function NormalizacaoView() {
         </button>
         <button
           onClick={() => setStep('matching')}
-          className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#2abfdc] hover:bg-[#ea6c0a] text-white transition-colors"
+          className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#f97316] hover:bg-[#ea6c0a] text-white transition-colors"
         >
           Avançar → Matching
         </button>

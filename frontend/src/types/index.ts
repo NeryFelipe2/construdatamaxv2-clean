@@ -515,6 +515,70 @@ export interface FrameworkAgreement {
   priceAdjustmentPct?: number
 }
 
+// ─── Suprimentos & Estoque Inteligente ───────────────────────────────────────
+
+export interface DepositoVirtual {
+  id: string
+  frente: string           // "Morro do Tetéu", "São Manoel", "Vila dos Criadores", "Escritório"
+  descricao?: string
+  ativo: boolean
+}
+
+export interface ItemEstoque {
+  id: string
+  depositoId: string
+  descricao: string
+  unidade: string
+  qtdDisponivel: number
+  qtdReservada: number
+  qtdTransito: number
+  estoqueMinimo: number
+  custoUnitario?: number
+  lpsActivityId?: string
+  categoria?: string
+  fornecedorPrincipal?: string
+}
+
+export interface MovimentacaoEstoque {
+  id: string
+  itemId: string
+  depositoId: string
+  tipo: 'entrada' | 'saida' | 'transferencia' | 'ajuste'
+  quantidade: number
+  dataMovimento: string
+  dataCompra?: string
+  fornecedor?: string
+  nf?: string
+  leadTimeDias?: number
+  lpsActivityId?: string
+  observacoes?: string
+}
+
+export interface ReservaMaterial {
+  id: string
+  itemId: string
+  depositoId: string
+  lpsActivityId: string
+  semana: number
+  qtdNecessaria: number
+  status: 'verde' | 'amarelo' | 'vermelho'
+  nfsEmTransito?: string[]
+  previsaoEntrega?: string
+  alertaGerado?: boolean
+  criadoEm: string
+}
+
+export interface LeadTimeRecord {
+  id: string
+  fornecedor: string
+  dataCompra: string
+  dataMovimento: string
+  nf: string
+  leadTimeDias: number
+  itemDescricao: string
+  categoria?: string
+}
+
 // ─── Mão de Obra ──────────────────────────────────────────────────────────────
 
 export type WorkerStatus   = 'active' | 'inactive' | 'suspended' | 'pending_approval'
@@ -1205,6 +1269,24 @@ export interface RDO {
   observations: string
   incidents:    string
   photos:       RdoPhoto[]
+  logoId?:      string   // ID of the SavedLogo to use in PDF export
+
+  // ── Contrato / Identificação ─────────────────────────────────────────────────
+  local?:                       string
+  gerenteContrato?:             string
+  tecnicoSeguranca?:            string
+  nomeEmpreiteira?:             string
+  servicoExecutar?:             string
+  ocorrencias?:                 string
+  funcionariosDiretos?:         number
+  funcionariosIndiretos?:       number
+  qtdEquipamentosFerramentas?:  number
+  numeroOS?:                    string
+  numeroContrato?:              string
+  climaManha?:                  string
+  climaTarde?:                  string
+  climaNoite?:                  string
+
   createdAt:    string
   updatedAt:    string
 }
@@ -1295,7 +1377,7 @@ export type BimTab = 'viewer' | '4d' | '5d'
 
 export type LpsCncCategory = 'weather' | 'equipment' | 'labor' | 'material' | 'design' | 'other'
 export type LpsReadyStatus = 'green' | 'yellow' | 'red'
-export type LpsTab = 'semaforo' | 'lookahead' | 'ppc' | 'takt' | 'restricoes' | 'analytics'
+export type LpsTab = 'semaforo' | 'lookahead' | 'ppc' | 'takt' | 'restricoes' | 'analytics' | 'timeline-restricoes' | 'alertas' | 'mao-de-obra' | 'integracoes'
 
 export type LpsRestrictionCategory =
   | 'projeto_engenharia'
@@ -1321,6 +1403,10 @@ export interface LpsRestriction {
   status: LpsRestrictionStatus
   createdAt: string
   resolvedAt?: string
+  linkedActivityIds?: string[]
+  linkedMasterActivityIds?: string[]
+  alertSentAt?: string
+  alertMessage?: string
 }
 
 export interface LpsActivity {
@@ -1549,4 +1635,254 @@ export interface HardeningPoint {
   lat: number
   lng: number
   riskLevel: RiskLevel
+}
+
+// ── Planejamento Mestre ──────────────────────────────────────────────────────
+
+export type PlanejamentoMestreTab = 'macro' | 'derivacao' | 'whatif' | 'integrada' | 'semanal'
+
+export interface ProgramacaoDiaria {
+  previsto:  number
+  realizado: number
+}
+export type MasterActivityStatus = 'not_started' | 'in_progress' | 'completed' | 'delayed'
+
+export interface MasterActivity {
+  id: string
+  wbsCode: string
+  name: string
+  parentId: string | null
+  level: number
+  plannedStart: string
+  plannedEnd: string
+  trendStart: string
+  trendEnd: string
+  durationDays: number
+  percentComplete: number
+  status: MasterActivityStatus
+  isMilestone: boolean
+  responsibleTeam?: string
+  linkedTrechoCodes?: string[]
+  predecessors?: string[]
+  weight?: number
+  notes?: string
+  networkType?: 'agua' | 'esgoto' | 'civil' | 'geral'
+  serviceCategory?: 'LA' | 'LE' | 'intra' | 'interligacao' | 'reposicao' | 'na_rede' | 'OS' | 'pavimentacao' | 'recomposicao'
+  diameterMm?: number
+  // Weekly programming extended fields
+  nucleo?:             string
+  local?:              string
+  comprimento?:        number
+  quantidadeLigacoes?: number
+  pesoMeta1000?:       number
+  coordenador?:        string
+  unidade?:            string
+}
+
+export interface MasterBaseline {
+  id: string
+  name: string
+  createdAt: string
+  activities: MasterActivity[]
+}
+
+export interface LookaheadDerivedActivity {
+  id: string
+  masterActivityId: string
+  weekIso: string
+  name: string
+  responsible: string
+  status: 'planned' | 'ready' | 'blocked' | 'completed'
+  linkedRestrictionIds?: string[]
+  notes?: string
+  percentComplete?: number
+  networkType?: 'agua' | 'esgoto' | 'civil' | 'geral'
+}
+
+export interface WhatIfAdjustment {
+  activityId: string
+  deltaStartDays: number
+  deltaDurationDays: number
+}
+
+export interface WhatIfScenario {
+  id: string
+  name: string
+  adjustments: WhatIfAdjustment[]
+  createdAt: string
+}
+
+// ── LPS Enhancements (Gestão de Restrições e Recursos) ──────────────────────
+
+export interface LpsAlert {
+  id: string
+  restrictionId: string
+  recipientRole: string
+  message: string
+  sentAt: string
+  acknowledged: boolean
+  acknowledgedAt?: string
+}
+
+export interface StaffingDimension {
+  id: string
+  activityName: string
+  requiredTeams: number
+  requiredWorkers: number
+  role: string
+  availableFromMaoDeObra: number
+  gap: number
+  status: 'ok' | 'deficit' | 'surplus'
+}
+
+export type IntegrationSourceType = 'suprimentos' | 'mao_de_obra' | 'rdo'
+
+export interface IntegrationStatus {
+  source: IntegrationSourceType
+  label: string
+  lastSyncAt: string | null
+  itemsLinked: number
+  restrictionsAutoClearable: number
+  status: 'connected' | 'partial' | 'disconnected'
+}
+
+// ── Operação e Campo ─────────────────────────────────────────────────────────
+
+export type OperacaoCampoTab = 'calendario' | 'dashboards'
+
+export interface FieldCalendarActivity {
+  id: string
+  name: string
+  masterActivityId?: string
+  trechoCode?: string
+  responsible: string
+}
+
+export interface FieldCalendarDay {
+  date: string
+  activityId: string
+  plannedQty: number
+  plannedUnit: string
+  actualQty: number | null
+  notes?: string
+}
+
+export interface WeeklyPpcResult {
+  weekIso: string
+  totalPlanned: number
+  totalCompleted: number
+  ppc: number
+}
+
+export interface NotableServiceCurve {
+  id: string
+  serviceName: string
+  unit: string
+  dataPoints: { date: string; planned: number; actual: number }[]
+}
+
+export interface TrendPoint {
+  date: string
+  plannedCumulativePct: number
+  actualCumulativePct: number
+}
+
+// ── EVM (Earned Value Management) ──────────────────────────────────────────
+
+export type EvmTab = 'dashboard' | 'medicao' | 'plano-contas' | 'work-packages' | 'indices'
+
+export type CostPillar = 'material' | 'equipamento' | 'mao_de_obra' | 'impostos_indiretos'
+
+export type ServiceCategory = 'LA' | 'LE' | 'intra' | 'interligacao' | 'reposicao' | 'na_rede' | 'OS' | 'pavimentacao' | 'recomposicao'
+
+export interface WeightedMeasurement {
+  id: string
+  activityId: string
+  activityName: string
+  financialWeight: number
+  durationWeight: number
+  economicWeight: number
+  specificWeight: number
+  compositeScore: number
+}
+
+export interface CostAccountEntry {
+  id: string
+  activityId: string
+  pillar: CostPillar
+  description: string
+  unitCostBRL: number
+  quantity: number
+  totalCostBRL: number
+}
+
+export interface WorkPackage {
+  id: string
+  code: string
+  name: string
+  description: string
+  costAccounts: CostAccountEntry[]
+  measurements: WeightedMeasurement[]
+  totalBudgetBRL: number
+  createdAt: string
+  isTemplate: boolean
+}
+
+export interface EvmMetrics {
+  BAC: number
+  PV: number
+  EV: number
+  AC: number
+  CPI: number
+  SPI: number
+  CV: number
+  SV: number
+  EAC: number
+  ETC: number
+  VAC: number
+  TCPI: number
+  costBreakdown: CostBreakdown
+  eacScenarios: EacScenarios
+  pillarDeviations: PillarDeviation[]
+  stockAlerts: StockAlert[]
+  healthStatus: 'blue' | 'yellow' | 'red'
+}
+
+export interface CostBreakdown {
+  material: number
+  equipamento: number
+  mao_de_obra: number
+  impostos_indiretos: number
+}
+
+export interface EacScenarios {
+  optimistic: number
+  trend: number
+  pessimistic: number
+}
+
+export interface PillarDeviation {
+  pillar: CostPillar
+  label: string
+  budgeted: number
+  actual: number
+  deviation: number
+  deviationPct: number
+}
+
+export interface StockAlert {
+  itemId: string
+  description: string
+  qtdComprada: number
+  qtdInstalada: number
+  qtdImobilizada: number
+  custoImobilizado: number
+}
+
+export interface SCurveMultiPoint {
+  date: string
+  plannedFinancialPct: number
+  actualPhysicalPct: number
+  earnedValuePct: number
+  actualCostPct: number
 }

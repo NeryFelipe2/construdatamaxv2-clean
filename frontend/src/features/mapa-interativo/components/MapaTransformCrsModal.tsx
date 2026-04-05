@@ -40,37 +40,37 @@ export function MapaTransformCrsModal({ onClose, defaultZone = '24S' }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-sm shadow-2xl">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-sm shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
           <div className="flex items-center gap-2">
             <ArrowRightLeft size={14} className="text-orange-400" />
             <h3 className="text-sm font-bold text-white">Transformar CRS</h3>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-300"><X size={16} /></button>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
         </div>
 
         {/* Body */}
         <div className="px-6 py-5 flex flex-col gap-4">
-          <p className="text-xs text-gray-500">Converta coordenadas UTM para WGS84 (lat/lng).</p>
+          <p className="text-xs text-[#6b6b6b]">Converta coordenadas UTM para WGS84 (lat/lng).</p>
 
           {/* Zone + Hemisphere */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Zona UTM</label>
+              <label className="text-[10px] text-[#6b6b6b] uppercase tracking-wider block mb-1">Zona UTM</label>
               <input
                 type="number" min={1} max={60}
                 value={zone}
                 onChange={(e) => setZone(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 text-center"
+                className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 text-center"
               />
             </div>
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Hemisfério</label>
+              <label className="text-[10px] text-[#6b6b6b] uppercase tracking-wider block mb-1">Hemisfério</label>
               <select
                 value={hemi}
                 onChange={(e) => setHemi(e.target.value as 'N' | 'S')}
-                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
               >
                 <option value="S">Sul (S)</option>
                 <option value="N">Norte (N)</option>
@@ -79,25 +79,25 @@ export function MapaTransformCrsModal({ onClose, defaultZone = '24S' }: Props) {
           </div>
 
           {/* Easting + Northing */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Easting (E)</label>
+              <label className="text-[10px] text-[#6b6b6b] uppercase tracking-wider block mb-1">Easting (E)</label>
               <input
                 type="number"
                 value={easting}
                 onChange={(e) => setEasting(e.target.value)}
                 placeholder="Ex: 558000"
-                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
               />
             </div>
             <div>
-              <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Northing (N)</label>
+              <label className="text-[10px] text-[#6b6b6b] uppercase tracking-wider block mb-1">Northing (N)</label>
               <input
                 type="number"
                 value={northing}
                 onChange={(e) => setNorthing(e.target.value)}
                 placeholder="Ex: 8567000"
-                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
               />
             </div>
           </div>
@@ -115,8 +115,8 @@ export function MapaTransformCrsModal({ onClose, defaultZone = '24S' }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-700">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">
+        <div className="flex justify-end gap-3 px-6 py-4 border-t border-[#525252]">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-[#a3a3a3] hover:text-white transition-colors">
             Fechar
           </button>
           <button

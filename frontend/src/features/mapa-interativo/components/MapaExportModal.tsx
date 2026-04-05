@@ -104,16 +104,16 @@ export function MapaExportModal({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-sm shadow-2xl">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-sm shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
           <h3 className="text-sm font-bold text-white">Exportar Mapa</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-300"><X size={16} /></button>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
         </div>
 
         {/* Options */}
         <div className="px-6 py-5 flex flex-col gap-3">
-          <p className="text-xs text-gray-500 mb-1">{nodes.length} nós · {segments.length} trechos</p>
+          <p className="text-xs text-[#6b6b6b] mb-1">{nodes.length} nós · {segments.length} trechos</p>
 
           <ExportOption
             label="GeoJSON"
@@ -142,8 +142,8 @@ export function MapaExportModal({ onClose }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end px-6 py-4 border-t border-gray-700">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">
+        <div className="flex justify-end px-6 py-4 border-t border-[#525252]">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-[#a3a3a3] hover:text-white transition-colors">
             Fechar
           </button>
         </div>
@@ -158,12 +158,12 @@ function ExportOption({ label, desc, ext, onClick }: {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors text-left w-full"
+      className="flex items-center gap-3 p-3 rounded-lg bg-[#3d3d3d] hover:bg-[#484848] transition-colors text-left w-full"
     >
       <Download size={16} className="text-orange-400 shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-white">{label} <span className="text-gray-500 font-normal text-xs">{ext}</span></p>
-        <p className="text-[10px] text-gray-500 truncate">{desc}</p>
+        <p className="text-sm font-semibold text-white">{label} <span className="text-[#6b6b6b] font-normal text-xs">{ext}</span></p>
+        <p className="text-[10px] text-[#6b6b6b] truncate">{desc}</p>
       </div>
     </button>
   )

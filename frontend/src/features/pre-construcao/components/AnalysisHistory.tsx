@@ -31,12 +31,12 @@ export function AnalysisHistory() {
   })))
 
   return (
-    <div className="w-56 shrink-0 flex flex-col bg-[#112645] border-r border-[#20406a] overflow-hidden">
+    <div className="w-56 shrink-0 flex flex-col bg-[#333333] border-r border-[#525252] overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#20406a]">
+      <div className="px-4 py-3 border-b border-[#525252]">
         <button
           onClick={resetPipeline}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
         >
           <Plus size={12} />
           Nova Análise
@@ -60,7 +60,7 @@ export function AnalysisHistory() {
           sessions.map((session) => (
             <div
               key={session.id}
-              className="bg-[#0d2040] border border-[#20406a] rounded-lg p-3 flex flex-col gap-1.5 hover:border-[#1f3c5e] transition-colors"
+              className="bg-[#2c2c2c] border border-[#525252] rounded-lg p-3 flex flex-col gap-1.5 hover:border-[#1f3c5e] transition-colors"
             >
               {/* Date */}
               <p className="text-[#f5f5f5] text-[11px] font-semibold">
@@ -81,7 +81,7 @@ export function AnalysisHistory() {
               </p>
 
               {/* Total cost */}
-              <p className="text-[#2abfdc] text-xs font-bold tabular-nums">
+              <p className="text-[#f97316] text-xs font-bold tabular-nums">
                 {formatBRL(session.totalCost)}
               </p>
 

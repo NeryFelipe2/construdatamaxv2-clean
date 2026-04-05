@@ -127,8 +127,8 @@ export function UploadZone() {
         className={cn(
           'border-2 border-dashed rounded-xl p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors',
           isDragging
-            ? 'border-[#2abfdc] bg-[#2abfdc]/5'
-            : 'border-[#1f3c5e] bg-[#14294e] hover:border-[#555]',
+            ? 'border-[#f97316] bg-[#f97316]/5'
+            : 'border-[#1f3c5e] bg-[#3d3d3d] hover:border-[#555]',
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -137,7 +137,7 @@ export function UploadZone() {
       >
         <UploadCloud
           size={40}
-          className={cn(isDragging ? 'text-[#2abfdc]' : 'text-[#6b6b6b]')}
+          className={cn(isDragging ? 'text-[#f97316]' : 'text-[#6b6b6b]')}
         />
         <p className="text-[#f5f5f5] text-sm font-medium">
           Arraste arquivos aqui ou clique para selecionar
@@ -164,7 +164,7 @@ export function UploadZone() {
           {uploadedFiles.map((uf) => (
             <div
               key={uf.name}
-              className="flex items-center gap-3 bg-[#14294e] border border-[#20406a] rounded-lg px-3 py-2"
+              className="flex items-center gap-3 bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2"
             >
               <FileIcon ext={uf.ext} />
               <span className="flex-1 text-[#f5f5f5] text-sm truncate">{uf.name}</span>
@@ -185,7 +185,7 @@ export function UploadZone() {
       {isDemoMode && uploadedFiles.length === 0 && (
         <button
           onClick={() => loadDemoData()}
-          className="w-full py-2.5 rounded-lg text-sm font-semibold border-2 border-dashed border-[#2abfdc]/50 text-[#2abfdc] hover:bg-[#2abfdc]/5 transition-colors flex items-center justify-center gap-2"
+          className="w-full py-2.5 rounded-lg text-sm font-semibold border-2 border-dashed border-[#f97316]/50 text-[#f97316] hover:bg-[#f97316]/5 transition-colors flex items-center justify-center gap-2"
         >
           <FlaskConical size={15} />
           Carregar Dados de Demonstração
@@ -199,8 +199,8 @@ export function UploadZone() {
         className={cn(
           'w-full py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors',
           uploadedFiles.length > 0 && !isLoading
-            ? 'bg-[#2abfdc] hover:bg-[#ea6c0a] text-white'
-            : 'bg-[#20406a] text-[#6b6b6b] cursor-not-allowed',
+            ? 'bg-[#f97316] hover:bg-[#ea6c0a] text-white'
+            : 'bg-[#525252] text-[#6b6b6b] cursor-not-allowed',
         )}
       >
         {isLoading ? (

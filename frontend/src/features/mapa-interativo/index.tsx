@@ -19,7 +19,7 @@ function ModeSelectorOverlay() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-8 bg-[#071422]">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-[#e4f2f8] mb-2">Mapa Interativo</h1>
+        <h1 className="text-2xl font-bold text-[#f5f5f5] mb-2">Mapa Interativo</h1>
         <p className="text-sm text-[#6b6b6b]">Selecione o modo de trabalho para configurar as camadas automaticamente</p>
       </div>
 
@@ -27,18 +27,18 @@ function ModeSelectorOverlay() {
         {/* Saneamento */}
         <button
           onClick={() => setMapMode('saneamento')}
-          className="flex flex-col items-center gap-3 flex-1 p-6 rounded-2xl border border-[#20406a] bg-[#0d2040] hover:border-[#2abfdc]/60 hover:bg-[#2abfdc]/5 transition-all group"
+          className="flex flex-col items-center gap-3 flex-1 p-6 rounded-2xl border border-[#525252] bg-[#2c2c2c] hover:border-[#f97316]/60 hover:bg-[#f97316]/5 transition-all group"
         >
-          <div className="w-16 h-16 rounded-2xl bg-[#2abfdc]/10 border border-[#2abfdc]/30 flex items-center justify-center group-hover:bg-[#2abfdc]/20 transition-colors">
-            <Droplets size={32} className="text-[#2abfdc]" />
+          <div className="w-16 h-16 rounded-2xl bg-[#f97316]/10 border border-[#f97316]/30 flex items-center justify-center group-hover:bg-[#f97316]/20 transition-colors">
+            <Droplets size={32} className="text-[#f97316]" />
           </div>
           <div className="text-center">
-            <p className="text-base font-bold text-[#e4f2f8] mb-1">Saneamento</p>
+            <p className="text-base font-bold text-[#f5f5f5] mb-1">Saneamento</p>
             <p className="text-xs text-[#6b6b6b] leading-relaxed">Redes de esgoto, água e drenagem. PVs, nós e tubulações.</p>
           </div>
           <div className="flex gap-2 flex-wrap justify-center">
             {['Esgoto', 'Água', 'Drenagem'].map((l) => (
-              <span key={l} className="text-[10px] px-2 py-0.5 rounded-full bg-[#2abfdc]/10 text-[#2abfdc] border border-[#2abfdc]/20">{l}</span>
+              <span key={l} className="text-[10px] px-2 py-0.5 rounded-full bg-[#f97316]/10 text-[#f97316] border border-[#f97316]/20">{l}</span>
             ))}
           </div>
         </button>
@@ -46,13 +46,13 @@ function ModeSelectorOverlay() {
         {/* Construção */}
         <button
           onClick={() => setMapMode('construcao')}
-          className="flex flex-col items-center gap-3 flex-1 p-6 rounded-2xl border border-[#20406a] bg-[#0d2040] hover:border-[#f97316]/60 hover:bg-[#f97316]/5 transition-all group"
+          className="flex flex-col items-center gap-3 flex-1 p-6 rounded-2xl border border-[#525252] bg-[#2c2c2c] hover:border-[#f97316]/60 hover:bg-[#f97316]/5 transition-all group"
         >
           <div className="w-16 h-16 rounded-2xl bg-[#f97316]/10 border border-[#f97316]/30 flex items-center justify-center group-hover:bg-[#f97316]/20 transition-colors">
             <HardHat size={32} className="text-[#f97316]" />
           </div>
           <div className="text-center">
-            <p className="text-base font-bold text-[#e4f2f8] mb-1">Construção</p>
+            <p className="text-base font-bold text-[#f5f5f5] mb-1">Construção</p>
             <p className="text-xs text-[#6b6b6b] leading-relaxed">Obras civis, estruturas e elementos construtivos.</p>
           </div>
           <div className="flex gap-2 flex-wrap justify-center">
@@ -84,9 +84,9 @@ export function MapaInterativoPage() {
       ) : (
         <>
           {/* Mode indicator strip */}
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-[#071422] border-b border-[#20406a] shrink-0">
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-[#071422] border-b border-[#525252] shrink-0">
             {mapMode === 'saneamento'
-              ? <Droplets size={12} className="text-[#2abfdc]" />
+              ? <Droplets size={12} className="text-[#f97316]" />
               : <HardHat size={12} className="text-[#f97316]" />
             }
             <span className="text-[11px] text-[#a3a3a3] font-medium">
@@ -94,7 +94,7 @@ export function MapaInterativoPage() {
             </span>
             <button
               onClick={() => useMapaInterativoStore.getState().setMapMode(null)}
-              className="ml-2 flex items-center gap-1 text-[10px] text-[#6b6b6b] hover:text-[#2abfdc] transition-colors"
+              className="ml-2 flex items-center gap-1 text-[10px] text-[#6b6b6b] hover:text-[#f97316] transition-colors"
             >
               <ArrowLeftRight size={10} />
               Trocar Modo

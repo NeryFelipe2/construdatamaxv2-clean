@@ -12,7 +12,7 @@ export function MapaLayersPanel() {
   const [open, setOpen] = useState(true)
 
   return (
-    <div className="absolute top-3 right-3 z-[1000] bg-gray-900/95 border border-gray-700 rounded-xl shadow-xl min-w-[140px] max-w-[180px]">
+    <div className="absolute top-3 right-3 z-[1000] bg-[#2c2c2c]/95 border border-[#525252] rounded-xl shadow-xl min-w-[140px] max-w-[180px]">
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 px-3 py-2 w-full text-xs font-semibold text-white hover:text-orange-400 transition-colors"
@@ -23,7 +23,7 @@ export function MapaLayersPanel() {
       </button>
 
       {open && (
-        <div className="px-3 pb-3 flex flex-col gap-1.5 border-t border-gray-800 pt-2">
+        <div className="px-3 pb-3 flex flex-col gap-1.5 border-t border-[#3d3d3d] pt-2">
           {layers.map((layer) => (
             <label key={layer.id} className="flex items-center gap-2 cursor-pointer group">
               <input
@@ -34,7 +34,7 @@ export function MapaLayersPanel() {
               />
               <div
                 className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border transition-colors ${
-                  layer.visible ? 'border-transparent' : 'border-gray-600 bg-transparent'
+                  layer.visible ? 'border-transparent' : 'border-[#5e5e5e] bg-transparent'
                 }`}
                 style={{ backgroundColor: layer.visible ? layer.color + 'cc' : undefined }}
               >
@@ -44,7 +44,7 @@ export function MapaLayersPanel() {
                   </svg>
                 )}
               </div>
-              <span className="text-xs text-gray-300 group-hover:text-white transition-colors">{layer.name}</span>
+              <span className="text-xs text-[#f5f5f5] group-hover:text-white transition-colors">{layer.name}</span>
               <div className="w-2 h-2 rounded-full ml-auto flex-shrink-0" style={{ backgroundColor: layer.color }} />
             </label>
           ))}

@@ -39,7 +39,7 @@ function EditCell({ value, onSave, type = 'text' }: {
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') setEditing(false) }}
-        className="w-full bg-[#20406a] border border-[#2abfdc]/50 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] focus:outline-none"
+        className="w-full bg-[#525252] border border-[#f97316]/50 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] focus:outline-none"
       />
       <button onClick={commit} className="text-[#4ade80] hover:text-emerald-300 p-0.5"><Check size={11} /></button>
       <button onClick={() => setEditing(false)} className="text-[#6b6b6b] hover:text-[#a3a3a3] p-0.5"><X size={11} /></button>
@@ -100,18 +100,18 @@ export function ExtractionView() {
   return (
     <div className="flex gap-4 h-full">
       {/* LEFT — Takeoff items table */}
-      <div className="flex flex-col flex-1 min-w-0 bg-[#0d2040] border border-[#20406a] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#20406a]">
+      <div className="flex flex-col flex-1 min-w-0 bg-[#2c2c2c] border border-[#525252] rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#525252]">
           <h2 className="text-[#f5f5f5] font-semibold text-sm">Itens Extraídos</h2>
           <div className="flex items-center gap-2">
             {takeoffItems.length > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-[#2abfdc]/20 text-[#2abfdc] text-xs font-semibold">
+              <span className="px-2 py-0.5 rounded-full bg-[#f97316]/20 text-[#f97316] text-xs font-semibold">
                 {takeoffItems.length} itens
               </span>
             )}
             <button
               onClick={addTakeoffItem}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#2abfdc]/20 hover:bg-[#2abfdc]/30 text-[#2abfdc] text-xs transition-colors"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#f97316]/20 hover:bg-[#f97316]/30 text-[#f97316] text-xs transition-colors"
             >
               <Plus size={11} /> Adicionar
             </button>
@@ -126,7 +126,7 @@ export function ExtractionView() {
           ) : (
             <table className="w-full text-sm border-collapse">
               <thead>
-                <tr className="bg-[#1a3662]">
+                <tr className="bg-[#484848]">
                   <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2 w-10">#</th>
                   <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Descrição</th>
                   <th className="text-right text-[#6b6b6b] text-xs font-medium px-3 py-2">Quantidade</th>
@@ -140,7 +140,7 @@ export function ExtractionView() {
                 {takeoffItems.map((item, idx) => (
                   <tr
                     key={item.id}
-                    className="border-t border-[#20406a] hover:bg-[#1a3662] transition-colors group"
+                    className="border-t border-[#525252] hover:bg-[#484848] transition-colors group"
                   >
                     <td className="px-3 py-2 text-[#6b6b6b] text-xs">{idx + 1}</td>
                     <td className="px-3 py-2 text-[#f5f5f5]">
@@ -173,7 +173,7 @@ export function ExtractionView() {
           )}
         </div>
 
-        <div className="px-4 py-3 border-t border-[#20406a] flex gap-2">
+        <div className="px-4 py-3 border-t border-[#525252] flex gap-2">
           <button
             onClick={() => setStep('upload')}
             className="px-3 py-2 rounded-lg text-sm font-medium border border-[#1f3c5e] text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#555] transition-colors shrink-0"
@@ -186,8 +186,8 @@ export function ExtractionView() {
             className={cn(
               'flex-1 py-2 rounded-lg text-sm font-semibold transition-colors',
               takeoffItems.length > 0
-                ? 'bg-[#2abfdc] hover:bg-[#ea6c0a] text-white'
-                : 'bg-[#20406a] text-[#6b6b6b] cursor-not-allowed',
+                ? 'bg-[#f97316] hover:bg-[#ea6c0a] text-white'
+                : 'bg-[#525252] text-[#6b6b6b] cursor-not-allowed',
             )}
           >
             Avançar → Normalização
@@ -196,10 +196,10 @@ export function ExtractionView() {
       </div>
 
       {/* RIGHT — Contract clauses */}
-      <div className="w-80 shrink-0 flex flex-col bg-[#0d2040] border border-[#20406a] rounded-xl overflow-hidden">
+      <div className="w-80 shrink-0 flex flex-col bg-[#2c2c2c] border border-[#525252] rounded-xl overflow-hidden">
         <button
           onClick={() => setClausesOpen((v) => !v)}
-          className="flex items-center justify-between px-4 py-3 border-b border-[#20406a] hover:bg-[#1a3662] transition-colors"
+          className="flex items-center justify-between px-4 py-3 border-b border-[#525252] hover:bg-[#484848] transition-colors"
         >
           <div className="flex items-center gap-2">
             <h2 className="text-[#f5f5f5] font-semibold text-sm">Cláusulas de Risco</h2>
@@ -226,19 +226,19 @@ export function ExtractionView() {
               clauses.map((clause) => (
                 <div
                   key={clause.id}
-                  className="bg-[#1a3662] border border-[#20406a] rounded-lg p-3 flex flex-col gap-2"
+                  className="bg-[#484848] border border-[#525252] rounded-lg p-3 flex flex-col gap-2"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <SeverityBadge severity={clause.severity} />
                   </div>
                   <p className="text-[#f5f5f5] text-xs font-bold">{clause.type}</p>
                   {clause.excerpt && (
-                    <p className="text-[#a3a3a3] text-[10px] font-mono bg-[#112645] rounded px-2 py-1 break-words">
+                    <p className="text-[#a3a3a3] text-[10px] font-mono bg-[#333333] rounded px-2 py-1 break-words">
                       "{clause.excerpt}"
                     </p>
                   )}
                   <p className="text-[#a3a3a3] text-xs leading-relaxed">{clause.explanation}</p>
-                  <p className="text-[#2abfdc] text-xs italic leading-relaxed">
+                  <p className="text-[#f97316] text-xs italic leading-relaxed">
                     {clause.recommendation}
                   </p>
                 </div>
