@@ -2105,7 +2105,7 @@ export default function LegacyApp() {
             C
           </div>
           <div>
-            <h1 className="text-white font-bold tracking-widest text-sm leading-tight">CONSTRU</h1>
+            <h1 className="text-[var(--text-primary)] font-bold tracking-widest text-sm leading-tight">CONSTRU</h1>
             <p className="text-[10px] text-[#38bdf8] font-mono tracking-wider">MAX SYSTEM OS</p>
           </div>
         </div>
@@ -2159,7 +2159,7 @@ export default function LegacyApp() {
         <header className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-light)]">
            <div>
               <div className="flex items-center gap-3 mb-1">
-                 <h2 className="text-2xl font-light text-white tracking-wide">{SIDEBAR_SECTIONS.flatMap(s=>s.items).find(i=>i.id === activeTab)?.label || "Módulo"}</h2>
+                 <h2 className="text-2xl font-light text-[var(--text-primary)] tracking-wide">{SIDEBAR_SECTIONS.flatMap(s=>s.items).find(i=>i.id === activeTab)?.label || "Módulo"}</h2>
                  <span className="px-2.5 py-0.5 rounded-full bg-[#38bdf8]/10 text-[#38bdf8] text-[10px] uppercase font-bold border border-[#38bdf8]/20 tracking-wider font-mono">
                     {selectedMotorLabel} CORE
                  </span>
