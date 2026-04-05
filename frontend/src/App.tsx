@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from "react-router-dom";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useProjectContext } from "@/store/projectContext";
+import { useThemeStore } from "@/store/themeStore";
 import {
-  Menu, X, ChevronLeft, ChevronRight,
+  Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
   Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
   CalendarClock, Target, FileText, Calculator, Layers,
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
-  FileSearch, Monitor, MessageSquare,
+  FileSearch, Monitor, MessageSquare, Building2, UserCog,
+  GitBranch, CheckSquare, Sun, Moon,
 } from "lucide-react";
 
 // ─── Lazy-loaded Palantir modules ────────────────────────────────────────────
@@ -28,6 +31,11 @@ const QuantitativosPage = lazy(() => import("@/features/quantitativos/index").th
 const ProjetosPage = lazy(() => import("@/features/projetos/index").then((m) => ({ default: m.ProjetosPage })));
 const PreConstrucaoPage = lazy(() => import("@/features/pre-construcao/index").then((m) => ({ default: m.PreConstrucaoPage })));
 const WhatsAppRdoPage = lazy(() => import("@/features/whatsapp-rdo/index").then((m) => ({ default: m.WhatsAppRdoPage })));
+
+// ─── New modules ────────────────────────────────────────────────────────────
+const GestaoContatosPage = lazy(() => import("@/features/gestao-contatos/index").then((m) => ({ default: m.GestaoContatosPage })));
+const FluxoOperacionalPage = lazy(() => import("@/features/fluxo-operacional/index").then((m) => ({ default: m.FluxoOperacionalPage })));
+const PunchListPage = lazy(() => import("@/features/punch-list/index").then((m) => ({ default: m.PunchListPage })));
 
 // ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
 const LegacyApp = lazy(() => import("./LegacyApp"));
@@ -62,8 +70,11 @@ const navItems = [
   { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
   { label: "Pre-Constr.", icon: FileSearch, to: "/app/pre-construcao" },
 
-  { section: "WhatsApp" },
+  { section: "Campo & WhatsApp" },
+  { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
+  { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
+  { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
 
   { section: "Módulos Offline (Nativos)" },
   { label: "Construplan Brutal", icon: Target, to: "/app/construplan-brutal" },
@@ -84,6 +95,22 @@ function RouteFallback() {
 
 function LazyRoute({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+}
+
+// ─── Theme Toggle ──────────────────────────────────────────────────────────
+function ThemeToggleButton({ isOpen }: { isOpen: boolean }) {
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  return (
+    <button
+      onClick={toggleTheme}
+      title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+      className="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8] transition-colors"
+    >
+      {theme === "dark" ? <Sun size={20} className="shrink-0" /> : <Moon size={20} className="shrink-0" />}
+      {isOpen && <span className="text-xs font-medium whitespace-nowrap">{theme === "dark" ? "Modo Claro" : "Modo Escuro"}</span>}
+    </button>
+  );
 }
 
 // ─── Sidebar ────────────────────────────────────────────────────────────────
@@ -167,6 +194,7 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
 
         {/* Bottom */}
         <div className="mt-auto flex flex-col gap-0.5 pt-2 border-t border-[#20406a]">
+          <ThemeToggleButton isOpen={isOpen} />
           <button
             onClick={toggleSidebar}
             title={isOpen ? "Recolher menu" : "Expandir menu"}
@@ -181,18 +209,127 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
   );
 }
 
+// ─── Project Selector ──────────────────────────────────────────────────────
+function ProjectSelector() {
+  const projetos = useProjectContext((s) => s.projetos);
+  const activeProjectId = useProjectContext((s) => s.activeProjectId);
+  const setActiveProject = useProjectContext((s) => s.setActiveProject);
+  const addProjeto = useProjectContext((s) => s.addProjeto);
+  const [open, setOpen] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [novoNome, setNovoNome] = useState("");
+  const [novoCidade, setNovoCidade] = useState("");
+  const [novoTipo, setNovoTipo] = useState<"agua" | "esgoto" | "misto">("esgoto");
+
+  const active = projetos.find((p) => p.id === activeProjectId);
+
+  async function handleAdd() {
+    if (!novoNome.trim()) return;
+    const p = await addProjeto({
+      nome: novoNome, contrato: "", cidade: novoCidade, cliente: "", tipo: novoTipo,
+      data_inicio: new Date().toISOString().slice(0, 10), data_fim: null,
+      orcamento_total: 0, status: "ativo", responsavel_nome: "", responsavel_telefone: "",
+    });
+    if (p) setActiveProject(p.id);
+    setNovoNome(""); setNovoCidade(""); setShowNew(false); setOpen(false);
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112645] border border-[#20406a] hover:border-[#2abfdc]/50 transition-colors max-w-[280px]"
+      >
+        <Building2 size={14} className="text-[#2abfdc] shrink-0" />
+        <span className="text-xs font-medium text-[#e4f2f8] truncate">{active?.nome ?? "Selecionar Projeto"}</span>
+        <ChevronDown size={12} className={cn("text-[#6b6b6b] shrink-0 transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => { setOpen(false); setShowNew(false); }} />
+          <div className="absolute top-full left-0 mt-1 z-50 w-80 bg-[#0d2040] border border-[#20406a] rounded-xl shadow-2xl overflow-hidden">
+            <div className="p-2 border-b border-[#20406a]">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-[#5a8caa] px-2">Projetos</span>
+            </div>
+            <div className="max-h-60 overflow-y-auto">
+              {projetos.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => { setActiveProject(p.id); setOpen(false); }}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-[#14294e] transition-colors",
+                    p.id === activeProjectId && "bg-[#2abfdc]/10",
+                  )}
+                >
+                  <div className={cn(
+                    "w-2 h-2 rounded-full shrink-0",
+                    p.status === "ativo" ? "bg-green-400" : p.status === "pausado" ? "bg-yellow-400" : "bg-gray-500",
+                  )} />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-[#e4f2f8] truncate">{p.nome}</div>
+                    <div className="text-[10px] text-[#5a8caa]">{p.cidade} - {p.tipo.toUpperCase()}</div>
+                  </div>
+                  {p.contrato && <span className="text-[9px] text-[#5a8caa] font-mono shrink-0">{p.contrato}</span>}
+                </button>
+              ))}
+            </div>
+            {!showNew ? (
+              <button
+                onClick={() => setShowNew(true)}
+                className="w-full flex items-center gap-2 px-3 py-2.5 border-t border-[#20406a] text-[#2abfdc] hover:bg-[#14294e] transition-colors"
+              >
+                <Plus size={14} />
+                <span className="text-xs font-medium">Novo Projeto</span>
+              </button>
+            ) : (
+              <div className="p-3 border-t border-[#20406a] space-y-2">
+                <input placeholder="Nome do projeto" value={novoNome} onChange={(e) => setNovoNome(e.target.value)}
+                  className="w-full bg-[#071422] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#e4f2f8] placeholder-[#5a8caa]" />
+                <div className="flex gap-2">
+                  <input placeholder="Cidade" value={novoCidade} onChange={(e) => setNovoCidade(e.target.value)}
+                    className="flex-1 bg-[#071422] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#e4f2f8] placeholder-[#5a8caa]" />
+                  <select value={novoTipo} onChange={(e) => setNovoTipo(e.target.value as any)}
+                    className="bg-[#071422] border border-[#20406a] rounded-lg px-2 py-1.5 text-xs text-[#e4f2f8]">
+                    <option value="esgoto">Esgoto</option>
+                    <option value="agua">Agua</option>
+                    <option value="misto">Misto</option>
+                  </select>
+                </div>
+                <button onClick={handleAdd}
+                  className="w-full bg-[#2abfdc]/20 text-[#2abfdc] border border-[#2abfdc]/30 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-[#2abfdc]/30 transition-colors">
+                  Criar Projeto
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── App Shell ──────────────────────────────────────────────────────────────
 function AppShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const fetchProjetos = useProjectContext((s) => s.fetchProjetos);
+
+  useEffect(() => { fetchProjetos(); }, []);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      {/* Mobile top bar */}
-      <div className="flex md:hidden items-center gap-3 px-4 h-12 border-b border-[#20406a] bg-[#0d2040] shrink-0 z-20">
-        <button onClick={() => setMobileOpen(true)} className="text-[#6b6b6b] hover:text-[#2abfdc] transition-colors" aria-label="Abrir menu">
+      {/* Global header with project selector */}
+      <div className="flex items-center gap-3 px-4 h-11 border-b border-[#20406a] bg-[#0a1628] shrink-0 z-20">
+        <button onClick={() => setMobileOpen(true)} className="text-[#6b6b6b] hover:text-[#2abfdc] transition-colors md:hidden" aria-label="Abrir menu">
           <Menu size={20} />
         </button>
-        <span className="text-[#e4f2f8] text-sm font-bold tracking-wide">ConstruData</span>
+        <span className="text-[#e4f2f8] text-sm font-bold tracking-wide md:hidden">ConstruData</span>
+        <div className="hidden md:block">
+          <ProjectSelector />
+        </div>
+        <div className="ml-auto md:hidden">
+          <ProjectSelector />
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
@@ -255,6 +392,9 @@ export default function App() {
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
           <Route path="pre-construcao" element={<LazyRoute><PreConstrucaoPage /></LazyRoute>} />
+          <Route path="gestao-contatos" element={<LazyRoute><GestaoContatosPage /></LazyRoute>} />
+          <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
+          <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />
           <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
           
           {/* OFFLINE INTEGRATION */}

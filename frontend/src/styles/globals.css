@@ -29,6 +29,23 @@
   --radius-xl: 1rem;
 }
 
+/* ─── Light theme overrides ─── */
+[data-theme="light"] {
+  --color-background: #f0f4f8;
+  --color-surface: #ffffff;
+  --color-card: #f8fafc;
+  --color-card-hover: #f1f5f9;
+  --color-border: #cbd5e1;
+  --color-border-strong: #94a3b8;
+  --color-accent: #0891b2;
+  --color-accent-hover: #0e7490;
+  --color-accent-muted: rgba(8, 145, 178, 0.1);
+  --color-muted: #e2e8f0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html, body, #root { height: 100%; margin: 0; padding: 0; }
 
@@ -41,10 +58,41 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+[data-theme="light"] body {
+  background-color: #f0f4f8;
+  background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+  color: #0f172a;
+}
+
+[data-theme="light"] .bg-\[\#0d2040\],
+[data-theme="light"] .bg-\[\#0a1628\],
+[data-theme="light"] .bg-\[\#071422\] { background-color: #f0f4f8 !important; }
+
+[data-theme="light"] .bg-\[\#112645\] { background-color: #ffffff !important; }
+[data-theme="light"] .bg-\[\#14294e\] { background-color: #f1f5f9 !important; }
+[data-theme="light"] .bg-gray-950,
+[data-theme="light"] .bg-gray-900 { background-color: #f8fafc !important; }
+
+[data-theme="light"] .border-\[\#20406a\] { border-color: #cbd5e1 !important; }
+
+[data-theme="light"] .text-\[\#e4f2f8\],
+[data-theme="light"] .text-white { color: #0f172a !important; }
+
+[data-theme="light"] .text-\[\#8fb3c8\],
+[data-theme="light"] .text-\[\#5a8caa\] { color: #475569 !important; }
+
+[data-theme="light"] .text-\[\#6b6b6b\] { color: #94a3b8 !important; }
+
+[data-theme="light"] .text-\[\#2abfdc\] { color: #0891b2 !important; }
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #112645; }
 ::-webkit-scrollbar-thumb { background: #20406a; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #2abfdc; }
 
+[data-theme="light"] ::-webkit-scrollbar-track { background: #f1f5f9; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+
 input[type="file"] { display: none; }
 input[type="date"] { color-scheme: dark; }
+[data-theme="light"] input[type="date"] { color-scheme: light; }
