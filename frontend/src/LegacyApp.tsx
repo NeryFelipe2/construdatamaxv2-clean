@@ -799,14 +799,10 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Pipeline de Saidas BIM 5D</div>
         <div className="action-row">
-          <button className="action-btn btn-green" disabled>GERAR TUDO (6 etapas)</button>
-          <button className="action-btn btn-red" disabled>IFC LOD500</button>
-          <button className="action-btn btn-blue" disabled>LandXML</button>
-          <button className="action-btn btn-orange" disabled>Cadastro NTS292</button>
-          <button className="action-btn btn-red" disabled>Cadastro DXF</button>
-          <button className="action-btn btn-teal" disabled>Cronograma</button>
-          <button className="action-btn btn-purple" disabled>Dynamo</button>
-          <button className="action-btn btn-dark" disabled>SCR</button>
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/processamento/importar"))}>GERAR TUDO (6 etapas)</button>
+          <a className="action-btn btn-red" href="/app/bim" style={{ textDecoration: "none" }}>ABRIR BIM</a>
+          <button className="action-btn btn-blue" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/cronograma"))}>CRONOGRAMA</button>
+          <a className="action-btn btn-teal" href="/app/gis-editor" style={{ textDecoration: "none" }}>EDITOR GIS</a>
         </div>
 
         <div className="link-row">
@@ -845,10 +841,10 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Lean Construction + Last Planner System + BIM 6D</div>
         <div className="action-row">
-          <button className="action-btn btn-green" disabled>RELATORIO LEAN+LPS</button>
-          <button className="action-btn btn-purple" disabled>TAKT TIME</button>
-          <button className="action-btn btn-blue" disabled>LOOKAHEAD 6 SEM</button>
-          <button className="action-btn btn-orange" disabled>BIM 6D (Ciclo Vida)</button>
+          <a className="action-btn btn-green" href="/app/lps-lean" style={{ textDecoration: "none" }}>ABRIR LPS COMPLETO</a>
+          <button className="action-btn btn-purple" type="button" onClick={() => { window.location.href = "/app/lps-lean"; }}>TAKT TIME</button>
+          <button className="action-btn btn-blue" type="button" onClick={() => { window.location.href = "/app/lps-lean"; }}>LOOKAHEAD 6 SEM</button>
+          <button className="action-btn btn-orange" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/insights/lean-lps"))}>DADOS LEAN JSON</button>
         </div>
 
         <div className="kpi-strip">
@@ -881,11 +877,9 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Gestao de Perdas — IWA / UARL / ILI / DMA</div>
         <div className="action-row">
-          <button className="action-btn btn-green" disabled>RELATORIO PERDAS</button>
-          <button className="action-btn btn-red" disabled>MAPA RISCO</button>
-          <button className="action-btn btn-blue" disabled>CRIAR DMAs</button>
-          <button className="action-btn btn-teal" disabled>PDF PERDAS</button>
-          <button className="action-btn btn-orange" disabled>ANALISE TROCA</button>
+          <button className="action-btn btn-green" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/insights/perdas"))}>DADOS PERDAS</button>
+          <button className="action-btn btn-red" type="button" onClick={() => setEmbeddedUrl(nativeUrl("/perdas"))}>MODULO PERDAS</button>
+          <button className="action-btn btn-blue" type="button" onClick={() => { window.location.href = "/app/gis-editor"; }}>EDITOR GIS</button>
         </div>
 
         <div className="kpi-strip">
@@ -909,11 +903,9 @@ export default function LegacyApp() {
       <>
         <div className="section-title">Assistente IA + E-LLMs Gratuitos + Analytics ML</div>
         <div className="action-row">
-          <button className="action-btn btn-green" disabled>GERAR RELATORIO</button>
-          <button className="action-btn btn-purple" disabled>ZERAR RELATORIO</button>
-          <button className="action-btn btn-orange" disabled>GERAR BENCHMARK</button>
-          <button className="action-btn btn-red" disabled>GERAR RISCOS</button>
-          <button className="action-btn btn-teal" disabled>MULTI PROV</button>
+          <a className="action-btn btn-green" href="/app/ia-analytics" style={{ textDecoration: "none" }}>ABRIR IA COMPLETA</a>
+          <button className="action-btn btn-orange" type="button" onClick={() => setEmbeddedUrl(apiUrl("/api/analytics/resumo"))}>ANALYTICS JSON</button>
+          <button className="action-btn btn-purple" type="button" onClick={() => { window.location.href = "/app/ia-analytics"; }}>CONFIGURAR LLMs</button>
         </div>
 
         <div className="kpi-strip">
@@ -973,9 +965,8 @@ export default function LegacyApp() {
         )}
 
         <div className="action-row" style={{ marginTop: 14 }}>
-          <button className="action-btn btn-purple" disabled>BATCH NUCLEOS DXF</button>
-          <button className="action-btn btn-orange" disabled>BATCH PROLONGAMENTOS</button>
-          <button className="action-btn btn-green" disabled>BATCH TUDO</button>
+          <a className="action-btn btn-purple" href="/app/projetos" style={{ textDecoration: "none" }}>GERENCIAR PROJETOS</a>
+          <a className="action-btn btn-green" href="/app/gis-editor" style={{ textDecoration: "none" }}>EDITOR GIS</a>
         </div>
       </>
     );
