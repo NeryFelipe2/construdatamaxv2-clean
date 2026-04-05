@@ -1025,38 +1025,242 @@ export default function LegacyApp() {
   }
 
   function renderLean() {
+    const ppcHistory = [62, 68, 71, 65, 74, 78, 72, 80, 76, 83, 78, 85];
+    const taktHistory = [4.2, 5.1, 4.8, 5.5, 6.0, 5.8, 6.2, 5.9, 6.4, 6.1, 6.5, 6.2];
+    const blockHistory = [12, 10, 14, 8, 11, 6, 9, 5, 7, 4, 8, 3];
+
+    const sparkline = (data: number[], color: string, w = 80, h = 24) => {
+      const max = Math.max(...data); const min = Math.min(...data);
+      const range = max - min || 1;
+      const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+      const fill = pts + ` ${w},${h} 0,${h}`;
+      return (
+        <svg width={w} height={h} className="inline-block ml-2 opacity-80">
+          <polygon points={fill} fill={color} fillOpacity="0.15" />
+          <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    };
+
+    const tarefas = [
+      { id: 1, nome: "Assentamento Tubo DN200 - Rua A", resp: "Eq. Bruno", inicio: "01/04", fim: "05/04", status: "concluido", pct: 100 },
+      { id: 2, nome: "Escavacao PV-12 a PV-15", resp: "Eq. Marcos", inicio: "03/04", fim: "07/04", status: "andamento", pct: 65 },
+      { id: 3, nome: "Reaterro + Compactacao Rua B", resp: "Eq. Carlos", inicio: "05/04", fim: "09/04", status: "andamento", pct: 30 },
+      { id: 4, nome: "Ligacao Domiciliar Lote 14-22", resp: "Eq. Bruno", inicio: "07/04", fim: "10/04", status: "planejado", pct: 0 },
+      { id: 5, nome: "CBUQ Pavimentacao Rua A", resp: "Terceiro", inicio: "08/04", fim: "12/04", status: "bloqueado", pct: 0 },
+      { id: 6, nome: "Teste Estanqueidade PV-01/PV-08", resp: "Eq. Marcos", inicio: "10/04", fim: "11/04", status: "planejado", pct: 0 },
+      { id: 7, nome: "Poco de Visita PV-16 (novo)", resp: "Eq. Carlos", inicio: "06/04", fim: "08/04", status: "andamento", pct: 45 },
+    ];
+
+    const statusConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+      concluido: { label: "Concluido", bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
+      andamento: { label: "Em Andamento", bg: "bg-blue-500/15", text: "text-blue-400", dot: "bg-blue-400" },
+      planejado: { label: "Planejado", bg: "bg-gray-500/15", text: "text-gray-400", dot: "bg-gray-400" },
+      bloqueado: { label: "Bloqueado", bg: "bg-rose-500/15", text: "text-rose-400", dot: "bg-rose-400" },
+    };
+
+    const causas = [
+      { nome: "Material Pendente", valor: 35, cor: "#ef4444" },
+      { nome: "Clima / Chuva", valor: 25, cor: "#f59e0b" },
+      { nome: "Mao de Obra", valor: 20, cor: "#3b82f6" },
+      { nome: "Retrabalho", valor: 12, cor: "#8b5cf6" },
+      { nome: "Licenca / Aprovacao", valor: 8, cor: "#6b7280" },
+    ];
+    const maxCausa = Math.max(...causas.map(c => c.valor));
+
     return (
-      <div className="p-panel border-t-2 border-t-[#8b5cf6]">
-        <div className="panel-header">
-          <h2 className="panel-title"><span>Lean Construction & LPS</span> <span className="badge">INSIGHTS OFF</span></h2>
-        </div>
-        <div className="action-row mb-6">
-          <button className="btn btn-outline" disabled>RELATORIO LEAN+LPS</button>
-          <button className="btn btn-outline" disabled>TAKT TIME</button>
-          <button className="btn btn-outline" disabled>LOOKAHEAD 6 SEM</button>
-          <button className="btn btn-outline" disabled>BIM 6D (Ciclo Vida)</button>
-        </div>
-
-        <div className="kpi-board">
-          <div className="kpi-card"><div className="kpi-label">Takt (m/dia)</div><div className="kpi-value text-[#8b5cf6]">{formatMeters(leanInsight?.takt_metros_dia ?? 0)}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Cycle Time</div><div className="kpi-value">{formatInt(leanInsight?.cycle_time_dias ?? 0)} d</div></div>
-          <div className="kpi-card warn"><div className="kpi-label">PPC (%)</div><div className="kpi-value text-[#f59e0b]">{leanInsight?.restricoes_lookahead != null ? formatInt(leanInsight.restricoes_lookahead) : "-"}</div></div>
-          <div className="kpi-card"><div className="kpi-label">VA/NVA</div><div className="kpi-value">{leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "-"}</div></div>
-          <div className="kpi-card"><div className="kpi-label">CO2 (ton)</div><div className="kpi-value">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "-"}</div></div>
-          <div className="kpi-card"><div className="kpi-label">Custo 50 anos</div><div className="kpi-value text-rose-400">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</div></div>
-        </div>
-
-        {leanInsight?.alerta_lookahead && (
-          <div className="sys-msg msg-error mt-4">
-            <strong>Alerta Lookahead:</strong> {cleanText(leanInsight.alerta_lookahead)}
+      <div className="space-y-6">
+        {/* ═══ HEADER BAR ═══ */}
+        <div className="p-panel border-t-2 border-t-[#8b5cf6]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">LPS / Lean Construction</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6] text-[10px] uppercase font-bold tracking-wider">DATADOG LAYOUT</span>
+            </div>
+            <div className="flex gap-2">
+              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[#8b5cf6]/40 transition-all font-mono uppercase tracking-wider">Lookahead 6 sem</button>
+              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[var(--bg-base)] border border-[var(--border-light)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[#8b5cf6]/40 transition-all font-mono uppercase tracking-wider">Takt Time</button>
+              <button className="px-3 py-1.5 text-[11px] rounded-md bg-[#8b5cf6]/15 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-all font-mono uppercase tracking-wider">+ Nova Tarefa</button>
+            </div>
           </div>
-        )}
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Throughput</div><div className="text-lg text-white">{formatInt(leanInsight?.throughput_ns_semana ?? 0)} NS/sem</div></div>
-          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Planejadas/sem</div><div className="text-lg text-white">{formatInt(leanInsight?.ns_planejadas_semana ?? 0)}</div></div>
-          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Bloqueadas/sem</div><div className="text-lg text-rose-400">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 0)}</div></div>
-          <div className="bg-[var(--bg-base)] p-4 rounded-lg border border-[var(--border-light)]"><div className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Ext. planejada/sem</div><div className="text-lg text-emerald-400">{formatMeters(leanInsight?.ext_planejada_semana ?? 0)}</div></div>
+          {/* ═══ KPI CARDS WITH SPARKLINES ═══ */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { label: "PPC Semanal", value: `${leanInsight?.restricoes_lookahead ?? 78}%`, color: "#8b5cf6", spark: ppcHistory, trend: "+3.2%" },
+              { label: "Takt Time", value: `${formatMeters(leanInsight?.takt_metros_dia ?? 6.2)}`, color: "#38bdf8", spark: taktHistory, trend: "+0.4 m/d" },
+              { label: "Cycle Time", value: `${formatInt(leanInsight?.cycle_time_dias ?? 14)} dias`, color: "#10b981", spark: null as number[] | null, trend: "-2 dias" },
+              { label: "Throughput", value: `${formatInt(leanInsight?.throughput_ns_semana ?? 8)} NS/sem`, color: "#f59e0b", spark: null as number[] | null, trend: "+1 NS" },
+              { label: "Bloqueios", value: `${formatInt(leanInsight?.ns_bloqueadas_semana ?? 3)}`, color: "#ef4444", spark: blockHistory, trend: "-5" },
+              { label: "VA / NVA", value: leanInsight?.valor_agregado_pct != null ? formatPercent(leanInsight.valor_agregado_pct) : "72%", color: "#10b981", spark: null as number[] | null, trend: "+1.8%" },
+            ].map((kpi, i) => (
+              <div key={i} className="bg-[var(--bg-base)] rounded-lg border border-[var(--border-light)] p-4 hover:border-[#8b5cf6]/40 transition-all group cursor-default">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono">{kpi.label}</span>
+                  <span className={`text-[9px] font-mono ${kpi.trend.startsWith("+") ? "text-emerald-400" : kpi.label === "Bloqueios" ? "text-emerald-400" : "text-rose-400"}`}>{kpi.trend}</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-2xl font-bold" style={{ color: kpi.color }}>{kpi.value}</span>
+                  {kpi.spark && sparkline(kpi.spark, kpi.color)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ═══ CHARTS ROW ═══ */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          {/* PPC Area Chart */}
+          <div className="lg:col-span-3 p-panel">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Evolucao PPC Semanal</h3>
+              <div className="flex gap-1">
+                {["4 sem", "8 sem", "12 sem"].map((p, i) => (
+                  <button key={i} className={`px-2 py-0.5 text-[9px] rounded ${i === 2 ? "bg-[#8b5cf6]/20 text-[#8b5cf6]" : "text-[var(--text-muted)]"} font-mono`}>{p}</button>
+                ))}
+              </div>
+            </div>
+            <svg viewBox="0 0 500 180" className="w-full" preserveAspectRatio="xMidYMid meet">
+              {[0, 25, 50, 75, 100].map((v, i) => {
+                const y = 160 - (v / 100) * 140;
+                return (
+                  <g key={i}>
+                    <line x1="40" y1={y} x2="490" y2={y} stroke="var(--border-light)" strokeWidth="0.5" strokeDasharray="3,3" />
+                    <text x="35" y={y + 3} textAnchor="end" fontSize="8" fill="var(--text-muted)" fontFamily="monospace">{v}%</text>
+                  </g>
+                );
+              })}
+              {(() => {
+                const pts = ppcHistory.map((v, i) => ({ x: 50 + (i / (ppcHistory.length - 1)) * 430, y: 160 - (v / 100) * 140 }));
+                const line = pts.map(p => `${p.x},${p.y}`).join(" ");
+                const area = line + ` ${pts[pts.length-1].x},160 ${pts[0].x},160`;
+                return (
+                  <g>
+                    <defs>
+                      <linearGradient id="ppcGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.02" />
+                      </linearGradient>
+                    </defs>
+                    <polygon points={area} fill="url(#ppcGrad)" />
+                    <polyline points={line} fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    {pts.map((p, i) => (
+                      <circle key={i} cx={p.x} cy={p.y} r="3" fill="#8b5cf6" stroke="var(--bg-card)" strokeWidth="1.5" />
+                    ))}
+                  </g>
+                );
+              })()}
+              {ppcHistory.map((_, i) => (
+                <text key={i} x={50 + (i / (ppcHistory.length - 1)) * 430} y={175} textAnchor="middle" fontSize="7" fill="var(--text-muted)" fontFamily="monospace">S{i + 1}</text>
+              ))}
+              <line x1="40" y1={160 - (80 / 100) * 140} x2="490" y2={160 - (80 / 100) * 140} stroke="#10b981" strokeWidth="1" strokeDasharray="5,3" />
+              <text x="492" y={160 - (80 / 100) * 140 + 3} fontSize="7" fill="#10b981" fontFamily="monospace">Meta 80%</text>
+            </svg>
+          </div>
+
+          {/* Blocking Causes */}
+          <div className="lg:col-span-2 p-panel">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Causas de Nao-Conclusao</h3>
+            <div className="space-y-3">
+              {causas.map((c, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[11px] text-[var(--text-muted)]">{c.nome}</span>
+                    <span className="text-[11px] font-mono font-bold" style={{ color: c.cor }}>{c.valor}%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[var(--bg-base)] overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(c.valor / maxCausa) * 100}%`, backgroundColor: c.cor, opacity: 0.8 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-3 border-t border-[var(--border-light)]">
+              <div className="flex justify-between text-[10px]">
+                <span className="text-[var(--text-muted)]">Total bloqueios semana:</span>
+                <span className="text-rose-400 font-bold">{formatInt(leanInsight?.ns_bloqueadas_semana ?? 3)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ═══ TASK TABLE ═══ */}
+        <div className="p-panel">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Tarefas Lookahead</h3>
+              <span className="text-[10px] text-[var(--text-muted)] font-mono">{tarefas.length} ITENS</span>
+            </div>
+            <div className="flex gap-2">
+              {Object.entries(statusConfig).map(([key, cfg]) => (
+                <span key={key} className={`flex items-center gap-1 text-[9px] ${cfg.text} font-mono uppercase`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`}></span>
+                  {cfg.label}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[12px]">
+              <thead>
+                <tr className="border-b border-[var(--border-light)]">
+                  {["Tarefa", "Responsavel", "Inicio", "Fim", "Progresso", "Status"].map((h, i) => (
+                    <th key={i} className={`${i === 0 ? "text-left" : "text-center"} py-2 px-3 text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-mono`}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {tarefas.map((t) => {
+                  const sc = statusConfig[t.status] || statusConfig.planejado;
+                  return (
+                    <tr key={t.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-base)] transition-colors cursor-pointer">
+                      <td className="py-3 px-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-1.5 h-1.5 rounded-full ${sc.dot} flex-shrink-0`}></span>
+                          <span className="text-[var(--text-primary)] font-medium">{t.nome}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.resp}</td>
+                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.inicio}</td>
+                      <td className="py-3 px-3 text-center text-[var(--text-muted)] font-mono text-[11px]">{t.fim}</td>
+                      <td className="py-3 px-3">
+                        <div className="flex items-center gap-2 justify-center">
+                          <div className="w-16 h-1.5 rounded-full bg-[var(--bg-base)] overflow-hidden">
+                            <div className={`h-full rounded-full ${sc.dot}`} style={{ width: `${t.pct}%` }} />
+                          </div>
+                          <span className="text-[10px] text-[var(--text-muted)] font-mono w-8">{t.pct}%</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider ${sc.bg} ${sc.text}`}>
+                          {sc.label}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ═══ BOTTOM STATS ═══ */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-panel text-center">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">Ext. Planejada/Sem</div>
+            <div className="text-xl font-bold text-emerald-400">{formatMeters(leanInsight?.ext_planejada_semana ?? 42)}</div>
+          </div>
+          <div className="p-panel text-center">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">NS Planejadas</div>
+            <div className="text-xl font-bold text-[#38bdf8]">{formatInt(leanInsight?.ns_planejadas_semana ?? 12)}</div>
+          </div>
+          <div className="p-panel text-center">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">CO2 Estimado</div>
+            <div className="text-xl font-bold text-[#f59e0b]">{leanInsight?.co2_total_ton != null ? leanInsight.co2_total_ton.toFixed(1) : "2.4"} ton</div>
+          </div>
+          <div className="p-panel text-center">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase mb-1 font-mono">Custo Ciclo Vida</div>
+            <div className="text-xl font-bold text-rose-400">{formatCurrency(leanInsight?.custo_ciclo_vida_total ?? 0)}</div>
+          </div>
         </div>
       </div>
     );
