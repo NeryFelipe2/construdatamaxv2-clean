@@ -40,14 +40,32 @@ function avgDepth(vertices: [number, number, number][]): number {
   return Math.round((sum / vertices.length) * 100) / 100
 }
 
+/**
+ * Critical fix: filtra apenas layers de REDE DE SANEAMENTO.
+ * Sem esse filtro, o parser importa toda a topografia (ruas, casas, lotes)
+ * gerando 145k+ nos invalidos. Mesmo bug que o backend tinha em
+ * ler_dxf_gdal.py e ler_dwg_universal.py antes do fix.
+ */
+const NETWORK_KEYWORDS = /TUBO|PIPE|REDE|ESGOTO|AGUA|CANAL|DRENAGEM|SEWER|WATER|DRAIN|RAMAL|COLETOR|EMISSARIO|ADUTORA|DISTRIBUI|HIDRA|SAN|PV|POCO|VISITA|MANHOLE/i
+
+const TOPOGRAPHY_KEYWORDS = /TOPO|RUA|VIA|LOTE|QUADRA|CASA|MURO|CALCADA|MEIO.FIO|ARVORE|POSTE|TERRENO|CURVA.NIVEL|HACHURA|HATCH|BORDO|EDIF|CONSTR|PASSEIO/i
+
+function isNetworkLayer(layer: string): boolean {
+  if (!layer) return false
+  // Bloqueia explicitamente layers de topografia
+  if (TOPOGRAPHY_KEYWORDS.test(layer)) return false
+  // Aceita apenas layers que tem palavras-chave de rede
+  return NETWORK_KEYWORDS.test(layer)
+}
+
 /** Derive element type from DXF layer name (heuristic) */
 function layerToElementType(layer: string): BimSegment['elementType'] {
   const l = layer.toUpperCase()
-  if (/TUBO|PIPE|REDE|ESGOTO|AGUA|AGUA|CANAL|DRENAGEM|SEWER|WATER|DRAIN/.test(l)) return 'pipe'
-  if (/LAJE|SLAB|PISO|FLOOR|FORRO|TETO/.test(l))                                   return 'slab'
-  if (/PILAR|COLUNA|COLUMN|PILLAR/.test(l))                                         return 'column'
-  if (/PAREDE|WALL|MURO|FACADE|FACHADA|VEDACAO/.test(l))                            return 'wall'
-  if (/VIGA|BEAM|BALDRAME|CINTAS|CINTA/.test(l))                                    return 'beam'
+  if (/TUBO|PIPE|REDE|ESGOTO|AGUA|CANAL|DRENAGEM|SEWER|WATER|DRAIN/.test(l)) return 'pipe'
+  if (/LAJE|SLAB|PISO|FLOOR|FORRO|TETO/.test(l))                              return 'slab'
+  if (/PILAR|COLUNA|COLUMN|PILLAR/.test(l))                                    return 'column'
+  if (/PAREDE|WALL|MURO|FACADE|FACHADA|VEDACAO/.test(l))                       return 'wall'
+  if (/VIGA|BEAM|BALDRAME|CINTAS|CINTA/.test(l))                               return 'beam'
   return 'pipe' // default for construction drawings
 }
 
@@ -121,8 +139,13 @@ function makeSeg(
   diameterMm = 200,
 ): BimSegment | null {
   if (vertices.length < 2) return null
+  // CRITICAL FIX: descarta tudo que nao for layer de rede de saneamento
+  // (mesmo bug do backend antes do fix de 3m)
+  if (!isNetworkLayer(layer)) return null
   const length = calcLength(vertices)
   if (length < 0.001) return null  // degenerate
+  // Tolerancia: descarta segmentos absurdos (< 0.5m ou > 500m sao quase certo lixo)
+  if (length < 0.5 || length > 500) return null
   return {
     id:          crypto.randomUUID(),
     vertices,
