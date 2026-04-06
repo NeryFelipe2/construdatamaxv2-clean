@@ -27,14 +27,14 @@ function CostComparisonBar({ analysis }: { analysis: BuyLeaseAnalysis }) {
       {/* Rental bar */}
       <div className="flex items-center gap-2">
         <span className="w-28 text-[#6b6b6b] text-xs shrink-0 text-right">Custo Aluguel/ano</span>
-        <div className="flex-1 h-5 bg-[#112645] rounded overflow-hidden relative">
+        <div className="flex-1 h-5 bg-[#333333] rounded overflow-hidden relative">
           <div
             className="h-full rounded transition-all duration-500"
             style={{ width: `${rentalPct}%`, backgroundColor: '#3b82f6' }}
           />
           {/* break-even marker on rental bar */}
           <div
-            className="absolute top-0 h-full w-[2px] bg-[#2abfdc] opacity-70"
+            className="absolute top-0 h-full w-[2px] bg-[#f97316] opacity-70"
             style={{ left: `${breakEvenPct}%` }}
           />
         </div>
@@ -46,13 +46,13 @@ function CostComparisonBar({ analysis }: { analysis: BuyLeaseAnalysis }) {
       {/* Ownership bar */}
       <div className="flex items-center gap-2">
         <span className="w-28 text-[#6b6b6b] text-xs shrink-0 text-right">Custo Propriedade/ano</span>
-        <div className="flex-1 h-5 bg-[#112645] rounded overflow-hidden relative">
+        <div className="flex-1 h-5 bg-[#333333] rounded overflow-hidden relative">
           <div
             className="h-full rounded transition-all duration-500"
             style={{ width: `${ownershipPct}%`, backgroundColor: '#22c55e' }}
           />
           <div
-            className="absolute top-0 h-full w-[2px] bg-[#2abfdc] opacity-70"
+            className="absolute top-0 h-full w-[2px] bg-[#f97316] opacity-70"
             style={{ left: `${breakEvenPct}%` }}
           />
         </div>
@@ -63,8 +63,8 @@ function CostComparisonBar({ analysis }: { analysis: BuyLeaseAnalysis }) {
 
       {/* Break-even label */}
       <div className="flex items-center gap-1.5 mt-0.5">
-        <div className="w-3 h-[2px] bg-[#2abfdc]" />
-        <span className="text-[#2abfdc] text-[10px]">
+        <div className="w-3 h-[2px] bg-[#f97316]" />
+        <span className="text-[#f97316] text-[10px]">
           Break-even: {analysis.breakEvenMonths} meses
           {analysis.breakEvenMonths <= 36
             ? ' — payback rápido'
@@ -137,7 +137,7 @@ function BuyLeaseDialog({ editTarget, onClose }: BuyLeaseDialogProps) {
   )
 
   const labelClass = 'block text-xs font-medium text-[#6b6b6b] mb-1'
-  const inputClass = 'w-full px-3 py-2 rounded-lg border border-[#20406a] bg-[#112645] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#2abfdc]'
+  const inputClass = 'w-full px-3 py-2 rounded-lg border border-[#525252] bg-[#333333] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]'
 
   function handleSave() {
     const data: Omit<BuyLeaseAnalysis, 'id'> = {
@@ -172,7 +172,7 @@ function BuyLeaseDialog({ editTarget, onClose }: BuyLeaseDialogProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[#0d2040] border border-[#20406a] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <p className="text-[#f5f5f5] text-base font-semibold">
@@ -265,7 +265,7 @@ function BuyLeaseDialog({ editTarget, onClose }: BuyLeaseDialogProps) {
           <div>
             <label className={labelClass}>
               Dias de Uso Projetados / ano
-              <span className="ml-1 text-[#2abfdc] font-normal">(≥180 = comprar · ≤60 = alugar)</span>
+              <span className="ml-1 text-[#f97316] font-normal">(≥180 = comprar · ≤60 = alugar)</span>
             </label>
             <input
               type="number"
@@ -305,13 +305,13 @@ function BuyLeaseDialog({ editTarget, onClose }: BuyLeaseDialogProps) {
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSave}
-            className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#2abfdc] hover:bg-[#1a9ab8] text-white transition-colors"
+            className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#f97316] hover:bg-[#ea580c] text-white transition-colors"
           >
             Salvar
           </button>
           <button
             onClick={onClose}
-            className="flex-1 py-2 rounded-lg text-sm font-medium border border-[#20406a] text-[#a3a3a3] hover:text-[#f5f5f5] transition-colors"
+            className="flex-1 py-2 rounded-lg text-sm font-medium border border-[#525252] text-[#a3a3a3] hover:text-[#f5f5f5] transition-colors"
           >
             Cancelar
           </button>
@@ -339,14 +339,14 @@ function BuyLeaseCard({
 
   return (
     <div
-      className="bg-[#14294e] rounded-xl p-4 relative"
+      className="bg-[#3d3d3d] rounded-xl p-4 relative"
       style={{ border: `1px solid ${meta.color}30` }}
     >
       {/* Edit / Delete buttons */}
       <div className="absolute top-3 right-3 flex items-center gap-1.5">
         <button
           onClick={onEdit}
-          className="p-1.5 rounded-lg text-[#6b6b6b] hover:text-[#2abfdc] hover:bg-[#20406a] transition-colors"
+          className="p-1.5 rounded-lg text-[#6b6b6b] hover:text-[#f97316] hover:bg-[#525252] transition-colors"
           title="Editar"
         >
           <Pencil size={13} />
@@ -400,7 +400,7 @@ function BuyLeaseCard({
       </p>
 
       {/* Reasoning */}
-      <p className="text-[#6b6b6b] text-xs leading-relaxed mt-2 mb-3 border-t border-[#20406a] pt-2">
+      <p className="text-[#6b6b6b] text-xs leading-relaxed mt-2 mb-3 border-t border-[#525252] pt-2">
         {a.reasoning}
       </p>
 
@@ -425,7 +425,7 @@ function BuyLeaseCard({
             {a.relatedProjects.map((proj) => (
               <span
                 key={proj}
-                className="px-2 py-0.5 rounded text-[10px] bg-[#20406a] text-[#6b6b6b]"
+                className="px-2 py-0.5 rounded text-[10px] bg-[#525252] text-[#6b6b6b]"
               >
                 {proj}
               </span>
@@ -480,7 +480,7 @@ function SummaryKPIs({ analyses }: { analyses: BuyLeaseAnalysis[] }) {
       ].map((kpi) => (
         <div
           key={kpi.label}
-          className="bg-[#14294e] border border-[#20406a] rounded-xl px-4 py-3"
+          className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-3"
         >
           <p className="text-[#6b6b6b] text-xs">{kpi.label}</p>
           <p className="text-lg font-bold leading-tight mt-0.5" style={{ color: kpi.color }}>
@@ -536,13 +536,13 @@ export function BuyLeasePanel() {
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#1a9ab8] text-white text-xs font-semibold transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-semibold transition-colors"
           >
             <Plus size={13} /> Nova Análise
           </button>
           <button
             onClick={runBuyLeaseEngine}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#1a3662] transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
           >
             <RefreshCw size={13} /> Rodar Engine
           </button>
@@ -554,7 +554,7 @@ export function BuyLeasePanel() {
 
       {/* Analysis cards */}
       {buyLeaseAnalyses.length === 0 ? (
-        <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-6 text-center">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-6 text-center">
           <p className="text-[#6b6b6b] text-sm">
             Clique em "Nova Análise" ou "Rodar Engine" para calcular a análise financeira.
           </p>

@@ -78,7 +78,7 @@ function TaskDot({ task, resources, onEdit }: TaskDotProps) {
           <HoverCardTrigger asChild>
             <button
               type="button"
-              className="w-2.5 h-2.5 rounded-full shrink-0 ring-1 ring-white/10 transition-transform hover:scale-150 focus:outline-none focus:ring-2 focus:ring-[#2abfdc]"
+              className="w-2.5 h-2.5 rounded-full shrink-0 ring-1 ring-white/10 transition-transform hover:scale-150 focus:outline-none focus:ring-2 focus:ring-[#f97316]"
               style={{ backgroundColor: hexColor }}
               aria-label={task.title}
               onClick={(e) => e.stopPropagation()}
@@ -124,7 +124,7 @@ function TaskDot({ task, resources, onEdit }: TaskDotProps) {
           <button
             type="button"
             onClick={() => onEdit(task.id)}
-            className="mt-2 w-full px-3 py-1.5 rounded-lg bg-[#2abfdc]/15 border border-[#2abfdc]/30 text-[#2abfdc] text-xs font-semibold hover:bg-[#2abfdc]/25 transition-colors"
+            className="mt-2 w-full px-3 py-1.5 rounded-lg bg-[#f97316]/15 border border-[#f97316]/30 text-[#f97316] text-xs font-semibold hover:bg-[#f97316]/25 transition-colors"
           >
             Editar
           </button>
@@ -155,8 +155,8 @@ function DayCell({ day, tasks, resources, onEdit, onNewTask }: DayCellProps) {
     <Card
       className={cn(
         "relative flex flex-col justify-between overflow-hidden cursor-pointer select-none transition-colors",
-        "bg-[#14294e] border-[#20406a] hover:bg-[#1a3662]",
-        today && "border-[#2abfdc] ring-1 ring-[#2abfdc]/30"
+        "bg-[#3d3d3d] border-[#525252] hover:bg-[#484848]",
+        today && "border-[#f97316] ring-1 ring-[#f97316]/30"
       )}
       style={{ width: "100%", height: "100%" }}
       onClick={onNewTask}
@@ -167,7 +167,7 @@ function DayCell({ day, tasks, resources, onEdit, onNewTask }: DayCellProps) {
           <span
             className={cn(
               "text-[11px] font-medium uppercase tracking-wide",
-              today ? "text-[#2abfdc]" : "text-[#a3a3a3]"
+              today ? "text-[#f97316]" : "text-[#a3a3a3]"
             )}
           >
             {format(day, "EEE", { locale: ptBR })}
@@ -175,7 +175,7 @@ function DayCell({ day, tasks, resources, onEdit, onNewTask }: DayCellProps) {
           <span
             className={cn(
               "text-sm font-bold tabular-nums",
-              today ? "text-[#2abfdc]" : "text-[#f5f5f5]"
+              today ? "text-[#f97316]" : "text-[#f5f5f5]"
             )}
           >
             {format(day, "d")}
@@ -184,7 +184,7 @@ function DayCell({ day, tasks, resources, onEdit, onNewTask }: DayCellProps) {
 
         {/* Today badge */}
         {today && (
-          <span className="text-[9px] font-bold text-[#2abfdc] uppercase tracking-widest mb-1">
+          <span className="text-[9px] font-bold text-[#f97316] uppercase tracking-widest mb-1">
             Hoje
           </span>
         )}
@@ -220,10 +220,10 @@ function DayCell({ day, tasks, resources, onEdit, onNewTask }: DayCellProps) {
             e.stopPropagation()
             onNewTask()
           }}
-          className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 w-5 h-5 rounded-full bg-[#2abfdc]/20 flex items-center justify-center transition-opacity"
+          className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 w-5 h-5 rounded-full bg-[#f97316]/20 flex items-center justify-center transition-opacity"
           aria-label="Novo evento"
         >
-          <Plus size={10} className="text-[#2abfdc]" />
+          <Plus size={10} className="text-[#f97316]" />
         </button>
       </CardContent>
     </Card>
@@ -256,8 +256,8 @@ function MobileDayRow({
   return (
     <div
       className={cn(
-        "border-b border-[#20406a] px-4 py-3",
-        today && "bg-[#2abfdc]/5"
+        "border-b border-[#525252] px-4 py-3",
+        today && "bg-[#f97316]/5"
       )}
     >
       {/* Day header */}
@@ -266,7 +266,7 @@ function MobileDayRow({
           <span
             className={cn(
               "text-lg font-bold tabular-nums",
-              today ? "text-[#2abfdc]" : "text-[#f5f5f5]"
+              today ? "text-[#f97316]" : "text-[#f5f5f5]"
             )}
           >
             {format(day, "d")}
@@ -274,13 +274,13 @@ function MobileDayRow({
           <span
             className={cn(
               "text-xs uppercase tracking-wide",
-              today ? "text-[#2abfdc]" : "text-[#a3a3a3]"
+              today ? "text-[#f97316]" : "text-[#a3a3a3]"
             )}
           >
             {format(day, "EEEE", { locale: ptBR })}
           </span>
           {today && (
-            <span className="text-[10px] font-bold text-[#2abfdc] bg-[#2abfdc]/15 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-bold text-[#f97316] bg-[#f97316]/15 px-1.5 py-0.5 rounded">
               Hoje
             </span>
           )}
@@ -288,10 +288,10 @@ function MobileDayRow({
         <button
           type="button"
           onClick={onNewTask}
-          className="w-6 h-6 rounded-full bg-[#2abfdc]/20 flex items-center justify-center"
+          className="w-6 h-6 rounded-full bg-[#f97316]/20 flex items-center justify-center"
           aria-label="Novo evento"
         >
-          <Plus size={12} className="text-[#2abfdc]" />
+          <Plus size={12} className="text-[#f97316]" />
         </button>
       </div>
 
@@ -308,7 +308,7 @@ function MobileDayRow({
                 key={t.id}
                 type="button"
                 onClick={() => onEdit(t.id)}
-                className="w-full flex items-center gap-2 p-2 rounded-lg bg-[#14294e] border border-[#20406a] hover:bg-[#1a3662] text-left transition-colors"
+                className="w-full flex items-center gap-2 p-2 rounded-lg bg-[#3d3d3d] border border-[#525252] hover:bg-[#484848] text-left transition-colors"
               >
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
@@ -442,9 +442,9 @@ export function ThreeDWallCalendar() {
 
   if (isMobile) {
     return (
-      <div className="flex flex-col h-full bg-[#112645]">
+      <div className="flex flex-col h-full bg-[#333333]">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#525252] shrink-0">
           <button
             type="button"
             onClick={goToPrev}
@@ -488,13 +488,13 @@ export function ThreeDWallCalendar() {
   // ─── Desktop 3D Layout ─────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col h-full bg-[#112645] select-none">
+    <div className="flex flex-col h-full bg-[#333333] select-none">
       {/* ── Month navigation header ── */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#20406a] shrink-0">
+      <div className="flex items-center justify-between px-3 sm:px-6 py-3 border-b border-[#525252] shrink-0">
         <button
           type="button"
           onClick={goToPrev}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#20406a] text-[#a3a3a3] text-xs font-semibold hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-[#a3a3a3] text-xs font-semibold hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
           aria-label="Mês anterior"
         >
           <ChevronLeft size={14} />
@@ -508,7 +508,7 @@ export function ThreeDWallCalendar() {
         <button
           type="button"
           onClick={goToNext}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#20406a] text-[#a3a3a3] text-xs font-semibold hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-[#a3a3a3] text-xs font-semibold hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
           aria-label="Próximo mês"
         >
           Próximo
@@ -597,9 +597,9 @@ export function ThreeDWallCalendar() {
       </div>
 
       {/* ── Footer hint ── */}
-      <div className="flex items-center justify-center gap-4 px-6 py-2 border-t border-[#20406a] shrink-0 text-[10px] text-[#525252]">
+      <div className="flex items-center justify-center gap-4 px-6 py-2 border-t border-[#525252] shrink-0 text-[10px] text-[#525252]">
         <span>Scroll: inclinar</span>
-        <span className="w-px h-3 bg-[#20406a]" />
+        <span className="w-px h-3 bg-[#525252]" />
         <span>Arrastar: rotacionar</span>
       </div>
     </div>

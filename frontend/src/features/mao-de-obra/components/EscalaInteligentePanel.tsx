@@ -9,7 +9,7 @@ import { calcShiftHours } from '../utils/cltEngine'
 
 const SHIFT_TYPE_COLOR: Record<string, string> = {
   regular:  '#3b82f6',
-  overtime: '#2abfdc',
+  overtime: '#f97316',
   night:    '#8b5cf6',
   holiday:  '#22c55e',
   day_off:  '#6b6b6b',
@@ -75,13 +75,13 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
     onSave(form as Omit<Shift, 'id'>)
   }
 
-  const fieldClass = 'w-full bg-[#112645] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#2abfdc]'
+  const fieldClass = 'w-full bg-[#333333] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
   const labelClass = 'block text-[#6b6b6b] text-xs mb-1'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[#112645] border border-[#20406a] rounded-2xl w-full max-w-md">
-        <div className="flex items-center justify-between p-4 border-b border-[#20406a]">
+      <div className="bg-[#333333] border border-[#525252] rounded-2xl w-full max-w-md">
+        <div className="flex items-center justify-between p-4 border-b border-[#525252]">
           <h3 className="text-[#f5f5f5] text-sm font-semibold">{initial?.id ? 'Editar Turno' : 'Novo Turno'}</h3>
           <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
         </div>
@@ -92,7 +92,7 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
               {workers.map((w) => <option key={w.id} value={w.id}>{w.name} — {w.role}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Data</label>
               <input type="date" className={fieldClass} value={form.date} onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))} />
@@ -112,7 +112,7 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
               <input type="time" className={fieldClass} value={form.endTime} onChange={(e) => setForm((p) => ({ ...p, endTime: e.target.value }))} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Intervalo (min)</label>
               <input type="number" min="0" className={fieldClass} value={form.breakMinutes} onChange={(e) => setForm((p) => ({ ...p, breakMinutes: parseInt(e.target.value) || 0 }))} />
@@ -144,8 +144,8 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
               </button>
             )}
             <div className="flex gap-2 ml-auto">
-              <button type="button" onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#20406a] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">Cancelar</button>
-              <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold">Salvar</button>
+              <button type="button" onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">Cancelar</button>
+              <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">Salvar</button>
             </div>
           </div>
         </form>
@@ -159,16 +159,16 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
 function CLTSettingsModal({ settings, onSave, onClose }: { settings: CLTSettings; onSave: (s: Partial<CLTSettings>) => void; onClose: () => void }) {
   const [form, setForm] = useState({ ...settings })
   const num = (field: keyof CLTSettings) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((p) => ({ ...p, [field]: parseFloat(e.target.value) || 0 }))
-  const fieldClass = 'w-full bg-[#112645] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#2abfdc]'
+  const fieldClass = 'w-full bg-[#333333] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
   const labelClass = 'block text-[#6b6b6b] text-xs mb-1'
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[#112645] border border-[#20406a] rounded-2xl w-full max-w-sm">
-        <div className="flex items-center justify-between p-4 border-b border-[#20406a]">
+      <div className="bg-[#333333] border border-[#525252] rounded-2xl w-full max-w-sm">
+        <div className="flex items-center justify-between p-4 border-b border-[#525252]">
           <h3 className="text-[#f5f5f5] text-sm font-semibold">Configurações CLT</h3>
           <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
         </div>
-        <div className="p-4 grid grid-cols-2 gap-3">
+        <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><label className={labelClass}>Jornada diária (h)</label><input type="number" className={fieldClass} value={form.maxDailyHours} onChange={num('maxDailyHours')} /></div>
           <div><label className={labelClass}>HE máx/dia (h)</label><input type="number" className={fieldClass} value={form.maxOvertimeHours} onChange={num('maxOvertimeHours')} /></div>
           <div><label className={labelClass}>Jornada semanal (h)</label><input type="number" className={fieldClass} value={form.maxWeeklyHours} onChange={num('maxWeeklyHours')} /></div>
@@ -178,8 +178,8 @@ function CLTSettingsModal({ settings, onSave, onClose }: { settings: CLTSettings
           <div><label className={labelClass}>Adicional noturno (%)</label><input type="number" className={fieldClass} value={form.nightDifferential} onChange={num('nightDifferential')} /></div>
           <div><label className={labelClass}>Taxa HE (%)</label><input type="number" className={fieldClass} value={form.overtimeRate} onChange={num('overtimeRate')} /></div>
           <div className="col-span-2 flex justify-end gap-2 pt-1">
-            <button onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#20406a] text-[#6b6b6b] text-xs">Cancelar</button>
-            <button onClick={() => { onSave(form); onClose() }} className="px-3 py-1.5 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold">Salvar</button>
+            <button onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs">Cancelar</button>
+            <button onClick={() => { onSave(form); onClose() }} className="px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">Salvar</button>
           </div>
         </div>
       </div>
@@ -223,12 +223,12 @@ function MonthlyView({ shifts, year, month, onDayClick }: { shifts: Shift[]; yea
           const isWeekend = dow === 0 || dow === 6
           const color = info
             ? info.absent > 0 ? '#ef4444' : info.dayOff > 0 ? '#6b6b6b' : '#22c55e'
-            : isWeekend ? '#1f3c5e' : '#20406a'
+            : isWeekend ? '#1f3c5e' : '#525252'
           return (
             <button
               key={ymd}
               onClick={() => onDayClick(ymd)}
-              className="flex flex-col items-center justify-start p-1 rounded-lg border hover:border-[#2abfdc]/50 transition-colors h-14"
+              className="flex flex-col items-center justify-start p-1 rounded-lg border hover:border-[#f97316]/50 transition-colors h-14"
               style={{ backgroundColor: `${color}0f`, borderColor: `${color}30` }}
             >
               <span className="text-[11px] font-semibold" style={{ color: isWeekend ? '#3f3f3f' : '#f5f5f5' }}>{date.getDate()}</span>
@@ -278,7 +278,7 @@ function WeeklyView({ shifts, workers, dates, onCellClick }: {
         </thead>
         <tbody>
           {workers.map((w) => (
-            <tr key={w.id} className="border-t border-[#20406a]">
+            <tr key={w.id} className="border-t border-[#525252]">
               <td className="px-2 py-1.5 text-[#f5f5f5] font-medium truncate max-w-[128px]">{w.name.split(' ')[0]}</td>
               {dates.map((d) => {
                 const ymd = toYMD(d)
@@ -286,7 +286,7 @@ function WeeklyView({ shifts, workers, dates, onCellClick }: {
                 return (
                   <td
                     key={ymd}
-                    className="px-1 py-1 text-center cursor-pointer hover:bg-[#1a3662]"
+                    className="px-1 py-1 text-center cursor-pointer hover:bg-[#484848]"
                     onClick={() => onCellClick(w.id, ymd)}
                   >
                     {dayShifts.length === 0 ? (
@@ -330,12 +330,12 @@ function DailyView({ shifts, workers, selectedDate, onAddShift, onEditShift }: {
         <p className="text-[#f5f5f5] text-sm font-semibold">
           {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
         </p>
-        <button onClick={onAddShift} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold">
+        <button onClick={onAddShift} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">
           <Plus size={12} /> Adicionar Turno
         </button>
       </div>
       {dayShifts.length === 0 ? (
-        <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-6 text-center">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-6 text-center">
           <p className="text-[#6b6b6b] text-sm">Nenhum turno registrado para este dia.</p>
         </div>
       ) : (
@@ -347,7 +347,7 @@ function DailyView({ shifts, workers, selectedDate, onAddShift, onEditShift }: {
             return (
               <div
                 key={s.id}
-                className="bg-[#14294e] border border-[#20406a] rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-[#2abfdc]/30"
+                className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-[#f97316]/30"
                 style={{ borderLeft: `3px solid ${color}` }}
                 onClick={() => onEditShift(s)}
               >
@@ -438,14 +438,14 @@ export function EscalaInteligentePanel() {
       {/* Toolbar */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* View mode */}
-        <div className="flex rounded-lg border border-[#20406a] overflow-hidden">
+        <div className="flex rounded-lg border border-[#525252] overflow-hidden">
           {([['month', Calendar, 'Mês'], ['week', LayoutGrid, 'Semana'], ['day', List, 'Dia']] as const).map(([mode, Icon, label]) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs transition-colors"
               style={{
-                background: viewMode === mode ? '#2abfdc' : 'transparent',
+                background: viewMode === mode ? '#f97316' : 'transparent',
                 color: viewMode === mode ? '#fff' : '#6b6b6b',
               }}
             >
@@ -472,7 +472,7 @@ export function EscalaInteligentePanel() {
         )}
 
         <div className="ml-auto flex gap-2">
-          <button onClick={() => setShowSettings(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#20406a] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">
+          <button onClick={() => setShowSettings(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">
             <Settings size={12} /> CLT
           </button>
           <button
@@ -486,7 +486,7 @@ export function EscalaInteligentePanel() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Main calendar/grid */}
-        <div className="lg:col-span-2 bg-[#14294e] border border-[#20406a] rounded-xl p-4">
+        <div className="lg:col-span-2 bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
           {viewMode === 'month' && (
             <MonthlyView shifts={shifts} year={year} month={month} onDayClick={handleDayClick} />
           )}
@@ -505,7 +505,7 @@ export function EscalaInteligentePanel() {
         </div>
 
         {/* CLT Alert Panel */}
-        <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-4 flex flex-col gap-3">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <p className="text-[#f5f5f5] text-sm font-semibold">Alertas CLT</p>
             <div className="flex gap-1.5">
@@ -547,7 +547,7 @@ export function EscalaInteligentePanel() {
           )}
 
           {/* Legend */}
-          <div className="border-t border-[#20406a] pt-3">
+          <div className="border-t border-[#525252] pt-3">
             <p className="text-[#6b6b6b] text-[10px] mb-2">Tipos de turno</p>
             <div className="flex flex-wrap gap-1.5">
               {Object.entries(SHIFT_TYPE_LABEL).map(([type, label]) => (

@@ -29,11 +29,11 @@ function EntryRow({ entry, onUpdate, onDelete }: {
     setEditing(false)
   }
 
-  const cellInput = 'bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none focus:border-violet-500 w-full'
+  const cellInput = 'bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none focus:border-violet-500 w-full'
 
   if (editing) {
     return (
-      <tr className="border-b border-gray-700/50 bg-gray-750/30">
+      <tr className="border-b border-[#525252]/50 bg-gray-750/30">
         <td className="px-3 py-2"><input value={draft.code} onChange={(e) => setDraft({ ...draft, code: e.target.value })} className={cellInput} /></td>
         <td className="px-3 py-2"><input value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} className={cellInput} /></td>
         <td className="px-3 py-2"><input value={draft.unit} onChange={(e) => setDraft({ ...draft, unit: e.target.value })} className={`${cellInput} w-16`} /></td>
@@ -42,7 +42,7 @@ function EntryRow({ entry, onUpdate, onDelete }: {
         <td className="px-3 py-2">
           <div className="flex gap-1">
             <button onClick={save} className="p-1 text-emerald-400"><Check size={13} /></button>
-            <button onClick={() => setEditing(false)} className="p-1 text-gray-500"><X size={13} /></button>
+            <button onClick={() => setEditing(false)} className="p-1 text-[#6b6b6b]"><X size={13} /></button>
           </div>
         </td>
       </tr>
@@ -50,12 +50,12 @@ function EntryRow({ entry, onUpdate, onDelete }: {
   }
 
   return (
-    <tr className="border-b border-gray-700/50 hover:bg-gray-750/20 cursor-pointer" onClick={() => setEditing(true)}>
-      <td className="px-3 py-2.5 text-gray-400 font-mono text-xs">{entry.code}</td>
-      <td className="px-3 py-2.5 text-gray-200 text-sm">{entry.description}</td>
-      <td className="px-3 py-2.5 text-gray-400 text-sm">{entry.unit}</td>
-      <td className="px-3 py-2.5 text-right text-gray-300 text-sm">{fmtBRL(entry.unitCost)}</td>
-      <td className="px-3 py-2.5 text-gray-400 text-sm">{entry.category}</td>
+    <tr className="border-b border-[#525252]/50 hover:bg-gray-750/20 cursor-pointer" onClick={() => setEditing(true)}>
+      <td className="px-3 py-2.5 text-[#a3a3a3] font-mono text-xs">{entry.code}</td>
+      <td className="px-3 py-2.5 text-[#f5f5f5] text-sm">{entry.description}</td>
+      <td className="px-3 py-2.5 text-[#a3a3a3] text-sm">{entry.unit}</td>
+      <td className="px-3 py-2.5 text-right text-[#f5f5f5] text-sm">{fmtBRL(entry.unitCost)}</td>
+      <td className="px-3 py-2.5 text-[#a3a3a3] text-sm">{entry.category}</td>
       <td className="px-3 py-2.5">
         <button onClick={(e) => { e.stopPropagation(); onDelete(entry.id) }} className="p-1 text-gray-600 hover:text-red-400 transition-colors">
           <Trash2 size={13} />
@@ -77,11 +77,11 @@ function AddEntryRow({ onAdd }: { onAdd: (e: Omit<CustomBaseEntry, 'id'>) => voi
     setErr('')
   }
 
-  const cellInput = 'bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none focus:border-violet-500 w-full'
+  const cellInput = 'bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none focus:border-violet-500 w-full'
 
   return (
     <>
-      <tr className="border-b border-gray-600 bg-gray-750/50">
+      <tr className="border-b border-[#5e5e5e] bg-gray-750/50">
         <td className="px-3 py-2"><input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} placeholder="Código" className={cellInput} /></td>
         <td className="px-3 py-2"><input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Descrição" className={cellInput} /></td>
         <td className="px-3 py-2"><input value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} className={`${cellInput} w-16`} /></td>
@@ -153,16 +153,16 @@ export function BancoDadosPanel() {
             className={`text-left p-4 rounded-xl border-2 transition-all ${
               costBase === opt.value
                 ? 'border-violet-500 bg-violet-950/30'
-                : 'border-gray-700 bg-gray-800 hover:border-gray-600'
+                : 'border-[#525252] bg-[#3d3d3d] hover:border-[#5e5e5e]'
             }`}
           >
             <div className="flex items-center justify-between mb-1">
-              <span className="text-gray-200 font-semibold text-sm">{opt.label}</span>
-              <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${costBase === opt.value ? 'border-violet-500 bg-violet-500' : 'border-gray-600'}`}>
+              <span className="text-[#f5f5f5] font-semibold text-sm">{opt.label}</span>
+              <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${costBase === opt.value ? 'border-violet-500 bg-violet-500' : 'border-[#5e5e5e]'}`}>
                 {costBase === opt.value && <span className="w-2 h-2 bg-white rounded-full" />}
               </span>
             </div>
-            <p className="text-gray-500 text-xs leading-relaxed">{opt.desc}</p>
+            <p className="text-[#6b6b6b] text-xs leading-relaxed">{opt.desc}</p>
             <p className="text-violet-400 text-xs mt-1 font-medium">{opt.count} entradas</p>
           </button>
         ))}
@@ -170,13 +170,13 @@ export function BancoDadosPanel() {
 
       {/* Custom base import controls */}
       {costBase === 'custom' && (
-        <div className="bg-gray-800 rounded-xl border border-gray-700 p-5 space-y-3">
-          <h3 className="text-gray-200 font-medium text-sm">Importar Base de Custos</h3>
+        <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-5 space-y-3">
+          <h3 className="text-[#f5f5f5] font-medium text-sm">Importar Base de Custos</h3>
           <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => fileRef.current?.click()}
               disabled={importing}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors disabled:opacity-50"
             >
               <Upload size={14} />
               {importing ? 'Importando...' : 'Importar Excel / CSV'}
@@ -184,45 +184,45 @@ export function BancoDadosPanel() {
             <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={handleFileChange} />
             <button
               onClick={() => exportCustomBaseToCsv(customBase)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors"
             >
               <Download size={14} /> Exportar Base (CSV)
             </button>
             <button
               onClick={() => exportCustomBaseToXlsx(customBase)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors"
             >
               <Download size={14} /> Exportar Base (Excel)
             </button>
           </div>
           {importError && <p className="text-red-400 text-sm">{importError}</p>}
-          <p className="text-gray-500 text-xs">
-            O arquivo Excel/CSV deve ter as colunas: <span className="text-gray-400">Código, Descrição, Unidade, Custo Unitário (R$), Categoria</span>
+          <p className="text-[#6b6b6b] text-xs">
+            O arquivo Excel/CSV deve ter as colunas: <span className="text-[#a3a3a3]">Código, Descrição, Unidade, Custo Unitário (R$), Categoria</span>
           </p>
         </div>
       )}
 
       {/* Search */}
       <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b6b6b]" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={`Buscar em ${costBase === 'sinapi' ? 'SINAPI' : costBase === 'seinfra' ? 'SEINFRA' : 'Base Própria'}...`}
-          className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-violet-500"
+          className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg pl-9 pr-4 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-violet-500"
         />
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-700">
-          <p className="text-gray-400 text-xs">{filtered.length} entradas{search && ` de ${displayEntries.length}`}</p>
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+        <div className="px-5 py-3 border-b border-[#525252]">
+          <p className="text-[#a3a3a3] text-xs">{filtered.length} entradas{search && ` de ${displayEntries.length}`}</p>
         </div>
         <div className="overflow-x-auto max-h-96 overflow-y-auto">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-gray-800 z-10">
-              <tr className="text-gray-500 text-xs border-b border-gray-700">
+            <thead className="sticky top-0 bg-[#3d3d3d] z-10">
+              <tr className="text-[#6b6b6b] text-xs border-b border-[#525252]">
                 <th className="text-left px-3 py-2.5 font-medium">Código</th>
                 <th className="text-left px-3 py-2.5 font-medium">Descrição</th>
                 <th className="text-left px-3 py-2.5 font-medium">Unidade</th>
@@ -233,7 +233,7 @@ export function BancoDadosPanel() {
             </thead>
             <tbody>
               {filtered.length === 0 && (
-                <tr><td colSpan={6} className="text-center text-gray-500 py-10">Nenhuma entrada encontrada.</td></tr>
+                <tr><td colSpan={6} className="text-center text-[#6b6b6b] py-10">Nenhuma entrada encontrada.</td></tr>
               )}
               {costBase === 'custom' ? (
                 <>
@@ -256,12 +256,12 @@ export function BancoDadosPanel() {
                 </>
               ) : (
                 filtered.map((e) => (
-                  <tr key={e.code} className="border-b border-gray-700/50 hover:bg-gray-750/20">
-                    <td className="px-3 py-2.5 text-gray-400 font-mono text-xs">{e.code}</td>
-                    <td className="px-3 py-2.5 text-gray-200">{e.description}</td>
-                    <td className="px-3 py-2.5 text-gray-400">{e.unit}</td>
-                    <td className="px-3 py-2.5 text-right text-gray-300">{fmtBRL(e.unitCost)}</td>
-                    <td className="px-3 py-2.5 text-gray-400">{e.category}</td>
+                  <tr key={e.code} className="border-b border-[#525252]/50 hover:bg-gray-750/20">
+                    <td className="px-3 py-2.5 text-[#a3a3a3] font-mono text-xs">{e.code}</td>
+                    <td className="px-3 py-2.5 text-[#f5f5f5]">{e.description}</td>
+                    <td className="px-3 py-2.5 text-[#a3a3a3]">{e.unit}</td>
+                    <td className="px-3 py-2.5 text-right text-[#f5f5f5]">{fmtBRL(e.unitCost)}</td>
+                    <td className="px-3 py-2.5 text-[#a3a3a3]">{e.category}</td>
                   </tr>
                 ))
               )}

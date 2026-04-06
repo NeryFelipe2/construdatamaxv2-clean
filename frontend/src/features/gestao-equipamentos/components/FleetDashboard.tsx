@@ -8,7 +8,7 @@ import type { EquipmentProfile, EquipmentStatus } from '@/types'
 
 const STATUS_COLOR: Record<EquipmentStatus, string> = {
   active:      '#22c55e',
-  idle:        '#2abfdc',
+  idle:        '#f97316',
   maintenance: '#3b82f6',
   alert:       '#ef4444',
   offline:     '#6b6b6b',
@@ -40,13 +40,13 @@ function KpiCard({
   accent?: boolean
 }) {
   return (
-    <div className="flex flex-col gap-1 bg-[#0d2040] border border-[#20406a] rounded-xl px-5 py-4">
+    <div className="flex flex-col gap-1 bg-[#2c2c2c] border border-[#525252] rounded-xl px-5 py-4">
       <span className="text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold">
         {label}
       </span>
       <span
         className="text-2xl font-bold leading-tight"
-        style={{ color: accent ? '#2abfdc' : '#f5f5f5' }}
+        style={{ color: accent ? '#f97316' : '#f5f5f5' }}
       >
         {value}
       </span>
@@ -60,7 +60,7 @@ function KpiCard({
 function EquipCard({ equip }: { equip: EquipmentProfile }) {
   const statusCfg = STATUS_CONFIG[equip.status]
   return (
-    <div className="bg-[#0d2040] border border-[#20406a] rounded-xl px-4 py-3 flex flex-col gap-2">
+    <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl px-4 py-3 flex flex-col gap-2">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-xs font-semibold text-[#f5f5f5] truncate">{equip.name}</p>
@@ -86,7 +86,7 @@ function EquipCard({ equip }: { equip: EquipmentProfile }) {
       </div>
       <button
         onClick={() => useEquipamentosStore.getState().setEditing(equip.id)}
-        className="self-end text-[10px] px-2 py-0.5 rounded border border-[#20406a] text-[#6b6b6b] hover:text-[#2abfdc] hover:border-[#2abfdc]/40 transition-colors"
+        className="self-end text-[10px] px-2 py-0.5 rounded border border-[#525252] text-[#6b6b6b] hover:text-[#f97316] hover:border-[#f97316]/40 transition-colors"
       >
         Editar
       </button>
@@ -152,7 +152,7 @@ export function FleetDashboard() {
     <div className="flex flex-col gap-6 p-6 overflow-y-auto h-full">
 
       {/* ── KPI Row ── */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <KpiCard
           label="Total da Frota"
           value={total}
@@ -180,7 +180,7 @@ export function FleetDashboard() {
       <div className="grid grid-cols-2 gap-6">
 
         {/* LEFT — horizontal bar chart */}
-        <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-5 flex flex-col gap-3">
+        <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-5 flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
             Utilização por Equipamento (horas)
           </h2>
@@ -218,7 +218,7 @@ export function FleetDashboard() {
                       width={plotW}
                       height={barH}
                       rx={3}
-                      fill="#14294e"
+                      fill="#3d3d3d"
                     />
                     {/* Bar fill */}
                     {barW > 0 && (
@@ -261,14 +261,14 @@ export function FleetDashboard() {
         </div>
 
         {/* RIGHT — upcoming maintenance */}
-        <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-5 flex flex-col gap-3">
+        <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-5 flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
             Próximas Manutenções
           </h2>
           {upcoming.length === 0 ? (
             <p className="text-xs text-[#6b6b6b] mt-2">Nenhuma OS agendada.</p>
           ) : (
-            <div className="flex flex-col divide-y divide-[#14294e]">
+            <div className="flex flex-col divide-y divide-[#3d3d3d]">
               {upcoming.map((order) => (
                 <div key={order.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
                   {/* Equipment info */}
@@ -283,7 +283,7 @@ export function FleetDashboard() {
                   {/* Type badge */}
                   <span
                     className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      TYPE_BADGE_COLOR[order.type] ?? 'bg-[#20406a] text-[#a3a3a3]'
+                      TYPE_BADGE_COLOR[order.type] ?? 'bg-[#525252] text-[#a3a3a3]'
                     }`}
                   >
                     {TYPE_LABEL[order.type] ?? order.type}
@@ -309,7 +309,7 @@ export function FleetDashboard() {
         <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
           Todos os Equipamentos
         </h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {equipamentos.map((eq) => (
             <EquipCard key={eq.id} equip={eq} />
           ))}

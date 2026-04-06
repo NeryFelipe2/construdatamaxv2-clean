@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { FlowHoverButton } from '@/components/ui/flow-hover-button'
+import portoAtlanticoImg from '@/assets/porto-atlantico.jpg'
 
 const SLIDES = [
   {
@@ -28,7 +29,7 @@ function GestaoMockup() {
       <div className="flex items-center justify-between">
         <span style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.1em' }} className="text-white/75 text-xs uppercase">Gestão de Projeto 360</span>
         <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#2abfdc] animate-pulse" />
+          <div className="w-1.5 h-1.5 rounded-full bg-[#f97316] animate-pulse" />
           <span className="text-white/65 text-xs">ao vivo</span>
         </div>
       </div>
@@ -49,10 +50,10 @@ function GestaoMockup() {
       <div style={{ border: '1px solid rgba(255,255,255,0.14)' }} className="p-3">
         <div className="flex justify-between text-xs mb-2">
           <span className="text-white/80">PRJ-001 — Torre Residencial Premium</span>
-          <span className="text-[#2abfdc] font-mono">47%</span>
+          <span className="text-[#f97316] font-mono">47%</span>
         </div>
         <div className="h-px bg-white/10 overflow-hidden">
-          <div className="h-full bg-[#2abfdc]" style={{ width: '47%' }} />
+          <div className="h-full bg-[#f97316]" style={{ width: '47%' }} />
         </div>
       </div>
       {/* Project list */}
@@ -78,16 +79,16 @@ function MapaMockup() {
     <div className="w-full h-full p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <span style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.1em' }} className="text-white/75 text-xs uppercase">Mapa Interativo</span>
-        <span className="text-[#2abfdc] text-xs uppercase tracking-wider border border-[#2abfdc]/30 px-2 py-0.5">Satélite</span>
+        <span className="text-[#f97316] text-xs uppercase tracking-wider border border-[#f97316]/30 px-2 py-0.5">Satélite</span>
       </div>
       {/* Simulated satellite map */}
-      <div className="flex-1 relative" style={{ background: 'linear-gradient(135deg, #0a2618 0%, #081e12 50%, #0b1a30 100%)', minHeight: 120 }}>
+      <div className="flex-1 relative" style={{ background: 'linear-gradient(135deg, #0a2618 0%, #081e12 50%, #2c2c2c 100%)', minHeight: 120 }}>
         <svg width="100%" height="100%" viewBox="0 0 400 150" style={{ position: 'absolute', inset: 0 }}>
           {/* Network lines */}
-          <path d="M40,75 L100,55 L170,80 L240,45 L320,65 L390,50" stroke="#2abfdc" strokeWidth="2" fill="none" opacity="0.7" />
+          <path d="M40,75 L100,55 L170,80 L240,45 L320,65 L390,50" stroke="#f97316" strokeWidth="2" fill="none" opacity="0.7" />
           <path d="M60,105 L130,90 L200,110 L270,80 L340,95" stroke="#22c55e" strokeWidth="1.5" fill="none" opacity="0.5" />
           {([[100,55],[170,80],[240,45],[320,65]] as [number,number][]).map(([x,y], i) => (
-            <circle key={i} cx={x} cy={y} r="3.5" fill="#2abfdc" opacity="0.9" />
+            <circle key={i} cx={x} cy={y} r="3.5" fill="#f97316" opacity="0.9" />
           ))}
           {([[130,90],[200,110],[270,80]] as [number,number][]).map(([x,y], i) => (
             <circle key={i} cx={x} cy={y} r="2.5" fill="#22c55e" opacity="0.9" />
@@ -99,7 +100,7 @@ function MapaMockup() {
         {[{ l: 'Extensão', v: '2.4 km' }, { l: 'Custo Est.', v: 'R$180k' }, { l: 'Trechos', v: '38' }].map((s) => (
           <div key={s.l} style={{ border: '1px solid rgba(255,255,255,0.14)' }} className="p-2 text-center">
             <div className="text-white/65 text-xs uppercase">{s.l}</div>
-            <div className="text-[#2abfdc] font-mono font-bold text-sm">{s.v}</div>
+            <div className="text-[#f97316] font-mono font-bold text-sm">{s.v}</div>
           </div>
         ))}
       </div>
@@ -122,8 +123,8 @@ function LpsMockup() {
             <div key={w} className="px-1 py-2 text-center text-white/65 uppercase text-xs border-b border-white/14 border-l border-l-white/14">{w}</div>
           ))}
           {[
-            { name: 'T01 Escavação', color: '#2abfdc', weeks: [1,1,1,0,0] },
-            { name: 'T02 DN200', color: '#2abfdc', weeks: [1,1,1,0,0] },
+            { name: 'T01 Escavação', color: '#f97316', weeks: [1,1,1,0,0] },
+            { name: 'T02 DN200', color: '#f97316', weeks: [1,1,1,0,0] },
             { name: 'T03 Reaterro', color: '#a78bfa', weeks: [1,1,0,0,0] },
             { name: 'T04 PVs', color: '#a78bfa', weeks: [0,1,1,0,0] },
           ].map((t) => ([
@@ -157,7 +158,7 @@ function QuantMockup() {
     <div className="w-full h-full p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <span style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.1em' }} className="text-white/75 text-xs uppercase">Quantitativos</span>
-        <span className="text-[#2abfdc] text-xs font-mono">Total: R$240.807</span>
+        <span className="text-[#f97316] text-xs font-mono">Total: R$240.807</span>
       </div>
       <div style={{ border: '1px solid rgba(255,255,255,0.14)' }}>
         <div className="grid text-xs" style={{ gridTemplateColumns: '90px 1fr auto' }}>
@@ -167,7 +168,7 @@ function QuantMockup() {
           {items.map((item) => ([
             <div key={item.code + 'c'} className="px-3 py-2 text-white/75 font-mono text-xs border-t border-white/10 truncate">{item.code}</div>,
             <div key={item.code + 'd'} className="px-3 py-2 text-white/90 text-xs border-t border-white/10 truncate">{item.desc}</div>,
-            <div key={item.code + 't'} className="px-3 py-2 text-[#2abfdc] font-mono text-xs border-t border-white/10">{item.total}</div>,
+            <div key={item.code + 't'} className="px-3 py-2 text-[#f97316] font-mono text-xs border-t border-white/10">{item.total}</div>,
           ]))}
         </div>
       </div>
@@ -176,7 +177,7 @@ function QuantMockup() {
         <span className="text-white/50">·</span>
         <span className="text-white/65">BDI 25%</span>
         <span className="text-white/50">·</span>
-        <span className="text-[#2abfdc]/70">Base SINAPI</span>
+        <span className="text-[#f97316]/70">Base SINAPI</span>
       </div>
     </div>
   )
@@ -199,23 +200,26 @@ export function HeroSection() {
       style={{ minHeight: '100vh' }}
       className="flex flex-col justify-center pt-14 relative overflow-hidden"
     >
-      {/* Background image */}
+      {/* Background image — ATLÂNTICO port/crane night scene (1920×1080 recommended)
+          Replace src/assets/porto-atlantico.jpg with the actual image to activate */}
       <div className="absolute inset-0 z-0" style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80)',
+        backgroundImage: `url(${portoAtlanticoImg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        opacity: 0.08,
+        filter: 'blur(4px)',
+        transform: 'scale(1.06)',
+        opacity: 0.45,
       }} />
-      {/* Dark overlay gradient */}
+      {/* Dark overlay gradient — tuned for high-contrast night imagery */}
       <div className="absolute inset-0 z-0" style={{
-        background: 'linear-gradient(180deg, #0b1a30 0%, rgba(11,26,48,0.88) 30%, rgba(11,26,48,0.92) 70%, #0b1a30 100%)',
+        background: 'linear-gradient(180deg, #2c2c2c 0%, rgba(44,44,44,0.65) 30%, rgba(44,44,44,0.70) 70%, #2c2c2c 100%)',
       }} />
       <div className="relative z-10">
       <div className="max-w-7xl mx-auto px-6 py-20 w-full">
         {/* Top label */}
         <div className="flex items-center gap-3 mb-10">
-          <div className="h-px w-8 bg-[#2abfdc]" />
-          <span style={{ letterSpacing: '0.2em', fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#2abfdc] text-xs font-medium uppercase">
+          <div className="h-px w-8 bg-[#f97316]" />
+          <span style={{ letterSpacing: '0.2em', fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#f97316] text-xs font-medium uppercase">
             Plataforma para Construção e Saneamento
           </span>
         </div>
@@ -235,7 +239,7 @@ export function HeroSection() {
             >
               Inteligência Operacional
               <br />
-              <span style={{ color: '#2abfdc' }}>para Construção</span>
+              <span style={{ color: '#f97316' }}>para Construção</span>
               <br />
               e Saneamento.
             </h1>
@@ -286,7 +290,7 @@ export function HeroSection() {
             <div
               style={{
                 border: '1px solid rgba(255,255,255,0.14)',
-                background: '#0f2240',
+                background: '#3d3d3d',
                 minHeight: 320,
               }}
               className="relative overflow-hidden"
@@ -301,7 +305,7 @@ export function HeroSection() {
                   key={i}
                   onClick={() => setActiveSlide(i)}
                   style={{
-                    background: i === activeSlide ? '#2abfdc' : 'rgba(255,255,255,0.15)',
+                    background: i === activeSlide ? '#f97316' : 'rgba(255,255,255,0.15)',
                     height: 2,
                     width: i === activeSlide ? 32 : 16,
                     transition: 'all 0.3s',

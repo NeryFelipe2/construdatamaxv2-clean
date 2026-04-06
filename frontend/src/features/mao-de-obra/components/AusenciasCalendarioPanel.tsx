@@ -580,7 +580,7 @@ export function AusenciasCalendarioPanel() {
       {/* Print-only layout */}
       <div className="hidden print:block mt-4">
         <h1 className="text-lg font-bold mb-1">Relatório de Ausências</h1>
-        <p className="text-xs text-gray-500 mb-1">Gerado em: {new Date().toLocaleString('pt-BR')}</p>
+        <p className="text-xs text-[#6b6b6b] mb-1">Gerado em: {new Date().toLocaleString('pt-BR')}</p>
         <div className="flex gap-6 text-xs mb-3">
           <span>Total: <strong>{filteredAbsences.length}</strong></span>
           <span>Atestado: <strong>{filteredAbsences.filter(a => a.type === 'sick_leave').length}</strong></span>

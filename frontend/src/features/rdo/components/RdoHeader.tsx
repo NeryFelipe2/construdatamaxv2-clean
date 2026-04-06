@@ -1,9 +1,10 @@
 /**
  * RdoHeader — top navigation and action bar for the RDO module.
- * Accent color: #0ea5e9 (sky-500)
  */
-import { FileText, Plus, Download } from 'lucide-react'
+import { useState } from 'react'
+import { FileText, Plus, Download, Settings } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
+import { LogoConfigModal } from './LogoConfigModal'
 import type { RdoTab } from '@/types'
 
 const TABS: { key: RdoTab; label: string }[] = [
@@ -14,8 +15,6 @@ const TABS: { key: RdoTab; label: string }[] = [
   { key: 'financeiro', label: 'Financeiro'         },
 ]
 
-const ACCENT = '#0ea5e9'
-
 function escapeCell(value: string | number | null | undefined): string {
   const str = String(value ?? '').replace(/[\x00-\x1F\x7F]/g, '')
   const neutralized = /^[=+\-@\t\r]/.test(str) ? `'${str}` : str
@@ -24,6 +23,7 @@ function escapeCell(value: string | number | null | undefined): string {
 
 export function RdoHeader() {
   const { activeTab, setActiveTab, rdos } = useRdoStore()
+  const [showLogoModal, setShowLogoModal] = useState(false)
 
   function handleExportCsv() {
     const BOM = '\uFEFF'
@@ -59,31 +59,38 @@ export function RdoHeader() {
   }
 
   return (
-    <div className="bg-gray-900 border-b border-gray-700 print:hidden">
+    <>
+    <div className="bg-[#2c2c2c] border-b border-[#525252] print:hidden">
       {/* Title + actions */}
       <div className="px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: ACCENT }}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#f97316]">
             <FileText size={20} className="text-white" />
           </div>
           <div>
             <h1 className="text-white font-semibold text-lg leading-tight">RDO</h1>
-            <p className="text-gray-400 text-xs">Relatório Diário de Obras</p>
+            <p className="text-[#a3a3a3] text-xs">Relatório Diário de Obras</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setShowLogoModal(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[#484848] text-[#a3a3a3] hover:text-[#f97316] hover:bg-[#484848] transition-colors border border-[#525252] hover:border-[#f97316]/30"
+          >
+            <Settings size={15} />
+            <span className="hidden sm:inline">Configurar Logo</span>
+          </button>
+          <button
             onClick={() => setActiveTab('novo')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: ACCENT }}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors bg-[#f97316] hover:bg-[#ea580c]"
           >
             <Plus size={15} />
             Novo RDO
           </button>
           <button
             onClick={handleExportCsv}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-700 text-gray-200 hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[#484848] text-[#f5f5f5] hover:bg-[#525252] transition-colors"
           >
             <Download size={15} />
             Exportar CSV
@@ -102,8 +109,8 @@ export function RdoHeader() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap border-b-2 ${
                   isActive
-                    ? 'text-white border-sky-500 bg-gray-800'
-                    : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-gray-800/50'
+                    ? 'text-[#f97316] border-[#f97316] bg-[#3d3d3d]'
+                    : 'text-[#a3a3a3] border-transparent hover:text-[#f5f5f5] hover:bg-[#3d3d3d]/50'
                 }`}
               >
                 {tab.label}
@@ -113,5 +120,8 @@ export function RdoHeader() {
         </div>
       </div>
     </div>
+
+    {showLogoModal && <LogoConfigModal onClose={() => setShowLogoModal(false)} />}
+    </>
   )
 }

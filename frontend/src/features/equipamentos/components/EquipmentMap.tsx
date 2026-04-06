@@ -30,7 +30,7 @@ const TILE_ATTR = {
 
 const PRIORITY_COLOR: Record<string, string> = {
   critical: '#ef4444',
-  high:     '#2abfdc',
+  high:     '#f97316',
   medium:   '#eab308',
   low:      '#22c55e',
 }
@@ -104,8 +104,8 @@ function MapController() {
 // ─── CSS ───────────────────────────────────────────────────────────────────────
 
 function getMapCSS(isDark: boolean) {
-  const bg     = isDark ? '#14294e' : '#ffffff'
-  const border = isDark ? '#20406a' : '#d4d8df'
+  const bg     = isDark ? '#3d3d3d' : '#ffffff'
+  const border = isDark ? '#525252' : '#d4d8df'
   const text   = isDark ? '#f5f5f5' : '#1a1d23'
   const muted  = isDark ? '#6b6b6b' : '#78828f'
   return `
@@ -125,7 +125,7 @@ function getMapCSS(isDark: boolean) {
   }
   .equip-popup .leaflet-popup-close-button:hover { color: ${text} !important; }
   .leaflet-control-zoom a { background: #fff !important; border-color: #d4d8df !important; color: #505863 !important; }
-  .leaflet-control-zoom a:hover { background: #f0f2f5 !important; color: #2abfdc !important; }
+  .leaflet-control-zoom a:hover { background: #f0f2f5 !important; color: #f97316 !important; }
   .leaflet-control-attribution { background: rgba(255,255,255,0.85) !important; color: #78828f !important; font-size: 9px !important; }
   .leaflet-control-attribution a { color: #505863 !important; }
   .leaflet-control-layers { background: ${bg} !important; border: 1px solid ${border} !important; border-radius: 8px !important; color: ${text} !important; }
@@ -201,7 +201,7 @@ export function EquipmentMap() {
       <style>{mapCSS}</style>
 
       {/* Filter bar */}
-      <div style={{ display: 'flex', gap: 6, padding: '8px 10px', background: isDark ? '#112645' : '#ffffff', flexWrap: 'wrap', flexShrink: 0, borderBottom: `1px solid ${isDark ? '#20406a' : '#e5e8ed'}` }}>
+      <div style={{ display: 'flex', gap: 6, padding: '8px 10px', background: isDark ? '#333333' : '#ffffff', flexWrap: 'wrap', flexShrink: 0, borderBottom: `1px solid ${isDark ? '#525252' : '#e5e8ed'}` }}>
         {FILTER_OPTIONS.map((opt) => (
           <button
             key={String(opt.value)}
@@ -209,8 +209,8 @@ export function EquipmentMap() {
             style={{
               padding: '3px 10px', borderRadius: 99, border: '1px solid',
               fontSize: 11, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s',
-              borderColor: filterStatus === opt.value ? '#2abfdc' : (isDark ? '#20406a' : '#d4d8df'),
-              background:  filterStatus === opt.value ? '#2abfdc' : 'transparent',
+              borderColor: filterStatus === opt.value ? '#f97316' : (isDark ? '#525252' : '#d4d8df'),
+              background:  filterStatus === opt.value ? '#f97316' : 'transparent',
               color:       filterStatus === opt.value ? '#fff' : (isDark ? '#a3a3a3' : '#505863'),
             }}
           >
@@ -271,7 +271,7 @@ export function EquipmentMap() {
                     key={`route-${r.id}`}
                     positions={[[r.fromLat!, r.fromLng!], [r.toLat!, r.toLng!]]}
                     pathOptions={{
-                      color:     PRIORITY_COLOR[r.priority] ?? '#2abfdc',
+                      color:     PRIORITY_COLOR[r.priority] ?? '#f97316',
                       weight:    2.5,
                       dashArray: '8 6',
                       opacity:   0.8,
@@ -309,7 +309,7 @@ export function EquipmentMap() {
               <Popup className="equip-popup" minWidth={220}>
                 <div style={{ padding: '14px 16px', fontFamily: 'Inter, system-ui, sans-serif' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#2abfdc', fontWeight: 700 }}>
+                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#f97316', fontWeight: 700 }}>
                       {eq.code}
                     </span>
                     <span style={{
@@ -343,8 +343,8 @@ export function EquipmentMap() {
                   <button
                     onClick={() => setEditing(eq.id)}
                     style={{
-                      width: '100%', padding: '6px', borderRadius: 8, border: '1px solid #20406a',
-                      background: 'transparent', color: '#2abfdc', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                      width: '100%', padding: '6px', borderRadius: 8, border: '1px solid #525252',
+                      background: 'transparent', color: '#f97316', fontSize: 11, fontWeight: 700, cursor: 'pointer',
                     }}
                   >
                     Editar Equipamento
@@ -364,7 +364,7 @@ export function EquipmentMap() {
           title={isFullscreen ? 'Sair do modo tela cheia' : 'Tela cheia'}
           style={{
             position: 'absolute', top: 10, left: 10, zIndex: 1000,
-            background: '#14294e', border: '1px solid #20406a', borderRadius: 8,
+            background: '#3d3d3d', border: '1px solid #525252', borderRadius: 8,
             padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center',
             color: '#f5f5f5',
           }}
@@ -375,7 +375,7 @@ export function EquipmentMap() {
         {/* Mini stats panel */}
         <div style={{
           position: 'absolute', bottom: 28, right: 10, zIndex: 1000,
-          background: 'rgba(26,26,26,0.92)', border: '1px solid #20406a',
+          background: 'rgba(26,26,26,0.92)', border: '1px solid #525252',
           borderRadius: 8, padding: '6px 10px', display: 'flex', flexDirection: 'column', gap: 3,
         }}>
           {statusCounts.filter((s) => s.count > 0).map((s) => (
@@ -394,7 +394,7 @@ export function EquipmentMap() {
             justifyContent: 'center', zIndex: 500, pointerEvents: 'none',
           }}>
             <div style={{
-              background: 'rgba(17,17,17,0.85)', border: '1px solid #20406a',
+              background: 'rgba(17,17,17,0.85)', border: '1px solid #525252',
               borderRadius: 12, padding: '16px 24px', textAlign: 'center',
             }}>
               <p style={{ margin: 0, color: '#6b6b6b', fontSize: 13 }}>

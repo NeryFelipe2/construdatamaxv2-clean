@@ -60,8 +60,8 @@ function ForecastForm({
   const isValid = form.weekLabel.trim() && Number(form.estimatedQty) > 0 && Number(form.estimatedValue) > 0
 
   return (
-    <div className="bg-[#0d2040] border border-[#2abfdc]/30 rounded-xl p-4 flex flex-col gap-3">
-      <div className="grid grid-cols-3 gap-3">
+    <div className="bg-[#2c2c2c] border border-[#f97316]/30 rounded-xl p-4 flex flex-col gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="flex flex-col gap-1">
           <label className="text-[10px] text-[#6b6b6b] uppercase tracking-widest">Semana / Rótulo</label>
           <input
@@ -69,7 +69,7 @@ function ForecastForm({
             value={form.weekLabel}
             onChange={(e) => set('weekLabel', e.target.value)}
             placeholder="Ex: Sem 12 / 2025"
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -77,7 +77,7 @@ function ForecastForm({
           <select
             value={form.materialCategory}
             onChange={(e) => set('materialCategory', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           >
             {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
@@ -87,13 +87,13 @@ function ForecastForm({
           <select
             value={form.relatedPhase}
             onChange={(e) => set('relatedPhase', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           >
             {PHASES.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="flex flex-col gap-1">
           <label className="text-[10px] text-[#6b6b6b] uppercase tracking-widest">Qtd Estimada</label>
           <input
@@ -101,7 +101,7 @@ function ForecastForm({
             min="0"
             value={form.estimatedQty}
             onChange={(e) => set('estimatedQty', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -109,7 +109,7 @@ function ForecastForm({
           <select
             value={form.unit}
             onChange={(e) => set('unit', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           >
             {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
           </select>
@@ -121,7 +121,7 @@ function ForecastForm({
             min="0"
             value={form.estimatedValue}
             onChange={(e) => set('estimatedValue', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -130,21 +130,21 @@ function ForecastForm({
             type="date"
             value={form.suggestedOrderDate}
             onChange={(e) => set('suggestedOrderDate', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           />
         </div>
       </div>
       <div className="flex justify-end gap-2 pt-1">
         <button
           onClick={onCancel}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#20406a] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] transition-colors"
         >
           <X size={12} /> Cancelar
         </button>
         <button
           onClick={() => { if (isValid) onSave(form) }}
           disabled={!isValid}
-          className="px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Salvar
         </button>
@@ -173,7 +173,7 @@ export function PrevisaoDemandaPanel() {
     : null
 
   const kpis = [
-    { label: 'Sugestões Pendentes',    value: String(suggested),                                           color: 'text-[#2abfdc]' },
+    { label: 'Sugestões Pendentes',    value: String(suggested),                                           color: 'text-[#f97316]' },
     { label: 'Valor Total Previsto',   value: totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), color: 'text-[#f5f5f5]' },
     { label: 'Dias até Próxima Compra', value: daysToNext !== null ? `${daysToNext}d` : '—',              color: daysToNext !== null && daysToNext <= 7 ? 'text-[#f87171]' : 'text-[#fbbf24]' },
   ]
@@ -217,7 +217,7 @@ export function PrevisaoDemandaPanel() {
       <div className="flex items-start justify-between gap-4 shrink-0">
         <div className="grid grid-cols-3 gap-3 flex-1">
           {kpis.map(({ label, value, color }) => (
-            <div key={label} className="bg-[#0d2040] border border-[#20406a] rounded-xl p-4 flex flex-col gap-1">
+            <div key={label} className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-4 flex flex-col gap-1">
               <p className="text-[#6b6b6b] text-xs">{label}</p>
               <p className={cn('text-xl font-bold tabular-nums', color)}>{value}</p>
             </div>
@@ -225,7 +225,7 @@ export function PrevisaoDemandaPanel() {
         </div>
         <button
           onClick={() => { setShowAddForm((v) => !v); setEditingId(null) }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors shrink-0 mt-0.5"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors shrink-0 mt-0.5"
         >
           <Plus size={12} />
           Nova Demanda
@@ -238,10 +238,10 @@ export function PrevisaoDemandaPanel() {
       )}
 
       {/* Table */}
-      <div className="flex-1 overflow-auto overflow-x-auto bg-[#0d2040] border border-[#20406a] rounded-xl">
+      <div className="flex-1 overflow-auto overflow-x-auto bg-[#2c2c2c] border border-[#525252] rounded-xl">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr className="bg-[#1a3662]">
+            <tr className="bg-[#484848]">
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Semana</th>
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Categoria</th>
               <th className="text-right text-[#6b6b6b] text-xs font-medium px-3 py-2 w-24">Qtd Estimada</th>
@@ -260,7 +260,7 @@ export function PrevisaoDemandaPanel() {
               )
               return (
                 <>
-                  <tr key={f.id} className="border-t border-[#20406a] hover:bg-[#1a3662]/50 transition-colors">
+                  <tr key={f.id} className="border-t border-[#525252] hover:bg-[#484848]/50 transition-colors">
                     <td className="px-3 py-2.5 text-[#f5f5f5] text-xs">{f.weekLabel}</td>
                     <td className="px-3 py-2.5 text-[#f5f5f5] text-xs font-medium">{f.materialCategory}</td>
                     <td className="px-3 py-2.5 text-right tabular-nums text-[#f5f5f5] text-xs">{f.estimatedQty.toLocaleString('pt-BR')}</td>
@@ -288,7 +288,7 @@ export function PrevisaoDemandaPanel() {
                       <div className="flex items-center justify-center gap-1 flex-wrap">
                         <button
                           onClick={() => setEditingId(editingId === f.id ? null : f.id)}
-                          className="px-2 py-0.5 rounded bg-[#14294e] hover:bg-[#1a3662] text-[#a3a3a3] text-[10px] font-semibold transition-colors"
+                          className="px-2 py-0.5 rounded bg-[#3d3d3d] hover:bg-[#484848] text-[#a3a3a3] text-[10px] font-semibold transition-colors"
                         >
                           Editar
                         </button>
@@ -296,13 +296,13 @@ export function PrevisaoDemandaPanel() {
                           <>
                             <button
                               onClick={() => { updateForecast(f.id, 'ordered'); setShowNewPO(true) }}
-                              className="px-2 py-0.5 rounded bg-[#2abfdc]/20 hover:bg-[#2abfdc]/30 text-[#2abfdc] text-[10px] font-semibold transition-colors"
+                              className="px-2 py-0.5 rounded bg-[#f97316]/20 hover:bg-[#f97316]/30 text-[#f97316] text-[10px] font-semibold transition-colors"
                             >
                               Criar OC
                             </button>
                             <button
                               onClick={() => updateForecast(f.id, 'dismissed')}
-                              className="px-2 py-0.5 rounded bg-[#1f3c5e] hover:bg-[#20406a] text-[#6b6b6b] text-[10px] font-semibold transition-colors"
+                              className="px-2 py-0.5 rounded bg-[#1f3c5e] hover:bg-[#525252] text-[#6b6b6b] text-[10px] font-semibold transition-colors"
                             >
                               Descartar
                             </button>
@@ -314,7 +314,7 @@ export function PrevisaoDemandaPanel() {
                     </td>
                   </tr>
                   {editingId === f.id && (
-                    <tr key={`${f.id}-edit`} className="border-t border-[#20406a]">
+                    <tr key={`${f.id}-edit`} className="border-t border-[#525252]">
                       <td colSpan={9} className="px-3 py-3">
                         <ForecastForm
                           initialValues={{

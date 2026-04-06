@@ -21,7 +21,7 @@ const FILTER_TABS: { key: WorkOrderStatus | 'all'; label: string }[] = [
 
 const STATUS_BADGE: Record<WorkOrderStatus, string> = {
   scheduled:   'bg-[#1d4ed8]/20 text-[#60a5fa]',
-  in_progress: 'bg-[#2abfdc]/20 text-[#2abfdc]',
+  in_progress: 'bg-[#f97316]/20 text-[#f97316]',
   completed:   'bg-[#16a34a]/20 text-[#4ade80]',
   cancelled:   'bg-[#1f3c5e] text-[#6b6b6b]',
 }
@@ -49,10 +49,10 @@ const TYPE_BADGE: Record<string, string> = {
 
 function inp(hasError: boolean) {
   return cn(
-    'w-full bg-[#0d2040] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
+    'w-full bg-[#2c2c2c] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
     hasError
       ? 'border-[#ef4444] focus:border-[#ef4444]'
-      : 'border-[#20406a] focus:border-[#2abfdc]',
+      : 'border-[#525252] focus:border-[#f97316]',
   )
 }
 
@@ -162,18 +162,18 @@ function WorkOrderDialog() {
       onClick={(e) => { if (e.target === e.currentTarget) setEditingOrder(null) }}
     >
       <div
-        className="w-full max-w-xl rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl"
+        className="w-full max-w-xl rounded-2xl border border-[#525252] bg-[#333333] flex flex-col shadow-2xl"
         style={{ maxHeight: '92vh' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252] shrink-0">
           <h2 className="text-[#f5f5f5] font-bold text-base">
             {isNew ? 'Nova Ordem de Serviço' : `Editar OS — ${existing?.description?.slice(0, 30) ?? ''}…`}
           </h2>
           <button
             onClick={() => setEditingOrder(null)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#1a3662] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#484848] transition-colors"
           >
             <X size={15} />
           </button>
@@ -196,7 +196,7 @@ function WorkOrderDialog() {
             </Field>
 
             {/* Type + scheduledDate */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Tipo *" error={errors.type?.message}>
                 <select {...register('type')} className={inp(!!errors.type)}>
                   <option value="preventive">Preventiva</option>
@@ -224,7 +224,7 @@ function WorkOrderDialog() {
             </Field>
 
             {/* Responsible + estimatedCost */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Responsável *" error={errors.responsible?.message}>
                 <input
                   {...register('responsible')}
@@ -257,17 +257,17 @@ function WorkOrderDialog() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-[#20406a] shrink-0">
+          <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-[#525252] shrink-0">
             <button
               type="button"
               onClick={() => setEditingOrder(null)}
-              className="px-4 py-2 rounded-lg border border-[#20406a] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
+              className="px-4 py-2 rounded-lg border border-[#525252] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold hover:bg-[#1a9ab8] transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] transition-colors"
             >
               {isNew ? 'Criar OS' : 'Salvar Alterações'}
             </button>
@@ -327,7 +327,7 @@ export function MaintenancePanel() {
     <div className="flex flex-col h-full overflow-hidden">
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#20406a] shrink-0 bg-[#112645]">
+      <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252] shrink-0 bg-[#333333]">
         {/* Filter tabs */}
         <div className="flex items-center gap-1">
           {FILTER_TABS.map((tab) => (
@@ -337,8 +337,8 @@ export function MaintenancePanel() {
               className={cn(
                 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors',
                 filter === tab.key
-                  ? 'bg-[#2abfdc] text-white'
-                  : 'bg-[#14294e] text-[#6b6b6b] hover:text-[#a3a3a3] border border-[#20406a]',
+                  ? 'bg-[#f97316] text-white'
+                  : 'bg-[#3d3d3d] text-[#6b6b6b] hover:text-[#a3a3a3] border border-[#525252]',
               )}
             >
               {tab.label}
@@ -352,7 +352,7 @@ export function MaintenancePanel() {
         {/* New OS button */}
         <button
           onClick={() => setEditingOrder('new')}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold hover:bg-[#1a9ab8] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] transition-colors"
         >
           <Plus size={14} />
           Nova OS
@@ -368,7 +368,7 @@ export function MaintenancePanel() {
         ) : (
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 {['Equipamento', 'Tipo', 'Data', 'Responsável', 'Custo Est.', 'Status', 'Ações'].map(
                   (col) => (
                     <th
@@ -381,11 +381,11 @@ export function MaintenancePanel() {
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#14294e]">
+            <tbody className="divide-y divide-[#3d3d3d]">
               {filtered.map((order) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-[#14294e]/50 transition-colors"
+                  className="hover:bg-[#3d3d3d]/50 transition-colors"
                 >
                   {/* Equipamento */}
                   <td className="py-3 pr-4">
@@ -399,7 +399,7 @@ export function MaintenancePanel() {
                     <span
                       className={cn(
                         'text-[10px] font-semibold px-2 py-0.5 rounded-full',
-                        TYPE_BADGE[order.type] ?? 'bg-[#20406a] text-[#a3a3a3]',
+                        TYPE_BADGE[order.type] ?? 'bg-[#525252] text-[#a3a3a3]',
                       )}
                     >
                       {TYPE_LABEL[order.type] ?? order.type}
@@ -445,7 +445,7 @@ export function MaintenancePanel() {
                           setConfirmDeleteId(null)
                           setEditingOrder(order.id)
                         }}
-                        className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#2abfdc] hover:bg-[#2abfdc]/10 transition-colors"
+                        className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f97316] hover:bg-[#f97316]/10 transition-colors"
                         title="Editar"
                       >
                         <Pencil size={13} />
@@ -463,7 +463,7 @@ export function MaintenancePanel() {
                           </button>
                           <button
                             onClick={() => setConfirmDeleteId(null)}
-                            className="text-[10px] px-2 py-0.5 rounded bg-[#1a3662] text-[#a3a3a3] hover:bg-[#20406a]"
+                            className="text-[10px] px-2 py-0.5 rounded bg-[#484848] text-[#a3a3a3] hover:bg-[#525252]"
                           >
                             Não
                           </button>

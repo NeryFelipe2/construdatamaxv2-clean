@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Plus, ClipboardList, FileText, Package, Receipt } from 'lucide-react'
+import { ChevronDown, ChevronUp, Plus, ClipboardList, FileText, Package, Receipt, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useShallow } from 'zustand/react/shallow'
 import { useSuprimentosStore } from '@/store/suprimentosStore'
@@ -60,9 +60,10 @@ interface PORowProps {
   matchStatus: MatchStatus | undefined
   onRegisterReceipt: () => void
   onEditPO: () => void
+  onRunMatch: () => void
 }
 
-function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
+function PORow({ po, matchStatus, onRegisterReceipt, onEditPO, onRunMatch }: PORowProps) {
   const [open, setOpen] = useState(false)
   const { receipts, invoices } = useSuprimentosStore(
     useShallow((s) => ({ receipts: s.receipts, invoices: s.invoices }))
@@ -73,11 +74,11 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
   const total   = po.items.reduce((acc, i) => acc + i.totalPrice, 0)
 
   return (
-    <div className="bg-[#0d2040] border border-[#20406a] rounded-xl overflow-hidden">
+    <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl overflow-hidden">
       {/* Header row */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-4 px-4 py-3 hover:bg-[#1a3662] transition-colors text-left"
+        className="w-full flex items-center gap-4 px-4 py-3 hover:bg-[#484848] transition-colors text-left"
       >
         {open ? <ChevronUp size={14} className="text-[#6b6b6b] shrink-0" /> : <ChevronDown size={14} className="text-[#6b6b6b] shrink-0" />}
         <span className="font-mono text-[#a3a3a3] text-xs shrink-0">{po.code}</span>
@@ -90,7 +91,7 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
       </button>
 
       {open && (
-        <div className="border-t border-[#20406a] p-4 flex flex-col gap-4">
+        <div className="border-t border-[#525252] p-4 flex flex-col gap-4">
           {/* Meta */}
           <div className="grid grid-cols-3 gap-2 text-xs">
             <div><span className="text-[#6b6b6b]">Responsável: </span><span className="text-[#f5f5f5]">{po.responsible}</span></div>
@@ -99,10 +100,10 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
           </div>
 
           {/* Items table */}
-          <div className="bg-[#112645] border border-[#20406a] rounded-lg overflow-x-auto overflow-hidden">
+          <div className="bg-[#333333] border border-[#525252] rounded-lg overflow-x-auto overflow-hidden">
             <table className="w-full text-xs border-collapse">
               <thead>
-                <tr className="bg-[#1a3662]">
+                <tr className="bg-[#484848]">
                   <th className="text-left text-[#6b6b6b] font-medium px-3 py-2">Descrição</th>
                   <th className="text-right text-[#6b6b6b] font-medium px-3 py-2 w-16">Qtd OC</th>
                   <th className="text-right text-[#6b6b6b] font-medium px-3 py-2 w-16">Qtd RC</th>
@@ -120,7 +121,7 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
                   const priceOk = !nfItem || Math.abs(nfItem.unitPrice - item.unitPrice) / item.unitPrice <= 0.02
                   const rowOk  = qtyOk && priceOk
                   return (
-                    <tr key={item.id} className="border-t border-[#20406a]">
+                    <tr key={item.id} className="border-t border-[#525252]">
                       <td className="px-3 py-2 text-[#f5f5f5]">{item.description}</td>
                       <td className="px-3 py-2 text-right tabular-nums text-[#f5f5f5]">{item.quantity.toLocaleString('pt-BR')}</td>
                       <td className={cn('px-3 py-2 text-right tabular-nums', rcItem ? (qtyOk ? 'text-[#4ade80]' : 'text-[#f87171]') : 'text-[#1f3c5e]')}>
@@ -164,7 +165,7 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {!receipt && (
               <button
                 onClick={onRegisterReceipt}
@@ -179,6 +180,13 @@ function PORow({ po, matchStatus, onRegisterReceipt, onEditPO }: PORowProps) {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#555] text-xs font-medium transition-colors"
             >
               Editar OC
+            </button>
+            <button
+              onClick={onRunMatch}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0f766e]/20 hover:bg-[#0f766e]/30 text-[#2dd4bf] text-xs font-semibold transition-colors"
+            >
+              <RefreshCw size={12} />
+              Executar Match
             </button>
           </div>
         </div>
@@ -205,7 +213,7 @@ function ThreeWayMatchSummary() {
   const fmtBRL = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 
   return (
-    <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-4 shrink-0">
+    <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-4 shrink-0">
       {/* Title */}
       <p className="text-[#f5f5f5] text-xs font-bold uppercase tracking-widest mb-3">
         Three-Way Match — OC · RC · NF
@@ -215,10 +223,10 @@ function ThreeWayMatchSummary() {
       <div className="grid grid-cols-3 gap-2 mb-4">
         {[
           { Icon: FileText,  label: 'Ordens de Compra',  count: purchaseOrders.length, color: '#3b82f6', sub: fmtBRL(totalOC) },
-          { Icon: Package,   label: 'Recibos (RC)',       count: receipts.length,       color: '#2abfdc', sub: `${receipts.length} entradas` },
+          { Icon: Package,   label: 'Recibos (RC)',       count: receipts.length,       color: '#f97316', sub: `${receipts.length} entradas` },
           { Icon: Receipt,   label: 'Notas Fiscais (NF)', count: invoices.length,        color: '#22c55e', sub: fmtBRL(totalNF) },
         ].map(({ Icon, label, count, color, sub }) => (
-          <div key={label} className="bg-[#112645] rounded-lg p-3 flex flex-col items-center text-center">
+          <div key={label} className="bg-[#333333] rounded-lg p-3 flex flex-col items-center text-center">
             <Icon size={18} style={{ color }} className="mb-1.5" />
             <span className="text-[#6b6b6b] text-[10px] font-medium leading-tight">{label}</span>
             <span className="text-lg font-bold mt-0.5" style={{ color }}>{count}</span>
@@ -228,14 +236,14 @@ function ThreeWayMatchSummary() {
       </div>
 
       {/* Match status row */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
           { label: 'Conciliado',  value: matched,     color: '#4ade80' },
           { label: 'Parcial',     value: partial,     color: '#fbbf24' },
           { label: 'Divergência', value: discrepancy, color: '#f87171' },
           { label: 'Aguardando',  value: pending,     color: '#93c5fd' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="bg-[#14294e] rounded-lg px-2 py-2 text-center">
+          <div key={label} className="bg-[#3d3d3d] rounded-lg px-2 py-2 text-center">
             <span className="block text-[10px] text-[#6b6b6b]">{label}</span>
             <span className="block text-base font-bold mt-0.5" style={{ color }}>{value}</span>
           </div>
@@ -252,8 +260,8 @@ function ThreeWayMatchSummary() {
 // ─── Main Panel ───────────────────────────────────────────────────────────────
 
 export function ConciliacaoPanel() {
-  const { purchaseOrders, matches } = useSuprimentosStore(
-    useShallow((s) => ({ purchaseOrders: s.purchaseOrders, matches: s.matches }))
+  const { purchaseOrders, matches, runMatch } = useSuprimentosStore(
+    useShallow((s) => ({ purchaseOrders: s.purchaseOrders, matches: s.matches, runMatch: s.runMatch }))
   )
 
   const [showNewPO,     setShowNewPO]     = useState(false)
@@ -270,7 +278,7 @@ export function ConciliacaoPanel() {
         <span className="text-[#6b6b6b] text-xs">{purchaseOrders.length} ordens de compra — expanda para ver o match linha por linha</span>
         <button
           onClick={() => setShowNewPO(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#1a9ab8] text-white text-xs font-semibold transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-semibold transition-colors"
         >
           <Plus size={12} />
           Nova OC
@@ -287,6 +295,7 @@ export function ConciliacaoPanel() {
             matchStatus={match?.status}
             onRegisterReceipt={() => setRegisterRcFor(po)}
             onEditPO={() => setEditPO(po)}
+            onRunMatch={() => runMatch(po.id)}
           />
         )
       })}

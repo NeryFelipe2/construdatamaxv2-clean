@@ -50,12 +50,12 @@ function CncEditor({ activity, onClose }: { activity: LpsActivity; onClose: () =
   }
 
   return (
-    <div className="flex flex-col gap-2 p-3 bg-gray-800 rounded-lg border border-gray-700 min-w-[280px]">
-      <p className="text-xs font-semibold text-gray-300">Causa de Não Cumprimento (CNC)</p>
+    <div className="flex flex-col gap-2 p-3 bg-[#3d3d3d] rounded-lg border border-[#525252] min-w-[280px]">
+      <p className="text-xs font-semibold text-[#f5f5f5]">Causa de Não Cumprimento (CNC)</p>
       <select
         value={cat}
         onChange={(e) => setCat(e.target.value as LpsCncCategory)}
-        className="bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
+        className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
       >
         {CNC_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -66,7 +66,7 @@ function CncEditor({ activity, onClose }: { activity: LpsActivity; onClose: () =
         onChange={(e) => setDesc(e.target.value)}
         placeholder="Descreva a causa..."
         rows={2}
-        className="bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500 resize-none"
+        className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500 resize-none"
       />
       {confirming ? (
         <ConfirmDialog
@@ -81,7 +81,7 @@ function CncEditor({ activity, onClose }: { activity: LpsActivity; onClose: () =
           <button onClick={handleSave} className="flex items-center gap-1 px-3 py-1.5 rounded text-xs bg-orange-600 hover:bg-orange-500 text-white transition-colors">
             <Check size={11} /> Salvar
           </button>
-          <button onClick={handleClear} className="flex items-center gap-1 px-3 py-1.5 rounded text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
+          <button onClick={handleClear} className="flex items-center gap-1 px-3 py-1.5 rounded text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <X size={11} /> Limpar CNC
           </button>
         </div>
@@ -116,30 +116,30 @@ function AddActivityRow({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <tr className="bg-orange-900/10 border-b border-gray-800">
+    <tr className="bg-orange-900/10 border-b border-[#3d3d3d]">
       <td className="px-3 py-2">
         <input value={week} onChange={(e) => setWeek(e.target.value)}
-          className="w-24 bg-gray-700 border border-gray-600 rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
+          className="w-24 bg-[#484848] border border-[#5e5e5e] rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
       </td>
       <td className="px-3 py-2">
         <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="T01"
-          className="w-16 bg-gray-700 border border-gray-600 rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
+          className="w-16 bg-[#484848] border border-[#5e5e5e] rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
       </td>
       <td className="px-3 py-2">
         <input value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Descrição..."
-          className="w-full bg-gray-700 border border-gray-600 rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
+          className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
       </td>
       <td className="px-3 py-2">
         <input value={team} onChange={(e) => setTeam(e.target.value)} placeholder="Equipe..."
-          className="w-24 bg-gray-700 border border-gray-600 rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
+          className="w-24 bg-[#484848] border border-[#5e5e5e] rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500" />
       </td>
       <td className="px-3 py-2 text-center">
         <span className="inline-block w-3 h-3 rounded-full bg-green-500" />
       </td>
       <td className="px-3 py-2">
         <input value={meters} onChange={(e) => setMeters(e.target.value)} type="number"
-          className="w-16 bg-gray-700 border border-gray-600 rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500 text-right" />
-        <span className="text-xs text-gray-500 ml-1">m</span>
+          className="w-16 bg-[#484848] border border-[#5e5e5e] rounded px-1.5 py-1 text-xs text-white focus:outline-none focus:border-orange-500 text-right" />
+        <span className="text-xs text-[#6b6b6b] ml-1">m</span>
       </td>
       <td className="px-3 py-2" />
       <td className="px-3 py-2">
@@ -147,7 +147,7 @@ function AddActivityRow({ onClose }: { onClose: () => void }) {
           <button onClick={handleAdd} className="px-2 py-1 rounded text-xs bg-orange-600 hover:bg-orange-500 text-white transition-colors">
             <Check size={11} />
           </button>
-          <button onClick={onClose} className="px-2 py-1 rounded text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
+          <button onClick={onClose} className="px-2 py-1 rounded text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <X size={11} />
           </button>
         </div>
@@ -200,7 +200,7 @@ export function SemaforoPanel() {
       {/* Controls */}
       <div className="flex items-center gap-3 flex-wrap">
         <select value={filterWeek} onChange={(e) => setFilterWeek(e.target.value)}
-          className="bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500">
+          className="bg-[#3d3d3d] border border-[#525252] rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500">
           <option value="">Todas as semanas</option>
           {weekOptions.map((w) => (
             <option key={w} value={w}>{weekLabel(w)} ({w})</option>
@@ -208,7 +208,7 @@ export function SemaforoPanel() {
         </select>
 
         <select value={filterTeam} onChange={(e) => setFilterTeam(e.target.value)}
-          className="bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500">
+          className="bg-[#3d3d3d] border border-[#525252] rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500">
           <option value="">Todas as equipes</option>
           {teamOptions.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
@@ -230,36 +230,36 @@ export function SemaforoPanel() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-gray-800 overflow-hidden overflow-x-auto">
+      <div className="rounded-xl border border-[#3d3d3d] overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-800/80 border-b border-gray-700">
+          <thead className="bg-[#3d3d3d]/80 border-b border-[#525252]">
             <tr>
-              <th className="text-left text-gray-400 px-3 py-3 text-xs font-semibold">Semana</th>
-              <th className="text-left text-gray-400 px-3 py-3 text-xs font-semibold">Trecho</th>
-              <th className="text-left text-gray-400 px-3 py-3 text-xs font-semibold">Descrição</th>
-              <th className="text-left text-gray-400 px-3 py-3 text-xs font-semibold">Equipe</th>
-              <th className="text-center text-gray-400 px-3 py-3 text-xs font-semibold">Semáforo</th>
-              <th className="text-right text-gray-400 px-3 py-3 text-xs font-semibold">Prod. Planj.</th>
-              <th className="text-left text-gray-400 px-3 py-3 text-xs font-semibold">CNC</th>
+              <th className="text-left text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Semana</th>
+              <th className="text-left text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Trecho</th>
+              <th className="text-left text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Descrição</th>
+              <th className="text-left text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Equipe</th>
+              <th className="text-center text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Semáforo</th>
+              <th className="text-right text-[#a3a3a3] px-3 py-3 text-xs font-semibold">Prod. Planj.</th>
+              <th className="text-left text-[#a3a3a3] px-3 py-3 text-xs font-semibold">CNC</th>
               <th className="w-10" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-800">
+          <tbody className="divide-y divide-[#3d3d3d]">
             {showAdd && (
               <AddActivityRow onClose={() => setShowAdd(false)} />
             )}
             {filtered.map((a) => (
-              <tr key={a.id} className="bg-gray-900 hover:bg-gray-800/60 transition-colors">
-                <td className="px-3 py-2.5 text-gray-400 text-xs whitespace-nowrap font-mono">
+              <tr key={a.id} className="bg-[#2c2c2c] hover:bg-[#3d3d3d]/60 transition-colors">
+                <td className="px-3 py-2.5 text-[#a3a3a3] text-xs whitespace-nowrap font-mono">
                   {weekLabel(a.week)}
                 </td>
                 <td className="px-3 py-2.5">
                   <span className="text-xs font-semibold text-white">{a.trechoCode}</span>
                 </td>
-                <td className="px-3 py-2.5 text-gray-300 text-xs max-w-[220px] truncate">
+                <td className="px-3 py-2.5 text-[#f5f5f5] text-xs max-w-[220px] truncate">
                   {a.description}
                 </td>
-                <td className="px-3 py-2.5 text-gray-400 text-xs whitespace-nowrap">
+                <td className="px-3 py-2.5 text-[#a3a3a3] text-xs whitespace-nowrap">
                   {a.responsibleTeam ?? '—'}
                 </td>
 
@@ -290,7 +290,7 @@ export function SemaforoPanel() {
                   )}
                 </td>
 
-                <td className="px-3 py-2.5 text-right text-gray-300 text-xs font-mono whitespace-nowrap">
+                <td className="px-3 py-2.5 text-right text-[#f5f5f5] text-xs font-mono whitespace-nowrap">
                   {a.plannedMeters ? `${a.plannedMeters} m` : '—'}
                   {a.executedMeters ? (
                     <span className="block text-[10px] text-green-400">{a.executedMeters} m exec.</span>
@@ -308,7 +308,7 @@ export function SemaforoPanel() {
                   ) : (
                     <button
                       onClick={() => setCncOpenId(cncOpenId === a.id ? null : a.id)}
-                      className="text-gray-500 hover:text-gray-300 text-[11px] transition-colors"
+                      className="text-[#6b6b6b] hover:text-[#f5f5f5] text-[11px] transition-colors"
                     >
                       + CNC
                     </button>

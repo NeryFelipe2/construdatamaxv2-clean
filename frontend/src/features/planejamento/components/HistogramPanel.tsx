@@ -21,7 +21,7 @@ export function HistogramPanel() {
 
   if (histogramPoints.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-96 gap-4 text-gray-500">
+      <div className="flex flex-col items-center justify-center h-96 gap-4 text-[#6b6b6b]">
         <p className="text-sm">Gere o planejamento para visualizar o histograma de recursos.</p>
         <button onClick={runSchedule}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-orange-600 hover:bg-orange-500 transition-colors">
@@ -67,7 +67,7 @@ export function HistogramPanel() {
             </button>
           )}
           <button onClick={() => exportHistogramCsv(histogramPoints)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <Download size={12} /> CSV
           </button>
         </div>
@@ -81,8 +81,8 @@ export function HistogramPanel() {
           { label: 'Total Hh', value: totalHH.toLocaleString('pt-BR') },
           { label: 'Equipamentos × Dias', value: equipDays.toLocaleString('pt-BR') },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-xs text-gray-400">{label}</div>
+          <div key={label} className="bg-[#3d3d3d] rounded-lg p-3 border border-[#525252]">
+            <div className="text-xs text-[#a3a3a3]">{label}</div>
             <div className="text-white font-semibold text-sm mt-1">{value}</div>
           </div>
         ))}
@@ -90,21 +90,21 @@ export function HistogramPanel() {
 
       {/* Navigation */}
       {totalPages > 1 && (
-        <div className="flex items-center gap-3 mb-3 text-sm text-gray-400">
+        <div className="flex items-center gap-3 mb-3 text-sm text-[#a3a3a3]">
           <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
-            className="p-1 rounded hover:bg-gray-700 disabled:opacity-30 transition-colors">
+            className="p-1 rounded hover:bg-[#484848] disabled:opacity-30 transition-colors">
             <ChevronLeft size={16} />
           </button>
           <span>Dias {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, histogramPoints.length)} de {histogramPoints.length}</span>
           <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page === totalPages - 1}
-            className="p-1 rounded hover:bg-gray-700 disabled:opacity-30 transition-colors">
+            className="p-1 rounded hover:bg-[#484848] disabled:opacity-30 transition-colors">
             <ChevronRight size={16} />
           </button>
         </div>
       )}
 
       {/* SVG chart */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 overflow-x-auto">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-4 overflow-x-auto">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-3xl mx-auto">
           {/* Y grid */}
           {yGrid.map((v) => {
@@ -152,7 +152,7 @@ export function HistogramPanel() {
       </div>
 
       {/* Legend */}
-      <div className="flex gap-6 mt-3 text-sm text-gray-400">
+      <div className="flex gap-6 mt-3 text-sm text-[#a3a3a3]">
         <span className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-sm bg-blue-500 inline-block opacity-80" />
           Mão de Obra (pessoas/dia)

@@ -39,34 +39,34 @@ function SaveDialog({ onClose, onSave }: { onClose: () => void; onSave: (name: s
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-gray-800 rounded-2xl border border-gray-600 w-full max-w-md shadow-2xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+      <div className="bg-[#3d3d3d] rounded-2xl border border-[#5e5e5e] w-full max-w-md shadow-2xl">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
           <h3 className="text-white font-semibold">Salvar Planejamento</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#a3a3a3] hover:text-white"><X size={18} /></button>
         </div>
         <div className="px-6 py-4 space-y-4">
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-400">Nome do Planejamento *</label>
+            <label className="text-xs text-[#a3a3a3]">Nome do Planejamento *</label>
             <input type="text" value={name} onChange={(e) => { setName(e.target.value); setErrors((p) => ({ ...p, name: '' })) }}
               maxLength={100} placeholder="Ex: Cenário Otimista — 3 Equipes"
-              className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500" />
+              className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b6b6b] focus:outline-none focus:border-orange-500" />
             {errors.name && <p className="text-xs text-red-400">{errors.name}</p>}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-400">Descrição (opcional)</label>
+            <label className="text-xs text-[#a3a3a3]">Descrição (opcional)</label>
             <textarea value={desc} onChange={(e) => setDesc(e.target.value)}
               maxLength={500} rows={3} placeholder="Notas sobre este cenário…"
-              className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none" />
+              className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b6b6b] focus:outline-none focus:border-orange-500 resize-none" />
           </div>
         </div>
-        <div className="flex gap-3 px-6 py-4 border-t border-gray-700">
+        <div className="flex gap-3 px-6 py-4 border-t border-[#525252]">
           <button onClick={onClose}
-            className="flex-1 px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors">
+            className="flex-1 px-4 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             Cancelar
           </button>
           <button onClick={handleSave}
             className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: '#2abfdc' }}>
+            style={{ backgroundColor: '#f97316' }}>
             Salvar
           </button>
         </div>
@@ -97,23 +97,23 @@ function ScenarioCard({ scenario, onLoad, onRename, onDelete }: {
   }
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-5 flex flex-col gap-4">
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-5 flex flex-col gap-4">
       {/* Header */}
       {editing ? (
         <div className="space-y-2">
           <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)}
             maxLength={100}
-            className="w-full bg-gray-700 border border-orange-500 rounded px-2 py-1 text-sm text-white focus:outline-none" />
+            className="w-full bg-[#484848] border border-orange-500 rounded px-2 py-1 text-sm text-white focus:outline-none" />
           <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)}
             maxLength={500} rows={2}
-            className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-white resize-none focus:outline-none focus:border-orange-500" />
+            className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-white resize-none focus:outline-none focus:border-orange-500" />
           <div className="flex gap-2">
             <button onClick={handleRename}
               className="flex items-center gap-1 px-2 py-1 rounded bg-orange-600 hover:bg-orange-500 text-white text-xs transition-colors">
               <Check size={12} /> Salvar
             </button>
             <button onClick={() => { setEditing(false); setEditName(scenario.name); setEditDesc(scenario.description ?? '') }}
-              className="flex items-center gap-1 px-2 py-1 rounded bg-gray-600 hover:bg-gray-500 text-gray-200 text-xs transition-colors">
+              className="flex items-center gap-1 px-2 py-1 rounded bg-[#525252] hover:bg-gray-500 text-[#f5f5f5] text-xs transition-colors">
               <X size={12} /> Cancelar
             </button>
           </div>
@@ -123,12 +123,12 @@ function ScenarioCard({ scenario, onLoad, onRename, onDelete }: {
           <div>
             <div className="text-white font-semibold text-sm">{scenario.name}</div>
             {scenario.description && (
-              <div className="text-gray-400 text-xs mt-0.5 line-clamp-2">{scenario.description}</div>
+              <div className="text-[#a3a3a3] text-xs mt-0.5 line-clamp-2">{scenario.description}</div>
             )}
           </div>
           <div className="flex gap-1 shrink-0">
             <button onClick={() => setEditing(true)}
-              className="text-gray-400 hover:text-white p-1 rounded transition-colors">
+              className="text-[#a3a3a3] hover:text-white p-1 rounded transition-colors">
               <Pencil size={13} />
             </button>
             <button onClick={() => {
@@ -142,26 +142,26 @@ function ScenarioCard({ scenario, onLoad, onRename, onDelete }: {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-gray-700/50 rounded-lg px-3 py-2">
-          <div className="text-gray-400">Trechos</div>
+        <div className="bg-[#484848]/50 rounded-lg px-3 py-2">
+          <div className="text-[#a3a3a3]">Trechos</div>
           <div className="text-white font-medium">{scenario.trechos.length}</div>
         </div>
-        <div className="bg-gray-700/50 rounded-lg px-3 py-2">
-          <div className="text-gray-400">Metros</div>
+        <div className="bg-[#484848]/50 rounded-lg px-3 py-2">
+          <div className="text-[#a3a3a3]">Metros</div>
           <div className="text-orange-400 font-medium">{totalMeters.toFixed(0)} m</div>
         </div>
-        <div className="bg-gray-700/50 rounded-lg px-3 py-2">
-          <div className="text-gray-400">Equipes</div>
+        <div className="bg-[#484848]/50 rounded-lg px-3 py-2">
+          <div className="text-[#a3a3a3]">Equipes</div>
           <div className="text-white font-medium">{scenario.teams.length}</div>
         </div>
-        <div className="bg-gray-700/50 rounded-lg px-3 py-2">
-          <div className="text-gray-400">Início</div>
+        <div className="bg-[#484848]/50 rounded-lg px-3 py-2">
+          <div className="text-[#a3a3a3]">Início</div>
           <div className="text-white font-medium">{scenario.scheduleConfig.startDate}</div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-700">
+      <div className="flex items-center justify-between text-xs text-[#6b6b6b] pt-2 border-t border-[#525252]">
         <span>Salvo em {fmtDate(scenario.createdAt)}</span>
         <button
           onClick={() => {
@@ -169,7 +169,7 @@ function ScenarioCard({ scenario, onLoad, onRename, onDelete }: {
               onLoad()
             }
           }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors"
         >
           <Upload size={12} /> Carregar
         </button>
@@ -190,7 +190,7 @@ export function ScenariosPanel() {
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h2 className="text-white font-semibold text-lg">Planejamentos Salvos</h2>
-          <p className="text-gray-400 text-sm mt-0.5">{scenarios.length} cenário(s) salvo(s)</p>
+          <p className="text-[#a3a3a3] text-sm mt-0.5">{scenarios.length} cenário(s) salvo(s)</p>
         </div>
         <button
           onClick={() => setShowDialog(true)}
@@ -201,23 +201,23 @@ export function ScenariosPanel() {
       </div>
 
       {/* Current config summary */}
-      <div className="bg-gray-800 rounded-xl border border-orange-500/30 p-4 mb-6">
+      <div className="bg-[#3d3d3d] rounded-xl border border-orange-500/30 p-4 mb-6">
         <div className="text-xs text-orange-400 font-medium uppercase tracking-wide mb-3">Configuração Atual (não salva)</div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
           <div>
-            <div className="text-gray-400 text-xs">Trechos</div>
+            <div className="text-[#a3a3a3] text-xs">Trechos</div>
             <div className="text-white font-medium">{trechos.length}</div>
           </div>
           <div>
-            <div className="text-gray-400 text-xs">Metros</div>
+            <div className="text-[#a3a3a3] text-xs">Metros</div>
             <div className="text-orange-400 font-medium">{trechos.reduce((s, t) => s + t.lengthM, 0).toFixed(0)} m</div>
           </div>
           <div>
-            <div className="text-gray-400 text-xs">Equipes</div>
+            <div className="text-[#a3a3a3] text-xs">Equipes</div>
             <div className="text-white font-medium">{teams.length}</div>
           </div>
           <div>
-            <div className="text-gray-400 text-xs">Custo Estimado</div>
+            <div className="text-[#a3a3a3] text-xs">Custo Estimado</div>
             <div className="text-white font-medium">{totalCostBRL > 0 ? fmtR(totalCostBRL) : '— (gere o planejamento)'}</div>
           </div>
         </div>
@@ -225,7 +225,7 @@ export function ScenariosPanel() {
 
       {/* Scenario cards */}
       {scenarios.length === 0 && (
-        <div className="text-center text-gray-500 py-12 text-sm">
+        <div className="text-center text-[#6b6b6b] py-12 text-sm">
           Nenhum planejamento salvo. Clique em "Salvar Planejamento Atual" para criar o primeiro cenário.
         </div>
       )}

@@ -25,7 +25,7 @@ const MODULES: { icon: LucideIcon; name: string; desc: string; cat: string }[] =
 
 export function AllModulesGrid() {
   return (
-    <section style={{ background: '#0f2240', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+    <section style={{ background: '#333333', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section label */}
         <div className="flex items-center gap-3 mb-16">
@@ -64,7 +64,7 @@ export function AllModulesGrid() {
             className="grid grid-cols-12 gap-4 py-4 hover:bg-white/[0.04] transition-colors group cursor-default"
           >
             <div className="col-span-1 flex items-center">
-              <Icon size={14} className="text-white/55 group-hover:text-[#2abfdc] transition-colors" />
+              <Icon size={14} className="text-white/55 group-hover:text-[#f97316] transition-colors" />
             </div>
             <div className="col-span-4 md:col-span-4 flex items-center">
               <span style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-white/80 text-sm font-medium group-hover:text-white transition-colors">{name}</span>

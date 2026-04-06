@@ -15,7 +15,7 @@ const SOURCE_BADGE: Record<CostBaseSource, string> = {
   sinapi:  'bg-blue-900/50 text-blue-300',
   seinfra: 'bg-teal-900/50 text-teal-300',
   custom:  'bg-violet-900/50 text-violet-300',
-  manual:  'bg-gray-700 text-gray-400',
+  manual:  'bg-[#484848] text-[#a3a3a3]',
 }
 
 function fmtBRL(n: number) {
@@ -57,10 +57,10 @@ function EditCell({ value, onSave, type = 'text' }: {
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') setEditing(false) }}
-        className="w-full bg-gray-700 border border-violet-500 rounded px-2 py-0.5 text-xs text-gray-200 focus:outline-none"
+        className="w-full bg-[#484848] border border-violet-500 rounded px-2 py-0.5 text-xs text-[#f5f5f5] focus:outline-none"
       />
       <button onClick={commit} className="text-emerald-400 hover:text-emerald-300 p-0.5"><Check size={12} /></button>
-      <button onClick={() => setEditing(false)} className="text-gray-500 hover:text-gray-400 p-0.5"><X size={12} /></button>
+      <button onClick={() => setEditing(false)} className="text-[#6b6b6b] hover:text-[#a3a3a3] p-0.5"><X size={12} /></button>
     </div>
   )
 }
@@ -97,31 +97,31 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
-        <div className="px-5 py-4 border-b border-gray-700 flex items-center justify-between">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+        <div className="px-5 py-4 border-b border-[#525252] flex items-center justify-between">
           <h3 className="text-white font-semibold text-sm">Buscar Item — SINAPI</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-200"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#a3a3a3] hover:text-[#f5f5f5]"><X size={18} /></button>
         </div>
-        <div className="px-5 py-3 border-b border-gray-700 flex items-center gap-3">
+        <div className="px-5 py-3 border-b border-[#525252] flex items-center gap-3">
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b6b6b]" />
             <input
               autoFocus
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar por código ou descrição..."
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-9 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-violet-500"
+              className="w-full bg-[#484848] border border-[#5e5e5e] rounded-lg pl-9 pr-4 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-violet-500"
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-gray-400 text-xs">Qtd:</label>
+            <label className="text-[#a3a3a3] text-xs">Qtd:</label>
             <input
               type="number"
               value={qty}
               onChange={(e) => setQty(parseFloat(e.target.value) || 1)}
               min={0.01}
-              className="w-20 bg-gray-700 border border-gray-600 rounded px-2 py-2 text-sm text-gray-200 focus:outline-none focus:border-violet-500"
+              className="w-20 bg-[#484848] border border-[#5e5e5e] rounded px-2 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-violet-500"
             />
           </div>
         </div>
@@ -130,11 +130,11 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
             <div
               key={entry.code}
               onClick={() => handleAdd(entry)}
-              className="px-5 py-3 border-b border-gray-700/50 hover:bg-gray-750/40 cursor-pointer flex items-start justify-between gap-3 group"
+              className="px-5 py-3 border-b border-[#525252]/50 hover:bg-gray-750/40 cursor-pointer flex items-start justify-between gap-3 group"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-gray-200 text-sm group-hover:text-violet-300 transition-colors">{entry.description}</p>
-                <p className="text-gray-500 text-xs mt-0.5">{entry.code} · {entry.unit} · {entry.category}</p>
+                <p className="text-[#f5f5f5] text-sm group-hover:text-violet-300 transition-colors">{entry.description}</p>
+                <p className="text-[#6b6b6b] text-xs mt-0.5">{entry.code} · {entry.unit} · {entry.category}</p>
               </div>
               <span className="text-violet-400 text-sm font-medium whitespace-nowrap shrink-0">
                 {fmtBRL(entry.unitCost)}/{entry.unit}
@@ -142,7 +142,7 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
             </div>
           ))}
           {filtered.length === 0 && (
-            <p className="text-center text-gray-500 py-10">Nenhum item encontrado.</p>
+            <p className="text-center text-[#6b6b6b] py-10">Nenhum item encontrado.</p>
           )}
         </div>
       </div>
@@ -162,23 +162,23 @@ function SaveDialog({ onSave, onClose }: { onSave: (name: string, desc?: string)
     onClose()
   }
 
-  const inputCls = 'w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-violet-500'
+  const inputCls = 'w-full bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-violet-500'
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-sm p-6 space-y-4">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-2xl w-full max-w-sm p-6 space-y-4">
         <h3 className="text-white font-semibold text-sm">Salvar Orçamento</h3>
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Nome *</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Nome *</label>
           <input autoFocus type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Rede Pluvial Trecho A" className={inputCls} />
         </div>
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Descrição (opcional)</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Descrição (opcional)</label>
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows={3} className={`${inputCls} resize-none`} />
         </div>
         {err && <p className="text-red-400 text-xs">{err}</p>}
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600">Cancelar</button>
+          <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-[#484848] text-[#f5f5f5] text-sm hover:bg-[#525252]">Cancelar</button>
           <button onClick={submit} className="px-4 py-1.5 rounded-lg text-sm text-white" style={{ backgroundColor: '#8b5cf6' }}>Salvar</button>
         </div>
       </div>
@@ -376,12 +376,12 @@ function FileUploadTab({ bdi, onImport, onClose }: {
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
         className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-          dragging ? 'border-violet-500 bg-violet-900/20' : 'border-gray-700 hover:border-gray-600'
+          dragging ? 'border-violet-500 bg-violet-900/20' : 'border-[#525252] hover:border-[#5e5e5e]'
         }`}
       >
-        <p className="text-gray-400 text-sm mb-2">Arraste um arquivo aqui ou clique para selecionar</p>
+        <p className="text-[#a3a3a3] text-sm mb-2">Arraste um arquivo aqui ou clique para selecionar</p>
         <p className="text-gray-600 text-xs mb-3">Formatos aceitos: .txt (CSV/TSV) · .dxf · .shp</p>
-        <label className="inline-block cursor-pointer px-4 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm transition-colors">
+        <label className="inline-block cursor-pointer px-4 py-1.5 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-sm transition-colors">
           Selecionar arquivo
           <input
             type="file"
@@ -401,9 +401,9 @@ function FileUploadTab({ bdi, onImport, onClose }: {
       )}
 
       {/* Format hints */}
-      <div className="rounded-lg bg-gray-800/60 border border-gray-700 px-4 py-3">
-        <p className="text-xs text-gray-400 font-semibold mb-1.5">Formato esperado para .txt / .csv:</p>
-        <pre className="text-[10px] text-gray-500 font-mono leading-relaxed">
+      <div className="rounded-lg bg-[#3d3d3d]/60 border border-[#525252] px-4 py-3">
+        <p className="text-xs text-[#a3a3a3] font-semibold mb-1.5">Formato esperado para .txt / .csv:</p>
+        <pre className="text-[10px] text-[#6b6b6b] font-mono leading-relaxed">
 {`CODIGO;DESCRICAO;UNIDADE;QTD;CUSTO_UNIT
 74209/001;Escavacao manual;m3;15;48.50
 72942/001;Tubo PVC DN150 PBA;m;100;32.00`}
@@ -413,24 +413,24 @@ function FileUploadTab({ bdi, onImport, onClose }: {
       {/* Preview */}
       {parsedItems.length > 0 && (
         <div>
-          <p className="text-xs text-gray-400 font-semibold mb-2">{parsedItems.length} item(ns) extraído(s):</p>
-          <div className="rounded-xl border border-gray-700 overflow-hidden max-h-52 overflow-y-auto">
+          <p className="text-xs text-[#a3a3a3] font-semibold mb-2">{parsedItems.length} item(ns) extraído(s):</p>
+          <div className="rounded-xl border border-[#525252] overflow-hidden max-h-52 overflow-y-auto">
             <table className="w-full text-xs">
-              <thead className="bg-gray-800 sticky top-0">
+              <thead className="bg-[#3d3d3d] sticky top-0">
                 <tr>
-                  <th className="text-left text-gray-500 px-3 py-2">Descrição</th>
-                  <th className="text-right text-gray-500 px-3 py-2">Qtd</th>
-                  <th className="text-left text-gray-500 px-3 py-2">Un.</th>
-                  <th className="text-right text-gray-500 px-3 py-2">C.Unit.</th>
+                  <th className="text-left text-[#6b6b6b] px-3 py-2">Descrição</th>
+                  <th className="text-right text-[#6b6b6b] px-3 py-2">Qtd</th>
+                  <th className="text-left text-[#6b6b6b] px-3 py-2">Un.</th>
+                  <th className="text-right text-[#6b6b6b] px-3 py-2">C.Unit.</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-[#3d3d3d]">
                 {parsedItems.map((item, i) => (
-                  <tr key={i} className="bg-gray-900">
-                    <td className="px-3 py-1.5 text-gray-300 truncate max-w-[200px]">{item.description}</td>
-                    <td className="px-3 py-1.5 text-right text-gray-400 font-mono">{item.quantity}</td>
-                    <td className="px-3 py-1.5 text-gray-500">{item.unit}</td>
-                    <td className="px-3 py-1.5 text-right text-gray-400 font-mono">
+                  <tr key={i} className="bg-[#2c2c2c]">
+                    <td className="px-3 py-1.5 text-[#f5f5f5] truncate max-w-[200px]">{item.description}</td>
+                    <td className="px-3 py-1.5 text-right text-[#a3a3a3] font-mono">{item.quantity}</td>
+                    <td className="px-3 py-1.5 text-[#6b6b6b]">{item.unit}</td>
+                    <td className="px-3 py-1.5 text-right text-[#a3a3a3] font-mono">
                       {item.unitCost > 0 ? fmtBRL(item.unitCost) : '—'}
                     </td>
                   </tr>
@@ -442,8 +442,8 @@ function FileUploadTab({ bdi, onImport, onClose }: {
       )}
 
       {/* Footer */}
-      <div className="flex gap-2 mt-auto pt-2 border-t border-gray-700">
-        <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600">
+      <div className="flex gap-2 mt-auto pt-2 border-t border-[#525252]">
+        <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-[#484848] text-[#f5f5f5] text-sm hover:bg-[#525252]">
           Cancelar
         </button>
         <button
@@ -491,18 +491,18 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-700 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-[#525252] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Network size={16} className="text-violet-400" />
             <h3 className="text-white font-semibold text-sm">Importar Rede</h3>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-200"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#a3a3a3] hover:text-[#f5f5f5]"><X size={18} /></button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-700">
+        <div className="flex border-b border-[#525252]">
           {(['templates', 'file'] as const).map((t) => (
             <button
               key={t}
@@ -510,7 +510,7 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
               className={`px-5 py-2.5 text-sm font-semibold border-b-2 transition-colors ${
                 tab === t
                   ? 'text-violet-400 border-violet-500'
-                  : 'text-gray-500 border-transparent hover:text-gray-300'
+                  : 'text-[#6b6b6b] border-transparent hover:text-[#f5f5f5]'
               }`}
             >
               {t === 'templates' ? 'Redes Prontas' : 'Importar Arquivo'}
@@ -522,17 +522,17 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
         {tab === 'templates' && (
           <>
             {/* Length input */}
-            <div className="px-5 py-3 border-b border-gray-700 flex items-center gap-3">
-              <label className="text-gray-400 text-xs whitespace-nowrap">Comprimento da rede (m):</label>
+            <div className="px-5 py-3 border-b border-[#525252] flex items-center gap-3">
+              <label className="text-[#a3a3a3] text-xs whitespace-nowrap">Comprimento da rede (m):</label>
               <input
                 type="number"
                 value={length}
                 min={10}
                 step={10}
                 onChange={(e) => setLength(parseFloat(e.target.value) || 100)}
-                className="w-28 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-violet-500"
+                className="w-28 bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-1.5 text-sm text-[#f5f5f5] focus:outline-none focus:border-violet-500"
               />
-              <span className="text-gray-500 text-xs">
+              <span className="text-[#6b6b6b] text-xs">
                 Quantitativos escalados proporcionalmente.
               </span>
             </div>
@@ -550,27 +550,27 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
                     className={`rounded-xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'border-violet-500 bg-violet-900/20'
-                        : 'border-gray-700 bg-gray-750/30 hover:border-gray-600'
+                        : 'border-[#525252] bg-gray-750/30 hover:border-[#5e5e5e]'
                     }`}
                   >
                     <div className="px-4 py-3 flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2.5">
                         <span className="text-2xl leading-none">{tmpl.icon}</span>
                         <div>
-                          <p className="text-gray-200 text-sm font-medium">{tmpl.name}</p>
-                          <p className="text-gray-500 text-xs mt-0.5">{tmpl.description}</p>
+                          <p className="text-[#f5f5f5] text-sm font-medium">{tmpl.name}</p>
+                          <p className="text-[#6b6b6b] text-xs mt-0.5">{tmpl.description}</p>
                         </div>
                       </div>
                       <div className="text-right shrink-0">
                         <p className="text-violet-400 text-sm font-semibold">{fmtBRL(total)}</p>
-                        <p className="text-gray-500 text-xs">{tmpl.items.length} itens · c/ BDI {bdi}%</p>
+                        <p className="text-[#6b6b6b] text-xs">{tmpl.items.length} itens · c/ BDI {bdi}%</p>
                       </div>
                     </div>
                     {isSelected && (
-                      <div className="border-t border-gray-700/60 px-4 pb-3">
+                      <div className="border-t border-[#525252]/60 px-4 pb-3">
                         <table className="w-full text-xs mt-2">
                           <thead>
-                            <tr className="text-gray-500">
+                            <tr className="text-[#6b6b6b]">
                               <th className="text-left py-1 font-medium">Descrição</th>
                               <th className="text-right py-1 font-medium">Qtd</th>
                               <th className="text-left py-1 pl-2 font-medium">Un.</th>
@@ -582,11 +582,11 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
                             {tmpl.items.map((it, idx) => {
                               const scaledQty = Math.round(it.quantity * scale * 100) / 100
                               return (
-                                <tr key={idx} className="border-t border-gray-700/30 text-gray-300">
+                                <tr key={idx} className="border-t border-[#525252]/30 text-[#f5f5f5]">
                                   <td className="py-1 pr-2">{it.description}</td>
-                                  <td className="py-1 text-right text-gray-400">{scaledQty}</td>
-                                  <td className="py-1 pl-2 text-gray-500">{it.unit}</td>
-                                  <td className="py-1 text-right text-gray-400">{fmtBRL(it.unitCost)}</td>
+                                  <td className="py-1 text-right text-[#a3a3a3]">{scaledQty}</td>
+                                  <td className="py-1 pl-2 text-[#6b6b6b]">{it.unit}</td>
+                                  <td className="py-1 text-right text-[#a3a3a3]">{fmtBRL(it.unitCost)}</td>
                                   <td className="py-1 text-right text-violet-300">{fmtBRL(scaledQty * it.unitCost)}</td>
                                 </tr>
                               )
@@ -601,12 +601,12 @@ function NetworkImportModal({ onClose, onImport, bdi }: {
             </div>
 
             {/* Footer */}
-            <div className="px-5 py-3 border-t border-gray-700 flex items-center justify-between">
-              <p className="text-gray-500 text-xs">
+            <div className="px-5 py-3 border-t border-[#525252] flex items-center justify-between">
+              <p className="text-[#6b6b6b] text-xs">
                 {selected ? `"${template?.name}" selecionada · ${length}m` : 'Selecione um template acima'}
               </p>
               <div className="flex gap-2">
-                <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600">
+                <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-[#484848] text-[#f5f5f5] text-sm hover:bg-[#525252]">
                   Cancelar
                 </button>
                 <button
@@ -685,7 +685,7 @@ export function ComposicaoPanel() {
     return sortDir === 'asc' ? <ChevronUp size={12} className="inline ml-0.5" /> : <ChevronDown size={12} className="inline ml-0.5" />
   }
 
-  const thCls = 'text-gray-500 text-xs font-medium py-2.5 px-3 text-left cursor-pointer hover:text-gray-300 whitespace-nowrap select-none'
+  const thCls = 'text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-left cursor-pointer hover:text-[#f5f5f5] whitespace-nowrap select-none'
 
   return (
     <div className="p-6 space-y-4">
@@ -713,94 +713,94 @@ export function ComposicaoPanel() {
         <button
           onClick={handleImportPre}
           disabled={importing === 'pre'}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors disabled:opacity-50"
         >
           {importing === 'pre' ? 'Importando...' : '↓ Importar da Pré-Construção'}
         </button>
         <button
           onClick={handleImportSup}
           disabled={importing === 'sup'}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors disabled:opacity-50"
         >
           {importing === 'sup' ? 'Importando...' : '↓ Importar do Suprimentos'}
         </button>
         <button
           onClick={() => setShowSave(true)}
           disabled={currentItems.length === 0}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors disabled:opacity-50"
         >
           Salvar Orçamento
         </button>
         <div className="flex items-center gap-1 ml-auto">
-          <button onClick={() => exportToCsv(currentItems)} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
+          <button onClick={() => exportToCsv(currentItems)} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <Download size={13} /> CSV
           </button>
-          <button onClick={() => exportToXlsx(currentItems, bdiGlobal)} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
+          <button onClick={() => exportToXlsx(currentItems, bdiGlobal)} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <Download size={13} /> Excel
           </button>
-          <button onClick={() => window.print()} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
+          <button onClick={() => window.print()} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <Printer size={13} /> PDF
           </button>
-          <button onClick={handleReset} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-gray-700 hover:bg-red-900/40 text-gray-400 hover:text-red-300 transition-colors">
+          <button onClick={handleReset} className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs bg-[#484848] hover:bg-red-900/40 text-[#a3a3a3] hover:text-red-300 transition-colors">
             <RefreshCw size={13} /> Reiniciar
           </button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-        <div className="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
-          <p className="text-gray-400 text-xs">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+        <div className="px-4 py-3 border-b border-[#525252] flex items-center justify-between">
+          <p className="text-[#a3a3a3] text-xs">
             {currentItems.length} item{currentItems.length !== 1 ? 's' : ''} · BDI Global: {bdiGlobal}%
           </p>
           <p className="text-violet-400 text-sm font-semibold">Total: {fmtBRL(total)}</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-700">
+            <thead className="border-b border-[#525252]">
               <tr>
                 <th className={thCls} onClick={() => handleSort('code')}>Código<SortIcon col="code" /></th>
                 <th className={thCls} onClick={() => handleSort('description')}>Descrição<SortIcon col="description" /></th>
-                <th className="text-gray-500 text-xs font-medium py-2.5 px-3 text-left">Un.</th>
-                <th className="text-gray-500 text-xs font-medium py-2.5 px-3 text-right">Quantidade</th>
-                <th className="text-gray-500 text-xs font-medium py-2.5 px-3 text-right">C.Unit. (R$)</th>
-                <th className="text-gray-500 text-xs font-medium py-2.5 px-3 text-right">BDI %</th>
+                <th className="text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-left">Un.</th>
+                <th className="text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-right">Quantidade</th>
+                <th className="text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-right">C.Unit. (R$)</th>
+                <th className="text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-right">BDI %</th>
                 <th className={`${thCls} text-right`} onClick={() => handleSort('totalCost')}>Total c/ BDI<SortIcon col="totalCost" /></th>
                 <th className={thCls} onClick={() => handleSort('category')}>Categoria<SortIcon col="category" /></th>
-                <th className="text-gray-500 text-xs font-medium py-2.5 px-3 text-center">Fonte</th>
+                <th className="text-[#6b6b6b] text-xs font-medium py-2.5 px-3 text-center">Fonte</th>
                 <th className="py-2.5 px-3 print:hidden" />
               </tr>
             </thead>
             <tbody>
               {sorted.length === 0 && (
                 <tr>
-                  <td colSpan={10} className="text-center text-gray-500 py-14">
+                  <td colSpan={10} className="text-center text-[#6b6b6b] py-14">
                     Nenhum item. Clique em "+ Adicionar Item" ou importe de outro módulo.
                   </td>
                 </tr>
               )}
               {sorted.map((item) => (
-                <tr key={item.id} className="border-b border-gray-700/50 hover:bg-gray-750/20">
-                  <td className="px-3 py-2.5 text-gray-400 font-mono text-xs">
+                <tr key={item.id} className="border-b border-[#525252]/50 hover:bg-gray-750/20">
+                  <td className="px-3 py-2.5 text-[#a3a3a3] font-mono text-xs">
                     <EditCell value={item.code} onSave={(v) => updateItem(item.id, { code: String(v) })} />
                   </td>
-                  <td className="px-3 py-2.5 text-gray-200 max-w-xs">
+                  <td className="px-3 py-2.5 text-[#f5f5f5] max-w-xs">
                     <EditCell value={item.description} onSave={(v) => updateItem(item.id, { description: String(v) })} />
                   </td>
-                  <td className="px-3 py-2.5 text-gray-400">
+                  <td className="px-3 py-2.5 text-[#a3a3a3]">
                     <EditCell value={item.unit} onSave={(v) => updateItem(item.id, { unit: String(v) })} />
                   </td>
-                  <td className="px-3 py-2.5 text-right text-gray-300">
+                  <td className="px-3 py-2.5 text-right text-[#f5f5f5]">
                     <EditCell value={item.quantity} onSave={(v) => updateItem(item.id, { quantity: Number(v) })} type="number" />
                   </td>
-                  <td className="px-3 py-2.5 text-right text-gray-300">
+                  <td className="px-3 py-2.5 text-right text-[#f5f5f5]">
                     <EditCell value={item.unitCost} onSave={(v) => updateItem(item.id, { unitCost: Number(v) })} type="number" />
                   </td>
-                  <td className="px-3 py-2.5 text-right text-gray-400">
+                  <td className="px-3 py-2.5 text-right text-[#a3a3a3]">
                     <EditCell value={item.bdi} onSave={(v) => updateItem(item.id, { bdi: Number(v) })} type="number" />
                   </td>
                   <td className="px-3 py-2.5 text-right text-violet-300 font-medium">{fmtBRL(item.totalCost)}</td>
-                  <td className="px-3 py-2.5 text-gray-400">
+                  <td className="px-3 py-2.5 text-[#a3a3a3]">
                     <EditCell value={item.category} onSave={(v) => updateItem(item.id, { category: String(v) })} />
                   </td>
                   <td className="px-3 py-2.5 text-center">
@@ -818,8 +818,8 @@ export function ComposicaoPanel() {
             </tbody>
             {currentItems.length > 0 && (
               <tfoot>
-                <tr className="border-t-2 border-gray-600">
-                  <td colSpan={6} className="px-3 py-3 text-gray-300 font-semibold text-sm">TOTAL GERAL</td>
+                <tr className="border-t-2 border-[#5e5e5e]">
+                  <td colSpan={6} className="px-3 py-3 text-[#f5f5f5] font-semibold text-sm">TOTAL GERAL</td>
                   <td className="px-3 py-3 text-right text-violet-400 font-bold text-sm">{fmtBRL(total)}</td>
                   <td colSpan={3} />
                 </tr>
@@ -830,7 +830,7 @@ export function ComposicaoPanel() {
       </div>
 
       {/* Print footer */}
-      <div className="hidden print:block mt-8 border-t border-gray-300 pt-3 text-xs text-gray-500 flex justify-between">
+      <div className="hidden print:block mt-8 border-t border-gray-300 pt-3 text-xs text-[#6b6b6b] flex justify-between">
         <span>Atlântico — Quantitativos e Orçamento</span>
         <span>Gerado em: {new Date().toLocaleString('pt-BR')}</span>
       </div>

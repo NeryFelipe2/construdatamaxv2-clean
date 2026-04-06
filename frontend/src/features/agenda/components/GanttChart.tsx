@@ -32,8 +32,8 @@ export function GanttChart({ filteredResourceIds }: GanttChartProps) {
         to right,
         transparent 0px,
         transparent ${colWidth - 1}px,
-        #20406a ${colWidth - 1}px,
-        #20406a ${colWidth}px
+        #525252 ${colWidth - 1}px,
+        #525252 ${colWidth}px
       )`,
     }),
     [colWidth]
@@ -85,7 +85,7 @@ export function GanttChart({ filteredResourceIds }: GanttChartProps) {
                 left: SIDEBAR_W + todayOffset,
                 width: 2,
                 height: totalHeight,
-                background: '#2abfdc',
+                background: '#f97316',
                 opacity: 0.7,
                 pointerEvents: 'none',
                 zIndex: 5,
@@ -96,7 +96,7 @@ export function GanttChart({ filteredResourceIds }: GanttChartProps) {
                   position: 'absolute',
                   top: -HEADER_H,
                   left: -18,
-                  background: '#2abfdc',
+                  background: '#f97316',
                   color: '#fff',
                   fontSize: 9,
                   fontWeight: 700,

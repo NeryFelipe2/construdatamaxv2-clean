@@ -23,12 +23,12 @@ export function GanttRow({
   gridStyle,
   viewParams,
 }: GanttRowProps) {
-  const rowBg         = index % 2 === 0 ? '#0d2040' : 'rgba(255,255,255,0.018)'
+  const rowBg         = index % 2 === 0 ? '#2c2c2c' : 'rgba(255,255,255,0.018)'
   const timelineWidth = viewParams.totalDays * viewParams.pixelsPerDay
 
   return (
     <div
-      className="flex border-b border-[#20406a]"
+      className="flex border-b border-[#525252]"
       style={{ background: rowBg, minWidth: SIDEBAR_W + timelineWidth }}
     >
       {/* Sticky resource name cell */}
@@ -42,7 +42,7 @@ export function GanttRow({
           height: ROW_HEIGHT,
           background: rowBg,
         }}
-        className="border-r border-[#20406a] flex flex-col justify-center px-4 gap-1"
+        className="border-r border-[#525252] flex flex-col justify-center px-4 gap-1"
       >
         <div className="flex items-center gap-2">
           <span className="text-[10px] font-mono text-[#6b6b6b]">{resource.code}</span>

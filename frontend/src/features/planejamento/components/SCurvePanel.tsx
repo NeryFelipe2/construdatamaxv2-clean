@@ -36,7 +36,7 @@ export function SCurvePanel() {
 
   if (scurvePoints.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-96 gap-4 text-gray-500">
+      <div className="flex flex-col items-center justify-center h-96 gap-4 text-[#6b6b6b]">
         <p className="text-sm">Gere o planejamento para visualizar a Curva S.</p>
         <button onClick={runSchedule}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-orange-600 hover:bg-orange-500 transition-colors">
@@ -73,13 +73,13 @@ export function SCurvePanel() {
             </button>
           )}
           <button onClick={() => exportSCurveCsv(scurvePoints)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors">
             <Download size={12} /> CSV
           </button>
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 overflow-x-auto">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-4 overflow-x-auto">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-3xl mx-auto">
           {/* Y grid lines */}
           {yGrid.map((pct) => {
@@ -110,7 +110,7 @@ export function SCurvePanel() {
           <line x1={PAD.left} y1={PAD.top + INNER_H} x2={W - PAD.right} y2={PAD.top + INNER_H} stroke="#6b7280" strokeWidth="1" />
 
           {/* Financial line (dashed, orange) */}
-          <polyline points={financialPoints} fill="none" stroke="#2abfdc" strokeWidth="2"
+          <polyline points={financialPoints} fill="none" stroke="#f97316" strokeWidth="2"
             strokeDasharray="6,4" opacity="0.9" />
 
           {/* Physical line (solid, blue) */}
@@ -119,14 +119,14 @@ export function SCurvePanel() {
       </div>
 
       {/* Legend */}
-      <div className="flex gap-6 mt-3 text-sm text-gray-400">
+      <div className="flex gap-6 mt-3 text-sm text-[#a3a3a3]">
         <span className="flex items-center gap-2">
           <svg width="24" height="10"><line x1="0" y1="5" x2="24" y2="5" stroke="#3b82f6" strokeWidth="2.5" /></svg>
           Físico Previsto (%)
         </span>
         <span className="flex items-center gap-2">
           <svg width="24" height="10">
-            <line x1="0" y1="5" x2="24" y2="5" stroke="#2abfdc" strokeWidth="2" strokeDasharray="5,3" />
+            <line x1="0" y1="5" x2="24" y2="5" stroke="#f97316" strokeWidth="2" strokeDasharray="5,3" />
           </svg>
           Financeiro Previsto (%)
         </span>
@@ -143,8 +143,8 @@ export function SCurvePanel() {
           { label: 'Metros Totais', value: `${scurvePoints[n - 1].cumulativeMeters.toFixed(0)} m` },
           { label: 'Físico Final', value: `${scurvePoints[n - 1].cumulativePhysicalPct.toFixed(1)}%` },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-            <div className="text-xs text-gray-400">{label}</div>
+          <div key={label} className="bg-[#3d3d3d] rounded-lg p-3 border border-[#525252]">
+            <div className="text-xs text-[#a3a3a3]">{label}</div>
             <div className="text-white font-semibold text-sm mt-1">{value}</div>
           </div>
         ))}

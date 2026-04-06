@@ -39,29 +39,29 @@ export function TaktTimePanel() {
       <div className="flex items-start gap-6 flex-wrap">
         {/* Total days input */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-gray-400 font-semibold">Prazo Total da Obra (dias úteis)</label>
+          <label className="text-xs text-[#a3a3a3] font-semibold">Prazo Total da Obra (dias úteis)</label>
           <div className="flex items-center gap-2">
             <input
               type="number"
               min={1}
               value={taktTotalDays}
               onChange={(e) => setTaktTotalDays(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-24 bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500 text-center font-mono"
+              className="w-24 bg-[#3d3d3d] border border-[#525252] rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-orange-500 text-center font-mono"
             />
-            <span className="text-gray-500 text-sm">dias</span>
+            <span className="text-[#6b6b6b] text-sm">dias</span>
           </div>
           <p className="text-[10px] text-gray-600">
             Takt por zona: <span className="text-orange-400 font-semibold">{fmtDays(taktPerZone)}</span> ({zones.length} zonas)
           </p>
         </div>
 
-        <div className="w-px h-12 bg-gray-700 self-center shrink-0" />
+        <div className="w-px h-12 bg-[#484848] self-center shrink-0" />
 
         {/* KPIs */}
         <div className="flex items-center gap-6 flex-wrap">
           <TaktKpi icon={<CheckCircle size={16} className="text-green-400" />} label="No Takt" value={String(onTime)} color="text-green-400" />
           <TaktKpi icon={<AlertTriangle size={16} className="text-red-400" />} label="Acima Takt" value={String(overTime)} color="text-red-400" />
-          <TaktKpi icon={<Clock size={16} className="text-gray-400" />} label="Pendentes" value={String(pending)} color="text-gray-400" />
+          <TaktKpi icon={<Clock size={16} className="text-[#a3a3a3]" />} label="Pendentes" value={String(pending)} color="text-[#a3a3a3]" />
           {avgActual !== null && (
             <TaktKpi
               icon={<Clock size={16} className="text-blue-400" />}
@@ -74,7 +74,7 @@ export function TaktTimePanel() {
       </div>
 
       {/* Timeline visualization */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+      <div className="rounded-xl border border-[#3d3d3d] bg-[#2c2c2c] p-5">
         <p className="text-xs font-semibold text-white mb-4">Fluxo Takt — Zonas em sequência</p>
 
         {zones.length === 0 ? (
@@ -117,14 +117,14 @@ export function TaktTimePanel() {
 
             {/* Scale */}
             <div className="relative h-3">
-              <div className="absolute inset-x-0 top-1/2 h-px bg-gray-700" />
+              <div className="absolute inset-x-0 top-1/2 h-px bg-[#484848]" />
               {[0, 25, 50, 75, 100].map((pct) => (
                 <div
                   key={pct}
                   className="absolute flex flex-col items-center"
                   style={{ left: `${pct}%` }}
                 >
-                  <div className="w-px h-2 bg-gray-600" />
+                  <div className="w-px h-2 bg-[#525252]" />
                   <span className="text-[9px] text-gray-600 mt-0.5">
                     {Math.round((pct / 100) * timelineTotal)}d
                   </span>
@@ -136,28 +136,28 @@ export function TaktTimePanel() {
       </div>
 
       {/* Zone table */}
-      <div className="rounded-xl border border-gray-800 overflow-x-auto overflow-hidden">
+      <div className="rounded-xl border border-[#3d3d3d] overflow-x-auto overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-gray-800/80 border-b border-gray-700">
+          <thead className="bg-[#3d3d3d]/80 border-b border-[#525252]">
             <tr>
-              <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Zona</th>
-              <th className="text-right text-gray-400 px-4 py-2.5 text-xs font-semibold">Extensão (m)</th>
-              <th className="text-right text-gray-400 px-4 py-2.5 text-xs font-semibold">Takt (dias)</th>
-              <th className="text-right text-gray-400 px-4 py-2.5 text-xs font-semibold">Real (dias)</th>
-              <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Status</th>
+              <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Zona</th>
+              <th className="text-right text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Extensão (m)</th>
+              <th className="text-right text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Takt (dias)</th>
+              <th className="text-right text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Real (dias)</th>
+              <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-800">
+          <tbody className="divide-y divide-[#3d3d3d]">
             {zones.map((z) => {
               const isOk  = z.actualDays !== undefined && z.actualDays <= z.taktDays
 
               return (
-                <tr key={z.id} className="bg-gray-900 hover:bg-gray-800/50 transition-colors">
+                <tr key={z.id} className="bg-[#2c2c2c] hover:bg-[#3d3d3d]/50 transition-colors">
                   <td className="px-4 py-2.5">
                     <span className="font-semibold text-white">{z.code}</span>
-                    <span className="text-gray-500 text-xs ml-2">{z.lengthM} m</span>
+                    <span className="text-[#6b6b6b] text-xs ml-2">{z.lengthM} m</span>
                   </td>
-                  <td className="px-4 py-2.5 text-right text-gray-300 font-mono">{z.lengthM}</td>
+                  <td className="px-4 py-2.5 text-right text-[#f5f5f5] font-mono">{z.lengthM}</td>
                   <td className="px-4 py-2.5 text-right text-orange-400 font-mono font-semibold">{z.taktDays}</td>
                   <td className="px-4 py-2.5 text-right font-mono">
                     <input
@@ -169,7 +169,7 @@ export function TaktTimePanel() {
                         const val = e.target.value === '' ? undefined : parseInt(e.target.value)
                         updateTaktZone(z.id, { actualDays: val })
                       }}
-                      className="w-16 bg-gray-800 border border-gray-700 rounded px-2 py-0.5 text-xs text-white focus:outline-none focus:border-orange-500 text-right"
+                      className="w-16 bg-[#3d3d3d] border border-[#525252] rounded px-2 py-0.5 text-xs text-white focus:outline-none focus:border-orange-500 text-right"
                     />
                   </td>
                   <td className="px-4 py-2.5">
@@ -200,7 +200,7 @@ function TaktKpi({ icon, label, value, color }: { icon: React.ReactNode; label: 
     <div className="flex flex-col gap-0.5">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="text-[10px] text-gray-500 uppercase tracking-wider">{label}</span>
+        <span className="text-[10px] text-[#6b6b6b] uppercase tracking-wider">{label}</span>
       </div>
       <span className={`text-xl font-bold ${color}`}>{value}</span>
     </div>

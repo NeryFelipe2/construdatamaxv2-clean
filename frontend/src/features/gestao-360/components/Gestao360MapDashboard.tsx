@@ -81,7 +81,7 @@ function makeDivIcon(severity: Severity, project: Project, selected: boolean) {
       ">
         <div style="
           display:flex;align-items:center;gap:5px;
-          background:#0d2040${bgAlpha};
+          background:#2c2c2c${bgAlpha};
           border:1.5px solid ${color};
           border-radius:8px;
           padding:4px 8px;
@@ -97,7 +97,7 @@ function makeDivIcon(severity: Severity, project: Project, selected: boolean) {
             box-shadow:0 0 5px ${color}aa;
           "></div>
           <span style="
-            color:#e4f2f8;font-size:10px;font-weight:700;
+            color:#f5f5f5;font-size:10px;font-weight:700;
             font-family:Inter,sans-serif;
             white-space:nowrap;
             letter-spacing:0.03em;
@@ -188,7 +188,7 @@ function fmtBRL(n: number) {
 function PhaseStatusBadge({ status }: { status: ProjectPhase['status'] }) {
   const map: Record<string, { label: string; color: string }> = {
     completed:   { label: 'Concluído',    color: '#22c55e' },
-    in_progress: { label: 'Em andamento', color: '#2abfdc' },
+    in_progress: { label: 'Em andamento', color: '#f97316' },
     not_started: { label: 'Não iniciado', color: '#6b6b6b' },
   }
   const cfg = map[status] ?? { label: status, color: '#6b6b6b' }
@@ -219,8 +219,8 @@ function GanttSvg({ project, W = 420 }: { project: Project; W?: number }) {
 
   return (
     <svg width={W} height={all.length * ROW + 20} style={{ overflow: 'visible', display: 'block' }}>
-      <line x1={todayClip} y1={0} x2={todayClip} y2={all.length * ROW + 4} stroke="#2abfdc" strokeWidth={1} strokeDasharray="3,2" opacity={0.6} />
-      <text x={todayClip + 3} y={10} fontSize={8} fill="#2abfdc" style={{ fontFamily: 'Inter, sans-serif' }}>hoje</text>
+      <line x1={todayClip} y1={0} x2={todayClip} y2={all.length * ROW + 4} stroke="#f97316" strokeWidth={1} strokeDasharray="3,2" opacity={0.6} />
+      <text x={todayClip + 3} y={10} fontSize={8} fill="#f97316" style={{ fontFamily: 'Inter, sans-serif' }}>hoje</text>
 
       {all.map((phase, i) => {
         const ps = new Date(phase.startDate + 'T00:00:00').getTime()
@@ -232,17 +232,17 @@ function GanttSvg({ project, W = 420 }: { project: Project; W?: number }) {
 
         const statusColor =
           phase.status === 'completed'   ? '#22c55e' :
-          phase.status === 'in_progress' ? '#2abfdc' : '#5a8caa'
+          phase.status === 'in_progress' ? '#f97316' : '#6b6b6b'
 
         const fillW = (phase.progress / 100) * bw
 
         return (
           <g key={phase.id}>
-            <text x={LABEL - 4} y={y + BAR_H / 2 + 4} textAnchor="end" fontSize={9} fill="#8fb3c8"
+            <text x={LABEL - 4} y={y + BAR_H / 2 + 4} textAnchor="end" fontSize={9} fill="#a3a3a3"
               style={{ fontFamily: 'Inter, sans-serif' }}>
               {phase.name.length > 16 ? phase.name.slice(0, 15) + '…' : phase.name}
             </text>
-            <rect x={x1} y={y} width={bw} height={BAR_H} rx={3} fill="#20406a" />
+            <rect x={x1} y={y} width={bw} height={BAR_H} rx={3} fill="#525252" />
             <rect x={x1} y={y} width={fillW} height={BAR_H} rx={3} fill={statusColor} opacity={0.75} />
             <text x={x1 + bw + 3} y={y + BAR_H / 2 + 4} fontSize={9} fill={statusColor}
               style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -310,7 +310,7 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
     { label: 'CPI',           value: cpi > 0 ? cpi.toFixed(2) : '—', color: spiCpiColor(cpi) },
     { label: 'SPI',           value: spi > 0 ? spi.toFixed(2) : '—', color: spiCpiColor(spi) },
     { label: 'Severidade',    value: SEVERITY_LABEL[severity],   color },
-    { label: 'Fases Exec.',   value: String(execPhases.length),  color: '#2abfdc' },
+    { label: 'Fases Exec.',   value: String(execPhases.length),  color: '#f97316' },
   ]
 
   return (
@@ -318,34 +318,34 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
       className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col bg-[#14294e] border border-[#20406a] rounded-2xl shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col bg-[#3d3d3d] border border-[#525252] rounded-2xl shadow-2xl">
         {/* Header */}
-        <div className="flex items-start gap-3 px-6 py-4 border-b border-[#20406a] shrink-0">
+        <div className="flex items-start gap-3 px-6 py-4 border-b border-[#525252] shrink-0">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ color, background: `${color}20` }}>
                 {SEVERITY_LABEL[severity]}
               </span>
-              <span className="text-[#5a8caa] text-sm font-mono">{project.code}</span>
+              <span className="text-[#6b6b6b] text-sm font-mono">{project.code}</span>
             </div>
-            <h2 className="text-[#e4f2f8] text-lg font-bold mt-1 leading-tight">{project.name}</h2>
+            <h2 className="text-[#f5f5f5] text-lg font-bold mt-1 leading-tight">{project.name}</h2>
             {project.address && (
               <div className="flex items-center gap-1 mt-0.5">
-                <MapPin size={11} className="text-[#5a8caa]" />
-                <span className="text-[#5a8caa] text-xs">{project.address}</span>
+                <MapPin size={11} className="text-[#6b6b6b]" />
+                <span className="text-[#6b6b6b] text-xs">{project.address}</span>
               </div>
             )}
           </div>
-          <button onClick={onClose} className="text-[#5a8caa] hover:text-[#e4f2f8] transition-colors shrink-0">
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors shrink-0">
             <X size={20} />
           </button>
         </div>
 
         {/* KPI chips */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 px-6 py-3 border-b border-[#20406a] shrink-0">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 px-6 py-3 border-b border-[#525252] shrink-0">
           {kpis.map((kpi) => (
-            <div key={kpi.label} className="bg-[#112645] rounded-lg px-3 py-2 text-center">
-              <p className="text-[#5a8caa] text-[10px] truncate">{kpi.label}</p>
+            <div key={kpi.label} className="bg-[#333333] rounded-lg px-3 py-2 text-center">
+              <p className="text-[#6b6b6b] text-[10px] truncate">{kpi.label}</p>
               <p className="text-sm font-bold" style={{ color: kpi.color }}>{kpi.value}</p>
             </div>
           ))}
@@ -356,17 +356,17 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
           {/* Photos */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Image size={13} className="text-[#5a8caa]" />
-              <p className="text-[#5a8caa] text-[10px] font-semibold uppercase tracking-wider">Fotos da Obra</p>
+              <Image size={13} className="text-[#6b6b6b]" />
+              <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider">Fotos da Obra</p>
             </div>
             {photos.length === 0 ? (
-              <p className="text-[#5a8caa] text-xs italic">Nenhuma foto disponível no Relatório 360 para este projeto.</p>
+              <p className="text-[#6b6b6b] text-xs italic">Nenhuma foto disponível no Relatório 360 para este projeto.</p>
             ) : (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {photos.map((ph) => (
                   <div key={ph.id} className="flex flex-col gap-1">
-                    <img src={ph.base64} alt={ph.label} className="w-full aspect-video object-cover rounded-lg border border-[#20406a]" />
-                    {ph.label && <p className="text-[10px] text-[#5a8caa] truncate text-center">{ph.label}</p>}
+                    <img src={ph.base64} alt={ph.label} className="w-full aspect-video object-cover rounded-lg border border-[#525252]" />
+                    {ph.label && <p className="text-[10px] text-[#6b6b6b] truncate text-center">{ph.label}</p>}
                   </div>
                 ))}
               </div>
@@ -376,66 +376,66 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
           {/* Phases — two columns */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Clock size={13} className="text-[#5a8caa]" />
-              <p className="text-[#5a8caa] text-[10px] font-semibold uppercase tracking-wider">Fases do Projeto</p>
+              <Clock size={13} className="text-[#6b6b6b]" />
+              <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider">Fases do Projeto</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {/* Planning */}
               <div>
-                <p className="text-[#5a8caa] text-[10px] font-semibold mb-2 uppercase tracking-wider">Planejamento</p>
+                <p className="text-[#6b6b6b] text-[10px] font-semibold mb-2 uppercase tracking-wider">Planejamento</p>
                 <div className="flex flex-col gap-2">
                   {project.planningPhases.map((phase) => (
-                    <div key={phase.id} className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-2">
+                    <div key={phase.id} className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[#e4f2f8] text-xs font-medium truncate">{phase.name}</span>
+                        <span className="text-[#f5f5f5] text-xs font-medium truncate">{phase.name}</span>
                         <PhaseStatusBadge status={phase.status} />
                       </div>
-                      <div className="flex items-center gap-1 text-[10px] text-[#5a8caa] mt-1">
+                      <div className="flex items-center gap-1 text-[10px] text-[#6b6b6b] mt-1">
                         <span>{fmtDate(phase.startDate)}</span>
                         <span>→</span>
                         <span>{fmtDate(phase.endDate)}</span>
                       </div>
                       <div className="mt-1.5 flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-[#20406a] rounded-full overflow-hidden">
-                          <div className="h-full rounded-full bg-[#5a8caa]" style={{ width: `${phase.progress}%` }} />
+                        <div className="flex-1 h-1 bg-[#525252] rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-[#6b6b6b]" style={{ width: `${phase.progress}%` }} />
                         </div>
-                        <span className="text-[10px] text-[#5a8caa]">{phase.progress}%</span>
+                        <span className="text-[10px] text-[#6b6b6b]">{phase.progress}%</span>
                       </div>
                     </div>
                   ))}
-                  {project.planningPhases.length === 0 && <p className="text-[#5a8caa] text-xs italic">Nenhuma fase</p>}
+                  {project.planningPhases.length === 0 && <p className="text-[#6b6b6b] text-xs italic">Nenhuma fase</p>}
                 </div>
               </div>
               {/* Execution */}
               <div>
-                <p className="text-[#5a8caa] text-[10px] font-semibold mb-2 uppercase tracking-wider">Execução</p>
+                <p className="text-[#6b6b6b] text-[10px] font-semibold mb-2 uppercase tracking-wider">Execução</p>
                 <div className="flex flex-col gap-2">
                   {project.executionPhases.map((phase) => (
-                    <div key={phase.id} className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-2">
+                    <div key={phase.id} className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[#e4f2f8] text-xs font-medium truncate">{phase.name}</span>
+                        <span className="text-[#f5f5f5] text-xs font-medium truncate">{phase.name}</span>
                         <PhaseStatusBadge status={phase.status} />
                       </div>
-                      <div className="flex items-center gap-1 text-[10px] text-[#5a8caa] mt-1">
+                      <div className="flex items-center gap-1 text-[10px] text-[#6b6b6b] mt-1">
                         <span>{fmtDate(phase.startDate)}</span>
                         <span>→</span>
                         <span>{fmtDate(phase.endDate)}</span>
                       </div>
                       <div className="mt-1.5 flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-[#20406a] rounded-full overflow-hidden">
+                        <div className="flex-1 h-1 bg-[#525252] rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full"
                             style={{
                               width: `${phase.progress}%`,
-                              background: phase.status === 'completed' ? '#22c55e' : phase.status === 'in_progress' ? '#2abfdc' : '#5a8caa',
+                              background: phase.status === 'completed' ? '#22c55e' : phase.status === 'in_progress' ? '#f97316' : '#6b6b6b',
                             }}
                           />
                         </div>
-                        <span className="text-[10px] text-[#5a8caa]">{phase.progress}%</span>
+                        <span className="text-[10px] text-[#6b6b6b]">{phase.progress}%</span>
                       </div>
                     </div>
                   ))}
-                  {project.executionPhases.length === 0 && <p className="text-[#5a8caa] text-xs italic">Nenhuma fase</p>}
+                  {project.executionPhases.length === 0 && <p className="text-[#6b6b6b] text-xs italic">Nenhuma fase</p>}
                 </div>
               </div>
             </div>
@@ -444,13 +444,13 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
           {/* Budget table */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <BarChart3 size={13} className="text-[#5a8caa]" />
-              <p className="text-[#5a8caa] text-[10px] font-semibold uppercase tracking-wider">Orçamento</p>
+              <BarChart3 size={13} className="text-[#6b6b6b]" />
+              <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider">Orçamento</p>
             </div>
-            <div className="rounded-xl border border-[#20406a] overflow-hidden">
+            <div className="rounded-xl border border-[#525252] overflow-hidden">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="bg-[#112645] text-[#5a8caa] text-[10px]">
+                  <tr className="bg-[#333333] text-[#6b6b6b] text-[10px]">
                     <th className="text-left px-3 py-2">Tipo</th>
                     <th className="text-left px-3 py-2">Descrição</th>
                     <th className="text-right px-3 py-2">Orçado</th>
@@ -463,12 +463,12 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
                   {project.budgetLines.map((line) => {
                     const lineDelta = line.budgeted > 0 ? ((line.projected - line.budgeted) / line.budgeted) * 100 : 0
                     return (
-                      <tr key={line.id} className="border-t border-[#20406a] hover:bg-[#1a3662] transition-colors">
-                        <td className="px-3 py-2 text-[#5a8caa] uppercase text-[10px]">{line.type}</td>
-                        <td className="px-3 py-2 text-[#e4f2f8] truncate max-w-[120px]">{line.description}</td>
-                        <td className="px-3 py-2 text-right text-[#8fb3c8] font-mono">{fmtBRL(line.budgeted)}</td>
-                        <td className="px-3 py-2 text-right font-mono" style={{ color: lineDelta > 5 ? '#ef4444' : '#e4f2f8' }}>{fmtBRL(line.projected)}</td>
-                        <td className="px-3 py-2 text-right text-[#2abfdc] font-mono">{fmtBRL(line.spent)}</td>
+                      <tr key={line.id} className="border-t border-[#525252] hover:bg-[#484848] transition-colors">
+                        <td className="px-3 py-2 text-[#6b6b6b] uppercase text-[10px]">{line.type}</td>
+                        <td className="px-3 py-2 text-[#f5f5f5] truncate max-w-[120px]">{line.description}</td>
+                        <td className="px-3 py-2 text-right text-[#a3a3a3] font-mono">{fmtBRL(line.budgeted)}</td>
+                        <td className="px-3 py-2 text-right font-mono" style={{ color: lineDelta > 5 ? '#ef4444' : '#f5f5f5' }}>{fmtBRL(line.projected)}</td>
+                        <td className="px-3 py-2 text-right text-[#f97316] font-mono">{fmtBRL(line.spent)}</td>
                         <td className="px-3 py-2 text-right font-mono" style={{ color: Math.abs(lineDelta) <= 5 ? '#22c55e' : Math.abs(lineDelta) <= 15 ? '#eab308' : '#ef4444' }}>
                           {lineDelta > 0 ? '+' : ''}{lineDelta.toFixed(1)}%
                         </td>
@@ -476,11 +476,11 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
                     )
                   })}
                   {/* Totals */}
-                  <tr className="border-t-2 border-[#20406a] bg-[#112645]">
-                    <td colSpan={2} className="px-3 py-2 text-[#e4f2f8] font-semibold text-xs">Total</td>
-                    <td className="px-3 py-2 text-right font-mono font-semibold text-[#e4f2f8]">{fmtBRL(budgeted)}</td>
+                  <tr className="border-t-2 border-[#525252] bg-[#333333]">
+                    <td colSpan={2} className="px-3 py-2 text-[#f5f5f5] font-semibold text-xs">Total</td>
+                    <td className="px-3 py-2 text-right font-mono font-semibold text-[#f5f5f5]">{fmtBRL(budgeted)}</td>
                     <td className="px-3 py-2 text-right font-mono font-semibold" style={{ color: delta > 5 ? '#ef4444' : '#22c55e' }}>{fmtBRL(eac)}</td>
-                    <td className="px-3 py-2 text-right font-mono font-semibold text-[#2abfdc]">{fmtBRL(spent)}</td>
+                    <td className="px-3 py-2 text-right font-mono font-semibold text-[#f97316]">{fmtBRL(spent)}</td>
                     <td className="px-3 py-2 text-right font-mono font-semibold" style={{ color: Math.abs(delta) <= 5 ? '#22c55e' : Math.abs(delta) <= 15 ? '#eab308' : '#ef4444' }}>
                       {delta > 0 ? '+' : ''}{delta.toFixed(1)}%
                     </td>
@@ -493,18 +493,18 @@ function Project360Modal({ project, onClose }: Project360ModalProps) {
           {/* Gantt */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <CheckCircle2 size={13} className="text-[#5a8caa]" />
-              <p className="text-[#5a8caa] text-[10px] font-semibold uppercase tracking-wider">Cronograma</p>
-              <span className="text-[#5a8caa] text-[10px]">{fmtDate(project.startDate)} → {fmtDate(project.endDate)}</span>
+              <CheckCircle2 size={13} className="text-[#6b6b6b]" />
+              <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider">Cronograma</p>
+              <span className="text-[#6b6b6b] text-[10px]">{fmtDate(project.startDate)} → {fmtDate(project.endDate)}</span>
             </div>
             <div className="overflow-x-auto">
               <GanttSvg project={project} W={540} />
             </div>
             <div className="flex gap-3 mt-2 text-[10px]">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-[#22c55e] inline-block" />Concluído</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-[#2abfdc] inline-block" />Em andamento</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-[#5a8caa] inline-block" />Não iniciado</span>
-              <span className="flex items-center gap-1 ml-2"><span className="inline-block w-4 border-t border-dashed border-[#2abfdc]" />Hoje</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-[#f97316] inline-block" />Em andamento</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-[#6b6b6b] inline-block" />Não iniciado</span>
+              <span className="flex items-center gap-1 ml-2"><span className="inline-block w-4 border-t border-dashed border-[#f97316]" />Hoje</span>
             </div>
           </div>
 
@@ -605,7 +605,7 @@ export function Gestao360MapDashboard() {
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
       {/* Filter bar */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-[#20406a] bg-[#0d2040] flex-wrap">
+      <div className="flex items-center gap-2 px-4 py-2 border-b border-[#525252] bg-[#2c2c2c] flex-wrap">
         {filters.map((f) => (
           <button
             key={f.id}
@@ -613,20 +613,20 @@ export function Gestao360MapDashboard() {
             className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
             style={{
               background: filter === f.id
-                ? (f.id === 'all' ? '#2abfdc20' : `${SEVERITY_COLOR[f.id as Severity]}25`)
+                ? (f.id === 'all' ? '#f9731620' : `${SEVERITY_COLOR[f.id as Severity]}25`)
                 : 'transparent',
               color: filter === f.id
-                ? (f.id === 'all' ? '#2abfdc' : SEVERITY_COLOR[f.id as Severity])
+                ? (f.id === 'all' ? '#f97316' : SEVERITY_COLOR[f.id as Severity])
                 : '#6b6b6b',
               border: `1px solid ${filter === f.id
-                ? (f.id === 'all' ? '#2abfdc50' : `${SEVERITY_COLOR[f.id as Severity]}50`)
-                : '#20406a'}`,
+                ? (f.id === 'all' ? '#f9731650' : `${SEVERITY_COLOR[f.id as Severity]}50`)
+                : '#525252'}`,
             }}
           >
             {f.label}
           </button>
         ))}
-        <div className="ml-auto flex items-center gap-1.5 text-[#5a8caa] text-xs">
+        <div className="ml-auto flex items-center gap-1.5 text-[#6b6b6b] text-xs">
           <MapPin size={11} />
           <span>{filtered.length} obra{filtered.length !== 1 ? 's' : ''} no mapa</span>
         </div>
@@ -637,7 +637,7 @@ export function Gestao360MapDashboard() {
         <MapContainer
           center={center}
           zoom={5}
-          style={{ height: '100%', width: '100%', background: '#0d2040' }}
+          style={{ height: '100%', width: '100%', background: '#2c2c2c' }}
           zoomControl={true}
         >
           <TileLayer
@@ -655,16 +655,16 @@ export function Gestao360MapDashboard() {
         </MapContainer>
 
         {/* Basemap switcher overlay */}
-        <div className="absolute bottom-4 left-4 z-[1000] flex gap-1 bg-[#112645]/90 border border-[#20406a] rounded-lg p-1 backdrop-blur-sm">
+        <div className="absolute bottom-4 left-4 z-[1000] flex gap-1 bg-[#333333]/90 border border-[#525252] rounded-lg p-1 backdrop-blur-sm">
           {(Object.keys(BASEMAP_LABELS) as Basemap[]).map((b) => (
             <button
               key={b}
               onClick={() => setBasemap(b)}
               className="px-2.5 py-1 rounded text-[10px] font-medium transition-colors"
               style={{
-                background: basemap === b ? '#2abfdc20' : 'transparent',
-                color:      basemap === b ? '#2abfdc'   : '#6b6b6b',
-                border:     `1px solid ${basemap === b ? '#2abfdc50' : 'transparent'}`,
+                background: basemap === b ? '#f9731620' : 'transparent',
+                color:      basemap === b ? '#f97316'   : '#6b6b6b',
+                border:     `1px solid ${basemap === b ? '#f9731650' : 'transparent'}`,
               }}
             >
               {BASEMAP_LABELS[b]}
@@ -684,13 +684,13 @@ export function Gestao360MapDashboard() {
       {/* Leaflet control styles */}
       <style>{`
         .leaflet-control-zoom a {
-          background: #112645 !important;
-          color: #8fb3c8 !important;
-          border-color: #20406a !important;
+          background: #333333 !important;
+          color: #a3a3a3 !important;
+          border-color: #525252 !important;
         }
         .leaflet-control-zoom a:hover {
-          background: #14294e !important;
-          color: #2abfdc !important;
+          background: #3d3d3d !important;
+          color: #f97316 !important;
         }
       `}</style>
     </div>

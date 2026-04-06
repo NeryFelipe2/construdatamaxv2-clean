@@ -1,6 +1,6 @@
 /**
  * PlanejamentoHeader — top navigation and action bar for the Planejamento module.
- * Accent color: #2abfdc (orange-500)
+ * Accent color: #f97316 (orange-500)
  */
 import { CalendarClock, Play, Download, Printer, AlertTriangle } from 'lucide-react'
 import { usePlanejamentoStore, type PlanejamentoTab } from '@/store/planejamentoStore'
@@ -36,16 +36,16 @@ export function PlanejamentoHeader() {
   }
 
   return (
-    <div className="bg-gray-900 border-b border-gray-700 print:hidden">
+    <div className="bg-[#2c2c2c] border-b border-[#525252] print:hidden">
       {/* Title + actions */}
       <div className="px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#2abfdc' }}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#f97316' }}>
             <CalendarClock size={20} className="text-white" />
           </div>
           <div>
-            <h1 className="text-white font-semibold text-lg leading-tight">Planejamento</h1>
-            <p className="text-gray-400 text-xs">Cronograma e análise de obras</p>
+            <h1 className="text-white font-semibold text-lg leading-tight">Planejamento de Trechos</h1>
+            <p className="text-[#a3a3a3] text-xs">Cronograma e análise de trechos</p>
           </div>
         </div>
 
@@ -53,21 +53,21 @@ export function PlanejamentoHeader() {
           <button
             onClick={runSchedule}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: '#2abfdc' }}
+            style={{ backgroundColor: '#f97316' }}
           >
             <Play size={15} />
             Gerar Planejamento
           </button>
           <button
             onClick={handleExportCsv}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-700 text-gray-200 hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[#484848] text-[#f5f5f5] hover:bg-[#525252] transition-colors"
           >
             <Download size={15} />
             Exportar CSV
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-700 text-gray-200 hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[#484848] text-[#f5f5f5] hover:bg-[#525252] transition-colors"
           >
             <Printer size={15} />
             Imprimir PDF
@@ -94,8 +94,8 @@ export function PlanejamentoHeader() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap border-b-2 ${
                   isActive
-                    ? 'text-white border-orange-500 bg-gray-800'
-                    : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-gray-800/50'
+                    ? 'text-white border-orange-500 bg-[#3d3d3d]'
+                    : 'text-[#a3a3a3] border-transparent hover:text-[#f5f5f5] hover:bg-[#3d3d3d]/50'
                 }`}
               >
                 {tab.label}

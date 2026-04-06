@@ -102,17 +102,17 @@ export function BudgetDialog() {
       onClick={(e) => { if (e.target === e.currentTarget) close() }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl"
+        className="w-full max-w-md rounded-2xl border border-[#525252] bg-[#333333] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#20406a]">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
           <h2 className="text-[#f5f5f5] font-bold text-sm">
             {isNew ? 'Nova Linha Orçamentária' : 'Editar Linha Orçamentária'}
           </h2>
           <button
             onClick={close}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#1a3662] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#484848] transition-colors"
           >
             <X size={15} />
           </button>
@@ -139,7 +139,7 @@ export function BudgetDialog() {
             </Field>
 
             {/* Currency fields */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <Field label="Orçado (R$) *" error={errors.budgeted?.message}>
                 <input
                   type="number"
@@ -174,7 +174,7 @@ export function BudgetDialog() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-[#20406a]">
+          <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-t border-[#525252]">
             {!isNew ? (
               confirmDelete ? (
                 <div className="flex items-center gap-2">
@@ -190,7 +190,7 @@ export function BudgetDialog() {
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="text-xs px-2 py-1 rounded bg-[#1a3662] text-[#a3a3a3] hover:bg-[#20406a]"
+                    className="text-xs px-2 py-1 rounded bg-[#484848] text-[#a3a3a3] hover:bg-[#525252]"
                   >
                     Não
                   </button>
@@ -213,13 +213,13 @@ export function BudgetDialog() {
               <button
                 type="button"
                 onClick={close}
-                className="px-4 py-2 rounded-lg border border-[#20406a] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
+                className="px-4 py-2 rounded-lg border border-[#525252] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold hover:bg-[#1a9ab8] transition-colors"
+                className="px-4 py-2 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] transition-colors"
               >
                 {isNew ? 'Adicionar' : 'Salvar'}
               </button>
@@ -235,10 +235,10 @@ export function BudgetDialog() {
 
 function inp(hasError: boolean) {
   return cn(
-    'w-full bg-[#0d2040] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
+    'w-full bg-[#2c2c2c] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
     hasError
       ? 'border-[#ef4444] focus:border-[#ef4444]'
-      : 'border-[#20406a] focus:border-[#2abfdc]'
+      : 'border-[#525252] focus:border-[#f97316]'
   )
 }
 

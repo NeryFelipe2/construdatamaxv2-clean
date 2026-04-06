@@ -21,7 +21,7 @@ function fmtDate(iso: string) {
 function weatherIcon(cond: RdoWeatherCondition) {
   switch (cond) {
     case 'good':   return <Sun size={14} className="text-yellow-400" />
-    case 'cloudy': return <Cloud size={14} className="text-gray-400" />
+    case 'cloudy': return <Cloud size={14} className="text-[#a3a3a3]" />
     case 'rain':   return <CloudRain size={14} className="text-blue-400" />
     case 'storm':  return <Zap size={14} className="text-purple-400" />
   }
@@ -37,7 +37,7 @@ function weatherLabel(cond: RdoWeatherCondition) {
 function statusBadge(status: string) {
   if (status === 'completed')   return <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-900/50 text-emerald-300">Concluído</span>
   if (status === 'in_progress') return <span className="px-2 py-0.5 rounded-full text-xs bg-yellow-900/50 text-yellow-300">Em Execução</span>
-  return <span className="px-2 py-0.5 rounded-full text-xs bg-gray-700 text-gray-400">Não Iniciado</span>
+  return <span className="px-2 py-0.5 rounded-full text-xs bg-[#484848] text-[#a3a3a3]">Não Iniciado</span>
 }
 
 // ─── Print layout (hidden on screen, visible when printing) ──────────────────
@@ -190,7 +190,7 @@ function PrintLayout({ rdo }: { rdo: RDO }) {
           <h2 className="font-semibold text-base border-b border-gray-300 pb-1 mb-2">
             Registro Fotográfico ({rdo.photos.length})
           </h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {rdo.photos.map((p) => (
               <div key={p.id}>
                 <img src={p.base64} alt={p.label} className="w-full h-32 object-cover border border-gray-300 rounded" />
@@ -201,7 +201,7 @@ function PrintLayout({ rdo }: { rdo: RDO }) {
         </div>
       )}
 
-      <div className="mt-8 border-t border-gray-300 pt-3 text-xs text-gray-500 flex justify-between">
+      <div className="mt-8 border-t border-gray-300 pt-3 text-xs text-[#6b6b6b] flex justify-between">
         <span>Gerado em: {new Date().toLocaleString('pt-BR')}</span>
         <span>ConstruData Palantir</span>
       </div>
@@ -222,7 +222,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
   }
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
       {/* Print layout injected at page level but scoped to this RDO — shows only when printing */}
       <PrintLayout rdo={rdo} />
 
@@ -231,15 +231,15 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-white font-semibold">RDO #{rdo.number}</span>
-            <span className="text-gray-400 text-sm">{fmtDate(rdo.date)}</span>
-            <div className="flex items-center gap-1 text-gray-400 text-xs">
+            <span className="text-[#a3a3a3] text-sm">{fmtDate(rdo.date)}</span>
+            <div className="flex items-center gap-1 text-[#a3a3a3] text-xs">
               {weatherIcon(rdo.weather.morning)}
               <span>{weatherLabel(rdo.weather.morning)}</span>
               <span className="mx-1 text-gray-600">·</span>
               <span>{rdo.weather.temperatureC}°C</span>
             </div>
           </div>
-          <div className="flex items-center gap-4 mt-1 text-gray-400 text-sm flex-wrap">
+          <div className="flex items-center gap-4 mt-1 text-[#a3a3a3] text-sm flex-wrap">
             <span>{rdo.responsible}</span>
             <span className="text-gray-600">·</span>
             <span>{rdo.trechos.length} trecho{rdo.trechos.length !== 1 ? 's' : ''}</span>
@@ -259,7 +259,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
             {rdo.geolocation && (
               <>
                 <span className="text-gray-600">·</span>
-                <MapPin size={12} className="text-sky-400" />
+                <MapPin size={12} className="text-[#f97316]" />
               </>
             )}
           </div>
@@ -267,7 +267,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onEdit}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-xs transition-colors"
             title="Editar RDO"
           >
             <Edit3 size={13} />
@@ -275,7 +275,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-xs transition-colors"
             title="Imprimir RDO"
           >
             <Printer size={13} />
@@ -290,7 +290,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           </button>
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="p-1.5 rounded-lg hover:bg-gray-700 text-gray-400 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[#484848] text-[#a3a3a3] transition-colors"
           >
             {expanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
@@ -299,47 +299,47 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
 
       {/* Expanded detail */}
       {expanded && (
-        <div className="px-5 pb-5 border-t border-gray-700 space-y-5 pt-4">
+        <div className="px-5 pb-5 border-t border-[#525252] space-y-5 pt-4">
 
           {/* Climate row */}
           <div>
-            <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Condições Climáticas</h3>
-            <div className="flex gap-5 text-sm text-gray-300 flex-wrap">
+            <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Condições Climáticas</h3>
+            <div className="flex gap-5 text-sm text-[#f5f5f5] flex-wrap">
               {(['morning', 'afternoon', 'night'] as const).map((p) => {
                 const labels = { morning: 'Manhã', afternoon: 'Tarde', night: 'Noite' }
                 return (
                   <div key={p} className="flex items-center gap-1.5">
                     {weatherIcon(rdo.weather[p])}
-                    <span className="text-gray-500">{labels[p]}:</span>
+                    <span className="text-[#6b6b6b]">{labels[p]}:</span>
                     <span>{weatherLabel(rdo.weather[p])}</span>
                   </div>
                 )
               })}
-              <span className="text-gray-400">{rdo.weather.temperatureC}°C</span>
+              <span className="text-[#a3a3a3]">{rdo.weather.temperatureC}°C</span>
             </div>
           </div>
 
           {/* Manpower */}
           <div>
-            <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Mão de Obra</h3>
-            <div className="flex gap-5 text-sm text-gray-300 flex-wrap">
+            <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Mão de Obra</h3>
+            <div className="flex gap-5 text-sm text-[#f5f5f5] flex-wrap">
               <span>Encarregados: <strong>{rdo.manpower.foremanCount}</strong></span>
               <span>Oficiais: <strong>{rdo.manpower.officialCount}</strong></span>
               <span>Ajudantes: <strong>{rdo.manpower.helperCount}</strong></span>
               <span>Operadores: <strong>{rdo.manpower.operatorCount}</strong></span>
-              <span className="text-sky-400">Total: <strong>{totalWorkers}</strong></span>
+              <span className="text-[#f97316]">Total: <strong>{totalWorkers}</strong></span>
             </div>
           </div>
 
           {/* Equipment */}
           {rdo.equipment.length > 0 && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Equipamentos</h3>
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Equipamentos</h3>
               <div className="space-y-1">
                 {rdo.equipment.map((e) => (
-                  <div key={e.id} className="flex items-center gap-3 text-sm text-gray-300">
+                  <div key={e.id} className="flex items-center gap-3 text-sm text-[#f5f5f5]">
                     <span className="flex-1">{e.name}</span>
-                    <span className="text-gray-500">{e.quantity}× · {e.hours}h</span>
+                    <span className="text-[#6b6b6b]">{e.quantity}× · {e.hours}h</span>
                   </div>
                 ))}
               </div>
@@ -349,12 +349,12 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           {/* Services */}
           {rdo.services.length > 0 && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Serviços Executados</h3>
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Serviços Executados</h3>
               <div className="space-y-1">
                 {rdo.services.map((s) => (
-                  <div key={s.id} className="flex items-center gap-3 text-sm text-gray-300">
+                  <div key={s.id} className="flex items-center gap-3 text-sm text-[#f5f5f5]">
                     <span className="flex-1">{s.description}</span>
-                    <span className="text-gray-500">{s.quantity} {s.unit}</span>
+                    <span className="text-[#6b6b6b]">{s.quantity} {s.unit}</span>
                   </div>
                 ))}
               </div>
@@ -364,11 +364,11 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           {/* Trechos */}
           {rdo.trechos.length > 0 && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Avanço por Trecho</h3>
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Avanço por Trecho</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-gray-500 text-xs">
+                    <tr className="text-[#6b6b6b] text-xs">
                       <th className="text-left pb-2 font-medium">Código</th>
                       <th className="text-left pb-2 font-medium">Descrição</th>
                       <th className="text-right pb-2 font-medium">Planejado</th>
@@ -381,12 +381,12 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
                     {rdo.trechos.map((t) => {
                       const pct = t.plannedMeters > 0 ? (t.executedMeters / t.plannedMeters) * 100 : 0
                       return (
-                        <tr key={t.id} className="border-t border-gray-700">
-                          <td className="py-1.5 pr-3 text-gray-200 font-mono text-xs">{t.trechoCode}</td>
-                          <td className="py-1.5 pr-3 text-gray-400">{t.trechoDescription}</td>
-                          <td className="py-1.5 pr-3 text-right text-gray-300">{t.plannedMeters.toFixed(1)} m</td>
-                          <td className="py-1.5 pr-3 text-right text-gray-300">{t.executedMeters.toFixed(1)} m</td>
-                          <td className="py-1.5 pr-3 text-right text-gray-300">{pct.toFixed(1)}%</td>
+                        <tr key={t.id} className="border-t border-[#525252]">
+                          <td className="py-1.5 pr-3 text-[#f5f5f5] font-mono text-xs">{t.trechoCode}</td>
+                          <td className="py-1.5 pr-3 text-[#a3a3a3]">{t.trechoDescription}</td>
+                          <td className="py-1.5 pr-3 text-right text-[#f5f5f5]">{t.plannedMeters.toFixed(1)} m</td>
+                          <td className="py-1.5 pr-3 text-right text-[#f5f5f5]">{t.executedMeters.toFixed(1)} m</td>
+                          <td className="py-1.5 pr-3 text-right text-[#f5f5f5]">{pct.toFixed(1)}%</td>
                           <td className="py-1.5 text-center">{statusBadge(t.status)}</td>
                         </tr>
                       )
@@ -400,29 +400,29 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           {/* Observations */}
           {rdo.observations && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Observações</h3>
-              <p className="text-gray-400 text-sm whitespace-pre-wrap">{rdo.observations}</p>
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Observações</h3>
+              <p className="text-[#a3a3a3] text-sm whitespace-pre-wrap">{rdo.observations}</p>
             </div>
           )}
           {rdo.incidents && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">Ocorrências</h3>
-              <p className="text-gray-400 text-sm whitespace-pre-wrap">{rdo.incidents}</p>
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">Ocorrências</h3>
+              <p className="text-[#a3a3a3] text-sm whitespace-pre-wrap">{rdo.incidents}</p>
             </div>
           )}
 
           {/* Photos */}
           {rdo.photos.length > 0 && (
             <div>
-              <h3 className="text-gray-300 text-xs font-semibold uppercase tracking-wide mb-2">
+              <h3 className="text-[#f5f5f5] text-xs font-semibold uppercase tracking-wide mb-2">
                 Registro Fotográfico ({rdo.photos.length})
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {rdo.photos.map((p) => (
                   <div key={p.id}>
-                    <img src={p.base64} alt={p.label} className="w-full h-28 object-cover rounded-lg border border-gray-700" />
+                    <img src={p.base64} alt={p.label} className="w-full h-28 object-cover rounded-lg border border-[#525252]" />
                     {p.label && (
-                      <p className="text-xs text-gray-500 mt-1 text-center truncate">{p.label}</p>
+                      <p className="text-xs text-[#6b6b6b] mt-1 text-center truncate">{p.label}</p>
                     )}
                   </div>
                 ))}
@@ -502,39 +502,39 @@ export function HistoricoPanel() {
     printRdosBatchPDF(batchFiltered, label)
   }
 
-  const filterInputCls = 'bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-sky-500'
+  const filterInputCls = 'bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50'
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-4 print:p-0">
       {/* Filters (hidden when printing) */}
       <div className="flex items-center gap-3 flex-wrap print:hidden">
         <div className="relative flex-1 min-w-48">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b6b6b]" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por número, responsável ou data..."
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500"
+            className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg pl-9 pr-4 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-[#f97316]/50"
           />
         </div>
         <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className={filterInputCls} title="Data inicial" />
         <span className="text-gray-600 text-sm">até</span>
         <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className={filterInputCls} title="Data final" />
         {(search || dateFrom || dateTo) && (
-          <button onClick={() => { setSearch(''); setDateFrom(''); setDateTo('') }} className="text-sky-400 hover:text-sky-300 text-sm">
+          <button onClick={() => { setSearch(''); setDateFrom(''); setDateTo('') }} className="text-[#f97316] hover:text-[#ea580c] text-sm">
             Limpar filtros
           </button>
         )}
       </div>
 
       {/* Period PDF selector */}
-      <div className="flex items-center gap-2 flex-wrap print:hidden bg-gray-800 rounded-lg border border-gray-700 px-4 py-2.5">
-        <span className="text-gray-400 text-xs font-medium">PDF por Período:</span>
+      <div className="flex items-center gap-2 flex-wrap print:hidden bg-[#3d3d3d] rounded-lg border border-[#525252] px-4 py-2.5">
+        <span className="text-[#a3a3a3] text-xs font-medium">PDF por Período:</span>
         <select
           value={pdfPeriodType}
           onChange={(e) => setPdfPeriodType(e.target.value as typeof pdfPeriodType)}
-          className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none"
+          className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none"
         >
           <option value="">-- Selecionar --</option>
           <option value="semanal">Semanal</option>
@@ -542,16 +542,16 @@ export function HistoricoPanel() {
           <option value="personalizado">Personalizado</option>
         </select>
         {pdfPeriodType === 'semanal' && (
-          <input type="week" value={pdfWeek} onChange={(e) => setPdfWeek(e.target.value)} className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none" />
+          <input type="week" value={pdfWeek} onChange={(e) => setPdfWeek(e.target.value)} className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none" />
         )}
         {pdfPeriodType === 'mensal' && (
-          <input type="month" value={pdfMonth} onChange={(e) => setPdfMonth(e.target.value)} className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none" />
+          <input type="month" value={pdfMonth} onChange={(e) => setPdfMonth(e.target.value)} className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none" />
         )}
         {pdfPeriodType === 'personalizado' && (
           <>
-            <input type="date" value={pdfFrom} onChange={(e) => setPdfFrom(e.target.value)} className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none" />
-            <span className="text-gray-500 text-xs">até</span>
-            <input type="date" value={pdfTo} onChange={(e) => setPdfTo(e.target.value)} className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none" />
+            <input type="date" value={pdfFrom} onChange={(e) => setPdfFrom(e.target.value)} className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none" />
+            <span className="text-[#6b6b6b] text-xs">até</span>
+            <input type="date" value={pdfTo} onChange={(e) => setPdfTo(e.target.value)} className="bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none" />
           </>
         )}
         {pdfPeriodType && (
@@ -566,14 +566,14 @@ export function HistoricoPanel() {
       </div>
 
       {/* Count */}
-      <p className="text-gray-500 text-sm print:hidden">
+      <p className="text-[#6b6b6b] text-sm print:hidden">
         {filtered.length} RDO{filtered.length !== 1 ? 's' : ''} encontrado{filtered.length !== 1 ? 's' : ''}
         {rdos.length !== filtered.length && ` de ${rdos.length} total`}
       </p>
 
       {/* Empty state */}
       {filtered.length === 0 && (
-        <div className="text-center py-16 text-gray-500 print:hidden">
+        <div className="text-center py-16 text-[#6b6b6b] print:hidden">
           <p className="text-lg">Nenhum RDO encontrado.</p>
           {rdos.length === 0 && (
             <p className="text-sm mt-1">Crie o primeiro RDO pela aba "+ Novo RDO".</p>
@@ -591,49 +591,49 @@ export function HistoricoPanel() {
       {/* Edit Modal */}
       {editingRdo && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 border border-gray-700 rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-700 shrink-0">
+          <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#525252] shrink-0">
               <span className="text-white font-semibold">Editar RDO #{editingRdo.number}</span>
-              <button onClick={() => setEditingRdo(null)} className="text-gray-400 hover:text-gray-200">
+              <button onClick={() => setEditingRdo(null)} className="text-[#a3a3a3] hover:text-[#f5f5f5]">
                 <X size={18} />
               </button>
             </div>
             <div className="overflow-y-auto flex-1 p-5 space-y-4">
               {/* Date + Responsible */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-400 text-xs mb-1">Data</label>
+                  <label className="block text-[#a3a3a3] text-xs mb-1">Data</label>
                   <input
                     type="date"
                     value={editForm.date ?? editingRdo.date}
                     onChange={(e) => setEditForm((f) => ({ ...f, date: e.target.value }))}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm text-gray-200 focus:outline-none"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 text-xs mb-1">Responsável</label>
+                  <label className="block text-[#a3a3a3] text-xs mb-1">Responsável</label>
                   <input
                     type="text"
                     value={editForm.responsible ?? editingRdo.responsible}
                     onChange={(e) => setEditForm((f) => ({ ...f, responsible: e.target.value }))}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm text-gray-200 focus:outline-none"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none"
                   />
                 </div>
               </div>
               {/* Weather */}
               <div>
-                <label className="block text-gray-400 text-xs mb-2">Condições Climáticas</label>
-                <div className="grid grid-cols-4 gap-3">
+                <label className="block text-[#a3a3a3] text-xs mb-2">Condições Climáticas</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {(['morning', 'afternoon', 'night'] as const).map((p) => {
                     const labels = { morning: 'Manhã', afternoon: 'Tarde', night: 'Noite' }
                     const weather = (editForm.weather ?? editingRdo.weather)
                     return (
                       <div key={p}>
-                        <label className="text-gray-500 text-xs block mb-1">{labels[p]}</label>
+                        <label className="text-[#6b6b6b] text-xs block mb-1">{labels[p]}</label>
                         <select
                           value={weather[p]}
                           onChange={(e) => setEditForm((f) => ({ ...f, weather: { ...(f.weather ?? editingRdo.weather), [p]: e.target.value } }))}
-                          className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-gray-200"
+                          className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1.5 text-xs text-[#f5f5f5]"
                         >
                           <option value="good">Bom</option>
                           <option value="cloudy">Nublado</option>
@@ -644,29 +644,29 @@ export function HistoricoPanel() {
                     )
                   })}
                   <div>
-                    <label className="text-gray-500 text-xs block mb-1">Temp. (°C)</label>
+                    <label className="text-[#6b6b6b] text-xs block mb-1">Temp. (°C)</label>
                     <input
                       type="number"
                       value={(editForm.weather ?? editingRdo.weather).temperatureC}
                       onChange={(e) => setEditForm((f) => ({ ...f, weather: { ...(f.weather ?? editingRdo.weather), temperatureC: Number(e.target.value) } }))}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-gray-200"
+                      className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1.5 text-xs text-[#f5f5f5]"
                     />
                   </div>
                 </div>
               </div>
               {/* Manpower */}
               <div>
-                <label className="block text-gray-400 text-xs mb-2">Mão de Obra</label>
-                <div className="grid grid-cols-4 gap-3">
+                <label className="block text-[#a3a3a3] text-xs mb-2">Mão de Obra</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {([['foremanCount', 'Encarregado'], ['officialCount', 'Oficial'], ['helperCount', 'Ajudante'], ['operatorCount', 'Operador']] as const).map(([field, label]) => (
                     <div key={field}>
-                      <label className="text-gray-500 text-xs block mb-1">{label}</label>
+                      <label className="text-[#6b6b6b] text-xs block mb-1">{label}</label>
                       <input
                         type="number"
                         min={0}
                         value={(editForm.manpower ?? editingRdo.manpower)[field]}
                         onChange={(e) => setEditForm((f) => ({ ...f, manpower: { ...(f.manpower ?? editingRdo.manpower), [field]: Number(e.target.value) } }))}
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-gray-200"
+                        className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1.5 text-xs text-[#f5f5f5]"
                       />
                     </div>
                   ))}
@@ -674,27 +674,27 @@ export function HistoricoPanel() {
               </div>
               {/* Observations */}
               <div>
-                <label className="block text-gray-400 text-xs mb-1">Observações Gerais</label>
+                <label className="block text-[#a3a3a3] text-xs mb-1">Observações Gerais</label>
                 <textarea
                   rows={3}
                   value={editForm.observations ?? editingRdo.observations}
                   onChange={(e) => setEditForm((f) => ({ ...f, observations: e.target.value }))}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm text-gray-200 resize-none focus:outline-none"
+                  className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-3 py-2 text-sm text-[#f5f5f5] resize-none focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-gray-400 text-xs mb-1">Ocorrências / Incidentes</label>
+                <label className="block text-[#a3a3a3] text-xs mb-1">Ocorrências / Incidentes</label>
                 <textarea
                   rows={2}
                   value={editForm.incidents ?? editingRdo.incidents}
                   onChange={(e) => setEditForm((f) => ({ ...f, incidents: e.target.value }))}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm text-gray-200 resize-none focus:outline-none"
+                  className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-3 py-2 text-sm text-[#f5f5f5] resize-none focus:outline-none"
                 />
               </div>
             </div>
-            <div className="px-5 py-4 border-t border-gray-700 flex gap-2 shrink-0">
+            <div className="px-5 py-4 border-t border-[#525252] flex gap-2 shrink-0">
               <button onClick={handleSaveEdit} className="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-600 text-white text-sm font-semibold transition-colors">Salvar</button>
-              <button onClick={() => setEditingRdo(null)} className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm transition-colors">Cancelar</button>
+              <button onClick={() => setEditingRdo(null)} className="px-4 py-2 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-sm transition-colors">Cancelar</button>
             </div>
           </div>
         </div>

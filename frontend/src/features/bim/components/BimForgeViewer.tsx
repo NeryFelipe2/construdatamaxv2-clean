@@ -95,48 +95,48 @@ function SetupModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      <div className="bg-[#112645] border border-[#20406a] rounded-2xl w-[480px] max-w-full p-6 flex flex-col gap-4">
+      <div className="bg-[#333333] border border-[#525252] rounded-2xl w-[480px] max-w-full p-6 flex flex-col gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#2abfdc]/15 flex items-center justify-center">
-            <Settings size={18} className="text-[#2abfdc]" />
+          <div className="w-9 h-9 rounded-xl bg-[#f97316]/15 flex items-center justify-center">
+            <Settings size={18} className="text-[#f97316]" />
           </div>
           <div>
-            <h3 className="text-[#e4f2f8] font-semibold text-sm">Configurar Autodesk APS</h3>
-            <p className="text-[#5a8caa] text-xs">Credenciais salvas apenas no localStorage do browser</p>
+            <h3 className="text-[#f5f5f5] font-semibold text-sm">Configurar Autodesk APS</h3>
+            <p className="text-[#6b6b6b] text-xs">Credenciais salvas apenas no localStorage do browser</p>
           </div>
         </div>
 
         <div className="flex flex-col gap-3">
           <div>
-            <label className="text-[#8fb3c8] text-xs block mb-1">Client ID *</label>
+            <label className="text-[#a3a3a3] text-xs block mb-1">Client ID *</label>
             <input
               type="text"
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
               placeholder="Seu APS Client ID"
-              className="w-full bg-[#14294e] border border-[#20406a] rounded-lg px-3 py-2 text-[#e4f2f8] text-sm focus:outline-none focus:border-[#2abfdc]/60"
+              className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]/60"
             />
           </div>
           <div>
-            <label className="text-[#8fb3c8] text-xs block mb-1">Client Secret *</label>
+            <label className="text-[#a3a3a3] text-xs block mb-1">Client Secret *</label>
             <input
               type="password"
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}
               placeholder="Seu APS Client Secret"
-              className="w-full bg-[#14294e] border border-[#20406a] rounded-lg px-3 py-2 text-[#e4f2f8] text-sm focus:outline-none focus:border-[#2abfdc]/60"
+              className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]/60"
             />
           </div>
           <div>
-            <label className="text-[#8fb3c8] text-xs block mb-1">Model URN (Base64) — opcional</label>
+            <label className="text-[#a3a3a3] text-xs block mb-1">Model URN (Base64) — opcional</label>
             <input
               type="text"
               value={urn}
               onChange={(e) => setUrn(e.target.value)}
               placeholder="dXJuOmFkc2sub2JqZWN0czE6..."
-              className="w-full bg-[#14294e] border border-[#20406a] rounded-lg px-3 py-2 text-[#e4f2f8] text-sm focus:outline-none focus:border-[#2abfdc]/60 font-mono"
+              className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]/60 font-mono"
             />
-            <p className="text-[#5a8caa] text-[10px] mt-1">
+            <p className="text-[#6b6b6b] text-[10px] mt-1">
               URN do modelo traduzido via Model Derivative API. Obtenha no APS Console.
             </p>
           </div>
@@ -152,14 +152,14 @@ function SetupModal({ onClose }: { onClose: () => void }) {
         <div className="flex gap-2 justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-sm text-[#6b6b6b] hover:text-[#e4f2f8] transition-colors"
+            className="px-4 py-2 rounded-lg text-sm text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#2abfdc] text-[#0d2040] hover:bg-[#1a9ab8] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#f97316] text-[#2c2c2c] hover:bg-[#ea580c] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             {saving && <Loader2 size={13} className="animate-spin" />}
             {saving ? 'Testando...' : 'Salvar e Conectar'}
@@ -170,7 +170,7 @@ function SetupModal({ onClose }: { onClose: () => void }) {
           href="https://aps.autodesk.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[#2abfdc] text-xs hover:underline"
+          className="flex items-center gap-1 text-[#f97316] text-xs hover:underline"
         >
           <ExternalLink size={11} />
           Criar conta APS gratuita → aps.autodesk.com
@@ -185,26 +185,26 @@ function SetupModal({ onClose }: { onClose: () => void }) {
 function ForgeSetupPrompt({ onSetup }: { onSetup: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-8">
-      <div className="w-16 h-16 rounded-2xl bg-[#2abfdc]/10 border border-[#2abfdc]/20 flex items-center justify-center">
-        <Eye size={28} className="text-[#2abfdc]" />
+      <div className="w-16 h-16 rounded-2xl bg-[#f97316]/10 border border-[#f97316]/20 flex items-center justify-center">
+        <Eye size={28} className="text-[#f97316]" />
       </div>
       <div>
-        <h3 className="text-[#e4f2f8] font-semibold text-base mb-2">Autodesk APS Viewer</h3>
-        <p className="text-[#5a8caa] text-sm max-w-sm leading-relaxed">
+        <h3 className="text-[#f5f5f5] font-semibold text-base mb-2">Autodesk APS Viewer</h3>
+        <p className="text-[#6b6b6b] text-sm max-w-sm leading-relaxed">
           Visualize modelos BIM/IFC diretamente no browser com o viewer nativo da Autodesk.
           Suporta RVT, IFC, DWG, NWD e mais de 60 formatos.
         </p>
       </div>
-      <div className="flex flex-col gap-2 text-left bg-[#14294e] border border-[#20406a] rounded-xl px-4 py-3 max-w-sm w-full text-xs text-[#8fb3c8]">
-        <p className="font-semibold text-[#2abfdc] mb-1">Como configurar:</p>
-        <p>1. Crie um app em <span className="text-[#2abfdc]">aps.autodesk.com</span> (gratuito)</p>
+      <div className="flex flex-col gap-2 text-left bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-3 max-w-sm w-full text-xs text-[#a3a3a3]">
+        <p className="font-semibold text-[#f97316] mb-1">Como configurar:</p>
+        <p>1. Crie um app em <span className="text-[#f97316]">aps.autodesk.com</span> (gratuito)</p>
         <p>2. Obtenha o Client ID e Client Secret</p>
         <p>3. Faça upload de um modelo e obtenha o URN</p>
         <p>4. Cole as credenciais no modal de configuração</p>
       </div>
       <button
         onClick={onSetup}
-        className="flex items-center gap-2 px-5 py-2.5 bg-[#2abfdc] text-[#0d2040] rounded-xl text-sm font-semibold hover:bg-[#1a9ab8] transition-colors"
+        className="flex items-center gap-2 px-5 py-2.5 bg-[#f97316] text-[#2c2c2c] rounded-xl text-sm font-semibold hover:bg-[#ea580c] transition-colors"
       >
         <Settings size={15} />
         Configurar APS
@@ -287,7 +287,7 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
         <button
           onClick={initViewer}
           title="Recarregar viewer"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#112645]/90 border border-[#20406a] rounded-lg text-xs text-[#8fb3c8] hover:text-[#2abfdc] transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#333333]/90 border border-[#525252] rounded-lg text-xs text-[#a3a3a3] hover:text-[#f97316] transition-colors"
         >
           <RefreshCw size={12} />
           Recarregar
@@ -295,7 +295,7 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
         <button
           onClick={onSettings}
           title="Configurações APS"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#112645]/90 border border-[#20406a] rounded-lg text-xs text-[#8fb3c8] hover:text-[#2abfdc] transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#333333]/90 border border-[#525252] rounded-lg text-xs text-[#a3a3a3] hover:text-[#f97316] transition-colors"
         >
           <Settings size={12} />
           Configurar
@@ -304,9 +304,9 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
 
       {/* Status overlay */}
       {status === 'loading' && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#0d2040]/80">
-          <Loader2 size={32} className="text-[#2abfdc] animate-spin mb-3" />
-          <p className="text-[#8fb3c8] text-sm">Carregando Autodesk Viewer…</p>
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#2c2c2c]/80">
+          <Loader2 size={32} className="text-[#f97316] animate-spin mb-3" />
+          <p className="text-[#a3a3a3] text-sm">Carregando Autodesk Viewer…</p>
         </div>
       )}
       {status === 'ready' && (
@@ -318,8 +318,8 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
       {status === 'error' && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 p-8 text-center">
           <AlertTriangle size={32} className="text-[#ef4444]" />
-          <p className="text-[#e4f2f8] font-semibold">Erro ao carregar modelo</p>
-          <p className="text-[#5a8caa] text-sm max-w-sm">{errMsg}</p>
+          <p className="text-[#f5f5f5] font-semibold">Erro ao carregar modelo</p>
+          <p className="text-[#6b6b6b] text-sm max-w-sm">{errMsg}</p>
           {errMsg.toLowerCase().includes('cors') && (
             <div className="bg-[#eab30815] border border-[#eab30830] rounded-lg px-4 py-3 text-xs text-[#eab308] max-w-sm text-left">
               <p className="font-semibold mb-1">Possível bloqueio de CORS</p>
@@ -328,7 +328,7 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
           )}
           <button
             onClick={initViewer}
-            className="px-4 py-2 bg-[#2abfdc] text-[#0d2040] rounded-lg text-sm font-semibold hover:bg-[#1a9ab8] transition-colors"
+            className="px-4 py-2 bg-[#f97316] text-[#2c2c2c] rounded-lg text-sm font-semibold hover:bg-[#ea580c] transition-colors"
           >
             Tentar novamente
           </button>
@@ -374,7 +374,7 @@ export function BimForgeViewer() {
 
   if (!hasCredentials) {
     return (
-      <div className="flex flex-col h-full bg-[#0d2040]">
+      <div className="flex flex-col h-full bg-[#2c2c2c]">
         {showSetup && <SetupModal onClose={() => setShowSetup(false)} />}
         <ForgeSetupPrompt onSetup={() => setShowSetup(true)} />
       </div>
@@ -383,23 +383,23 @@ export function BimForgeViewer() {
 
   if (connecting) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#0d2040]">
-        <Loader2 size={28} className="text-[#2abfdc] animate-spin" />
-        <p className="text-[#8fb3c8] text-sm">Conectando ao Autodesk APS…</p>
+      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#2c2c2c]">
+        <Loader2 size={28} className="text-[#f97316] animate-spin" />
+        <p className="text-[#a3a3a3] text-sm">Conectando ao Autodesk APS…</p>
       </div>
     )
   }
 
   if (!isConnected || connErr) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#0d2040] p-8 text-center">
+      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#2c2c2c] p-8 text-center">
         {showSetup && <SetupModal onClose={() => setShowSetup(false)} />}
         <AlertTriangle size={28} className="text-[#ef4444]" />
-        <p className="text-[#e4f2f8] font-semibold">Falha na autenticação APS</p>
-        {connErr && <p className="text-[#5a8caa] text-sm max-w-sm">{connErr}</p>}
+        <p className="text-[#f5f5f5] font-semibold">Falha na autenticação APS</p>
+        {connErr && <p className="text-[#6b6b6b] text-sm max-w-sm">{connErr}</p>}
         <button
           onClick={() => setShowSetup(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#2abfdc] text-[#0d2040] rounded-xl text-sm font-semibold hover:bg-[#1a9ab8] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#f97316] text-[#2c2c2c] rounded-xl text-sm font-semibold hover:bg-[#ea580c] transition-colors"
         >
           <Settings size={14} />
           Reconfigurar credenciais
@@ -410,23 +410,23 @@ export function BimForgeViewer() {
 
   if (!hasUrn) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#0d2040] p-8 text-center">
+      <div className="flex flex-col items-center justify-center h-full gap-4 bg-[#2c2c2c] p-8 text-center">
         {showSetup && <SetupModal onClose={() => setShowSetup(false)} />}
         <CheckCircle2 size={28} className="text-[#22c55e]" />
-        <p className="text-[#e4f2f8] font-semibold">APS conectado</p>
-        <p className="text-[#5a8caa] text-sm max-w-sm">
+        <p className="text-[#f5f5f5] font-semibold">APS conectado</p>
+        <p className="text-[#6b6b6b] text-sm max-w-sm">
           Insira o URN do modelo para carregar no viewer.
         </p>
         <div className="flex gap-2 max-w-sm w-full">
           <input
             type="text"
             placeholder="URN do modelo (Base64)"
-            className="flex-1 bg-[#14294e] border border-[#20406a] rounded-lg px-3 py-2 text-[#e4f2f8] text-sm focus:outline-none focus:border-[#2abfdc]/60 font-mono"
+            className="flex-1 bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]/60 font-mono"
             onChange={(e) => setForgeUrn(e.target.value)}
           />
           <button
             onClick={() => setShowSetup(true)}
-            className="px-3 py-2 bg-[#2abfdc] text-[#0d2040] rounded-lg text-sm font-semibold hover:bg-[#1a9ab8] transition-colors"
+            className="px-3 py-2 bg-[#f97316] text-[#2c2c2c] rounded-lg text-sm font-semibold hover:bg-[#ea580c] transition-colors"
           >
             <Settings size={14} />
           </button>
@@ -436,7 +436,7 @@ export function BimForgeViewer() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0d2040]">
+    <div className="flex flex-col h-full bg-[#2c2c2c]">
       {showSetup && <SetupModal onClose={() => setShowSetup(false)} />}
       <ViewerContainer
         token={forgeToken}

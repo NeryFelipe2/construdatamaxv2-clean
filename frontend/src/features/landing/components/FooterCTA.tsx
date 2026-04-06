@@ -2,7 +2,7 @@ import { FlowHoverButton } from '@/components/ui/flow-hover-button'
 
 export function FooterCTA() {
   return (
-    <section style={{ background: '#0b1a30', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+    <section style={{ background: '#2c2c2c', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <div className="flex items-center justify-center gap-3 mb-12">
           <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.10)' }} />

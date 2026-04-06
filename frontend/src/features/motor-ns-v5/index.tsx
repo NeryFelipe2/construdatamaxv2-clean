@@ -21,7 +21,8 @@ import {
 } from "@/lib/api"
 
 const TABS = [
-  { id: "processar", label: "Processar", icon: Upload },
+  { id: "processar", label: "Processar Unico", icon: Upload },
+  { id: "batch", label: "Batch de Núcleos", icon: Layers },
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "trechos", label: "Trechos & NS", icon: Layers },
   { id: "custos", label: "Custos 5D", icon: DollarSign },
@@ -43,6 +44,7 @@ export function MotorNsV5Page() {
   const [nucleos, setNucleos] = useState<string[]>([])
 
   const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [batchFiles, setBatchFiles] = useState<File[]>([])
   const [cartoFile, setCartoFile] = useState<File | null>(null)
   const [uploadNucleo, setUploadNucleo] = useState("")
   const [selectedMotor, setSelectedMotor] = useState<"v5" | "v9">("v5")
@@ -82,6 +84,31 @@ export function MotorNsV5Page() {
     }
   }
 
+  async function handleBatchUpload() {
+    if (batchFiles.length === 0) { setUploadMsg({ type: "err", text: "Selecione os arquivos do Batch" }); return }
+    setUploading(true); setUploadMsg(null)
+    try {
+      // Simula uma chamada de lotes agrupando em um FormData ou chamadas assíncronas sequenciais
+      let totalPvs = 0, totalTrechos = 0, totalNs = 0;
+      for (const file of batchFiles) {
+         const fd = new FormData();
+         fd.append("arquivo", file);
+         fd.append("nucleo", file.name.split('.')[0].toUpperCase())
+         fd.append("motor", selectedMotor)
+         if (cartoFile) fd.append("cartografia", cartoFile)
+         const job = await apiProcessarImportar(fd) as any
+         totalPvs += job.n_pvs ?? 0; totalTrechos += job.n_trechos ?? 0; totalNs += job.ns_geradas ?? 0;
+      }
+      setUploadMsg({ type: "ok", text: `Lote Processado: ${totalPvs} PVs, ${totalTrechos} trechos, ${totalNs} NS totais.` })
+      apiDashboard().then(setDashboard).catch(() => {})
+      apiNsList().then(r => setNsList(r.items ?? [])).catch(() => {})
+    } catch (e: any) {
+      setUploadMsg({ type: "err", text: e.message ?? "Erro processando Lote" })
+    } finally {
+      setUploading(false)
+    }
+  }
+
   // KPIs computed
   const kpiPvs = dashboard?.n_total ?? 0
   const kpiExec = dashboard?.n_execucao ?? 0
@@ -114,7 +141,7 @@ export function MotorNsV5Page() {
         {TABS.map(t => {
           const Icon = t.icon
           return (
-            <button key={t.id} onClick={() => setTab(t.id)}
+            <button key={t.id} onClick={() => { setTab(t.id); setUploadMsg(null) }}
               className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors ${
                 tab === t.id ? "text-cyan-400 border-cyan-400" : "text-[#6b6b6b] border-transparent hover:text-[#8fb3c8]"
               }`}>
@@ -212,6 +239,74 @@ export function MotorNsV5Page() {
               </div>
             )}
           </>
+        )}
+
+        {/* ── BATCH DE NUCLEOS ── */}
+        {tab === "batch" && (
+          <div className="bg-[#112645] border border-[#20406a] rounded-xl p-6">
+            <h2 className="text-sm font-bold text-purple-400 uppercase tracking-wider mb-4">Processamento em Lote (Multi-Arquivos)</h2>
+            <p className="text-xs text-[#8fb3c8] mb-6">Suba múltiplos arquivos (DXF, DWG, XML) de uma vez. O nome de cada arquivo será usado como nome do seu Núcleo automaticamente.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div>
+                  <label className="text-[10px] font-bold text-[#5a8caa] uppercase tracking-wider">Arquivos Base Múltiplos</label>
+                  <label className="w-full mt-1 bg-[#0d2040] border-2 border-dashed border-[#20406a] rounded-xl p-6 text-center cursor-pointer hover:border-purple-500/50 transition-colors block">
+                    <Layers size={28} className="mx-auto mb-2 text-[#5a8caa]" />
+                    {batchFiles.length > 0 ? (
+                      <div>
+                        <div className="text-sm font-medium text-purple-400">{batchFiles.length} arquivo(s) selecionados</div>
+                        <div className="text-[10px] text-[#5a8caa]">Total: {(batchFiles.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(1)} MB</div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="text-sm font-medium text-[#e4f2f8]">Selecione múltiplos arquivos .DXF, .DWG</div>
+                        <div className="text-[10px] text-[#5a8caa]">Aceita seleção simultânea</div>
+                      </div>
+                    )}
+                    <input type="file" multiple accept=".dxf,.dwg,.xml,.landxml,.json" className="hidden"
+                      onChange={e => setBatchFiles(Array.from(e.target.files ?? []))} />
+                  </label>
+                  {batchFiles.length > 0 && (
+                     <div className="mt-2 text-xs text-[#8fb3c8] max-h-32 overflow-y-auto bg-[#0d2040] rounded p-2 border border-[#20406a]">
+                       {batchFiles.map(f => (<div key={f.name}>📄 {f.name}</div>))}
+                     </div>
+                  )}
+               </div>
+               
+               <div>
+                  <label className="text-[10px] font-bold text-[#5a8caa] uppercase tracking-wider">Motor Central</label>
+                  <select value={selectedMotor} onChange={e => setSelectedMotor(e.target.value as any)}
+                    className="w-full mt-1 bg-[#0d2040] border border-[#20406a] rounded-lg px-3 py-2.5 text-sm text-[#e4f2f8]">
+                    <option value="v5">NOVA NS v5 (SABESP)</option>
+                    <option value="v9">NS v9 (Geracao 9)</option>
+                  </select>
+
+                  <label className="text-[10px] font-bold text-[#5a8caa] uppercase tracking-wider mt-4 block">Cartografia Global (opcional)</label>
+                  <label className="w-full mt-1 bg-[#0d2040] border border-dashed border-[#20406a] rounded-lg px-3 py-2.5 text-sm text-[#5a8caa] hover:border-purple-500/50 hover:text-purple-400 cursor-pointer flex items-center gap-2 transition-colors">
+                    <Map size={14} />
+                    {cartoFile ? cartoFile.name.slice(0, 20) : "SHP / DXF base aplicado a todos"}
+                    <input type="file" accept=".shp,.dbf,.shx,.zip,.dxf,.geojson" className="hidden"
+                      onChange={e => setCartoFile(e.target.files?.[0] ?? null)} />
+                  </label>
+               </div>
+            </div>
+
+            <div className="mt-5 flex items-center gap-3">
+              <button onClick={handleBatchUpload} disabled={uploading || batchFiles.length === 0}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                {uploading ? <RefreshCw size={16} className="animate-spin" /> : <Layers size={16} />}
+                {uploading ? "Processando Lote..." : "Iniciar Batch Run"}
+              </button>
+              {uploadMsg && (
+                <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-lg max-w-sm ${
+                  uploadMsg.type === "ok" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                }`}>
+                  {uploadMsg.type === "ok" ? <CheckCircle size={14} className="shrink-0" /> : <AlertTriangle size={14} className="shrink-0" />}
+                  {uploadMsg.text}
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
         {/* ── DASHBOARD ── */}

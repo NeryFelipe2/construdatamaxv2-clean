@@ -1,14 +1,14 @@
 export function OntologiaSection() {
   const layers = [
-    { label: 'RDO — Campo', pct: 100, color: '#2abfdc' },
-    { label: 'BIM — Modelo 3D/4D/5D', pct: 88, color: '#38bdf8' },
+    { label: 'RDO — Campo', pct: 100, color: '#f97316' },
+    { label: 'BIM — Modelo 3D/4D/5D', pct: 88, color: '#f97316' },
     { label: 'ERP — Orçamento', pct: 75, color: '#a78bfa' },
     { label: 'Cronograma', pct: 92, color: '#22c55e' },
     { label: 'Suprimentos', pct: 70, color: '#f97316' },
   ]
 
   return (
-    <section id="plataforma" style={{ background: '#0f2240', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+    <section id="plataforma" style={{ background: '#333333', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section label */}
         <div className="flex items-center gap-3 mb-16">
@@ -35,8 +35,8 @@ export function OntologiaSection() {
                 </div>
               ))}
             </div>
-            <div className="mt-8" style={{ border: '1px solid rgba(42,191,220,0.15)', padding: '1rem 1.25rem', borderLeft: '2px solid #2abfdc' }}>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#2abfdc] text-xs uppercase tracking-widest mb-1">Camada Semântica Unificada</div>
+            <div className="mt-8" style={{ border: '1px solid rgba(249,115,22,0.15)', padding: '1rem 1.25rem', borderLeft: '2px solid #f97316' }}>
+              <div style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#f97316] text-xs uppercase tracking-widest mb-1">Camada Semântica Unificada</div>
               <div className="text-white/75 text-xs">Todos os módulos conectados em tempo real</div>
             </div>
           </div>
@@ -74,7 +74,7 @@ export function OntologiaSection() {
                 { v: 'Tempo Real', d: 'Decisões baseadas em dados ao vivo' },
               ].map((item) => (
                 <div key={item.v} className="flex items-start gap-4">
-                  <div className="w-1 h-1 rounded-full bg-[#2abfdc] mt-2 shrink-0" />
+                  <div className="w-1 h-1 rounded-full bg-[#f97316] mt-2 shrink-0" />
                   <div>
                     <span className="text-white/90 text-sm font-medium">{item.v}</span>
                     <span className="text-white/70 text-sm"> — {item.d}</span>

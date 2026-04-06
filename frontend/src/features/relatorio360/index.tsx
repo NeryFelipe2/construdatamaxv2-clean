@@ -6,6 +6,7 @@ import { CrewsPanel } from './components/CrewsPanel'
 import { EquipmentPanel } from './components/EquipmentPanel'
 import { MaterialsPanel } from './components/MaterialsPanel'
 import { PhotosPanel } from './components/PhotosPanel'
+import { LpsPccPanel } from './components/LpsPccPanel'
 
 export function Relatorio360Page() {
   const report = useCurrentReport()
@@ -41,6 +42,11 @@ export function Relatorio360Page() {
             {/* Photos - full width */}
             <section>
               <PhotosPanel />
+            </section>
+
+            {/* LPS / PPC / Previsto × Realizado */}
+            <section>
+              <LpsPccPanel />
             </section>
           </div>
         </>

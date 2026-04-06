@@ -119,18 +119,18 @@ export function EquipmentDialog() {
       onClick={(e) => { if (e.target === e.currentTarget) close() }}
     >
       <div
-        className="w-full max-w-2xl rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl"
+        className="w-full max-w-2xl rounded-2xl border border-[#525252] bg-[#333333] flex flex-col shadow-2xl"
         style={{ maxHeight: '92vh' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252] shrink-0">
           <h2 className="text-[#f5f5f5] font-bold text-base">
             {isNew ? 'Novo Equipamento' : `Editar — ${existing?.name ?? ''}`}
           </h2>
           <button
             onClick={close}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#1a3662] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#484848] transition-colors"
           >
             <X size={15} />
           </button>
@@ -142,7 +142,7 @@ export function EquipmentDialog() {
 
             {/* ── Identificação ── */}
             <Section title="Identificação">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Código *" error={errors.code?.message}>
                   <input {...register('code')} placeholder="EQ-001" className={inp(!!errors.code)} />
                 </Field>
@@ -157,7 +157,7 @@ export function EquipmentDialog() {
               <Field label="Nome *" error={errors.name?.message}>
                 <input {...register('name')} placeholder="Tesoura Aérea" className={inp(!!errors.name)} />
               </Field>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <Field label="Tipo *" error={errors.type?.message}>
                   <input {...register('type')} placeholder="Plataforma" className={inp(!!errors.type)} />
                 </Field>
@@ -168,7 +168,7 @@ export function EquipmentDialog() {
                   <input {...register('model')} placeholder="660SJ" className={inp(!!errors.model)} />
                 </Field>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Ano de Fabricação *" error={errors.year?.message}>
                   <input
                     type="number"
@@ -189,7 +189,7 @@ export function EquipmentDialog() {
 
             {/* ── Operação ── */}
             <Section title="Operação">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Operador Responsável" error={errors.operator?.message}>
                   <input
                     {...register('operator')}
@@ -206,7 +206,7 @@ export function EquipmentDialog() {
                   />
                 </Field>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Capacidade / Carga Máx." error={errors.maxLoad?.message}>
                   <input
                     {...register('maxLoad')}
@@ -226,7 +226,7 @@ export function EquipmentDialog() {
 
             {/* ── Manutenção ── */}
             <Section title="Manutenção">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Última Manutenção *" error={errors.lastMaintenance?.message}>
                   <input type="date" {...register('lastMaintenance')} className={inp(!!errors.lastMaintenance)} />
                 </Field>
@@ -248,7 +248,7 @@ export function EquipmentDialog() {
               <p className="text-[10px] text-[#3f3f3f] -mt-1">
                 Preencha as coordenadas geográficas decimais. Após salvar, o marcador aparecerá no mapa e poderá ser arrastado para ajuste fino.
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="Latitude" error={errors.lat?.message as string | undefined}>
                   <input
                     type="number"
@@ -279,7 +279,7 @@ export function EquipmentDialog() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-[#20406a] shrink-0">
+          <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-t border-[#525252] shrink-0">
             {!isNew ? (
               confirmDelete ? (
                 <div className="flex items-center gap-2">
@@ -295,7 +295,7 @@ export function EquipmentDialog() {
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="text-xs px-2 py-1 rounded bg-[#1a3662] text-[#a3a3a3] hover:bg-[#20406a]"
+                    className="text-xs px-2 py-1 rounded bg-[#484848] text-[#a3a3a3] hover:bg-[#525252]"
                   >
                     Não
                   </button>
@@ -318,13 +318,13 @@ export function EquipmentDialog() {
               <button
                 type="button"
                 onClick={close}
-                className="px-4 py-2 rounded-lg border border-[#20406a] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
+                className="px-4 py-2 rounded-lg border border-[#525252] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-[#2abfdc] text-white text-xs font-semibold hover:bg-[#1a9ab8] transition-colors"
+                className="px-4 py-2 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] transition-colors"
               >
                 {isNew ? 'Adicionar Equipamento' : 'Salvar Alterações'}
               </button>
@@ -353,10 +353,10 @@ function blankDefaults(): EquipamentoFormValues {
 
 function inp(hasError: boolean) {
   return cn(
-    'w-full bg-[#0d2040] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
+    'w-full bg-[#2c2c2c] border rounded-lg px-3 py-2 text-sm text-[#f5f5f5] outline-none placeholder:text-[#3f3f3f] transition-colors',
     hasError
       ? 'border-[#ef4444] focus:border-[#ef4444]'
-      : 'border-[#20406a] focus:border-[#2abfdc]'
+      : 'border-[#525252] focus:border-[#f97316]'
   )
 }
 
@@ -389,7 +389,7 @@ function Section({
 }) {
   return (
     <fieldset className="flex flex-col gap-3">
-      <legend className="text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold mb-0.5 w-full pb-1 border-b border-[#20406a]">
+      <legend className="text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold mb-0.5 w-full pb-1 border-b border-[#525252]">
         {title}
       </legend>
       {children}

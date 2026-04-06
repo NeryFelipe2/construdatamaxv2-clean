@@ -53,7 +53,7 @@ export function GanttTimeHeader() {
   return (
     <div
       style={{ position: 'sticky', top: 0, zIndex: 20 }}
-      className="border-b border-[#20406a] bg-[#112645]"
+      className="border-b border-[#525252] bg-[#333333]"
     >
       {/* Top row — month/year grouping */}
       <div className="flex" style={{ minWidth: totalWidth }}>
@@ -62,9 +62,9 @@ export function GanttTimeHeader() {
           style={{
             position: 'sticky', left: 0, zIndex: 21,
             width: SIDEBAR_W, minWidth: SIDEBAR_W,
-            background: '#112645',
+            background: '#333333',
           }}
-          className="border-r border-b border-[#20406a] px-3 flex items-center"
+          className="border-r border-b border-[#525252] px-3 flex items-center"
         >
           <span className="text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold">
             Recurso
@@ -75,7 +75,7 @@ export function GanttTimeHeader() {
           <div
             key={`${seg.label}-${i}`}
             style={{ width: seg.cols * colWidth, minWidth: seg.cols * colWidth }}
-            className="border-r border-b border-[#20406a] px-3 flex items-center overflow-hidden"
+            className="border-r border-b border-[#525252] px-3 flex items-center overflow-hidden"
           >
             <span className="text-xs font-semibold text-[#f5f5f5] capitalize truncate">
               {seg.label}
@@ -91,9 +91,9 @@ export function GanttTimeHeader() {
           style={{
             position: 'sticky', left: 0, zIndex: 21,
             width: SIDEBAR_W, minWidth: SIDEBAR_W,
-            background: '#112645',
+            background: '#333333',
           }}
-          className="border-r border-[#20406a]"
+          className="border-r border-[#525252]"
         />
 
         {Array.from({ length: numCols }).map((_, i) => {
@@ -103,7 +103,7 @@ export function GanttTimeHeader() {
             <div
               key={i}
               style={{ width: colWidth, minWidth: colWidth }}
-              className="border-r border-[#20406a] flex items-center justify-center overflow-hidden"
+              className="border-r border-[#525252] flex items-center justify-center overflow-hidden"
             >
               <span className="text-[10px] font-mono text-[#6b6b6b] truncate px-0.5">
                 {label}

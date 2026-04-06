@@ -24,7 +24,7 @@ export function Bim4DPanel() {
 
   if (!project) {
     return (
-      <div className="h-24 bg-gray-900 border-t border-gray-800 flex items-center justify-center">
+      <div className="h-24 bg-[#2c2c2c] border-t border-[#3d3d3d] flex items-center justify-center">
         <p className="text-gray-600 text-xs">Carregue um projeto para usar a análise 4D</p>
       </div>
     )
@@ -54,13 +54,13 @@ export function Bim4DPanel() {
   }
 
   return (
-    <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 shrink-0">
+    <div className="bg-[#2c2c2c] border-t border-[#3d3d3d] px-4 py-2 shrink-0">
       {/* Header row */}
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-gray-300 text-xs font-semibold">Análise 4D — Simulação de Prazo</span>
+        <span className="text-[#f5f5f5] text-xs font-semibold">Análise 4D — Simulação de Prazo</span>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3 text-xs">
-            <Stat color="bg-gray-600"  label="Não iniciado" value={totalSegs - completed.length - inProgress.length} />
+            <Stat color="bg-[#525252]"  label="Não iniciado" value={totalSegs - completed.length - inProgress.length} />
             <Stat color="bg-yellow-500" label="Em andamento" value={inProgress.length} />
             <Stat color="bg-green-500"  label="Concluído"    value={completed.length} />
           </div>
@@ -68,7 +68,7 @@ export function Bim4DPanel() {
             onClick={handleSync}
             disabled={syncing}
             title="Sincronizar datas com o módulo Planejamento"
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors bg-gray-800 hover:bg-gray-700 text-gray-300 disabled:opacity-50"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors bg-[#3d3d3d] hover:bg-[#484848] text-[#f5f5f5] disabled:opacity-50"
           >
             {synced
               ? <><Check size={12} className="text-green-400" /> Sincronizado</>
@@ -93,7 +93,7 @@ export function Bim4DPanel() {
       {/* Status row */}
       <div className="flex items-center justify-between">
         <span className="text-indigo-400 text-xs font-mono font-bold">{activeDate}</span>
-        <span className="text-gray-500 text-xs">
+        <span className="text-[#6b6b6b] text-xs">
           Extensão concluída:{' '}
           <span className="text-green-400 font-semibold">
             {completedLen.toFixed(0)} m ({totalLength > 0 ? ((completedLen / totalLength) * 100).toFixed(0) : 0}%)
@@ -102,7 +102,7 @@ export function Bim4DPanel() {
       </div>
 
       {/* Progress bar */}
-      <div className="mt-1.5 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+      <div className="mt-1.5 h-0.5 bg-[#3d3d3d] rounded-full overflow-hidden">
         <div className="h-full bg-indigo-600 transition-all" style={{ width: `${pct.toFixed(1)}%` }} />
       </div>
     </div>
@@ -113,8 +113,8 @@ function Stat({ color, label, value }: { color: string; label: string; value: nu
   return (
     <span className="flex items-center gap-1">
       <span className={`w-2 h-2 rounded-full shrink-0 ${color}`} />
-      <span className="text-gray-500">{label}:</span>
-      <span className="text-gray-200 font-semibold">{value}</span>
+      <span className="text-[#6b6b6b]">{label}:</span>
+      <span className="text-[#f5f5f5] font-semibold">{value}</span>
     </span>
   )
 }

@@ -31,11 +31,11 @@ export function MaterialsPanel() {
         <span className="text-xs font-mono text-[#6b6b6b]">{logs.length} itens</span>
       </div>
 
-      <div className="rounded-xl border border-[#20406a] bg-[#14294e] overflow-hidden">
+      <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
         {logs.length === 0 ? (
           <div className="p-6 text-center text-sm text-[#6b6b6b]">Nenhum material registrado</div>
         ) : (
-          <div className="divide-y divide-[#20406a]">
+          <div className="divide-y divide-[#525252]">
             <div className="grid grid-cols-5 px-4 py-2 text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold">
               <span>ID</span>
               <span>Atividade</span>
@@ -49,9 +49,9 @@ export function MaterialsPanel() {
               return (
                 <div
                   key={log.id}
-                  className="grid grid-cols-5 px-4 py-3 text-sm items-center hover:bg-[#1a3662] transition-colors"
+                  className="grid grid-cols-5 px-4 py-3 text-sm items-center hover:bg-[#484848] transition-colors"
                 >
-                  <span className="font-mono text-xs text-[#2abfdc] font-semibold">{log.materialId}</span>
+                  <span className="font-mono text-xs text-[#f97316] font-semibold">{log.materialId}</span>
                   <span className="text-[#a3a3a3] text-xs truncate pr-2">{activity?.name ?? '—'}</span>
                   <div className="flex items-center justify-end">
                     {isEditing ? (
@@ -61,11 +61,11 @@ export function MaterialsPanel() {
                         step={0.01}
                         value={editQuantity}
                         onChange={(e) => setEditQuantity(Math.max(0, Number(e.target.value)))}
-                        className="w-20 bg-[#0d2040] border border-[#2abfdc]/60 rounded px-1.5 py-0.5 text-xs text-[#e4f2f8] text-center focus:outline-none"
+                        className="w-20 bg-[#2c2c2c] border border-[#f97316]/60 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] text-center focus:outline-none"
                         autoFocus
                       />
                     ) : (
-                      <span className="font-mono text-[#e4f2f8] text-sm font-semibold">
+                      <span className="font-mono text-[#f5f5f5] text-sm font-semibold">
                         {log.quantity.toLocaleString('pt-BR')}
                       </span>
                     )}
@@ -77,14 +77,14 @@ export function MaterialsPanel() {
                         <button onClick={() => saveEdit(log.id)} className="text-[#22c55e] hover:text-[#22c55e]/80 transition-colors" title="Salvar">
                           <Check size={13} />
                         </button>
-                        <button onClick={() => setEditingId(null)} className="text-[#6b6b6b] hover:text-[#e4f2f8] transition-colors" title="Cancelar">
+                        <button onClick={() => setEditingId(null)} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors" title="Cancelar">
                           <X size={13} />
                         </button>
                       </>
                     ) : (
                       <button
                         onClick={() => startEdit(log.id, log.quantity)}
-                        className="text-[#5a8caa] hover:text-[#2abfdc] transition-colors"
+                        className="text-[#6b6b6b] hover:text-[#f97316] transition-colors"
                         title="Editar quantidade"
                       >
                         <Pencil size={11} />

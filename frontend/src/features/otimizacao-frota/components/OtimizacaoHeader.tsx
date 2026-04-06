@@ -66,8 +66,8 @@ export function OtimizacaoHeader({ activeTab, onTabChange }: Props) {
     <div className="flex flex-col gap-4 px-6 pt-6 pb-0">
       {/* Title */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#2abfdc]/15">
-          <Cpu size={18} className="text-[#2abfdc]" />
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#f97316]/15">
+          <Cpu size={18} className="text-[#f97316]" />
         </div>
         <div>
           <h1 className="text-[#f5f5f5] text-lg font-semibold leading-none">
@@ -84,7 +84,7 @@ export function OtimizacaoHeader({ activeTab, onTabChange }: Props) {
         {kpis.map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-[#14294e] border border-[#20406a] rounded-xl px-4 py-3 flex items-center gap-3"
+            className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-3 flex items-center gap-3"
           >
             <div
               className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
@@ -101,7 +101,7 @@ export function OtimizacaoHeader({ activeTab, onTabChange }: Props) {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 border-b border-[#20406a] -mb-px">
+      <div className="flex gap-1 border-b border-[#525252] -mb-px">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -109,7 +109,7 @@ export function OtimizacaoHeader({ activeTab, onTabChange }: Props) {
             className={cn(
               'px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
               activeTab === tab.id
-                ? 'border-[#2abfdc] text-[#2abfdc]'
+                ? 'border-[#f97316] text-[#f97316]'
                 : 'border-transparent text-[#6b6b6b] hover:text-[#f5f5f5]',
             )}
           >

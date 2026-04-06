@@ -42,17 +42,17 @@ function KpiCard({ label, value, sub, color = 'sky' }: {
   label: string; value: string | number; sub?: string; color?: string
 }) {
   const colorMap: Record<string, string> = {
-    sky:     'text-sky-400',
+    sky:     'text-[#f97316]',
     emerald: 'text-emerald-400',
     amber:   'text-amber-400',
     rose:    'text-rose-400',
     violet:  'text-violet-400',
   }
   return (
-    <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-      <p className="text-gray-400 text-xs mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${colorMap[color] ?? 'text-sky-400'}`}>{value}</p>
-      {sub && <p className="text-gray-500 text-xs mt-0.5">{sub}</p>}
+    <div className="bg-[#3d3d3d] rounded-xl p-4 border border-[#525252]">
+      <p className="text-[#a3a3a3] text-xs mb-1">{label}</p>
+      <p className={`text-2xl font-bold ${colorMap[color] ?? 'text-[#f97316]'}`}>{value}</p>
+      {sub && <p className="text-[#6b6b6b] text-xs mt-0.5">{sub}</p>}
     </div>
   )
 }
@@ -116,7 +116,7 @@ function DashboardIntegrado({
         />
       </div>
       {/* Row 2 KPIs */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <KpiCard label="Dias Planejados" value={daysPlanned || '—'} color="sky" />
         <KpiCard label="RDOs Preenchidos" value={rdoCount} color="emerald" />
         <KpiCard
@@ -127,14 +127,14 @@ function DashboardIntegrado({
       </div>
 
       {/* Trecho table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-700">
-          <h3 className="text-gray-200 font-medium text-sm">Detalhamento por Trecho</h3>
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+        <div className="px-5 py-3 border-b border-[#525252]">
+          <h3 className="text-[#f5f5f5] font-medium text-sm">Detalhamento por Trecho</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-xs border-b border-gray-700">
+              <tr className="text-[#6b6b6b] text-xs border-b border-[#525252]">
                 <th className="text-left px-5 py-2.5 font-medium">Trecho</th>
                 <th className="text-right px-3 py-2.5 font-medium">Planejado (m)</th>
                 <th className="text-right px-3 py-2.5 font-medium">Executado (m)</th>
@@ -146,7 +146,7 @@ function DashboardIntegrado({
             <tbody>
               {merged.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="text-center text-gray-500 py-8 px-5">
+                  <td colSpan={6} className="text-center text-[#6b6b6b] py-8 px-5">
                     Nenhum trecho disponível. Crie RDOs com trechos ou carregue o planejamento.
                   </td>
                 </tr>
@@ -155,31 +155,31 @@ function DashboardIntegrado({
                 const pct = row.planned > 0 ? Math.min((row.executed / row.planned) * 100, 100) : 0
                 const status = row.executed === 0 ? 'not_started' : pct >= 100 ? 'completed' : 'in_progress'
                 return (
-                  <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-750/30">
+                  <tr key={i} className="border-b border-[#525252]/50 hover:bg-gray-750/30">
                     <td className="px-5 py-3">
-                      <p className="text-gray-200 font-mono text-xs">{row.code}</p>
-                      <p className="text-gray-500 text-xs">{row.name}</p>
+                      <p className="text-[#f5f5f5] font-mono text-xs">{row.code}</p>
+                      <p className="text-[#6b6b6b] text-xs">{row.name}</p>
                     </td>
-                    <td className="px-3 py-3 text-right text-gray-300">{row.planned.toFixed(1)}</td>
-                    <td className="px-3 py-3 text-right text-gray-300">{row.executed.toFixed(1)}</td>
+                    <td className="px-3 py-3 text-right text-[#f5f5f5]">{row.planned.toFixed(1)}</td>
+                    <td className="px-3 py-3 text-right text-[#f5f5f5]">{row.executed.toFixed(1)}</td>
                     <td className="px-3 py-3 text-center">
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-sky-900/40 text-sky-300">{row.source}</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs bg-sky-900/40 text-[#ea580c]">{row.source}</span>
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                        <div className="flex-1 h-1.5 bg-[#484848] rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full bg-sky-500"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <span className="text-gray-400 text-xs w-10 text-right">{pct.toFixed(0)}%</span>
+                        <span className="text-[#a3a3a3] text-xs w-10 text-right">{pct.toFixed(0)}%</span>
                       </div>
                     </td>
                     <td className="px-3 py-3 text-center">
                       {status === 'completed'   ? <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-900/50 text-emerald-300">Concluído</span>
                        : status === 'in_progress' ? <span className="px-2 py-0.5 rounded-full text-xs bg-yellow-900/50 text-yellow-300">Em Execução</span>
-                       : <span className="px-2 py-0.5 rounded-full text-xs bg-gray-700 text-gray-400">Não Iniciado</span>}
+                       : <span className="px-2 py-0.5 rounded-full text-xs bg-[#484848] text-[#a3a3a3]">Não Iniciado</span>}
                     </td>
                   </tr>
                 )
@@ -206,7 +206,7 @@ function CurvaSComparativa({
 
   if (points.length < 2) {
     return (
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-8 text-center text-gray-500">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-8 text-center text-[#6b6b6b]">
         Dados insuficientes para gerar a curva. Adicione lançamentos financeiros e trechos ao planejamento.
       </div>
     )
@@ -235,16 +235,16 @@ function CurvaSComparativa({
   })
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-      <div className="px-5 py-3 border-b border-gray-700 flex items-center justify-between flex-wrap gap-2">
-        <h3 className="text-gray-200 font-medium text-sm">Curva S Comparativa</h3>
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+      <div className="px-5 py-3 border-b border-[#525252] flex items-center justify-between flex-wrap gap-2">
+        <h3 className="text-[#f5f5f5] font-medium text-sm">Curva S Comparativa</h3>
         <div className="flex items-center gap-1">
           {(['financial', 'physical', 'both'] as const).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
               className={`px-3 py-1 rounded text-xs transition-colors ${
-                mode === m ? 'bg-sky-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                mode === m ? 'bg-sky-600 text-white' : 'bg-[#484848] text-[#f5f5f5] hover:bg-[#525252]'
               }`}
             >
               {m === 'financial' ? 'Financeiro' : m === 'physical' ? 'Físico (%)' : 'Ambos'}
@@ -292,18 +292,18 @@ function CurvaSComparativa({
             <>
               <div className="flex items-center gap-1.5">
                 <div className="w-6 h-0.5 bg-blue-500" />
-                <span className="text-gray-400 text-xs">PV (Planejado)</span>
+                <span className="text-[#a3a3a3] text-xs">PV (Planejado)</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-6 h-0.5 bg-emerald-500" />
-                <span className="text-gray-400 text-xs">EV (Valor Agregado)</span>
+                <span className="text-[#a3a3a3] text-xs">EV (Valor Agregado)</span>
               </div>
             </>
           )}
           {(mode === 'financial' || mode === 'both') && (
             <div className="flex items-center gap-1.5">
               <div className="w-6 h-0.5 bg-rose-500" style={{ borderTop: '2px dashed #f43f5e', background: 'none' }} />
-              <span className="text-gray-400 text-xs">AC (Custo Real)</span>
+              <span className="text-[#a3a3a3] text-xs">AC (Custo Real)</span>
             </div>
           )}
         </div>
@@ -359,27 +359,27 @@ function AnaliseAtrasos({
   return (
     <div className="space-y-4">
       {/* Summary */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-          <p className="text-gray-400 text-xs mb-1">Trechos em Atraso</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-[#3d3d3d] rounded-xl p-4 border border-[#525252]">
+          <p className="text-[#a3a3a3] text-xs mb-1">Trechos em Atraso</p>
           <p className={`text-2xl font-bold ${lateCount > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>{lateCount}</p>
         </div>
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-          <p className="text-gray-400 text-xs mb-1">Dias de Atraso Acumulado</p>
+        <div className="bg-[#3d3d3d] rounded-xl p-4 border border-[#525252]">
+          <p className="text-[#a3a3a3] text-xs mb-1">Dias de Atraso Acumulado</p>
           <p className={`text-2xl font-bold ${totalDelayDays > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>{totalDelayDays}</p>
         </div>
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-          <p className="text-gray-400 text-xs mb-1">Trechos Monitorados</p>
-          <p className="text-2xl font-bold text-sky-400">{rows.length}</p>
+        <div className="bg-[#3d3d3d] rounded-xl p-4 border border-[#525252]">
+          <p className="text-[#a3a3a3] text-xs mb-1">Trechos Monitorados</p>
+          <p className="text-2xl font-bold text-[#f97316]">{rows.length}</p>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-xs border-b border-gray-700">
+              <tr className="text-[#6b6b6b] text-xs border-b border-[#525252]">
                 <th className="text-left px-5 py-2.5 font-medium">Trecho</th>
                 <th className="text-center px-3 py-2.5 font-medium">Início Plan.</th>
                 <th className="text-center px-3 py-2.5 font-medium">Término Plan.</th>
@@ -390,7 +390,7 @@ function AnaliseAtrasos({
             <tbody>
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center text-gray-500 py-10 px-5">
+                  <td colSpan={5} className="text-center text-[#6b6b6b] py-10 px-5">
                     Nenhum trecho com datas de planejamento disponíveis.
                   </td>
                 </tr>
@@ -398,18 +398,18 @@ function AnaliseAtrasos({
               {rows.map((row, i) => (
                 <tr
                   key={i}
-                  className={`border-b border-gray-700/50 ${
+                  className={`border-b border-[#525252]/50 ${
                     row.status === 'late'    ? 'bg-red-950/20'    :
                     row.status === 'minor'   ? 'bg-yellow-950/20' :
                                                ''
                   }`}
                 >
                   <td className="px-5 py-3">
-                    <p className="text-gray-200 font-mono text-xs">{row.code}</p>
-                    <p className="text-gray-500 text-xs">{row.name}</p>
+                    <p className="text-[#f5f5f5] font-mono text-xs">{row.code}</p>
+                    <p className="text-[#6b6b6b] text-xs">{row.name}</p>
                   </td>
-                  <td className="px-3 py-3 text-center text-gray-300">{fmtDate(row.plannedStart)}</td>
-                  <td className="px-3 py-3 text-center text-gray-300">{fmtDate(row.plannedEnd)}</td>
+                  <td className="px-3 py-3 text-center text-[#f5f5f5]">{fmtDate(row.plannedStart)}</td>
+                  <td className="px-3 py-3 text-center text-[#f5f5f5]">{fmtDate(row.plannedEnd)}</td>
                   <td className="px-3 py-3 text-center">
                     <span className={`text-sm font-medium ${
                       row.delayDays === 0 ? 'text-emerald-400' :
@@ -518,12 +518,12 @@ export function IntegracaoPanel() {
           <button
             onClick={handleManualSync}
             disabled={syncing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-700 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-500 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-xs text-[#a3a3a3] hover:text-[#f5f5f5] hover:border-gray-500 transition-colors disabled:opacity-50"
           >
             <RefreshCw size={12} className={syncing ? 'animate-spin' : ''} />
             Sincronizar
           </button>
-          <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-1 border border-gray-700">
+          <div className="flex items-center gap-1 bg-[#3d3d3d] rounded-lg p-1 border border-[#525252]">
             {SUB_TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -531,7 +531,7 @@ export function IntegracaoPanel() {
                 className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                   activeTab === tab.key
                     ? 'bg-sky-600 text-white'
-                    : 'text-gray-400 hover:text-gray-200'
+                    : 'text-[#a3a3a3] hover:text-[#f5f5f5]'
                 }`}
               >
                 {tab.label}

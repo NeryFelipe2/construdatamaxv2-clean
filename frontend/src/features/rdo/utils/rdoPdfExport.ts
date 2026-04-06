@@ -4,6 +4,7 @@
  * Uses window.print() — no external PDF library needed.
  */
 import type { RDO } from '@/types'
+import { useCompanySettingsStore } from '@/store/companySettingsStore'
 
 const WEATHER_ICON: Record<string, string> = {
   good:   '☀️',
@@ -40,6 +41,12 @@ function fmtDate(d: string) {
 export function printRdoPDF(rdo: RDO) {
   const win = window.open('', '_blank')
   if (!win) { alert('Permita pop-ups para exportar o PDF.'); return }
+
+  const { logos, companyName } = useCompanySettingsStore.getState()
+  const selectedLogo = rdo.logoId
+    ? logos.find((l) => l.id === rdo.logoId)
+    : logos[0]
+  const companyLogo = selectedLogo?.base64 ?? null
 
   const totalManpower =
     rdo.manpower.foremanCount +
@@ -105,6 +112,52 @@ export function printRdoPDF(rdo: RDO) {
     ? `<p>📍 Lat: <code>${rdo.geolocation.lat}</code> &nbsp; Lng: <code>${rdo.geolocation.lng}</code></p>`
     : ''
 
+  // Helper: return value or "Não informado" if absent/falsy
+  function ni(v: string | number | undefined | null, isNum = false): string {
+    if (isNum) return (v !== undefined && v !== null && (v as number) > 0) ? String(v) : 'Não informado'
+    return (v && String(v).trim()) ? String(v) : 'Não informado'
+  }
+
+  const infoTableHtml = `
+  <table class="info-table" style="margin-bottom:10px;">
+    <tbody>
+      <tr>
+        <th>Local / Obra</th>
+        <td colspan="3">${ni(rdo.local)}</td>
+      </tr>
+      <tr>
+        <th>Empreiteira</th>
+        <td>${ni(rdo.nomeEmpreiteira)}</td>
+        <th>Nº OS</th>
+        <td>${ni(rdo.numeroOS)}</td>
+      </tr>
+      <tr>
+        <th>N° Contrato</th>
+        <td>${ni(rdo.numeroContrato)}</td>
+        <th>Serviço a Executar</th>
+        <td>${ni(rdo.servicoExecutar)}</td>
+      </tr>
+      <tr>
+        <th>Gerente de Contrato</th>
+        <td>${ni(rdo.gerenteContrato)}</td>
+        <th>Técnico de Segurança</th>
+        <td>${ni(rdo.tecnicoSeguranca)}</td>
+      </tr>
+      <tr>
+        <th>Func. Diretos</th>
+        <td>${ni(rdo.funcionariosDiretos, true)}</td>
+        <th>Func. Indiretos</th>
+        <td>${ni(rdo.funcionariosIndiretos, true)}</td>
+      </tr>
+      <tr>
+        <th>Qtd. Equip./Ferramentas</th>
+        <td>${ni(rdo.qtdEquipamentosFerramentas, true)}</td>
+        <th>Clima Manhã / Tarde / Noite</th>
+        <td>${ni(rdo.climaManha)} · ${ni(rdo.climaTarde)} · ${ni(rdo.climaNoite)}</td>
+      </tr>
+    </tbody>
+  </table>`
+
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -113,17 +166,20 @@ export function printRdoPDF(rdo: RDO) {
   <style>
     @page { size: A4; margin: 14mm 14mm 18mm 14mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5pt; color: #0e1f38; background: #fff; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5pt; color: #111; background: #fff; }
 
     /* ── Cover ─────────────────────────── */
     .cover {
       display: flex; align-items: center; gap: 14px;
-      padding: 18px 0 12px; border-bottom: 3px solid #2abfdc; margin-bottom: 16px;
+      padding: 18px 0 12px; border-bottom: 3px solid #f97316; margin-bottom: 12px;
     }
     .cover-logo {
-      width: 44px; height: 44px; background: #2abfdc; border-radius: 10px;
+      width: 44px; height: 44px; background: #f97316; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       font-size: 22px; color: #fff; font-weight: 900; flex-shrink: 0;
+    }
+    .cover-logo-img {
+      max-width: 140px; max-height: 52px; object-fit: contain; flex-shrink: 0;
     }
     .cover-title { font-size: 18pt; font-weight: 800; color: #111; letter-spacing: -0.5px; }
     .cover-sub   { font-size: 9pt; color: #6b7280; margin-top: 2px; }
@@ -134,11 +190,22 @@ export function printRdoPDF(rdo: RDO) {
     }
     .badge-orange { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
 
+    /* ── Info table (identification fields) ── */
+    .info-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 10px; }
+    .info-table th {
+      background: #f3f4f6; font-weight: 700; padding: 4px 8px; text-align: left;
+      border: 1px solid #e5e7eb; color: #374151; white-space: nowrap; width: 22%;
+    }
+    .info-table td {
+      background: #fff; padding: 4px 8px; border: 1px solid #e5e7eb;
+      color: #111; width: 28%;
+    }
+
     /* ── Section ────────────────────────── */
     .section { margin-bottom: 14px; break-inside: avoid; }
     .section-header {
       display: flex; align-items: center; gap: 7px;
-      background: #f9fafb; border-left: 3px solid #2abfdc;
+      background: #f9fafb; border-left: 3px solid #f97316;
       padding: 5px 10px; border-radius: 0 6px 6px 0;
       font-size: 9pt; font-weight: 700; color: #111; text-transform: uppercase;
       letter-spacing: 0.04em; margin-bottom: 8px;
@@ -197,17 +264,20 @@ export function printRdoPDF(rdo: RDO) {
 
   <!-- Print button (hidden on print) -->
   <div class="no-print" style="text-align:right;padding:8px 0;margin-bottom:4px;">
-    <button onclick="window.print()" style="background:#2abfdc;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">
+    <button onclick="window.print()" style="background:#f97316;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">
       🖨️ Imprimir / Salvar PDF
     </button>
   </div>
 
   <!-- Cover -->
   <div class="cover">
-    <div class="cover-logo">R</div>
+    ${companyLogo
+      ? `<img src="${companyLogo}" alt="Logo" class="cover-logo-img" />`
+      : `<div class="cover-logo">R</div>`
+    }
     <div>
       <div class="cover-title">Relatório Diário de Obra</div>
-      <div class="cover-sub">Construdata · Módulo RDO</div>
+      <div class="cover-sub">${companyName} · Módulo RDO</div>
     </div>
     <div class="cover-badges">
       <span class="badge badge-orange">RDO #${rdo.number}</span>
@@ -215,6 +285,15 @@ export function printRdoPDF(rdo: RDO) {
       <span class="badge">${rdo.responsible || '—'}</span>
     </div>
   </div>
+
+  <!-- Identification info table -->
+  ${infoTableHtml}
+
+  ${rdo.ocorrencias && rdo.ocorrencias !== 'Não informado' ? `
+  <div class="section" style="margin-bottom:10px;">
+    <div class="section-header"><span class="section-icon">⚠️</span> Ocorrências</div>
+    <div class="obs-box" style="border-color:#fca5a5;color:#dc2626;">${rdo.ocorrencias}</div>
+  </div>` : ''}
 
   <!-- 1. Condições Climáticas -->
   <div class="section">
@@ -460,15 +539,15 @@ export function printRdosBatchPDF(rdos: RDO[], label: string): void {
     @page { size: A4; margin: 14mm 14mm 18mm 14mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5pt; color: #0e1f38; background: #fff; }
-    .cover { display: flex; align-items: center; gap: 14px; padding: 18px 0 12px; border-bottom: 3px solid #2abfdc; margin-bottom: 16px; }
-    .cover-logo { width: 44px; height: 44px; background: #2abfdc; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; font-weight: 900; flex-shrink: 0; }
+    .cover { display: flex; align-items: center; gap: 14px; padding: 18px 0 12px; border-bottom: 3px solid #f97316; margin-bottom: 16px; }
+    .cover-logo { width: 44px; height: 44px; background: #f97316; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; font-weight: 900; flex-shrink: 0; }
     .cover-title { font-size: 18pt; font-weight: 800; color: #111; letter-spacing: -0.5px; }
     .cover-sub { font-size: 9pt; color: #6b7280; margin-top: 2px; }
     .cover-badges { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
     .badge { font-size: 8pt; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
     .badge-orange { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
     .section { margin-bottom: 14px; break-inside: avoid; }
-    .section-header { display: flex; align-items: center; gap: 7px; background: #f9fafb; border-left: 3px solid #2abfdc; padding: 5px 10px; border-radius: 0 6px 6px 0; font-size: 9pt; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+    .section-header { display: flex; align-items: center; gap: 7px; background: #f9fafb; border-left: 3px solid #f97316; padding: 5px 10px; border-radius: 0 6px 6px 0; font-size: 9pt; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
     .section-icon { font-size: 11pt; }
     table { width: 100%; border-collapse: collapse; font-size: 9pt; }
     th { background: #f3f4f6; font-weight: 700; padding: 5px 8px; text-align: left; border-bottom: 1px solid #e5e7eb; color: #374151; font-size: 8pt; text-transform: uppercase; }
@@ -512,7 +591,7 @@ export function printRdosBatchPDF(rdos: RDO[], label: string): void {
     <style>${css}</style>
   </head><body>
     <div class="no-print" style="text-align:right;padding:8px 0;margin-bottom:4px;">
-      <button onclick="window.print()" style="background:#2abfdc;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">🖨️ Imprimir / Salvar PDF</button>
+      <button onclick="window.print()" style="background:#f97316;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">🖨️ Imprimir / Salvar PDF</button>
     </div>
     ${cover}${rdoSections}
   </body></html>`

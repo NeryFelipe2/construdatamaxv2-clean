@@ -19,7 +19,7 @@ function Th({ children }: { children: React.ReactNode }) {
   return <th className="text-left px-3 py-1.5 text-[#6b6b6b] font-medium text-xs whitespace-nowrap">{children}</th>
 }
 function Td({ children, mono }: { children: React.ReactNode; mono?: boolean }) {
-  return <td className={`px-3 py-1.5 text-xs text-[#8fb3c8] whitespace-nowrap ${mono ? 'font-mono' : ''}`}>{children}</td>
+  return <td className={`px-3 py-1.5 text-xs text-[#a3a3a3] whitespace-nowrap ${mono ? 'font-mono' : ''}`}>{children}</td>
 }
 
 export function GridBottomPanel() {
@@ -57,12 +57,12 @@ export function GridBottomPanel() {
 
   if (!bottomPanelOpen) {
     return (
-      <div className="h-8 bg-[#0d2040] border-t border-[#20406a] flex items-center px-3 shrink-0">
+      <div className="h-8 bg-[#2c2c2c] border-t border-[#525252] flex items-center px-3 shrink-0">
         <div className="flex items-center gap-2 overflow-x-auto flex-1">
           {TABS.map((t) => (
             <span key={t.id} className="flex items-center gap-1 text-xs text-[#6b6b6b] whitespace-nowrap">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: t.color }} />
-              {t.label} <span className="text-[#8fb3c8]">{t.count}</span>
+              {t.label} <span className="text-[#a3a3a3]">{t.count}</span>
             </span>
           ))}
         </div>
@@ -74,21 +74,21 @@ export function GridBottomPanel() {
   }
 
   return (
-    <div className="h-52 bg-[#0d2040] border-t border-[#20406a] flex flex-col shrink-0">
+    <div className="h-52 bg-[#2c2c2c] border-t border-[#525252] flex flex-col shrink-0">
       {/* Tab strip */}
-      <div className="flex items-center border-b border-[#20406a] overflow-x-auto shrink-0 bg-[#0a1628]">
+      <div className="flex items-center border-b border-[#525252] overflow-x-auto shrink-0 bg-[#0a1628]">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveGridTab(tab.id)}
             className={[
-              'flex items-center gap-1.5 px-3 py-2 text-xs whitespace-nowrap border-r border-[#20406a] transition-colors shrink-0',
-              activeGridTab === tab.id ? 'bg-[#14294e] text-[#f5f5f5]' : 'text-[#6b6b6b] hover:text-[#8fb3c8]',
+              'flex items-center gap-1.5 px-3 py-2 text-xs whitespace-nowrap border-r border-[#525252] transition-colors shrink-0',
+              activeGridTab === tab.id ? 'bg-[#3d3d3d] text-[#f5f5f5]' : 'text-[#6b6b6b] hover:text-[#a3a3a3]',
             ].join(' ')}
           >
             <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: tab.color }} />
             {tab.label}
-            <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-[#20406a] text-[#8fb3c8] text-xs">{tab.count}</span>
+            <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-[#525252] text-[#a3a3a3] text-xs">{tab.count}</span>
           </button>
         ))}
         <button onClick={() => setBottomPanelOpen(false)} className="ml-auto px-3 py-2 text-[#6b6b6b] hover:text-[#f5f5f5] shrink-0">
@@ -101,16 +101,16 @@ export function GridBottomPanel() {
         {activeGridTab === 'circuit' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Circuit ID</Th><Th>Circuit Name</Th><Th>Circuit Class</Th>
                 <Th>Risk Classification</Th><Th>Risk Level</Th><Th>Circuit Customer Count</Th>
                 <Th>Protected Devices on Circuit</Th><Th>Installed Structures</Th>
                 <Th>Line Segments</Th><Th>District Name</Th><Th>Is In Area of Interest</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {circuitAssets.map((c) => (
-                <tr key={c.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={c.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{c.circuitId}</Td>
                   <Td>{c.circuitName}</Td>
                   <Td>{c.circuitClass}</Td>
@@ -135,14 +135,14 @@ export function GridBottomPanel() {
         {activeGridTab === 'device' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Device ID</Th><Th>Type</Th><Th>Manufacturer</Th><Th>Model</Th>
                 <Th>Status</Th><Th>Risk</Th><Th>Circuit ID</Th><Th>Installed</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {deviceAssets.map((d) => (
-                <tr key={d.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={d.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{d.deviceId}</Td>
                   <Td>{d.deviceType}</Td>
                   <Td>{d.manufacturer ?? '—'}</Td>
@@ -160,14 +160,14 @@ export function GridBottomPanel() {
         {activeGridTab === 'weather' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Station ID</Th><Th>Station Name</Th><Th>Temp (°C)</Th>
                 <Th>Wind (km/h)</Th><Th>Precip (mm)</Th><Th>Alerts</Th><Th>Last Updated</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {weatherStations.map((w) => (
-                <tr key={w.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={w.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{w.stationId}</Td>
                   <Td>{w.stationName}</Td>
                   <Td>{w.currentTempC ?? '—'}</Td>
@@ -184,13 +184,13 @@ export function GridBottomPanel() {
         {activeGridTab === 'customer' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Customer ID</Th><Th>Address</Th><Th>Service Type</Th><Th>Circuit ID</Th><Th>Status</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {customers.map((c) => (
-                <tr key={c.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={c.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{c.customerId}</Td>
                   <Td>{c.address}</Td>
                   <Td>{c.serviceType}</Td>
@@ -205,14 +205,14 @@ export function GridBottomPanel() {
         {activeGridTab === 'structure' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Structure ID</Th><Th>Type</Th><Th>Condition</Th><Th>Risk</Th>
                 <Th>Circuit ID</Th><Th>Inspection Date</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {structureAssets.map((s) => (
-                <tr key={s.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={s.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{s.structureId}</Td>
                   <Td>{s.structureType}</Td>
                   <Td>{s.condition}</Td>
@@ -228,14 +228,14 @@ export function GridBottomPanel() {
         {activeGridTab === 'vegetation' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Point ID</Th><Th>Address</Th><Th>Priority</Th><Th>Status</Th>
                 <Th>Last Trim</Th><Th>Circuit ID</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {vegetationPoints.map((v) => (
-                <tr key={v.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={v.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{v.pointId}</Td>
                   <Td>{v.address ?? '—'}</Td>
                   <Td>{v.priority}</Td>
@@ -251,14 +251,14 @@ export function GridBottomPanel() {
         {activeGridTab === 'hardening' && (
           <table className="w-full text-xs">
             <thead className="sticky top-0 bg-[#0a1628]">
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 <Th>Point ID</Th><Th>Type</Th><Th>Status</Th><Th>Completion</Th>
                 <Th>Circuit ID</Th><Th>Risk</Th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]/50">
+            <tbody className="divide-y divide-[#525252]/50">
               {hardeningPoints.map((h) => (
-                <tr key={h.id} className="hover:bg-[#14294e] transition-colors">
+                <tr key={h.id} className="hover:bg-[#3d3d3d] transition-colors">
                   <Td mono>{h.pointId}</Td>
                   <Td>{h.hardeningType}</Td>
                   <Td>{h.status}</Td>

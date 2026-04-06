@@ -3,13 +3,13 @@ import { useShallow } from 'zustand/react/shallow'
 import { useRede360Store } from '@/store/rede360Store'
 
 const LAYERS = [
-  { key: 'orders',           label: 'Service Orders',    color: '#eab308' },
-  { key: 'outages',          label: 'Live Outages',      color: '#ef4444' },
-  { key: 'assets',           label: 'Assets',            color: '#2abfdc' },
-  { key: 'riskLayers',       label: 'Risk Layers',       color: '#f97316' },
-  { key: 'serviceDistricts', label: 'Service Districts', color: '#a78bfa' },
-  { key: 'landCover',        label: 'Land Cover',        color: '#4ade80' },
-  { key: 'circuits',         label: 'Circuits',          color: '#38bdf8' },
+  { key: 'orders',           label: 'Ordens de Serviço',   color: '#eab308' },
+  { key: 'outages',          label: 'Interrupções Ativas',  color: '#ef4444' },
+  { key: 'assets',           label: 'Ativos',               color: '#f97316' },
+  { key: 'riskLayers',       label: 'Camadas de Risco',     color: '#f97316' },
+  { key: 'serviceDistricts', label: 'Distritos de Serviço', color: '#a78bfa' },
+  { key: 'landCover',        label: 'Cobertura do Solo',    color: '#4ade80' },
+  { key: 'circuits',         label: 'Circuitos',            color: '#38bdf8' },
 ]
 
 export function GridLayerPanel() {
@@ -28,15 +28,15 @@ export function GridLayerPanel() {
   }
 
   return (
-    <div className="hidden md:flex w-48 shrink-0 bg-[#0d2040] border-r border-[#20406a] flex-col overflow-y-auto">
+    <div className="hidden md:flex w-48 shrink-0 bg-[#2c2c2c] border-r border-[#525252] flex-col overflow-y-auto">
       {/* Header */}
-      <div className="px-3 py-2.5 border-b border-[#20406a] flex items-center justify-between">
-        <span className="text-[#8fb3c8] text-xs font-semibold uppercase tracking-wider">Camadas</span>
+      <div className="px-3 py-2.5 border-b border-[#525252] flex items-center justify-between">
+        <span className="text-[#a3a3a3] text-xs font-semibold uppercase tracking-wider">Camadas</span>
         <button
           onClick={toggleAll}
-          className="text-xs text-[#2abfdc] hover:text-[#f5f5f5] transition-colors"
+          className="text-xs text-[#f97316] hover:text-[#f5f5f5] transition-colors"
         >
-          {allVisible ? 'Ocultar' : 'Mostrar'} all
+          {allVisible ? 'Ocultar tudo' : 'Mostrar tudo'}
         </button>
       </div>
       {/* Layer rows */}
@@ -47,7 +47,7 @@ export function GridLayerPanel() {
             <button
               key={key}
               onClick={() => setLayerVisibility(key, !visible)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-[#14294e] transition-colors group text-left"
+              className="flex items-center gap-2 px-3 py-2 hover:bg-[#3d3d3d] transition-colors group text-left"
             >
               <span
                 className="w-2.5 h-2.5 rounded-sm shrink-0 transition-opacity"
@@ -57,7 +57,7 @@ export function GridLayerPanel() {
                 {label}
               </span>
               {visible
-                ? <Eye size={12} className="text-[#6b6b6b] group-hover:text-[#8fb3c8]" />
+                ? <Eye size={12} className="text-[#6b6b6b] group-hover:text-[#a3a3a3]" />
                 : <EyeOff size={12} className="text-[#6b6b6b]" />
               }
             </button>

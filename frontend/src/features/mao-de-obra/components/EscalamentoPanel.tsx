@@ -45,10 +45,10 @@ function SuggestionCard({
   return (
     <div
       className={cn(
-        'bg-[#14294e] border rounded-xl p-4',
+        'bg-[#3d3d3d] border rounded-xl p-4',
         s.accepted === true  ? 'border-[#22c55e]/40' :
-        s.accepted === false ? 'border-[#20406a] opacity-50' :
-                               'border-[#2abfdc]/30',
+        s.accepted === false ? 'border-[#525252] opacity-50' :
+                               'border-[#f97316]/30',
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -85,7 +85,7 @@ function SuggestionCard({
             </button>
             <button
               onClick={onDismiss}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#20406a] text-[#6b6b6b] text-xs font-semibold hover:bg-[#333] transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#525252] text-[#6b6b6b] text-xs font-semibold hover:bg-[#333] transition-colors"
             >
               <X size={12} /> Dispensar
             </button>
@@ -121,7 +121,7 @@ function OccurrenceRow({
     .join(', ')
 
   return (
-    <tr className="border-b border-[#1e1e1e] last:border-0">
+    <tr className="border-b border-[#3d3d3d] last:border-0">
       <td className="py-2 text-[#6b6b6b] text-xs shrink-0">
         {new Date(occ.date + 'T00:00:00').toLocaleDateString('pt-BR')}
       </td>
@@ -156,7 +156,7 @@ export function EscalamentoPanel() {
   return (
     <div className="flex flex-col gap-4">
       {/* Reallocation engine */}
-      <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-4">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-[#f5f5f5] text-sm font-semibold">Sugestões de Realocação</p>
@@ -167,7 +167,7 @@ export function EscalamentoPanel() {
           </div>
           <button
             onClick={runReallocationEngine}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#1a3662] transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
           >
             <RefreshCw size={13} />
             Rodar Engine
@@ -199,14 +199,14 @@ export function EscalamentoPanel() {
       </div>
 
       {/* Occurrence log */}
-      <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-4">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
           <p className="text-[#f5f5f5] text-sm font-semibold">
             Registro de Ocorrências ({occurrences.length})
           </p>
           <button
             onClick={() => setIsOcorrenciaOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
           >
             <Plus size={13} />
             Registrar
@@ -219,7 +219,7 @@ export function EscalamentoPanel() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[#20406a]">
+                <tr className="border-b border-[#525252]">
                   <th className="text-left text-[#6b6b6b] font-medium pb-2">Data</th>
                   <th className="text-left text-[#6b6b6b] font-medium pb-2">Tipo</th>
                   <th className="text-left text-[#6b6b6b] font-medium pb-2">Descrição</th>

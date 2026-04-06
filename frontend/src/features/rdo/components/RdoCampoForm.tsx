@@ -169,6 +169,11 @@ export function RdoCampoForm() {
 
   // ── Submit ────
   function handleSubmit() {
+    if (fotos.length === 0) {
+      alert("⚠️ É obrigatório anexar pelo menos 1 foto do serviço executado.")
+      return
+    }
+
     const payload = {
       data, projeto_id: activeProjectId, frente_id: frenteId || null, clima, turno,
       equipes: equipes.map(eq => ({ tipo: eq.tipo, lider: eq.lider, atividades: eq.atividades })),
@@ -179,7 +184,16 @@ export function RdoCampoForm() {
       ocorrencia: { tipo: ocorrenciaTipo, descricao: ocorrenciaDesc },
     }
     console.log("RDO Payload:", payload)
-    alert("RDO salvo! (Supabase integration coming)")
+
+    // Formatação de disparo para o WhatsApp
+    const eng = contatos.find(c => c.projeto_id === activeProjectId && (c.cargo === 'Engenheiro' || c.cargo === 'Mestre'))
+    const telefone = eng?.telefone ? eng.telefone.replace(/\D/g, '') : ''
+
+    const textoBase = `*🚧 RDO (DIÁRIO DE OBRA) - ${activeProjeto?.nome?.toUpperCase() ?? "PROJETO"}*\n📅 Data: ${data} | 🌤️ Clima: ${clima}\n\n*👤 MÃO DE OBRA:*\n${maoObra.filter(m => m.qtd > 0).map(m => `- ${m.cargo}: ${m.qtd}`).join('\n') || '- Nenhuma'}\n\n*📋 ATIVIDADES:*\n${equipes.length > 0 ? equipes.map((eq, i) => `[Eq. ${i+1}] ${eq.tipo} - Líd: ${eq.lider || 'N/A'}\n${eq.atividades.map(a => `📍 ${a.rua}\n  ↳ ${a.servico} | ${a.tubo}: ${a.metragem}m`).join('\n')}`).join('\n\n') : '- Sem atividades'}\n\n*⚠️ OCORRÊNCIAS:*\n${ocorrenciaTipo !== "Nenhuma" ? `🚨 ${ocorrenciaTipo} - ${ocorrenciaDesc}` : 'Nenhuma'}\n\n📸 *Lembrete:* As fotos foram registradas na plataforma.`;
+
+    const textoCodificado = encodeURIComponent(textoBase)
+    const url = telefone ? `https://api.whatsapp.com/send?phone=55${telefone}&text=${textoCodificado}` : `https://api.whatsapp.com/send?text=${textoCodificado}`
+    window.open(url, '_blank')
   }
 
   return (

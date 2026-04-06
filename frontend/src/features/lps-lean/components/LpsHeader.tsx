@@ -16,12 +16,16 @@ const CNC_LABELS: Record<string, string> = {
 }
 
 const TABS: { id: LpsTab; label: string }[] = [
-  { id: 'semaforo',   label: 'Semáforo' },
-  { id: 'lookahead',  label: 'Look-ahead' },
-  { id: 'ppc',        label: 'PPC Dashboard' },
-  { id: 'takt',       label: 'Takt Time' },
-  { id: 'restricoes', label: 'Restrições' },
-  { id: 'analytics',  label: 'Analytics' },
+  { id: 'semaforo',            label: 'Semáforo' },
+  { id: 'lookahead',           label: 'Look-ahead' },
+  { id: 'ppc',                 label: 'PPC Dashboard' },
+  { id: 'takt',                label: 'Takt Time' },
+  { id: 'restricoes',          label: 'Restrições' },
+  { id: 'analytics',           label: 'Analytics' },
+  { id: 'timeline-restricoes', label: 'Timeline Restrições' },
+  { id: 'alertas',             label: 'Alertas' },
+  { id: 'mao-de-obra',         label: 'Mão de Obra' },
+  { id: 'integracoes',         label: 'Integrações' },
 ]
 
 export function LpsHeader() {
@@ -60,9 +64,9 @@ export function LpsHeader() {
   const ppcColor = avgPpc >= 80 ? 'text-green-400' : avgPpc >= 60 ? 'text-yellow-400' : 'text-red-400'
 
   return (
-    <div className="bg-gray-900 border-b border-gray-800">
+    <div className="bg-[#2c2c2c] border-b border-[#3d3d3d]">
       {/* KPI strip */}
-      <div className="px-6 py-4 flex items-center gap-8 flex-wrap border-b border-gray-800/60">
+      <div className="px-6 py-4 flex items-center gap-8 flex-wrap border-b border-[#3d3d3d]/60">
         {/* Logo / title */}
         <div className="flex items-center gap-2.5 shrink-0">
           <div className="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center">
@@ -70,25 +74,25 @@ export function LpsHeader() {
           </div>
           <div>
             <p className="text-xs font-bold text-white leading-tight">LPS / Lean</p>
-            <p className="text-[10px] text-gray-500 leading-tight">Last Planner System</p>
+            <p className="text-[10px] text-[#6b6b6b] leading-tight">Last Planner System</p>
           </div>
         </div>
 
-        <div className="w-px h-8 bg-gray-700 shrink-0" />
+        <div className="w-px h-8 bg-[#484848] shrink-0" />
 
         {/* PPC médio */}
         <Kpi label="PPC (4 sem.)" value={`${avgPpc}%`} valueClass={ppcColor} />
 
         {/* Tendência */}
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] text-gray-500 uppercase tracking-wider">Tendência</span>
+          <span className="text-[10px] text-[#6b6b6b] uppercase tracking-wider">Tendência</span>
           <div className="flex items-center gap-1">
             {trend > 0
               ? <TrendingUp size={16} className="text-green-400" />
               : trend < 0
                 ? <TrendingDown size={16} className="text-red-400" />
-                : <Minus size={16} className="text-gray-500" />}
-            <span className={`text-sm font-bold ${trend > 0 ? 'text-green-400' : trend < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                : <Minus size={16} className="text-[#6b6b6b]" />}
+            <span className={`text-sm font-bold ${trend > 0 ? 'text-green-400' : trend < 0 ? 'text-red-400' : 'text-[#a3a3a3]'}`}>
               {trend > 0 ? `+${trend}` : trend === 0 ? '—' : trend}pp
             </span>
           </div>
@@ -105,11 +109,11 @@ export function LpsHeader() {
         {/* Top CNC */}
         {topCnc && (
           <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] text-gray-500 uppercase tracking-wider">Principal CNC</span>
+            <span className="text-[10px] text-[#6b6b6b] uppercase tracking-wider">Principal CNC</span>
             <div className="flex items-center gap-1.5">
               <AlertTriangle size={13} className="text-orange-400" />
               <span className="text-sm font-semibold text-orange-300">{CNC_LABELS[topCnc[0]] ?? topCnc[0]}</span>
-              <span className="text-xs text-gray-500">({topCnc[1]}×)</span>
+              <span className="text-xs text-[#6b6b6b]">({topCnc[1]}×)</span>
             </div>
           </div>
         )}
@@ -124,7 +128,7 @@ export function LpsHeader() {
             className={`px-5 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px ${
               activeTab === tab.id
                 ? 'text-orange-400 border-orange-500'
-                : 'text-gray-500 border-transparent hover:text-gray-300'
+                : 'text-[#6b6b6b] border-transparent hover:text-[#f5f5f5]'
             }`}
           >
             {tab.label}
@@ -140,7 +144,7 @@ function Kpi({ label, value, sub, valueClass = 'text-white' }: {
 }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[10px] text-gray-500 uppercase tracking-wider">{label}</span>
+      <span className="text-[10px] text-[#6b6b6b] uppercase tracking-wider">{label}</span>
       <span className={`text-sm font-bold ${valueClass}`}>{value}</span>
       {sub && <span className="text-[10px] text-gray-600">{sub}</span>}
     </div>

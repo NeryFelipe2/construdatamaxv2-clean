@@ -146,7 +146,7 @@ function VehicleDialog({ vehicle, onClose, onSave }: {
               <input type="number" min={1980} max={2030} className={inputCls} value={form.year} onChange={e => setForm(f => ({ ...f, year: Number(e.target.value) }))} />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className={labelCls}>Tipo</label>
               <select className={inputCls} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value as VehicleType }))}>
@@ -400,7 +400,7 @@ function AbastecimentoTab() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className={labelCls}>Data</label>
                 <input type="date" className={inputCls} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} />
@@ -544,7 +544,7 @@ function ManutencaoTab() {
               <label className={labelCls}>Descrição</label>
               <textarea className={`${inputCls} resize-none`} rows={2} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className={labelCls}>Data</label>
                 <input type="date" className={inputCls} value={form.serviceDate} onChange={e => setForm(f => ({ ...f, serviceDate: e.target.value }))} />
@@ -760,7 +760,7 @@ function RotasTab() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div><label className={labelCls}>Data</label><input type="date" className={inputCls} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} /></div>
               <div><label className={labelCls}>Saída</label><input type="time" className={inputCls} value={form.departureTime} onChange={e => setForm(f => ({ ...f, departureTime: e.target.value }))} /></div>
               <div><label className={labelCls}>Chegada</label><input type="time" className={inputCls} value={form.arrivalTime} onChange={e => setForm(f => ({ ...f, arrivalTime: e.target.value }))} /></div>
@@ -817,7 +817,7 @@ function OrdensTab() {
   return (
     <div className="space-y-4">
       {/* Pipeline header */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {pipeline.map(p => (
           <div key={p.status} className={`rounded-xl border px-3 py-2 text-center text-xs font-medium ${OS_STATUS_COLORS[p.status]} border-current/20`}>
             <div className="text-lg font-bold">{p.count}</div>
@@ -870,7 +870,7 @@ function OrdensTab() {
               </div>
             </div>
             <div><label className={labelCls}>Descrição</label><textarea className={`${inputCls} resize-none`} rows={2} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div><label className={labelCls}>Prioridade</label>
                 <select className={inputCls} value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value as typeof form.priority }))}>
                   {['urgent','high','normal','low'].map(p => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
@@ -983,7 +983,7 @@ function MultasTab() {
             </div>
             <div><label className={labelCls}>Infração (Artigo)</label><input className={inputCls} value={form.infraction} onChange={e => setForm(f => ({ ...f, infraction: e.target.value }))} /></div>
             <div><label className={labelCls}>Descrição</label><input className={inputCls} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} /></div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div><label className={labelCls}>Data</label><input type="date" className={inputCls} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} /></div>
               <div><label className={labelCls}>Valor (R$)</label><input type="number" min={0} step={0.01} className={inputCls} value={form.amount} onChange={e => setForm(f => ({ ...f, amount: parseFloat(e.target.value) || 0 }))} /></div>
               <div><label className={labelCls}>Vencimento</label><input type="date" className={inputCls} value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} /></div>
@@ -1224,7 +1224,7 @@ function AlertasTab() {
   const SEVERITY_LABELS: Record<string, string> = { critical: 'Crítico', high: 'Alto', medium: 'Médio', low: 'Baixo' }
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {(['critical','high','medium','low'] as const).map(sev => (
           <div key={sev} className={`rounded-xl border px-3 py-2 text-center text-xs font-medium ${ALERT_COLORS[sev]}`}>
             <div className="text-lg font-bold">{active.filter(a => a.severity === sev).length}</div>

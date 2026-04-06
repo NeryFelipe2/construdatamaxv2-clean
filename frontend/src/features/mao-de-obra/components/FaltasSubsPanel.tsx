@@ -113,7 +113,7 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
               </select>
               {errors.workerId && <p className={errCls}>{errors.workerId}</p>}
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className={labelCls}>Data</label>
                 <input type="date" className={inputCls} value={date}

@@ -480,7 +480,7 @@ export function BimCanvas() {
           <button
             key={p}
             onClick={(e) => { e.stopPropagation(); applyPreset(p) }}
-            className="px-2 py-1 rounded bg-[#112645]/90 border border-[#20406a] text-[10px] text-[#8fb3c8] hover:text-[#2abfdc] hover:border-[#2abfdc]/40 transition-colors"
+            className="px-2 py-1 rounded bg-[#333333]/90 border border-[#525252] text-[10px] text-[#a3a3a3] hover:text-[#f97316] hover:border-[#f97316]/40 transition-colors"
           >
             {p === 'top' ? 'Topo' : p === 'front' ? 'Frente' : p === 'iso' ? 'Iso' : 'Ajustar'}
           </button>
@@ -495,15 +495,15 @@ export function BimCanvas() {
               e.stopPropagation()
               droneCtrlRef.current?.lock()
             }}
-            className="flex flex-col items-center gap-2 px-6 py-4 bg-[#112645]/90 border border-[#2abfdc]/40 rounded-2xl text-[#2abfdc] hover:bg-[#14294e]/90 transition-colors"
+            className="flex flex-col items-center gap-2 px-6 py-4 bg-[#333333]/90 border border-[#f97316]/40 rounded-2xl text-[#f97316] hover:bg-[#3d3d3d]/90 transition-colors"
           >
             <span className="text-sm font-semibold">Modo Drone ativo</span>
-            <span className="text-xs text-[#8fb3c8]">Clique para capturar mouse • WASD para mover • ESC para sair</span>
+            <span className="text-xs text-[#a3a3a3]">Clique para capturar mouse • WASD para mover • ESC para sair</span>
           </button>
         </div>
       )}
       {droneMode && droneLocked && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 bg-[#112645]/80 border border-[#2abfdc]/30 rounded-full text-[#2abfdc] text-[10px]">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 bg-[#333333]/80 border border-[#f97316]/30 rounded-full text-[#f97316] text-[10px]">
           WASD · Q/E (subir/descer) · Shift (rápido) · ESC para sair
         </div>
       )}

@@ -69,26 +69,26 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
   }
 
   return (
-    <div className="rounded-xl border border-[#20406a] bg-[#14294e] overflow-hidden">
+    <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
       <div className="w-full flex items-center justify-between px-4 py-3">
         {editing ? (
           <div className="flex-1 flex items-center gap-2 flex-wrap">
             <input
               value={draftForeman}
               onChange={(e) => setDraftForeman(e.target.value)}
-              className="flex-1 min-w-[120px] bg-[#112645] border border-[#20406a] rounded-lg px-2 py-1 text-sm text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+              className="flex-1 min-w-[120px] bg-[#333333] border border-[#525252] rounded-lg px-2 py-1 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
               placeholder="Encarregado"
             />
             <input
               value={draftType}
               onChange={(e) => setDraftType(e.target.value)}
-              className="w-28 bg-[#112645] border border-[#20406a] rounded-lg px-2 py-1 text-sm text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+              className="w-28 bg-[#333333] border border-[#525252] rounded-lg px-2 py-1 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
               placeholder="Tipo"
             />
             <button onClick={saveCrew} className="text-[#22c55e] hover:text-[#22c55e]/80 transition-colors" title="Salvar">
               <Check size={15} />
             </button>
-            <button onClick={cancelEdit} className="text-[#6b6b6b] hover:text-[#e4f2f8] transition-colors" title="Cancelar">
+            <button onClick={cancelEdit} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors" title="Cancelar">
               <X size={15} />
             </button>
           </div>
@@ -98,15 +98,15 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
             className="flex-1 text-left flex flex-col gap-0.5"
           >
             <div className="flex items-center gap-2">
-              <span className="text-[#e4f2f8] font-semibold text-sm">{crew.foremanName}</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#2abfdc]/15 text-[#2abfdc] font-semibold uppercase tracking-wider">
+              <span className="text-[#f5f5f5] font-semibold text-sm">{crew.foremanName}</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#f97316]/15 text-[#f97316] font-semibold uppercase tracking-wider">
                 {crew.crewType}
               </span>
             </div>
             <div className="flex items-center gap-3 text-xs text-[#a3a3a3]">
               <span className="flex items-center gap-1"><Users size={11} />{crew.timecards.length} apontamentos</span>
               <span className="flex items-center gap-1"><Clock size={11} />{formatHours(totalHours)}</span>
-              <span className="text-[#2abfdc] font-mono font-semibold">{formatCurrency(totalCost)}</span>
+              <span className="text-[#f97316] font-mono font-semibold">{formatCurrency(totalCost)}</span>
             </div>
           </button>
         )}
@@ -115,20 +115,20 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
           {!editing && (
             <button
               onClick={() => { setEditing(true); setOpen(true) }}
-              className="text-[#5a8caa] hover:text-[#2abfdc] transition-colors"
+              className="text-[#6b6b6b] hover:text-[#f97316] transition-colors"
               title="Editar equipe"
             >
               <Pencil size={13} />
             </button>
           )}
-          <button onClick={() => setOpen(!open)} className="text-[#6b6b6b] hover:text-[#e4f2f8] transition-colors">
+          <button onClick={() => setOpen(!open)} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors">
             {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
         </div>
       </div>
 
       {open && (
-        <div className="border-t border-[#20406a] px-4 py-3 flex flex-col gap-3">
+        <div className="border-t border-[#525252] px-4 py-3 flex flex-col gap-3">
           {/* Timecards */}
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -136,7 +136,7 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
               {editing && (
                 <button
                   onClick={() => setAddingTc(true)}
-                  className="flex items-center gap-1 text-[#2abfdc] text-xs hover:text-[#2abfdc]/80 transition-colors"
+                  className="flex items-center gap-1 text-[#f97316] text-xs hover:text-[#f97316]/80 transition-colors"
                 >
                   <Plus size={11} /> Adicionar membro
                 </button>
@@ -151,20 +151,20 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
                       <input
                         value={tcEdits[tc.id]?.workerName ?? tc.workerName}
                         onChange={(e) => setTcEdits((p) => ({ ...p, [tc.id]: { ...p[tc.id], workerName: e.target.value } }))}
-                        className="bg-[#112645] border border-[#20406a] rounded px-1.5 py-0.5 text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+                        className="bg-[#333333] border border-[#525252] rounded px-1.5 py-0.5 text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
                         placeholder="Nome"
                       />
                       <input
                         value={tcEdits[tc.id]?.role ?? tc.role}
                         onChange={(e) => setTcEdits((p) => ({ ...p, [tc.id]: { ...p[tc.id], role: e.target.value } }))}
-                        className="bg-[#112645] border border-[#20406a] rounded px-1.5 py-0.5 text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+                        className="bg-[#333333] border border-[#525252] rounded px-1.5 py-0.5 text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
                         placeholder="Função"
                       />
                       <input
                         type="number" min={0} step={0.5}
                         value={tcEdits[tc.id]?.hoursWorked ?? tc.hoursWorked}
                         onChange={(e) => setTcEdits((p) => ({ ...p, [tc.id]: { ...p[tc.id], hoursWorked: Number(e.target.value) } }))}
-                        className="bg-[#112645] border border-[#20406a] rounded px-1.5 py-0.5 text-[#e4f2f8] text-center focus:outline-none focus:border-[#2abfdc]/60"
+                        className="bg-[#333333] border border-[#525252] rounded px-1.5 py-0.5 text-[#f5f5f5] text-center focus:outline-none focus:border-[#f97316]/60"
                       />
                       <div className="flex items-center gap-1">
                         <button onClick={() => saveTc(tc.id)} className="text-[#22c55e]"><Check size={12} /></button>
@@ -174,16 +174,16 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
                   ) : (
                     <>
                       <div className="flex flex-col">
-                        <span className="text-[#e4f2f8] font-medium">{tc.workerName}</span>
+                        <span className="text-[#f5f5f5] font-medium">{tc.workerName}</span>
                         <span className="text-[#6b6b6b]">{tc.role}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="font-mono">{formatHours(tc.hoursWorked)}</span>
-                        <span className="font-mono text-[#2abfdc]">{formatCurrency(tc.hoursWorked * tc.hourlyRate)}</span>
+                        <span className="font-mono text-[#f97316]">{formatCurrency(tc.hoursWorked * tc.hourlyRate)}</span>
                         {editing && (
                           <div className="flex items-center gap-1">
-                            <button onClick={() => setEditingTcId(tc.id)} className="text-[#5a8caa] hover:text-[#2abfdc]"><Pencil size={10} /></button>
-                            <button onClick={() => onDeleteTimecard(crew.id, tc.id)} className="text-[#5a8caa] hover:text-[#ef4444]"><Trash2 size={10} /></button>
+                            <button onClick={() => setEditingTcId(tc.id)} className="text-[#6b6b6b] hover:text-[#f97316]"><Pencil size={10} /></button>
+                            <button onClick={() => onDeleteTimecard(crew.id, tc.id)} className="text-[#6b6b6b] hover:text-[#ef4444]"><Trash2 size={10} /></button>
                           </div>
                         )}
                       </div>
@@ -198,21 +198,21 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
                   <input
                     value={newTc.workerName}
                     onChange={(e) => setNewTc((p) => ({ ...p, workerName: e.target.value }))}
-                    className="bg-[#112645] border border-[#2abfdc]/40 rounded px-1.5 py-0.5 text-xs text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+                    className="bg-[#333333] border border-[#f97316]/40 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
                     placeholder="Nome *"
                     autoFocus
                   />
                   <input
                     value={newTc.role}
                     onChange={(e) => setNewTc((p) => ({ ...p, role: e.target.value }))}
-                    className="bg-[#112645] border border-[#2abfdc]/40 rounded px-1.5 py-0.5 text-xs text-[#e4f2f8] focus:outline-none focus:border-[#2abfdc]/60"
+                    className="bg-[#333333] border border-[#f97316]/40 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60"
                     placeholder="Função"
                   />
                   <input
                     type="number" min={0} step={0.5}
                     value={newTc.hoursWorked}
                     onChange={(e) => setNewTc((p) => ({ ...p, hoursWorked: Number(e.target.value) }))}
-                    className="bg-[#112645] border border-[#2abfdc]/40 rounded px-1.5 py-0.5 text-xs text-[#e4f2f8] text-center focus:outline-none focus:border-[#2abfdc]/60"
+                    className="bg-[#333333] border border-[#f97316]/40 rounded px-1.5 py-0.5 text-xs text-[#f5f5f5] text-center focus:outline-none focus:border-[#f97316]/60"
                   />
                   <div className="flex items-center gap-1">
                     <button onClick={submitNewTc} disabled={!newTc.workerName.trim()} className="text-[#22c55e] disabled:opacity-40"><Check size={12} /></button>
@@ -236,7 +236,7 @@ function CrewCard({ crew, onUpdateCrew, onAddTimecard, onUpdateTimecard, onDelet
                       act.status === 'completed'
                         ? 'bg-[#22c55e]/15 text-[#22c55e]'
                         : act.status === 'in_progress'
-                        ? 'bg-[#2abfdc]/15 text-[#2abfdc]'
+                        ? 'bg-[#f97316]/15 text-[#f97316]'
                         : 'bg-[#3f3f3f] text-[#a3a3a3]'
                     )}
                   >
@@ -276,7 +276,7 @@ export function CrewsPanel() {
       </div>
 
       {crews.length === 0 ? (
-        <div className="rounded-xl border border-[#20406a] bg-[#14294e] p-6 text-center text-sm text-[#6b6b6b]">
+        <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] p-6 text-center text-sm text-[#6b6b6b]">
           Nenhuma equipe registrada
         </div>
       ) : (

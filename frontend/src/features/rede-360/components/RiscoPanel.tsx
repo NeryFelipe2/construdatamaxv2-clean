@@ -83,7 +83,7 @@ export function RiscoPanel() {
         {RISK_ORDER.map((risk) => (
           <div
             key={risk}
-            className="bg-[#112645] rounded-xl border border-[#20406a] p-4"
+            className="bg-[#333333] rounded-xl border border-[#525252] p-4"
             style={{ borderLeftColor: RISK_COLORS[risk], borderLeftWidth: 3 }}
           >
             <div className="text-[#6b6b6b] text-xs mb-1">{RISK_LABELS[risk]}</div>
@@ -98,8 +98,8 @@ export function RiscoPanel() {
       {/* Two-column section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Ativos em risco */}
-        <div className="bg-[#112645] rounded-xl border border-[#20406a] overflow-hidden">
-          <div className="px-4 py-2.5 border-b border-[#20406a]">
+        <div className="bg-[#333333] rounded-xl border border-[#525252] overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-[#525252]">
             <h3 className="text-[#f5f5f5] text-sm font-semibold">Ativos em Risco</h3>
           </div>
           <div className="overflow-y-auto" style={{ maxHeight: 400 }}>
@@ -107,7 +107,7 @@ export function RiscoPanel() {
               const canGenerateOS = asset.riskLevel === 'critical' || asset.riskLevel === 'high'
               const overdue = isOverdue(asset.nextInspectionDue)
               return (
-                <div key={asset.id} className="flex items-start gap-3 px-4 py-2.5 border-b border-[#20406a]/50 hover:bg-[#14294e] transition-colors">
+                <div key={asset.id} className="flex items-start gap-3 px-4 py-2.5 border-b border-[#525252]/50 hover:bg-[#3d3d3d] transition-colors">
                   <span className={`px-1.5 py-0.5 rounded text-xs shrink-0 mt-0.5 ${RISK_BG[asset.riskLevel]}`}>
                     {RISK_LABELS[asset.riskLevel]}
                   </span>
@@ -130,7 +130,7 @@ export function RiscoPanel() {
                         status:      'pending',
                         description: `Inspeção gerada automaticamente para ativo de risco ${RISK_LABELS[asset.riskLevel]}: ${asset.name}`,
                       })}
-                      className="shrink-0 px-2 py-1 rounded bg-[#14294e] hover:bg-[#20406a] text-[#2abfdc] text-xs border border-[#20406a] transition-colors"
+                      className="shrink-0 px-2 py-1 rounded bg-[#3d3d3d] hover:bg-[#525252] text-[#f97316] text-xs border border-[#525252] transition-colors"
                     >
                       Gerar OS
                     </button>
@@ -142,7 +142,7 @@ export function RiscoPanel() {
         </div>
 
         {/* Bar chart: Distribuição por Tipo */}
-        <div className="bg-[#112645] rounded-xl border border-[#20406a] p-4">
+        <div className="bg-[#333333] rounded-xl border border-[#525252] p-4">
           <h3 className="text-[#f5f5f5] text-sm font-semibold mb-4">Distribuição por Tipo</h3>
           <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
             {/* Grid lines */}
@@ -151,7 +151,7 @@ export function RiscoPanel() {
               const val = Math.round(pct * maxCount)
               return (
                 <g key={pct}>
-                  <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y} stroke="#20406a" strokeWidth="1" strokeDasharray="3,3" />
+                  <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y} stroke="#525252" strokeWidth="1" strokeDasharray="3,3" />
                   <text x={PAD.l - 4} y={y + 4} textAnchor="end" fontSize="9" fill="#6b6b6b">{val}</text>
                 </g>
               )

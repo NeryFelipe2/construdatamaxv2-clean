@@ -72,7 +72,7 @@ export function ShowcaseSection() {
   return (
     <section>
       {/* ── A) AI Headline Block ──────────────────────────────────── */}
-      <div style={{ background: '#0b1a30', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+      <div style={{ background: '#2c2c2c', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
         <div className="max-w-7xl mx-auto px-6">
           <SectionDivider num="10" tag="AUTOMAÇÃO IA" />
 
@@ -97,16 +97,16 @@ export function ShowcaseSection() {
       </div>
 
       {/* ── B) Software / Modules Grid ────────────────────────────── */}
-      <div style={{ background: '#0f2240' }} className="py-24">
+      <div style={{ background: '#333333' }} className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-px" style={{ background: 'rgba(255,255,255,0.10)' }}>
             {MODULES.map(({ icon: Icon, name, desc }) => (
               <div
                 key={name}
-                style={{ background: '#0f2240' }}
-                className="group p-6 flex flex-col gap-3 hover:bg-[#0b1a30] transition-colors cursor-default"
+                style={{ background: '#333333' }}
+                className="group p-6 flex flex-col gap-3 hover:bg-[#2c2c2c] transition-colors cursor-default"
               >
-                <Icon size={18} className="text-white/60 group-hover:text-[#2abfdc] transition-colors" />
+                <Icon size={18} className="text-white/60 group-hover:text-[#f97316] transition-colors" />
                 <div>
                   <div
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -123,11 +123,11 @@ export function ShowcaseSection() {
       </div>
 
       {/* ── C) Mission & Values ────────────────────────────────────── */}
-      <div style={{ background: '#0b1a30', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+      <div style={{ background: '#2c2c2c', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Left — Mission */}
-            <div style={{ borderLeft: '3px solid #2abfdc' }} className="pl-6">
+            <div style={{ borderLeft: '3px solid #f97316' }} className="pl-6">
               <h3
                 style={{
                   fontFamily: "'Space Grotesk', sans-serif",
@@ -150,7 +150,7 @@ export function ShowcaseSection() {
             <div className="space-y-6">
               {OBJECTIVES.map((obj) => (
                 <div key={obj.label} className="flex gap-4 items-start">
-                  <div className="w-2 h-2 rounded-full bg-[#2abfdc] mt-1.5 shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#f97316] mt-1.5 shrink-0" />
                   <div>
                     <span className="text-white/90 text-sm font-medium">{obj.label}</span>
                     <span className="text-white/70 text-sm"> — {obj.desc}</span>
@@ -163,7 +163,7 @@ export function ShowcaseSection() {
       </div>
 
       {/* ── D) Quote Block ─────────────────────────────────────────── */}
-      <div style={{ background: '#0f2240' }} className="py-24">
+      <div style={{ background: '#333333' }} className="py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p
             style={{
@@ -181,7 +181,7 @@ export function ShowcaseSection() {
           <a
             href="#contato"
             className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider transition-colors hover:opacity-80"
-            style={{ color: '#2abfdc', letterSpacing: '0.12em' }}
+            style={{ color: '#f97316', letterSpacing: '0.12em' }}
           >
             SAIBA MAIS <ArrowRight size={14} />
           </a>
@@ -189,7 +189,7 @@ export function ShowcaseSection() {
       </div>
 
       {/* ── E) Testimonials ────────────────────────────────────────── */}
-      <div style={{ background: '#0b1a30' }} className="py-32">
+      <div style={{ background: '#2c2c2c' }} className="py-32">
         <div className="max-w-7xl mx-auto px-6">
           <SectionDivider num="11" tag="PARCEIROS" />
 
@@ -220,7 +220,7 @@ export function ShowcaseSection() {
                       style={{ border: '1px solid rgba(255,255,255,0.14)', background: 'transparent' }}
                       className="p-8 max-w-2xl mx-auto"
                     >
-                      <div className="text-sm font-medium mb-4" style={{ color: '#2abfdc', fontFamily: "'Space Grotesk', sans-serif" }}>
+                      <div className="text-sm font-medium mb-4" style={{ color: '#f97316', fontFamily: "'Space Grotesk', sans-serif" }}>
                         {t.company}
                       </div>
                       <p className="text-white/80 text-base leading-relaxed mb-6">
@@ -243,7 +243,7 @@ export function ShowcaseSection() {
                   key={i}
                   onClick={() => setActiveTestimonial(i)}
                   style={{
-                    background: i === activeTestimonial ? '#2abfdc' : 'rgba(255,255,255,0.15)',
+                    background: i === activeTestimonial ? '#f97316' : 'rgba(255,255,255,0.15)',
                     height: 2,
                     width: i === activeTestimonial ? 32 : 16,
                     transition: 'all 0.3s',
@@ -261,7 +261,7 @@ export function ShowcaseSection() {
                 style={{ border: '1px solid rgba(255,255,255,0.14)' }}
                 className="p-6"
               >
-                <div className="text-sm font-medium mb-3" style={{ color: '#2abfdc', fontFamily: "'Space Grotesk', sans-serif" }}>
+                <div className="text-sm font-medium mb-3" style={{ color: '#f97316', fontFamily: "'Space Grotesk', sans-serif" }}>
                   {t.company}
                 </div>
                 <p className="text-white/80 text-sm leading-relaxed mb-4">
@@ -278,7 +278,7 @@ export function ShowcaseSection() {
       </div>
 
       {/* ── F) CTA Block ───────────────────────────────────────────── */}
-      <div style={{ background: '#0f2240' }} className="py-20">
+      <div style={{ background: '#333333' }} className="py-20">
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-center gap-4">
           <FlowHoverButton variant="accent" href="#contato">
             Solicitar Demonstração

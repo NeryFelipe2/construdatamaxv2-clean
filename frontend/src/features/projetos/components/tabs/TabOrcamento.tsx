@@ -16,10 +16,10 @@ const TYPE_LABEL: Record<BudgetLineType, string> = {
 }
 
 function UtilBar({ pct }: { pct: number }) {
-  const color = pct > 90 ? '#ef4444' : pct > 75 ? '#2abfdc' : '#22c55e'
+  const color = pct > 90 ? '#ef4444' : pct > 75 ? '#f97316' : '#22c55e'
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 rounded-full bg-[#1a3662] overflow-hidden">
+      <div className="flex-1 h-1.5 rounded-full bg-[#484848] overflow-hidden">
         <div className="h-full rounded-full" style={{ width: `${Math.min(pct, 100)}%`, background: color }} />
       </div>
       <span className="text-[10px] font-mono w-8 text-right" style={{ color }}>
@@ -31,9 +31,9 @@ function UtilBar({ pct }: { pct: number }) {
 
 function SummaryCell({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex flex-col gap-1 p-3 rounded-xl border border-[#20406a] bg-[#14294e]">
+    <div className="flex flex-col gap-1 p-3 rounded-xl border border-[#525252] bg-[#3d3d3d]">
       <span className="text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">{label}</span>
-      <span className={cn('text-base font-bold font-mono', highlight ? 'text-[#2abfdc]' : 'text-[#f5f5f5]')}>
+      <span className={cn('text-base font-bold font-mono', highlight ? 'text-[#f97316]' : 'text-[#f5f5f5]')}>
         {value}
       </span>
     </div>
@@ -68,7 +68,7 @@ export function TabOrcamento({ project }: { project: Project }) {
   return (
     <div className="flex flex-col gap-4 p-5 overflow-y-auto h-full">
       {/* Summary */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <SummaryCell label="Total Orçado"    value={formatCurrency(totalBudgeted)}  highlight />
         <SummaryCell label="Total Projetado" value={formatCurrency(totalProjected)} />
         <SummaryCell label="Total Gasto"     value={formatCurrency(totalSpent)} />
@@ -76,10 +76,10 @@ export function TabOrcamento({ project }: { project: Project }) {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-[#20406a] overflow-x-auto">
+      <div className="rounded-xl border border-[#525252] overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b border-[#20406a] bg-[#0d2040]">
+            <tr className="border-b border-[#525252] bg-[#2c2c2c]">
               <th className="text-left px-4 py-2.5 text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">Tipo</th>
               <th className="text-left px-4 py-2.5 text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">Descrição</th>
               <th className="text-right px-4 py-2.5 text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">Orçado</th>
@@ -101,8 +101,8 @@ export function TabOrcamento({ project }: { project: Project }) {
                   key={line.id}
                   className={cn(
                     'transition-colors',
-                    !isLast && 'border-b border-[#14294e]',
-                    hoveredId === line.id ? 'bg-[#1a3662]' : 'bg-[#112645]'
+                    !isLast && 'border-b border-[#3d3d3d]',
+                    hoveredId === line.id ? 'bg-[#484848]' : 'bg-[#333333]'
                   )}
                   onMouseEnter={() => setHoveredId(line.id)}
                   onMouseLeave={() => { setHoveredId(null); if (confirmDeleteId === line.id) setConfirmDeleteId(null) }}
@@ -130,7 +130,7 @@ export function TabOrcamento({ project }: { project: Project }) {
                           </button>
                           <button
                             onClick={() => setConfirmDeleteId(null)}
-                            className="text-[9px] px-1.5 py-0.5 rounded bg-[#1a3662] text-[#a3a3a3] hover:bg-[#20406a]"
+                            className="text-[9px] px-1.5 py-0.5 rounded bg-[#484848] text-[#a3a3a3] hover:bg-[#525252]"
                           >
                             Não
                           </button>
@@ -139,7 +139,7 @@ export function TabOrcamento({ project }: { project: Project }) {
                         <>
                           <button
                             onClick={() => setEditingBudgetLine({ projectId: project.id, lineId: line.id })}
-                            className="w-6 h-6 flex items-center justify-center rounded text-[#6b6b6b] hover:text-[#2abfdc] hover:bg-[#2abfdc]/10 transition-colors"
+                            className="w-6 h-6 flex items-center justify-center rounded text-[#6b6b6b] hover:text-[#f97316] hover:bg-[#f97316]/10 transition-colors"
                           >
                             <Pencil size={11} />
                           </button>
@@ -169,14 +169,14 @@ export function TabOrcamento({ project }: { project: Project }) {
       {/* Add button */}
       <button
         onClick={() => setEditingBudgetLine({ projectId: project.id, lineId: 'new' })}
-        className="self-start flex items-center gap-1.5 text-xs text-[#6b6b6b] hover:text-[#2abfdc] transition-colors border border-dashed border-[#20406a] hover:border-[#2abfdc]/30 rounded-lg px-3 py-2"
+        className="self-start flex items-center gap-1.5 text-xs text-[#6b6b6b] hover:text-[#f97316] transition-colors border border-dashed border-[#525252] hover:border-[#f97316]/30 rounded-lg px-3 py-2"
       >
         <Plus size={12} />
         Adicionar Linha
       </button>
 
       {/* ── Quantitativos Vinculados ── */}
-      <div className="border-t border-[#20406a] pt-4">
+      <div className="border-t border-[#525252] pt-4">
         <h3 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3] mb-3">
           Quantitativos Vinculados
         </h3>
@@ -185,7 +185,7 @@ export function TabOrcamento({ project }: { project: Project }) {
         ) : (
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 {['Descrição', 'Unid', 'Qtd', 'Custo Unit.', 'Total'].map((col) => (
                   <th key={col} className="text-left text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold pb-2 pr-4 whitespace-nowrap">
                     {col}
@@ -193,14 +193,14 @@ export function TabOrcamento({ project }: { project: Project }) {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#14294e]">
+            <tbody className="divide-y divide-[#3d3d3d]">
               {linkedQuantitativos.map((item) => (
-                <tr key={item.id} className="hover:bg-[#14294e]/50 transition-colors">
+                <tr key={item.id} className="hover:bg-[#3d3d3d]/50 transition-colors">
                   <td className="py-2 pr-4 text-[#f5f5f5]">{item.description}</td>
                   <td className="py-2 pr-4 text-[#6b6b6b]">{item.unit}</td>
                   <td className="py-2 pr-4 text-[#a3a3a3] font-mono">{item.quantity.toLocaleString('pt-BR')}</td>
                   <td className="py-2 pr-4 text-[#a3a3a3] font-mono">{formatCurrency(item.unitCost)}</td>
-                  <td className="py-2 text-[#2abfdc] font-semibold font-mono">{formatCurrency(item.totalCost)}</td>
+                  <td className="py-2 text-[#f97316] font-semibold font-mono">{formatCurrency(item.totalCost)}</td>
                 </tr>
               ))}
             </tbody>

@@ -15,7 +15,7 @@ const CATEGORY_LABEL: Record<DocumentCategory, string> = {
 }
 
 const CATEGORY_COLOR: Record<DocumentCategory, string> = {
-  contract:      'text-[#2abfdc] bg-[#2abfdc]/10',
+  contract:      'text-[#f97316] bg-[#f97316]/10',
   drawing:       'text-[#3b82f6] bg-[#3b82f6]/10',
   specification: 'text-[#a855f7] bg-[#a855f7]/10',
   report:        'text-[#22c55e] bg-[#22c55e]/10',
@@ -119,17 +119,17 @@ export function TabDocumentos({ project }: { project: Project }) {
         className={cn(
           'flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-8 cursor-pointer transition-colors',
           isDragging
-            ? 'border-[#2abfdc] bg-[#2abfdc]/5'
-            : 'border-[#20406a] hover:border-[#1f3c5e] bg-[#112645]'
+            ? 'border-[#f97316] bg-[#f97316]/5'
+            : 'border-[#525252] hover:border-[#1f3c5e] bg-[#333333]'
         )}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
       >
-        <UploadCloud size={28} className={isDragging ? 'text-[#2abfdc]' : 'text-[#3f3f3f]'} />
+        <UploadCloud size={28} className={isDragging ? 'text-[#f97316]' : 'text-[#3f3f3f]'} />
         <div className="text-center">
-          <p className="text-sm text-[#a3a3a3]">Arraste arquivos ou <span className="text-[#2abfdc]">clique para selecionar</span></p>
+          <p className="text-sm text-[#a3a3a3]">Arraste arquivos ou <span className="text-[#f97316]">clique para selecionar</span></p>
           <p className="text-[10px] text-[#3f3f3f] mt-0.5">Máximo 10 MB por arquivo</p>
         </div>
         <input
@@ -157,8 +157,8 @@ export function TabDocumentos({ project }: { project: Project }) {
             className={cn(
               'text-[10px] px-2.5 py-1 rounded-full font-semibold transition-colors border',
               filter === opt.value
-                ? 'bg-[#2abfdc]/15 text-[#2abfdc] border-[#2abfdc]/30'
-                : 'text-[#6b6b6b] border-[#20406a] hover:border-[#1f3c5e] hover:text-[#a3a3a3]'
+                ? 'bg-[#f97316]/15 text-[#f97316] border-[#f97316]/30'
+                : 'text-[#6b6b6b] border-[#525252] hover:border-[#1f3c5e] hover:text-[#a3a3a3]'
             )}
           >
             {opt.label}
@@ -177,9 +177,9 @@ export function TabDocumentos({ project }: { project: Project }) {
           {filtered.map((doc) => (
             <div
               key={doc.id}
-              className="flex items-center gap-3 rounded-xl border border-[#20406a] bg-[#14294e] px-4 py-3 hover:bg-[#1a3662] transition-colors"
+              className="flex items-center gap-3 rounded-xl border border-[#525252] bg-[#3d3d3d] px-4 py-3 hover:bg-[#484848] transition-colors"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#1a3662] flex items-center justify-center text-[#6b6b6b] shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-[#484848] flex items-center justify-center text-[#6b6b6b] shrink-0">
                 <FileIcon mimeType={doc.mimeType} size={16} />
               </div>
 
@@ -200,7 +200,7 @@ export function TabDocumentos({ project }: { project: Project }) {
                   <>
                     <button
                       onClick={(e) => { e.stopPropagation(); setPreviewDoc(doc) }}
-                      className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#2abfdc] hover:bg-[#2abfdc]/10 transition-colors"
+                      className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f97316] hover:bg-[#f97316]/10 transition-colors"
                       title="Visualizar"
                     >
                       <Eye size={13} />
@@ -226,7 +226,7 @@ export function TabDocumentos({ project }: { project: Project }) {
                     </button>
                     <button
                       onClick={() => setConfirmDeleteId(null)}
-                      className="text-[9px] px-1.5 py-0.5 rounded bg-[#1a3662] text-[#a3a3a3]"
+                      className="text-[9px] px-1.5 py-0.5 rounded bg-[#484848] text-[#a3a3a3]"
                     >
                       Não
                     </button>
@@ -253,19 +253,19 @@ export function TabDocumentos({ project }: { project: Project }) {
           onClick={() => setPreviewDoc(null)}
         >
           <div
-            className="w-full max-w-4xl rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl overflow-hidden"
+            className="w-full max-w-4xl rounded-2xl border border-[#525252] bg-[#333333] flex flex-col shadow-2xl overflow-hidden"
             style={{ maxHeight: '90vh' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-[#20406a] shrink-0">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#525252] shrink-0">
               <div className="flex items-center gap-2 min-w-0">
                 <FileIcon mimeType={previewDoc.mimeType} size={14} />
                 <span className="text-sm text-[#f5f5f5] font-medium truncate">{previewDoc.name}</span>
               </div>
               <button
                 onClick={() => setPreviewDoc(null)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#1a3662] transition-colors shrink-0"
+                className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#484848] transition-colors shrink-0"
               >
                 <X size={14} />
               </button>
@@ -284,7 +284,7 @@ export function TabDocumentos({ project }: { project: Project }) {
                   title={previewDoc.name}
                   width="100%"
                   height="600px"
-                  className="rounded-lg border border-[#20406a]"
+                  className="rounded-lg border border-[#525252]"
                 />
               ) : (
                 <div className="flex flex-col items-center gap-3 py-12 text-center">
@@ -293,7 +293,7 @@ export function TabDocumentos({ project }: { project: Project }) {
                   <a
                     href={previewDoc.base64}
                     download={previewDoc.name}
-                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#2abfdc]/15 border border-[#2abfdc]/30 text-[#2abfdc] hover:bg-[#2abfdc]/25 transition-colors"
+                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#f97316]/15 border border-[#f97316]/30 text-[#f97316] hover:bg-[#f97316]/25 transition-colors"
                   >
                     <Download size={12} />
                     Download

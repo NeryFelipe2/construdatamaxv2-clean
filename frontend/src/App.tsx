@@ -45,6 +45,9 @@ const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").t
 // ─── Motor NS V5 (novo, visual Datadog) ────────────────────────────────────
 const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m) => ({ default: m.MotorNsV5Page })));
 
+// ─── Leitor de PDF (extração algorítmica) ───────────────────────────────────
+const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
+
 // ─── Nav items ──────────────────────────────────────────────────────────────
 const navItems = [
   { section: "Gestao" },
@@ -79,6 +82,7 @@ const navItems = [
 
   { section: "IA & Inteligencia" },
   { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
+  { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
 
   { section: "Comunicacao" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
@@ -406,6 +410,7 @@ export default function App() {
           <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
           <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />
           <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
+          <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
           
           {/* Legacy offline routes removed — all modules now integrated */}
 

@@ -9,7 +9,7 @@ import type { PredictiveHealth, HealthRisk } from '@/types'
 
 const RISK_META: Record<HealthRisk, { label: string; color: string; bg: string }> = {
   critical: { label: 'Crítico', color: '#ef4444', bg: '#ef444415' },
-  high:     { label: 'Alto',    color: '#2abfdc', bg: '#2abfdc15' },
+  high:     { label: 'Alto',    color: '#f97316', bg: '#f9731615' },
   medium:   { label: 'Médio',   color: '#eab308', bg: '#eab30815' },
   low:      { label: 'Baixo',   color: '#22c55e', bg: '#22c55e15' },
 }
@@ -18,7 +18,7 @@ const RISK_META: Record<HealthRisk, { label: string; color: string; bg: string }
 
 function HealthGauge({ score, color }: { score: number; color: string }) {
   const theme = useThemeStore((s) => s.theme)
-  const trackColor = theme === 'dark' ? '#20406a' : '#e5e8ed'
+  const trackColor = theme === 'dark' ? '#525252' : '#e5e8ed'
   const textColor  = theme === 'dark' ? '#f5f5f5' : '#1a1d23'
 
   const r = 24
@@ -58,7 +58,7 @@ function HealthCard({ h, onDelete }: { h: PredictiveHealth; onDelete: () => void
 
   return (
     <div
-      className="bg-[#14294e] rounded-xl p-4 flex gap-4 relative"
+      className="bg-[#3d3d3d] rounded-xl p-4 flex gap-4 relative"
       style={{ border: `1px solid ${meta.color}30` }}
     >
       {/* Delete button */}
@@ -74,7 +74,7 @@ function HealthCard({ h, onDelete }: { h: PredictiveHealth; onDelete: () => void
 
       <div className="flex-1 min-w-0 pr-6">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          <span className="font-mono text-xs font-bold text-[#2abfdc]">{h.equipmentCode}</span>
+          <span className="font-mono text-xs font-bold text-[#f97316]">{h.equipmentCode}</span>
           <span
             className="px-2 py-0.5 rounded text-[10px] font-bold"
             style={{ backgroundColor: meta.bg, color: meta.color }}
@@ -82,7 +82,7 @@ function HealthCard({ h, onDelete }: { h: PredictiveHealth; onDelete: () => void
             {meta.label}
           </span>
           <span
-            className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#20406a] text-[#6b6b6b]"
+            className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#525252] text-[#6b6b6b]"
           >
             {h.predictedFailureWindow}
           </span>
@@ -141,7 +141,7 @@ function MaintenanceInputDialog({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState<MaintenanceFormState>(EMPTY_MAINTENANCE_FORM)
 
   const labelClass = 'block text-xs font-medium text-[#6b6b6b] mb-1'
-  const inputClass = 'w-full px-3 py-2 rounded-lg border border-[#20406a] bg-[#112645] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#2abfdc]'
+  const inputClass = 'w-full px-3 py-2 rounded-lg border border-[#525252] bg-[#333333] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]'
 
   function handleSave() {
     addHealthScore({
@@ -163,7 +163,7 @@ function MaintenanceInputDialog({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[#0d2040] border border-[#20406a] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <p className="text-[#f5f5f5] text-base font-semibold">Adicionar Equipamento</p>
@@ -275,13 +275,13 @@ function MaintenanceInputDialog({ onClose }: { onClose: () => void }) {
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSave}
-            className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#2abfdc] hover:bg-[#1a9ab8] text-white transition-colors"
+            className="flex-1 py-2 rounded-lg text-sm font-semibold bg-[#f97316] hover:bg-[#ea580c] text-white transition-colors"
           >
             Salvar
           </button>
           <button
             onClick={onClose}
-            className="flex-1 py-2 rounded-lg text-sm font-medium border border-[#20406a] text-[#a3a3a3] hover:text-[#f5f5f5] transition-colors"
+            className="flex-1 py-2 rounded-lg text-sm font-medium border border-[#525252] text-[#a3a3a3] hover:text-[#f5f5f5] transition-colors"
           >
             Cancelar
           </button>
@@ -318,13 +318,13 @@ export function ManutencaoPreditivaPanel() {
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setDialogOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#1a9ab8] text-white text-xs font-semibold transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-semibold transition-colors"
           >
             <Plus size={13} /> Adicionar Equipamento
           </button>
           <button
             onClick={runHealthEngine}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#1a3662] transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
           >
             <RefreshCw size={13} /> Rodar Engine
           </button>
@@ -348,7 +348,7 @@ export function ManutencaoPreditivaPanel() {
 
       {/* Health cards grid */}
       {sorted.length === 0 ? (
-        <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-6 text-center">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-6 text-center">
           <p className="text-[#6b6b6b] text-sm">Clique em "Rodar Engine" para calcular os scores.</p>
         </div>
       ) : (

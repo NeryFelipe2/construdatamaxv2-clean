@@ -31,10 +31,10 @@ function KpiCard({
   label: string; value: string; sub?: string; borderColor?: string; textColor?: string
 }) {
   return (
-    <div className={`bg-gray-800 rounded-xl p-4 border border-gray-700 ${borderColor ? `border-l-4 ${borderColor}` : ''}`}>
-      <p className="text-gray-400 text-xs mb-1">{label}</p>
+    <div className={`bg-[#3d3d3d] rounded-xl p-4 border border-[#525252] ${borderColor ? `border-l-4 ${borderColor}` : ''}`}>
+      <p className="text-[#a3a3a3] text-xs mb-1">{label}</p>
       <p className={`text-xl font-bold ${textColor}`}>{value}</p>
-      {sub && <p className="text-gray-500 text-xs mt-0.5">{sub}</p>}
+      {sub && <p className="text-[#6b6b6b] text-xs mt-0.5">{sub}</p>}
     </div>
   )
 }
@@ -66,11 +66,11 @@ function EntryRow({ entry, onUpdate, onDelete }: EntryRowProps) {
     setEditing(false)
   }
 
-  const inputCls = 'bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-gray-200 focus:outline-none focus:border-sky-500 w-full'
+  const inputCls = 'bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50 w-full'
 
   if (editing) {
     return (
-      <tr className="border-b border-gray-700/50 bg-gray-750/30">
+      <tr className="border-b border-[#525252]/50 bg-gray-750/30">
         <td className="px-3 py-2">
           <input type="date" value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} className={inputCls} />
         </td>
@@ -92,7 +92,7 @@ function EntryRow({ entry, onUpdate, onDelete }: EntryRowProps) {
         <td className="px-3 py-2">
           <div className="flex gap-1">
             <button onClick={save} className="p-1 text-emerald-400 hover:text-emerald-300"><Check size={14} /></button>
-            <button onClick={cancel} className="p-1 text-gray-400 hover:text-gray-300"><X size={14} /></button>
+            <button onClick={cancel} className="p-1 text-[#a3a3a3] hover:text-[#f5f5f5]"><X size={14} /></button>
           </div>
         </td>
       </tr>
@@ -100,11 +100,11 @@ function EntryRow({ entry, onUpdate, onDelete }: EntryRowProps) {
   }
 
   return (
-    <tr className="border-b border-gray-700/50 hover:bg-gray-750/20">
-      <td className="px-3 py-3 text-gray-400 text-sm">{fmtDate(entry.date)}</td>
-      <td className="px-3 py-3 text-gray-300 text-sm">{entry.category}</td>
-      <td className="px-3 py-3 text-gray-300 text-sm">{entry.description}</td>
-      <td className="px-3 py-3 text-gray-200 text-sm font-medium">{fmtBRL(entry.valueBRL)}</td>
+    <tr className="border-b border-[#525252]/50 hover:bg-gray-750/20">
+      <td className="px-3 py-3 text-[#a3a3a3] text-sm">{fmtDate(entry.date)}</td>
+      <td className="px-3 py-3 text-[#f5f5f5] text-sm">{entry.category}</td>
+      <td className="px-3 py-3 text-[#f5f5f5] text-sm">{entry.description}</td>
+      <td className="px-3 py-3 text-[#f5f5f5] text-sm font-medium">{fmtBRL(entry.valueBRL)}</td>
       <td className="px-3 py-3">
         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
           entry.type === 'expense'
@@ -116,8 +116,8 @@ function EntryRow({ entry, onUpdate, onDelete }: EntryRowProps) {
       </td>
       <td className="px-3 py-3">
         <div className="flex items-center gap-1">
-          <button onClick={() => setEditing(true)} className="p-1 text-gray-400 hover:text-sky-400 transition-colors"><Pencil size={13} /></button>
-          <button onClick={() => onDelete(entry.id)} className="p-1 text-gray-400 hover:text-red-400 transition-colors"><Trash2 size={13} /></button>
+          <button onClick={() => setEditing(true)} className="p-1 text-[#a3a3a3] hover:text-[#f97316] transition-colors"><Pencil size={13} /></button>
+          <button onClick={() => onDelete(entry.id)} className="p-1 text-[#a3a3a3] hover:text-red-400 transition-colors"><Trash2 size={13} /></button>
         </div>
       </td>
     </tr>
@@ -143,39 +143,39 @@ function AddEntryForm({ onAdd, onClose }: {
     onClose()
   }
 
-  const inputCls = 'w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500'
+  const inputCls = 'w-full bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-[#f97316]/50'
 
   return (
-    <div className="bg-gray-750 border border-gray-600 rounded-xl p-5 space-y-3">
-      <h4 className="text-gray-200 font-medium text-sm">Novo Lançamento</h4>
+    <div className="bg-gray-750 border border-[#5e5e5e] rounded-xl p-5 space-y-3">
+      <h4 className="text-[#f5f5f5] font-medium text-sm">Novo Lançamento</h4>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Data</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Data</label>
           <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className={inputCls} />
         </div>
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Categoria</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Categoria</label>
           <input type="text" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="ex. Material" className={inputCls} />
         </div>
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Tipo</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Tipo</label>
           <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as 'expense' | 'revenue' })} className={inputCls}>
             <option value="expense">Despesa</option>
             <option value="revenue">Receita</option>
           </select>
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-gray-400 text-xs mb-1">Descrição</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Descrição</label>
           <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Descrição do lançamento" className={inputCls} />
         </div>
         <div>
-          <label className="block text-gray-400 text-xs mb-1">Valor (R$)</label>
+          <label className="block text-[#a3a3a3] text-xs mb-1">Valor (R$)</label>
           <input type="number" value={form.valueBRL} onChange={(e) => setForm({ ...form, valueBRL: Number(e.target.value) })} min={0} className={inputCls} />
         </div>
       </div>
       {err && <p className="text-red-400 text-xs">{err}</p>}
       <div className="flex justify-end gap-2">
-        <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600 transition-colors">Cancelar</button>
+        <button onClick={onClose} className="px-3 py-1.5 rounded-lg bg-[#484848] text-[#f5f5f5] text-sm hover:bg-[#525252] transition-colors">Cancelar</button>
         <button onClick={submit} className="px-4 py-1.5 rounded-lg text-sm text-white transition-colors" style={{ backgroundColor: '#0ea5e9' }}>Salvar</button>
       </div>
     </div>
@@ -196,19 +196,19 @@ function CategoryChart({ entries }: { entries: RdoFinancialEntry[] }) {
   const max = sorted[0]?.[1] ?? 1
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-5">
-      <h3 className="text-gray-200 font-medium text-sm mb-4">Custos por Categoria</h3>
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-5">
+      <h3 className="text-[#f5f5f5] font-medium text-sm mb-4">Custos por Categoria</h3>
       <div className="space-y-3">
         {sorted.map(([cat, val]) => (
           <div key={cat} className="flex items-center gap-3">
-            <span className="text-gray-400 text-xs w-28 truncate text-right">{cat}</span>
-            <div className="flex-1 h-5 bg-gray-700 rounded-full overflow-hidden">
+            <span className="text-[#a3a3a3] text-xs w-28 truncate text-right">{cat}</span>
+            <div className="flex-1 h-5 bg-[#484848] rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-sky-500/70 transition-all"
                 style={{ width: `${(val / max) * 100}%` }}
               />
             </div>
-            <span className="text-gray-300 text-xs w-24 text-right">{fmtBRL(val)}</span>
+            <span className="text-[#f5f5f5] text-xs w-24 text-right">{fmtBRL(val)}</span>
           </div>
         ))}
       </div>
@@ -257,9 +257,9 @@ function SCurve({
   const acStr = points.map((p, i) => `${xOf(i).toFixed(1)},${yOfBRL(p.acBRL).toFixed(1)}`).join(' ')
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-      <div className="px-5 py-3 border-b border-gray-700">
-        <h3 className="text-gray-200 font-medium text-sm">Curva S — PV / EV / AC</h3>
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+      <div className="px-5 py-3 border-b border-[#525252]">
+        <h3 className="text-[#f5f5f5] font-medium text-sm">Curva S — PV / EV / AC</h3>
       </div>
       <div className="p-4">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 280 }}>
@@ -277,9 +277,9 @@ function SCurve({
           <polyline points={acStr} fill="none" stroke="#f43f5e" strokeWidth="2" strokeDasharray="5 3" />
         </svg>
         <div className="flex items-center gap-5 justify-center mt-1 flex-wrap">
-          <div className="flex items-center gap-1.5"><div className="w-5 h-0.5 bg-blue-500" /><span className="text-gray-400 text-xs">PV</span></div>
-          <div className="flex items-center gap-1.5"><div className="w-5 h-0.5 bg-emerald-500" /><span className="text-gray-400 text-xs">EV</span></div>
-          <div className="flex items-center gap-1.5 opacity-70"><div className="w-5 h-0.5 bg-rose-500" /><span className="text-gray-400 text-xs">AC</span></div>
+          <div className="flex items-center gap-1.5"><div className="w-5 h-0.5 bg-blue-500" /><span className="text-[#a3a3a3] text-xs">PV</span></div>
+          <div className="flex items-center gap-1.5"><div className="w-5 h-0.5 bg-emerald-500" /><span className="text-[#a3a3a3] text-xs">EV</span></div>
+          <div className="flex items-center gap-1.5 opacity-70"><div className="w-5 h-0.5 bg-rose-500" /><span className="text-[#a3a3a3] text-xs">AC</span></div>
         </div>
       </div>
     </div>
@@ -338,7 +338,7 @@ export function FinanceiroPanel() {
   const totalRevenue = financialEntries.filter((e) => e.type === 'revenue').reduce((s, e) => s + e.valueBRL, 0)
 
   function indexColor(val: number, goodAbove1 = true): string {
-    if (isNaN(val) || !isFinite(val)) return 'text-gray-400'
+    if (isNaN(val) || !isFinite(val)) return 'text-[#a3a3a3]'
     if (goodAbove1) return val >= 1 ? 'text-emerald-400' : val >= 0.9 ? 'text-yellow-400' : 'text-rose-400'
     return val <= 1 ? 'text-emerald-400' : 'text-rose-400'
   }
@@ -349,15 +349,15 @@ export function FinanceiroPanel() {
         <h2 className="text-white font-semibold text-lg">Análise Financeira (EVM)</h2>
         {/* BAC Input */}
         <div className="flex items-center gap-2">
-          <label className="text-gray-400 text-sm">Orçamento Total (BAC):</label>
+          <label className="text-[#a3a3a3] text-sm">Orçamento Total (BAC):</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">R$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b6b6b] text-sm">R$</span>
             <input
               type="number"
               value={budgetInput}
               onChange={(e) => setBudgetInput(e.target.value)}
               onBlur={handleBudgetBlur}
-              className="pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded-lg text-sm text-gray-200 focus:outline-none focus:border-sky-500 w-36"
+              className="pl-8 pr-3 py-1.5 bg-[#3d3d3d] border border-[#5e5e5e] rounded-lg text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50 w-36"
               min={0}
             />
           </div>
@@ -366,7 +366,7 @@ export function FinanceiroPanel() {
 
       {/* Row 1 EVM KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <KpiCard label="Orçamento Total (BAC)" value={fmtBRL(budgetBRL)} textColor="text-sky-400" />
+        <KpiCard label="Orçamento Total (BAC)" value={fmtBRL(budgetBRL)} textColor="text-[#f97316]" />
         <KpiCard label="Valor Agregado (EV)" value={fmtBRL(evm.ev)} textColor="text-emerald-400" sub={`${budgetBRL > 0 ? ((evm.ev / budgetBRL) * 100).toFixed(1) : '0.0'}% do BAC`} />
         <KpiCard label="Custo Real (AC)" value={fmtBRL(evm.ac)} textColor="text-rose-400" />
         <KpiCard label="Valor Planejado (PV)" value={fmtBRL(evm.pv)} textColor="text-blue-400" sub={`${budgetBRL > 0 ? ((evm.pv / budgetBRL) * 100).toFixed(1) : '0.0'}% do BAC`} />
@@ -406,8 +406,8 @@ export function FinanceiroPanel() {
 
       {/* Row 3 Projections */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <KpiCard label="EAC (Estimativa Final)" value={isFinite(evm.eac) ? fmtBRL(evm.eac) : '—'} textColor="text-gray-200" />
-        <KpiCard label="ETC (Custo para Concluir)" value={isFinite(evm.etc) ? fmtBRL(evm.etc) : '—'} textColor="text-gray-200" />
+        <KpiCard label="EAC (Estimativa Final)" value={isFinite(evm.eac) ? fmtBRL(evm.eac) : '—'} textColor="text-[#f5f5f5]" />
+        <KpiCard label="ETC (Custo para Concluir)" value={isFinite(evm.etc) ? fmtBRL(evm.etc) : '—'} textColor="text-[#f5f5f5]" />
         <KpiCard label="VAC (Variação ao Concluir)" value={isFinite(evm.vac) ? fmtBRL(evm.vac) : '—'} textColor={evm.vac >= 0 ? 'text-emerald-400' : 'text-rose-400'} />
         <KpiCard label="TCPI" value={isFinite(evm.tcpi) ? evm.tcpi.toFixed(3) : '—'} sub="eficiência requerida" textColor={indexColor(evm.tcpi, false)} />
       </div>
@@ -425,11 +425,11 @@ export function FinanceiroPanel() {
       <CategoryChart entries={financialEntries} />
 
       {/* Financial entries table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-700 flex items-center justify-between flex-wrap gap-2">
+      <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
+        <div className="px-5 py-3 border-b border-[#525252] flex items-center justify-between flex-wrap gap-2">
           <div>
-            <h3 className="text-gray-200 font-medium text-sm">Lançamentos Financeiros</h3>
-            <p className="text-gray-500 text-xs mt-0.5">
+            <h3 className="text-[#f5f5f5] font-medium text-sm">Lançamentos Financeiros</h3>
+            <p className="text-[#6b6b6b] text-xs mt-0.5">
               {financialEntries.length} lançamento{financialEntries.length !== 1 ? 's' : ''}
               &nbsp;· Despesas: {fmtBRL(acBRL)} · Receitas: {fmtBRL(totalRevenue)}
             </p>
@@ -445,7 +445,7 @@ export function FinanceiroPanel() {
         </div>
 
         {showAddForm && (
-          <div className="px-5 py-4 border-b border-gray-700">
+          <div className="px-5 py-4 border-b border-[#525252]">
             <AddEntryForm
               onAdd={addFinancialEntry}
               onClose={() => setShowAddForm(false)}
@@ -456,7 +456,7 @@ export function FinanceiroPanel() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-xs border-b border-gray-700">
+              <tr className="text-[#6b6b6b] text-xs border-b border-[#525252]">
                 <th className="text-left px-3 py-2.5 font-medium">Data</th>
                 <th className="text-left px-3 py-2.5 font-medium">Categoria</th>
                 <th className="text-left px-3 py-2.5 font-medium">Descrição</th>
@@ -468,7 +468,7 @@ export function FinanceiroPanel() {
             <tbody>
               {financialEntries.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="text-center text-gray-500 py-10">
+                  <td colSpan={6} className="text-center text-[#6b6b6b] py-10">
                     Nenhum lançamento financeiro. Clique em "Novo Lançamento" para começar.
                   </td>
                 </tr>

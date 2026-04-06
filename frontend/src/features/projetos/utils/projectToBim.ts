@@ -116,7 +116,7 @@ export function projectToBim(project: Project): BimProject {
   // ── Layers ────────────────────────────────────────────────────────────────
   const layers: BimLayer[] = [
     { id: 'slabs',   name: 'Lajes',   visible: true, color: '#3b82f6', attribute: 'elementType' },
-    { id: 'columns', name: 'Pilares', visible: true, color: '#2abfdc', attribute: 'elementType' },
+    { id: 'columns', name: 'Pilares', visible: true, color: '#f97316', attribute: 'elementType' },
     { id: 'walls',   name: 'Paredes', visible: true, color: '#22c55e', attribute: 'elementType' },
   ]
 

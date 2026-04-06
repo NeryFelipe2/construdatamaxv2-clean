@@ -24,12 +24,12 @@ function SectionDivider({ num, tag }: { num: string; tag: string }) {
 // ── BIM mockup (dark angular)
 function BimPanel() {
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="flex items-center gap-2 mb-5">
         <span className="text-white/65 text-xs font-mono uppercase tracking-wider">BIM 3D/4D/5D — Esgoto Sanitário</span>
         <div className="ml-auto flex gap-1">
           {['3D', '4D', '5D'].map((t, i) => (
-            <span key={t} className="text-xs px-2 py-0.5 font-mono" style={i === 0 ? { background: '#2abfdc', color: '#000' } : { border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.70)' }}>{t}</span>
+            <span key={t} className="text-xs px-2 py-0.5 font-mono" style={i === 0 ? { background: '#f97316', color: '#000' } : { border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.70)' }}>{t}</span>
           ))}
         </div>
       </div>
@@ -41,14 +41,14 @@ function BimPanel() {
           </div>
         ))}
       </div>
-      <div className="relative flex items-center justify-center" style={{ height: 140, background: '#071222', border: '1px solid rgba(255,255,255,0.10)' }}>
+      <div className="relative flex items-center justify-center" style={{ height: 140, background: '#222222', border: '1px solid rgba(255,255,255,0.10)' }}>
         <svg width="100%" height="100%" viewBox="0 0 400 140">
           {[0,1,2,3,4].map(i => <line key={i} x1={60+i*60} y1={15} x2={60+i*60} y2={125} stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />)}
           {[0,1,2,3].map(i => <line key={i} x1={60} y1={20+i*30} x2={300} y2={20+i*30} stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />)}
-          <path d="M80,75 L140,55 L200,75 L260,55" stroke="#2abfdc" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M140,55 L140,95 L175,95" stroke="#2abfdc" strokeWidth="1.5" fill="none" />
+          <path d="M80,75 L140,55 L200,75 L260,55" stroke="#f97316" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M140,55 L140,95 L175,95" stroke="#f97316" strokeWidth="1.5" fill="none" />
           {([[80,75],[140,55],[200,75],[260,55]] as [number,number][]).map(([x,y],i) => (
-            <circle key={i} cx={x} cy={y} r="4" fill="#2abfdc" />
+            <circle key={i} cx={x} cy={y} r="4" fill="#f97316" />
           ))}
         </svg>
         <span className="absolute bottom-2 right-2 text-white/55 text-xs font-mono">Three.js WebGL</span>
@@ -60,7 +60,7 @@ function BimPanel() {
 // ── Torre mockup
 function TorrePanel() {
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="flex items-center justify-between mb-5">
         <span className="text-white/65 text-xs font-mono uppercase tracking-wider">Torre de Controle</span>
         <span className="text-white/55 text-xs font-mono">PRJ-001 ▾</span>
@@ -91,7 +91,7 @@ function TorrePanel() {
 // ── Suprimentos mockup
 function SuprPanel() {
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="text-white/65 text-xs font-mono uppercase tracking-wider mb-5">Suprimentos — Three-Way Match</div>
       <div className="grid grid-cols-3 gap-2 mb-4">
         {[{l:'PO #1047',v:'R$84k'},{l:'GRN Recebido',v:'R$84k'},{l:'NF 000134',v:'R$84k'}].map((k) => (
@@ -101,8 +101,8 @@ function SuprPanel() {
           </div>
         ))}
       </div>
-      <div style={{ border: '1px solid rgba(42,191,220,0.2)', background: 'rgba(42,191,220,0.05)' }} className="py-2.5 text-center mb-4">
-        <span className="text-[#2abfdc] text-xs font-mono uppercase tracking-wider">✓ Three-Way Match — Aprovado</span>
+      <div style={{ border: '1px solid rgba(249,115,22,0.2)', background: 'rgba(249,115,22,0.05)' }} className="py-2.5 text-center mb-4">
+        <span className="text-[#f97316] text-xs font-mono uppercase tracking-wider">✓ Three-Way Match — Aprovado</span>
       </div>
       {[{s:'Votorantim Cimentos',p:'98%',c:'#22c55e'},{s:'TubPlast DN200',p:'85%',c:'#eab308'},{s:'Ferro & Aço Ltda',p:'72%',c:'#ef4444'}].map((r) => (
         <div key={r.s} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }} className="flex items-center gap-3 py-2">
@@ -118,7 +118,7 @@ function SuprPanel() {
 // ── MO mockup
 function MoPanel() {
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="text-white/65 text-xs font-mono uppercase tracking-wider mb-5">Mão de Obra — Alocação Diária</div>
       {[
         {n:'Carlos M.',r:'Encanador',cert:'NR-10 ✓',h:'8h',ok:true},
@@ -141,8 +141,8 @@ function MoPanel() {
           <div style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-white font-bold text-lg">24</div>
           <div className="text-white/65 text-xs uppercase tracking-wider">Colaboradores</div>
         </div>
-        <div style={{ border: '1px solid rgba(42,191,220,0.15)', background: 'rgba(42,191,220,0.06)' }} className="p-2 text-center">
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#2abfdc' }} className="font-bold text-lg">192h</div>
+        <div style={{ border: '1px solid rgba(249,115,22,0.15)', background: 'rgba(249,115,22,0.06)' }} className="p-2 text-center">
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#f97316' }} className="font-bold text-lg">192h</div>
           <div className="text-white/65 text-xs uppercase tracking-wider">Hoje</div>
         </div>
       </div>
@@ -153,7 +153,7 @@ function MoPanel() {
 // ── RDO mockup
 function RdoPanel() {
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="flex items-center justify-between mb-5">
         <span className="text-white/65 text-xs font-mono uppercase tracking-wider">RDO — 27/03/2026</span>
         <span className="text-white/60 text-xs font-mono">OBR-001</span>
@@ -174,10 +174,10 @@ function RdoPanel() {
           <div className="flex justify-between text-xs mb-1.5">
             <span className="text-white/80 font-mono">{a.code}</span>
             <span className="text-white/85">{a.desc}</span>
-            <span style={{ color: '#2abfdc' }} className="font-mono">{a.qty}</span>
+            <span style={{ color: '#f97316' }} className="font-mono">{a.qty}</span>
           </div>
           <div className="h-px" style={{ background: 'rgba(255,255,255,0.14)' }}>
-            <div className="h-full" style={{ width: `${a.pct}%`, background: '#2abfdc' }} />
+            <div className="h-full" style={{ width: `${a.pct}%`, background: '#f97316' }} />
           </div>
         </div>
       ))}
@@ -197,9 +197,9 @@ function AiPanel() {
     { role:'bot', t:'Com a realocação sugerida: +2 dias. Sem intervenção: +8 dias e R$24.000 em multa contratual.'},
   ]
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }} className="p-6">
+    <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }} className="p-6">
       <div className="flex items-center gap-2 mb-5">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#2abfdc] animate-pulse" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#f97316] animate-pulse" />
         <span className="text-white/65 text-xs font-mono uppercase tracking-wider">Atlântico AI — Copiloto de Obra</span>
       </div>
       <div className="space-y-3">
@@ -208,7 +208,7 @@ function AiPanel() {
             <div
               className="inline-block max-w-[90%] px-3 py-2 leading-relaxed"
               style={
-                m.role === 'user' ? { background: 'rgba(42,191,220,0.12)', border: '1px solid rgba(42,191,220,0.2)', color: '#2abfdc' } :
+                m.role === 'user' ? { background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.2)', color: '#f97316' } :
                 m.role === 'alert' ? { background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)', color: 'rgba(251,191,36,0.8)' } :
                 m.role === 'sys' ? { color: 'rgba(255,255,255,0.55)', fontStyle: 'italic' } :
                 { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.90)' }
@@ -340,7 +340,7 @@ function FeatureBlock({ id, num, tag, title, copy, bullets, visual, flip }: Feat
             <div className="space-y-4">
               {bullets.map((b) => (
                 <div key={b.label} className="flex gap-4 items-start">
-                  <span className="text-[#2abfdc] mt-0.5 shrink-0 font-mono text-sm">—</span>
+                  <span className="text-[#f97316] mt-0.5 shrink-0 font-mono text-sm">—</span>
                   <div>
                     <span className="text-white/90 text-sm font-medium">{b.label}</span>
                     <span className="text-white/70 text-sm">: {b.desc}</span>
@@ -359,9 +359,9 @@ function FeatureBlock({ id, num, tag, title, copy, bullets, visual, flip }: Feat
 
 export function FeatureDeepSection() {
   return (
-    <section id="funcionalidades" style={{ background: '#0b1a30' }}>
+    <section id="funcionalidades" style={{ background: '#2c2c2c' }}>
       {FEATURES.map((f, i) => (
-        <div key={f.id} style={{ background: i % 2 === 0 ? '#0b1a30' : '#0f2240' }}>
+        <div key={f.id} style={{ background: i % 2 === 0 ? '#2c2c2c' : '#333333' }}>
           <FeatureBlock {...f} />
         </div>
       ))}

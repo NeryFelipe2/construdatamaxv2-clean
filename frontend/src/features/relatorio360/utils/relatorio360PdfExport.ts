@@ -94,7 +94,7 @@ function buildHtml(report: DailyReport, title: string, subtitle: string): string
       <div class="crew-header">
         <strong>${crew.foremanName}</strong>
         <span class="badge">${crew.crewType}</span>
-        <span style="margin-left:auto;color:#2abfdc;font-weight:700">${fmtCurrency(crewCost)}</span>
+        <span style="margin-left:auto;color:#f97316;font-weight:700">${fmtCurrency(crewCost)}</span>
       </div>
       <table>
         <thead><tr>
@@ -157,10 +157,10 @@ function buildHtml(report: DailyReport, title: string, subtitle: string): string
 
     .cover {
       display: flex; align-items: center; gap: 14px;
-      padding: 18px 0 12px; border-bottom: 3px solid #2abfdc; margin-bottom: 16px;
+      padding: 18px 0 12px; border-bottom: 3px solid #f97316; margin-bottom: 16px;
     }
     .cover-logo {
-      width: 44px; height: 44px; background: #2abfdc; border-radius: 10px;
+      width: 44px; height: 44px; background: #f97316; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       font-size: 18pt; color: #fff; font-weight: 900; flex-shrink: 0;
     }
@@ -186,7 +186,7 @@ function buildHtml(report: DailyReport, title: string, subtitle: string): string
       padding: 6px 12px; border-radius: 6px 6px 0 0; margin-bottom: 0;
       display: flex; align-items: center; gap: 8px;
     }
-    .section-dot { width: 8px; height: 8px; border-radius: 50%; background: #2abfdc; flex-shrink: 0; }
+    .section-dot { width: 8px; height: 8px; border-radius: 50%; background: #f97316; flex-shrink: 0; }
 
     table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
     th { background: #f8fafc; padding: 5px 8px; text-align: left; font-weight: 600; border-bottom: 1px solid #e2e8f0; }

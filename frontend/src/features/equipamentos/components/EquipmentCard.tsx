@@ -20,8 +20,8 @@ export function EquipmentCard({ equipment, isSelected, onSelect, onEdit }: Props
       className={cn(
         'rounded-xl border p-3.5 cursor-pointer transition-all flex flex-col gap-2',
         isSelected
-          ? 'border-[#2abfdc]/50 bg-[#2abfdc]/5 shadow-sm'
-          : 'border-[#20406a] bg-[#112645] hover:border-[#1f3c5e] hover:bg-[#14294e]'
+          ? 'border-[#f97316]/50 bg-[#f97316]/5 shadow-sm'
+          : 'border-[#525252] bg-[#333333] hover:border-[#1f3c5e] hover:bg-[#3d3d3d]'
       )}
     >
       {/* Top row: code + status badge + alert count */}
@@ -33,7 +33,7 @@ export function EquipmentCard({ equipment, isSelected, onSelect, onEdit }: Props
           />
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[#2abfdc] font-mono text-xs font-semibold">{equipment.code}</span>
+              <span className="text-[#f97316] font-mono text-xs font-semibold">{equipment.code}</span>
               <span className="text-[10px] text-[#6b6b6b] uppercase tracking-wider">{equipment.type}</span>
             </div>
             <p className="text-[#f5f5f5] font-semibold text-sm leading-snug truncate">
@@ -83,7 +83,7 @@ export function EquipmentCard({ equipment, isSelected, onSelect, onEdit }: Props
       {/* Edit link */}
       <button
         onClick={(e) => { e.stopPropagation(); onEdit() }}
-        className="self-start flex items-center gap-1 text-[10px] text-[#3f3f3f] hover:text-[#2abfdc] transition-colors mt-0.5"
+        className="self-start flex items-center gap-1 text-[10px] text-[#3f3f3f] hover:text-[#f97316] transition-colors mt-0.5"
       >
         <Pencil size={9} />
         Editar perfil

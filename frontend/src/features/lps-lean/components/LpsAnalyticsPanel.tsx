@@ -17,7 +17,7 @@ const CATEGORY_LABELS: Record<LpsRestrictionCategory, string> = {
 
 const CATEGORY_COLORS: Record<LpsRestrictionCategory, string> = {
   projeto_engenharia: '#6366f1',
-  materiais:          '#2abfdc',
+  materiais:          '#f97316',
   equipamentos:       '#eab308',
   mao_de_obra:        '#a78bfa',
   externo:            '#38bdf8',
@@ -126,10 +126,10 @@ export function LpsAnalyticsPanel() {
                 return (
                   <div key={cat}>
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs text-gray-300">{CATEGORY_LABELS[cat]}</span>
-                      <span className="text-xs font-semibold text-gray-200">{count} ({pct}%)</span>
+                      <span className="text-xs text-[#f5f5f5]">{CATEGORY_LABELS[cat]}</span>
+                      <span className="text-xs font-semibold text-[#f5f5f5]">{count} ({pct}%)</span>
                     </div>
-                    <div className="h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-[#3d3d3d] rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{ width: `${pct}%`, backgroundColor: CATEGORY_COLORS[cat] }}
@@ -158,7 +158,7 @@ export function LpsAnalyticsPanel() {
           ) : (
             <BarChart
               data={byResponsavel.map(([label, v]) => ({ label, value: v }))}
-              color="#2abfdc"
+              color="#f97316"
             />
           )}
         </ChartCard>
@@ -218,7 +218,7 @@ function StatusDonut({ byStatus, total }: { byStatus: [LpsRestrictionStatus, num
         {byStatus.map(([status, count]) => (
           <div key={status} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: STATUS_CHART_COLORS[status] }} />
-            <span className="text-xs text-gray-300">{STATUS_LABELS[status]}</span>
+            <span className="text-xs text-[#f5f5f5]">{STATUS_LABELS[status]}</span>
             <span className="text-xs font-bold text-white ml-1">{count}</span>
           </div>
         ))}
@@ -300,8 +300,8 @@ function GroupedBarChart({ data }: { data: { month: string; criadas: number; res
 
 function KpiCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 flex flex-col gap-1">
-      <p className="text-[10px] uppercase tracking-widest text-gray-500">{label}</p>
+    <div className="rounded-xl border border-[#3d3d3d] bg-[#2c2c2c] p-4 flex flex-col gap-1">
+      <p className="text-[10px] uppercase tracking-widest text-[#6b6b6b]">{label}</p>
       <p className={`text-xl font-bold ${color}`}>{value}</p>
     </div>
   )
@@ -309,7 +309,7 @@ function KpiCard({ label, value, color }: { label: string; value: string; color:
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+    <div className="rounded-xl border border-[#3d3d3d] bg-[#2c2c2c] p-5">
       <p className="text-xs font-semibold text-white mb-4">{title}</p>
       {children}
     </div>

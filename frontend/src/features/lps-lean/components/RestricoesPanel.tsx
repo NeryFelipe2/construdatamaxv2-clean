@@ -20,7 +20,7 @@ const CATEGORY_LABELS: Record<LpsRestrictionCategory, string> = {
 
 const CATEGORY_COLORS: Record<LpsRestrictionCategory, string> = {
   projeto_engenharia: '#6366f1',
-  materiais:          '#2abfdc',
+  materiais:          '#f97316',
   equipamentos:       '#eab308',
   mao_de_obra:        '#a78bfa',
   externo:            '#38bdf8',
@@ -140,7 +140,7 @@ export function RestricoesPanel() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4 flex-wrap">
           <h2 className="text-sm font-bold text-white">Análise de Restrições</h2>
-          <KpiBadge label="TOTAL"        value={counts.total}        color="bg-gray-700 text-gray-200" />
+          <KpiBadge label="TOTAL"        value={counts.total}        color="bg-[#484848] text-[#f5f5f5]" />
           <KpiBadge label="IDENTIFICADAS" value={counts.identificada} color="bg-red-900/50 text-red-300" />
           <KpiBadge label="EM RESOLUÇÃO"  value={counts.em_resolucao} color="bg-yellow-900/50 text-yellow-300" />
           <KpiBadge label="RESOLVIDAS"    value={counts.resolvida}    color="bg-green-900/50 text-green-300" />
@@ -162,7 +162,7 @@ export function RestricoesPanel() {
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               filter === f
                 ? 'bg-orange-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                : 'bg-[#3d3d3d] text-[#a3a3a3] hover:bg-[#484848]'
             }`}
           >
             {f === 'all' ? 'Todas' : STATUS_LABELS[f]}
@@ -171,29 +171,29 @@ export function RestricoesPanel() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-gray-800 overflow-x-auto overflow-hidden">
+      <div className="rounded-xl border border-[#3d3d3d] overflow-x-auto overflow-hidden">
         {visible.length === 0 ? (
           <p className="text-gray-600 text-sm text-center py-10">Nenhuma restrição encontrada.</p>
         ) : (
           <table className="w-full text-sm">
-            <thead className="bg-gray-800/80 border-b border-gray-700">
+            <thead className="bg-[#3d3d3d]/80 border-b border-[#525252]">
               <tr>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Categoria</th>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Tema / Descrição</th>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Responsável</th>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Prazo</th>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Tags</th>
-                <th className="text-left text-gray-400 px-4 py-2.5 text-xs font-semibold">Status</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Categoria</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Tema / Descrição</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Responsável</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Prazo</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Tags</th>
+                <th className="text-left text-[#a3a3a3] px-4 py-2.5 text-xs font-semibold">Status</th>
                 <th className="px-4 py-2.5 text-xs" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-[#3d3d3d]">
               {visible.map((r) => {
                 const isExpired = r.prazoRemocao && r.prazoRemocao < today && r.status !== 'resolvida'
                 return (
                   <tr
                     key={r.id}
-                    className="bg-gray-900 hover:bg-gray-800/50 transition-colors cursor-pointer"
+                    className="bg-[#2c2c2c] hover:bg-[#3d3d3d]/50 transition-colors cursor-pointer"
                     onClick={() => openEdit(r)}
                   >
                     <td className="px-4 py-3">
@@ -209,12 +209,12 @@ export function RestricoesPanel() {
                     </td>
                     <td className="px-4 py-3 max-w-xs">
                       <p className="text-white text-xs font-semibold">{r.tema}</p>
-                      <p className="text-gray-500 text-[10px] truncate">{r.descricao}</p>
+                      <p className="text-[#6b6b6b] text-[10px] truncate">{r.descricao}</p>
                     </td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{r.responsavel || '—'}</td>
+                    <td className="px-4 py-3 text-[#a3a3a3] text-xs">{r.responsavel || '—'}</td>
                     <td className="px-4 py-3 text-xs">
                       {r.prazoRemocao ? (
-                        <span className={`flex items-center gap-1 ${isExpired ? 'text-red-400' : 'text-gray-300'}`}>
+                        <span className={`flex items-center gap-1 ${isExpired ? 'text-red-400' : 'text-[#f5f5f5]'}`}>
                           {isExpired && <AlertTriangle size={11} />}
                           {r.prazoRemocao}
                         </span>
@@ -223,7 +223,7 @@ export function RestricoesPanel() {
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {r.tags.slice(0, 3).map((t) => (
-                          <span key={t} className="px-1.5 py-0.5 bg-gray-800 text-gray-400 rounded text-[9px]">{t}</span>
+                          <span key={t} className="px-1.5 py-0.5 bg-[#3d3d3d] text-[#a3a3a3] rounded text-[9px]">{t}</span>
                         ))}
                         {r.tags.length > 3 && (
                           <span className="text-gray-600 text-[9px]">+{r.tags.length - 3}</span>
@@ -252,7 +252,7 @@ export function RestricoesPanel() {
                           className={`bg-transparent text-xs font-semibold border-none outline-none cursor-pointer ${STATUS_COLORS[r.status]}`}
                         >
                           {(Object.keys(STATUS_LABELS) as LpsRestrictionStatus[]).map((s) => (
-                            <option key={s} value={s} className="bg-gray-900 text-white">{STATUS_LABELS[s]}</option>
+                            <option key={s} value={s} className="bg-[#2c2c2c] text-white">{STATUS_LABELS[s]}</option>
                           ))}
                         </select>
                       )}
@@ -284,13 +284,13 @@ export function RestricoesPanel() {
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
             {/* Modal header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+            <div className="flex items-center justify-between px-3 sm:px-6 py-4 border-b border-[#525252]">
               <h3 className="text-sm font-bold text-white">
                 {editId ? 'Editar Restrição' : 'Nova Restrição'}
               </h3>
-              <button onClick={() => setModalOpen(false)} className="text-gray-500 hover:text-gray-300">
+              <button onClick={() => setModalOpen(false)} className="text-[#6b6b6b] hover:text-[#f5f5f5]">
                 <X size={16} />
               </button>
             </div>
@@ -304,7 +304,7 @@ export function RestricoesPanel() {
                   value={form.tema}
                   onChange={(e) => setForm((f) => ({ ...f, tema: e.target.value }))}
                   placeholder="Ex: Licença ambiental pendente"
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                  className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                 />
               </FieldGroup>
 
@@ -313,7 +313,7 @@ export function RestricoesPanel() {
                 <select
                   value={form.categoria}
                   onChange={(e) => setForm((f) => ({ ...f, categoria: e.target.value as LpsRestrictionCategory }))}
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                  className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                 >
                   {(Object.keys(CATEGORY_LABELS) as LpsRestrictionCategory[]).map((c) => (
                     <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
@@ -328,19 +328,19 @@ export function RestricoesPanel() {
                   onChange={(e) => setForm((f) => ({ ...f, descricao: e.target.value }))}
                   rows={3}
                   placeholder="Descreva a restrição..."
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
                 />
               </FieldGroup>
 
               {/* Impacto + Responsável row */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FieldGroup label="Impacto">
                   <input
                     type="text"
                     value={form.impacto}
                     onChange={(e) => setForm((f) => ({ ...f, impacto: e.target.value }))}
                     placeholder="Ex: Paralisa equipe B"
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                   />
                 </FieldGroup>
                 <FieldGroup label="Responsável">
@@ -349,26 +349,26 @@ export function RestricoesPanel() {
                     value={form.responsavel}
                     onChange={(e) => setForm((f) => ({ ...f, responsavel: e.target.value }))}
                     placeholder="Ex: Eng. Ambiental"
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                   />
                 </FieldGroup>
               </div>
 
               {/* Prazo + Status row */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FieldGroup label="Prazo de Remoção">
                   <input
                     type="date"
                     value={form.prazoRemocao}
                     onChange={(e) => setForm((f) => ({ ...f, prazoRemocao: e.target.value }))}
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                   />
                 </FieldGroup>
                 <FieldGroup label="Status">
                   <select
                     value={form.status}
                     onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as LpsRestrictionStatus }))}
-                    className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
                   >
                     {(Object.keys(STATUS_LABELS) as LpsRestrictionStatus[]).map((s) => (
                       <option key={s} value={s}>{STATUS_LABELS[s]}</option>
@@ -384,7 +384,7 @@ export function RestricoesPanel() {
                   onChange={(e) => setForm((f) => ({ ...f, acoesNecessarias: e.target.value }))}
                   rows={2}
                   placeholder="Liste as ações para remover esta restrição..."
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
                 />
               </FieldGroup>
 
@@ -392,7 +392,7 @@ export function RestricoesPanel() {
               <FieldGroup label="Tags">
                 <div className="flex flex-wrap gap-1 mb-2">
                   {form.tags.map((t) => (
-                    <span key={t} className="flex items-center gap-1 px-2 py-0.5 bg-gray-700 text-gray-300 rounded text-xs">
+                    <span key={t} className="flex items-center gap-1 px-2 py-0.5 bg-[#484848] text-[#f5f5f5] rounded text-xs">
                       {t}
                       <button onClick={() => removeTag(t)} className="hover:text-red-400"><X size={10} /></button>
                     </span>
@@ -405,11 +405,11 @@ export function RestricoesPanel() {
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag() } }}
                     placeholder="Digite e pressione Enter"
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
+                    className="flex-1 bg-[#3d3d3d] border border-[#525252] rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500"
                   />
                   <button
                     onClick={addTag}
-                    className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded text-xs"
+                    className="px-3 py-1.5 bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] rounded text-xs"
                   >
                     Adicionar
                   </button>
@@ -423,16 +423,16 @@ export function RestricoesPanel() {
                   onChange={(e) => setForm((f) => ({ ...f, observacoes: e.target.value }))}
                   rows={2}
                   placeholder="Informações adicionais (opcional)..."
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full bg-[#3d3d3d] border border-[#525252] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
                 />
               </FieldGroup>
             </div>
 
             {/* Modal footer */}
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-700">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#525252]">
               <button
                 onClick={() => setModalOpen(false)}
-                className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-sm text-[#a3a3a3] hover:text-white transition-colors"
               >
                 Cancelar
               </button>
@@ -465,7 +465,7 @@ function KpiBadge({ label, value, color }: { label: string; value: number; color
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{label}</label>
+      <label className="text-[10px] font-semibold text-[#a3a3a3] uppercase tracking-wider">{label}</label>
       {children}
     </div>
   )

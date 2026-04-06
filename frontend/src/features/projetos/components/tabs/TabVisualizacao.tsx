@@ -141,7 +141,7 @@ export function TabVisualizacao({ project }: { project: Project }) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Sub-tab bar */}
-      <div className="flex items-end gap-0 px-5 pt-4 border-b border-[#20406a] shrink-0">
+      <div className="flex items-end gap-0 px-5 pt-4 border-b border-[#525252] shrink-0">
         {views.map((v) => (
           <button
             key={v}
@@ -149,7 +149,7 @@ export function TabVisualizacao({ project }: { project: Project }) {
             className={cn(
               'px-5 py-2.5 text-sm font-bold transition-colors border-b-2 -mb-px',
               activeView === v
-                ? 'text-[#2abfdc] border-[#2abfdc]'
+                ? 'text-[#f97316] border-[#f97316]'
                 : 'text-[#6b6b6b] border-transparent hover:text-[#a3a3a3]'
             )}
           >
@@ -163,7 +163,7 @@ export function TabVisualizacao({ project }: { project: Project }) {
 
       <div className="flex-1 overflow-y-auto">
         {/* Visualization panel */}
-        <div className="mx-5 mt-4 rounded-xl border border-[#20406a] bg-[#14294e] overflow-hidden">
+        <div className="mx-5 mt-4 rounded-xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
           {activeView === '3D' && <View3D project={project} />}
           {activeView === '4D' && <View4D project={project} />}
           {activeView === '5D' && <View5D project={project} />}
@@ -175,10 +175,10 @@ export function TabVisualizacao({ project }: { project: Project }) {
             <span className="text-[10px] uppercase tracking-widest font-semibold text-[#6b6b6b]">
               Demandas e Custos
             </span>
-            <div className="rounded-xl border border-[#20406a] overflow-x-auto">
+            <div className="rounded-xl border border-[#525252] overflow-x-auto">
               <table className="w-full min-w-[480px] text-xs">
                 <thead>
-                  <tr className="border-b border-[#20406a] bg-[#0d2040]">
+                  <tr className="border-b border-[#525252] bg-[#2c2c2c]">
                     {['Item', 'Quantidade', 'Unidade', 'Custo Unit.', 'Total Estimado'].map((h) => (
                       <th key={h} className="text-left px-4 py-2.5 text-[9px] uppercase tracking-widest font-semibold text-[#6b6b6b]">
                         {h}
@@ -188,12 +188,12 @@ export function TabVisualizacao({ project }: { project: Project }) {
                 </thead>
                 <tbody>
                   {project.demands.map((d, i) => (
-                    <tr key={d.id} className={cn(i < project.demands.length - 1 && 'border-b border-[#14294e]')}>
+                    <tr key={d.id} className={cn(i < project.demands.length - 1 && 'border-b border-[#3d3d3d]')}>
                       <td className="px-4 py-3 text-[#f5f5f5]">{d.label}</td>
                       <td className="px-4 py-3 font-mono text-[#a3a3a3]">{d.quantity.toLocaleString('pt-BR')}</td>
                       <td className="px-4 py-3 text-[#6b6b6b]">{d.unit}</td>
                       <td className="px-4 py-3 font-mono text-[#a3a3a3]">{formatCurrency(d.estimatedCost / d.quantity)}</td>
-                      <td className="px-4 py-3 font-mono text-[#2abfdc] font-semibold">{formatCurrency(d.estimatedCost)}</td>
+                      <td className="px-4 py-3 font-mono text-[#f97316] font-semibold">{formatCurrency(d.estimatedCost)}</td>
                     </tr>
                   ))}
                 </tbody>

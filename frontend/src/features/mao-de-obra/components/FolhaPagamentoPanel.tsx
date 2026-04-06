@@ -295,7 +295,7 @@ export function FolhaPagamentoPanel() {
       {currentPayroll && (
         <div className="hidden print:block mt-4">
           <h1 className="text-lg font-bold mb-1">Folha de Pagamento — {monthLabel}</h1>
-          <p className="text-xs text-gray-500 mb-3">Gerado em: {new Date().toLocaleString('pt-BR')}</p>
+          <p className="text-xs text-[#6b6b6b] mb-3">Gerado em: {new Date().toLocaleString('pt-BR')}</p>
           <table className="w-full border-collapse text-xs">
             <thead>
               <tr>

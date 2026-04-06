@@ -20,7 +20,7 @@ function Section({ title, icon: Icon, children }: {
 }) {
   const [open, setOpen] = useState(true)
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+    <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-750 transition-colors"
@@ -29,7 +29,7 @@ function Section({ title, icon: Icon, children }: {
           <Icon size={16} className="text-orange-400" />
           <span className="text-white font-medium text-sm">{title}</span>
         </div>
-        {open ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+        {open ? <ChevronDown size={16} className="text-[#a3a3a3]" /> : <ChevronRight size={16} className="text-[#a3a3a3]" />}
       </button>
       {open && <div className="px-5 pb-5">{children}</div>}
     </div>
@@ -47,7 +47,7 @@ function NumInput({ label, value, onChange, min = 0, max, step = 1, unit }: {
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs text-gray-400">{label}</label>
+      <label className="text-xs text-[#a3a3a3]">{label}</label>
       <div className="flex items-center gap-1">
         <input
           type="number"
@@ -56,9 +56,9 @@ function NumInput({ label, value, onChange, min = 0, max, step = 1, unit }: {
           max={max}
           step={step}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+          className="w-full bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
         />
-        {unit && <span className="text-xs text-gray-400 shrink-0">{unit}</span>}
+        {unit && <span className="text-xs text-[#a3a3a3] shrink-0">{unit}</span>}
       </div>
     </div>
   )
@@ -81,15 +81,15 @@ function DadosSection() {
   return (
     <Section title="Dados do Projeto" icon={Database}>
       <div className="flex items-center gap-4 mb-4">
-        <div className="flex-1 bg-gray-700/50 rounded-lg p-3 text-center">
+        <div className="flex-1 bg-[#484848]/50 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-white">{trechos.length}</div>
-          <div className="text-xs text-gray-400">Trechos</div>
+          <div className="text-xs text-[#a3a3a3]">Trechos</div>
         </div>
-        <div className="flex-1 bg-gray-700/50 rounded-lg p-3 text-center">
+        <div className="flex-1 bg-[#484848]/50 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-orange-400">{totalMeters.toFixed(0)}</div>
-          <div className="text-xs text-gray-400">Metros totais</div>
+          <div className="text-xs text-[#a3a3a3]">Metros totais</div>
         </div>
-        <div className="flex-1 bg-gray-700/50 rounded-lg p-3 text-center">
+        <div className="flex-1 bg-[#484848]/50 rounded-lg p-3 text-center">
           {editingBudget ? (
             <div className="flex items-center gap-1">
               <input
@@ -98,7 +98,7 @@ function DadosSection() {
                 value={budgetInput}
                 onChange={(e) => setBudgetInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') saveBudget(); if (e.key === 'Escape') setEditingBudget(false) }}
-                className="w-full bg-gray-600 border border-gray-500 rounded px-2 py-1 text-sm text-white text-center focus:outline-none"
+                className="w-full bg-[#525252] border border-gray-500 rounded px-2 py-1 text-sm text-white text-center focus:outline-none"
               />
               <button onClick={saveBudget} className="text-orange-400 text-xs font-bold shrink-0">OK</button>
             </div>
@@ -109,7 +109,7 @@ function DadosSection() {
                   ? projectBudget.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
                   : '—'}
               </div>
-              <div className="text-xs text-gray-400">Orçamento total</div>
+              <div className="text-xs text-[#a3a3a3]">Orçamento total</div>
             </button>
           )}
         </div>
@@ -121,7 +121,7 @@ function DadosSection() {
         <Database size={14} />
         Carregar Trechos da Plataforma
       </button>
-      <p className="text-xs text-gray-500 mt-2">
+      <p className="text-xs text-[#6b6b6b] mt-2">
         Importa itens da Pré-Construção com unidade ml/m como trechos de execução. Clique no orçamento para editar.
       </p>
     </Section>
@@ -145,7 +145,7 @@ function EquipesSection() {
     <Section title="Equipes" icon={Users}>
       <div className="space-y-4">
         {teams.map((team) => (
-          <div key={team.id} className="bg-gray-700/40 rounded-lg p-4 border border-gray-600">
+          <div key={team.id} className="bg-[#484848]/40 rounded-lg p-4 border border-[#5e5e5e]">
             <div className="flex items-center justify-between mb-3">
               <input
                 type="text"
@@ -158,7 +158,7 @@ function EquipesSection() {
               </button>
             </div>
 
-            <div className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Composição da Equipe</div>
+            <div className="text-xs text-[#a3a3a3] mb-2 font-medium uppercase tracking-wide">Composição da Equipe</div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
               <NumInput label="Encarregados" value={team.foremanCount} min={0} max={10}
                 onChange={(v) => updateTeam(team.id, { foremanCount: v })} />
@@ -170,7 +170,7 @@ function EquipesSection() {
                 onChange={(v) => updateTeam(team.id, { operatorCount: v })} />
             </div>
 
-            <div className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Equipamentos</div>
+            <div className="text-xs text-[#a3a3a3] mb-2 font-medium uppercase tracking-wide">Equipamentos</div>
             <div className="grid grid-cols-3 gap-3 mb-3">
               <NumInput label="Retroescavadeira" value={team.retroescavadeira} min={0}
                 onChange={(v) => updateTeam(team.id, { retroescavadeira: v })} />
@@ -180,15 +180,15 @@ function EquipesSection() {
                 onChange={(v) => updateTeam(team.id, { caminhaoBasculante: v })} />
             </div>
 
-            <div className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Custos</div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="text-xs text-[#a3a3a3] mb-2 font-medium uppercase tracking-wide">Custos</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <NumInput label="Mão de Obra (R$/h)" value={team.laborHourlyRateBRL} min={1} step={0.5}
                 onChange={(v) => updateTeam(team.id, { laborHourlyRateBRL: v })} />
               <NumInput label="Equipamento (R$/dia)" value={team.equipmentDailyRateBRL} min={0} step={50}
                 onChange={(v) => updateTeam(team.id, { equipmentDailyRateBRL: v })} />
             </div>
 
-            <div className="text-xs text-gray-400 mt-3 mb-2 font-medium uppercase tracking-wide">Restrições de Escavação</div>
+            <div className="text-xs text-[#a3a3a3] mt-3 mb-2 font-medium uppercase tracking-wide">Restrições de Escavação</div>
             <NumInput
               label="Prof. Máx. Escavação Manual (m)"
               value={team.maxManualExcavDepthM ?? 1.5}
@@ -203,7 +203,7 @@ function EquipesSection() {
       </div>
       <button
         onClick={() => addTeam(DEFAULT_TEAM)}
-        className="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors"
+        className="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors"
       >
         <Plus size={14} />
         Nova Equipe
@@ -234,18 +234,18 @@ function ProdutividadeSection() {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-600">
-              <th className="text-left text-gray-400 py-2 pr-4 font-medium">Serviço</th>
-              <th className="text-left text-gray-400 py-2 pr-4 font-medium">Unidade</th>
-              <th className="text-right text-gray-400 py-2 font-medium">Valor</th>
-              <th className="text-left text-gray-400 py-2 pl-3 font-medium">Fonte</th>
+            <tr className="border-b border-[#5e5e5e]">
+              <th className="text-left text-[#a3a3a3] py-2 pr-4 font-medium">Serviço</th>
+              <th className="text-left text-[#a3a3a3] py-2 pr-4 font-medium">Unidade</th>
+              <th className="text-right text-[#a3a3a3] py-2 font-medium">Valor</th>
+              <th className="text-left text-[#a3a3a3] py-2 pl-3 font-medium">Fonte</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700">
+          <tbody className="divide-y divide-[#525252]">
             {PROD_ROWS.map((row) => (
               <tr key={row.key}>
-                <td className="text-gray-200 py-2.5 pr-4">{row.label}</td>
-                <td className="text-gray-400 py-2.5 pr-4 text-xs">{row.unit}</td>
+                <td className="text-[#f5f5f5] py-2.5 pr-4">{row.label}</td>
+                <td className="text-[#a3a3a3] py-2.5 pr-4 text-xs">{row.unit}</td>
                 <td className="py-2.5 text-right">
                   <input
                     type="number"
@@ -253,7 +253,7 @@ function ProdutividadeSection() {
                     min={0.1}
                     step={1}
                     onChange={(e) => update(row.key, Number(e.target.value))}
-                    className="w-20 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-white text-right focus:outline-none focus:border-orange-500"
+                    className="w-20 bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-sm text-white text-right focus:outline-none focus:border-orange-500"
                   />
                 </td>
                 <td className="py-2.5 pl-3">
@@ -283,11 +283,11 @@ function ParametrosProdutividadeSection() {
     <Section title="Parâmetros de Produtividade" icon={Settings2}>
       <div className="space-y-4">
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-gray-400">Modo de Agrupamento do Gantt</label>
+          <label className="text-xs text-[#a3a3a3]">Modo de Agrupamento do Gantt</label>
           <select
             value={scheduleConfig.ganttGroupingMode ?? 'daily_segment'}
             onChange={(e) => updateConfig({ ganttGroupingMode: e.target.value as 'daily_segment' | 'by_trecho' | 'trecho_activity' })}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           >
             <option value="daily_segment">Por segmento diário</option>
             <option value="by_trecho">Por Trecho (completo)</option>
@@ -299,22 +299,22 @@ function ParametrosProdutividadeSection() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => updateConfig({ groupByProximity: !(scheduleConfig.groupByProximity ?? false) })}
-            className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${scheduleConfig.groupByProximity ? 'bg-orange-500' : 'bg-gray-600'}`}
+            className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${scheduleConfig.groupByProximity ? 'bg-orange-500' : 'bg-[#525252]'}`}
           >
             <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${scheduleConfig.groupByProximity ? 'translate-x-5' : 'translate-x-0.5'}`} />
           </button>
           <div>
-            <span className="text-sm text-gray-300">Agrupar Trechos por Proximidade</span>
-            <p className="text-[11px] text-gray-500">Agrupa trechos próximos para otimizar a execução sequencial.</p>
+            <span className="text-sm text-[#f5f5f5]">Agrupar Trechos por Proximidade</span>
+            <p className="text-[11px] text-[#6b6b6b]">Agrupa trechos próximos para otimizar a execução sequencial.</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-700/40 border border-gray-600">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#484848]/40 border border-[#5e5e5e]">
           <BarChart3 size={16} className="text-orange-400 shrink-0" />
           <div>
-            <div className="text-xs text-gray-400">Gargalo atual de produção</div>
+            <div className="text-xs text-[#a3a3a3]">Gargalo atual de produção</div>
             <div className="text-base font-bold text-orange-400">{bottleneck} m/dia</div>
-            <div className="text-[11px] text-gray-500">min(escavação, assentamento) — ajuste na aba Produtividade</div>
+            <div className="text-[11px] text-[#6b6b6b]">min(escavação, assentamento) — ajuste na aba Produtividade</div>
           </div>
         </div>
       </div>
@@ -344,40 +344,40 @@ function PeriodoSection() {
     <Section title="Período e Calendário" icon={Calendar}>
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-5">
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-gray-400">Data de Início</label>
+          <label className="text-xs text-[#a3a3a3]">Data de Início</label>
           <input
             type="date"
             value={scheduleConfig.startDate}
             onChange={(e) => updateConfig({ startDate: e.target.value })}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-gray-400">Data Alvo de Conclusão</label>
+          <label className="text-xs text-[#a3a3a3]">Data Alvo de Conclusão</label>
           <input
             type="date"
             value={scheduleConfig.targetEndDate ?? ''}
             onChange={(e) => updateConfig({ targetEndDate: e.target.value || undefined })}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-gray-400">Horas por Dia</label>
+          <label className="text-xs text-[#a3a3a3]">Horas por Dia</label>
           <input
             type="number"
             value={scheduleConfig.workHoursPerDay}
             min={1}
             max={24}
             onChange={(e) => updateConfig({ workHoursPerDay: Number(e.target.value) })}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-gray-400">Semana de Trabalho</label>
+          <label className="text-xs text-[#a3a3a3]">Semana de Trabalho</label>
           <select
             value={scheduleConfig.workWeekMode}
             onChange={(e) => updateConfig({ workWeekMode: e.target.value as 'mon_fri' | 'mon_sat' })}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           >
             <option value="mon_fri">Segunda a Sexta</option>
             <option value="mon_sat">Segunda a Sábado</option>
@@ -385,13 +385,13 @@ function PeriodoSection() {
         </div>
       </div>
 
-      <div className="border-t border-gray-700 pt-4">
-        <div className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-3">Feriados</div>
+      <div className="border-t border-[#525252] pt-4">
+        <div className="text-xs text-[#a3a3a3] font-medium uppercase tracking-wide mb-3">Feriados</div>
         {holidays.length > 0 && (
           <div className="space-y-1 mb-3">
             {holidays.map((h) => (
-              <div key={h.date} className="flex items-center justify-between bg-gray-700/40 rounded-lg px-3 py-2">
-                <span className="text-sm text-gray-200">{h.date} — {h.description}</span>
+              <div key={h.date} className="flex items-center justify-between bg-[#484848]/40 rounded-lg px-3 py-2">
+                <span className="text-sm text-[#f5f5f5]">{h.date} — {h.description}</span>
                 <button onClick={() => removeHoliday(h.date)} className="text-red-400 hover:text-red-300">
                   <Trash2 size={13} />
                 </button>
@@ -404,18 +404,18 @@ function PeriodoSection() {
             type="date"
             value={newHolidayDate}
             onChange={(e) => setNewHolidayDate(e.target.value)}
-            className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
           />
           <input
             type="text"
             placeholder="Descrição do feriado"
             value={newHolidayDesc}
             onChange={(e) => setNewHolidayDesc(e.target.value)}
-            className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+            className="flex-1 bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b6b6b] focus:outline-none focus:border-orange-500"
           />
           <button
             onClick={handleAddHoliday}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-600 hover:bg-gray-500 text-gray-200 text-sm transition-colors"
+            className="flex items-center gap-1 px-3 py-2 rounded-lg bg-[#525252] hover:bg-gray-500 text-[#f5f5f5] text-sm transition-colors"
           >
             <Plus size={14} />
           </button>
@@ -465,22 +465,22 @@ function CalculadoraSection() {
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={() => setEnabled(!enabled)}
-          className={`relative w-10 h-5 rounded-full transition-colors ${enabled ? 'bg-orange-500' : 'bg-gray-600'}`}
+          className={`relative w-10 h-5 rounded-full transition-colors ${enabled ? 'bg-orange-500' : 'bg-[#525252]'}`}
         >
           <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
         </button>
-        <span className="text-sm text-gray-300">Habilitar calculadora inversa</span>
+        <span className="text-sm text-[#f5f5f5]">Habilitar calculadora inversa</span>
       </div>
 
       {enabled && (
         <div className="space-y-4">
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-gray-400">Data Alvo de Conclusão</label>
+            <label className="text-xs text-[#a3a3a3]">Data Alvo de Conclusão</label>
             <input
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              className="w-48 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
+              className="w-48 bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
             />
           </div>
           {result && (
@@ -489,12 +489,12 @@ function CalculadoraSection() {
                 ? 'bg-green-900/30 text-green-300 border border-green-700/50'
                 : result.startsWith('✗')
                 ? 'bg-red-900/30 text-red-300 border border-red-700/50'
-                : 'bg-gray-700 text-gray-300'
+                : 'bg-[#484848] text-[#f5f5f5]'
             }`}>
               {result}
             </div>
           )}
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#6b6b6b]">
             Cálculo aproximado com produtividade média. Gere o planejamento completo para resultado exato.
           </p>
         </div>
@@ -510,29 +510,29 @@ function TechnicalRulesSection() {
 
   return (
     <Section title="Regras Técnicas" icon={ShieldAlert}>
-      <p className="text-xs text-gray-500 mb-4">
+      <p className="text-xs text-[#6b6b6b] mb-4">
         Regras aplicadas automaticamente a trechos que correspondam à condição. Multiplicam a produtividade e o custo.
       </p>
       <div className="overflow-x-auto">
         <table className="w-full text-xs border-collapse">
           <thead>
-            <tr className="border-b border-gray-700">
-              <th className="text-left text-gray-400 font-medium py-2 pr-3">Nome da Regra</th>
-              <th className="text-left text-gray-400 font-medium py-2 pr-3">Condição</th>
-              <th className="text-right text-gray-400 font-medium py-2 pr-3 w-32">Prod. (×)</th>
-              <th className="text-right text-gray-400 font-medium py-2 pr-3 w-32">Custo (×)</th>
+            <tr className="border-b border-[#525252]">
+              <th className="text-left text-[#a3a3a3] font-medium py-2 pr-3">Nome da Regra</th>
+              <th className="text-left text-[#a3a3a3] font-medium py-2 pr-3">Condição</th>
+              <th className="text-right text-[#a3a3a3] font-medium py-2 pr-3 w-32">Prod. (×)</th>
+              <th className="text-right text-[#a3a3a3] font-medium py-2 pr-3 w-32">Custo (×)</th>
               <th className="py-2 w-8" />
             </tr>
           </thead>
           <tbody>
             {technicalRules.map((rule) => (
-              <tr key={rule.id} className="border-b border-gray-700/50 group">
+              <tr key={rule.id} className="border-b border-[#525252]/50 group">
                 <td className="py-2 pr-3">
                   <input
                     type="text"
                     value={rule.name}
                     onChange={(e) => updateTechnicalRule(rule.id, { name: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-gray-200 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-[#f5f5f5] focus:outline-none focus:border-orange-500"
                   />
                 </td>
                 <td className="py-2 pr-3">
@@ -540,7 +540,7 @@ function TechnicalRulesSection() {
                     type="text"
                     value={rule.condition}
                     onChange={(e) => updateTechnicalRule(rule.id, { condition: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-gray-400 font-mono focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-[#a3a3a3] font-mono focus:outline-none focus:border-orange-500"
                   />
                 </td>
                 <td className="py-2 pr-3 text-right">
@@ -551,7 +551,7 @@ function TechnicalRulesSection() {
                     max={2}
                     step={0.05}
                     onChange={(e) => updateTechnicalRule(rule.id, { productivityMultiplier: Number(e.target.value) })}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-right text-gray-200 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-right text-[#f5f5f5] focus:outline-none focus:border-orange-500"
                   />
                 </td>
                 <td className="py-2 pr-3 text-right">
@@ -562,7 +562,7 @@ function TechnicalRulesSection() {
                     max={3}
                     step={0.05}
                     onChange={(e) => updateTechnicalRule(rule.id, { costMultiplier: Number(e.target.value) })}
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-right text-gray-200 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-[#484848] border border-[#5e5e5e] rounded px-2 py-1 text-right text-[#f5f5f5] focus:outline-none focus:border-orange-500"
                   />
                 </td>
                 <td className="py-2">
@@ -587,7 +587,7 @@ function TechnicalRulesSection() {
           productivityMultiplier: 0.8,
           costMultiplier: 1.2,
         })}
-        className="mt-3 flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors"
+        className="mt-3 flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] transition-colors"
       >
         <Plus size={13} /> Adicionar Regra
       </button>

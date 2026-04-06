@@ -43,7 +43,7 @@ function LineChart() {
             y1={yPos(pct)}
             x2={LEFT + plotW}
             y2={yPos(pct)}
-            stroke="#14294e"
+            stroke="#3d3d3d"
             strokeWidth={1}
           />
           <text
@@ -82,7 +82,7 @@ function LineChart() {
           ...WEEKLY_DATA.map((v, i) => `${xPos(i)},${yPos(v)}`),
           `${xPos(n - 1)},${TOP + plotH}`,
         ].join(' ')}
-        fill="#2abfdc"
+        fill="#f97316"
         fillOpacity={0.08}
       />
 
@@ -90,7 +90,7 @@ function LineChart() {
       <polyline
         points={polyline}
         fill="none"
-        stroke="#2abfdc"
+        stroke="#f97316"
         strokeWidth={2}
         strokeLinejoin="round"
         strokeLinecap="round"
@@ -103,8 +103,8 @@ function LineChart() {
           cx={xPos(i)}
           cy={yPos(v)}
           r={3.5}
-          fill="#2abfdc"
-          stroke="#112645"
+          fill="#f97316"
+          stroke="#333333"
           strokeWidth={1.5}
         />
       ))}
@@ -169,10 +169,10 @@ function HoursBarChart({ data }: { data: { name: string; hours: number }[] }) {
               {truncate(item.name)}
             </text>
             {/* Background */}
-            <rect x={LEFT} y={barY} width={plotW} height={barH} rx={3} fill="#14294e" />
+            <rect x={LEFT} y={barY} width={plotW} height={barH} rx={3} fill="#3d3d3d" />
             {/* Fill */}
             {barW > 0 && (
-              <rect x={LEFT} y={barY} width={barW} height={barH} rx={3} fill="#2abfdc" opacity={0.8} />
+              <rect x={LEFT} y={barY} width={barW} height={barH} rx={3} fill="#f97316" opacity={0.8} />
             )}
             {/* Value */}
             <text
@@ -215,7 +215,7 @@ export function UtilizacaoPanel() {
     <div className="flex flex-col gap-6 p-6 overflow-y-auto h-full">
 
       {/* Line chart */}
-      <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-5 flex flex-col gap-3">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
           Taxa de Utilização da Frota (%) — Últimas 8 Semanas
         </h2>
@@ -226,7 +226,7 @@ export function UtilizacaoPanel() {
       </div>
 
       {/* Horizontal bar chart */}
-      <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-5 flex flex-col gap-3">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
           Horas por Equipamento — Este Mês
         </h2>
@@ -234,14 +234,14 @@ export function UtilizacaoPanel() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#0d2040] border border-[#20406a] rounded-xl p-5 flex flex-col gap-3">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">
           Detalhamento por Equipamento
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="border-b border-[#20406a]">
+              <tr className="border-b border-[#525252]">
                 {['Equipamento', 'Horas Totais', 'Horas Prod.', 'Horas Ociosas', 'Taxa'].map(
                   (col) => (
                     <th
@@ -254,9 +254,9 @@ export function UtilizacaoPanel() {
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#14294e]">
+            <tbody className="divide-y divide-[#3d3d3d]">
               {tableRows.map(({ eq, productive, idle, rate }) => (
-                <tr key={eq.id} className="hover:bg-[#14294e]/50 transition-colors">
+                <tr key={eq.id} className="hover:bg-[#3d3d3d]/50 transition-colors">
                   <td className="py-2.5 pr-4">
                     <div className="flex flex-col">
                       <span className="text-[#f5f5f5] font-medium">{eq.name}</span>
@@ -269,14 +269,14 @@ export function UtilizacaoPanel() {
                   <td className="py-2.5 pr-4 text-[#4ade80] font-mono">
                     {productive.toLocaleString('pt-BR')}h
                   </td>
-                  <td className="py-2.5 pr-4 text-[#2abfdc] font-mono">
+                  <td className="py-2.5 pr-4 text-[#f97316] font-mono">
                     {idle.toLocaleString('pt-BR')}h
                   </td>
                   <td className="py-2.5 pr-4">
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 max-w-[80px] h-1.5 bg-[#20406a] rounded-full overflow-hidden">
+                      <div className="flex-1 max-w-[80px] h-1.5 bg-[#525252] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#2abfdc] rounded-full"
+                          className="h-full bg-[#f97316] rounded-full"
                           style={{ width: `${rate}%` }}
                         />
                       </div>

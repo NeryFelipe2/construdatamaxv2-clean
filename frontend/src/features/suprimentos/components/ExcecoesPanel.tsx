@@ -69,14 +69,14 @@ function ExceptionForm({
   }
 
   return (
-    <div className="bg-[#0d2040] border border-[#2abfdc]/30 rounded-xl p-4 flex flex-col gap-3">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="bg-[#2c2c2c] border border-[#f97316]/30 rounded-xl p-4 flex flex-col gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
           <label className="text-[10px] text-[#6b6b6b] uppercase tracking-widest">OC</label>
           <select
             value={form.poId}
             onChange={(e) => set('poId', e.target.value)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           >
             {purchaseOrders.map((po) => (
               <option key={po.id} value={po.id}>{po.code} — {po.supplier}</option>
@@ -88,7 +88,7 @@ function ExceptionForm({
           <select
             value={form.type}
             onChange={(e) => set('type', e.target.value as ExceptionType)}
-            className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+            className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
           >
             {(Object.keys(TYPE_LABELS) as ExceptionType[]).map((t) => (
               <option key={t} value={t}>{TYPE_LABELS[t]}</option>
@@ -103,7 +103,7 @@ function ExceptionForm({
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
           placeholder="Descreva a exceção..."
-          className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+          className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -113,19 +113,19 @@ function ExceptionForm({
           value={form.responsible}
           onChange={(e) => set('responsible', e.target.value)}
           placeholder="Nome do responsável"
-          className="bg-[#112645] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#2abfdc]/50"
+          className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
         />
       </div>
       <div className="flex justify-end gap-2 pt-1">
         <button
           onClick={onCancel}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#20406a] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] transition-colors"
         >
           <X size={12} /> Cancelar
         </button>
         <button
           onClick={() => { if (form.description.trim()) onSave(form) }}
-          className="px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
         >
           Salvar
         </button>
@@ -161,7 +161,7 @@ export function ExcecoesPanel() {
   const filterBtnCls = (active: boolean) =>
     cn(
       'px-2.5 py-1 rounded text-xs font-medium transition-colors',
-      active ? 'bg-[#2abfdc] text-white' : 'text-[#6b6b6b] hover:text-[#f5f5f5]'
+      active ? 'bg-[#f97316] text-white' : 'text-[#6b6b6b] hover:text-[#f5f5f5]'
     )
 
   function handleAdd(data: { poId: string; type: ExceptionType; description: string; responsible: string }) {
@@ -215,7 +215,7 @@ export function ExcecoesPanel() {
         </div>
         <button
           onClick={() => { setShowAddForm((v) => !v); setEditingId(null) }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2abfdc] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors shrink-0"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors shrink-0"
         >
           <Plus size={12} />
           Nova Exceção
@@ -232,10 +232,10 @@ export function ExcecoesPanel() {
       )}
 
       {/* Table */}
-      <div className="flex-1 overflow-auto overflow-x-auto bg-[#0d2040] border border-[#20406a] rounded-xl">
+      <div className="flex-1 overflow-auto overflow-x-auto bg-[#2c2c2c] border border-[#525252] rounded-xl">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr className="bg-[#1a3662]">
+            <tr className="bg-[#484848]">
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">OC</th>
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2">Fornecedor</th>
               <th className="text-left text-[#6b6b6b] text-xs font-medium px-3 py-2 w-36">Tipo</th>
@@ -257,7 +257,7 @@ export function ExcecoesPanel() {
                 const po = purchaseOrders.find((p) => p.id === ex.poId)
                 return (
                   <>
-                    <tr key={ex.id} className="border-t border-[#20406a] hover:bg-[#1a3662]/50 transition-colors">
+                    <tr key={ex.id} className="border-t border-[#525252] hover:bg-[#484848]/50 transition-colors">
                       <td className="px-3 py-3">
                         <span className="font-mono text-[#a3a3a3] text-xs">{po?.code ?? ex.poId}</span>
                       </td>
@@ -269,7 +269,7 @@ export function ExcecoesPanel() {
                       </td>
                       <td className="px-3 py-3 text-[#a3a3a3] text-xs leading-relaxed max-w-xs">
                         <p className="line-clamp-2">{ex.description}</p>
-                        <p className="text-[#2abfdc] text-[10px] italic mt-0.5 line-clamp-1">{ex.suggestedAction}</p>
+                        <p className="text-[#f97316] text-[10px] italic mt-0.5 line-clamp-1">{ex.suggestedAction}</p>
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex flex-col gap-0.5">
@@ -287,7 +287,7 @@ export function ExcecoesPanel() {
                         <div className="flex items-center justify-center gap-1.5 flex-wrap">
                           <button
                             onClick={() => setEditingId(editingId === ex.id ? null : ex.id)}
-                            className="px-2 py-1 rounded bg-[#14294e] hover:bg-[#1a3662] text-[#a3a3a3] text-[10px] font-semibold transition-colors"
+                            className="px-2 py-1 rounded bg-[#3d3d3d] hover:bg-[#484848] text-[#a3a3a3] text-[10px] font-semibold transition-colors"
                           >
                             Editar
                           </button>
@@ -295,7 +295,7 @@ export function ExcecoesPanel() {
                             <>
                               <button
                                 onClick={() => setRouting(ex)}
-                                className="px-2 py-1 rounded bg-[#2abfdc]/20 hover:bg-[#2abfdc]/30 text-[#2abfdc] text-[10px] font-semibold transition-colors"
+                                className="px-2 py-1 rounded bg-[#f97316]/20 hover:bg-[#f97316]/30 text-[#f97316] text-[10px] font-semibold transition-colors"
                               >
                                 Rotear
                               </button>
@@ -314,7 +314,7 @@ export function ExcecoesPanel() {
                       </td>
                     </tr>
                     {editingId === ex.id && (
-                      <tr key={`${ex.id}-edit`} className="border-t border-[#20406a]">
+                      <tr key={`${ex.id}-edit`} className="border-t border-[#525252]">
                         <td colSpan={7} className="px-3 py-3">
                           <ExceptionForm
                             initialValues={{

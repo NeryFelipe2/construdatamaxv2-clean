@@ -70,7 +70,7 @@ export function Gestao360Header() {
       label: 'EAC Projetado',
       value: eac > 0 ? `R$${(eac / 1_000_000).toFixed(1)}M` : '—',
       icon:  TrendingUp,
-      color: '#2abfdc',
+      color: '#f97316',
     },
     {
       label: 'Δ Orçamento',
@@ -94,7 +94,7 @@ export function Gestao360Header() {
       label: 'OMs em Aprovação',
       value: String(openCOs),
       icon:  FileEdit,
-      color: openCOs === 0 ? '#22c55e' : '#2abfdc',
+      color: openCOs === 0 ? '#22c55e' : '#f97316',
     },
     {
       label: 'Alertas Críticos',
@@ -109,8 +109,8 @@ export function Gestao360Header() {
       {/* Title + project selector */}
       <div className="flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#2abfdc]/15">
-            <LayoutDashboard size={18} className="text-[#2abfdc]" />
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#f97316]/15">
+            <LayoutDashboard size={18} className="text-[#f97316]" />
           </div>
           <div>
             <h1 className="text-[#f5f5f5] text-lg font-semibold leading-none">
@@ -127,7 +127,7 @@ export function Gestao360Header() {
           <select
             value={selectedProjectId ?? project?.id ?? ''}
             onChange={(e) => selectProject(e.target.value)}
-            className="ml-auto px-3 py-1.5 rounded-lg bg-[#14294e] border border-[#20406a] text-[#f5f5f5] text-sm focus:outline-none focus:border-[#2abfdc]/60"
+            className="ml-auto px-3 py-1.5 rounded-lg bg-[#3d3d3d] border border-[#525252] text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]/60"
           >
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -143,7 +143,7 @@ export function Gestao360Header() {
         {kpis.map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-[#14294e] border border-[#20406a] rounded-xl px-3 py-3 flex items-center gap-2"
+            className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-3 py-3 flex items-center gap-2"
           >
             <div
               className="flex items-center justify-center w-7 h-7 rounded-lg shrink-0"
@@ -162,14 +162,14 @@ export function Gestao360Header() {
       </div>
 
       {/* Tab bar — horizontal scroll on mobile */}
-      <div className="flex gap-1 border-b border-[#20406a] -mb-px overflow-x-auto scrollbar-none">
+      <div className="flex gap-1 border-b border-[#525252] -mb-px overflow-x-auto scrollbar-none">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={
               activeTab === tab.id
-                ? 'px-4 py-2.5 text-sm font-medium border-b-2 border-[#2abfdc] text-[#2abfdc] whitespace-nowrap shrink-0'
+                ? 'px-4 py-2.5 text-sm font-medium border-b-2 border-[#f97316] text-[#f97316] whitespace-nowrap shrink-0'
                 : 'px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-[#6b6b6b] hover:text-[#f5f5f5] whitespace-nowrap shrink-0 transition-colors'
             }
           >

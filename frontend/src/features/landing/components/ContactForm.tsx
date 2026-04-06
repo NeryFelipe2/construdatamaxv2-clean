@@ -27,7 +27,7 @@ function Field({ label, wrapperClassName, ...props }: FieldProps) {
           padding: '0.5rem 0',
           fontSize: '0.875rem',
         }}
-        className="focus:border-b-[#2abfdc] transition-colors placeholder:text-white/50"
+        className="focus:border-b-[#f97316] transition-colors placeholder:text-white/50"
         {...props}
       />
     </div>
@@ -66,7 +66,7 @@ export function ContactForm() {
   }
 
   return (
-    <section id="contato" style={{ background: '#0f2240', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
+    <section id="contato" style={{ background: '#333333', borderTop: '1px solid rgba(255,255,255,0.10)' }} className="py-32">
       <div className="max-w-3xl mx-auto px-6">
         {/* Section label */}
         <div className="flex items-center gap-3 mb-16">
@@ -74,7 +74,7 @@ export function ContactForm() {
           <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.10)' }} />
         </div>
 
-        <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#0b1a30' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,0.14)', background: '#2c2c2c' }}>
           {/* Form header */}
           <div style={{ borderBottom: '1px solid rgba(255,255,255,0.14)' }} className="px-10 py-8">
             <h2
@@ -126,7 +126,7 @@ export function ContactForm() {
                   disabled={loading}
                   style={{
                     width: '100%',
-                    background: '#2abfdc',
+                    background: '#f97316',
                     color: '#000',
                     padding: '0.875rem 1.5rem',
                     fontFamily: "'Space Grotesk', sans-serif",

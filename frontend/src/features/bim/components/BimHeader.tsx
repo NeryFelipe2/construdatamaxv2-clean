@@ -57,7 +57,7 @@ export function BimHeader({ onUploadClick }: Props) {
   const pctDone     = totalSegs > 0 ? Math.round((completed / totalSegs) * 100) : 0
 
   return (
-    <div className="flex flex-col bg-gray-900 border-b border-gray-800 shrink-0">
+    <div className="flex flex-col bg-[#2c2c2c] border-b border-[#3d3d3d] shrink-0">
       {/* Top row: title | tabs | upload */}
       <div className="flex items-center gap-2 h-12 px-3">
         <div className="flex items-center gap-2 shrink-0">
@@ -68,7 +68,7 @@ export function BimHeader({ onUploadClick }: Props) {
         </div>
 
         {/* Tabs — scrollable on mobile */}
-        <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-0.5 overflow-x-auto scrollbar-none flex-1 min-w-0">
+        <div className="flex items-center gap-1 bg-[#3d3d3d] rounded-lg p-0.5 overflow-x-auto scrollbar-none flex-1 min-w-0">
           {TABS.map((t) => (
             <button
               key={t.key}
@@ -77,7 +77,7 @@ export function BimHeader({ onUploadClick }: Props) {
                 'px-2 sm:px-3 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap shrink-0',
                 activeTab === t.key
                   ? 'bg-indigo-600 text-white'
-                  : 'text-gray-400 hover:text-gray-200',
+                  : 'text-[#a3a3a3] hover:text-[#f5f5f5]',
               )}
             >
               {t.label}
@@ -90,7 +90,7 @@ export function BimHeader({ onUploadClick }: Props) {
           <div className="relative">
             <button
               onClick={openProjects}
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs font-medium transition-colors"
+              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-xs font-medium transition-colors"
             >
               <FolderOpen size={13} />
               <span className="hidden sm:inline">Projetos</span>
@@ -99,15 +99,15 @@ export function BimHeader({ onUploadClick }: Props) {
             {showProjects && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowProjects(false)} />
-                <div className="absolute right-0 top-full mt-1 z-50 bg-gray-800 border border-gray-700 rounded-lg shadow-xl min-w-[200px] py-1 max-h-[60vh] overflow-y-auto">
+                <div className="absolute right-0 top-full mt-1 z-50 bg-[#3d3d3d] border border-[#525252] rounded-lg shadow-xl min-w-[200px] py-1 max-h-[60vh] overflow-y-auto">
                   {projectList.length === 0 ? (
-                    <p className="px-3 py-2 text-xs text-gray-500">Nenhum projeto cadastrado.</p>
+                    <p className="px-3 py-2 text-xs text-[#6b6b6b]">Nenhum projeto cadastrado.</p>
                   ) : (
                     projectList.map((p) => (
                       <button
                         key={p.id}
                         onClick={() => loadProject(p.id)}
-                        className="w-full text-left px-3 py-2 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition-colors truncate"
+                        className="w-full text-left px-3 py-2 text-xs text-[#f5f5f5] hover:bg-[#484848] hover:text-white transition-colors truncate"
                       >
                         {p.name}
                       </button>
@@ -129,7 +129,7 @@ export function BimHeader({ onUploadClick }: Props) {
       </div>
 
       {/* KPI bar — horizontally scrollable on mobile */}
-      <div className="flex items-center border-t border-gray-800 divide-x divide-gray-800 overflow-x-auto scrollbar-none">
+      <div className="flex items-center border-t border-[#3d3d3d] divide-x divide-[#3d3d3d] overflow-x-auto scrollbar-none">
         <KpiCell icon={<GitBranch size={12} className="text-indigo-400" />} label="Trechos" value={String(totalSegs)} />
         <KpiCell icon={<Ruler size={12} className="text-blue-400" />} label="Extensão" value={`${totalLength.toFixed(0)} m`} />
         <KpiCell icon={<DollarSign size={12} className="text-green-400" />} label="Custo Total" value={fmtBRL(totalCost)} />
@@ -137,7 +137,7 @@ export function BimHeader({ onUploadClick }: Props) {
           icon={<CalendarCheck size={12} className="text-orange-400" />}
           label={`Concluído`}
           value={`${pctDone}%`}
-          accent={pctDone === 100 ? 'text-green-400' : pctDone > 50 ? 'text-yellow-400' : 'text-gray-300'}
+          accent={pctDone === 100 ? 'text-green-400' : pctDone > 50 ? 'text-yellow-400' : 'text-[#f5f5f5]'}
         />
         {project?.type && (
           <div className="flex items-center px-3 py-1.5 shrink-0">
@@ -145,7 +145,7 @@ export function BimHeader({ onUploadClick }: Props) {
               'px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap',
               project.type === 'building'   ? 'bg-blue-900/40 text-blue-300'   :
               project.type === 'sanitation' ? 'bg-green-900/40 text-green-300' :
-              'bg-gray-700 text-gray-400',
+              'bg-[#484848] text-[#a3a3a3]',
             )}>
               {project.type === 'building' ? 'Construção Civil' :
                project.type === 'sanitation' ? 'Saneamento' : 'Genérico'}
@@ -158,7 +158,7 @@ export function BimHeader({ onUploadClick }: Props) {
 }
 
 function KpiCell({
-  icon, label, value, accent = 'text-gray-200',
+  icon, label, value, accent = 'text-[#f5f5f5]',
 }: {
   icon: React.ReactNode; label: string; value: string; accent?: string
 }) {

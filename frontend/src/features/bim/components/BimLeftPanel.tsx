@@ -22,7 +22,7 @@ export function BimLeftPanel() {
 
   if (projects.length === 0) {
     return (
-      <div className="w-56 bg-gray-900 border-r border-gray-800 flex flex-col items-center justify-center p-4 shrink-0">
+      <div className="w-56 bg-[#2c2c2c] border-r border-[#3d3d3d] flex flex-col items-center justify-center p-4 shrink-0">
         <LayersIcon size={32} className="text-gray-700 mb-2" />
         <p className="text-gray-600 text-xs text-center">Ative o modo Demo ou importe um arquivo</p>
       </div>
@@ -33,11 +33,11 @@ export function BimLeftPanel() {
   const totalLength = project?.segments.reduce((s, seg) => s + seg.lengthM, 0) ?? 0
 
   return (
-    <div className="w-56 bg-gray-900 border-r border-gray-800 flex flex-col shrink-0 overflow-y-auto">
+    <div className="w-56 bg-[#2c2c2c] border-r border-[#3d3d3d] flex flex-col shrink-0 overflow-y-auto">
       {/* Project switcher */}
       {projects.length > 0 && (
-        <div className="p-2 border-b border-gray-800">
-          <p className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider mb-1.5 px-1">Projetos</p>
+        <div className="p-2 border-b border-[#3d3d3d]">
+          <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider mb-1.5 px-1">Projetos</p>
           <div className="space-y-0.5">
             {projects.map((p) => (
               <button
@@ -47,13 +47,13 @@ export function BimLeftPanel() {
                   'flex items-center gap-2 w-full text-left px-2 py-1.5 rounded-lg text-xs transition-colors',
                   p.id === activeProjectId
                     ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-600/40'
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200',
+                    : 'text-[#a3a3a3] hover:bg-[#3d3d3d] hover:text-[#f5f5f5]',
                 )}
               >
                 <span className={cn(
                   'shrink-0',
                   p.type === 'building' ? 'text-blue-400' :
-                  p.type === 'sanitation' ? 'text-green-400' : 'text-gray-500',
+                  p.type === 'sanitation' ? 'text-green-400' : 'text-[#6b6b6b]',
                 )}>
                   {PROJECT_ICONS[p.type ?? 'generic']}
                 </span>
@@ -70,7 +70,7 @@ export function BimLeftPanel() {
       {project && (
         <>
           {/* Project info */}
-          <div className="p-3 border-b border-gray-800">
+          <div className="p-3 border-b border-[#3d3d3d]">
             <div className="space-y-1">
               <Row label="Trechos"    value={String(project.segments.length)} />
               <Row label="Extensão"   value={`${totalLength.toFixed(0)} m`} />
@@ -80,10 +80,10 @@ export function BimLeftPanel() {
           </div>
 
           {/* Budget summary */}
-          <div className="p-3 border-b border-gray-800">
+          <div className="p-3 border-b border-[#3d3d3d]">
             <div className="flex items-center gap-2 mb-1.5">
               <DollarSign size={12} className="text-green-400 shrink-0" />
-              <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider">Custo Total</span>
+              <span className="text-[#a3a3a3] text-[10px] font-semibold uppercase tracking-wider">Custo Total</span>
             </div>
             <p className="text-green-400 font-bold text-base leading-tight">{fmtBRL(totalCost)}</p>
             <p className="text-gray-600 text-xs mt-0.5">
@@ -93,23 +93,23 @@ export function BimLeftPanel() {
 
           {/* Layers */}
           <div className="p-3 flex-1">
-            <p className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider mb-1.5">Camadas</p>
+            <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider mb-1.5">Camadas</p>
             <div className="space-y-0.5">
               {layers.map((layer) => (
                 <button
                   key={layer.id}
                   onClick={() => toggleLayer(layer.id)}
-                  className="flex items-center gap-2 w-full text-left rounded px-2 py-1 hover:bg-gray-800 transition-colors group"
+                  className="flex items-center gap-2 w-full text-left rounded px-2 py-1 hover:bg-[#3d3d3d] transition-colors group"
                 >
                   <span
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: layer.visible ? layer.color : '#374151' }}
                   />
-                  <span className={`text-xs flex-1 truncate ${layer.visible ? 'text-gray-200' : 'text-gray-600'}`}>
+                  <span className={`text-xs flex-1 truncate ${layer.visible ? 'text-[#f5f5f5]' : 'text-gray-600'}`}>
                     {layer.name}
                   </span>
                   {layer.visible
-                    ? <Eye size={11} className="text-gray-600 group-hover:text-gray-400 shrink-0" />
+                    ? <Eye size={11} className="text-gray-600 group-hover:text-[#a3a3a3] shrink-0" />
                     : <EyeOff size={11} className="text-gray-700 shrink-0" />}
                 </button>
               ))}
@@ -125,7 +125,7 @@ function Row({ label, value, truncate }: { label: string; value: string; truncat
   return (
     <div className="flex justify-between gap-1">
       <span className="text-gray-600 text-xs">{label}</span>
-      <span className={`text-gray-300 text-xs font-medium ${truncate ? 'truncate max-w-[100px]' : ''}`}>{value}</span>
+      <span className={`text-[#f5f5f5] text-xs font-medium ${truncate ? 'truncate max-w-[100px]' : ''}`}>{value}</span>
     </div>
   )
 }

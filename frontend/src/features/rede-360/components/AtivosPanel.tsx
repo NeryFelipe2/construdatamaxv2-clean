@@ -109,19 +109,19 @@ export function AtivosPanel() {
     URL.revokeObjectURL(url)
   }
 
-  const selectCls = 'bg-[#14294e] border border-[#20406a] rounded px-2 py-1.5 text-xs text-[#f5f5f5] focus:outline-none'
+  const selectCls = 'bg-[#3d3d3d] border border-[#525252] rounded px-2 py-1.5 text-xs text-[#f5f5f5] focus:outline-none'
 
   return (
     <div className="p-4 h-full overflow-y-auto">
-      <div className="bg-[#112645] rounded-xl border border-[#20406a] overflow-hidden">
+      <div className="bg-[#333333] rounded-xl border border-[#525252] overflow-hidden">
         {/* Filter bar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#20406a] flex-wrap">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#525252] flex-wrap">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nome ou código..."
-            className="bg-[#14294e] border border-[#20406a] rounded px-3 py-1.5 text-xs text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none flex-1 min-w-36"
+            className="bg-[#3d3d3d] border border-[#525252] rounded px-3 py-1.5 text-xs text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none flex-1 min-w-36"
           />
           <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={selectCls}>
             <option value="">Todos os tipos</option>
@@ -149,7 +149,7 @@ export function AtivosPanel() {
           </select>
           <button
             onClick={handleExportCsv}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#14294e] hover:bg-[#1a3662] border border-[#20406a] text-[#8fb3c8] text-xs transition-colors ml-auto"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#3d3d3d] hover:bg-[#484848] border border-[#525252] text-[#a3a3a3] text-xs transition-colors ml-auto"
           >
             <Download size={12} />
             Exportar CSV
@@ -160,13 +160,13 @@ export function AtivosPanel() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-[#6b6b6b] border-b border-[#20406a]">
+              <tr className="text-[#6b6b6b] border-b border-[#525252]">
                 {['Código', 'Nome', 'Tipo', 'Rede', 'Status', 'Risco', 'Última Inspeção', 'Próxima Due', 'Ações'].map((h) => (
                   <th key={h} className="text-left px-4 py-2.5 font-medium">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#20406a]">
+            <tbody className="divide-y divide-[#525252]">
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={9} className="px-4 py-8 text-center text-[#6b6b6b]">Nenhum ativo encontrado.</td>
@@ -178,13 +178,13 @@ export function AtivosPanel() {
                 return (
                   <tr
                     key={asset.id}
-                    className="bg-[#14294e] hover:bg-[#1a3662] transition-colors cursor-pointer"
+                    className="bg-[#3d3d3d] hover:bg-[#484848] transition-colors cursor-pointer"
                     onClick={() => { setSelectedAssetId(asset.id); setActiveTab('home') }}
                   >
-                    <td className="px-4 py-2.5 font-mono text-[#8fb3c8]">{asset.code}</td>
+                    <td className="px-4 py-2.5 font-mono text-[#a3a3a3]">{asset.code}</td>
                     <td className="px-4 py-2.5 text-[#f5f5f5] font-medium max-w-[180px] truncate">{asset.name}</td>
-                    <td className="px-4 py-2.5 text-[#8fb3c8]">{ASSET_TYPE_LABELS[asset.type]}</td>
-                    <td className="px-4 py-2.5 text-[#8fb3c8]">{NETWORK_TYPE_LABELS[asset.networkType]}</td>
+                    <td className="px-4 py-2.5 text-[#a3a3a3]">{ASSET_TYPE_LABELS[asset.type]}</td>
+                    <td className="px-4 py-2.5 text-[#a3a3a3]">{NETWORK_TYPE_LABELS[asset.networkType]}</td>
                     <td className="px-4 py-2.5">
                       <span className={`px-1.5 py-0.5 rounded text-xs ${STATUS_COLORS[asset.status]}`}>
                         {STATUS_LABELS[asset.status]}
@@ -195,14 +195,14 @@ export function AtivosPanel() {
                         {RISK_LABELS[asset.riskLevel]}
                       </span>
                     </td>
-                    <td className="px-4 py-2.5 text-[#8fb3c8]">{fmtDate(asset.lastInspection)}</td>
-                    <td className={`px-4 py-2.5 ${overdue ? 'text-red-400 font-medium' : 'text-[#8fb3c8]'}`}>
+                    <td className="px-4 py-2.5 text-[#a3a3a3]">{fmtDate(asset.lastInspection)}</td>
+                    <td className={`px-4 py-2.5 ${overdue ? 'text-red-400 font-medium' : 'text-[#a3a3a3]'}`}>
                       {fmtDate(due)}{overdue ? ' ⚠' : ''}
                     </td>
                     <td className="px-4 py-2.5">
                       <button
                         onClick={(e) => { e.stopPropagation(); setSelectedAssetId(asset.id); setActiveTab('home') }}
-                        className="px-2 py-1 rounded bg-[#112645] hover:bg-[#20406a] text-[#2abfdc] text-xs transition-colors"
+                        className="px-2 py-1 rounded bg-[#333333] hover:bg-[#525252] text-[#f97316] text-xs transition-colors"
                       >
                         Ver
                       </button>

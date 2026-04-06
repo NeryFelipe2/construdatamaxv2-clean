@@ -18,6 +18,9 @@ export const projectInfoSchema = z
     projectManager: z.string().max(100).optional(),
     riskLevel:      z.enum(['low', 'medium', 'high', 'critical'] as const).optional(),
     priority:       z.enum(['low', 'medium', 'high'] as const).optional(),
+    address:        z.string().max(200).optional(),
+    lat:            z.number().optional(),
+    lng:            z.number().optional(),
   })
   .refine((d) => d.endDate >= d.startDate, {
     message: 'Data de término deve ser após data de início',

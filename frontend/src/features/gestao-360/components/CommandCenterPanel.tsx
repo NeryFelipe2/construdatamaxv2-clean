@@ -28,7 +28,7 @@ interface FeedItem {
 const SEVERITY_ORDER = { critical: 0, high: 1, medium: 2, low: 3 }
 const SEVERITY_COLOR = {
   critical: '#ef4444',
-  high:     '#2abfdc',
+  high:     '#f97316',
   medium:   '#eab308',
   low:      '#22c55e',
 }
@@ -59,7 +59,7 @@ const REC_CATEGORY_LABEL: Record<Recommendation['category'], string> = {
 const REC_CATEGORY_COLOR: Record<Recommendation['category'], string> = {
   immediate: '#ef4444',
   week:      '#eab308',
-  strategic: '#2abfdc',
+  strategic: '#f97316',
 }
 
 // ─── Priority Matrix ──────────────────────────────────────────────────────────
@@ -72,9 +72,9 @@ function PriorityMatrix({ recs }: { recs: Recommendation[] }) {
   const cH = H - PAD
 
   return (
-    <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-4">
-      <p className="text-[#e4f2f8] text-sm font-semibold mb-3 flex items-center gap-2">
-        <Target size={13} className="text-[#2abfdc]" />
+    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
+      <p className="text-[#f5f5f5] text-sm font-semibold mb-3 flex items-center gap-2">
+        <Target size={13} className="text-[#f97316]" />
         Matriz de Prioridade
       </p>
       <svg width={W} height={H} className="mx-auto block">
@@ -82,17 +82,17 @@ function PriorityMatrix({ recs }: { recs: Recommendation[] }) {
         <rect x={PAD + cW / 2} y={0}        width={cW / 2} height={cH / 2} fill="#ef444412" rx={2} />
         <rect x={PAD}          y={0}        width={cW / 2} height={cH / 2} fill="#f9731612" rx={2} />
         <rect x={PAD + cW / 2} y={cH / 2}  width={cW / 2} height={cH / 2} fill="#eab30812" rx={2} />
-        <rect x={PAD}          y={cH / 2}  width={cW / 2} height={cH / 2} fill="#1a366212" rx={2} />
+        <rect x={PAD}          y={cH / 2}  width={cW / 2} height={cH / 2} fill="#48484812" rx={2} />
 
         {/* Quadrant labels */}
         <text x={PAD + cW * 0.75} y={12} textAnchor="middle" fontSize={7} fill="#ef444488">Ação Imediata</text>
         <text x={PAD + cW * 0.25} y={12} textAnchor="middle" fontSize={7} fill="#f9731688">Esta Semana</text>
         <text x={PAD + cW * 0.75} y={cH / 2 + 12} textAnchor="middle" fontSize={7} fill="#eab30888">Planejar</text>
-        <text x={PAD + cW * 0.25} y={cH / 2 + 12} textAnchor="middle" fontSize={7} fill="#5a8caa88">Monitorar</text>
+        <text x={PAD + cW * 0.25} y={cH / 2 + 12} textAnchor="middle" fontSize={7} fill="#6b6b6b88">Monitorar</text>
 
         {/* Center lines */}
-        <line x1={PAD + cW / 2} y1={0} x2={PAD + cW / 2} y2={cH} stroke="#20406a" strokeWidth={1} strokeDasharray="3,2" />
-        <line x1={PAD} y1={cH / 2} x2={PAD + cW} y2={cH / 2} stroke="#20406a" strokeWidth={1} strokeDasharray="3,2" />
+        <line x1={PAD + cW / 2} y1={0} x2={PAD + cW / 2} y2={cH} stroke="#525252" strokeWidth={1} strokeDasharray="3,2" />
+        <line x1={PAD} y1={cH / 2} x2={PAD + cW} y2={cH / 2} stroke="#525252" strokeWidth={1} strokeDasharray="3,2" />
 
         {/* Dots */}
         {recs.map((r) => {
@@ -109,8 +109,8 @@ function PriorityMatrix({ recs }: { recs: Recommendation[] }) {
         })}
 
         {/* Axis labels */}
-        <text x={PAD + cW / 2} y={H - 2} textAnchor="middle" fontSize={8} fill="#5a8caa">Impacto →</text>
-        <text x={6} y={cH / 2 + 4} textAnchor="middle" fontSize={8} fill="#5a8caa" transform={`rotate(-90, 6, ${cH / 2})`}>↑ Urgência</text>
+        <text x={PAD + cW / 2} y={H - 2} textAnchor="middle" fontSize={8} fill="#6b6b6b">Impacto →</text>
+        <text x={6} y={cH / 2 + 4} textAnchor="middle" fontSize={8} fill="#6b6b6b" transform={`rotate(-90, 6, ${cH / 2})`}>↑ Urgência</text>
       </svg>
     </div>
   )
@@ -430,7 +430,7 @@ export function CommandCenterPanel() {
       {/* Feed header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <p className="text-[#e4f2f8] text-sm font-semibold">Centro de Comando — Feed Unificado</p>
+          <p className="text-[#f5f5f5] text-sm font-semibold">Centro de Comando — Feed Unificado</p>
           <p className="text-[#6b6b6b] text-xs mt-0.5">
             {feed.length} ocorrência{feed.length !== 1 ? 's' : ''} ativa{feed.length !== 1 ? 's' : ''} em todos os módulos
           </p>
@@ -454,7 +454,7 @@ export function CommandCenterPanel() {
 
       {/* Feed list */}
       {feed.length === 0 ? (
-        <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-8 text-center">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-8 text-center">
           <p className="text-[#22c55e] text-sm font-semibold mb-1">Tudo sob controle!</p>
           <p className="text-[#6b6b6b] text-xs">Nenhuma ocorrência crítica ou pendente em todos os módulos.</p>
         </div>
@@ -466,7 +466,7 @@ export function CommandCenterPanel() {
             return (
               <div
                 key={item.id}
-                className="bg-[#14294e] border border-[#20406a] rounded-xl p-3 flex items-start gap-3"
+                className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-3 flex items-start gap-3"
                 style={{ borderLeft: `3px solid ${color}` }}
               >
                 <div className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0" style={{ backgroundColor: `${color}18` }}>
@@ -479,12 +479,12 @@ export function CommandCenterPanel() {
                     </span>
                     <span className="text-[#6b6b6b] text-[10px] shrink-0">{item.module}</span>
                   </div>
-                  <p className="text-[#e4f2f8] text-xs font-semibold">{item.title}</p>
+                  <p className="text-[#f5f5f5] text-xs font-semibold">{item.title}</p>
                   <p className="text-[#6b6b6b] text-[11px] mt-0.5 leading-relaxed">{item.detail}</p>
                 </div>
                 <Link
                   to={item.link}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg shrink-0 text-[#6b6b6b] text-[10px] font-semibold border border-[#20406a] hover:border-[#2abfdc]/50 hover:text-[#2abfdc] transition-colors"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg shrink-0 text-[#6b6b6b] text-[10px] font-semibold border border-[#525252] hover:border-[#f97316]/50 hover:text-[#f97316] transition-colors"
                 >
                   Ver módulo <ArrowRight size={10} />
                 </Link>
@@ -497,13 +497,13 @@ export function CommandCenterPanel() {
       {/* Intelligent Optimizations */}
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <TrendingUp size={14} className="text-[#2abfdc]" />
-          <h3 className="text-[#e4f2f8] text-sm font-semibold">Otimizações Inteligentes</h3>
+          <TrendingUp size={14} className="text-[#f97316]" />
+          <h3 className="text-[#f5f5f5] text-sm font-semibold">Otimizações Inteligentes</h3>
           <span className="text-[#6b6b6b] text-xs">({recommendations.length} sugestão{recommendations.length !== 1 ? 'ões' : ''})</span>
         </div>
 
         {recommendations.length === 0 ? (
-          <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-6 text-center">
+          <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-6 text-center">
             <AlertTriangle size={24} className="text-[#22c55e] mx-auto mb-2" />
             <p className="text-[#22c55e] text-sm font-semibold">Nenhuma otimização necessária — tudo sob controle!</p>
           </div>
@@ -516,20 +516,20 @@ export function CommandCenterPanel() {
                 if (catRecs.length === 0) return null
                 const color = REC_CATEGORY_COLOR[cat]
                 return (
-                  <div key={cat} className="bg-[#14294e] border border-[#20406a] rounded-xl overflow-hidden">
-                    <div className="px-4 py-2.5 border-b border-[#20406a] flex items-center gap-2" style={{ borderLeft: `3px solid ${color}` }}>
+                  <div key={cat} className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
+                    <div className="px-4 py-2.5 border-b border-[#525252] flex items-center gap-2" style={{ borderLeft: `3px solid ${color}` }}>
                       <span className="text-xs font-bold" style={{ color }}>{REC_CATEGORY_LABEL[cat]}</span>
                       <span className="text-[#6b6b6b] text-[10px]">({catRecs.length})</span>
                     </div>
-                    <div className="flex flex-col divide-y divide-[#20406a]">
+                    <div className="flex flex-col divide-y divide-[#525252]">
                       {catRecs.map((rec) => (
                         <div key={rec.id} className="px-4 py-2.5 flex items-start gap-2">
                           <div className="shrink-0 mt-0.5 w-2 h-2 rounded-full mt-1" style={{ background: color }} />
                           <div className="flex-1 min-w-0">
-                            <p className="text-[#e4f2f8] text-xs font-semibold">{rec.title}</p>
+                            <p className="text-[#f5f5f5] text-xs font-semibold">{rec.title}</p>
                             <p className="text-[#6b6b6b] text-[11px] mt-0.5">{rec.detail}</p>
                           </div>
-                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#20406a] text-[#5a8caa] shrink-0 whitespace-nowrap">{rec.module}</span>
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#525252] text-[#6b6b6b] shrink-0 whitespace-nowrap">{rec.module}</span>
                         </div>
                       ))}
                     </div>
@@ -547,7 +547,7 @@ export function CommandCenterPanel() {
       </div>
 
       {/* Module quick links */}
-      <div className="bg-[#14294e] border border-[#20406a] rounded-xl p-4">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
         <ModuleQuickLinks exclude={['/gestao-360']} />
       </div>
     </div>

@@ -403,7 +403,7 @@ export function buildLayersFromSegments(segments: BimSegment[]): import('@/types
     if (!layerMap.has(layer)) {
       // Assign color based on element type
       const colorMap: Record<string, string> = {
-        pipe:   '#2abfdc',
+        pipe:   '#f97316',
         slab:   '#94a3b8',
         column: '#f59e0b',
         wall:   '#64748b',

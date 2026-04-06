@@ -8,7 +8,7 @@ const COLOR_MODES: { key: BimColorMode; label: string; dot: string }[] = [
   { key: 'depth',    label: 'Profundidade', dot: '#3b82f6' },
   { key: 'date',     label: 'Prazo (4D)',   dot: '#f59e0b' },
   { key: 'cost',     label: 'Custo (5D)',   dot: '#ef4444' },
-  { key: 'diameter', label: 'Diâmetro',     dot: '#2abfdc' },
+  { key: 'diameter', label: 'Diâmetro',     dot: '#f97316' },
   { key: 'pressure', label: 'Pressão',      dot: '#22c55e' },
 ]
 
@@ -21,14 +21,14 @@ export function BimControls() {
   const toggleDroneMode = useBimStore((s) => s.toggleDroneMode)
 
   return (
-    <div className="flex items-center gap-1 px-3 py-2 bg-gray-800/80 border-b border-gray-700 overflow-x-auto scrollbar-none shrink-0">
+    <div className="flex items-center gap-1 px-3 py-2 bg-[#3d3d3d]/80 border-b border-[#525252] overflow-x-auto scrollbar-none shrink-0">
       {/* Viewer mode toggle */}
-      <div className="flex items-center bg-gray-900/60 rounded-lg border border-gray-700 p-0.5 mr-2">
+      <div className="flex items-center bg-[#2c2c2c]/60 rounded-lg border border-[#525252] p-0.5 mr-2">
         <button
           onClick={() => setViewerMode('threejs')}
           className={cn(
             'flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors',
-            viewerMode === 'threejs' ? 'bg-gray-700 text-gray-100' : 'text-gray-500 hover:text-gray-300',
+            viewerMode === 'threejs' ? 'bg-[#484848] text-gray-100' : 'text-[#6b6b6b] hover:text-[#f5f5f5]',
           )}
         >
           <Cpu size={11} />
@@ -38,7 +38,7 @@ export function BimControls() {
           onClick={() => setViewerMode('forge')}
           className={cn(
             'flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors',
-            viewerMode === 'forge' ? 'bg-[#2abfdc]/20 text-[#2abfdc]' : 'text-gray-500 hover:text-gray-300',
+            viewerMode === 'forge' ? 'bg-[#f97316]/20 text-[#f97316]' : 'text-[#6b6b6b] hover:text-[#f5f5f5]',
           )}
         >
           <Navigation size={11} />
@@ -54,8 +54,8 @@ export function BimControls() {
           className={cn(
             'flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-medium transition-colors mr-2',
             droneMode
-              ? 'bg-[#2abfdc]/15 border-[#2abfdc]/40 text-[#2abfdc]'
-              : 'border-gray-700 text-gray-500 hover:text-gray-300 hover:border-gray-600',
+              ? 'bg-[#f97316]/15 border-[#f97316]/40 text-[#f97316]'
+              : 'border-[#525252] text-[#6b6b6b] hover:text-[#f5f5f5] hover:border-[#5e5e5e]',
           )}
         >
           <Navigation size={11} />
@@ -66,7 +66,7 @@ export function BimControls() {
       {/* Color mode selector — Three.js only */}
       {viewerMode === 'threejs' && (
         <>
-          <span className="text-gray-500 text-xs font-medium mr-1">Cor:</span>
+          <span className="text-[#6b6b6b] text-xs font-medium mr-1">Cor:</span>
           {COLOR_MODES.map((m) => (
             <button
               key={m.key}
@@ -74,8 +74,8 @@ export function BimControls() {
               className={cn(
                 'flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-colors',
                 colorMode === m.key
-                  ? 'bg-gray-700 text-gray-100'
-                  : 'text-gray-500 hover:text-gray-300',
+                  ? 'bg-[#484848] text-gray-100'
+                  : 'text-[#6b6b6b] hover:text-[#f5f5f5]',
               )}
             >
               <Circle size={8} fill={m.dot} stroke="none" />

@@ -24,9 +24,9 @@ function PhotoCard({ photo }: { photo: ReportPhoto }) {
   }
 
   return (
-    <div className="group relative flex flex-col rounded-xl border border-[#20406a] bg-[#14294e] overflow-hidden hover:border-[#1f3c5e] transition-colors">
+    <div className="group relative flex flex-col rounded-xl border border-[#525252] bg-[#3d3d3d] overflow-hidden hover:border-[#1f3c5e] transition-colors">
       {/* Image */}
-      <div className="relative aspect-video bg-[#1a3662] overflow-hidden">
+      <div className="relative aspect-video bg-[#484848] overflow-hidden">
         <img
           src={photo.base64}
           alt={photo.label}
@@ -35,7 +35,7 @@ function PhotoCard({ photo }: { photo: ReportPhoto }) {
         {/* Delete overlay */}
         <button
           onClick={() => removePhoto(photo.id)}
-          className="absolute top-2 right-2 flex items-center justify-center w-7 h-7 rounded-lg bg-[#0d2040]/80 text-[#ef4444] opacity-0 group-hover:opacity-100 hover:bg-[#ef4444]/20 transition-all"
+          className="absolute top-2 right-2 flex items-center justify-center w-7 h-7 rounded-lg bg-[#2c2c2c]/80 text-[#ef4444] opacity-0 group-hover:opacity-100 hover:bg-[#ef4444]/20 transition-all"
           title="Remover foto"
         >
           <Trash2 size={13} />
@@ -54,7 +54,7 @@ function PhotoCard({ photo }: { photo: ReportPhoto }) {
                 if (e.key === 'Enter') commitLabel()
                 if (e.key === 'Escape') cancelEdit()
               }}
-              className="flex-1 bg-transparent border-b border-[#2abfdc] text-[#f5f5f5] text-xs outline-none pb-0.5"
+              className="flex-1 bg-transparent border-b border-[#f97316] text-[#f5f5f5] text-xs outline-none pb-0.5"
             />
             <button onClick={commitLabel} className="text-[#22c55e] hover:opacity-80">
               <Check size={13} />
@@ -68,7 +68,7 @@ function PhotoCard({ photo }: { photo: ReportPhoto }) {
             <span className="text-[#f5f5f5] text-xs font-medium truncate">{photo.label}</span>
             <button
               onClick={() => setEditing(true)}
-              className="text-[#6b6b6b] opacity-0 group-hover/label:opacity-100 hover:text-[#2abfdc] transition-all"
+              className="text-[#6b6b6b] opacity-0 group-hover/label:opacity-100 hover:text-[#f97316] transition-all"
             >
               <Pencil size={11} />
             </button>
@@ -99,7 +99,7 @@ export function PhotosPanel() {
           <span className="text-xs font-mono text-[#6b6b6b]">{photos.length} fotos</span>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#2abfdc]/15 text-[#2abfdc] border border-[#2abfdc]/30 hover:bg-[#2abfdc]/25 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#f97316]/15 text-[#f97316] border border-[#f97316]/30 hover:bg-[#f97316]/25 transition-colors"
           >
             <Camera size={13} />
             Adicionar Fotos
@@ -119,15 +119,15 @@ export function PhotosPanel() {
         <div
           onClick={() => fileInputRef.current?.click()}
           className={cn(
-            'flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#20406a] bg-[#112645]',
-            'h-32 cursor-pointer hover:border-[#2abfdc]/40 hover:bg-[#2abfdc]/5 transition-colors'
+            'flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#525252] bg-[#333333]',
+            'h-32 cursor-pointer hover:border-[#f97316]/40 hover:bg-[#f97316]/5 transition-colors'
           )}
         >
           <Camera size={24} className="text-[#3f3f3f]" />
           <span className="text-xs text-[#6b6b6b]">Clique para adicionar fotos da obra</span>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {photos.map((photo) => (
             <PhotoCard key={photo.id} photo={photo} />
           ))}
@@ -135,8 +135,8 @@ export function PhotosPanel() {
           <div
             onClick={() => fileInputRef.current?.click()}
             className={cn(
-              'aspect-video flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#20406a]',
-              'cursor-pointer hover:border-[#2abfdc]/40 hover:bg-[#2abfdc]/5 transition-colors'
+              'aspect-video flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#525252]',
+              'cursor-pointer hover:border-[#f97316]/40 hover:bg-[#f97316]/5 transition-colors'
             )}
           >
             <Camera size={20} className="text-[#3f3f3f]" />
