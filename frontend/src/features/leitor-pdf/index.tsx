@@ -165,6 +165,28 @@ export function LeitorPdfPage() {
 
   function removeFromQueue(id: string) { setQueue(prev => prev.filter(f => f.id !== id)) }
 
+  // Tenta backend, fallback client-side
+  const BACKEND_URL = import.meta.env.VITE_API_URL || "https://construdatamaxv2-clean.onrender.com"
+
+  async function extractViaBackend(file: File): Promise<ExtractedPdf | null> {
+    try {
+      const form = new FormData()
+      form.append("files", file)
+      const res = await fetch(`${BACKEND_URL}/api/motores/pdf/extract`, { method: "POST", body: form })
+      if (!res.ok) return null
+      const data = await res.json()
+      if (!data?.[0]?.text) return null
+      const item = data[0]
+      const sections = extractSections(item.text)
+      return {
+        text: item.text,
+        pageCount: item.page_count || 1,
+        charsPerPage: item.chars_per_page || 0,
+        sections,
+      }
+    } catch { return null }
+  }
+
   async function handleProcess() {
     if (queue.length === 0 || processing) return
     setProcessing(true)
@@ -176,7 +198,10 @@ export function LeitorPdfPage() {
       setQueue([...updated])
 
       try {
-        const result = await readPdfClientSide(updated[i].file)
+        // Tenta backend (extrai PDF binário real)
+        let result = await extractViaBackend(updated[i].file)
+        // Fallback: client-side se backend offline
+        if (!result) result = await readPdfClientSide(updated[i].file)
         updated[i] = { ...updated[i], status: "done", result }
       } catch (e: any) {
         updated[i] = { ...updated[i], status: "error", error: e.message ?? "Erro ao processar" }
