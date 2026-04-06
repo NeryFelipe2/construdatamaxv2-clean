@@ -17,6 +17,7 @@ from api.routes_processamento import router as processamento_router
 from api.routes_rdo import router as rdo_router
 from api.routes_whatsapp import router as whatsapp_router
 from api.routes_notificacoes import router as notificacoes_router
+from api.routes_motores import router as motores_router
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
 
@@ -36,6 +37,7 @@ app.include_router(processamento_router)
 app.include_router(operacao_router)
 app.include_router(whatsapp_router)
 app.include_router(notificacoes_router)
+app.include_router(motores_router)
 
 # Mount ConstruPlan Flask Offline Backend (Brutal Injection)
 try:
