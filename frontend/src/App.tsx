@@ -42,8 +42,8 @@ const EvmPage = lazy(() => import("@/features/evm/index").then((m) => ({ default
 const PlanejamentoMestrePage = lazy(() => import("@/features/planejamento-mestre/index").then((m) => ({ default: m.PlanejamentoMestrePage })));
 const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").then((m) => ({ default: m.OperacaoCampoPage })));
 
-// ─── NS V5 Legacy (all 13 tabs preserved) ───────────────────────────────────
-const LegacyApp = lazy(() => import("./LegacyApp"));
+// ─── Motor NS V5 (novo, visual Datadog) ────────────────────────────────────
+const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m) => ({ default: m.MotorNsV5Page })));
 
 // ─── Nav items ──────────────────────────────────────────────────────────────
 const navItems = [
@@ -354,11 +354,11 @@ function AppShell() {
   );
 }
 
-// ─── NS V5 Legacy wrapper (preserves styles.css shell) ──────────────────────
+// ─── NS V5 wrapper (uses new MotorNsV5Page) ────────────────────────────────
 function NsV5Page() {
   return (
     <LazyRoute>
-      <LegacyApp />
+      <MotorNsV5Page />
     </LazyRoute>
   );
 }
