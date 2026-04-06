@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+/* ─── Leaflet z-index fix ─── */
+/* Leaflet usa z-index 400-700 por padrao, o que faz o mapa vazar
+   sobre header/sidebar/dropdowns. Forcamos ele a ficar abaixo. */
+.leaflet-container,
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control-container,
+.leaflet-control,
+.leaflet-popup,
+.leaflet-tooltip,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-tile-pane,
+.leaflet-overlay-pane {
+  z-index: 1 !important;
+}
+.leaflet-control-zoom,
+.leaflet-control-layers,
+.leaflet-control-attribution {
+  z-index: 2 !important;
+}
+/* Tooltip de PV pode subir um pouco mas nao mais que o header */
+.leaflet-tooltip {
+  z-index: 3 !important;
+}
+
 @theme {
   --color-background: #0d2040;
   --color-surface: #112645;
