@@ -404,7 +404,8 @@ def _gerar_divergencias_xlsx(divergencias: list, out_dir, nucleo: str) -> str:
     return fpath
 
 
-def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=None):
+def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=None,
+                          topo_path=None, cartografia_path=None):
     """
     Gera cadastro técnico as-built conforme NTS 292.
 
@@ -433,6 +434,23 @@ def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=No
     # Enriquecer PVs com dados reais de campo se status_ns fornecido
     pvs_campo: dict = {}          # {pv_nome: {ct_real, cf_real, prof_real}}
     divergencias: list = []       # [{ns_key, pv, campo, projeto, diff}]
+
+    # Pipeline do PROJETO (ficticio) sai sempre em out_dir.
+    # Se topo_path foi fornecido, dispara um SEGUNDO pipeline depois com o
+    # cadastro REAL COMPILADO em out_dir/REAL_COMPILADO_<NUCLEO>/.
+    pvs_ajustados_campo = 0
+    _topo_diferido = topo_path  # guarda para 2a passada
+    topo_path = None            # zera nesta passada (geramos o ficticio)
+
+    # ── Cartografia de fundo (DWG/DXF) ──
+    cartografia_polys = None
+    if cartografia_path:
+        try:
+            from cadastro.ler_cartografia import ler_cartografia
+            cartografia_polys = ler_cartografia(cartografia_path)
+            print(f"  [NTS292] cartografia: {len(cartografia_polys or [])} polilinhas")
+        except Exception as e:
+            print(f"  [NTS292] falha ao ler cartografia: {e}")
     data_levant = ""
     resp_levant = ""
 
@@ -513,6 +531,24 @@ def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=No
     ymin, ymax = min(ys) - 20, max(ys) + 20
 
     _draw_coord_grid(msp, xmin, ymin, xmax, ymax, step=50)
+
+    # Cartografia de fundo no DXF consolidado (georreferenciada, sem reprojeto)
+    if cartografia_polys:
+        _ensure_layer(doc, "CARTOGRAFIA_FUNDO", color=8)
+        n_poly = 0
+        for elem in cartografia_polys:
+            pts = elem.get("pontos") or []
+            if len(pts) < 2:
+                continue
+            # filtra polilinhas que tocam a area da rede
+            if not any(xmin <= p[0] <= xmax and ymin <= p[1] <= ymax for p in pts):
+                continue
+            try:
+                msp.add_lwpolyline(pts, dxfattribs={"layer": "CARTOGRAFIA_FUNDO"})
+                n_poly += 1
+            except Exception:
+                pass
+        print(f"  [NTS292] cartografia desenhada no DXF consolidado: {n_poly} polilinhas")
 
     # Desenhar tubulações
     for tr in trechos:
@@ -615,9 +651,12 @@ def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=No
         "formato": "A4 (rede coletora) / A1 (planta-perfil)",
         "dados_campo": {
             "pvs_com_campo_real": len(pvs_campo),
+            "pvs_ajustados_por_campo": pvs_ajustados_campo,
             "divergencias": len(divergencias),
             "data_levantamento": data_levant,
             "responsavel_levantamento": resp_levant,
+            "topo_path": topo_path or "",
+            "cartografia_path": cartografia_path or "",
         },
         "layers": list(LAYERS.keys()) + ["CAMPO_REAL", "PROJETO"],
         "requisitos_entrega": {
@@ -634,6 +673,63 @@ def gerar_cadastro_nts292(pvs, trechos, nucleo, out_dir, info=None, status_ns=No
         json.dump(meta, f, indent=2, ensure_ascii=False)
 
     paths_gerados.append(str(meta_path))
+
+    # 7. Folha A4 SABESP (DXF + PDF) — uma folha por trecho contiguo
+    try:
+        from cadastro import folha_a4
+        base = f"CADASTRO A4 - {nucleo.upper().replace(' ','_')}"
+        # converte PVs para o formato esperado pela folha
+        def _conv(nm):
+            p = pvs_perfil.get(nm, {}) or pvs.get(nm, {})
+            return {
+                "nome": nm,
+                "este": p.get("x", 0),
+                "norte": p.get("y", 0),
+                "cota_tampa": p.get("ct", 0) or 0,
+                "cota_fundo": p.get("cf", 0) or 0,
+                "prof": p.get("prof", 0) or 0,
+                "tipo": "PV",
+            }
+        # cada trecho vira uma folha (par PV_ini -> PV_fim)
+        folhas = []
+        for tr in trechos:
+            a = _conv(tr.get("pv_ini", ""))
+            b = _conv(tr.get("pv_fim", ""))
+            if a["este"] and b["este"]:
+                folhas.append([a, b])
+        if folhas:
+            redes_info = {
+                "diametro": (trechos[0].get("dn_mm") if trechos else "") or "",
+                "material": (trechos[0].get("material") if trechos else "") or "",
+                "met_construtivo": "VALA ABERTA",
+            }
+            paths_a4 = folha_a4.generate_batch(folhas, str(out), base, info=info, redes_info=redes_info, cartografia=cartografia_polys)
+            for dxf_p, pdf_p in paths_a4:
+                paths_gerados.extend([dxf_p, pdf_p])
+            print(f"  [NTS292] {len(folhas)} folhas A4 SABESP geradas (DXF+PDF)")
+    except Exception as e:
+        print(f"  [NTS292] folha A4 nao gerada: {e}")
+
+    # ── 2a passada: CADASTRO REAL COMPILADO (topo de campo aplicado) ──
+    if _topo_diferido:
+        try:
+            from cadastro.ler_topo import ler_topo
+            from cadastro.compilar_campo import compilar_campo
+            topo_pts = ler_topo(_topo_diferido)
+            pvs_real, trechos_real, divs_topo = compilar_campo(pvs, trechos, topo_pts)
+            n_aj = sum(1 for p in pvs_real.values() if p.get("fonte") == "CAMPO")
+            print(f"  [NTS292] topo lido: {len(topo_pts)} pts | {n_aj} PVs ajustados -> REAL_COMPILADO")
+            sub = out / f"REAL_COMPILADO_{nucleo.upper().replace(' ','_')}"
+            info_real = dict(info)
+            info_real["conteudo"] = f"CADASTRO REAL COMPILADO (topo) — {nucleo}"
+            extras = gerar_cadastro_nts292(
+                pvs_real, trechos_real, nucleo + "_REAL", str(sub),
+                info=info_real, status_ns=status_ns,
+                topo_path=None, cartografia_path=cartografia_path,
+            )
+            paths_gerados.extend(extras)
+        except Exception as e:
+            print(f"  [NTS292] falha REAL_COMPILADO: {e}")
 
     print(f"[NTS292] Cadastro gerado: {fpath}")
     print(f"         {len(pvs)} PVs | {len(trechos)} trechos | {meta['extensao_m']:.0f}m")

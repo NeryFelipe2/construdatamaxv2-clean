@@ -150,6 +150,8 @@ class HydroNetworkApp:
         self.saida_var   = tk.StringVar(value=str(SCRIPT_DIR / "SAIDA_HYDRONETWORK"))
         self.nucleo_var  = tk.StringVar()
         self.tipo_var    = tk.StringVar(value="auto")
+        self.topo_var         = tk.StringVar()
+        self.cartografia_var  = tk.StringVar()
 
         self._build_ui()
         self._log_msg(f"ConstruData - HydroNetwork v{VERSION} | NS v{NS_VERSION}")
@@ -283,7 +285,11 @@ class HydroNetworkApp:
         self.arquivo_var.trace_add("write", self._on_arquivo_change)
 
         self._file_row(lf, "Pasta de Saida:", self.saida_var, directory=True)
- 
+        self._file_row(lf, "TXT/GSI Topografo (campo):", self.topo_var,
+                       filetypes=[("Topografia", "*.txt *.csv *.gsi")])
+        self._file_row(lf, "Cartografia (DXF/DWG/GPKG):", self.cartografia_var,
+                       filetypes=[("Cartografia", "*.dxf *.dwg *.gpkg")])
+
         # ── PAINEL DE STATUS DE MOTORES (Real-time) ───────────────────
         sf = tk.Frame(tab, bg=BG2, bd=1, relief=tk.RIDGE)
         sf.pack(fill=tk.X, padx=12, pady=4)
@@ -1438,10 +1444,63 @@ class HydroNetworkApp:
             ("BATCH NUCLEOS DXF", PURPLE, WHITE, self._cmd_batch),
             ("BATCH PROLONGAMENTOS", ORANGE, WHITE, self._cmd_batch_prolongamentos),
             ("BATCH TUDO", ACCENT, "#000", self._cmd_batch_tudo),
+            ("AUDITORIA CAMPO V4 (NTS)", BLUE, WHITE, self._cmd_auditoria_campo_v4),
         ]:
             tk.Button(brow, text=txt, command=cmd, bg=cor, fg=fg_c,
                       font=("Segoe UI", 10, "bold"), relief=tk.FLAT,
                       padx=20, pady=8).pack(side=tk.LEFT, padx=4)
+
+    def _cmd_auditoria_campo_v4(self):
+        """Chama a validação de executado vs projetado (V4/NTS) cruzando a rede carregada com um Shapefile importado."""
+        if not hasattr(self, 'trechos') or not self.trechos:
+            messagebox.showwarning("Aviso", "Por favor, navegue no arquivo DXF/XML/DWG lá em cima e clique em 'APENAS LER PROJETO' primeiro!")
+            return
+
+        res = messagebox.askyesno("Auditoria V4 (Executado vs Projeto)", 
+                                  "Vamos cruzar o PROJETO que está na tela com as LINHAS DO EXECUTADO.\n"
+                                  "Serão gerados os Consolidados V4 e Listas de Materiais NTS (PEAD 63/110, PVC 200/300).\n\n"
+                                  "Deseja selecionar o Shapefile de Execução agora?")
+        if not res: return
+        
+        shp_path = filedialog.askopenfilename(
+            title="Selecionar Shapefile de Campo (Executado)",
+            filetypes=[("Shapefile", "*.shp"), ("Todos", "*.*")]
+        )
+        if not shp_path: return
+
+        self._run(self._do_auditoria_campo_v4, shp_path=shp_path)
+
+    def _do_auditoria_campo_v4(self, shp_path=""):
+        try:
+            self.root.after(0, self._status, "Inicializando Motor V4 de Auditoria Executiva...", "#ffeb3b")
+            
+            from motor_auditoria_v4 import processar_lote_auditoria
+            
+            # Pegamos o projeto atual na memoria
+            nucleo = self.nucleo_var.get() or "Rede Atual"
+            tipo = "AGUA" if "agua" in nucleo.lower() else "ESGOTO"
+            
+            projetos = [{
+                "nucleo": nucleo,
+                "tipo": tipo,
+                "pvs": self.pvs,
+                "trechos": self.trechos
+            }]
+            
+            out_base = Path.home() / "Desktop" / "GERAR NS COM ITENS POR RUA DE PV A PV" / "SAIDA_COMPLETA_POR_RUA" / "_AUDITORIA_V4_IMPORTADA"
+            out_base.mkdir(parents=True, exist_ok=True)
+            
+            resultado = processar_lote_auditoria(projetos, Path(shp_path), out_base)
+            
+            self.root.after(0, self._log_msg, f"AUDITORIA CONCLUIDA! ({resultado['status_geral']['exec']} NS executadas cruzadas)", "OK")
+            self.root.after(0, self._status, "Auditoria Concluida", "#00ff7f")
+            
+            if out_base.exists():
+                os.startfile(out_base)
+                
+        except Exception as e:
+            self.root.after(0, self._log_msg, f"FALHA NA AUDITORIA V4: {e}", "ERROR")
+            self.root.after(0, self._status, "Erro na Auditoria V4", "#ff3333")
 
     # ── TAB 8: LOG ───────────────────────────────────────────────────────────
 
@@ -2593,7 +2652,9 @@ class HydroNetworkApp:
         if _ENGINES.get("NTS292"):
             self.root.after(0, self._log_msg, "Etapa 4/6: Cadastro NTS 292...", "INFO")
             from gerar_cadastro_nts292 import gerar_cadastro_nts292
-            gerar_cadastro_nts292(self.pvs, self.trechos, nucleo, str(Path(pasta) / "03_CADASTRO_NTS292"))
+            gerar_cadastro_nts292(self.pvs, self.trechos, nucleo, str(Path(pasta) / "03_CADASTRO_NTS292"),
+                                  topo_path=self.topo_var.get() or None,
+                                  cartografia_path=self.cartografia_var.get() or None)
             self.root.after(0, self._log_msg, "NTS 292: OK", "OK")
 
         # Etapa 5: IFC
@@ -2718,7 +2779,9 @@ class HydroNetworkApp:
             gerar_json_dados(self.pvs, self.trechos, nucleo, p / f"dados_{slug}.json")
         if _ENGINES.get("NTS292"):
             from gerar_cadastro_nts292 import gerar_cadastro_nts292
-            gerar_cadastro_nts292(self.pvs, self.trechos, nucleo, str(Path(pasta) / "03_CADASTRO_NTS292"))
+            gerar_cadastro_nts292(self.pvs, self.trechos, nucleo, str(Path(pasta) / "03_CADASTRO_NTS292"),
+                                  topo_path=self.topo_var.get() or None,
+                                  cartografia_path=self.cartografia_var.get() or None)
         if _ENGINES.get("IFC"):
             from gerar_ifc_lod500 import gerar_ifc_lod500
             gerar_ifc_lod500(self.pvs, self.trechos, nucleo, str(Path(pasta) / "04_BIM_LOD500"))
@@ -2748,7 +2811,9 @@ class HydroNetworkApp:
     def _do_nts292(self):
         from gerar_cadastro_nts292 import gerar_cadastro_nts292
         gerar_cadastro_nts292(self.pvs, self.trechos, self.nucleo_var.get() or "REDE",
-                              str(Path(self.saida_var.get()) / "03_CADASTRO_NTS292"))
+                              str(Path(self.saida_var.get()) / "03_CADASTRO_NTS292"),
+                              topo_path=self.topo_var.get() or None,
+                              cartografia_path=self.cartografia_var.get() or None)
 
     def _cmd_cadastro_dxf(self):
         if self._check_data(): self._run(self._do_cadastro_dxf)
