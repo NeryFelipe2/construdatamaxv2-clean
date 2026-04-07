@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/store/projectContext";
 import { useThemeStore, LayoutTheme } from "@/store/themeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
   Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
@@ -401,6 +402,7 @@ function NsV5Page() {
 export default function App() {
   return (
     <BrowserRouter>
+      <TourProvider>
       <ThemeSwitcherFab />
       <Routes>
         <Route path="/app" element={<AdaptiveShell />}>
@@ -439,6 +441,7 @@ export default function App() {
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
+      </TourProvider>
     </BrowserRouter>
   );
 }

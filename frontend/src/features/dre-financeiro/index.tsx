@@ -14,6 +14,9 @@ import {
   CheckCircle2, AlertTriangle, Target, Layers, Clock,
   Building2, Truck, Users, Wrench, FileText, Shield,
 } from 'lucide-react'
+import { InfoTooltip, TOOLTIPS } from '@/components/ui/InfoTooltip'
+import { InsightsPanel, generateDreInsights, generateFluxoCaixaInsights, generateCustoTrechoInsights } from '@/components/ui/InsightBanner'
+import { TourButton, useTour } from '@/components/ui/GuidedTour'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type TabId = 'dre' | 'fluxo' | 'eficiencia' | 'custos'
@@ -108,13 +111,17 @@ function fmt(v: number) {
 }
 function fmtPct(v: number) { return `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` }
 
-function KpiCard({ label, value, sub, icon: Icon, color, trend }: {
+function KpiCard({ label, value, sub, icon: Icon, color, trend, tooltip, dataTour }: {
   label: string; value: string; sub?: string; icon: any; color: string; trend?: 'up' | 'down' | 'neutral'
+  tooltip?: import('@/components/ui/InfoTooltip').TooltipContent; dataTour?: string
 }) {
   return (
-    <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4 hover:border-[#2abfdc]/30 transition-colors">
+    <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4 hover:border-[#2abfdc]/30 transition-colors" data-tour={dataTour}>
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-bold text-[#5a8caa] uppercase tracking-wider">{label}</span>
+        <span className="text-[10px] font-bold text-[#5a8caa] uppercase tracking-wider flex items-center gap-1">
+          {label}
+          {tooltip && <InfoTooltip content={tooltip} position="bottom" size={11} />}
+        </span>
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color.replace('text-', 'bg-').replace('400', '500/15')}`}>
           <Icon size={16} className={color} />
         </div>
@@ -187,6 +194,7 @@ export function DreFinanceiroPage() {
           <p className="text-xs text-[#5a8caa]">{CONTRATO.numero} — {CONTRATO.cliente} — {CONTRATO.cidade}</p>
         </div>
         <div className="flex items-center gap-4">
+          <TourButton tourId={tab === 'dre' ? 'dre-financeiro' : tab === 'fluxo' ? 'fluxo-caixa' : tab === 'custos' ? 'custo-trecho' : 'eficiencia'} label="Tutorial" />
           <div className="text-right">
             <div className="text-[10px] text-[#5a8caa] uppercase">Valor Contrato</div>
             <div className="text-sm font-bold text-emerald-400">{fmt(CONTRATO.valorContrato)}</div>
@@ -216,13 +224,19 @@ export function DreFinanceiroPage() {
         {tab === 'dre' && (
           <>
             {/* KPI Row */}
+            {/* Insights Panel */}
+            <InsightsPanel
+              insights={generateDreInsights({ margemBruta, margemLiquida, lucroLiquido, totalReceita })}
+              title="Insights — O que os dados dizem?"
+            />
+
             <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
-              <KpiCard label="Receita Bruta" value={fmt(totalReceita)} icon={TrendingUp} color="text-emerald-400" trend="up" sub="Acumulado Jan-Mar 2026" />
-              <KpiCard label="Custo Direto" value={fmt(totalCustoDir)} icon={TrendingDown} color="text-rose-400" trend="down" />
-              <KpiCard label="Lucro Bruto" value={fmt(lucroBruto)} icon={BarChart3} color="text-cyan-400" trend="up" sub={`Margem: ${margemBruta.toFixed(1)}%`} />
+              <KpiCard label="Receita Bruta" value={fmt(totalReceita)} icon={TrendingUp} color="text-emerald-400" trend="up" sub="Acumulado Jan-Mar 2026" tooltip={TOOLTIPS.receitaBruta} dataTour="receita-bruta" />
+              <KpiCard label="Custo Direto" value={fmt(totalCustoDir)} icon={TrendingDown} color="text-rose-400" trend="down" tooltip={TOOLTIPS.custoDirecto} dataTour="custo-direto" />
+              <KpiCard label="Lucro Bruto" value={fmt(lucroBruto)} icon={BarChart3} color="text-cyan-400" trend="up" sub={`Margem: ${margemBruta.toFixed(1)}%`} tooltip={TOOLTIPS.lucroBruto} dataTour="lucro-bruto" />
               <KpiCard label="Lucro Operacional" value={fmt(lucroOperacional)} icon={PieChart} color="text-purple-400" trend="up" />
               <KpiCard label="Impostos" value={fmt(totalImpostos)} icon={Receipt} color="text-yellow-400" trend="down" />
-              <KpiCard label="Lucro Líquido" value={fmt(lucroLiquido)} icon={DollarSign} color="text-emerald-400" trend="up" sub={`Margem: ${margemLiquida.toFixed(1)}%`} />
+              <KpiCard label="Lucro Líquido" value={fmt(lucroLiquido)} icon={DollarSign} color="text-emerald-400" trend="up" sub={`Margem: ${margemLiquida.toFixed(1)}%`} tooltip={TOOLTIPS.lucroLiquido} dataTour="lucro-liquido" />
             </div>
 
             {/* DRE Table */}
@@ -326,11 +340,15 @@ export function DreFinanceiroPage() {
         {/* ═══════════════ FLUXO DE CAIXA ═══════════════ */}
         {tab === 'fluxo' && (
           <>
+            <InsightsPanel
+              insights={generateFluxoCaixaInsights({ saldoAtual: FLUXO_CAIXA[FLUXO_CAIXA.length-1].saldo, mesBreakeven: 'Fev/2026', totalRecebido: FLUXO_CAIXA.reduce((a,f)=>a+f.recebido,0), totalGasto: FLUXO_CAIXA.reduce((a,f)=>a+f.gasto,0) })}
+              title="Insights — Fluxo de Caixa"
+            />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <KpiCard label="Total Recebido" value={fmt(FLUXO_CAIXA.reduce((a, f) => a + f.recebido, 0))} icon={TrendingUp} color="text-emerald-400" trend="up" />
+              <KpiCard label="Total Recebido" value={fmt(FLUXO_CAIXA.reduce((a, f) => a + f.recebido, 0))} icon={TrendingUp} color="text-emerald-400" trend="up" tooltip={TOOLTIPS.fluxoCaixa} />
               <KpiCard label="Total Gasto" value={fmt(FLUXO_CAIXA.reduce((a, f) => a + f.gasto, 0))} icon={TrendingDown} color="text-rose-400" trend="down" />
               <KpiCard label="Saldo Atual" value={fmt(FLUXO_CAIXA[FLUXO_CAIXA.length - 1].saldo)} icon={Wallet} color="text-cyan-400" trend="up" sub="Acumulado" />
-              <KpiCard label="Breakeven" value="Fev/2026" icon={Target} color="text-yellow-400" sub="Mês 6 — projeto vira positivo" />
+              <KpiCard label="Breakeven" value="Fev/2026" icon={Target} color="text-yellow-400" sub="Mês 6 — projeto vira positivo" tooltip={TOOLTIPS.breakeven} dataTour="breakeven" />
             </div>
 
             {/* Fluxo Table + Visual */}
@@ -396,11 +414,15 @@ export function DreFinanceiroPage() {
         {/* ═══════════════ CUSTO POR TRECHO ═══════════════ */}
         {tab === 'custos' && (
           <>
+            <InsightsPanel
+              insights={generateCustoTrechoInsights({ variacaoMedia: -0.8, totalTrechos: TRECHOS_CUSTO.length, trechosAbaixo: TRECHOS_CUSTO.filter(t => t.variacao < 0).length })}
+              title="Insights — Custo por Trecho"
+            />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <KpiCard label="Total Trechos" value={String(TRECHOS_CUSTO.length)} icon={Layers} color="text-cyan-400" />
               <KpiCard label="Custo Total" value={fmt(totalTrechosCusto)} icon={DollarSign} color="text-emerald-400" />
-              <KpiCard label="Custo Médio/m" value={fmt(totalTrechosCusto / TRECHOS_CUSTO.reduce((a, t) => a + t.ext, 0))} icon={Calculator} color="text-purple-400" sub="Média ponderada" />
-              <KpiCard label="Variação Média" value="-0.8%" icon={Shield} color="text-green-400" sub="Abaixo do orçamento" trend="up" />
+              <KpiCard label="Custo Médio/m" value={fmt(totalTrechosCusto / TRECHOS_CUSTO.reduce((a, t) => a + t.ext, 0))} icon={Calculator} color="text-purple-400" sub="Média ponderada" tooltip={TOOLTIPS.custoUnitario} dataTour="custo-unitario" />
+              <KpiCard label="Variação Média" value="-0.8%" icon={Shield} color="text-green-400" sub="Abaixo do orçamento" trend="up" tooltip={TOOLTIPS.variacaoCusto} dataTour="variacao" />
             </div>
 
             <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
@@ -468,9 +490,9 @@ export function DreFinanceiroPage() {
           <>
             {/* Impact cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <KpiCard label="Economia Mensal" value={fmt(EFICIENCIA.impactoFinanceiro.economiaMensal)} icon={DollarSign} color="text-emerald-400" trend="up" sub="vs. processo manual" />
+              <KpiCard label="Economia Mensal" value={fmt(EFICIENCIA.impactoFinanceiro.economiaMensal)} icon={DollarSign} color="text-emerald-400" trend="up" sub="vs. processo manual" tooltip={TOOLTIPS.eficiencia} dataTour="economia-mensal" />
               <KpiCard label="Economia Anual" value={fmt(EFICIENCIA.impactoFinanceiro.economiaAnual)} icon={TrendingUp} color="text-cyan-400" trend="up" />
-              <KpiCard label="ROI" value={`${EFICIENCIA.impactoFinanceiro.roi}%`} icon={Target} color="text-purple-400" trend="up" sub="Retorno sobre investimento" />
+              <KpiCard label="ROI" value={`${EFICIENCIA.impactoFinanceiro.roi}%`} icon={Target} color="text-purple-400" trend="up" sub="Retorno sobre investimento" tooltip={TOOLTIPS.roi} />
               <KpiCard label="Payback" value={`${EFICIENCIA.impactoFinanceiro.paybackDias} dias`} icon={Clock} color="text-yellow-400" trend="up" sub="Tempo para se pagar" />
             </div>
 
