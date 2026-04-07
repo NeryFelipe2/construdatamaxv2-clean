@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python312", "python312Packages.pip", "gcc", "gdal", "proj"]
+
+[phases.install]
+cmds = ["python3 -m pip install -r backend/requirements.txt"]
+
+[start]
+cmd = "cd backend && python3 main.py"
