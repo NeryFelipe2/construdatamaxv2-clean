@@ -2,17 +2,19 @@
  * RdoHeader — top navigation and action bar for the RDO module.
  */
 import { useState } from 'react'
-import { FileText, Plus, Download, Settings } from 'lucide-react'
+import { FileText, Plus, Download, Settings, MessageSquare, Repeat } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
 import { LogoConfigModal } from './LogoConfigModal'
 import type { RdoTab } from '@/types'
 
-const TABS: { key: RdoTab; label: string }[] = [
-  { key: 'dashboard',  label: 'Dashboard'         },
-  { key: 'novo',       label: '+ Novo RDO'         },
-  { key: 'historico',  label: 'Histórico de RDOs'  },
-  { key: 'integracao', label: 'RDO × Planejamento' },
-  { key: 'financeiro', label: 'Financeiro'         },
+const TABS: { key: RdoTab; label: string; icon?: React.ReactNode }[] = [
+  { key: 'dashboard',       label: 'Dashboard'         },
+  { key: 'novo',            label: '+ Novo RDO'         },
+  { key: 'historico',       label: 'Histórico de RDOs'  },
+  { key: 'integracao',      label: 'RDO × Planejamento' },
+  { key: 'financeiro',      label: 'Financeiro'         },
+  { key: 'whatsapp-bot',    label: '📱 RDO WhatsApp',   icon: <MessageSquare size={12} /> },
+  { key: 'whatsapp-fluxo',  label: '🔄 Controle Fluxo', icon: <Repeat size={12} /> },
 ]
 
 function escapeCell(value: string | number | null | undefined): string {

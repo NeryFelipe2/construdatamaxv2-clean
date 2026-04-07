@@ -1197,7 +1197,7 @@ export interface PlanScenario {
 
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
-export type RdoTab = 'dashboard' | 'novo' | 'historico' | 'integracao' | 'financeiro'
+export type RdoTab = 'dashboard' | 'novo' | 'historico' | 'integracao' | 'financeiro' | 'whatsapp-bot' | 'whatsapp-fluxo'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
