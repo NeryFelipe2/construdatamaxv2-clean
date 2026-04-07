@@ -1,0 +1,140 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{775C6DF8-BCB6-48BA-8F98-9D4621E908F5}"/><Properties><ItemName resource="906" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{72514471-D3DF-48F1-862B-BFCE6AC7E974}"/><Properties><ItemName resource="905" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{01876B32-9316-479A-9AC2-AD020755F8F7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>4</ToolType><StockToolRef/></Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{18E9276B-4A45-4B51-8141-340F2EF8BD2D}"/><Properties><ItemName resource="900" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{16FF5CFC-1C77-4D96-8C32-1F1A3F865655}"/><Properties><ItemName resource="899" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="128" cy="128" IsDark="false" resource="IDB_VISUALSTYLE_XRAY" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{484CA208-33CB-40A6-B318-595E29496858}"/><Data>
+				<VisualStyle>
+					<VSFACESTYLE value="2"/>
+					<VSLIGHTINGQUALITY value="2"/>
+					<VSFACEHIGHLIGHT value="-30"/>
+					<VSFACEOPACITY value="50"/>
+					<VSMATERIALMODE value="2"/>
+					<VSFACECOLORMODE value="0"/>
+					<VSMONOCOLOR value="-2">
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</VSMONOCOLOR>
+					<VSSHADOWS value="0"/>
+					<VSBACKGROUNDS value="1"/>
+					<VSEDGES value="1"/>
+					<VSEDGECOLOR value="1">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSEDGECOLOR>
+					<VSISOONTOP value="0"/>
+					<VSEDGEOVERHANG value="-6"/>
+					<VSEDGEJITTER value="-2"/>
+					<VSEDGESMOOTH value="1"/>
+					<VSHALOGAP value="0"/>
+					<VSSILHEDGES value="0"/>
+					<VSSILHWIDTH value="5"/>
+					<VSOBSCUREDEDGES value="1"/>
+					<VSOBSCUREDCOLOR value="1">
+						<TrueColor>
+							<ColorValue Color="-939524096"/>
+						</TrueColor>
+					</VSOBSCUREDCOLOR>
+					<VSOBSCUREDLTYPE value="1"/>
+					<VSINTERSECTIONEDGES value="0"/>
+					<VSINTERSECTIONCOLOR value="0">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSINTERSECTIONCOLOR>
+					<VSINTERSECTIONLTYPE value="1"/>
+					<VSHIDEPRECISION value="0"/>
+				</VisualStyle>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8A95E18B-A48F-458E-B7F9-D815D573A328}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>4</ToolType><StockToolRef/></Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EE0FA6F7-C5FD-4AF0-A191-D87A119F7120}"/><Properties><ItemName resource="903" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F6518E98-19B4-418D-9E46-66C543FC7C00}"/><Properties><ItemName resource="901" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="128" cy="128" IsDark="false" resource="IDB_VISUALSTYLE_SKETCHY" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{484CA208-33CB-40A6-B318-595E29496858}"/><Data>
+				<VisualStyle>
+					<VSFACESTYLE value="1"/>
+					<VSLIGHTINGQUALITY value="2"/>
+					<VSFACEHIGHLIGHT value="-30"/>
+					<VSFACEOPACITY value="-60"/>
+					<VSMATERIALMODE value="0"/>
+					<VSFACECOLORMODE value="-2"/>
+					<VSMONOCOLOR value="-2">
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</VSMONOCOLOR>
+					<VSSHADOWS value="0"/>
+					<VSBACKGROUNDS value="1"/>
+					<VSEDGES value="2"/>
+					<VSEDGECOLOR value="2">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSEDGECOLOR>
+					<VSISOONTOP value="0"/>
+					<VSEDGEOVERHANG value="6"/>
+					<VSEDGEJITTER value="2"/>
+					<VSEDGESMOOTH value="40"/>
+					<VSHALOGAP value="0"/>
+					<VSSILHEDGES value="1"/>
+					<VSSILHWIDTH value="6"/>
+					<VSOBSCUREDEDGES value="0"/>
+					<VSOBSCUREDCOLOR value="0">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSOBSCUREDCOLOR>
+					<VSOBSCUREDLTYPE value="1"/>
+					<VSINTERSECTIONEDGES value="0"/>
+					<VSINTERSECTIONCOLOR value="0">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSINTERSECTIONCOLOR>
+					<VSINTERSECTIONLTYPE value="1"/>
+					<VSHIDEPRECISION value="0"/>
+				</VisualStyle>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F3B0D0F7-4240-4EA8-838B-930F3373DFC6}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>4</ToolType><StockToolRef/></Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{353DCF7C-06BF-4EF2-BC6F-302101B11A5C}"/><Properties><ItemName resource="904" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A2A1C24A-12A6-4200-BAF1-3110D0EEB4C7}"/><Properties><ItemName resource="902" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="128" cy="128" IsDark="false" resource="IDB_VISUALSTYLE_GRAY" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>1</ToolType><StockToolRef idValue="{484CA208-33CB-40A6-B318-595E29496858}"/><Data>
+				<VisualStyle>
+					<VSFACESTYLE value="2"/>
+					<VSLIGHTINGQUALITY value="2"/>
+					<VSFACEHIGHLIGHT value="-30"/>
+					<VSFACEOPACITY value="-60"/>
+					<VSMATERIALMODE value="0"/>
+					<VSFACECOLORMODE value="1"/>
+					<VSMONOCOLOR value="1">
+						<TrueColor>
+							<ColorValue Color="-1023410177"/>
+						</TrueColor>
+					</VSMONOCOLOR>
+					<VSSHADOWS value="0"/>
+					<VSBACKGROUNDS value="1"/>
+					<VSEDGES value="2"/>
+					<VSEDGECOLOR value="2">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSEDGECOLOR>
+					<VSISOONTOP value="0"/>
+					<VSEDGEOVERHANG value="-6"/>
+					<VSEDGEJITTER value="-2"/>
+					<VSEDGESMOOTH value="40"/>
+					<VSHALOGAP value="0"/>
+					<VSSILHEDGES value="1"/>
+					<VSSILHWIDTH value="3"/>
+					<VSOBSCUREDEDGES value="0"/>
+					<VSOBSCUREDCOLOR value="0">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSOBSCUREDCOLOR>
+					<VSOBSCUREDLTYPE value="1"/>
+					<VSINTERSECTIONEDGES value="0"/>
+					<VSINTERSECTIONCOLOR value="0">
+						<TrueColor>
+							<ColorValue Color="-1023410169"/>
+						</TrueColor>
+					</VSINTERSECTIONCOLOR>
+					<VSINTERSECTIONLTYPE value="1"/>
+					<VSHIDEPRECISION value="0"/>
+				</VisualStyle>
+			</Data>
+		</Tool></Tools></Palette>

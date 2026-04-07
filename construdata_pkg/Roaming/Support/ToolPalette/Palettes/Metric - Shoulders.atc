@@ -1,0 +1,539 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{F3ADA874-A721-4185-B6BA-AD324D4099B5}"/><Properties><ItemName resource="51007" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{F02B85C5-E07B-4670-8C9B-55C6F77B7C86}"/><Properties><ItemName resource="51009" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C4D7AFB3-EF12-4A4C-A85F-A043C88CDCAA}"/><Properties><ItemName resource="7401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderExtendAll.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderExtendAll.png"/></Images><Description resource="7402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderExtendAll subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderExtendAll</HelpData></Help><Time createdUniversalDateTime="2005-07-26T21:58:00" modifiedUniversalDateTime="2005-07-26T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderExtendAll</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7403" Description="7404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="7405" Description="7406">0
+							<Enum>
+								<Right DisplayName="7407">0</Right>
+								<Left DisplayName="7408">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="7409" Description="7410">2.4</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="7429" Description="7430">0
+							<Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<ShoulderSlope DataType="Double" TypeInfo="9" DisplayName="7411" Description="7412">-0.02</ShoulderSlope>
+						<HoldDaylightSlope DataType="Long" DisplayName="7413" Description="7414">1
+						   	<Enum>
+								<True DisplayName="7415">1</True>
+								<False DisplayName="7416">0</False>
+							</Enum>
+						</HoldDaylightSlope>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="7440" Description="7441">0.25</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="7442" Description="7443">1.8</DaylightWidth>
+						<SuperelevateSubBase DataType="Long" DisplayName="7434" Description="7435">0
+							<Enum>
+								<Yes DisplayName="7436">1</Yes>
+								<No DisplayName="7437">0</No>
+							</Enum>
+						</SuperelevateSubBase>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="7419" Description="7420">-0.02</SubbaseSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="7421" Description="7422">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="7423" Description="7424">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="7425" Description="7426">0.100</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="7427" Description="7428">0.300</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D695CEB8-AC11-44BA-AC1C-4CE897AEB33B}"/><Properties><ItemName resource="6101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderExtendSubbase.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderExtendSubbase.png"/></Images><Description resource="6102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderExtendSubbase subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderExtendSubbase</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderExtendSubbase</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6103" Description="6104">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6105" Description="6106">0
+								    <Enum>
+								<Right DisplayName="6107">0</Right>
+								<Left DisplayName="6108">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="6109" Description="6110">2.4</ShoulderWidth>
+						<ShoulderUseSuperelevation DataType="Long" DisplayName="6135" Description="6136">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</ShoulderUseSuperelevation>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<ShoulderDefaultSlope DataType="Double" TypeInfo="9" DisplayName="6140" Description="6141">-0.06</ShoulderDefaultSlope>
+						<HoldDaylightSlope DataType="Long" DisplayName="6113" Description="6114">1
+						   	<Enum>
+								<True DisplayName="6115">1</True>
+								<False DisplayName="6116">0</False>
+							</Enum>
+						</HoldDaylightSlope>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="6149" Description="6150">0.25</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="6151" Description="6152">1.8</DaylightWidth>
+						<SubbaseUseSuperelevation DataType="Long" DisplayName="6142" Description="6143">0
+							<Enum>
+								<SO DisplayName="6144">0</SO>
+								<SI DisplayName="6145">1</SI>
+								<No DisplayName="6146">2</No>
+							</Enum>
+						</SubbaseUseSuperelevation>
+						<SubbaseDefaultSlope DataType="Double" TypeInfo="9" DisplayName="6147" Description="6148">-0.06</SubbaseDefaultSlope>
+						<Pave1Extension DataType="Double" TypeInfo="16" DisplayName="6121" Description="6122">0</Pave1Extension>
+						<Pave2Extension DataType="Double" TypeInfo="16" DisplayName="6123" Description="6124">0</Pave2Extension>
+						<BaseExtension DataType="Double" TypeInfo="16" DisplayName="6125" Description="6126">0</BaseExtension>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="6127" Description="6128">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="6129" Description="6130">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="6131" Description="6132">0.1</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6133" Description="6134">0.3</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C79E9500-12E9-4971-B3C8-4DDCB402B028}"/><Properties><ItemName resource="11701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderMultiLayer.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderMultiLayer.png"/></Images><Description resource="11702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderMultiLayer subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderMultiLayer</HelpData></Help><Time createdUniversalDateTime="2007-11-07T21:58:00" modifiedUniversalDateTime="2007-11-07T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderMultiLayer</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="11703" Description="11704">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="11705" Description="11706">0
+					<Enum>
+								<Right DisplayName="11707">0</Right>
+								<Left DisplayName="11708">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="11709" Description="11710">2.4</ShoulderWidth>
+						<ExtensionPave2 DataType="Double" TypeInfo="16" DisplayName="11747" Description="11748">0.05</ExtensionPave2>
+						<ExtensionPave3 DataType="Double" TypeInfo="16" DisplayName="11749" Description="11750">0.1</ExtensionPave3>
+						<UseSuperelevationSlope DataType="Long" DisplayName="11711" Description="11712">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<ShoulderDefaultSlope DataType="Double" TypeInfo="9" DisplayName="11716" Description="11717">-0.06</ShoulderDefaultSlope>
+						<SubbaseDaylightType DataType="Long" DisplayName="11718" Description="11719">0
+					<Enum>
+								<HoldSlopeAdjustWidth DisplayName="11720">0</HoldSlopeAdjustWidth>
+								<HoldWidthAdjustSlope DisplayName="11721">1</HoldWidthAdjustSlope>
+							</Enum>
+						</SubbaseDaylightType>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="11722" Description="11723">0.25</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="11724" Description="11725">3</DaylightWidth>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="11726" Description="11727">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="11728" Description="11729">0.025</Pave2Depth>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="11730" Description="11731">0.025</Pave3Depth>
+						<Base1Depth DataType="Double" TypeInfo="16" DisplayName="11732" Description="11733">0.100</Base1Depth>
+						<Base2Depth DataType="Double" TypeInfo="16" DisplayName="11734" Description="11735">0.100</Base2Depth>
+						<Base3Depth DataType="Double" TypeInfo="16" DisplayName="11736" Description="11737">0.100</Base3Depth>
+						<Subbase1Depth DataType="Double" TypeInfo="16" DisplayName="11738" Description="11739">0.3</Subbase1Depth>
+						<Subbase2Depth DataType="Double" TypeInfo="16" DisplayName="11740" Description="11741">0.3</Subbase2Depth>
+						<Subbase3InnerDepth DataType="Double" TypeInfo="16" DisplayName="11742" Description="11743">0.3</Subbase3InnerDepth>
+						<Subbase3OuterDepth DataType="Double" TypeInfo="16" DisplayName="11744" Description="11745">0.3</Subbase3OuterDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{90CC0C3A-45B9-4F60-89A9-1931F96785B0}"/><Properties><ItemName resource="12001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderMultilayerVaryingWidth.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderMultilayerVaryingWidth.png"/></Images><Description resource="12002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderMultilayerVaryingWidthSubassembly subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderMultilayerVaryingWidth</HelpData></Help><Time createdUniversalDateTime="2008-01-05T21:58:00" modifiedUniversalDateTime="2008-01-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderMultilayerVaryingWidth</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="12003" Description="12004">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="12005" Description="12006">
+          0
+          <Enum>
+								<Right DisplayName="12007">0</Right>
+								<Left DisplayName="12008">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="12009" Description="12010">2.0</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="12011" Description="12012">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<ShoulderSlope DataType="Double" TypeInfo="9" DisplayName="12016" Description="12017">-0.04</ShoulderSlope>
+						<DaylightType DataType="Long" DisplayName="12018" Description="12019">
+          0
+          <Enum>
+								<Slope DisplayName="12020">0</Slope>
+								<Width DisplayName="12021">1</Width>
+							</Enum>
+						</DaylightType>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="12022" Description="12023">0.5</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="12024" Description="12025">2.0</DaylightWidth>
+						<ShoulderPave1Name DataType="String" DisplayName="12026" Description="12027">SP1</ShoulderPave1Name>
+						<ShoulderPave1Depth DataType="Double" TypeInfo="16" DisplayName="12028" Description="12029">0.025</ShoulderPave1Depth>
+						<ShoulderPave2Name DataType="String" DisplayName="12032" Description="12033">SP2</ShoulderPave2Name>
+						<ShoulderPave2Depth DataType="Double" TypeInfo="16" DisplayName="12034" Description="12035">0.025</ShoulderPave2Depth>
+						<ShoulderPave2InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12036" Description="12037">0.0</ShoulderPave2InsideExtendedWidth>
+						<ShoulderPave3Name DataType="String" DisplayName="12038" Description="12039">SP3</ShoulderPave3Name>
+						<ShoulderPave3Depth DataType="Double" TypeInfo="16" DisplayName="12040" Description="12041">0.025</ShoulderPave3Depth>
+						<ShoulderPave3InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12042" Description="12043">0.0</ShoulderPave3InsideExtendedWidth>
+						<ShoulderPave4Name DataType="String" DisplayName="12044" Description="12045">SP4</ShoulderPave4Name>
+						<ShoulderPave4Depth DataType="Double" TypeInfo="16" DisplayName="12046" Description="12047">0.025</ShoulderPave4Depth>
+						<ShoulderPave4InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12048" Description="12049">0.0</ShoulderPave4InsideExtendedWidth>
+						<ShoulderPave5Name DataType="String" DisplayName="12050" Description="12051">SP5</ShoulderPave5Name>
+						<ShoulderPave5Depth DataType="Double" TypeInfo="16" DisplayName="12052" Description="12053">0.025</ShoulderPave5Depth>
+						<ShoulderPave5InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12054" Description="12055">0.0</ShoulderPave5InsideExtendedWidth>
+						<ShoulderPave6Name DataType="String" DisplayName="12056" Description="12057">SP6</ShoulderPave6Name>
+						<ShoulderPave6Depth DataType="Double" TypeInfo="16" DisplayName="12058" Description="12059">0.025</ShoulderPave6Depth>
+						<ShoulderPave6InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12060" Description="12061">0.0</ShoulderPave6InsideExtendedWidth>
+						<ShoulderPave7Name DataType="String" DisplayName="12062" Description="12063">SP7</ShoulderPave7Name>
+						<ShoulderPave7Depth DataType="Double" TypeInfo="16" DisplayName="12064" Description="12065">0.025</ShoulderPave7Depth>
+						<ShoulderPave7InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12066" Description="12067">0.0</ShoulderPave7InsideExtendedWidth>
+						<ShoulderPave8Name DataType="String" DisplayName="12068" Description="12069">SP8</ShoulderPave8Name>
+						<ShoulderPave8Depth DataType="Double" TypeInfo="16" DisplayName="12070" Description="12071">0.025</ShoulderPave8Depth>
+						<ShoulderPave8InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12072" Description="12073">0.0</ShoulderPave8InsideExtendedWidth>
+						<ShoulderPave9Name DataType="String" DisplayName="12074" Description="12075">SP9</ShoulderPave9Name>
+						<ShoulderPave9Depth DataType="Double" TypeInfo="16" DisplayName="12076" Description="12077">0.025</ShoulderPave9Depth>
+						<ShoulderPave9InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12078" Description="12079">0.0</ShoulderPave9InsideExtendedWidth>
+						<ShoulderPave10Name DataType="String" DisplayName="12080" Description="12081">SP10</ShoulderPave10Name>
+						<ShoulderPave10Depth DataType="Double" TypeInfo="16" DisplayName="12082" Description="12083">0.025</ShoulderPave10Depth>
+						<ShoulderPave10InsideExtendedWidth DataType="Double" TypeInfo="16" DisplayName="12084" Description="12085">0.0</ShoulderPave10InsideExtendedWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E3DA2D50-E946-4F9A-8973-33036A67A83D}"/><Properties><ItemName resource="11901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderMultiSurface.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderMultiSurface.png"/></Images><Description resource="11902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderMultiSurface subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderMultiSurface</HelpData></Help><Time createdUniversalDateTime="2007-11-07T21:58:00" modifiedUniversalDateTime="2007-11-07T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderMultiSurface</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="11903" Description="11904">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="11905" Description="11906">0
+					<Enum>
+								<Right DisplayName="11907">0</Right>
+								<Left DisplayName="11908">1</Left>
+							</Enum>
+						</Side>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="11909" Description="11910">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="11911" Description="11912">0.025</Pave2Depth>
+						<Pave3Depth DataType="Double" TypeInfo="16" DisplayName="11913" Description="11914">0.025</Pave3Depth>
+						<Pave4Depth DataType="Double" TypeInfo="16" DisplayName="11915" Description="11916">0.025</Pave4Depth>
+						<Pave5Depth DataType="Double" TypeInfo="16" DisplayName="11917" Description="11918">0.025</Pave5Depth>
+						<Pave6Depth DataType="Double" TypeInfo="16" DisplayName="11919" Description="11920">0.025</Pave6Depth>
+						<Pave7Depth DataType="Double" TypeInfo="16" DisplayName="11921" Description="11922">0.025</Pave7Depth>
+						<Pave8Depth DataType="Double" TypeInfo="16" DisplayName="11923" Description="11924">0.025</Pave8Depth>
+						<Pave9Depth DataType="Double" TypeInfo="16" DisplayName="11925" Description="11926">0.025</Pave9Depth>
+						<Pave10Depth DataType="Double" TypeInfo="16" DisplayName="11927" Description="11928">0.025</Pave10Depth>
+						<PavedShoulderWidth DataType="Double" TypeInfo="16" DisplayName="11929" Description="11930">1</PavedShoulderWidth>
+						<PavedShoulderSlopeSpecification DataType="Long" DisplayName="11931" Description="11932">0
+					<Enum>
+								<Default DisplayName="11933">0</Default>
+								<UseInsideShoulderSE DisplayName="11934">1</UseInsideShoulderSE>
+								<UseOutsideShoulderSE DisplayName="11953">2</UseOutsideShoulderSE>
+							</Enum>
+						</PavedShoulderSlopeSpecification>
+						<DefaultPavedShoulderSlope DataType="Double" TypeInfo="9" DisplayName="11936" Description="11937">-0.04</DefaultPavedShoulderSlope>
+						<EarthenedShoulderWidth DataType="Double" TypeInfo="16" DisplayName="11938" Description="11939">1</EarthenedShoulderWidth>
+						<EarthenedShoulderSlopeSpecification DataType="Long" DisplayName="11940" Description="11941">0
+					<Enum>
+								<Default DisplayName="11942">0</Default>
+								<UseInsideShoulderSE DisplayName="11934">1</UseInsideShoulderSE>
+								<UseOutsideShoulderSE DisplayName="11953">2</UseOutsideShoulderSE>
+							</Enum>
+						</EarthenedShoulderSlopeSpecification>
+						<DefaultEarthenedShoulderSlope DataType="Double" TypeInfo="9" DisplayName="11945" Description="11946">-0.04</DefaultEarthenedShoulderSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="11947" Description="11948">1</DaylightWidth>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="11949" Description="11950">0.5</DaylightSlope>
+						<SubbaseDaylightType DataType="Long" DisplayName="11954" Description="11955">0
+					<Enum>
+								<HoldSlopeAdjustWidth DisplayName="11956">0</HoldSlopeAdjustWidth>
+								<HoldWidthAdjustSlope DisplayName="11957">1</HoldWidthAdjustSlope>
+							</Enum>
+						</SubbaseDaylightType>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F3AEDAB7-2E0D-4665-8925-754B3F5C62B1}"/><Properties><ItemName resource="6201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderVerticalSubbase.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderVerticalSubbase.png"/></Images><Description resource="6202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderVerticalSubbase subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderVerticalSubbase</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderVerticalSubbase</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="6203" Description="6204">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="6205" Description="6206">0
+		                    <Enum>
+								<Right DisplayName="6207">0</Right>
+								<Left DisplayName="6208">1</Left>
+							</Enum>
+						</Side>
+						<PavedWidth DataType="Double" TypeInfo="16" DisplayName="6209" Description="6210">2.4</PavedWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="6229" Description="6230">0
+              <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+              <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<DefaultPavedSlope DataType="Double" TypeInfo="9" DisplayName="6234" Description="6235">-0.06</DefaultPavedSlope>
+						<UnpavedLinkTreatment DataType="Double" TypeInfo="0" DisplayName="6213" Description="6214">1</UnpavedLinkTreatment>
+						<UnpavedWidth DataType="Double" TypeInfo="16" DisplayName="6215" Description="6216">1.8</UnpavedWidth>
+						<UnpavedSlope DataType="Double" TypeInfo="9" DisplayName="6217" Description="6218">-0.06</UnpavedSlope>
+						<UnpavedMaxBreakover DataType="Double" TypeInfo="9" DisplayName="6219" Description="6220">0.08</UnpavedMaxBreakover>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="6221" Description="6222">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="6223" Description="6224">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="6225" Description="6226">0.1</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="6227" Description="6228">0.3</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C52D0A26-C7E3-48FC-98B3-59667DA4E714}"/><Properties><ItemName resource="11201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderWidening.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderWidening.png"/></Images><Description resource="11202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderWidening subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderWidening</HelpData></Help><Time createdUniversalDateTime="2008-01-05T21:58:00" modifiedUniversalDateTime="2008-01-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderWidening</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="11203" Description="11204">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="11205" Description="11206">0
+							<Enum>
+								<Right DisplayName="11207">0</Right>
+								<Left DisplayName="11208">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="11209" Description="11210">1.8</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="11211" Description="11212">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<ShoulderSlope DataType="Double" TypeInfo="9" DisplayName="11216" Description="11217">-0.02</ShoulderSlope>
+						<HoldDaylightSlope DataType="Long" DisplayName="11218" Description="11219">1
+						   	<Enum>
+								<True DisplayName="11220">1</True>
+								<False DisplayName="11221">0</False>
+							</Enum>
+						</HoldDaylightSlope>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="11222" Description="11223">0.25</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="11224" Description="11225">1.8</DaylightWidth>
+						<SuperelevateSubBase DataType="Long" DisplayName="11226" Description="11227">0
+							<Enum>
+								<Yes DisplayName="11228">1</Yes>
+								<No DisplayName="11229">0</No>
+							</Enum>
+						</SuperelevateSubBase>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="11230" Description="11231">-0.02</SubbaseSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="11232" Description="11233">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="11234" Description="11235">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="11236" Description="11237">0.100</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="11238" Description="11239">0.100</SubbaseDepth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{55F35422-E597-445B-BC9E-EE02E733B4BF}"/><Properties><ItemName resource="9701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderWithSubbaseInterlaced.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderWithSubbaseInterlaced.png"/></Images><Description resource="9702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderWithSubbaseInterlaced subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderWithSubbaseInterlaced</HelpData></Help><Time createdUniversalDateTime="2005-07-26T21:58:00" modifiedUniversalDateTime="2005-07-26T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderWithSubbaseInterlaced</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9703" Description="9704">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="9705" Description="9706">0
+							<Enum>
+								<Right DisplayName="9707">0</Right>
+								<Left DisplayName="9708">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="9709" Description="9710">2.4</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="9711" Description="9712">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<DefaultShoulderSlope DataType="Double" TypeInfo="9" DisplayName="9716" Description="9717">-0.04</DefaultShoulderSlope>
+						<SubbaseDaylightType DataType="Long" DisplayName="9718" Description="9719">1
+						   	<Enum>
+								<HoldSlope DisplayName="9720">1</HoldSlope>
+								<HoldWidth DisplayName="9721">0</HoldWidth>
+							</Enum>
+						</SubbaseDaylightType>
+						<DaylightSlope DataType="Double" TypeInfo="10" DisplayName="9752" Description="9753">0.25</DaylightSlope>
+						<DaylightWidth DataType="Double" TypeInfo="16" DisplayName="9754" Description="9755">1.8</DaylightWidth>
+						<SubbaseSuperelevation DataType="Long" DisplayName="9724" Description="9725">0
+							<Enum>
+								<No DisplayName="9713">0</No>
+								<SO DisplayName="9714">1</SO>
+								<SI DisplayName="9715">2</SI>
+							</Enum>
+						</SubbaseSuperelevation>
+						<DefaultSubbaseSlope DataType="Double" TypeInfo="9" DisplayName="9726" Description="9727">-0.04</DefaultSubbaseSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="9728" Description="9729">0.025</Pave1Depth>
+						<GapPave1Pave2 DataType="Double" TypeInfo="16" DisplayName="9730" Description="9731">0.000</GapPave1Pave2>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="9732" Description="9733">0.025</Pave2Depth>
+						<Pave2Trim DataType="Double" TypeInfo="16" DisplayName="9734" Description="9735">0.4</Pave2Trim>
+						<GapPave2Base DataType="Double" TypeInfo="16" DisplayName="9736" Description="9737">0.01</GapPave2Base>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="9738" Description="9739">0.1</BaseDepth>
+						<BaseTrim DataType="Double" TypeInfo="16" DisplayName="9740" Description="9741">0.4</BaseTrim>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="9742" Description="9743">0.3</SubbaseDepth>
+						<TopsoilThickness DataType="Double" TypeInfo="16" DisplayName="9744" Description="9745">0.0</TopsoilThickness>
+						<TopsoilShapeCode DataType="String" DisplayName="9746" Description="9747">Topsoil</TopsoilShapeCode>
+						<Pave1ShapeCode DataType="String" DisplayName="9748" Description="9749">Pave1</Pave1ShapeCode>
+						<Pave2ShapeCode DataType="String" DisplayName="9750" Description="9751">Pave2</Pave2ShapeCode>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F28AC370-14A1-4E57-A183-BFC1D9C94007}"/><Properties><ItemName resource="9801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Shoulders\64\light\AeccShoulderWithSubbaseInterlacedAndDitch.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Shoulders\64\dark\AeccShoulderWithSubbaseInterlacedAndDitch.png"/></Images><Description resource="9802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_ShoulderWithSubbaseInterlacedAndDitch subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_ShoulderWithSubbaseInterlacedAndDitch</HelpData></Help><Time createdUniversalDateTime="2006-11-20T21:58:00" modifiedUniversalDateTime="2006-11-21T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.ShoulderWithSubbaseInterlacedAndDitch</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9803" Description="9804">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+          <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="9805" Description="9806">0
+							<Enum>
+								<Right DisplayName="9807">0</Right>
+								<Left DisplayName="9808">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="9809" Description="9810">2.4</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="9811" Description="9812">0
+          <Enum>
+								<No DisplayName="7431">0</No>
+								<LeftOutsideShoulder DisplayName="13016">1</LeftOutsideShoulder>
+								<LeftInsideShoulder DisplayName="13015">2</LeftInsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<DefaultShoulderSlope DataType="Double" TypeInfo="9" DisplayName="9816" Description="9817">-0.06</DefaultShoulderSlope>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="9818" Description="9819">3.0</DitchWidth>
+						<DitchDepth DataType="Double" TypeInfo="16" DisplayName="9820" Description="9821">0.4</DitchDepth>
+						<CurveTessellationPoints DataType="Long" DisplayName="9822" Description="9823">10</CurveTessellationPoints>
+						<SubbaseForeSlope DataType="Double" TypeInfo="10" DisplayName="9852" Description="9853">0.5</SubbaseForeSlope>
+						<SubbaseSuperelevation DataType="Long" DisplayName="9824" Description="9825">0
+							<Enum>
+								<No DisplayName="9813">0</No>
+								<SO DisplayName="9814">1</SO>
+								<SI DisplayName="9815">2</SI>
+							</Enum>
+						</SubbaseSuperelevation>
+						<DefaultSubbaseSlope DataType="Double" TypeInfo="9" DisplayName="9826" Description="9827">-0.04</DefaultSubbaseSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="9828" Description="9829">0.025</Pave1Depth>
+						<GapPave1Pave2 DataType="Double" TypeInfo="16" DisplayName="9830" Description="9831">0.000</GapPave1Pave2>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="9832" Description="9833">0.025</Pave2Depth>
+						<Pave2Trim DataType="Double" TypeInfo="16" DisplayName="9834" Description="9835">0.4</Pave2Trim>
+						<GapPave2Base DataType="Double" TypeInfo="16" DisplayName="9836" Description="9837">0.01</GapPave2Base>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="9838" Description="9839">0.1</BaseDepth>
+						<BaseTrim DataType="Double" TypeInfo="16" DisplayName="9840" Description="9841">0.4</BaseTrim>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="9842" Description="9843">0.3</SubbaseDepth>
+						<TopsoilThickness DataType="Double" TypeInfo="16" DisplayName="9844" Description="9845">0.0</TopsoilThickness>
+						<TopsoilShapeCode DataType="String" DisplayName="9846" Description="9847">Topsoil</TopsoilShapeCode>
+						<Pave1ShapeCode DataType="String" DisplayName="9848" Description="9849">Pave1</Pave1ShapeCode>
+						<Pave2ShapeCode DataType="String" DisplayName="9850" Description="9851">Pave2</Pave2ShapeCode>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F02B85C5-E07B-4670-8C9B-55C6F77B7C86}"/><Properties><ItemName resource="51009" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

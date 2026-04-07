@@ -1,14 +1,21 @@
-"""Servidor FastAPI da plataforma construdatamaxv2."""
+"""Servidor FastAPI da plataforma construdatamaxv2 — UNIFIED V5 ENGINE."""
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 import tempfile
+
+# Garante que o repo root está no sys.path para imports dos motores
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.wsgi import WSGIMiddleware
 
+# ─── Original Routers (9) ────────────────────────────────────────────────────
 from api.routes_cadastro import router as cadastro_router
 from api.routes_campo import router as campo_router
 from api.routes_ns import router as ns_router
@@ -18,10 +25,21 @@ from api.routes_rdo import router as rdo_router
 from api.routes_whatsapp import router as whatsapp_router
 from api.routes_notificacoes import router as notificacoes_router
 from api.routes_motores import router as motores_router
+
+# ─── NEW V5 Engine Routers (4) ──────────────────────────────────────────────
+from api.routes_engine_v5 import router as engine_v5_router
+from api.routes_geradores import router as geradores_router
+from api.routes_analytics import router as analytics_router
+from api.routes_leitores import router as leitores_router
+
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
 
-app = FastAPI(title=f"{PLATFORM_DISPLAY_NAME} API", version="2.0.0")
+app = FastAPI(
+    title=f"{PLATFORM_DISPLAY_NAME} API — Unified V5 Engine",
+    version="3.0.0",
+    description="ConstruData HydroNetwork — Plataforma unificada com 13 routers, 25 motores, 27 geradores.",
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,6 +47,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# ─── Register Original Routers ──────────────────────────────────────────────
 app.include_router(ns_router)
 app.include_router(rdo_router)
 app.include_router(campo_router)
@@ -38,6 +57,12 @@ app.include_router(operacao_router)
 app.include_router(whatsapp_router)
 app.include_router(notificacoes_router)
 app.include_router(motores_router)
+
+# ─── Register V5 Engine Routers ─────────────────────────────────────────────
+app.include_router(engine_v5_router)
+app.include_router(geradores_router)
+app.include_router(analytics_router)
+app.include_router(leitores_router)
 
 # Mount ConstruPlan Flask Offline Backend (Brutal Injection)
 try:
@@ -62,7 +87,18 @@ def raiz():
 
 @app.get("/health")
 def health():
-    return {"ok": True, "app": PLATFORM_NAME, "display_name": PLATFORM_DISPLAY_NAME}
+    motores_path = REPO_ROOT / "motores"
+    geradores_path = REPO_ROOT / "geradores"
+    return {
+        "ok": True,
+        "app": PLATFORM_NAME,
+        "display_name": PLATFORM_DISPLAY_NAME,
+        "version": "3.0.0",
+        "engine": "Unified V5",
+        "routers": 13,
+        "motores": len(list(motores_path.glob("*.py"))) - 1 if motores_path.exists() else 0,
+        "geradores": len(list(geradores_path.glob("gerar_*.py"))) if geradores_path.exists() else 0,
+    }
 
 
 def _servir_html(nome_arquivo: str) -> FileResponse:

@@ -1,0 +1,155 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{4BE848C7-50A4-41BF-929E-ECE60FE5422F}"/><Properties><ItemName resource="229" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{3DC04D3A-3DDA-4F89-88E6-433AB64846B2}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2003-06-20T00:02:11" modifiedUniversalDateTime="2003-06-19T17:05:12"/></Properties><Source/><ToolType>2</ToolType><Flyout enable="true"><ShapePackage idValue="{4AFD3A7B-127C-468D-9DAD-D6D948BA8615}"/><CurrentShape idValue="{A7FC31D7-54EB-4CC8-B5D8-539D51522D1A}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="0"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1" value="0"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_line</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{95451451-2499-4ACA-A5E9-B05BD4458881}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2003-06-18T02:55:03" modifiedUniversalDateTime="2003-06-19T17:05:28"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbRotatedDimension"/>
+				<ToolbarButton idButton="ID_Dimlinear"/>
+			</CustomData>
+			<Source/><ToolType>2</ToolType><Flyout enable="true"><ShapePackage idValue="{1C0B9364-5C7A-4DAC-B6B1-E9CEF007A433}"/><CurrentShape idValue="{9CBF0BA0-1B71-4244-9FAB-CF3714CF3940}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1" value="0"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1" value="ByLayer"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="1"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="-1"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1" value="Standard"/>
+						</BasicPropInfo>
+					</Dimstyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_dimlinear</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DF6F87D9-D06A-4C5E-9E00-D6C0FEC0A1C6}"/><Properties><ItemName resource="274" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_LISP_TOOL" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2003-02-25T18:57:05" modifiedUniversalDateTime="2003-06-19T17:06:20"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="FALSE" valueType="2" value="0"/>
+						</BasicPropInfo>
+						<CreateInfo>
+							<AcCmColor mRGB="3221225472"/>
+						</CreateInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>(entget (car (entsel)))</Macro>
+				</Command>
+			</Data>
+		</Tool></Tools></Palette>

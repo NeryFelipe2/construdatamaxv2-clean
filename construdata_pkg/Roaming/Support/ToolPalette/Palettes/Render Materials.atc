@@ -1,0 +1,1471 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{D5F2AE54-D62C-47C1-ACCD-52D2DF2A6D29}"/><Properties><ItemName resource="1" src="AeccToolsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:31:24" modifiedUniversalDateTime="2004-09-02T11:48:47"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{60633869-2EEE-45F5-B11B-700BDE66E415}"/><Properties><ItemName resource="100" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\df14c157.png"/></Images><ToolTip resource="200" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{AA1BD7A3-F419-412A-A715-87DCA548254F}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{AA1BD7A3-F419-412A-A715-87DCA548254F}" app="3DSVIZ" thumbnail=".\images\df14c157.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Concrete.Precast Structural Concrete.Smooth">
+						<ArchTemplateParameters name="Masonry" classid_A="187120343" classid_B="418276389">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.35" g="0.35" b="0.35"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.5</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.513623" g="0.522878" b="0.470291"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>1.397</ArchTextureWidth>
+							<ArchTextureHeight>1.016</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Concrete.Precast Structural Concrete.Smooth.diffuse" id="{3FD3D49E-42B4-4F22-930C-5B29DEBAE6DF}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1985</OffsetCoord>
+														<TilingCoord>0.71582</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.008</OffsetCoord>
+														<TilingCoord>0.984252</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Concrete.Precast Structural Concrete.Smooth.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>0.936247</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{3FD3D49E-42B4-4F22-930C-5B29DEBAE6DF}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{D9C2C3EA-9F9D-4CBE-B8F7-6AA8E2419624}"/><Properties><ItemName resource="101" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\61f69c98.png"/></Images><ToolTip resource="201" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{C670D1BF-011F-428C-ADEE-3F611CEBD767}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{C670D1BF-011F-428C-ADEE-3F611CEBD767}" app="3DSVIZ" thumbnail=".\images\61f69c98.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Masonry.Stone.Fieldstone.Uncoarsed.Tight">
+						<ArchTemplateParameters name="Stone" classid_A="1102075164" classid_B="1811706595">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.4" g="0.4" b="0.4"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.7</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.651963" g="0.590652" b="0.473787"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>1.8542</ArchTextureWidth>
+							<ArchTextureHeight>1.222248</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Masonry.Stone.Fieldstone.Uncoarsed.Tight.diffuse" id="{DD245ADE-1654-4834-8A49-9754F7AA301E}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.4271</OffsetCoord>
+														<TilingCoord>0.539316</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.111124</OffsetCoord>
+														<TilingCoord>0.818165</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Masonry.Stone.Fieldstone.Uncoarsed.Tight.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{DD245ADE-1654-4834-8A49-9754F7AA301E}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4BDADFF6-253A-4C67-9280-6346231A13DE}"/><Properties><ItemName resource="102" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\d7ab36ea.png"/></Images><ToolTip resource="202" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{2C77977A-249C-426E-9BF9-EB1EBACC4F5C}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{2C77977A-249C-426E-9BF9-EB1EBACC4F5C}" app="3DSVIZ" thumbnail=".\images\d7ab36ea.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Masonry.Unit Masonry.Brick.Modular.Flemish Cross">
+						<ArchTemplateParameters name="Masonry" classid_A="187120343" classid_B="418276389">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.35" g="0.35" b="0.35"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.5</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.505092" g="0.369664" b="0.294156"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>1.2192</ArchTextureWidth>
+							<ArchTextureHeight>1.083564</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>0.1</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Masonry.Unit Masonry.Brick.Modular.Flemish Cross.diffuse" id="{265BED1A-82EE-4653-9237-C52E80E14F08}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.041782</OffsetCoord>
+														<TilingCoord>0.92288</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Masonry.Unit Masonry.Brick.Modular.Flemish Cross.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>0.969919</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+								<TextureMap name="Masonry.Unit Masonry.Brick.Modular.Flemish Cross.bump" id="{5B9B3294-9B36-4F92-BD7A-310FDB7F1B1C}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.041782</OffsetCoord>
+														<TilingCoord>0.92288</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Masonry.Unit Masonry.Brick.Modular.Flemish Cross.bump.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{265BED1A-82EE-4653-9237-C52E80E14F08}"/>
+							<Map on="1" TexMapChannelNum="8" TexMapChannel="Bump Map" Amount="10" TexMapRef="{5B9B3294-9B36-4F92-BD7A-310FDB7F1B1C}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3963EB97-7529-471D-A59E-888B4383C604}"/><Properties><ItemName resource="103" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\28dca12c.png"/></Images><ToolTip resource="203" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{3DD9BFF0-030F-49B2-94F5-22FE9D6A275A}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{3DD9BFF0-030F-49B2-94F5-22FE9D6A275A}" app="3DSVIZ" thumbnail=".\images\28dca12c.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Paving - Surfacing.Cobble Stone.Heringbone">
+						<ArchTemplateParameters name="Stone" classid_A="1102075164" classid_B="1811706595">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.4" g="0.4" b="0.4"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.7</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.584763" g="0.511345" b="0.419026"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>0.6096</ArchTextureWidth>
+							<ArchTextureHeight>0.6096</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Paving - Surfacing.Cobble Stone.Heringbone.diffuse" id="{5EF0A93A-812C-4B94-B9DA-2201FB8D9B33}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Paving - Surfacing.Cobble Stone.Heringbone.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{5EF0A93A-812C-4B94-B9DA-2201FB8D9B33}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{78BA8D9D-E3F2-431C-8BEC-08FE11BDBC8F}"/><Properties><ItemName resource="104" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\4afe55db.png"/></Images><ToolTip resource="204" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{A9E3BFCA-3735-4896-9271-DE8214D7B415}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{A9E3BFCA-3735-4896-9271-DE8214D7B415}" app="3DSVIZ" thumbnail=".\images\4afe55db.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Paving - Surfacing.Asphalt">
+						<ArchTemplateParameters name="Ideal Diffuse" classid_A="1304583271" classid_B="613231372">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.7" g="0.7" b="0.7"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.05</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.9</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>1.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.67027" g="0.67027" b="0.67027"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>1.2192</ArchTextureWidth>
+							<ArchTextureHeight>1.2192</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>0.1</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Paving - Surfacing.Asphalt.diffuse" id="{645DF1D3-E3F2-4607-B5A7-9002E77C062C}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Paving - Surfacing.Asphalt.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+								<TextureMap name="Sitework.Paving - Surfacing.Asphalt.bump" id="{32AEB3A5-7B22-4273-8BC3-02C9C608D269}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Paving - Surfacing.Asphalt.bump.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{645DF1D3-E3F2-4607-B5A7-9002E77C062C}"/>
+							<Map on="1" TexMapChannelNum="8" TexMapChannel="Bump Map" Amount="10" TexMapRef="{32AEB3A5-7B22-4273-8BC3-02C9C608D269}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{7C2AA252-7964-4222-9D84-342014CB3358}"/><Properties><ItemName resource="105" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\afdb468a.png"/></Images><ToolTip resource="205" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{8E47DFF0-1F9F-4AA5-90B1-1EA437FE270E}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{8E47DFF0-1F9F-4AA5-90B1-1EA437FE270E}" app="3DSVIZ" thumbnail=".\images\afdb468a.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Paving - Surfacing.Pavers.Interlocking">
+						<ArchTemplateParameters name="Masonry" classid_A="187120343" classid_B="418276389">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.35" g="0.35" b="0.35"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.5</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.717619" g="0.721952" b="0.712521"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>0.4064</ArchTextureWidth>
+							<ArchTextureHeight>0.4064</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Paving - Surfacing.Pavers.Interlocking.diffuse" id="{F6B5E0A5-6A5C-4156-8F00-2104B1E74261}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.2968</OffsetCoord>
+														<TilingCoord>2.46063</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>-0.2968</OffsetCoord>
+														<TilingCoord>2.46063</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Paving - Surfacing.Pavers.Interlocking.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>0.672567</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{F6B5E0A5-6A5C-4156-8F00-2104B1E74261}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{480B9A38-9DEF-42D8-B7CD-0E51D409F24E}"/><Properties><ItemName resource="106" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\974b6180.png"/></Images><ToolTip resource="206" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{FB80A74A-2BD7-428F-AF05-0539E0CCB2E9}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{FB80A74A-2BD7-428F-AF05-0539E0CCB2E9}" app="3DSVIZ" thumbnail=".\images\974b6180.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Planting.Grass.Thick">
+						<ArchTemplateParameters name="Ideal Diffuse" classid_A="1304583271" classid_B="613231372">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.7" g="0.7" b="0.7"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.05</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.9</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>1.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.286822" g="0.326418" b="0.153365"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>1.2192</ArchTextureWidth>
+							<ArchTextureHeight>1.2192</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>0.1</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Planting.Grass.Thick.diffuse" id="{67F45C50-B629-46C7-8274-4B87A5D0D2C2}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Planting.Grass.Thick.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+								<TextureMap name="Sitework.Planting.Grass.Thick.bump" id="{AAC9BA55-DA56-4215-8358-F0D58CF4181D}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.1096</OffsetCoord>
+														<TilingCoord>0.82021</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Planting.Grass.Thick.bump.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{67F45C50-B629-46C7-8274-4B87A5D0D2C2}"/>
+							<Map on="1" TexMapChannelNum="8" TexMapChannel="Bump Map" Amount="10" TexMapRef="{AAC9BA55-DA56-4215-8358-F0D58CF4181D}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C75541F7-57FE-43A2-9DBA-4F9547221E2A}"/><Properties><ItemName resource="107" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\973b7bbf.png"/></Images><ToolTip resource="207" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{E328BBE4-A917-4D7E-8A86-5B6D38D5E8FD}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{E328BBE4-A917-4D7E-8A86-5B6D38D5E8FD}" app="3DSVIZ" thumbnail=".\images\973b7bbf.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Planting.Grass.Short">
+						<ArchTemplateParameters name="Ideal Diffuse" classid_A="1304583271" classid_B="613231372">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.7" g="0.7" b="0.7"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.05</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.9</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>1.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.506994" g="0.563012" b="0.353448"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>0.6096</ArchTextureWidth>
+							<ArchTextureHeight>0.6096</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>0.1</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Planting.Grass.Short.diffuse" id="{D64326F4-62D3-4405-B1E7-236E69D013DC}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Planting.Grass.Short.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+								<TextureMap name="Sitework.Planting.Grass.Short.bump" id="{DD97DC88-1333-4691-97C2-96A530E8DA29}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>-0.1952</OffsetCoord>
+														<TilingCoord>1.64042</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Planting.Grass.Short.bump.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{D64326F4-62D3-4405-B1E7-236E69D013DC}"/>
+							<Map on="1" TexMapChannelNum="8" TexMapChannel="Bump Map" Amount="10" TexMapRef="{DD97DC88-1333-4691-97C2-96A530E8DA29}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{75646F87-1423-4327-A5CF-240F465DF687}"/><Properties><ItemName resource="108" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\47bb66bb.png"/></Images><ToolTip resource="208" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{9C4328B9-2155-45EE-A2A6-11BA1070CDB0}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{9C4328B9-2155-45EE-A2A6-11BA1070CDB0}" app="3DSVIZ" thumbnail=".\images\47bb66bb.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Planting.Gravel.Crushed">
+						<ArchTemplateParameters name="Masonry" classid_A="187120343" classid_B="418276389">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.35" g="0.35" b="0.35"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.2</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.5</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>0.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.518328" g="0.545761" b="0.531374"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>0.4572</ArchTextureWidth>
+							<ArchTextureHeight>0.4572</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Planting.Gravel.Crushed.diffuse" id="{892AABF9-8859-449E-AB45-24E55751D845}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.2714</OffsetCoord>
+														<TilingCoord>2.187227</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>-0.2714</OffsetCoord>
+														<TilingCoord>2.187227</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Planting.Gravel.Crushed.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>0.896152</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{892AABF9-8859-449E-AB45-24E55751D845}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{57A99E9E-73A2-428A-A528-B5C50DFB6109}"/><Properties><ItemName resource="109" src="AeccToolsRC.dll"/><Images option="0"><Image cx="88" cy="88" IsDark="false" src="images\65131da3.png"/></Images><ToolTip resource="209" src="AeccToolsRC.dll"/><Refresh>true</Refresh><Time createdUniversalDateTime="2004-09-02T15:46:54" modifiedUniversalDateTime="2004-09-02T15:46:54"/></Properties><Source idValue="{7E9F0764-5834-4958-B863-E0994F428819}"><SourceFile><Url href="file://C:\Documents and Settings\All Users\Application Data\Autodesk\C3D 2005\enu\Tool Catalogs\Render Material Catalog\Autodesk Sample Render Material Catalog.atc"/></SourceFile><ParentDocument><DocumentName>Render Material Catalog</DocumentName></ParentDocument></Source><ToolType>1</ToolType><StockToolRef idValue="{E04B3676-CBB7-454C-9CDB-A55ACA81C41F}"/><Data>
+				<Material id="{7E9F0764-5834-4958-B863-E0994F428819}" app="3DSVIZ" thumbnail=".\images\65131da3.png">
+					<LinearUnits unitType="m" unitScale="1.0"/>
+					<ArchitecturalMaterial name="Sitework.Site Improvements.Fences - GatesWood.Shadowbox-Trellis">
+						<ArchTemplateParameters name="Ideal Diffuse" classid_A="1304583271" classid_B="613231372">
+							<ArchShaderType type="Phong"/>
+							<ArchReflectivity>
+								<RGBf r="0.7" g="0.7" b="0.7"/>
+							</ArchReflectivity>
+							<ArchMinReflectivity>0.05</ArchMinReflectivity>
+							<ArchMaxReflectivity>0.9</ArchMaxReflectivity>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchMinShininess>0.0</ArchMinShininess>
+							<ArchMaxShinness>1.0</ArchMaxShinness>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchMinTransparency>0.0</ArchMinTransparency>
+							<ArchMaxTransparency>1.0</ArchMaxTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchMinTranslucency>0.0</ArchMinTranslucency>
+							<ArchMaxTranslucency>1.0</ArchMaxTranslucency>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchMinIndexOfRefraction>1.0</ArchMinIndexOfRefraction>
+							<ArchMaxIndexOfRefraction>1.0</ArchMaxIndexOfRefraction>
+							<ArchSetParameters>1</ArchSetParameters>
+						</ArchTemplateParameters>
+						<ArchMatParameters>
+							<ArchDiffuseColor>
+								<RGBf r="0.431542" g="0.279293" b="0.152538"/>
+							</ArchDiffuseColor>
+							<ArchIndexOfRefraction>1.0</ArchIndexOfRefraction>
+							<ArchTwoSided>0</ArchTwoSided>
+							<ArchEmitLuminance>0</ArchEmitLuminance>
+							<ArchColorBleedScale>1.0</ArchColorBleedScale>
+							<ArchReflectanceScale>1.0</ArchReflectanceScale>
+							<ArchIndirectBumpAmount>1.0</ArchIndirectBumpAmount>
+							<ArchTransmittanceScale>1.0</ArchTransmittanceScale>
+							<ArchUseTextureSize>1</ArchUseTextureSize>
+							<ArchTextureWidth>0.8128</ArchTextureWidth>
+							<ArchTextureHeight>1.524</ArchTextureHeight>
+							<ArchTextureUOffset>0.0</ArchTextureUOffset>
+							<ArchTextureVOffset>0.0</ArchTextureVOffset>
+							<ArchDiffuseAmount>1.0</ArchDiffuseAmount>
+							<ArchShininess>0.0</ArchShininess>
+							<ArchTransparency>0.0</ArchTransparency>
+							<ArchTranslucency>0.0</ArchTranslucency>
+							<ArchLuminance>0.0</ArchLuminance>
+							<ArchBumpMapAmount>1.0</ArchBumpMapAmount>
+							<ArchCutoutMapAmount>1.0</ArchCutoutMapAmount>
+							<ArchDisplayMapInViewport>0</ArchDisplayMapInViewport>
+						</ArchMatParameters>
+						<MapSet>
+							<MapLib>
+								<TextureMap name="Sitework.Site Improvements.Fences - GatesWood.Shadowbox-Trellis.diffuse" id="{7883C000-B6A6-47DC-88AC-A936F7C392D2}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.0936</OffsetCoord>
+														<TilingCoord>1.230315</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.262</OffsetCoord>
+														<TilingCoord>0.656168</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Site Improvements.Fences - GatesWood.Shadowbox-Trellis.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+								<TextureMap name="Sitework.Site Improvements.Fences - GatesWood.Shadowbox-Trellis.cutout" id="{7CD854BC-FF97-480B-817C-16E41167DBA2}">
+									<DisplayMapInViewport>0</DisplayMapInViewport>
+									<BitmapMap>
+										<TexMapCoords2d>
+											<TextureCoords>
+												<ExplicitMapChannel CoordPlane="uv">
+													<MapChannel>1</MapChannel>
+													<UCoords>
+														<OffsetCoord>-0.0936</OffsetCoord>
+														<TilingCoord>1.230315</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</UCoords>
+													<VCoords>
+														<OffsetCoord>0.262</OffsetCoord>
+														<TilingCoord>0.656168</TilingCoord>
+														<TextureTiling Tiling="tile"/>
+													</VCoords>
+													<Angles>
+														<UAngle>0.0</UAngle>
+														<VAngle>0.0</VAngle>
+														<WAngle>0.0</WAngle>
+													</Angles>
+													<Blur>1.0</Blur>
+													<BlurOffset>0.0</BlurOffset>
+												</ExplicitMapChannel>
+											</TextureCoords>
+										</TexMapCoords2d>
+										<TexMapNoise>
+											<NoiseAmount>1.0</NoiseAmount>
+											<NoiseLevels>1</NoiseLevels>
+											<NoiseSize>1.0</NoiseSize>
+											<NoisePhase>0.0</NoisePhase>
+										</TexMapNoise>
+										<BitmapParameters>
+											<BitmapFile filename="Sitework.Site Improvements.Fences - GatesWood.Shadowbox-Trellis.cutout.jpg"/>
+											<Cropping on="0" CropType="crop">
+												<UCrop>0.0</UCrop>
+												<VCrop>0.0</VCrop>
+												<WCrop>1.0</WCrop>
+												<HCrop>1.0</HCrop>
+												<JitterPlacement on="0">1.0</JitterPlacement>
+											</Cropping>
+											<Filtering Type="pyramidal"/>
+											<MonoChannelOutput Output="rgbIntensity"/>
+											<RGBChannelOutput Output="alphaAsGray"/>
+											<AlphaSource Source="none"/>
+											<PremultipliedAlpha>1</PremultipliedAlpha>
+										</BitmapParameters>
+										<TexMapOutput>
+											<Invert>0</Invert>
+											<Clamp>0</Clamp>
+											<AlphaFromRGBIntensity>0</AlphaFromRGBIntensity>
+											<OutputAmount>1.0</OutputAmount>
+											<RGBOffset>0.0</RGBOffset>
+											<RGBLevel>1.0</RGBLevel>
+											<BumpAmount>1.0</BumpAmount>
+										</TexMapOutput>
+									</BitmapMap>
+								</TextureMap>
+							</MapLib>
+							<Map on="1" TexMapChannelNum="1" TexMapChannel="Diffuse Map" Amount="100" TexMapRef="{7883C000-B6A6-47DC-88AC-A936F7C392D2}"/>
+							<Map on="1" TexMapChannelNum="24" TexMapChannel="Cutout Map" Amount="100" TexMapRef="{7CD854BC-FF97-480B-817C-16E41167DBA2}"/>
+						</MapSet>
+					</ArchitecturalMaterial>
+				</Material>
+			</Data>
+		</Tool></Tools></Palette>

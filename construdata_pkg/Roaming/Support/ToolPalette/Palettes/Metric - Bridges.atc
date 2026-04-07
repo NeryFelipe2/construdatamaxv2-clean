@@ -1,0 +1,98 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{F3A992A5-2A21-4F4B-954F-4DDAC89534ED}"/><Properties><ItemName resource="51034" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:29:32" modifiedUniversalDateTime="2009-01-04T11:55:37"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{36167538-EA02-4B32-87A6-23EAF7596299}"/><Properties><ItemName resource="51036" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{768BA418-1BC5-4C79-BEEF-22D2599B0ABC}"/><Properties><ItemName resource="1001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Bridges\64\light\AeccBridgeBoxGirder1.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Bridges\64\dark\AeccBridgeBoxGirder1.png"/></Images><Description resource="1002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_BridgeBoxGirder1 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_BridgeBoxGirder1</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.BridgeBoxGirder1</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1003" Description="1004">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+          <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<LeftWidth DataType="Double" TypeInfo="16" DisplayName="1005" Description="1006">5.34</LeftWidth>
+						<RightWidth DataType="Double" TypeInfo="16" DisplayName="1007" Description="1008">5.34</RightWidth>
+						<LeftUseSuperelevation DataType="Long" DisplayName="1039" Description="1040">2
+					<Enum>
+								<No DisplayName="1041">0</No>
+								<LI DisplayName="1042">1</LI>
+								<LO DisplayName="1043">2</LO>
+							</Enum>
+						</LeftUseSuperelevation>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="1044" Description="1045">-0.02</LeftDefaultSlope>
+						<RightUseSuperelevation DataType="Long" DisplayName="1046" Description="1047">2
+					<Enum>
+								<No DisplayName="1048">0</No>
+								<LI DisplayName="1049">1</LI>
+								<LO DisplayName="1050">2</LO>
+							</Enum>
+						</RightUseSuperelevation>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="1051" Description="1052">-0.02</RightDefaultSlope>
+						<SoffitDepth DataType="Double" TypeInfo="16" DisplayName="1013" Description="1014">2.0</SoffitDepth>
+						<EdgeDepth DataType="Double" TypeInfo="16" DisplayName="1015" Description="1016">0.15</EdgeDepth>
+						<FlangeDepth DataType="Double" TypeInfo="16" DisplayName="1017" Description="1018">0.3</FlangeDepth>
+						<OverhangWidth DataType="Double" TypeInfo="16" DisplayName="1019" Description="1020">1.2</OverhangWidth>
+						<GirderWidth DataType="Double" TypeInfo="16" DisplayName="1021" Description="1022">2.0</GirderWidth>
+						<IncludeBarriers DataType="Long" DisplayName="1023" Description="1024">1
+					<Enum>
+								<True DisplayName="1025">1</True>
+								<False DisplayName="1026">0</False>
+							</Enum>
+						</IncludeBarriers>
+						<BarrierA DataType="Double" TypeInfo="17" DisplayName="1027" Description="1028">0.810</BarrierA>
+						<BarrierB DataType="Double" TypeInfo="17" DisplayName="1029" Description="1030">0.131</BarrierB>
+						<BarrierC DataType="Double" TypeInfo="17" DisplayName="1031" Description="1032">0.059</BarrierC>
+						<BarrierD DataType="Double" TypeInfo="17" DisplayName="1033" Description="1034">0.125</BarrierD>
+						<BarrierE DataType="Double" TypeInfo="17" DisplayName="1035" Description="1036">0.557</BarrierE>
+						<BarrierF DataType="Double" TypeInfo="17" DisplayName="1037" Description="1038">0.178</BarrierF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{9E0F372B-0CEC-4146-A098-C7B13F0AF12C}"/><Properties><ItemName resource="1101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Bridges\64\light\AeccBridgeBoxGirder2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Bridges\64\dark\AeccBridgeBoxGirder2.png"/></Images><Description resource="1102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_BridgeBoxGirder2 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_BridgeBoxGirder2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.BridgeBoxGirder2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1103" Description="1104">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+          <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<LeftWidth DataType="Double" DisplayName="1105" Description="1106">5.34</LeftWidth>
+						<RightWidth DataType="Double" DisplayName="1107" Description="1108">5.34</RightWidth>
+						<DeckSlopeUseSuperelevation DataType="Long" DisplayName="1147" Description="1148">1
+					<Enum>
+								<No DisplayName="1149">0</No>
+								<LLO DisplayName="1150">1</LLO>
+								<LLI DisplayName="1151">2</LLI>
+							</Enum>
+						</DeckSlopeUseSuperelevation>
+						<DefaultDeckSlope DataType="Double" TypeInfo="9" DisplayName="1152" Description="1153">0.02</DefaultDeckSlope>
+						<IncludeBarriers DataType="Long" DisplayName="1111" Description="1112">1
+					<Enum>
+								<True DisplayName="1113">1</True>
+								<False DisplayName="1114">0</False>
+							</Enum>
+						</IncludeBarriers>
+						<DimensionA DataType="Double" TypeInfo="16" DisplayName="1115" Description="1116">0.2</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="16" DisplayName="1117" Description="1118">0.3</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="16" DisplayName="1119" Description="1120">1.8</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="16" DisplayName="1121" Description="1122">0.15</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="16" DisplayName="1123" Description="1124">1.425</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="16" DisplayName="1125" Description="1126">0.17</DimensionF>
+						<DimensionG DataType="Double" TypeInfo="16" DisplayName="1127" Description="1128">0.25</DimensionG>
+						<DimensionH DataType="Double" TypeInfo="16" DisplayName="1129" Description="1130">0.21</DimensionH>
+						<DimensionI DataType="Double" TypeInfo="16" DisplayName="1131" Description="1132">0.3</DimensionI>
+						<DimensionJ DataType="Double" TypeInfo="16" DisplayName="1133" Description="1134">0.6</DimensionJ>
+						<BarrierA DataType="Double" TypeInfo="17" DisplayName="1135" Description="1136">0.810</BarrierA>
+						<BarrierB DataType="Double" TypeInfo="17" DisplayName="1137" Description="1138">0.131</BarrierB>
+						<BarrierC DataType="Double" TypeInfo="17" DisplayName="1139" Description="1140">0.059</BarrierC>
+						<BarrierD DataType="Double" TypeInfo="17" DisplayName="1141" Description="1142">0.125</BarrierD>
+						<BarrierE DataType="Double" TypeInfo="17" DisplayName="1143" Description="1144">0.557</BarrierE>
+						<BarrierF DataType="Double" TypeInfo="17" DisplayName="1145" Description="1146">0.178</BarrierF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>

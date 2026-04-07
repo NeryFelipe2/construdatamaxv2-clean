@@ -708,7 +708,7 @@
 [data-theme="light"] .bg-gradient-to-br .text-white,
 [data-theme="light"] [class*="bg-emerald"] .text-white,
 [data-theme="light"] [class*="bg-\\[\\#10b981"] .text-white,
-[data-theme="light"] .bg-black\\/80 .text-white {
+[data-theme="light"] [class*="bg-black"] .text-white {
   color: #ffffff !important;
 }
 

@@ -1,0 +1,865 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{92CDB627-A8DF-4466-AFBD-FD5DC1351ED1}"/><Properties><ItemName resource="1201" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{72514471-D3DF-48F1-862B-BFCE6AC7E974}"/><Properties><ItemName resource="1218" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C24D92B0-8F65-4BF6-9167-0E4BBD45CB0A}"/><Properties><ItemName resource="1202" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_LEADER" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>0</ContentType>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{200C0005-2484-4052-A4D4-F65EC5225584}"/><Properties><ItemName resource="1203" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_TEXT" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>2</ContentType>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3371284A-5315-483B-8620-8CA4A7B0750C}"/><Properties><ItemName resource="1204" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagCircle - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{BCCBBBEA-4802-4113-BDF5-73D35D775B7A}"/><Properties><ItemName resource="1205" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagBox - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F5928E83-4D1E-4CF0-BADB-E5C5C418D277}"/><Properties><ItemName resource="1206" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagHexagon - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1E0B00EB-850B-4B87-9289-176461630148}"/><Properties><ItemName resource="1207" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagTriangle - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{52B360C8-0E75-4DEE-A419-E715D2135AB6}"/><Properties><ItemName resource="1208" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagSlot - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FE135970-FCEB-4C8B-A873-88A71FADF3DC}"/><Properties><ItemName resource="1209" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<Scale>1</Scale>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_DetailCallout - Imperial</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4A8D9E16-90E7-47DD-9A62-45BCE177A6EF}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>4</ToolType><StockToolRef/></Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5DE912F8-FDF6-4C0B-9933-38DEF588A402}"/><Properties><ItemName resource="1219" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2026-01-14T14:46:39" modifiedUniversalDateTime="2026-01-14T14:46:39"/></Properties><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{43CF0845-EC36-4F08-8B8A-7E228FE55ACF}"/><Properties><ItemName resource="1210" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_LEADER" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>0</ContentType>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{33D2F2AE-54C5-472A-8054-23E36F06DF51}"/><Properties><ItemName resource="1211" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_TEXT" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>2</ContentType>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A28F10F8-325A-4335-B55C-D4219C5CBFE1}"/><Properties><ItemName resource="1212" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagCircle - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1DBE3CEF-5526-48D5-8376-942167D45887}"/><Properties><ItemName resource="1213" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagBox - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{43D6E8A6-2227-49BD-973A-0469BB20F307}"/><Properties><ItemName resource="1214" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagHexagon - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{FCEE47F2-BA67-462E-8304-5C04583A50CD}"/><Properties><ItemName resource="1215" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagTriangle - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{631EF73D-C21A-41B2-9C8E-3A3B9341CCFE}"/><Properties><ItemName resource="1216" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_TagSlot - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EC734460-14E8-42D3-A4DA-A3494FA3CE1D}"/><Properties><ItemName resource="1217" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="32" cy="32" IsDark="false" resource="IDB_BITMAP_MULTPLELEADER_BLOCK" src="AcTpCatalogRes.dll"/></Images><Time createdUniversalDateTime="2006-09-21T12:58:21" modifiedUniversalDateTime="2006-09-22T10:02:53"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{92280455-DD3B-4263-82C5-369916493F55}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<MLeader>
+					<ContentType>1</ContentType>
+					<SourceBlockFile>%SampleFolderLang%\Dynamic Blocks\Multileader Tools.dwg</SourceBlockFile>
+					<SourceBlock>_DetailCallout - Metric</SourceBlock>
+				</MLeader>
+			</Data>
+		</Tool></Tools></Palette>

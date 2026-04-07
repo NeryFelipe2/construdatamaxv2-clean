@@ -1,0 +1,300 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{477C5277-DFA4-404C-8223-2527503D5D05}"/><Properties><ItemName resource="51010" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{6873A6CD-3CA2-4066-9E11-9E36574C17E8}"/><Properties><ItemName resource="51012" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A41AA442-DFE2-4B11-A930-3BB78A0857AE}"/><Properties><ItemName resource="10001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianConstantSlopeWithBarrier.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianConstantSlopeWithBarrier.png"/></Images><Description resource="10002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianConstantSlopeWithBarrier subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianConstantSlopeWithBarrier</HelpData></Help><Time createdUniversalDateTime="2005-07-26T21:58:00" modifiedUniversalDateTime="2005-07-26T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianConstantSlopeWithBarrier</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10003" Description="10004">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+              <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<LeftMedianWidth DataType="Double" TypeInfo="16" DisplayName="10005" Description="10006">2</LeftMedianWidth>
+						<RightMedianWidth DataType="Double" TypeInfo="16" DisplayName="10007" Description="10008">2</RightMedianWidth>
+						<CrownPointAtCenter DataType="Long" DisplayName="10083" Description="10084">
+              0
+              <Enum>
+								<Yes DisplayName="10085">1</Yes>
+								<No DisplayName="10086">0</No>
+							</Enum>
+						</CrownPointAtCenter>
+						<LeftMedianCrossSlope DataType="Double" TypeInfo="9" DisplayName="10009" Description="10010">0</LeftMedianCrossSlope>
+						<RightMedianCrossSlope DataType="Double" TypeInfo="9" DisplayName="10011" Description="10012">0</RightMedianCrossSlope>
+						<BarrierOption DataType="Long" DisplayName="10013" Description="10014">
+              1
+              <Enum>
+								<None DisplayName="10015">0</None>
+								<BothSides DisplayName="10016">1</BothSides>
+								<Right DisplayName="10017">2</Right>
+								<Left DisplayName="10018">3</Left>
+							</Enum>
+						</BarrierOption>
+						<BarrierTopWidth DataType="Double" TypeInfo="16" DisplayName="10019" Description="10020">0.15</BarrierTopWidth>
+						<BarrierMiddleWidth DataType="Double" TypeInfo="16" DisplayName="10021" Description="10022">0.225</BarrierMiddleWidth>
+						<CurbHeight DataType="Double" TypeInfo="16" DisplayName="10023" Description="10024">0.075</CurbHeight>
+						<BarrierBottomWidth DataType="Double" TypeInfo="16" DisplayName="10025" Description="10026">0.6</BarrierBottomWidth>
+						<BarrierHeight DataType="Double" TypeInfo="16" DisplayName="10027" Description="10028">0.9</BarrierHeight>
+						<BarrierMiddleHeight DataType="Double" TypeInfo="16" DisplayName="10029" Description="10030">0.45</BarrierMiddleHeight>
+						<ShoulderHeightOffset DataType="Double" TypeInfo="0" DisplayName="10031" Description="10032">0.015</ShoulderHeightOffset>
+						<LeftShoulderWidth DataType="Double" TypeInfo="16" DisplayName="10033" Description="10034">1.2</LeftShoulderWidth>
+						<LeftShoulderDefaultSlope DataType="Double" TypeInfo="9" DisplayName="10035" Description="10036">-0.02</LeftShoulderDefaultSlope>
+						<LSUseSuperelevationSlope DataType="Long" DisplayName="10037" Description="10038">
+              1
+              <Enum>
+								<No DisplayName="10039">0</No>
+								<Yes DisplayName="4651">1</Yes>
+							</Enum>
+						</LSUseSuperelevationSlope>
+						<RightShoulderWidth DataType="Double" TypeInfo="16" DisplayName="10042" Description="10043">1.2</RightShoulderWidth>
+						<RightShoulderDefaultSlope DataType="Double" TypeInfo="9" DisplayName="10044" Description="10045">-0.02</RightShoulderDefaultSlope>
+						<RSUseSuperelevationSlope DataType="Long" DisplayName="10046" Description="10047">
+              1
+              <Enum>
+								<No DisplayName="10039">0</No>
+								<Yes DisplayName="4651">1</Yes>
+							</Enum>
+						</RSUseSuperelevationSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+				<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<SubbaseSlope DataType="Double" TypeInfo="9" DisplayName="10048" Description="10049">-0.04</SubbaseSlope>
+						<DrainKey DataType="Long" DisplayName="10050" Description="10051">
+              2
+              <Enum>
+								<None DisplayName="10052">0</None>
+								<BelowLeftBarrier DisplayName="10053">1</BelowLeftBarrier>
+								<BelowRightBarrier DisplayName="10054">2</BelowRightBarrier>
+							</Enum>
+						</DrainKey>
+						<KeyWidth DataType="Double" TypeInfo="16" DisplayName="10055" Description="10056">0.3</KeyWidth>
+						<KeyDepth DataType="Double" TypeInfo="16" DisplayName="10057" Description="10058">0.3</KeyDepth>
+						<LeftPave1Depth DataType="Double" TypeInfo="16" DisplayName="10059" Description="10060">0.025</LeftPave1Depth>
+						<LeftPave2Depth DataType="Double" TypeInfo="16" DisplayName="10061" Description="10061">0.025</LeftPave2Depth>
+						<LeftBaseDepth DataType="Double" TypeInfo="16" DisplayName="10063" Description="10064">0.1</LeftBaseDepth>
+						<LeftSubbaseDepth DataType="Double" TypeInfo="16" DisplayName="10065" Description="10066">0.3</LeftSubbaseDepth>
+						<LeftPave2Extension DataType="Double" TypeInfo="16" DisplayName="10067" Description="10068">0.1</LeftPave2Extension>
+						<LeftBaseExtension DataType="Double" TypeInfo="16" DisplayName="10069" Description="10070">0.25</LeftBaseExtension>
+						<RightPave1Depth DataType="Double" TypeInfo="16" DisplayName="10071" Description="10072">0.025</RightPave1Depth>
+						<RightPave2Depth DataType="Double" TypeInfo="16" DisplayName="10073" Description="10074">0.025</RightPave2Depth>
+						<RightBaseDepth DataType="Double" TypeInfo="16" DisplayName="10075" Description="10076">0.1</RightBaseDepth>
+						<RightSubbaseDepth DataType="Double" TypeInfo="16" DisplayName="10077" Description="10078">0.3</RightSubbaseDepth>
+						<RightPave2Extension DataType="Double" TypeInfo="16" DisplayName="10079" Description="10080">0.1</RightPave2Extension>
+						<RightBaseExtension DataType="Double" TypeInfo="16" DisplayName="10081" Description="10082">0.25</RightBaseExtension>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{30CF0547-6A48-4C30-91E3-BA7AEC93A89B}"/><Properties><ItemName resource="4301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianDepressed.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianDepressed.png"/></Images><Description resource="4302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianDepressed subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianDepressed</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianDepressed</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4303" Description="4304">R2019</Version>
+						<MarkedPointName DataType="String" DisplayName="4305" Description="4306">none</MarkedPointName>
+						<Slope1 DataType="Double" TypeInfo="10" DisplayName="4307" Description="4308">-0.25</Slope1>
+						<Slope2 DataType="Double" TypeInfo="10" DisplayName="4309" Description="4310">-0.25</Slope2>
+						<HoldDitchSlope DataType="Long" DisplayName="4311" Description="4312">1
+						   	<Enum>
+								<True DisplayName="4313">1</True>
+								<False DisplayName="4314">0</False>
+							</Enum>
+						</HoldDitchSlope>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="4315" Description="4316">0.6</DitchWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{836ACA69-0765-4F07-A09F-6BF069EE16E6}"/><Properties><ItemName resource="4401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianDepressedShoulderExt.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianDepressedShoulderExt.png"/></Images><Description resource="4402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianDepressedShoulderExt subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianDepressedShoulderExt</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianDepressedShoulderExt</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4403" Description="4404">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="4494" ReadOnly="true">1
+              <Enum><ConditionallySupported DisplayName="4493">1</ConditionallySupported></Enum>
+						</SE_AOR_Behavior>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="4405" Description="4406">0.6</DitchWidth>
+						<DitchSlope DataType="Double" TypeInfo="10" DisplayName="4407" Description="4408">0.25</DitchSlope>
+						<HoldDitchSlopes DataType="Long" DisplayName="4409" Description="4410">1
+						   	<Enum>
+								<True DisplayName="4411">1</True>
+								<False DisplayName="4412">0</False>
+							</Enum>
+						</HoldDitchSlopes>
+						<CenterlinePivot DataType="Long" DisplayName="4413" Description="4414">0
+						   	<Enum>
+								<True DisplayName="4415">1</True>
+								<False DisplayName="4416">0</False>
+							</Enum>
+						</CenterlinePivot>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<LeftMedianWidth DataType="Double" TypeInfo="16" DisplayName="4417" Description="4418">6.6</LeftMedianWidth>
+						<RightMedianWidth DataType="Double" TypeInfo="16" DisplayName="4419" Description="4420">6.6</RightMedianWidth>
+						<PavedShoulderWidth DataType="Double" TypeInfo="16" DisplayName="4421" Description="4422">0.6</PavedShoulderWidth>
+						<Pave1Extension DataType="Double" TypeInfo="16" DisplayName="4423" Description="4424">0.0</Pave1Extension>
+						<Pave2Extension DataType="Double" TypeInfo="16" DisplayName="4425" Description="4426">0.0</Pave2Extension>
+						<BaseExtension DataType="Double" TypeInfo="16" DisplayName="4427" Description="4428">0.0</BaseExtension>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="4429" Description="4430">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="4431" Description="4432">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="4433" Description="4434">0.1</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="4435" Description="4436">0.3</SubbaseDepth>
+						<LeftTurnLaneWidth DataType="Double" TypeInfo="16" DisplayName="4437" Description="4438">0.0</LeftTurnLaneWidth>
+						<RightTurnLaneWidth DataType="Double" DisplayName="4439" Description="4440">0.0</RightTurnLaneWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{23C20945-CD82-4005-8A8F-24A4ACF1DA5C}"/><Properties><ItemName resource="4501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianDepressedShoulderVert.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianDepressedShoulderVert.png"/></Images><Description resource="4502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianDepressedShoulderVert subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianDepressedShoulderVert</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianDepressedShoulderVert</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4503" Description="4504">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="4494" ReadOnly="true">1
+              <Enum><ConditionallySupported DisplayName="4593">1</ConditionallySupported></Enum>
+						</SE_AOR_Behavior>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="4505" Description="4506">0.6</DitchWidth>
+						<DitchSlope DataType="Double" TypeInfo="10" DisplayName="4507" Description="4508">0.25</DitchSlope>
+						<HoldDitchSlopes DataType="Long" DisplayName="4509" Description="4510">1
+						   	<Enum>
+								<True DisplayName="4511">1</True>
+								<False DisplayName="4512">0</False>
+							</Enum>
+						</HoldDitchSlopes>
+						<CenterlinePivot DataType="Long" DisplayName="4513" Description="4514">0
+						   	<Enum>
+								<True DisplayName="4515">1</True>
+								<False DisplayName="4516">0</False>
+							</Enum>
+						</CenterlinePivot>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<LeftMedianWidth DataType="Double" TypeInfo="16" DisplayName="4517" Description="4518">6.6</LeftMedianWidth>
+						<RightMedianWidth DataType="Double" TypeInfo="16" DisplayName="4519" Description="4520">6.6</RightMedianWidth>
+						<PavedShoulderWidth DataType="Double" TypeInfo="16" DisplayName="4521" Description="4522">0.6</PavedShoulderWidth>
+						<UnpavedShoulderWidth DataType="Double" TypeInfo="16" DisplayName="4523" Description="4524">1.2</UnpavedShoulderWidth>
+						<UnpavedShoulderSlope DataType="Double" TypeInfo="9" DisplayName="4525" Description="4526">-0.06</UnpavedShoulderSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="4527" Description="4528">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="4529" Description="4530">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="4531" Description="4532">0.1</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="4533" Description="4534">0.3</SubbaseDepth>
+						<LeftTurnLaneWidth DataType="Double" TypeInfo="16" DisplayName="4535" Description="4536">0.0</LeftTurnLaneWidth>
+						<RightTurnLaneWidth DataType="Double" TypeInfo="16" DisplayName="4537" Description="4538">0.0</RightTurnLaneWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{15CD374C-4B77-4114-ACDF-CD1F6BC53860}"/><Properties><ItemName resource="4601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianFlushWithBarrier.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianFlushWithBarrier.png"/></Images><Description resource="4602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianFlushWithBarrier subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianFlushWithBarrier</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianFlushWithBarrier</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4603" Description="4604">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="4553" ReadOnly="true">1
+          <Enum><ConditionallySupported DisplayName="4552">1</ConditionallySupported></Enum>
+						</SE_AOR_Behavior>
+						<IncludeBarrier DataType="Long" DisplayName="4605" Description="4606">1
+				    <Enum>
+								<True DisplayName="4607">1</True>
+								<False DisplayName="4608">0</False>
+							</Enum>
+						</IncludeBarrier>
+						<LeftWidth DataType="Double" TypeInfo="16" DisplayName="4609" Description="4610">1.2</LeftWidth>
+						<RightWidth DataType="Double" TypeInfo="16" DisplayName="4611" Description="4612">1.2</RightWidth>
+						<LeftUseSuperelevation DataType="Long" DisplayName="4637" Description="4638">1
+					<Enum>
+								<No DisplayName="4639">0</No>
+								<Yes DisplayName="4651">1</Yes>
+							</Enum>
+						</LeftUseSuperelevation>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="4642" Description="4643">-0.02</LeftDefaultSlope>
+						<RightUseSuperelevation DataType="Long" DisplayName="4644" Description="4645">1
+					<Enum>
+								<No DisplayName="4646">0</No>
+								<Yes DisplayName="4651">1</Yes>
+							</Enum>
+						</RightUseSuperelevation>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="4649" Description="4650">-0.02</RightDefaultSlope>
+						<ShoulderSlopeDirection DataType="Long" DisplayName="13007" Description="13002">0
+					<Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</ShoulderSlopeDirection>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="4617" Description="4618">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="4619" Description="4620">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="4621" Description="4622">0.1</BaseDepth>
+						<SubbaseDepth DataType="Double" TypeInfo="16" DisplayName="4623" Description="4624">0.3</SubbaseDepth>
+						<DimensionA DataType="Double" TypeInfo="17" DisplayName="4625" Description="4626">0.810</DimensionA>
+						<DimensionB DataType="Double" TypeInfo="17" DisplayName="4627" Description="4628">0.232</DimensionB>
+						<DimensionC DataType="Double" TypeInfo="17" DisplayName="4629" Description="4630">0.059</DimensionC>
+						<DimensionD DataType="Double" TypeInfo="17" DisplayName="4631" Description="4632">0.125</DimensionD>
+						<DimensionE DataType="Double" TypeInfo="17" DisplayName="4633" Description="4634">0.557</DimensionE>
+						<DimensionF DataType="Double" TypeInfo="17" DisplayName="4635" Description="4636">0.178</DimensionF>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{608E9FDE-E9E1-48BA-8393-0100726CEE57}"/><Properties><ItemName resource="4701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianRaisedConstantSlope.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianRaisedConstantSlope.png"/></Images><Description resource="4702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianRaisedConstantSlope subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianRaisedConstantSlope</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianRaisedConstantSlope</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4703" Description="4704">R2019</Version>
+						<MarkedPoint DataType="String" DisplayName="4705" Description="4706">NONE</MarkedPoint>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="4707" Description="4708">0.1</Depth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A7326E1C-5199-4DF4-BB6B-DCFADA4ABF90}"/><Properties><ItemName resource="4801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Medians\64\light\AeccMedianRaisedWithCrown.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Medians\64\dark\AeccMedianRaisedWithCrown.png"/></Images><Description resource="4802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_MedianRaisedWithCrown subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_MedianRaisedWithCrown</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.MedianRaisedWithCrown</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="4803" Description="4804">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13025" ReadOnly="true">1
+                  <Enum><Supported DisplayName="13026">1</Supported></Enum>
+						</SE_AOR_Behavior>
+						<MarkedPoint DataType="String" DisplayName="4805" Description="4806">NONE</MarkedPoint>
+						<Depth DataType="Double" TypeInfo="16" DisplayName="4807" Description="4808">0.1</Depth>
+						<Slope1UseSuperelevation DataType="Long" DisplayName="4813" Description="4814">0
+		                            <Enum>
+								<No DisplayName="4815">0</No>
+								<LS DisplayName="4829">1</LS>
+								<SS DisplayName="4830">2</SS>
+							</Enum>
+						</Slope1UseSuperelevation>
+						<Slope1Default DataType="Double" TypeInfo="9" DisplayName="4819" Description="4820">-0.02</Slope1Default>
+						<Slope2UseSuperelevation DataType="Long" DisplayName="4821" Description="4822">0
+		                            <Enum>
+								<No DisplayName="4823">0</No>
+								<LS DisplayName="4829">1</LS>
+								<SS DisplayName="4830">2</SS>
+							</Enum>
+						</Slope2UseSuperelevation>
+						<Slope2Default DataType="Double" TypeInfo="9" DisplayName="4827" Description="4828">-0.02</Slope2Default>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>

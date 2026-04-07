@@ -1,0 +1,35 @@
+<Catalog FileRevision="24.0.0" Revision="24.0.0" option="0">
+    <ItemID idValue="{9DEB6DE1-7B21-4F13-B5FF-5C6F239D6C9F}"/>
+    <Properties>
+        <ItemName>Grading Optimization</ItemName>
+        <Images option="0"/>
+        <Description>Objets de talus</Description>
+        <ToolTip>Objets de talus</ToolTip>
+        <Time createdUniversalDateTime="2020-03-22T11:56:36" modifiedUniversalDateTime="2020-03-22T11:56:36"/>
+    </Properties>
+    <CustomData>
+        <Translation status="1"/>
+    </CustomData>
+    <Tools/>
+    <Palettes>
+        <Palette Revision="24.0.0" option="0">
+            <ItemID idValue="{48A1583A-E997-4842-A094-151975D45908}"/>
+            <Url href="Palettes\Grading Object - Imperial.atc"/>
+            <Properties>
+                <ItemName>Objets de talus - Anglo-saxon</ItemName>
+                <Images option="0"/>
+            </Properties>
+        </Palette>
+        <Palette Revision="24.0.0" option="0">
+            <ItemID idValue="{56D8AFE7-0AF4-4634-94AC-279FEDD4BA55}"/>
+            <Url href="Palettes\Grading Object - Metric.atc"/>
+            <Properties>
+                <ItemName>Objets de talus - Métrique</ItemName>
+                <Images option="0"/>
+            </Properties>
+        </Palette>		
+    </Palettes>
+    <Packages/>
+    <Categories/>
+    <Catalogs/>
+</Catalog>

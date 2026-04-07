@@ -2,17 +2,18 @@ import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from "react-r
 import { lazy, Suspense, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/store/projectContext";
-import { useThemeStore } from "@/store/themeStore";
+import { useThemeStore, LayoutTheme } from "@/store/themeStore";
+import { AppLayout } from "@/components/layout/AppLayout";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
   Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
   CalendarClock, Target, FileText, Calculator, Layers,
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
   FileSearch, Monitor, MessageSquare, Building2, UserCog,
-  GitBranch, CheckSquare, Sun, Moon, Brain,
+  GitBranch, CheckSquare, Sun, Moon, Brain, Palette,
 } from "lucide-react";
 
-// ─── Lazy-loaded Palantir modules ────────────────────────────────────────────
+// ─── Lazy-loaded modules ────────────────────────────────────────────────────
 const TorreDeControlePage = lazy(() => import("@/features/torre-de-controle/index").then((m) => ({ default: m.TorreDeControlePage })));
 const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) => ({ default: m.Gestao360Page })));
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
@@ -31,8 +32,6 @@ const QuantitativosPage = lazy(() => import("@/features/quantitativos/index").th
 const ProjetosPage = lazy(() => import("@/features/projetos/index").then((m) => ({ default: m.ProjetosPage })));
 const PreConstrucaoPage = lazy(() => import("@/features/pre-construcao/index").then((m) => ({ default: m.PreConstrucaoPage })));
 const WhatsAppRdoPage = lazy(() => import("@/features/whatsapp-rdo/index").then((m) => ({ default: m.WhatsAppRdoPage })));
-
-// ─── New modules ────────────────────────────────────────────────────────────
 const GestaoContatosPage = lazy(() => import("@/features/gestao-contatos/index").then((m) => ({ default: m.GestaoContatosPage })));
 const FluxoOperacionalPage = lazy(() => import("@/features/fluxo-operacional/index").then((m) => ({ default: m.FluxoOperacionalPage })));
 const PunchListPage = lazy(() => import("@/features/punch-list/index").then((m) => ({ default: m.PunchListPage })));
@@ -41,50 +40,45 @@ const GisEditorPage = lazy(() => import("@/features/gis-editor/index").then((m) 
 const EvmPage = lazy(() => import("@/features/evm/index").then((m) => ({ default: m.EvmPage })));
 const PlanejamentoMestrePage = lazy(() => import("@/features/planejamento-mestre/index").then((m) => ({ default: m.PlanejamentoMestrePage })));
 const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").then((m) => ({ default: m.OperacaoCampoPage })));
-
-// ─── Motor NS V5 (novo, visual Datadog) ────────────────────────────────────
 const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m) => ({ default: m.MotorNsV5Page })));
-
-// ─── Leitor de PDF (extração algorítmica) ───────────────────────────────────
 const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
+const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((m) => ({ default: m.default })));
+const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
 
-// ─── Nav items ──────────────────────────────────────────────────────────────
+// ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 const navItems = [
-  { section: "Gestao" },
-  { label: "Gestao 360", icon: LayoutDashboard, to: "/app/gestao-360" },
+  { section: "Gestão" },
+  { label: "Gestão 360", icon: LayoutDashboard, to: "/app/gestao-360" },
   { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
   { label: "Projetos", icon: FolderKanban, to: "/app/projetos" },
-
   { section: "Engenharia" },
   { label: "Motor NS V5", icon: Monitor, to: "/app/ns-v5" },
   { label: "Mapa / GIS", icon: Map, to: "/app/mapa-interativo" },
   { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
   { label: "Rede 360", icon: Network, to: "/app/rede-360" },
-  { label: "Pre-Construcao", icon: FileSearch, to: "/app/pre-construcao" },
-
+  { label: "Pré-Construção", icon: FileSearch, to: "/app/pre-construcao" },
   { section: "Planejamento" },
   { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
   { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },
-  { label: "LPS/Lean", icon: Target, to: "/app/lps-lean" },
+  { label: "LPS / Lean", icon: Target, to: "/app/lps-lean" },
   { label: "EVM / Curva S", icon: Calculator, to: "/app/evm" },
-
-  { section: "Operacao de Campo" },
+  { section: "Financeiro" },
+  { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
+  { section: "Operação de Campo" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "Relatorio 360", icon: ClipboardList, to: "/app/relatorio360" },
+  { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
   { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
-
   { section: "Recursos" },
   { label: "Suprimentos", icon: PackageSearch, to: "/app/suprimentos" },
-  { label: "Mao de Obra", icon: Users, to: "/app/mao-de-obra" },
+  { label: "Mão de Obra", icon: Users, to: "/app/mao-de-obra" },
   { label: "Equipamentos", icon: Wrench, to: "/app/gestao-equipamentos" },
   { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
-
-  { section: "IA & Inteligencia" },
+  { section: "IA & Inteligência" },
+  { label: "Engine V5", icon: Cpu, to: "/app/engine-v5" },
   { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
   { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
-
-  { section: "Comunicacao" },
+  { section: "Comunicação" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
   { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
@@ -96,72 +90,92 @@ function RouteFallback() {
     <div className="flex items-center justify-center h-full text-gray-400">
       <div className="flex items-center gap-3">
         <div className="w-5 h-5 border-2 border-gray-600 border-t-cyan-500 rounded-full animate-spin" />
-        <span className="text-sm">Carregando modulo...</span>
+        <span className="text-sm">Carregando módulo...</span>
       </div>
     </div>
   );
 }
-
 function LazyRoute({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 }
 
-// ─── Theme Toggle ──────────────────────────────────────────────────────────
-function ThemeToggleButton({ isOpen }: { isOpen: boolean }) {
+// ─── Theme Switcher FAB (floating action button) ────────────────────────────
+const THEME_META: Record<LayoutTheme, { emoji: string; label: string; next: string }> = {
+  ekyte:  { emoji: "🔵", label: "eKyte",  next: "Dark" },
+  dark:   { emoji: "🌑", label: "Dark",   next: "Light" },
+  light:  { emoji: "☀️", label: "Light",  next: "eKyte" },
+};
+
+function ThemeSwitcherFab() {
   const theme = useThemeStore((s) => s.theme);
-  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const cycleTheme = useThemeStore((s) => s.cycleTheme);
+  const meta = THEME_META[theme];
+
   return (
     <button
-      onClick={toggleTheme}
-      title={theme === "dark" ? "Modo claro" : "Modo escuro"}
-      className="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8] transition-colors"
+      onClick={cycleTheme}
+      title={`Tema atual: ${meta.label} — Clique para ${meta.next}`}
+      className="fixed bottom-5 right-5 z-[9999] flex items-center gap-2 px-4 py-2.5 rounded-full shadow-2xl border backdrop-blur-md transition-all hover:scale-105 active:scale-95"
+      style={{
+        background: theme === 'dark' ? 'rgba(13,32,64,0.95)' : theme === 'light' ? 'rgba(255,255,255,0.95)' : 'rgba(47,85,229,0.95)',
+        borderColor: theme === 'dark' ? '#20406a' : theme === 'light' ? '#e5e7eb' : 'rgba(255,255,255,0.3)',
+        color: theme === 'light' ? '#333' : '#fff',
+      }}
     >
-      {theme === "dark" ? <Sun size={20} className="shrink-0" /> : <Moon size={20} className="shrink-0" />}
-      {isOpen && <span className="text-xs font-medium whitespace-nowrap">{theme === "dark" ? "Modo Claro" : "Modo Escuro"}</span>}
+      <Palette size={16} />
+      <span className="text-xs font-semibold">{meta.emoji} {meta.label}</span>
     </button>
   );
 }
 
-// ─── Sidebar ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// DARK / LIGHT SIDEBAR SHELL (original design — restored)
+// ═══════════════════════════════════════════════════════════════════════════
 const SIDEBAR_KEY = "cdata-sidebar";
 
-function Sidebar({ onClose }: { onClose?: () => void }) {
+function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void }) {
   const [isOpen, setIsOpen] = useState(() => {
     try { return localStorage.getItem(SIDEBAR_KEY) !== "false"; } catch { return true; }
   });
+  const cycleTheme = useThemeStore((s) => s.cycleTheme);
 
   function toggleSidebar() {
     setIsOpen((prev) => {
       const next = !prev;
-      try { localStorage.setItem(SIDEBAR_KEY, String(next)); } catch { /* noop */ }
+      try { localStorage.setItem(SIDEBAR_KEY, String(next)); } catch {}
       return next;
     });
   }
 
+  // Color tokens based on dark vs light
+  const c = isDark
+    ? { bg: "bg-[#0d2040]", border: "border-[#20406a]", logoBg: "bg-[#071422]", logoRing: "rgba(42,191,220,0.3)", logoShadow: "0 0 12px rgba(42,191,220,0.25)", logoText: "text-[#2abfdc]", title: "text-[#e4f2f8]", subtitle: "text-[#2abfdc]", section: "text-[#5a8caa]", itemDefault: "text-[#6b6b6b]", itemHover: "hover:bg-[#14294e] hover:text-[#8fb3c8]", itemActive: "bg-[#2abfdc]/12 text-[#2abfdc]" }
+    : { bg: "bg-white", border: "border-gray-200", logoBg: "bg-blue-50", logoRing: "rgba(59,130,246,0.3)", logoShadow: "0 0 8px rgba(59,130,246,0.15)", logoText: "text-blue-600", title: "text-gray-900", subtitle: "text-blue-500", section: "text-gray-400", itemDefault: "text-gray-500", itemHover: "hover:bg-gray-100 hover:text-gray-800", itemActive: "bg-blue-50 text-blue-600" };
+
   return (
     <aside
       className={cn(
-        "flex flex-col shrink-0 border-r border-[#20406a] bg-[#0d2040] h-full",
-        "transition-[width] duration-200 ease-in-out overflow-hidden",
+        "flex flex-col shrink-0 border-r h-full transition-[width] duration-200 ease-in-out overflow-hidden",
+        c.bg, c.border,
         isOpen ? "w-[220px]" : "w-16",
       )}
     >
       {/* Logo */}
-      <div className="flex items-center h-14 border-b border-[#20406a] shrink-0 px-[14px] gap-3">
+      <div className={cn("flex items-center h-14 border-b shrink-0 px-[14px] gap-3", c.border)}>
         <div
-          className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0 bg-[#071422]"
-          style={{ boxShadow: "0 0 12px rgba(42,191,220,0.25)", border: "1px solid rgba(42,191,220,0.3)" }}
+          className={cn("flex items-center justify-center w-9 h-9 rounded-xl shrink-0", c.logoBg)}
+          style={{ boxShadow: c.logoShadow, border: `1px solid ${c.logoRing}` }}
         >
-          <span className="text-[#2abfdc] font-bold text-lg">C</span>
+          <span className={cn("font-bold text-lg", c.logoText)}>C</span>
         </div>
         {isOpen && (
           <div className="flex flex-col leading-none">
-            <span className="text-sm font-bold whitespace-nowrap text-[#e4f2f8]">ConstruData</span>
-            <span className="text-[9px] font-medium tracking-widest uppercase text-[#2abfdc] opacity-80">HydroNetwork</span>
+            <span className={cn("text-sm font-bold whitespace-nowrap", c.title)}>ConstruData</span>
+            <span className={cn("text-[9px] font-medium tracking-widest uppercase opacity-80", c.subtitle)}>HydroNetwork</span>
           </div>
         )}
         {onClose && (
-          <button onClick={onClose} className="ml-auto text-[#6b6b6b] hover:text-[#e4f2f8] transition-colors md:hidden" aria-label="Fechar menu">
+          <button onClick={onClose} className={cn("ml-auto transition-colors md:hidden", c.itemDefault)} aria-label="Fechar menu">
             <X size={18} />
           </button>
         )}
@@ -173,7 +187,7 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
           if ("section" in item && !("to" in item)) {
             if (!isOpen) return null;
             return (
-              <div key={`s-${i}`} className="text-[9px] font-bold uppercase tracking-widest text-[#5a8caa] mt-4 mb-1 px-[10px]">
+              <div key={`s-${i}`} className={cn("text-[9px] font-bold uppercase tracking-widest mt-4 mb-1 px-[10px]", c.section)}>
                 {item.section}
               </div>
             );
@@ -189,9 +203,7 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 rounded-lg transition-colors h-10 px-[10px]",
-                  isActive
-                    ? "bg-[#2abfdc]/12 text-[#2abfdc]"
-                    : "text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8]",
+                  isActive ? c.itemActive : `${c.itemDefault} ${c.itemHover}`,
                 )
               }
             >
@@ -202,12 +214,19 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
         })}
 
         {/* Bottom */}
-        <div className="mt-auto flex flex-col gap-0.5 pt-2 border-t border-[#20406a]">
-          <ThemeToggleButton isOpen={isOpen} />
+        <div className={cn("mt-auto flex flex-col gap-0.5 pt-2 border-t", c.border)}>
+          <button
+            onClick={cycleTheme}
+            title="Alternar tema"
+            className={cn("flex items-center gap-3 h-10 px-[10px] rounded-lg transition-colors", c.itemDefault, c.itemHover)}
+          >
+            <Palette size={20} className="shrink-0" />
+            {isOpen && <span className="text-xs font-medium whitespace-nowrap">Tema</span>}
+          </button>
           <button
             onClick={toggleSidebar}
             title={isOpen ? "Recolher menu" : "Expandir menu"}
-            className="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8] transition-colors"
+            className={cn("flex items-center gap-3 h-10 px-[10px] rounded-lg transition-colors", c.itemDefault, c.itemHover)}
           >
             {isOpen ? <ChevronLeft size={20} className="shrink-0" /> : <ChevronRight size={20} className="shrink-0" />}
             {isOpen && <span className="text-xs font-medium whitespace-nowrap">Recolher</span>}
@@ -219,7 +238,7 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
 }
 
 // ─── Project Selector ──────────────────────────────────────────────────────
-function ProjectSelector() {
+function ProjectSelector({ isDark }: { isDark: boolean }) {
   const projetos = useProjectContext((s) => s.projetos);
   const activeProjectId = useProjectContext((s) => s.activeProjectId);
   const setActiveProject = useProjectContext((s) => s.setActiveProject);
@@ -243,70 +262,68 @@ function ProjectSelector() {
     setNovoNome(""); setNovoCidade(""); setShowNew(false); setOpen(false);
   }
 
+  const c = isDark
+    ? { btnBg: "bg-[#112645]", btnBorder: "border-[#20406a]", btnHover: "hover:border-[#2abfdc]/50", text: "text-[#e4f2f8]", accent: "text-[#2abfdc]", dropBg: "bg-[#0d2040]", dropBorder: "border-[#20406a]", inputBg: "bg-[#071422]", section: "text-[#5a8caa]", sub: "text-[#5a8caa]", hoverRow: "hover:bg-[#14294e]", activeRow: "bg-[#2abfdc]/10" }
+    : { btnBg: "bg-white", btnBorder: "border-gray-300", btnHover: "hover:border-blue-400", text: "text-gray-800", accent: "text-blue-600", dropBg: "bg-white", dropBorder: "border-gray-200", inputBg: "bg-gray-50", section: "text-gray-400", sub: "text-gray-500", hoverRow: "hover:bg-gray-50", activeRow: "bg-blue-50" };
+
   return (
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112645] border border-[#20406a] hover:border-[#2abfdc]/50 transition-colors max-w-[280px]"
+        className={cn("flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors max-w-[280px]", c.btnBg, c.btnBorder, c.btnHover)}
       >
-        <Building2 size={14} className="text-[#2abfdc] shrink-0" />
-        <span className="text-xs font-medium text-[#e4f2f8] truncate">{active?.nome ?? "Selecionar Projeto"}</span>
-        <ChevronDown size={12} className={cn("text-[#6b6b6b] shrink-0 transition-transform", open && "rotate-180")} />
+        <Building2 size={14} className={cn("shrink-0", c.accent)} />
+        <span className={cn("text-xs font-medium truncate", c.text)}>{active?.nome ?? "Selecionar Projeto"}</span>
+        <ChevronDown size={12} className={cn("shrink-0 transition-transform", c.sub, open && "rotate-180")} />
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => { setOpen(false); setShowNew(false); }} />
-          <div className="absolute top-full left-0 mt-1 z-50 w-80 bg-[#0d2040] border border-[#20406a] rounded-xl shadow-2xl overflow-hidden">
-            <div className="p-2 border-b border-[#20406a]">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#5a8caa] px-2">Projetos</span>
+          <div className={cn("absolute top-full left-0 mt-1 z-50 w-80 rounded-xl shadow-2xl overflow-hidden border", c.dropBg, c.dropBorder)}>
+            <div className={cn("p-2 border-b", c.dropBorder)}>
+              <span className={cn("text-[9px] font-bold uppercase tracking-widest px-2", c.section)}>Projetos</span>
             </div>
             <div className="max-h-60 overflow-y-auto">
               {projetos.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => { setActiveProject(p.id); setOpen(false); }}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-[#14294e] transition-colors",
-                    p.id === activeProjectId && "bg-[#2abfdc]/10",
-                  )}
+                  className={cn("w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors", c.hoverRow, p.id === activeProjectId && c.activeRow)}
                 >
-                  <div className={cn(
-                    "w-2 h-2 rounded-full shrink-0",
-                    p.status === "ativo" ? "bg-green-400" : p.status === "pausado" ? "bg-yellow-400" : "bg-gray-500",
-                  )} />
+                  <div className={cn("w-2 h-2 rounded-full shrink-0", p.status === "ativo" ? "bg-green-400" : p.status === "pausado" ? "bg-yellow-400" : "bg-gray-500")} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-[#e4f2f8] truncate">{p.nome}</div>
-                    <div className="text-[10px] text-[#5a8caa]">{p.cidade} - {p.tipo.toUpperCase()}</div>
+                    <div className={cn("text-xs font-medium truncate", c.text)}>{p.nome}</div>
+                    <div className={cn("text-[10px]", c.sub)}>{p.cidade} - {p.tipo.toUpperCase()}</div>
                   </div>
-                  {p.contrato && <span className="text-[9px] text-[#5a8caa] font-mono shrink-0">{p.contrato}</span>}
+                  {p.contrato && <span className={cn("text-[9px] font-mono shrink-0", c.sub)}>{p.contrato}</span>}
                 </button>
               ))}
             </div>
             {!showNew ? (
               <button
                 onClick={() => setShowNew(true)}
-                className="w-full flex items-center gap-2 px-3 py-2.5 border-t border-[#20406a] text-[#2abfdc] hover:bg-[#14294e] transition-colors"
+                className={cn("w-full flex items-center gap-2 px-3 py-2.5 border-t transition-colors", c.accent, c.hoverRow, c.dropBorder)}
               >
                 <Plus size={14} />
                 <span className="text-xs font-medium">Novo Projeto</span>
               </button>
             ) : (
-              <div className="p-3 border-t border-[#20406a] space-y-2">
+              <div className={cn("p-3 border-t space-y-2", c.dropBorder)}>
                 <input placeholder="Nome do projeto" value={novoNome} onChange={(e) => setNovoNome(e.target.value)}
-                  className="w-full bg-[#071422] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#e4f2f8] placeholder-[#5a8caa]" />
+                  className={cn("w-full border rounded-lg px-3 py-1.5 text-xs", c.inputBg, c.dropBorder, c.text)} />
                 <div className="flex gap-2">
                   <input placeholder="Cidade" value={novoCidade} onChange={(e) => setNovoCidade(e.target.value)}
-                    className="flex-1 bg-[#071422] border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#e4f2f8] placeholder-[#5a8caa]" />
+                    className={cn("flex-1 border rounded-lg px-3 py-1.5 text-xs", c.inputBg, c.dropBorder, c.text)} />
                   <select value={novoTipo} onChange={(e) => setNovoTipo(e.target.value as any)}
-                    className="bg-[#071422] border border-[#20406a] rounded-lg px-2 py-1.5 text-xs text-[#e4f2f8]">
+                    className={cn("border rounded-lg px-2 py-1.5 text-xs", c.inputBg, c.dropBorder, c.text)}>
                     <option value="esgoto">Esgoto</option>
-                    <option value="agua">Agua</option>
+                    <option value="agua">Água</option>
                     <option value="misto">Misto</option>
                   </select>
                 </div>
                 <button onClick={handleAdd}
-                  className="w-full bg-[#2abfdc]/20 text-[#2abfdc] border border-[#2abfdc]/30 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-[#2abfdc]/30 transition-colors">
+                  className="w-full bg-blue-500/20 text-blue-500 border border-blue-500/30 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-blue-500/30 transition-colors">
                   Criar Projeto
                 </button>
               </div>
@@ -318,26 +335,32 @@ function ProjectSelector() {
   );
 }
 
-// ─── App Shell ──────────────────────────────────────────────────────────────
-function AppShell() {
+// ═══════════════════════════════════════════════════════════════════════════
+// SIDEBAR SHELL (used for Dark and Light themes)
+// ═══════════════════════════════════════════════════════════════════════════
+function SidebarShell({ isDark }: { isDark: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const fetchProjetos = useProjectContext((s) => s.fetchProjetos);
 
   useEffect(() => { fetchProjetos(); }, []);
 
+  const headerBg = isDark ? "bg-[#0a1628]" : "bg-white";
+  const headerBorder = isDark ? "border-[#20406a]" : "border-gray-200";
+  const mobileTitle = isDark ? "text-[#e4f2f8]" : "text-gray-900";
+  const mobileBtn = isDark ? "text-[#6b6b6b] hover:text-[#2abfdc]" : "text-gray-400 hover:text-blue-500";
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      {/* Global header with project selector */}
-      <div className="flex items-center gap-3 px-4 h-11 border-b border-[#20406a] bg-[#0a1628] shrink-0 z-20">
-        <button onClick={() => setMobileOpen(true)} className="text-[#6b6b6b] hover:text-[#2abfdc] transition-colors md:hidden" aria-label="Abrir menu">
+      <div className={cn("flex items-center gap-3 px-4 h-11 border-b shrink-0 z-20", headerBg, headerBorder)}>
+        <button onClick={() => setMobileOpen(true)} className={cn("transition-colors md:hidden", mobileBtn)} aria-label="Abrir menu">
           <Menu size={20} />
         </button>
-        <span className="text-[#e4f2f8] text-sm font-bold tracking-wide md:hidden">ConstruData</span>
+        <span className={cn("text-sm font-bold tracking-wide md:hidden", mobileTitle)}>ConstruData</span>
         <div className="hidden md:block">
-          <ProjectSelector />
+          <ProjectSelector isDark={isDark} />
         </div>
         <div className="ml-auto md:hidden">
-          <ProjectSelector />
+          <ProjectSelector isDark={isDark} />
         </div>
       </div>
 
@@ -348,9 +371,9 @@ function AppShell() {
           "transition-transform duration-200 ease-in-out",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}>
-          <Sidebar onClose={() => setMobileOpen(false)} />
+          <Sidebar isDark={isDark} onClose={() => setMobileOpen(false)} />
         </div>
-        <main className="flex-1 overflow-y-auto min-w-0">
+        <main className={cn("flex-1 overflow-y-auto min-w-0", isDark ? "bg-[#040608]" : "bg-[#f4f6f9]")}>
           <Outlet />
         </main>
       </div>
@@ -358,30 +381,29 @@ function AppShell() {
   );
 }
 
-// ─── NS V5 wrapper (uses new MotorNsV5Page) ────────────────────────────────
-function NsV5Page() {
-  return (
-    <LazyRoute>
-      <MotorNsV5Page />
-    </LazyRoute>
-  );
+// ═══════════════════════════════════════════════════════════════════════════
+// ADAPTIVE SHELL — picks the correct layout based on theme
+// ═══════════════════════════════════════════════════════════════════════════
+function AdaptiveShell() {
+  const theme = useThemeStore((s) => s.theme);
+
+  if (theme === 'ekyte') return <AppLayout />;
+  if (theme === 'dark')  return <SidebarShell isDark={true} />;
+  return <SidebarShell isDark={false} />;
 }
 
-// ─── Offline IFrame Wrapper Brutal ──────────────────────────────────────────
-function OfflineIframePage({ url }: { url: string }) {
-  return (
-    <div className="w-full h-full bg-[#040608] overflow-hidden">
-      <iframe src={url} className="w-full h-full border-none m-0 p-0 block" title="Módulo Offline" />
-    </div>
-  );
+// ─── NS V5 wrapper ──────────────────────────────────────────────────────────
+function NsV5Page() {
+  return <LazyRoute><MotorNsV5Page /></LazyRoute>;
 }
 
 // ─── App ────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeSwitcherFab />
       <Routes>
-        <Route path="/app" element={<AppShell />}>
+        <Route path="/app" element={<AdaptiveShell />}>
           <Route index element={<Navigate to="/app/gestao-360" replace />} />
           <Route path="ns-v5" element={<NsV5Page />} />
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
@@ -411,9 +433,8 @@ export default function App() {
           <Route path="punch-list" element={<LazyRoute><PunchListPage /></LazyRoute>} />
           <Route path="whatsapp-rdo" element={<LazyRoute><WhatsAppRdoPage /></LazyRoute>} />
           <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
-          
-          {/* Legacy offline routes removed — all modules now integrated */}
-
+          <Route path="engine-v5" element={<LazyRoute><EngineV5Dashboard /></LazyRoute>} />
+          <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />

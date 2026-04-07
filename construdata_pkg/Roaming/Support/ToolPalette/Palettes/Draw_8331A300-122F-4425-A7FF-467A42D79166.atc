@@ -1,0 +1,1325 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{8331A300-122F-4425-A7FF-467A42D79166}"/><Properties><ItemName resource="830" src="AcTpCatalogRes.dll"/><Images option="0"/><Time createdUniversalDateTime="2005-11-14T22:49:31" modifiedUniversalDateTime="2005-11-14T22:49:31"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{AB5B74E2-8A23-4A4E-8755-91E313CC098F}"/><Properties><ItemName resource="210" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_LINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_LINE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_LINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_LINE" src="%ProgramBtnRes%"/></Images><Description resource="242" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T17:31:27"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbLine"/>
+				<ToolbarButton idButton="ID_Line"/>
+			</CustomData>
+			<Source/><ToolType>2</ToolType><Flyout enable="false"><ShapePackage idValue="{4AFD3A7B-127C-468D-9DAD-D6D948BA8615}"/><CurrentShape idValue="{A7FC31D7-54EB-4CC8-B5D8-539D51522D1A}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_line</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F8244743-71E5-4400-B787-95ABF1791221}"/><Properties><ItemName resource="225" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_XLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_XLINE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_XLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_XLINE" src="%ProgramBtnRes%"/></Images><Description resource="257" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T17:31:33"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbXline"/>
+				<ToolbarButton idButton="ID_Xline"/>
+			</CustomData>
+			<Source/><ToolType>2</ToolType><Flyout enable="false"><ShapePackage idValue="{4AFD3A7B-127C-468D-9DAD-D6D948BA8615}"/><CurrentShape idValue="{25BB7D34-0E8F-4A36-B852-AEA08205923E}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_xline</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1460D9CF-ABCE-4B29-B314-E03F2E09C947}"/><Properties><ItemName resource="211" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_PLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_PLINE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_PLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_PLINE" src="%ProgramBtnRes%"/></Images><Description resource="243" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T17:31:39"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDb2dPolyline"/>
+				<ToolbarButton idButton="ID_Pline"/>
+			</CustomData>
+			<Source/><ToolType>2</ToolType><Flyout enable="false"><ShapePackage idValue="{4AFD3A7B-127C-468D-9DAD-D6D948BA8615}"/><CurrentShape idValue="{63B4EA09-B9B3-45BC-B864-E7A22A7EFAF2}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_pline</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{43E972AA-0A0C-4CF5-860C-3366E9EF8FB0}"/><Properties><ItemName resource="800" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_POLYGO" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_POLYGO" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_POLYGO" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_POLYGO" src="%ProgramBtnRes%"/></Images><Description resource="801" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_polygon </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{23E5CB52-6498-46A7-9285-6B7C7A42ABBE}"/><Properties><ItemName resource="802" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_RECTAN" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_RECTAN" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_RECTAN" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_RECTAN" src="%ProgramBtnRes%"/></Images><Description resource="803" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_rectang </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{5C5399DA-9CF5-4447-9846-18B4299A30C4}"/><Properties><ItemName resource="199" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_ARC3PT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_ARC3PT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_ARC3PT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_ARC3PT" src="%ProgramBtnRes%"/></Images><Description resource="231" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_arc</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{AD23FB73-F643-4EC4-893D-FD02914BDE45}"/><Properties><ItemName resource="201" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_CIRRAD" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_CIRRAD" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_CIRRAD" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_CIRRAD" src="%ProgramBtnRes%"/></Images><Description resource="233" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_circle</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{51334845-7098-4193-9CC7-022B8C21BB85}"/><Properties><ItemName resource="804" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_REVCLOUD" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_REVCLOUD" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_REVCLOUD" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_REVCLOUD" src="%ProgramBtnRes%"/></Images><Description resource="805" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_revcloud </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{CCE209EF-0088-4B82-BC4B-015F22E6F8C5}"/><Properties><ItemName resource="220" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_SPLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_SPLINE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_SPLINE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_SPLINE" src="%ProgramBtnRes%"/></Images><Description resource="252" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T17:31:47"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbSpline"/>
+				<ToolbarButton idButton="ID_Spline"/>
+			</CustomData>
+			<Source/><ToolType>2</ToolType><Flyout enable="false"><ShapePackage idValue="{4AFD3A7B-127C-468D-9DAD-D6D948BA8615}"/><CurrentShape idValue="{9E94EFA7-423D-4CED-AC1C-889A7BE3906B}"/></Flyout><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_spline</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6A40F238-7A60-4AFA-A63F-6947DC3D15B8}"/><Properties><ItemName resource="208" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_ELLAE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_ELLAE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_ELLAE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_ELLAE" src="%ProgramBtnRes%"/></Images><Description resource="240" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_ellipse</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{91747C49-91B0-4C41-B44A-CF8643B86B88}"/><Properties><ItemName resource="806" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_ELLARC" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_ELLARC" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_ELLARC" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_ELLARC" src="%ProgramBtnRes%"/></Images><Description resource="807" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_ellipse _a</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{EA5E3C0A-DF8D-4415-92AD-8E34A9383E10}"/><Properties><ItemName resource="808" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_DINSER" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_DINSER" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_DINSER" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_DINSER" src="%ProgramBtnRes%"/></Images><Description resource="809" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_insert</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{17F30901-774F-4077-8C23-D914FC2BDCD7}"/><Properties><ItemName resource="810" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_XATTAC" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_XATTAC" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_XATTAC" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_XATTAC" src="%ProgramBtnRes%"/></Images><Description resource="811" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_xattach</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{74BE9FB1-289C-4DDB-B5EA-0D342F8D7FE2}"/><Properties><ItemName resource="812" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_DWF_UNDER" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_DWF_UNDER" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_DWF_UNDER" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_DWF_UNDER" src="%ProgramBtnRes%"/></Images><Description resource="813" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_dwfattach</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1BC7CDD8-646D-4408-8DFD-F5CC24377D15}"/><Properties><ItemName resource="816" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_IMGATT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_IMGATT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_IMGATT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_IMGATT" src="%ProgramBtnRes%"/></Images><Description resource="817" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_imageattach </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{18610FA2-97F3-480D-9BAE-719E21E3739C}"/><Properties><ItemName resource="818" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_IMPORT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_IMPORT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_IMPORT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_IMPORT" src="%ProgramBtnRes%"/></Images><Description resource="819" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_import </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{707029AF-A5ED-46B6-9B62-74B470599442}"/><Properties><ItemName resource="820" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_INSOLE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_INSOLE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_INSOLE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_INSOLE" src="%ProgramBtnRes%"/></Images><Description resource="821" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_insertobj </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{66ED6335-B19A-4AA9-A25E-A39FDBA080E4}"/><Properties><ItemName resource="822" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_BLOCK" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_BLOCK" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_BLOCK" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_BLOCK" src="%ProgramBtnRes%"/></Images><Description resource="823" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_block </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{901C81D8-B1F2-411D-8599-1F7316B17D1D}"/><Properties><ItemName resource="214" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_POINT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_POINT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_POINT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_POINT" src="%ProgramBtnRes%"/></Images><Description resource="246" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>*^C^C_point</Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{9B864469-6B2C-4F31-9A3A-8EB38D567458}"/><Properties><ItemName resource="824" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_BHATCH" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_BHATCH" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_BHATCH" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_BHATCH" src="%ProgramBtnRes%"/></Images><Description resource="825" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_bhatch </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B3360643-DE29-4D03-B936-706F4C1BE2AE}"/><Properties><ItemName resource="826" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_GRADIENT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_GRADIENT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_GRADIENT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_GRADIENT" src="%ProgramBtnRes%"/></Images><Description resource="827" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_gradient </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B47BFAA5-5C50-4D87-9034-9FC59EC5F118}"/><Properties><ItemName resource="218" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_REGION" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_REGION" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_REGION" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_REGION" src="%ProgramBtnRes%"/></Images><Description resource="250" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T22:50:48"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbRegion"/>
+				<ToolbarButton idButton="ID_Region"/>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_region </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6F83CFC2-6FC8-4E42-88EA-CB2BCE82FE58}"/><Properties><ItemName resource="828" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_TABLE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_TABLE" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_TABLE" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_TABLE" src="%ProgramBtnRes%"/></Images><Description resource="829" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:48:46" modifiedUniversalDateTime="2005-11-14T22:48:46"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_table </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{69AC1996-1CFF-41CD-BE16-0FE5875F5083}"/><Properties><ItemName resource="213" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_MTEXT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_MTEXT" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_MTEXT" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_MTEXT" src="%ProgramBtnRes%"/></Images><Description resource="245" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T22:50:48"/></Properties><CustomData>
+				<AcRxClassInfo className="AcDbMText"/>
+				<ToolbarButton idButton="ID_Mtext"/>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_mtext </Macro>
+				</Command>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0CA2023B-98DB-499C-91B8-7A15AFDCD78D}"/><Properties><ItemName resource="299" src="AcTpCatalogRes.dll"/><Images option="0"><Image cx="16" cy="16" IsDark="false" resource="RCDATA_16_ATTDEF" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="false" resource="RCDATA_32_ATTDEF" src="%ProgramBtnRes%"/><Image cx="16" cy="16" IsDark="true" resource="RCDATA_16_ATTDEF" src="%ProgramBtnRes%"/><Image cx="32" cy="32" IsDark="true" resource="RCDATA_32_ATTDEF" src="%ProgramBtnRes%"/></Images><Description resource="300" src="AcTpCatalogRes.dll"/><Time createdUniversalDateTime="2005-11-14T22:50:48" modifiedUniversalDateTime="2005-11-14T22:50:48"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{2AE7120B-CEE4-47A5-9B50-EF9F3ADE24AC}"/><Data>
+				<GeneralProperties>
+					<Color>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE"/>
+						</BasicPropInfo>
+					</Color>
+					<Layer>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Layer>
+					<Linetype>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Linetype>
+					<LinetypeScale>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="3" value="0"/>
+						</BasicPropInfo>
+					</LinetypeScale>
+					<PlotStyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</PlotStyle>
+					<LineWeight>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="2" value="0"/>
+						</BasicPropInfo>
+					</LineWeight>
+					<Textstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Textstyle>
+					<Dimstyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Dimstyle>
+					<Tablestyle>
+						<BasicPropInfo>
+							<PropValue unspecified="TRUE" valueType="1"/>
+						</BasicPropInfo>
+					</Tablestyle>
+				</GeneralProperties>
+				<Command>
+					<Macro>^C^C_attdef</Macro>
+				</Command>
+			</Data>
+		</Tool></Tools></Palette>

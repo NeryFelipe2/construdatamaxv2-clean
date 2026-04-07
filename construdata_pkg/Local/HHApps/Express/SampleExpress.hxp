@@ -1,0 +1,218 @@
+"Hydraflow Express 2006"
+"Culvert Data -------------------------------"
+"My Culvert"
+"Invert elev dn = ",100
+"Invert elev up = ",100.55
+"Culvert length = ",55
+"Culvert slope (ft/ft) = ",1.000006E-02
+"Culvert rise (ft) = ",2
+"Culvert span (ft) = ",2
+"Barrel shape = ","Cir"
+"No. barrels = ",1
+"Manning n = ",.013
+"Upstream edge type = ","Projecting"
+"Top elevation = ",106
+"Top width = ",30
+"Width of crest = ",10
+"Qmin = ",10
+"Qmax = ",40
+"Qincr = ",2
+"Starting tailwater elev = ","(dc+D)/2"
+"Channel Data -------------------------------"
+"My Channel"
+"Channel type = ","Trapezoidal"
+"Invert elevation = ",100
+"Bottom width = ",5
+"Side slope left z:1 = ",2
+"Side slope right z:1 = ",3
+"Total depth = ",4
+"Cross slope Sx (ft/ft) = ",0
+"Cross slope Sw (ft/ft) = ",0
+"Gutter width = ",0
+"Channel slope (%) = ",.5
+"Manning's n = ",.035
+"Calc method = ","Q vs Depth"
+"Min Q = ",0
+"Max Q = ",0
+"Q Incr ",10
+"Known Q = ",0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,104,0
+"User Sta/Elev/n = ",8,100,0
+"User Sta/Elev/n = ",13,100,0
+"User Sta/Elev/n = ",21,104,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"User Sta/Elev/n = ",0,0,0
+"Inlet Data -------------------------------"
+"Curb Inlet"
+"Inlet type = ","Curb"
+"Inlet opening length = ",4
+"Gutter slope (ft/ft) = ",.002
+"Gutter cross slope (ft/ft) = ",.08
+"Pvmnt cross slope (ft/ft) = ",.02
+"Throat height (in) = ",6
+"Gutter width = ",2
+"Clear open grate area = ",0
+"Grate length = ",0
+"Grate width = ",0
+"Sag or On grade = ","On grade"
+"Local depression (in) = ",1.44
+"Gutter n-value = ",.013
+"Calc method = ","Q vs Depth"
+"Qmin = ",0
+"Qmax = ",0
+"Max depth = ",6
+"Hydrology Data -------------------------------"
+"Inflow Outflow Hydrographs"
+"Hydrograph type = ","Rational"
+"Drainage area (ac) = ",11.45
+"CN or C = ",.8
+"Tc method = ","User"
+"Tc = ",20
+"Storm distribution = ","Synthetic"
+"Storm duration = ",.6666667
+"Receding Limb/Storm Duration/Shape factor = ",1
+"Return period = ",50
+"Target Q = ",35
+"Basin slope (%) = ",0
+"Hydraulic length = ",0
+"Composite CN/C data"
+4,.7
+6,.85
+1.45,.9
+0,0
+0,0
+0,0
+"TR55 Tc data"
+"Sheet flow"
+"Section = ",1
+"N-value = ",0
+"Length = ",0
+"Precip = ",0
+"Slope (%) = ",0
+"Section = ",2
+"N-value = ",0
+"Length = ",0
+"Precip = ",0
+"Slope (%) = ",0
+"Section = ",3
+"N-value = ",0
+"Length = ",0
+"Precip = ",0
+"Slope (%) = ",0
+"Shallow concentrated"
+"Section = ",1
+"Flow length = ",0
+"Slope (%) = ",0
+"Velocity = ",""
+"Section = ",2
+"Flow length = ",0
+"Slope (%) = ",0
+"Velocity = ",""
+"Section = ",3
+"Flow length = ",0
+"Slope (%) = ",0
+"Velocity = ",""
+"Channel"
+"Section = ",1
+"X-sectional area = ",0
+"Wetted perimeter = ",0
+"Slope (%) = ",0
+"N-value = ",0
+"Length = ",0
+"Section = ",2
+"X-sectional area = ",0
+"Wetted perimeter = ",0
+"Slope (%) = ",0
+"N-value = ",0
+"Length = ",0
+"Section = ",3
+"X-sectional area = ",0
+"Wetted perimeter = ",0
+"Slope (%) = ",0
+"N-value = ",0
+"Length = ",0
+"Weir Data -------------------------------"
+"My Two-Stage Weir"
+"Type of weir = ","Compound"
+"Crest = ","Sharp"
+"Length = ",10
+"Total depth = ",2
+"Depth a = ",1
+"Side slope (z:1) = ",0
+"Compound length x = ",4
+"Coefficient = ",3.33
+"Calc method = ","Q vs Depth"
+"Qmax = ",0
+"Qincr = ",10
+"Known Q = ",0
+"Rainfall Data -------------------------------"
+"SampleExpress.IDF"
+#FALSE#
+"FHA"
+0,69.87033,0,79.25974,88.23514,102.6072,114.8193,127.1596
+0,13.10001,0,14.60002,15.50002,16.50003,17.20003,17.80003
+0,.8658344,0,.8369033,.8279132,.8217015,.819854,.818648
+0,0,0,0,0,0,0,0
+0,0,0,0
+5.7,4,2.686,1.7
+0,0,0,0
+6.57732,4.6976,3.301556,2.1466
+7.245359,5.2168,3.740692,2.4596
+8.253059,5.9888,4.375514,2.9065
+9.0486,6.596,4.871096,3.2542
+9.84,7.2,5.364,3.6
+"Hydraflow Express Precipitation Data"
+0,0
+2.2,1.8
+0,0
+3.3,0
+4.25,2.6
+5.77,0
+6.8,0
+7.95,4
+"End of file"

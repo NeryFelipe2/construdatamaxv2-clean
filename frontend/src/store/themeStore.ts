@@ -1,26 +1,37 @@
 import { create } from 'zustand'
 
-type Theme = 'dark' | 'light'
+export type LayoutTheme = 'ekyte' | 'dark' | 'light'
 
 interface ThemeState {
-  theme: Theme
-  toggleTheme: () => void
+  theme: LayoutTheme
+  setTheme: (t: LayoutTheme) => void
+  cycleTheme: () => void
 }
 
-function applyTheme(t: Theme) {
+const THEME_KEY = 'cdata-theme'
+const VALID: LayoutTheme[] = ['ekyte', 'dark', 'light']
+
+function applyTheme(t: LayoutTheme) {
   document.documentElement.setAttribute('data-theme', t)
 }
 
-// Apply persisted theme immediately on module load (before React renders)
-const saved = (localStorage.getItem('cdata-theme') ?? 'dark') as Theme
+// Read persisted theme (default to ekyte for the new layout)
+const raw = localStorage.getItem(THEME_KEY) ?? 'dark'
+const saved: LayoutTheme = VALID.includes(raw as LayoutTheme) ? (raw as LayoutTheme) : 'dark'
 applyTheme(saved)
 
 export const useThemeStore = create<ThemeState>((set) => ({
   theme: saved,
-  toggleTheme: () =>
+  setTheme: (t) => {
+    localStorage.setItem(THEME_KEY, t)
+    applyTheme(t)
+    set({ theme: t })
+  },
+  cycleTheme: () =>
     set((s) => {
-      const next: Theme = s.theme === 'dark' ? 'light' : 'dark'
-      localStorage.setItem('cdata-theme', next)
+      const idx = VALID.indexOf(s.theme)
+      const next = VALID[(idx + 1) % VALID.length]
+      localStorage.setItem(THEME_KEY, next)
       applyTheme(next)
       return { theme: next }
     }),

@@ -1,0 +1,383 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{43790CC8-A3D9-4055-A814-AB31404DEE64}"/><Properties><ItemName resource="51037" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{BB842F4B-CA2E-44BC-9CAC-08C082FC6DD4}"/><Properties><ItemName resource="51038" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A0C6BF60-E0C6-4C31-8A58-EE1376B7F6F6}"/><Properties><ItemName resource="12500" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_level_1lane_1side.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_level_1lane_1side.png"/></Images><Description resource="12533" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMillAndLevel1 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Level_1Lane_1Side</HelpData></Help><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Level_1Lane_1Side</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="12501" Description="12504">
+                            0
+                            <Enum>
+								<Right DisplayName="12502">0</Right>
+								<Left DisplayName="12503">1</Left>
+							</Enum>
+						</Side>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12505" Description="12506">0.3</OverlayDepth>
+						<OverlaySlopeOptions DataType="Long" DisplayName="12507" Description="12511">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12508">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12509">1</MatchSlope>
+								<LO DisplayName="12510">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12532">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12534">4</LI>
+								<UseDefaultSlope DisplayName="14023">5</UseDefaultSlope>
+							</Enum>
+						</OverlaySlopeOptions>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="12512" Description="12513">-0.02</DefaultSlope>
+						<IEOLOffset DataType="Double" TypeInfo="16" DisplayName="12514" Description="12515">0</IEOLOffset>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="12516" Description="12517">12</LaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<InsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14005" Description="14006">0</InsideEdgeOfExistingLane>
+						<OutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14007" Description="14008">12</OutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12518" Description="12519">
+                            0
+                            <Enum>
+								<MinLevelDepth DisplayName="12520">0</MinLevelDepth>
+								<UseProfile DisplayName="12521">1</UseProfile>
+								<PingToPrevious DisplayName="12522">2</PingToPrevious>
+							</Enum>
+						</UseProfileOptions>
+						<MinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12523" Description="12524">0.3</MinLevelDepth>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12525" Description="12526">0.005</SlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{B7ED46B2-F796-4F2C-AC98-ED9CEAEB1F69}"/><Properties><ItemName resource="12551" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_mill_level_1lane_1side.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_mill_level_1lane_1side.png"/></Images><Description resource="12552" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMillAndLevel1 subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Mill_Level_1Lane_1Side</HelpData></Help><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Mill_Level_1Lane_1Side</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="12553" Description="12554">
+                            0
+                            <Enum>
+								<Right DisplayName="12555">0</Right>
+								<Left DisplayName="12556">1</Left>
+							</Enum>
+						</Side>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12557" Description="12558">0.3</OverlayDepth>
+						<OverlaySlopeOptions DataType="Long" DisplayName="12559" Description="12560">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12561">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12562">1</MatchSlope>
+								<LO DisplayName="12563">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12564">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12587">4</LI>
+								<UseDefaultSlope DisplayName="14023">5</UseDefaultSlope>
+							</Enum>
+						</OverlaySlopeOptions>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="12565" Description="12566">-0.02</DefaultSlope>
+						<IEOLOffset DataType="Double" TypeInfo="16" DisplayName="12567" Description="12568">0</IEOLOffset>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="12569" Description="12570">12</LaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<InsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14005" Description="14006">0</InsideEdgeOfExistingLane>
+						<OutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14007" Description="14008">12</OutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12571" Description="12572">
+                            0
+                            <Enum>
+								<MinLevelDepth DisplayName="12573">0</MinLevelDepth>
+								<UseProfile DisplayName="12574">1</UseProfile>
+								<PingToPrevious DisplayName="12575">2</PingToPrevious>
+							</Enum>
+						</UseProfileOptions>
+						<MinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12576" Description="12577">0.6</MinLevelDepth>
+						<MinMillDepth DataType="Double" TypeInfo="16" DisplayName="12578" Description="12579">0.3</MinMillDepth>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12580" Description="12581">0.005</SlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{695349A0-6A75-4E44-80C2-30A9CA7F2045}"/><Properties><ItemName resource="12601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_mill_1lane_1side.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_mill_1lane_1side.png"/></Images><Description resource="12602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayMill1Lane1Side subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Mill_1Lane_1Side</HelpData></Help><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Mill_1Lane_1Side</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="12603" Description="12604">
+                            0
+                            <Enum>
+								<Right DisplayName="12605">0</Right>
+								<Left DisplayName="12606">1</Left>
+							</Enum>
+						</Side>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12607" Description="12608">0.3</OverlayDepth>
+						<OverlaySlopeOptions DataType="Long" DisplayName="12609" Description="12610">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12611">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12612">1</MatchSlope>
+								<LO DisplayName="12613">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12614">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12635">4</LI>
+								<UseDefaultSlope DisplayName="14023">5</UseDefaultSlope>
+							</Enum>
+						</OverlaySlopeOptions>
+						<DefaultSlope DataType="Double" TypeInfo="9" DisplayName="12615" Description="12616">-0.02</DefaultSlope>
+						<IEOLOffset DataType="Double" TypeInfo="16" DisplayName="12617" Description="12618">0</IEOLOffset>
+						<LaneWidth DataType="Double" TypeInfo="16" DisplayName="12619" Description="12620">12</LaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<InsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14005" Description="14006">0</InsideEdgeOfExistingLane>
+						<OutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14007" Description="14008">12</OutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12621" Description="12622">
+                            0
+                            <Enum>
+								<MinMillDepth DisplayName="12623">0</MinMillDepth>
+								<UseProfile DisplayName="12624">1</UseProfile>
+								<PingToPrevious DisplayName="12625">2</PingToPrevious>
+							</Enum>
+						</UseProfileOptions>
+						<MinMillDepth DataType="Double" TypeInfo="16" DisplayName="12626" Description="12627">0.3</MinMillDepth>
+						<SlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12628" Description="12629">0.005</SlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8FEF1A9D-BA5C-4F61-A009-CFF25254DE7F}"/><Properties><ItemName resource="12655" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_level_crown.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_level_crown.png"/></Images><Description resource="12656" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayLevelCrown subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Level_Crown</HelpData></Help><Time createdUniversalDateTime="2017-05-16T11:04:31" modifiedUniversalDateTime="2017-05-16T11:04:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Level_Crown</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12657" Description="12658">0.3</OverlayDepth>
+						<LeftOverlaySlopeOptions DataType="Long" DisplayName="12659" Description="12660">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12661">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12662">1</MatchSlope>
+								<LO DisplayName="12663">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12664">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12701">4</LI>
+								<UseDefaultSlope DisplayName="14024">5</UseDefaultSlope>
+							</Enum>
+						</LeftOverlaySlopeOptions>
+						<RightOverlaySlopeOptions DataType="Long" DisplayName="12665" Description="12666">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12667">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12668">1</MatchSlope>
+								<LO DisplayName="12669">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12670">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12702">4</LI>
+								<UseDefaultSlope DisplayName="14025">5</UseDefaultSlope>
+							</Enum>
+						</RightOverlaySlopeOptions>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12671" Description="12672">-0.02</LeftDefaultSlope>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12673" Description="12674">-0.02</RightDefaultSlope>
+						<CrownOffset DataType="Double" TypeInfo="16" DisplayName="12675" Description="12676">0</CrownOffset>
+						<LeftLaneWidth DataType="Double" TypeInfo="16" DisplayName="12677" Description="12678">12</LeftLaneWidth>
+						<RightLaneWidth DataType="Double" TypeInfo="16" DisplayName="12679" Description="12680">12</RightLaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<LeftInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14011" Description="14012">0</LeftInsideEdgeOfExistingLane>
+						<LeftOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14013" Description="14014">12</LeftOutsideEdgeOfExistingLane>
+						<RightInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14015" Description="14016">0</RightInsideEdgeOfExistingLane>
+						<RightOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14017" Description="14018">12</RightOutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12681" Description="12682">
+                            0
+                            <Enum>
+								<MinLevelDepth DisplayName="12683">0</MinLevelDepth>
+								<UseProfile DisplayName="12684">1</UseProfile>
+							</Enum>
+						</UseProfileOptions>
+						<LeftMinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12685" Description="12686">0.3</LeftMinLevelDepth>
+						<RightMinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12687" Description="12688">0.3</RightMinLevelDepth>
+						<LeftSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12689" Description="12690">0.005</LeftSlopeTolerance>
+						<RightSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12691" Description="12692">0.005</RightSlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{E26A5835-ECF8-4D9D-A1E6-182895A438D3}"/><Properties><ItemName resource="12721" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_mill_level_crown.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_mill_level_crown.png"/></Images><Description resource="12722" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayLevelCrown subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Mill_Level_Crown</HelpData></Help><Time createdUniversalDateTime="2017-05-16T11:04:31" modifiedUniversalDateTime="2017-05-16T11:04:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Mill_Level_Crown</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12723" Description="12724">0.3</OverlayDepth>
+						<LeftOverlaySlopeOptions DataType="Long" DisplayName="12725" Description="12726">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12727">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12728">1</MatchSlope>
+								<LO DisplayName="12729">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12730">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12771">4</LI>
+								<UseDefaultSlope DisplayName="14024">5</UseDefaultSlope>
+							</Enum>
+						</LeftOverlaySlopeOptions>
+						<RightOverlaySlopeOptions DataType="Long" DisplayName="12731" Description="12732">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12733">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12734">1</MatchSlope>
+								<LO DisplayName="12735">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12736">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12772">4</LI>
+								<UseDefaultSlope DisplayName="14025">5</UseDefaultSlope>
+							</Enum>
+						</RightOverlaySlopeOptions>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12737" Description="12738">-0.02</LeftDefaultSlope>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12739" Description="12740">-0.02</RightDefaultSlope>
+						<CrownOffset DataType="Double" TypeInfo="16" DisplayName="12741" Description="12742">0</CrownOffset>
+						<LeftLaneWidth DataType="Double" TypeInfo="16" DisplayName="12743" Description="12744">12</LeftLaneWidth>
+						<RightLaneWidth DataType="Double" TypeInfo="16" DisplayName="12745" Description="12746">12</RightLaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<LeftInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14011" Description="14012">0</LeftInsideEdgeOfExistingLane>
+						<LeftOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14013" Description="14014">12</LeftOutsideEdgeOfExistingLane>
+						<RightInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14015" Description="14016">0</RightInsideEdgeOfExistingLane>
+						<RightOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14017" Description="14018">12</RightOutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12747" Description="12748">
+                            0
+                            <Enum>
+								<MinLevelDepth DisplayName="12749">0</MinLevelDepth>
+								<UseProfile DisplayName="12750">1</UseProfile>
+							</Enum>
+						</UseProfileOptions>
+						<LeftMinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12751" Description="12752">0.6</LeftMinLevelDepth>
+						<RightMinLevelDepth DataType="Double" TypeInfo="16" DisplayName="12753" Description="12754">0.6</RightMinLevelDepth>
+						<LeftMinMillDepth DataType="Double" TypeInfo="16" DisplayName="12755" Description="12756">0.3</LeftMinMillDepth>
+						<RightMinMillDepth DataType="Double" TypeInfo="16" DisplayName="12757" Description="12758">0.3</RightMinMillDepth>
+						<LeftSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12759" Description="12760">0.005</LeftSlopeTolerance>
+						<RightSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12761" Description="12762">0.005</RightSlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{BA4A87DF-3CD5-4717-95D7-11334C721153}"/><Properties><ItemName resource="12801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\New Rehab\64\light\overlay_mill_crown.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\New Rehab\64\dark\overlay_mill_crown.png"/></Images><Description resource="12802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_OverlayLevelCrown subassembly</Keywords><AccessRight>1</AccessRight><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_Overlay_Mill_Crown</HelpData></Help><Time createdUniversalDateTime="2017-05-16T11:04:31" modifiedUniversalDateTime="2017-05-16T11:04:31"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.Overlay_Mill_Crown</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="12951" Description="12952">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="12953" Description="12954" ReadOnly="true">
+                            1
+                            <Enum>
+								<Unsupported DisplayName="12955">1</Unsupported>
+							</Enum>
+						</SE_AOR_Behavior>
+						<OverlayDepth DataType="Double" TypeInfo="16" DisplayName="12803" Description="12804">0.6</OverlayDepth>
+						<LeftOverlaySlopeOptions DataType="Long" DisplayName="12805" Description="12806">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12807">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12808">1</MatchSlope>
+								<LO DisplayName="12809">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12810">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12847">4</LI>
+								<UseDefaultSlope DisplayName="14024">5</UseDefaultSlope>
+							</Enum>
+						</LeftOverlaySlopeOptions>
+						<RightOverlaySlopeOptions DataType="Long" DisplayName="12811" Description="12812">
+                            3
+                            <Enum>
+								<UserDefinedWithFlapping DisplayName="12813">0</UserDefinedWithFlapping>
+								<MatchSlope DisplayName="12814">1</MatchSlope>
+								<LO DisplayName="12815">2</LO>
+								<UserDefinedWithoutFlapping DisplayName="12816">3</UserDefinedWithoutFlapping>
+								<LI DisplayName="12848">4</LI>
+								<UseDefaultSlope DisplayName="14025">5</UseDefaultSlope>
+							</Enum>
+						</RightOverlaySlopeOptions>
+						<LeftDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12817" Description="12818">-0.02</LeftDefaultSlope>
+						<RightDefaultSlope DataType="Double" TypeInfo="9" DisplayName="12819" Description="12820">-0.02</RightDefaultSlope>
+						<CrownOffset DataType="Double" TypeInfo="16" DisplayName="12821" Description="12822">0</CrownOffset>
+						<LeftLaneWidth DataType="Double" TypeInfo="16" DisplayName="12823" Description="12824">12</LeftLaneWidth>
+						<RightLaneWidth DataType="Double" TypeInfo="16" DisplayName="12825" Description="12826">12</RightLaneWidth>
+						<DesignLaneWidthSameAsExisting DataType="Long" DisplayName="14001" Description="14002">
+                            0
+                            <Enum>
+								<Yes DisplayName="14003">0</Yes>
+								<No DisplayName="14004">1</No>
+							</Enum>
+						</DesignLaneWidthSameAsExisting>
+						<LeftInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14011" Description="14012">0</LeftInsideEdgeOfExistingLane>
+						<LeftOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14013" Description="14014">12</LeftOutsideEdgeOfExistingLane>
+						<RightInsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14015" Description="14016">0</RightInsideEdgeOfExistingLane>
+						<RightOutsideEdgeOfExistingLane DataType="Double" TypeInfo="16" DisplayName="14017" Description="14018">12</RightOutsideEdgeOfExistingLane>
+						<UseProfileOptions DataType="Long" DisplayName="12827" Description="12828">
+                            0
+                            <Enum>
+								<MinMillDepth DisplayName="12829">0</MinMillDepth>
+								<UseProfile DisplayName="12830">1</UseProfile>
+							</Enum>
+						</UseProfileOptions>
+						<LeftMinMillDepth DataType="Double" TypeInfo="16" DisplayName="12831" Description="12832">0.3</LeftMinMillDepth>
+						<RightMinMillDepth DataType="Double" TypeInfo="16" DisplayName="12833" Description="12834">0.3</RightMinMillDepth>
+						<LeftSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12835" Description="12836">0.005</LeftSlopeTolerance>
+						<RightSlopeTolerance DataType="Double" TypeInfo="9" DisplayName="12837" Description="12838">0.005</RightSlopeTolerance>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{BB842F4B-CA2E-44BC-9CAC-08C082FC6DD4}"/><Properties><ItemName resource="51038" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2017-05-11T10:44:31" modifiedUniversalDateTime="2017-05-11T10:44:31"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>

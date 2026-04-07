@@ -30,3 +30,4 @@ groq
 mistralai
 cohere
 evolutionapi
+flask

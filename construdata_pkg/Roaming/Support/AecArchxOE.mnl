@@ -1,0 +1,94 @@
+;;;
+;;;     AutoCAD Architecture Release 2004 Object Enabler
+;;;     Menu Lisp File - AECARCHXOE.MNL
+;;;
+;;;     Copyright © 2003 by Autodesk, Inc.
+;;;
+;;;     Permission to use, copy, modify, and distribute this software
+;;;     for any purpose and without fee is hereby granted, provided
+;;;     that the above copyright notice appears in all copies and 
+;;;     that both that copyright notice and the limited warranty and 
+;;;     restricted rights notice below appear in all supporting 
+;;;     documentation.
+;;;
+;;;     AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.  
+;;;     AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF 
+;;;     MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC. 
+;;;     DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE 
+;;;     UNINTERRUPTED OR ERROR FREE.
+;;;
+;;;     Use, duplication, or disclosure by the U.S. Government is subject to 
+;;;     restrictions set forth in FAR 52.227-19 (Commercial Computer 
+;;;     Software - Restricted Rights) and DFAR 252.227-7013(c)(1)(ii) 
+;;;     (Rights in Technical Data and Computer Software), as applicable. 
+;;;
+;;;  --------------------------------------------------------------------------
+;;;
+;;;     This file is loaded automatically following the menu AECARCHXOE.
+;;;
+(if (not (member "aeccore.crx" (arx)))
+  (progn
+    (if (findfile "aeccore.crx")
+        (arxload (findfile "aeccore.crx"))
+    )
+  )
+)
+(princ)
+;;;-----BEGIN-SIGNATURE-----
+;;; UAoAADCCCkwGCSqGSIb3DQEHAqCCCj0wggo5AgEBMQ8wDQYJKoZIhvcNAQELBQAw
+;;; CwYJKoZIhvcNAQcBoIIHaDCCB2QwggVMoAMCAQICEA9fuR6l67H55q1id1lETD8w
+;;; DQYJKoZIhvcNAQELBQAwaTELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0
+;;; LCBJbmMuMUEwPwYDVQQDEzhEaWdpQ2VydCBUcnVzdGVkIEc0IENvZGUgU2lnbmlu
+;;; ZyBSU0E0MDk2IFNIQTM4NCAyMDIxIENBMTAeFw0yNDA3MDkwMDAwMDBaFw0yNTA3
+;;; MDgyMzU5NTlaMGwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw
+;;; FAYDVQQHEw1TYW4gRnJhbmNpc2NvMRcwFQYDVQQKEw5BdXRvZGVzaywgSW5jLjEX
+;;; MBUGA1UEAxMOQXV0b2Rlc2ssIEluYy4wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAw
+;;; ggIKAoICAQC6IaKd2EOwWN7iH2odBOOA4gXbXdAHZfdiS5dx7ebl+6uHX4HRSHbl
+;;; u7CIdkJHV6BZrpNm8KRSCTK3a8ZZUdqRe8otfkiEqa78gGqI8DR5rHemjUJEjEd0
+;;; g9nCCStnwFrv0xpAnczaRrm/k9K1LcDx8yUieHfkCttxKH8F06A48mNfV1L7bD9Y
+;;; LC77d5E3UApWFi/xd0S2X26QTP7xiEDyrfeOV1dRc4sHd2Th7OrH+lEw0Zp/NPt/
+;;; UVaMnokeSA+0SEWZISxC1vHlvY/2NZAJNf9/iUsGyLbqACM13WG1zyngo9YL6sbE
+;;; vD6AKSTOGScrK14MaUfcpFlHB9YGm3qZ8Zea+a6KzZ9VOlVp0uQF4IFbJtrPrXFk
+;;; GAVoaLO9zz1tdTXaUmSoR7UwXa7BNrXFi+0j9s2ANcFhpuHlbzr4AOd0mUf9cgVd
+;;; PbX7lTbmYlbVKd6a1wmCBKv+KI5+31VmjibV/9p5bTftwtMyygxx+tBfz9/Sn8Ma
+;;; AQBSFJXX93onvDojfLmCZfITBrCOysoLb1rKHeojtxuSEhfeYEWVBa2304WozMrM
+;;; kOOgICJgA1JiWG9G8DZ5/t+QqVyUwXLLiXmEccpfJao0shnlBSJSRE29jckNTL3I
+;;; u+5Im4b7mEVJdqz9X3/ta/huhAVc1LzuxWiUf8pB0pn5CDojWqgf7QIDAQABo4IC
+;;; AzCCAf8wHwYDVR0jBBgwFoAUaDfg67Y7+F8Rhvv+YXsIiGX0TkIwHQYDVR0OBBYE
+;;; FJgkVcfm7dBsnpfzpZyUFttQZaNtMD4GA1UdIAQ3MDUwMwYGZ4EMAQQBMCkwJwYI
+;;; KwYBBQUHAgEWG2h0dHA6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAOBgNVHQ8BAf8E
+;;; BAMCB4AwEwYDVR0lBAwwCgYIKwYBBQUHAwMwgbUGA1UdHwSBrTCBqjBToFGgT4ZN
+;;; aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0VHJ1c3RlZEc0Q29kZVNp
+;;; Z25pbmdSU0E0MDk2U0hBMzg0MjAyMUNBMS5jcmwwU6BRoE+GTWh0dHA6Ly9jcmw0
+;;; LmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRHNENvZGVTaWduaW5nUlNBNDA5
+;;; NlNIQTM4NDIwMjFDQTEuY3JsMIGUBggrBgEFBQcBAQSBhzCBhDAkBggrBgEFBQcw
+;;; AYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMFwGCCsGAQUFBzAChlBodHRwOi8v
+;;; Y2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRUcnVzdGVkRzRDb2RlU2lnbmlu
+;;; Z1JTQTQwOTZTSEEzODQyMDIxQ0ExLmNydDAJBgNVHRMEAjAAMA0GCSqGSIb3DQEB
+;;; CwUAA4ICAQAVuryMlTvRwmG8JELzCxmi404UsjqX8TrjWs/a4IDd/nnef9RjWo16
+;;; HVhkBqZqiJRSeGTFpsAGgJNr4Ri1byvz0b+864eHhUMczwsNcLw/z0CCrKDeNb4b
+;;; Mcng9qcgfyuue1U0jiOLRrlYH5Jxh3hG4riGoy3d4IFTBDfrUqIh29cRaRr5YytS
+;;; MpxnlC4U7NOOOvVjclKhflL7P4LyTDIhIIPJwN9OifZFeYi3TR0NQE2HJAvk9XJa
+;;; sBwIxJAmSit/UV7OMCmGLKcQ38U5cYLwwg6j6rW4oHLDU0ajP2KKYTG8X5F0+iGB
+;;; bU2DJPjkfg6GBPc6rWN3+/GE0/zFbvE+tAer5knFbHkNkmCgzrW4O92d8J+tix7a
+;;; fIZtLJSCITci+bnSDKsSqTkC9LIf+2AzwX7BQsh+tvRdXGCD8OLk8HUZT1/iLoAf
+;;; nCgMy9cZgz26Tuj8KeAdwaG5PlvbBNoWU5fiV+/BEHthGHE9EFHv1i5/pC/1YQ2s
+;;; h7ZbKfeElc3QLrlvlXzZmKz14E53KKnvuC/tJq4sVZq/AkodOsQ+U8j2nq+vYTOD
+;;; aGEiWqw5NWJa8vzdkkjzPzUfU7/Ma5sRvXq8J1XORS/fI9w9YmOMcEx4Uo7mAGJH
+;;; IMUAss9ib36Dv+cQ8SbkP7OCReWXM2Dub/c4m/L3cebF2TeRlJ/+hjGCAqgwggKk
+;;; AgEBMH0waTELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMUEw
+;;; PwYDVQQDEzhEaWdpQ2VydCBUcnVzdGVkIEc0IENvZGUgU2lnbmluZyBSU0E0MDk2
+;;; IFNIQTM4NCAyMDIxIENBMQIQD1+5HqXrsfnmrWJ3WURMPzANBgkqhkiG9w0BAQsF
+;;; ADANBgkqhkiG9w0BAQEFAASCAgCWMeh5kc0hPDanhgHU4Aal+N3tK39+meQPG8tD
+;;; nsVlGYUbNRWpeFuRXHT0fQu57DzdWnI5reBYLqzUoEYjM9JBdgIspEPPOW0/+4nO
+;;; BRgLizMKx7jmY/3Lgzu5xUnedjUHekKuh5nPqNIu7IxfcqExZu8a8yUtGEEHNGQ0
+;;; XLhp1en5E3U2G3gVmwKu/pn/js3k7flDSr10gcI9ywt4NAQf6e8Opa04J3vl+2lm
+;;; 4tmVN1YhRO6G+OniEabmiXnBjd391S4LYt07h3ujWrcVsrkgAmeGII5165TsfR3c
+;;; WpkfplK8GW725RBAj8wIUwTIQR/XdnOJV0KaHa1Z8lQqqq08H+ZavBjavjGyEDXJ
+;;; KrgQkf9RIIi20+4AUPseR0c9y6D0iIeSwXfnVUGqz1n7TIli2u5vlVgqb0bOUfrm
+;;; 5ILjKGS+N+3HL4j9w5J6DhzGYmZBzetU9wCrM7Def2V2nTGZnbdZqH/TwRLh4bZn
+;;; 8pilIA6AWwwV2jvcqLSUN8g/+jD17U3ha2IsWPys74EG64foNK1R6/fkgKbKTJkj
+;;; wFe1925PTTDlQoxzue+L+yXmc1jluHvY439Otgqvc/BM5rUIRn756e7846scOw62
+;;; Q70Py+9CtL7ZB+c1ap3PCfE7d7tQPDWqF7x9sB/j1ovaucNWNSA6GLzgLCK2JH7S
+;;; fTAwkw==
+;;; -----END-SIGNATURE-----

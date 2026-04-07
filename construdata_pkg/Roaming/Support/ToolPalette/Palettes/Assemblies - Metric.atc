@@ -1,0 +1,141 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{AA40AB04-A0D9-4256-B854-BD8193409640}"/><Properties><ItemName resource="50002" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:10:27" modifiedUniversalDateTime="2008-03-12T13:18:28"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{78382A28-D856-4B60-A2B4-D189F0E53CE9}"/><Properties><ItemName resource="50011" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:48:52" modifiedUniversalDateTime="2008-02-22T00:48:52"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{558FE50F-4C9A-4C03-BAA2-63507D3A11B5}"/><Properties><ItemName resource="50021" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Basic Assembly.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Basic Assembly.png"/></Images><Description resource="50022" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-25T15:56:15" modifiedUniversalDateTime="2008-02-25T15:56:15"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Basic Assembly.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1490F7AD-13A8-4624-BFBF-0EB84EB3441F}"/><Properties><ItemName resource="50031" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Transition.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Transition.png"/></Images><Description resource="50032" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-25T15:56:15" modifiedUniversalDateTime="2008-02-25T15:56:15"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Transition.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F8B5CB56-AE15-43FA-8F83-5EC178EEA8AB}"/><Properties><ItemName resource="50041" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Divided Highway.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Divided Highway.png"/></Images><Description resource="50042" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-25T15:56:15" modifiedUniversalDateTime="2008-02-25T15:56:15"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Divided Highway.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{D3216842-CBB4-4F66-AD83-7428F91746AF}"/><Properties><ItemName resource="50051" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Full Section.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Full Section.png"/></Images><Description resource="50052" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road Full Section.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{7ADDF906-7019-407D-A594-DD2080A24E50}"/><Properties><ItemName resource="50061" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Full Section.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Full Section.png"/></Images><Description resource="50062" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Secondary Road Full Section.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C15FB0B4-1C2F-4C49-BC56-34CC72C4AE08}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:39:01" modifiedUniversalDateTime="2008-02-22T00:39:01"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{3F09C7E0-DCC0-4B22-83B1-8BDE6A402AB7}"/><Properties><ItemName resource="50071" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:48:52" modifiedUniversalDateTime="2008-02-22T00:48:52"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{A1F6FD42-023A-4806-BFD5-12F1924E1423}"/><Properties><ItemName resource="50081" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road - Through Intersection.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road - Through Intersection.png"/></Images><Description resource="50082" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road - Through Intersection.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{B333FB27-F293-42E3-AE25-8179B1F8D80F}"/><Properties><ItemName resource="50091" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Part Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Part Section - Daylight Left.png"/></Images><Description resource="50092" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road Part Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{1302F79A-9482-4D75-9C31-452C580B532A}"/><Properties><ItemName resource="50101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Part Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Part Section - Daylight Right.png"/></Images><Description resource="50102" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road Part Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{76EFF87D-86DF-47D3-A2A8-B16EB3712101}"/><Properties><ItemName resource="50111" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Half Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Half Section - Daylight Left.png"/></Images><Description resource="50112" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road Half Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{D985A412-576C-49E1-90D0-797B84CCCCF3}"/><Properties><ItemName resource="50121" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Primary Road Half Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Primary Road Half Section - Daylight Right.png"/></Images><Description resource="50122" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Primary Road Half Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{0F159EAC-A092-4E91-8FBA-0A7975036611}"/><Properties><ItemName resource="50131" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Half Section - Daylight Left.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Half Section - Daylight Left.png"/></Images><Description resource="50132" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Secondary Road Half Section - Daylight Left.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{BE5763EA-B952-4709-BF64-EFA51D556E48}"/><Properties><ItemName resource="50141" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Secondary Road Half Section - Daylight Right.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Secondary Road Half Section - Daylight Right.png"/></Images><Description resource="50142" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Secondary Road Half Section - Daylight Right.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="18.0.0" option="0"><ItemID idValue="{AD0224FD-16BA-45FB-957C-5C71BCE597E1}"/><Properties><ItemName resource="50151" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Curb Return Fillets.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Curb Return Fillets.png"/></Images><Description resource="50152" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2009-01-15T19:10:10" modifiedUniversalDateTime="2009-01-15T19:10:10"/></Properties><CustomData>
+				<Version>6.0</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Curb Return Fillets.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{43788044-7240-4151-A62B-498E570C1377}"/><Properties><ItemName resource="50161" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Null Assembly.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Null Assembly.png"/></Images><Description resource="50162" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-21T18:59:34" modifiedUniversalDateTime="2008-02-21T18:59:34"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Null Assembly.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{99FF6A92-6065-4FBF-9018-C538CCE6F7CE}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:39:01" modifiedUniversalDateTime="2008-02-22T00:39:01"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0CE7EEB5-C7DD-4990-B3DD-97BD7751C311}"/><Properties><ItemName resource="50171" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-02-22T00:49:08" modifiedUniversalDateTime="2008-02-22T00:49:08"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{DD2E0427-689C-4DED-9F90-268F01DCB961}"/><Properties><ItemName resource="50181" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Assemblies\64\light\Roundabout.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Assemblies\64\dark\Roundabout.png"/></Images><Description resource="50182" src="AeccStockSubassemblyScriptsRC.dll"/><Help><HelpFile>.\Help\c3d.chm</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>sharing_assemblies</HelpData></Help><Time createdUniversalDateTime="2008-02-21T18:59:34" modifiedUniversalDateTime="2008-02-21T18:59:34"/></Properties><CustomData>
+				<Version>5.7</Version>
+			</CustomData>
+			<Source/><ToolType>1</ToolType><StockToolRef idValue="{15C5328D-6D6B-4621-ABAE-F169988F9E50}"/><Data>
+				<AeccDbAssembly>
+					<ExternalDrawing>%AECCCONTENT_DIR%\Assemblies\Metric\Roundabout.dwg</ExternalDrawing>
+				</AeccDbAssembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>

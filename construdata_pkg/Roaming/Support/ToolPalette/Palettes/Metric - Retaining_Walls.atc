@@ -1,0 +1,189 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{6CA6390F-0CBB-4A94-8E05-CC28F35B55A5}"/><Properties><ItemName resource="51028" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:29:32" modifiedUniversalDateTime="2009-01-04T11:55:37"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{B9E54E4D-6944-4FB2-95C3-50CD91F7D648}"/><Properties><ItemName resource="51030" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{638B5252-AA8C-4850-8B0C-95C8BA216BE8}"/><Properties><ItemName resource="8701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccRetainWallTapered.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccRetainWallTapered.png"/></Images><Description resource="8702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_RetainWallTapered subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RetainWallTapered</HelpData></Help><Time createdUniversalDateTime="2006-01-26T22:58:00" modifiedUniversalDateTime="2006-01-26T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.RetainWallTapered</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8703" Description="8704">R2019</Version>
+						<Side DataType="Long" DisplayName="8705" Description="8706">0
+		             <Enum>
+								<Right DisplayName="8707">0</Right>
+								<Left DisplayName="8708">1</Left>
+							</Enum>
+						</Side>
+						<WallTopWidth DataType="Double" TypeInfo="16" DisplayName="8709" Description="8710">0.292</WallTopWidth>
+						<TopHeight DataType="Double" TypeInfo="16" DisplayName="8711" Description="8712">0.4</TopHeight>
+						<FootingCover DataType="Double" TypeInfo="16" DisplayName="8713" Description="8714">0.5</FootingCover>
+						<Key DataType="Long" DisplayName="8715" Description="8716">1
+		             <Enum>
+								<Yes DisplayName="8717">1</Yes>
+								<No DisplayName="8718">0</No>
+							</Enum>
+						</Key>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{18214F3B-EFB4-49AB-AC6D-6C42E83F0320}"/><Properties><ItemName resource="8801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccRetainWallTaperedWide.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccRetainWallTaperedWide.png"/></Images><Description resource="8802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_RetainWallTaperedWide subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RetainWallTaperedWide</HelpData></Help><Time createdUniversalDateTime="2006-01-26T22:58:00" modifiedUniversalDateTime="2006-01-26T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.RetainWallTaperedWide</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8803" Description="8804">R2019</Version>
+						<Side DataType="Long" DisplayName="8805" Description="8806">0
+		             <Enum>
+								<Right DisplayName="8807">0</Right>
+								<Left DisplayName="8808">1</Left>
+							</Enum>
+						</Side>
+						<WallTopWidth DataType="Double" TypeInfo="16" DisplayName="8809" Description="8810">0.45</WallTopWidth>
+						<TopHeight DataType="Double" TypeInfo="16" DisplayName="8811" Description="8812">0.4</TopHeight>
+						<FootingCover DataType="Double" TypeInfo="16" DisplayName="8813" Description="8814">0.5</FootingCover>
+						<Key DataType="Long" DisplayName="8815" Description="8816">1
+		             <Enum>
+								<Yes DisplayName="8817">1</Yes>
+								<No DisplayName="8818">0</No>
+							</Enum>
+						</Key>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4443D0EB-0C9F-42C7-BBB7-3EF89A355733}"/><Properties><ItemName resource="8901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccRetainWallTieToDitch.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccRetainWallTieToDitch.png"/></Images><Description resource="8902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_RetainWallTieToDitch subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RetainWallTieToDitch</HelpData></Help><Time createdUniversalDateTime="2006-01-26T22:58:00" modifiedUniversalDateTime="2006-01-26T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.RetainWallTieToDitch</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8903" Description="8904">R2019</Version>
+						<SE_AOR_Behavior DataType="Long" DisplayName="13022" Description="13024" ReadOnly="true">1
+          <Enum><Unsupported DisplayName="13023">1</Unsupported></Enum>
+						</SE_AOR_Behavior>
+						<Side DataType="Long" DisplayName="8905" Description="8906">0
+		             <Enum>
+								<Right DisplayName="8907">0</Right>
+								<Left DisplayName="8908">1</Left>
+							</Enum>
+						</Side>
+						<ShoulderWidth DataType="Double" TypeInfo="16" DisplayName="8909" Description="8910">1.33</ShoulderWidth>
+						<UseSuperelevationSlope DataType="Long" DisplayName="8911" Description="8912">0
+          <Enum>
+								<No DisplayName="13021">0</No>
+								<LeftInsideShoulder DisplayName="13015">1</LeftInsideShoulder>
+								<LeftOutsideShoulder DisplayName="13016">2</LeftOutsideShoulder>
+								<RightInsideShoulder DisplayName="13019">3</RightInsideShoulder>
+								<RightOutsideShoulder DisplayName="13020">4</RightOutsideShoulder>
+							</Enum>
+						</UseSuperelevationSlope>
+						<SlopeDirection DataType="Long" DisplayName="13001" Description="13002">0
+          <Enum>
+								<AwayFromCrown DisplayName="13003">0</AwayFromCrown>
+								<TowardsCrown DisplayName="13004">1</TowardsCrown>
+							</Enum>
+						</SlopeDirection>
+						<DefaultShoulderSlope DataType="Double" TypeInfo="9" DisplayName="8916" Description="8917">-0.02</DefaultShoulderSlope>
+						<Pave1Depth DataType="Double" TypeInfo="16" DisplayName="8918" Description="8919">0.025</Pave1Depth>
+						<Pave2Depth DataType="Double" TypeInfo="16" DisplayName="8920" Description="8921">0.025</Pave2Depth>
+						<BaseDepth DataType="Double" TypeInfo="16" DisplayName="8922" Description="8923">0.1</BaseDepth>
+						<SubBaseDepth DataType="Double" TypeInfo="16" DisplayName="8924" Description="8925">0.33</SubBaseDepth>
+						<WallTopWidth DataType="Double" TypeInfo="16" DisplayName="8926" Description="8927">0.292</WallTopWidth>
+						<FootingCover DataType="Double" TypeInfo="16" DisplayName="8928" Description="8929">0.5</FootingCover>
+						<Key DataType="Long" DisplayName="8930" Description="8931">1
+		             <Enum>
+								<Yes DisplayName="8932">1</Yes>
+								<No DisplayName="8933">0</No>
+							</Enum>
+						</Key>
+						<UseBarrier DataType="Long" DisplayName="8934" Description="8935">1
+		             <Enum>
+								<Yes DisplayName="8936">1</Yes>
+								<No DisplayName="8937">0</No>
+							</Enum>
+						</UseBarrier>
+						<WalkWidth DataType="Double" TypeInfo="16" DisplayName="8938" Description="8939">1.0</WalkWidth>
+						<WalkSlope DataType="Double" TypeInfo="8" DisplayName="8940" Description="8941">0.25</WalkSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="8942" Description="8943">0.5</FillSlope>
+						<ToeWidth DataType="Double" TypeInfo="16" DisplayName="8944" Description="8945">0.5</ToeWidth>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{32DB90E3-AC5F-450F-B5B5-6813EDA9E8D5}"/><Properties><ItemName resource="9001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccRetainWallToLowSide.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccRetainWallToLowSide.png"/></Images><Description resource="9002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_RetainWallToLowSide subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RetainWallToLowSide</HelpData></Help><Time createdUniversalDateTime="2006-01-26T22:58:00" modifiedUniversalDateTime="2006-01-26T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.RetainWallToLowSide</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9003" Description="9004">R2019</Version>
+						<Side DataType="Long" DisplayName="9005" Description="9006">0
+		             <Enum>
+								<Right DisplayName="9007">0</Right>
+								<Left DisplayName="9008">1</Left>
+							</Enum>
+						</Side>
+						<WallTopWidth DataType="Double" TypeInfo="16" DisplayName="9009" Description="9010">0.292</WallTopWidth>
+						<TopHeight DataType="Double" TypeInfo="16" DisplayName="9011" Description="9012">0.4</TopHeight>
+						<FootingCover DataType="Double" TypeInfo="16" DisplayName="9013" Description="9014">0.5</FootingCover>
+						<Key DataType="Long" DisplayName="9015" Description="9016">1
+		             <Enum>
+								<Yes DisplayName="9017">1</Yes>
+								<No DisplayName="9018">0</No>
+							</Enum>
+						</Key>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{A9F231CF-E752-4199-B449-B63F3AD6939F}"/><Properties><ItemName resource="9101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccRetainWallVertical.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccRetainWallVertical.png"/></Images><Description resource="9102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_RetainWallVertical subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_RetainWallVertical</HelpData></Help><Time createdUniversalDateTime="2006-01-26T22:58:00" modifiedUniversalDateTime="2006-01-26T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.RetainWallVertical</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9103" Description="9104">R2019</Version>
+						<Side DataType="Long" DisplayName="9105" Description="9106">0
+		             <Enum>
+								<Right DisplayName="9107">0</Right>
+								<Left DisplayName="9108">1</Left>
+							</Enum>
+						</Side>
+						<WallTopWidth DataType="Double" TypeInfo="16" DisplayName="9109" Description="9110">0.292</WallTopWidth>
+						<TopHeight DataType="Double" TypeInfo="16" DisplayName="9111" Description="9112">0.4</TopHeight>
+						<FootingCover DataType="Double" TypeInfo="16" DisplayName="9113" Description="9114">0.5</FootingCover>
+						<Key DataType="Long" DisplayName="9115" Description="9116">1
+		             <Enum>
+								<Yes DisplayName="9117">1</Yes>
+								<No DisplayName="9118">0</No>
+							</Enum>
+						</Key>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{17BF818F-FBAE-48EF-BB8E-CC2ED565B4A8}"/><Properties><ItemName resource="9601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Retaining Walls\64\light\AeccSimpleNoiseBarrier.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Retaining Walls\64\dark\AeccSimpleNoiseBarrier.png"/></Images><Description resource="9602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_SimpleNoiseBarrier subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_SimpleNoiseBarrier</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.SimpleNoiseBarrier</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="9603" Description="9604">R2019</Version>
+						<Side DataType="Long" DisplayName="9605" Description="9606">0
+		                    <Enum>
+								<Right DisplayName="9607">0</Right>
+								<Left DisplayName="9608">1</Left>
+							</Enum>
+						</Side>
+						<TopWidth DataType="Double" TypeInfo="16" DisplayName="9609" Description="9610">1.0</TopWidth>
+						<Foreslope DataType="Double" TypeInfo="10" DisplayName="9611" Description="9612">1.5</Foreslope>
+						<Backslope DataType="Double" TypeInfo="10" DisplayName="9613" Description="9614">1.5</Backslope>
+						<Height DataType="Double" TypeInfo="16" DisplayName="9615" Description="9616">3.0</Height>
+						<TopsoilThickness DataType="Double" TypeInfo="16" DisplayName="9617" Description="9618">0.0</TopsoilThickness>
+						<TopsoilShapeCode DataType="String" DisplayName="9619" Description="9620">Topsoil</TopsoilShapeCode>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>m</Units>
+			</Data>
+		</Tool></Tools></Palette>

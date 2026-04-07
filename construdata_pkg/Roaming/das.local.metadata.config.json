@@ -1,0 +1,1 @@
+﻿{"IdleTimeout":"00:00:30","JobTimeout":"00:30:00","MaxParallelism":1,"MaxWorkingSetRate":50,"MaxCpuRate":50,"PreferredPort":4000}

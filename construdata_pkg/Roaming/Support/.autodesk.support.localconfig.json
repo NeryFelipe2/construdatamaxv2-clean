@@ -1,0 +1,67 @@
+{
+	"ProjectConfiguration" : 
+	{
+		"General" : 
+		{
+			"AlternativePageSetUpsTemplate" : 
+			{
+				"items" : 
+				[
+					{
+						"absolutePath" : "C:\\Users\\felip\\AppData\\Local\\Autodesk\\C3D 2026\\enu\\Template\\SheetSets\\Architectural Imperial.dwt"
+					}
+				],
+				"providerName" : "Local"
+			},
+			"AuthorPalettePath" : 
+			[
+				{
+					"items" : 
+					[
+						{
+							"absolutePath" : "C:\\Users\\felip\\AppData\\Roaming\\Autodesk\\C3D 2026\\enu\\Support\\AuthorPalette"
+						}
+					],
+					"providerName" : "Local"
+				}
+			],
+			"QnewTemplate" : 
+			{
+				"items" : 
+				[
+					{
+						"absolutePath" : "C:\\Users\\felip\\AppData\\Local\\Autodesk\\C3D 2026\\enu\\Template\\_Autodesk Civil 3D (Metric) NCS.dwt"
+					}
+				],
+				"providerName" : "Local"
+			},
+			"TemplatePath" : 
+			{
+				"items" : 
+				[
+					{
+						"absolutePath" : "C:\\Users\\felip\\AppData\\Local\\Autodesk\\C3D 2026\\enu\\Template"
+					}
+				],
+				"providerName" : "Local"
+			},
+			"ToolPalettePath" : 
+			[
+				{
+					"items" : 
+					[
+						{
+							"absolutePath" : "C:\\Users\\felip\\AppData\\Roaming\\Autodesk\\C3D 2026\\enu\\support\\ToolPalette"
+						}
+					],
+					"providerName" : "Local"
+				}
+			]
+		},
+		"Meta" : 
+		{
+			"Version" : "0.0.1"
+		},
+		"Variables" : {}
+	}
+}

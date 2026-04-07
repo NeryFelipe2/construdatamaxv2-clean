@@ -1,0 +1,907 @@
+<Palette FileRevision="25.1.0" Revision="25.1.0" option="0"><ItemID idValue="{3244E777-B3AC-4A33-B357-12176990FFE9}"/><Properties><ItemName resource="51016" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2004-09-02T15:28:22" modifiedUniversalDateTime="2009-01-04T11:43:42"/></Properties><Source/><Tools><Tool Revision="25.1.0" option="0"><ItemID idValue="{2A7D7A2F-EB50-468A-957A-DF34048E1463}"/><Properties><ItemName resource="51017" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{7141439F-631A-4EC8-9CA2-E8C718AB2183}"/><Properties><ItemName resource="1201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightBasin.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightBasin.png"/></Images><Description resource="1202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightBasin subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightBasin</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightBasin</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1203" Description="1204">R2019</Version>
+						<Side DataType="Long" DisplayName="1205" Description="1206">0
+		                    <Enum>
+								<Right DisplayName="1207">0</Right>
+								<Left DisplayName="1208">1</Left>
+							</Enum>
+						</Side>
+						<OmitDaylightLink DataType="Long" DisplayName="1209" Description="1210">0
+							<Enum>
+								<True DisplayName="1211">1</True>
+								<False DisplayName="1212">0</False>
+							</Enum>
+						</OmitDaylightLink>
+						<ForeSlope DataType="Double" TypeInfo="10" DisplayName="1213" Description="1214">0.3333333333</ForeSlope>
+						<ForeslopeWidth DataType="Double" TypeInfo="16" DisplayName="1215" Description="1216">4</ForeslopeWidth>
+						<BasinDepth DataType="Double" TypeInfo="16" DisplayName="1217" Description="1218">0</BasinDepth>
+						<BasinSlope DataType="Double" TypeInfo="10" DisplayName="1219" Description="1220">0.25</BasinSlope>
+						<BasinWidth DataType="Double" TypeInfo="16" DisplayName="1221" Description="1222">6</BasinWidth>
+						<BermWidth DataType="Double" TypeInfo="16" DisplayName="1223" Description="1224">6</BermWidth>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1225" Description="1226">0.3333333333</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1227" Description="1228">0.3333333333</FillSlope>
+						<RoundingOption DataType="Long" DisplayName="1229" Description="1230">0
+							<Enum>
+								<None DisplayName="1231">0</None>
+								<Circular DisplayName="1232">1</Circular>
+								<Parabolic DisplayName="1233">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1234" Description="1235">0
+							<Enum>
+								<Length DisplayName="1236">0</Length>
+								<Radius DisplayName="1237">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1238" Description="1239">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1240" Description="1241">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1242" Description="1243">3
+							<Enum>
+								<AllLinks DisplayName="1244">0</AllLinks>
+								<DaylightLinks DisplayName="1245">1</DaylightLinks>
+								<FillLinks DisplayName="1246">2</FillLinks>
+								<None DisplayName="1247">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1248" Description="1249">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1250" Description="1251">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1252" Description="1253">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1254" Description="1255">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1256" Description="1257">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1258" Description="1259">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1260" Description="1261">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1262" Description="1263">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1264" Description="1265">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{6619C315-01E1-4B77-BD96-F5C7760CFFB0}"/><Properties><ItemName resource="10201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightBasin2.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightBasin2.png"/></Images><Description resource="10202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightBasin2 subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightBasin2</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:59:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightBasin2</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10203" Description="10204">R2019</Version>
+						<Side DataType="Long" DisplayName="10205" Description="10206">0
+		                    <Enum>
+								<Right DisplayName="10207">0</Right>
+								<Left DisplayName="10208">1</Left>
+							</Enum>
+						</Side>
+						<OmitDaylightLink DataType="Long" DisplayName="10209" Description="10210">0
+							<Enum>
+								<True DisplayName="10211">1</True>
+								<False DisplayName="10212">0</False>
+							</Enum>
+						</OmitDaylightLink>
+						<OmitBerm DataType="Long" DisplayName="10213" Description="10214">1
+							<Enum>
+								<True DisplayName="10215">1</True>
+								<False DisplayName="10216">0</False>
+							</Enum>
+						</OmitBerm>
+						<ForeSlope DataType="Double" TypeInfo="10" DisplayName="10217" Description="10218">0.3333333333</ForeSlope>
+						<ForeslopeWidth DataType="Double" TypeInfo="16" DisplayName="10219" Description="10220">4</ForeslopeWidth>
+						<BasinDepth DataType="Double" TypeInfo="16" DisplayName="10221" Description="10222">0</BasinDepth>
+						<BasinSlope DataType="Double" TypeInfo="10" DisplayName="10223" Description="10224">0.25</BasinSlope>
+						<BasinWidth DataType="Double" TypeInfo="16" DisplayName="10225" Description="10226">6</BasinWidth>
+						<BermWidth DataType="Double" TypeInfo="16" DisplayName="10227" Description="10228">6</BermWidth>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="10229" Description="10230">0.3333333333</CutSlope>
+						<ClearZoneWidth DataType="Double" TypeInfo="16" DisplayName="10231" Description="10232">20</ClearZoneWidth>
+						<ClearZoneSlope DataType="Double" TypeInfo="10" DisplayName="10233" Description="10234">0.1666666666</ClearZoneSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="10235" Description="10236">0.3333333333</FillSlope>
+						<RoundingOption DataType="Long" DisplayName="10237" Description="10238">0
+							<Enum>
+								<None DisplayName="10239">0</None>
+								<Circular DisplayName="10240">1</Circular>
+								<Parabolic DisplayName="10241">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="10242" Description="10243">0
+							<Enum>
+								<Length DisplayName="10244">0</Length>
+								<Radius DisplayName="10245">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="10246" Description="10247">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="10248" Description="10249">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="10250" Description="10251">3
+							<Enum>
+								<AllLinks DisplayName="10252">0</AllLinks>
+								<DaylightLinks DisplayName="10253">1</DaylightLinks>
+								<FillLinks DisplayName="10254">2</FillLinks>
+								<None DisplayName="10255">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="10256" Description="10257">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="10258" Description="10259">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="10260" Description="10261">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="10262" Description="10263">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="10264" Description="10265">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="10266" Description="10267">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="10268" Description="10269">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="10270" Description="10271">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="10272" Description="10273">Seeded Grass</MaterialName3>
+						<MaterialThickness4 DataType="Double" TypeInfo="16" DisplayName="10274" Description="10275">0.5</MaterialThickness4>
+						<MaterialName4 DataType="String" DisplayName="10276" Description="10277">Gravel</MaterialName4>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{23E1FCE0-0977-4745-AE87-AC121141C792}"/><Properties><ItemName resource="1301" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightBench.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightBench.png"/></Images><Description resource="1302" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightBench subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightBench</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightBench</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1303" Description="1304">R2019</Version>
+						<Side DataType="Long" DisplayName="1305" Description="1306">0
+		                    <Enum>
+								<Right DisplayName="1307">0</Right>
+								<Left DisplayName="1308">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1309" Description="1310">0.5</CutSlope>
+						<MaxCutHeight DataType="Double" TypeInfo="16" DisplayName="1311" Description="1312">10</MaxCutHeight>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1313" Description="1314">0.5</FillSlope>
+						<MaxFillHeight DataType="Double" TypeInfo="16" DisplayName="1315" Description="1316">10</MaxFillHeight>
+						<BenchWidth DataType="Double" TypeInfo="16" DisplayName="1317" Description="1318">5</BenchWidth>
+						<BenchSlope DataType="Double" TypeInfo="9" DisplayName="1319" Description="1320">0.02</BenchSlope>
+						<RoundingOption DataType="Long" DisplayName="1321" Description="1322">0
+							<Enum>
+								<None DisplayName="1323">0</None>
+								<Circular DisplayName="1324">1</Circular>
+								<Parabolic DisplayName="1325">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1326" Description="1327">0
+							<Enum>
+								<Length DisplayName="1328">0</Length>
+								<Radius DisplayName="1329">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1330" Description="1331">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1332" Description="1333">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1334" Description="1335">3
+							<Enum>
+								<AllLinks DisplayName="1336">0</AllLinks>
+								<DaylightLinks DisplayName="1337">1</DaylightLinks>
+								<FillLinks DisplayName="1338">2</FillLinks>
+								<None DisplayName="1339">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1340" Description="1341">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1342" Description="1343">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1344" Description="1345">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1346" Description="1347">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1348" Description="1349">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1350" Description="1351">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1352" Description="1353">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1354" Description="1355">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1356" Description="1357">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{4D53903C-5825-42E7-A692-5EDE90020C03}"/><Properties><ItemName resource="1401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightGeneral.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightGeneral.png"/></Images><Description resource="1402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightGeneral subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightGeneral</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightGeneral</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1403" Description="1404">R2019</Version>
+						<Side DataType="Long" DisplayName="1405" Description="1406">0
+		                    <Enum>
+								<Right DisplayName="1407">0</Right>
+								<Left DisplayName="1408">1</Left>
+							</Enum>
+						</Side>
+						<OmitDaylightLink DataType="Long" DisplayName="1409" Description="1410">0
+							<Enum>
+								<True DisplayName="1411">1</True>
+								<False DisplayName="1412">0</False>
+							</Enum>
+						</OmitDaylightLink>
+						<CutTestPoint DataType="Long" DisplayName="1413" Description="1414">3</CutTestPoint>
+						<Cut1Width DataType="Double" TypeInfo="16" DisplayName="1415" Description="1416">0</Cut1Width>
+						<Cut1Slope DataType="Double" TypeInfo="10" DisplayName="1417" Description="1418">0</Cut1Slope>
+						<Cut2Width DataType="Double" TypeInfo="16" DisplayName="1419" Description="1420">0</Cut2Width>
+						<Cut2Slope DataType="Double" TypeInfo="10" DisplayName="1421" Description="1422">0</Cut2Slope>
+						<Cut3Width DataType="Double" TypeInfo="16" DisplayName="1423" Description="1424">0</Cut3Width>
+						<Cut3Slope DataType="Double" TypeInfo="10" DisplayName="1425" Description="1426">0</Cut3Slope>
+						<Cut4Width DataType="Double" TypeInfo="16" DisplayName="1427" Description="1428">0</Cut4Width>
+						<Cut4Slope DataType="Double" TypeInfo="10" DisplayName="1429" Description="1430">0</Cut4Slope>
+						<Cut5Width DataType="Double" TypeInfo="16" DisplayName="1431" Description="1432">0</Cut5Width>
+						<Cut5Slope DataType="Double" TypeInfo="10" DisplayName="1433" Description="1434">0</Cut5Slope>
+						<Cut6Width DataType="Double" TypeInfo="16" DisplayName="1435" Description="1436">0</Cut6Width>
+						<Cut6Slope DataType="Double" TypeInfo="10" DisplayName="1437" Description="1438">0</Cut6Slope>
+						<Cut7Width DataType="Double" TypeInfo="16" DisplayName="1439" Description="1440">0</Cut7Width>
+						<Cut7Slope DataType="Double" TypeInfo="10" DisplayName="1441" Description="1442">0</Cut7Slope>
+						<Cut8Width DataType="Double" TypeInfo="16" DisplayName="1443" Description="1444">0</Cut8Width>
+						<Cut8Slope DataType="Double" TypeInfo="10" DisplayName="1445" Description="1446">0</Cut8Slope>
+						<FlatCutSlope DataType="Double" TypeInfo="10" DisplayName="1447" Description="1448">0.1666666667</FlatCutSlope>
+						<FlatCutMaxHeight DataType="Double" TypeInfo="16" DisplayName="1449" Description="1450">5</FlatCutMaxHeight>
+						<MediumCutSlope DataType="Double" TypeInfo="10" DisplayName="1451" Description="1452">0.25</MediumCutSlope>
+						<MediumCutMaxHeight DataType="Double" TypeInfo="16" DisplayName="1453" Description="1454">10</MediumCutMaxHeight>
+						<SteepCutSlope DataType="Double" TypeInfo="10" DisplayName="1455" Description="1456">0.5</SteepCutSlope>
+						<Fill1Width DataType="Double" TypeInfo="16" DisplayName="1457" Description="1458">0</Fill1Width>
+						<Fill1Slope DataType="Double" TypeInfo="10" DisplayName="1459" Description="1460">0</Fill1Slope>
+						<Fill2Width DataType="Double" TypeInfo="16" DisplayName="1461" Description="1462">0</Fill2Width>
+						<Fill2Slope DataType="Double" TypeInfo="10" DisplayName="1463" Description="1464">0</Fill2Slope>
+						<Fill3Width DataType="Double" TypeInfo="16" DisplayName="1465" Description="1466">0</Fill3Width>
+						<Fill3Slope DataType="Double" TypeInfo="10" DisplayName="1467" Description="1468">0</Fill3Slope>
+						<FlatFillSlope DataType="Double" TypeInfo="10" DisplayName="1469" Description="1470">0.1666666667</FlatFillSlope>
+						<FlatFillMaxHeight DataType="Double" TypeInfo="16" DisplayName="1471" Description="1472">5</FlatFillMaxHeight>
+						<MediumFillSlope DataType="Double" TypeInfo="10" DisplayName="1473" Description="1474">0.25</MediumFillSlope>
+						<MediumFillMaxHeight DataType="Double" TypeInfo="16" DisplayName="1475" Description="1476">10</MediumFillMaxHeight>
+						<SteepFillSlope DataType="Double" TypeInfo="10" DisplayName="1477" Description="1478">0.5</SteepFillSlope>
+						<GuardrailWidth DataType="Double" TypeInfo="16" DisplayName="1479" Description="1480">2</GuardrailWidth>
+						<GuardrailProcSlope DataType="Double" TypeInfo="9" DisplayName="1481" Description="1482">-0.02</GuardrailProcSlope>
+						<IncludeGuardrail DataType="Long" DisplayName="1483" Description="1484">0
+							<Enum>
+								<True DisplayName="1485">1</True>
+								<False DisplayName="1486">0</False>
+							</Enum>
+						</IncludeGuardrail>
+						<WidthToPost DataType="Double" DisplayName="1487" Description="1488">1</WidthToPost>
+						<RoundingOption DataType="Long" DisplayName="1321" Description="1322">0
+							<Enum>
+								<None DisplayName="1323">0</None>
+								<Circular DisplayName="1324">1</Circular>
+								<Parabolic DisplayName="1325">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1326" Description="1327">0
+							<Enum>
+								<Length DisplayName="1328">0</Length>
+								<Radius DisplayName="1329">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1330" Description="1331">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1332" Description="1333">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1334" Description="1335">3
+							<Enum>
+								<AllLinks DisplayName="1336">0</AllLinks>
+								<DaylightLinks DisplayName="1337">1</DaylightLinks>
+								<FillLinks DisplayName="1338">2</FillLinks>
+								<None DisplayName="1339">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1340" Description="1341">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1342" Description="1343">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1344" Description="1345">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1346" Description="1347">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1348" Description="1349">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1350" Description="1351">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1352" Description="1353">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1354" Description="1355">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1356" Description="1357">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{78755B26-B56F-47AA-9523-90D4F7C36029}"/><Properties><ItemName resource="10801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightInsideROW.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightInsideROW.png"/></Images><Description resource="10802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightInsideROW subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightInsideROW</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:59:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightInsideROW</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10803" Description="10804">R2019</Version>
+						<ROWOffset DataType="Double" TypeInfo="16" DisplayName="10805" Description="10806">10</ROWOffset>
+						<TypicalFillSlope DataType="Double" TypeInfo="10" DisplayName="10807" Description="10808">0.25</TypicalFillSlope>
+						<MaximumFillSlope DataType="Double" TypeInfo="10" DisplayName="10809" Description="10810">0.5</MaximumFillSlope>
+						<TypicalCutSlope DataType="Double" TypeInfo="10" DisplayName="10811" Description="10812">0.25</TypicalCutSlope>
+						<MaximumCutSlope DataType="Double" TypeInfo="10" DisplayName="10813" Description="10814">0.5</MaximumCutSlope>
+						<HoldSlope DataType="Long" DisplayName="10815" Description="10816">0
+							<Enum>
+								<HoldMaximumSlope DisplayName="10817">0</HoldMaximumSlope>
+								<OverrideMaximumSlope DisplayName="10818">1</OverrideMaximumSlope>
+							</Enum>
+						</HoldSlope>
+						<RoundingOption DataType="Long" DisplayName="10819" Description="10820">0
+							<Enum>
+								<None DisplayName="10821">0</None>
+								<Circular DisplayName="10822">1</Circular>
+								<Parabolic DisplayName="10823">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="10824" Description="10825">0
+							<Enum>
+								<Length DisplayName="10826">0</Length>
+								<Radius DisplayName="10827">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="10828" Description="10829">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="10830" Description="10831">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="10832" Description="10833">1
+							<Enum>
+								<AllLinks DisplayName="10834">0</AllLinks>
+								<None DisplayName="10835">1</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="10836" Description="10837">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="10838" Description="10839">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="10840" Description="10841">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="10842" Description="10843">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="10844" Description="10845">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="10846" Description="10847">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="10848" Description="10849">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="10850" Description="10851">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="10852" Description="10853">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8C08CF58-2B32-48C6-9D5E-2A58010092E9}"/><Properties><ItemName resource="1501" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMaxOffset.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMaxOffset.png"/></Images><Description resource="1502" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMaxOffset subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMaxOffset</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMaxOffset</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1503" Description="1504">R2019</Version>
+						<Side DataType="Long" DisplayName="1505" Description="1506">0
+		                    <Enum>
+								<Right DisplayName="1507">0</Right>
+								<Left DisplayName="1508">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1509" Description="1510">0.25</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1511" Description="1512">0.25</FillSlope>
+						<MaxOffset DataType="Double" TypeInfo="16" DisplayName="1513" Description="1514">10</MaxOffset>
+						<RoundingOption DataType="Long" DisplayName="1515" Description="1516">0
+							<Enum>
+								<None DisplayName="1517">0</None>
+								<Circular DisplayName="1518">1</Circular>
+								<Parabolic DisplayName="1519">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1520" Description="1521">0
+							<Enum>
+								<Length DisplayName="1522">0</Length>
+								<Radius DisplayName="1523">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1524" Description="1525">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1526" Description="1527">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1528" Description="1529">3
+							<Enum>
+								<AllLinks DisplayName="1530">0</AllLinks>
+								<DaylightLinks DisplayName="1531">1</DaylightLinks>
+								<FillLinks DisplayName="1532">2</FillLinks>
+								<None DisplayName="1533">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1534" Description="1535">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1536" Description="1537">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1538" Description="1539">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1540" Description="1541">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1542" Description="1543">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1544" Description="1545">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1546" Description="1547">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1548" Description="1549">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1550" Description="1551">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{81212F3B-2883-4863-82EA-1854E49E53ED}"/><Properties><ItemName resource="1601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMaxWidth.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMaxWidth.png"/></Images><Description resource="1602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMaxWidth subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMaxWidth</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMaxWidth</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1603" Description="1604">R2019</Version>
+						<Side DataType="Long" DisplayName="1605" Description="1606">0
+		                    <Enum>
+								<Right DisplayName="1607">0</Right>
+								<Left DisplayName="1608">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1609" Description="1610">0.25</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1611" Description="1612">0.25</FillSlope>
+						<MaxWidth DataType="Double" TypeInfo="16" DisplayName="1613" Description="1614">10</MaxWidth>
+						<RoundingOption DataType="Long" DisplayName="1615" Description="1616">0
+							<Enum>
+								<None DisplayName="1617">0</None>
+								<Circular DisplayName="1618">1</Circular>
+								<Parabolic DisplayName="1619">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1620" Description="1621">0
+							<Enum>
+								<Length DisplayName="1622">0</Length>
+								<Radius DisplayName="1623">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1624" Description="1625">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1626" Description="1627">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1628" Description="1629">3
+							<Enum>
+								<AllLinks DisplayName="1630">0</AllLinks>
+								<DaylightLinks DisplayName="1631">1</DaylightLinks>
+								<FillLinks DisplayName="1632">2</FillLinks>
+								<None DisplayName="1633">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1634" Description="1635">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1636" Description="1637">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1638" Description="1639">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1640" Description="1641">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1642" Description="1643">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1644" Description="1645">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1646" Description="1647">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1648" Description="1649">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1650" Description="1651">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{37127231-E36D-4DC8-A93B-774B4AAA688D}"/><Properties><ItemName resource="1701" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMinOffset.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMinOffset.png"/></Images><Description resource="1702" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMinOffset subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMinOffset</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMinOffset</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1703" Description="1704">R2019</Version>
+						<Side DataType="Long" DisplayName="1705" Description="1706">0
+		                    <Enum>
+								<Right DisplayName="1707">0</Right>
+								<Left DisplayName="1708">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1709" Description="1710">0.25</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1711" Description="1712">0.25</FillSlope>
+						<MinOffset DataType="Double" TypeInfo="16" DisplayName="1713" Description="1714">10</MinOffset>
+						<RoundingOption DataType="Long" DisplayName="1715" Description="1716">0
+							<Enum>
+								<None DisplayName="1717">0</None>
+								<Circular DisplayName="1718">1</Circular>
+								<Parabolic DisplayName="1719">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1720" Description="1721">0
+							<Enum>
+								<Length DisplayName="1722">0</Length>
+								<Radius DisplayName="1723">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1724" Description="1725">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1726" Description="1727">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1728" Description="1729">3
+							<Enum>
+								<AllLinks DisplayName="1730">0</AllLinks>
+								<DaylightLinks DisplayName="1731">1</DaylightLinks>
+								<FillLinks DisplayName="1732">2</FillLinks>
+								<None DisplayName="1733">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1734" Description="1735">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1736" Description="1737">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1738" Description="1739">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1740" Description="1741">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1742" Description="1743">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1744" Description="1745">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1746" Description="1747">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1748" Description="1749">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1750" Description="1751">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{8B0680F8-2499-40F9-96BB-30F81DE1D19B}"/><Properties><ItemName resource="1801" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMinWidth.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMinWidth.png"/></Images><Description resource="1802" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMinWidth subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMinWidth</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMinWidth</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1803" Description="1804">R2019</Version>
+						<Side DataType="Long" DisplayName="1805" Description="1806">0
+		                    <Enum>
+								<Right DisplayName="1807">0</Right>
+								<Left DisplayName="1808">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1809" Description="1810">0.25</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1811" Description="1812">0.25</FillSlope>
+						<MinWidth DataType="Double" TypeInfo="16" DisplayName="1813" Description="1814">10</MinWidth>
+						<RoundingOption DataType="Long" DisplayName="1815" Description="1816">0
+							<Enum>
+								<None DisplayName="1817">0</None>
+								<Circular DisplayName="1818">1</Circular>
+								<Parabolic DisplayName="1819">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1820" Description="1821">0
+							<Enum>
+								<Length DisplayName="1822">0</Length>
+								<Radius DisplayName="1823">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1824" Description="1825">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1826" Description="1827">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1828" Description="1829">3
+							<Enum>
+								<AllLinks DisplayName="1830">0</AllLinks>
+								<DaylightLinks DisplayName="1831">1</DaylightLinks>
+								<FillLinks DisplayName="1832">2</FillLinks>
+								<None DisplayName="1833">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1834" Description="1835">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1836" Description="1837">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1838" Description="1839">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1840" Description="1841">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1842" Description="1843">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1844" Description="1845">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1846" Description="1847">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1848" Description="1849">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1850" Description="1851">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{430EAAED-167C-4AB1-943D-0B264C280C43}"/><Properties><ItemName resource="1901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMultiIntercept.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMultiIntercept.png"/></Images><Description resource="1902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMultiIntercept subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMultiIntercept</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMultiIntercept</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="1903" Description="1904">R2019</Version>
+						<Side DataType="Long" DisplayName="1905" Description="1906">0
+		                    <Enum>
+								<Right DisplayName="1907">0</Right>
+								<Left DisplayName="1908">1</Left>
+							</Enum>
+						</Side>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="1909" Description="1910">0.25</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="1911" Description="1912">0.25</FillSlope>
+						<InterceptNumber DataType="Long" TypeInfo="3" DisplayName="1913" Description="1914">10</InterceptNumber>
+						<RoundingOption DataType="Long" DisplayName="1915" Description="1916">0
+							<Enum>
+								<None DisplayName="1917">0</None>
+								<Circular DisplayName="1918">1</Circular>
+								<Parabolic DisplayName="1919">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="1920" Description="1921">0
+							<Enum>
+								<Length DisplayName="1922">0</Length>
+								<Radius DisplayName="1923">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="1924" Description="1925">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="1926" Description="1927">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="1928" Description="1929">3
+							<Enum>
+								<AllLinks DisplayName="1930">0</AllLinks>
+								<DaylightLinks DisplayName="1931">1</DaylightLinks>
+								<FillLinks DisplayName="1932">2</FillLinks>
+								<None DisplayName="1933">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="1934" Description="1935">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="1936" Description="1937">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="1938" Description="1939">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="1940" Description="1941">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="1942" Description="1943">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="1944" Description="1945">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="1946" Description="1947">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="1948" Description="1949">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="1950" Description="1951">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{C8970CCA-B4A3-48EC-953B-77F25266C1F3}"/><Properties><ItemName resource="10601" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightMultipleSurface.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightMultipleSurface.png"/></Images><Description resource="10602" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightMultipleSurface subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightMultipleSurface</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:59:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightMultipleSurface</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="10603" Description="10604">R2019</Version>
+						<Side DataType="Long" DisplayName="10605" Description="10606">0
+		                    <Enum>
+								<Right DisplayName="10607">0</Right>
+								<Left DisplayName="10608">1</Left>
+							</Enum>
+						</Side>
+						<Surface1CutSlope DataType="Double" TypeInfo="10" DisplayName="10609" Description="10610">0.25</Surface1CutSlope>
+						<Surface1And2BenchWidth DataType="Double" TypeInfo="16" DisplayName="10611" Description="10612">0</Surface1And2BenchWidth>
+						<Surface1And2BenchSlope DataType="Double" TypeInfo="10" DisplayName="10613" Description="10614">0.25</Surface1And2BenchSlope>
+						<Surface2CutSlope DataType="Double" TypeInfo="10" DisplayName="10615" Description="10616">0.5</Surface2CutSlope>
+						<Surface2And3BenchWidth DataType="Double" TypeInfo="16" DisplayName="10617" Description="10618">0</Surface2And3BenchWidth>
+						<Surface2And3BenchSlope DataType="Double" TypeInfo="10" DisplayName="10619" Description="10620">0.25</Surface2And3BenchSlope>
+						<Surface3CutSlope DataType="Double" TypeInfo="10" DisplayName="10621" Description="10622">1</Surface3CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="10623" Description="10624">0.25</FillSlope>
+						<PlaceMaterial DataType="Long" DisplayName="10625" Description="10626">3
+							<Enum>
+								<AllLinks DisplayName="10627">0</AllLinks>
+								<DaylightLinks DisplayName="10628">1</DaylightLinks>
+								<FillLinks DisplayName="10629">2</FillLinks>
+								<None DisplayName="10630">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="10631" Description="10632">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="10633" Description="10634">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="10635" Description="10636">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="10637" Description="10638">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="10639" Description="10640">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="10641" Description="10642">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="10643" Description="10644">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="10645" Description="10646">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="10647" Description="10648">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{60E220B2-1042-47E6-A28E-9151FFF7B93A}"/><Properties><ItemName resource="10401" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightRockCut.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightRockCut.png"/></Images><Description resource="10402" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightRockCut subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightRockCut</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:59:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightRockCut</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Content DownloadLocation="http://www.autodesk.com/subscriptionlogin"/>
+					<Params>
+						<Version DataType="String" DisplayName="10403" Description="10404">R2019</Version>
+						<Side DataType="Long" DisplayName="10405" Description="10406">0
+		                    <Enum>
+								<Right DisplayName="10407">0</Right>
+								<Left DisplayName="10408">1</Left>
+							</Enum>
+						</Side>
+						<OmitDaylightLink DataType="Long" DisplayName="10409" Description="10410">0
+							<Enum>
+								<True DisplayName="10411">1</True>
+								<False DisplayName="10412">0</False>
+							</Enum>
+						</OmitDaylightLink>
+						<CutSlope DataType="Double" TypeInfo="10" DisplayName="10413" Description="10414">0.5</CutSlope>
+						<FillSlope DataType="Double" TypeInfo="10" DisplayName="10415" Description="10416">0.25</FillSlope>
+						<ForeSlopeSlope DataType="Double" TypeInfo="10" DisplayName="10417" Description="10418">0.25</ForeSlopeSlope>
+						<DitchDepth DataType="Double" TypeInfo="16" DisplayName="10419" Description="10420">4</DitchDepth>
+						<BottomWidth DataType="Double" TypeInfo="16" DisplayName="10421" Description="10422">2.0</BottomWidth>
+						<BackSlopeSlope DataType="Double" TypeInfo="10" DisplayName="10423" Description="10424">0.25</BackSlopeSlope>
+						<BackSlopeWidth DataType="Double" TypeInfo="16" DisplayName="10425" Description="10426">4.0</BackSlopeWidth>
+						<RockCut1DepthLimit DataType="Double" TypeInfo="16" DisplayName="10427" Description="10428">9.0</RockCut1DepthLimit>
+						<RockCut1Slope DataType="Double" TypeInfo="10" DisplayName="10429" Description="10430">0.25</RockCut1Slope>
+						<RockCut2Slope DataType="Double" TypeInfo="10" DisplayName="10431" Description="10432">1</RockCut2Slope>
+						<EGStrippingWidth DataType="Double" TypeInfo="16" DisplayName="10433" Description="10434">5.0</EGStrippingWidth>
+						<DaylightLinkSlope DataType="Double" TypeInfo="10" DisplayName="10435" Description="10436">0.5</DaylightLinkSlope>
+						<PlaceMaterial DataType="Long" DisplayName="10437" Description="10438">3
+							<Enum>
+								<AllLinks DisplayName="10439">0</AllLinks>
+								<DaylightLinks DisplayName="10440">1</DaylightLinks>
+								<FillLinks DisplayName="10441">2</FillLinks>
+								<None DisplayName="10442">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="10443" Description="10444">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="10445" Description="10446">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="10447" Description="10448">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="10449" Description="10450">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="10451" Description="10452">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="10453" Description="10454">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="10455" Description="10456">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="10457" Description="10458">0.3333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="10459" Description="10460">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{1F6BDE40-0244-4122-ACFA-2CFE4229A795}"/><Properties><ItemName resource="2001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightStandard.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightStandard.png"/></Images><Description resource="2002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightStandard subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightStandard</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightStandard</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2003" Description="2004">R2019</Version>
+						<Side DataType="Long" DisplayName="2005" Description="2006">0
+		                    <Enum>
+								<Right DisplayName="2007">0</Right>
+								<Left DisplayName="2008">1</Left>
+							</Enum>
+						</Side>
+						<OmitDaylightLink DataType="Long" DisplayName="2009" Description="2010">0
+							<Enum>
+								<True DisplayName="2011">1</True>
+								<False DisplayName="2012">0</False>
+							</Enum>
+						</OmitDaylightLink>
+						<FlatCutSlope DataType="Double" TypeInfo="10" DisplayName="2013" Description="2014">0.1666666667</FlatCutSlope>
+						<FlatCutMaxHeight DataType="Double" TypeInfo="16" DisplayName="2015" Description="2016">5</FlatCutMaxHeight>
+						<MediumCutSlope DataType="Double" TypeInfo="10" DisplayName="2017" Description="2018">0.25</MediumCutSlope>
+						<MediumCutMaxHeight DataType="Double" TypeInfo="16" DisplayName="2019" Description="2020">10</MediumCutMaxHeight>
+						<SteepCutSlope DataType="Double" TypeInfo="10" DisplayName="2021" Description="2022">0.5</SteepCutSlope>
+						<ForeslopeWidth DataType="Double" TypeInfo="16" DisplayName="2023" Description="2024">12</ForeslopeWidth>
+						<ForeslopeSlope DataType="Double" TypeInfo="10" DisplayName="2025" Description="2026">0.25</ForeslopeSlope>
+						<DitchWidth DataType="Double" TypeInfo="16" DisplayName="2027" Description="2028">3</DitchWidth>
+						<FlatFillSlope DataType="Double" TypeInfo="10" DisplayName="2029" Description="2030">0.1666666667</FlatFillSlope>
+						<FlatFillMaxHeight DataType="Double" TypeInfo="16" DisplayName="2031" Description="2032">5</FlatFillMaxHeight>
+						<MediumFillSlope DataType="Double" TypeInfo="10" DisplayName="2033" Description="2034">0.25</MediumFillSlope>
+						<MediumFillMaxHeight DataType="Double" TypeInfo="16" DisplayName="2035" Description="2036">10</MediumFillMaxHeight>
+						<SteepFillSlope DataType="Double" TypeInfo="10" DisplayName="2037" Description="2038">0.5</SteepFillSlope>
+						<GuardrailWidth DataType="Double" TypeInfo="16" DisplayName="2039" Description="2040">2</GuardrailWidth>
+						<GuardrailProcSlope DataType="Double" TypeInfo="9" DisplayName="2041" Description="2042">-0.02</GuardrailProcSlope>
+						<IncludeGuardrail DataType="Long" DisplayName="2043" Description="2044">0
+							<Enum>
+								<True DisplayName="2045">1</True>
+								<False DisplayName="2046">0</False>
+							</Enum>
+						</IncludeGuardrail>
+						<WidthToPost DataType="Double" DisplayName="2047" Description="2048">1</WidthToPost>
+						<RoundingOption DataType="Long" DisplayName="2049" Description="2050">0
+							<Enum>
+								<None DisplayName="2051">0</None>
+								<Circular DisplayName="2052">1</Circular>
+								<Parabolic DisplayName="2053">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="2054" Description="2055">0
+							<Enum>
+								<Length DisplayName="2056">0</Length>
+								<Radius DisplayName="2057">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="2058" Description="2059">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="2060" Description="2061">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="2062" Description="2063">3
+							<Enum>
+								<AllLinks DisplayName="2064">0</AllLinks>
+								<DaylightLinks DisplayName="2065">1</DaylightLinks>
+								<FillLinks DisplayName="2066">2</FillLinks>
+								<None DisplayName="2067">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="2068" Description="2069">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="2070" Description="2071">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="2072" Description="2073">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="2074" Description="2075">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="2076" Description="2077">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="2078" Description="2079">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="2080" Description="2081">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="2082" Description="2083">0.333333333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="2084" Description="2085">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{823248D1-3B88-4331-B101-5D5035D2C907}"/><Properties><ItemName resource="2101" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightToOffset.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightToOffset.png"/></Images><Description resource="2102" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightToOffset subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightToOffset</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightToOffset</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2103" Description="2104">R2019</Version>
+						<DaylightOffset DataType="Double" TypeInfo="16" DisplayName="2105" Description="2106">10</DaylightOffset>
+						<RoundingOption DataType="Long" DisplayName="2107" Description="2108">0
+							<Enum>
+								<None DisplayName="2109">0</None>
+								<Circular DisplayName="2110">1</Circular>
+								<Parabolic DisplayName="2111">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="2112" Description="2113">0
+							<Enum>
+								<Length DisplayName="2114">0</Length>
+								<Radius DisplayName="2115">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="2116" Description="2117">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="2118" Description="2119">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="2120" Description="2121">3
+							<Enum>
+								<AllLinks DisplayName="2122">0</AllLinks>
+								<DaylightLinks DisplayName="2123">1</DaylightLinks>
+								<FillLinks DisplayName="2124">2</FillLinks>
+								<None DisplayName="2125">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="2126" Description="2127">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="2128" Description="2129">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="2130" Description="2131">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="2132" Description="2133">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="2134" Description="2135">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="2136" Description="2137">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="2138" Description="2139">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="2140" Description="2141">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="2142" Description="2143">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{925580F7-7752-4370-AA5E-5AAC81D4824D}"/><Properties><ItemName resource="2201" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccDaylightToROW.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccDaylightToROW.png"/></Images><Description resource="2202" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_DaylightToROW subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_DaylightToROW</HelpData></Help><Time createdUniversalDateTime="2002-04-05T21:58:00" modifiedUniversalDateTime="2002-04-05T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.DaylightToROW</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="2203" Description="2204">R2019</Version>
+						<ROWOffset DataType="Double" TypeInfo="16" DisplayName="2205" Description="2206">10</ROWOffset>
+						<OffsetAdjustment DataType="Double" TypeInfo="16" DisplayName="2207" Description="2208">0</OffsetAdjustment>
+						<RoundingOption DataType="Long" DisplayName="2209" Description="2210">0
+							<Enum>
+								<None DisplayName="2211">0</None>
+								<Circular DisplayName="2212">1</Circular>
+								<Parabolic DisplayName="2213">2</Parabolic>
+							</Enum>
+						</RoundingOption>
+						<RoundingBy DataType="Long" DisplayName="2214" Description="2215">0
+							<Enum>
+								<Length DisplayName="2216">0</Length>
+								<Radius DisplayName="2217">1</Radius>
+							</Enum>
+						</RoundingBy>
+						<RoundingParameter DataType="Double" TypeInfo="16" DisplayName="2218" Description="2219">1.5</RoundingParameter>
+						<RoundingTesselation DataType="Long" DisplayName="2220" Description="2221">6</RoundingTesselation>
+						<PlaceMaterial DataType="Long" DisplayName="2222" Description="2223">3
+							<Enum>
+								<AllLinks DisplayName="2224">0</AllLinks>
+								<DaylightLinks DisplayName="2225">1</DaylightLinks>
+								<FillLinks DisplayName="2226">2</FillLinks>
+								<None DisplayName="2227">3</None>
+							</Enum>
+						</PlaceMaterial>
+						<SlopeLimit1 DataType="Double" TypeInfo="10" DisplayName="2228" Description="2229">1.0</SlopeLimit1>
+						<MaterialThickness1 DataType="Double" TypeInfo="16" DisplayName="2230" Description="2231">1.0</MaterialThickness1>
+						<MaterialName1 DataType="String" DisplayName="2232" Description="2233">Rip Rap</MaterialName1>
+						<SlopeLimit2 DataType="Double" TypeInfo="10" DisplayName="2234" Description="2235">0.5</SlopeLimit2>
+						<MaterialThickness2 DataType="Double" TypeInfo="16" DisplayName="2236" Description="2237">0.5</MaterialThickness2>
+						<MaterialName2 DataType="String" DisplayName="2238" Description="2239">Rip Rap</MaterialName2>
+						<SlopeLimit3 DataType="Double" TypeInfo="10" DisplayName="2240" Description="2241">0.25</SlopeLimit3>
+						<MaterialThickness3 DataType="Double" TypeInfo="16" DisplayName="2242" Description="2243">0.3333</MaterialThickness3>
+						<MaterialName3 DataType="String" DisplayName="2244" Description="2245">Seeded Grass</MaterialName3>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{82EDFB59-BB97-420D-A940-82D1A471D6E2}"/><Properties><ItemName resource="7901" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccStrippingPavement.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccStrippingPavement.png"/></Images><Description resource="7902" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_StrippingPavement subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_StrippingPavement</HelpData></Help><Time createdUniversalDateTime="2006-01-15T21:58:00" modifiedUniversalDateTime="2006-01-15T21:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.StrippingPavement</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="7903" Description="7904">R2019</Version>
+						<StrippingDepth DataType="Double" TypeInfo="16" DisplayName="7905" Description="7906">0.167</StrippingDepth>
+						<ExtendtoExistingGround DataType="Long" DisplayName="7907" Description="7908">1
+		          <Enum>
+								<Yes DisplayName="7909">1</Yes>
+								<No DisplayName="7910">0</No>
+							</Enum>
+						</ExtendtoExistingGround>
+						<Foreslope DataType="Double" TypeInfo="10" DisplayName="7911" Description="7912">-0.5</Foreslope>
+						<Backslope DataType="Double" TypeInfo="10" DisplayName="7913" Description="7914">0.5</Backslope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{0FD3286D-11E0-4467-A5A8-8C6F0FEE6D50}"/><Properties><ItemName resource="8001" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"><Image cx="64" cy="64" IsDark="false" src=".\Images\Daylight\64\light\AeccStrippingTopSoil.png"/><Image cx="64" cy="64" IsDark="true" src=".\Images\Daylight\64\dark\AeccStrippingTopSoil.png"/></Images><Description resource="8002" src="AeccStockSubassemblyScriptsRC.dll"/><Keywords>_StrippingTopSoil subassembly</Keywords><Help><HelpFile>WBH</HelpFile><HelpCommand>HELP_HHWND_TOPIC</HelpCommand><HelpData>SA_StrippingTopSoil</HelpData></Help><Time createdUniversalDateTime="2006-01-15T22:58:00" modifiedUniversalDateTime="2006-01-15T22:58:00"/></Properties><Source/><ToolType>1</ToolType><StockToolRef idValue="{7F55AAC0-0256-48D7-BFA5-914702663FDE}"/><Data>
+				<AeccDbSubassembly>
+					<GeometryGenerateMode>UseDotNet</GeometryGenerateMode>
+					<DotNetClass Assembly="%AECCCONTENT_DIR%\C3DStockSubassemblies.dll">Subassembly.StrippingTopSoil</DotNetClass>
+					<Resource Module="AeccStockSubassemblyScriptsRC.dll"/>
+					<Params>
+						<Version DataType="String" DisplayName="8003" Description="8004">R2019</Version>
+						<Side DataType="Long" DisplayName="8005" Description="8006">0
+		          <Enum>
+								<Right DisplayName="8007">0</Right>
+								<Left DisplayName="8008">1</Left>
+							</Enum>
+						</Side>
+						<StrippingDepth DataType="Double" TypeInfo="16" DisplayName="8009" Description="8010">0.167</StrippingDepth>
+						<StrippingWidth DataType="Double" TypeInfo="16" DisplayName="8011" Description="8012">16.67</StrippingWidth>
+						<Foreslope DataType="Double" TypeInfo="10" DisplayName="8013" Description="8014">-0.5</Foreslope>
+						<Backslope DataType="Double" TypeInfo="10" DisplayName="8015" Description="8016">0.5</Backslope>
+					</Params>
+				</AeccDbSubassembly>
+				<Units>foot</Units>
+			</Data>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{2A7D7A2F-EB50-468A-957A-DF34048E1463}"/><Properties><ItemName resource="51017" src="AeccStockSubassemblyScriptsRC.dll"/><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>3</ToolType><StockToolRef/><Data/>
+		</Tool><Tool Revision="25.1.0" option="0"><ItemID idValue="{F14CFCDA-4412-4DD5-B166-11561ADC6AF7}"/><Properties><Images option="0"/><Time createdUniversalDateTime="2008-12-23T04:06:46" modifiedUniversalDateTime="2008-12-23T04:06:46"/></Properties><Source/><ToolType>4</ToolType><StockToolRef/><Data/>
+		</Tool></Tools></Palette>
