@@ -338,32 +338,44 @@ def importar_status_ns_json(path_ou_dict: str | Path | dict[str, Any], nucleo: s
 def _resolver_json_da_ns(item: dict[str, Any]) -> Path | None:
     caminho_completo = item.get("caminho_completo")
     if caminho_completo:
-        pasta = Path(caminho_completo)
-        if pasta.exists():
-            for nome in item.get("arquivos", []):
-                if str(nome).lower().endswith(".json"):
-                    json_path = pasta / nome
-                    if json_path.exists():
-                        return json_path
-            encontrados = sorted(pasta.glob("*.json"))
-            if encontrados:
-                return encontrados[0]
+        try:
+            pasta = Path(caminho_completo)
+            if pasta.exists():
+                for nome in item.get("arquivos", []):
+                    if str(nome).lower().endswith(".json"):
+                        json_path = pasta / nome
+                        if json_path.exists():
+                            return json_path
+                encontrados = sorted(pasta.glob("*.json"))
+                if encontrados:
+                    return encontrados[0]
+        except (OSError, ValueError):
+            pass
     return None
 
 
 def importar_consolidado_notas_servico(path: str | Path = CONSOLIDADO_NS_PATH) -> int:
     """Migra o consolidado de NS usando os ``DADOS.json`` reais."""
-    consolidado_path = Path(path)
-    if not consolidado_path.exists():
+    try:
+        consolidado_path = Path(path)
+        if not consolidado_path.exists():
+            return 0
+    except (OSError, ValueError):
         return 0
 
-    data = json.loads(consolidado_path.read_text(encoding="utf-8"))
+    try:
+        data = json.loads(consolidado_path.read_text(encoding="utf-8"))
+    except Exception:
+        return 0
     total = 0
     for item in data.get("notas_servico", []):
-        json_path = _resolver_json_da_ns(item)
-        nucleo_fallback = item.get("bairro") or "REDE"
-        if json_path:
-            total += importar_ns_json_arquivo(json_path, nucleo_fallback=nucleo_fallback)
+        try:
+            json_path = _resolver_json_da_ns(item)
+            nucleo_fallback = item.get("bairro") or "REDE"
+            if json_path:
+                total += importar_ns_json_arquivo(json_path, nucleo_fallback=nucleo_fallback)
+        except (OSError, ValueError):
+            continue
     return total
 
 
