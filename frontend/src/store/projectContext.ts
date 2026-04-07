@@ -43,6 +43,12 @@ const DEMO_PROJETOS: DbProjeto[] = [
     orcamento_total: 28000000, status: 'ativo', responsavel_nome: 'Bruno Silva',
     responsavel_telefone: '5511988888888', created_at: '2024-06-01T00:00:00Z',
   },
+  {
+    id: 'pardinho-1', nome: 'Pardinho — Consórcio Itapetininga', contrato: 'CT-PARDINHO-2026', cidade: 'Pardinho',
+    cliente: 'Consórcio Itapetininga', tipo: 'esgoto', data_inicio: '2026-04-01', data_fim: '2027-12-31',
+    orcamento_total: 32000000, status: 'ativo', responsavel_nome: 'Luiz Fernando',
+    responsavel_telefone: '5537999425397', created_at: '2026-04-07T00:00:00Z',
+  },
 ]
 
 const DEMO_FRENTES: DbFrente[] = [
@@ -51,6 +57,10 @@ const DEMO_FRENTES: DbFrente[] = [
   { id: 'f-3', projeto_id: 'demo-1', nome: 'Sao Manoel', setor: 'Centro', tipo_rede: 'esgoto', extensao_total: 5400, pvs_total: 38, status: 'pausada' },
   { id: 'f-4', projeto_id: 'demo-2', nome: 'Frente Norte A', setor: 'Norte', tipo_rede: 'agua', extensao_total: 6000, pvs_total: 42, status: 'ativa' },
   { id: 'f-5', projeto_id: 'demo-2', nome: 'Frente Norte B', setor: 'Norte', tipo_rede: 'esgoto', extensao_total: 7200, pvs_total: 51, status: 'ativa' },
+  // ─── Pardinho — Consórcio Itapetininga ───
+  { id: 'f-pard-1', projeto_id: 'pardinho-1', nome: 'Frente Rede Principal', setor: 'Centro Pardinho', tipo_rede: 'esgoto', extensao_total: 9500, pvs_total: 68, status: 'ativa' },
+  { id: 'f-pard-2', projeto_id: 'pardinho-1', nome: 'Frente Ligações Prediais', setor: 'Bairros', tipo_rede: 'esgoto', extensao_total: 4200, pvs_total: 0, status: 'ativa' },
+  { id: 'f-pard-3', projeto_id: 'pardinho-1', nome: 'Frente ETE / Emissário', setor: 'Área Rural', tipo_rede: 'esgoto', extensao_total: 3100, pvs_total: 22, status: 'planejada' },
 ]
 
 export const useProjectContext = create<ProjectContextState>((set, get) => ({

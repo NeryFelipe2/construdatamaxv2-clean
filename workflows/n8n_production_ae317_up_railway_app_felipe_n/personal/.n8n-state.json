@@ -1,0 +1,29 @@
+{
+  "workflows": {
+    "8qGfvzqfYAwGXCzF": {
+      "lastSyncedHash": "391d2ef9aeb5a9fe9f4c2147f4be82e54c752af291c762ce29ea2ea24bc4bf06",
+      "lastSyncedAt": "2026-04-07T19:17:42.504Z",
+      "filename": "assistente-diario-obra.workflow.ts"
+    },
+    "cC3ofuHlwdtj8Idb": {
+      "lastSyncedHash": "bd778d036bb1d27b04be70b437ca932270062cec8d5419ed6641cd6dd94573a4",
+      "lastSyncedAt": "2026-04-07T19:18:15.987Z",
+      "filename": "webhook-rdo-whatsapp.workflow.ts"
+    },
+    "7ZFxLruxONFgd9Y7": {
+      "lastSyncedHash": "cd1cd4d1a62f831a5394c05bb28d196e03f7564ff582a93d46674cdd196b29ed",
+      "lastSyncedAt": "2026-04-07T21:07:43.046Z",
+      "filename": "alerta-medicao-prazos.workflow.ts"
+    },
+    "3MlISSU8VYGAiiMR": {
+      "lastSyncedHash": "0ee39682a2ec3e927bce1f60611d2610042bdd3e8dc40d292a58a52b509eeefd",
+      "lastSyncedAt": "2026-04-07T21:33:51.320Z",
+      "filename": "gestao-pardinho-rdo-dashboard.workflow.ts"
+    },
+    "3OLzegqMNGmSfWYr": {
+      "lastSyncedHash": "62cd1c851cfebe06a26f0fb2f0f8b1fb01a8795e614102946d8eafbf86c12a51",
+      "lastSyncedAt": "2026-04-07T21:35:10.638Z",
+      "filename": "pardinho-lean-lps-planejamento.workflow.ts"
+    }
+  }
+}

@@ -35,12 +35,14 @@ export const NUCLEOS: BotOption[] = [
   { value: 'slnr-sv', label: 'SLNR São Vicente', emoji: '2️⃣' },
   { value: 'slnr-pg', label: 'SLNR Praia Grande', emoji: '3️⃣' },
   { value: 'slnr-guaruja', label: 'SLNR Guarujá', emoji: '4️⃣' },
+  { value: 'pardinho-itapetininga', label: 'Pardinho - Consórcio Itapetininga', emoji: '5️⃣' },
 ]
 
 export const PROJETOS: BotOption[] = [
   { value: 'ct-11481051', label: 'CT 11481051 - Rede Esgoto', emoji: '1️⃣' },
   { value: 'ct-11481052', label: 'CT 11481052 - Rede Água', emoji: '2️⃣' },
   { value: 'ct-11481053', label: 'CT 11481053 - Ligações', emoji: '3️⃣' },
+  { value: 'ct-pardinho-2026', label: 'CT Pardinho - Consórcio Itapetininga', emoji: '4️⃣' },
 ]
 
 export const CLIMA_OPTIONS: BotOption[] = [
