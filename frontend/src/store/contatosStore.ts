@@ -18,6 +18,8 @@ const DEMO_CONTATOS: DbContato[] = [
   { id: 'c-pard-3', nome: 'Fábio', cargo: 'Gerente', telefone_whatsapp: '5537999000001', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-pard-4', nome: 'André', cargo: 'Engenheiro', telefone_whatsapp: '5537999000002', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-pard-5', nome: 'Encarregado Pardinho', cargo: 'Encarregado', telefone_whatsapp: '5537999000003', projeto_id: 'pardinho-1', frente_id: 'f-pard-1', ativo: true, foto_url: null },
+  { id: 'c-pard-6', nome: 'Renato', cargo: 'Diretoria', telefone_whatsapp: '5528999154319', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-pard-7', nome: 'Buruca', cargo: 'Encarregado Geral', telefone_whatsapp: '5528999220853', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
   // ─── Osasco / Consórcio CLU Osasco ───
   { id: 'c-osc-1', nome: 'Fábio', cargo: 'Gerente', telefone_whatsapp: '5511999999999', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-osc-2', nome: 'Cláudia', cargo: 'Engenheira', telefone_whatsapp: '5511999999998', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
@@ -25,6 +27,8 @@ const DEMO_CONTATOS: DbContato[] = [
   { id: 'c-osc-4', nome: 'Carol', cargo: 'Sala Técnica', telefone_whatsapp: '5511999999996', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-osc-5', nome: 'Mateus Santos', cargo: 'Engenheiro Campo', telefone_whatsapp: '5561991015639', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-osc-6', nome: 'Luiz Fernando', cargo: 'Diretor', telefone_whatsapp: '5537999425397', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-osc-7', nome: 'Renato', cargo: 'Diretoria', telefone_whatsapp: '5528999154319', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-osc-8', nome: 'Buruca', cargo: 'Encarregado Geral', telefone_whatsapp: '5528999220853', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
 ]
 
 interface ContatosState {
