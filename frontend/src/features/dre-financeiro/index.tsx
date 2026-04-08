@@ -7,7 +7,7 @@
  * - Resultado econômico e fluxo de caixa
  * - DRE: Projeto, Planejamento e Execução
  */
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   DollarSign, TrendingUp, TrendingDown, BarChart3, ArrowUpRight,
   ArrowDownRight, PieChart, Wallet, Receipt, Calculator,
@@ -17,19 +17,27 @@ import {
 import { InfoTooltip, TOOLTIPS } from '@/components/ui/InfoTooltip'
 import { InsightsPanel, generateDreInsights, generateFluxoCaixaInsights, generateCustoTrechoInsights } from '@/components/ui/InsightBanner'
 import { TourButton, useTour } from '@/components/ui/GuidedTour'
+import { useProjectContext } from '@/store/projectContext'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type TabId = 'dre' | 'fluxo' | 'eficiencia' | 'custos'
 
-// ─── Mock Data — Projeto de Esgoto Santos/Osasco ────────────────────────────
-const CONTRATO = {
-  numero: 'CT 11481051',
-  empresa: 'ConstruDataMax Engenharia',
-  cliente: 'SABESP',
-  cidade: 'Santos / Osasco',
-  valorContrato: 18_750_000,
-  prazoMeses: 18,
+// ─── Dados por Projeto ──────────────────────────────────────────────────────
+const CONTRATOS: Record<string, { numero: string; empresa: string; cliente: string; cidade: string; valorContrato: number; prazoMeses: number }> = {
+  'demo-1': {
+    numero: 'CT 11481051', empresa: 'ConstruDataMax Engenharia', cliente: 'SABESP',
+    cidade: 'Santos / Osasco', valorContrato: 18_750_000, prazoMeses: 18,
+  },
+  'pardinho-1': {
+    numero: 'CT-PARDINHO-2026', empresa: 'Consórcio Itapetininga', cliente: 'Prefeitura Pardinho',
+    cidade: 'Pardinho-SP', valorContrato: 32_000_000, prazoMeses: 21,
+  },
+  'demo-2': {
+    numero: 'CT 2024-OSC', empresa: 'ConstruDataMax Engenharia', cliente: 'Prefeitura Osasco',
+    cidade: 'Osasco', valorContrato: 28_000_000, prazoMeses: 24,
+  },
 }
+const DEFAULT_CONTRATO = CONTRATOS['demo-1']
 
 // DRE — Demonstrativo de Resultado
 const DRE_DATA = {
@@ -163,6 +171,8 @@ function SectionTitle({ children, icon: Icon }: { children: string; icon: any })
 // ─── Main Page ──────────────────────────────────────────────────────────────
 export function DreFinanceiroPage() {
   const [tab, setTab] = useState<TabId>('dre')
+  const { activeProjectId } = useProjectContext()
+  const CONTRATO = (activeProjectId && CONTRATOS[activeProjectId]) || DEFAULT_CONTRATO
 
   const totalReceita = DRE_DATA.receitas.reduce((a, r) => a + r.valor, 0)
   const totalCustoDir = DRE_DATA.custosDiretos.reduce((a, c) => a + c.valor, 0)
