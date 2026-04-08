@@ -4,20 +4,28 @@ import {
   TrendingUp, Clock, Calendar, ArrowUpRight, ArrowDownRight,
   Briefcase, HardHat, Truck, Wrench, FileText, Target
 } from 'lucide-react'
+import { useProjectContext } from '@/store/projectContext'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type TabId = 'atividades' | 'produtividade' | 'performance'
 
-// ─── Mock Data ──────────────────────────────────────────────────────────────
-const MOCK_KPI = {
+// ─── Mock Data por Projeto ──────────────────────────────────────────────────
+const PROJECT_DATA: Record<string, {
+  kpi: typeof SANTOS_KPI; executores: typeof SANTOS_EXECUTORES;
+  frentes: typeof SANTOS_FRENTES; notificacoes: typeof SANTOS_NOTIFICACOES;
+  execucao: typeof SANTOS_EXECUCAO;
+}> = {}
+
+const SANTOS_KPI = {
   nsAtivas: 45, nsAtrasadas: 27, nsHoje: 2, nsSemData: 4,
   tarefas: 276, tarefasAtrasadas: 52, tarefasHoje: 8, tarefasAmanha: 29,
   rdosHoje: 12, rdosPendentes: 3,
   metrosExecutados: 4850, metrosMeta: 6000,
   pvsCadastrados: 187, pvsTotal: 220,
+  equipeCampo: 18, frentesAtivas: 3,
 }
 
-const EXECUTORES = [
+const SANTOS_EXECUTORES = [
   { nome: 'Marcos Silva', avatar: '👷', tarefas: 19, atrasadas: 12, hoje: 7 },
   { nome: 'Ana Souza', avatar: '👩‍🔧', tarefas: 14, atrasadas: 8, hoje: 5 },
   { nome: 'Carlos Lima', avatar: '🧑‍💼', tarefas: 10, atrasadas: 4, hoje: 3 },
@@ -25,14 +33,14 @@ const EXECUTORES = [
   { nome: 'Felipe Santos', avatar: '👨‍🔬', tarefas: 6, atrasadas: 1, hoje: 4 },
 ]
 
-const FRENTES = [
+const SANTOS_FRENTES = [
   { nome: 'Pantanal Baixo', ns: 12, progresso: 78 },
   { nome: 'São Manoel', ns: 8, progresso: 62 },
   { nome: 'Vila Belmiro', ns: 5, progresso: 45 },
   { nome: 'Macuco', ns: 7, progresso: 88 },
 ]
 
-const NOTIFICACOES = [
+const SANTOS_NOTIFICACOES = [
   { tipo: 'alerta', texto: 'NS 260213 com prazo vencido há 3 dias', hora: '08:45' },
   { tipo: 'ok', texto: 'RDO de ontem aprovado pela fiscalização', hora: '08:30' },
   { tipo: 'alerta', texto: 'Topografia pendente no trecho PV-042 a PV-048', hora: '07:55' },
@@ -40,6 +48,69 @@ const NOTIFICACOES = [
   { tipo: 'ok', texto: 'Cadastro A4 gerado: 12 folhas NTS0292', hora: 'Ontem' },
   { tipo: 'alerta', texto: 'Falta de material: tubo PVC DN200 (estoque 0)', hora: 'Ontem' },
 ]
+
+const SANTOS_EXECUCAO = [
+  { label: 'Rede Executada', value: '4.850m', pct: 81, icon: TrendingUp },
+  { label: 'Ligações', value: '312', pct: 72, icon: Wrench },
+  { label: 'PVs Executados', value: '187', pct: 85, icon: Target },
+  { label: 'Cadastros Gerados', value: '156', pct: 90, icon: FileText },
+]
+
+// ─── PARDINHO ───────────────────────────────────────────────────────────────
+const PARDINHO_KPI = {
+  nsAtivas: 8, nsAtrasadas: 2, nsHoje: 1, nsSemData: 1,
+  tarefas: 42, tarefasAtrasadas: 5, tarefasHoje: 4, tarefasAmanha: 6,
+  rdosHoje: 3, rdosPendentes: 1,
+  metrosExecutados: 620, metrosMeta: 16800,
+  pvsCadastrados: 12, pvsTotal: 90,
+  equipeCampo: 8, frentesAtivas: 2,
+}
+
+const PARDINHO_EXECUTORES = [
+  { nome: 'Ícaro (Eng.)', avatar: '👷', tarefas: 15, atrasadas: 3, hoje: 4 },
+  { nome: 'André (Eng.)', avatar: '🧑‍💼', tarefas: 12, atrasadas: 1, hoje: 3 },
+  { nome: 'Encarregado Geral', avatar: '👨‍🔧', tarefas: 8, atrasadas: 1, hoje: 2 },
+  { nome: 'Topógrafo', avatar: '📐', tarefas: 4, atrasadas: 0, hoje: 1 },
+  { nome: 'Motorista/Logística', avatar: '🚛', tarefas: 3, atrasadas: 0, hoje: 1 },
+]
+
+const PARDINHO_FRENTES = [
+  { nome: 'Rede Principal (DN 150-300)', ns: 4, progresso: 4 },
+  { nome: 'Ligações Prediais', ns: 2, progresso: 2 },
+  { nome: 'ETE / Emissário', ns: 2, progresso: 0 },
+]
+
+const PARDINHO_NOTIFICACOES = [
+  { tipo: 'alerta', texto: 'Licença ambiental CETESB pendente — área da ETE', hora: '08:30' },
+  { tipo: 'ok', texto: 'RDO de Ícaro aprovado pelo Luiz Fernando', hora: '07:45' },
+  { tipo: 'info', texto: '620m de rede executados na primeira semana', hora: '07:20' },
+  { tipo: 'alerta', texto: 'Solo rochoso identificado no trecho do emissário', hora: 'Ontem' },
+  { tipo: 'ok', texto: 'Material (tubo PVC DN200) entregue no canteiro', hora: 'Ontem' },
+  { tipo: 'info', texto: 'Luiz Fernando definiu metas da semana via WhatsApp', hora: 'Ontem' },
+]
+
+const PARDINHO_EXECUCAO = [
+  { label: 'Rede Executada', value: '620m', pct: 4, icon: TrendingUp },
+  { label: 'Ligações', value: '8', pct: 2, icon: Wrench },
+  { label: 'PVs Executados', value: '12', pct: 13, icon: Target },
+  { label: 'Cadastros Gerados', value: '6', pct: 8, icon: FileText },
+]
+
+// ─── OSASCO ─────────────────────────────────────────────────────────────────
+const OSASCO_KPI = {
+  nsAtivas: 32, nsAtrasadas: 14, nsHoje: 3, nsSemData: 2,
+  tarefas: 185, tarefasAtrasadas: 28, tarefasHoje: 6, tarefasAmanha: 11,
+  rdosHoje: 8, rdosPendentes: 2,
+  metrosExecutados: 3200, metrosMeta: 7200,
+  pvsCadastrados: 93, pvsTotal: 150,
+  equipeCampo: 14, frentesAtivas: 2,
+}
+
+PROJECT_DATA['demo-1'] = { kpi: SANTOS_KPI, executores: SANTOS_EXECUTORES, frentes: SANTOS_FRENTES, notificacoes: SANTOS_NOTIFICACOES, execucao: SANTOS_EXECUCAO }
+PROJECT_DATA['pardinho-1'] = { kpi: PARDINHO_KPI, executores: PARDINHO_EXECUTORES, frentes: PARDINHO_FRENTES, notificacoes: PARDINHO_NOTIFICACOES, execucao: PARDINHO_EXECUCAO }
+PROJECT_DATA['demo-2'] = { kpi: OSASCO_KPI, executores: SANTOS_EXECUTORES, frentes: [{ nome: 'Frente Norte A', ns: 10, progresso: 55 }, { nome: 'Frente Norte B', ns: 8, progresso: 42 }], notificacoes: SANTOS_NOTIFICACOES, execucao: [{ label: 'Rede Executada', value: '3.200m', pct: 44, icon: TrendingUp }, { label: 'Ligações', value: '180', pct: 38, icon: Wrench }, { label: 'PVs Executados', value: '93', pct: 62, icon: Target }, { label: 'Cadastros Gerados', value: '74', pct: 55, icon: FileText }] }
+
+const DEFAULT_DATA = PROJECT_DATA['demo-1']
 
 // ─── Helper Components ──────────────────────────────────────────────────────
 function MetricCard({ title, value, icon: Icon, color, sub, badge, badgeColor }: {
@@ -89,6 +160,12 @@ function InlineBar({ value, max, color }: { value: number; max: number; color: s
 // ─── Main Page ──────────────────────────────────────────────────────────────
 export function Gestao360Page() {
   const [tab, setTab] = useState<TabId>('atividades')
+  const { activeProjectId } = useProjectContext()
+  const data = (activeProjectId && PROJECT_DATA[activeProjectId]) || DEFAULT_DATA
+  const MOCK_KPI = data.kpi
+  const EXECUTORES = data.executores
+  const FRENTES = data.frentes
+  const NOTIFICACOES = data.notificacoes
   const maxTarefas = Math.max(...EXECUTORES.map(e => e.tarefas))
 
   return (
@@ -149,8 +226,8 @@ export function Gestao360Page() {
           <MetricCard title="PVs Cadastrados" value={MOCK_KPI.pvsCadastrados} icon={Target} color="text-cyan-500"
             sub={`de ${MOCK_KPI.pvsTotal} planejados`} />
 
-          <MetricCard title="Equipe em Campo" value={18} icon={Users} color="text-violet-500"
-            badge="3 frentes" badgeColor="bg-blue-100 text-blue-600" />
+          <MetricCard title="Equipe em Campo" value={MOCK_KPI.equipeCampo} icon={Users} color="text-violet-500"
+            badge={`${MOCK_KPI.frentesAtivas} frentes`} badgeColor="bg-blue-100 text-blue-600" />
         </div>
 
         {/* Row 2: Main Grid */}
@@ -213,15 +290,15 @@ export function Gestao360Page() {
             {/* Mini Summary */}
             <div className="mt-5 pt-4 border-t border-gray-100 grid grid-cols-3 gap-3 text-center">
               <div>
-                <div className="text-2xl font-bold text-gray-900">4</div>
+                <div className="text-2xl font-bold text-gray-900">{FRENTES.length}</div>
                 <div className="text-[10px] text-gray-400">Frentes ativas</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-500">68%</div>
+                <div className="text-2xl font-bold text-green-500">{FRENTES.length > 0 ? Math.round(FRENTES.reduce((a, f) => a + f.progresso, 0) / FRENTES.length) : 0}%</div>
                 <div className="text-[10px] text-gray-400">Média progresso</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-orange-500">2</div>
+                <div className="text-2xl font-bold text-orange-500">{FRENTES.filter(f => f.progresso < 50).length}</div>
                 <div className="text-[10px] text-gray-400">Com atraso</div>
               </div>
             </div>
@@ -262,21 +339,18 @@ export function Gestao360Page() {
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
             <h3 className="text-sm font-bold text-gray-800 mb-4">Resumo de Execução</h3>
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: 'Rede Executada', value: '4.850m', pct: 81, color: 'bg-blue-500', icon: TrendingUp },
-                { label: 'Ligações', value: '312', pct: 72, color: 'bg-emerald-500', icon: Wrench },
-                { label: 'PVs Executados', value: '187', pct: 85, color: 'bg-violet-500', icon: Target },
-                { label: 'Cadastros Gerados', value: '156', pct: 90, color: 'bg-cyan-500', icon: FileText },
-              ].map((item, i) => (
+              {data.execucao.map((item, i) => {
+                const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-violet-500', 'bg-cyan-500']
+                return (
                 <div key={i} className="bg-gray-50 rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <item.icon size={14} className="text-gray-400" />
                     <span className="text-xs text-gray-500 font-medium">{item.label}</span>
                   </div>
                   <div className="text-xl font-bold text-gray-900 mb-1">{item.value}</div>
-                  <ProgressBar value={item.pct} max={100} color={item.color} />
+                  <ProgressBar value={item.pct} max={100} color={colors[i] || 'bg-blue-500'} />
                 </div>
-              ))}
+              )})}
             </div>
           </div>
 
