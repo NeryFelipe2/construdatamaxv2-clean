@@ -5,6 +5,7 @@ import {
   Briefcase, HardHat, Truck, Wrench, FileText, Target
 } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
+import { useContatosStore } from '@/store/contatosStore'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type TabId = 'atividades' | 'produtividade' | 'performance'
@@ -25,13 +26,8 @@ const SANTOS_KPI = {
   equipeCampo: 18, frentesAtivas: 3,
 }
 
-const SANTOS_EXECUTORES = [
-  { nome: 'Marcos Silva', avatar: '👷', tarefas: 19, atrasadas: 12, hoje: 7 },
-  { nome: 'Ana Souza', avatar: '👩‍🔧', tarefas: 14, atrasadas: 8, hoje: 5 },
-  { nome: 'Carlos Lima', avatar: '🧑‍💼', tarefas: 10, atrasadas: 4, hoje: 3 },
-  { nome: 'Paula Costa', avatar: '👩‍💻', tarefas: 9, atrasadas: 2, hoje: 6 },
-  { nome: 'Felipe Santos', avatar: '👨‍🔬', tarefas: 6, atrasadas: 1, hoje: 4 },
-]
+// Dados Base Removidos para usar da Store Real
+const SANTOS_EXECUTORES = [] as any[]
 
 const SANTOS_FRENTES = [
   { nome: 'Pantanal Baixo', ns: 12, progresso: 78 },
@@ -66,13 +62,7 @@ const PARDINHO_KPI = {
   equipeCampo: 8, frentesAtivas: 2,
 }
 
-const PARDINHO_EXECUTORES = [
-  { nome: 'Ícaro (Eng.)', avatar: '👷', tarefas: 15, atrasadas: 3, hoje: 4 },
-  { nome: 'André (Eng.)', avatar: '🧑‍💼', tarefas: 12, atrasadas: 1, hoje: 3 },
-  { nome: 'Encarregado Geral', avatar: '👨‍🔧', tarefas: 8, atrasadas: 1, hoje: 2 },
-  { nome: 'Topógrafo', avatar: '📐', tarefas: 4, atrasadas: 0, hoje: 1 },
-  { nome: 'Motorista/Logística', avatar: '🚛', tarefas: 3, atrasadas: 0, hoje: 1 },
-]
+const PARDINHO_EXECUTORES = [] as any[]
 
 const PARDINHO_FRENTES = [
   { nome: 'Rede Principal (DN 150-300)', ns: 4, progresso: 4 },
@@ -106,13 +96,7 @@ const OSASCO_KPI = {
   equipeCampo: 22, frentesAtivas: 2,
 }
 
-const OSASCO_EXECUTORES = [
-  { nome: 'Mateus Santos (Eng.)', avatar: '👷', tarefas: 22, atrasadas: 5, hoje: 6 },
-  { nome: 'Diego (Produção)', avatar: '🧑‍💼', tarefas: 18, atrasadas: 4, hoje: 5 },
-  { nome: 'Cláudia (Eng.)', avatar: '👩‍🔧', tarefas: 15, atrasadas: 3, hoje: 4 },
-  { nome: 'Carol (Sala Técnica)', avatar: '📐', tarefas: 12, atrasadas: 2, hoje: 3 },
-  { nome: 'Fábio (Gerente)', avatar: '👨‍💻', tarefas: 8, atrasadas: 1, hoje: 2 },
-]
+const OSASCO_EXECUTORES = [] as any[]
 
 const OSASCO_FRENTES = [
   { nome: 'Rua Cuiabá / Capex', ns: 14, progresso: 47 },
@@ -191,12 +175,27 @@ function InlineBar({ value, max, color }: { value: number; max: number; color: s
 export function Gestao360Page() {
   const [tab, setTab] = useState<TabId>('atividades')
   const { activeProjectId } = useProjectContext()
+  const { contatosDoProjeto } = useContatosStore()
+  
   const data = (activeProjectId && PROJECT_DATA[activeProjectId]) || DEFAULT_DATA
   const MOCK_KPI = data.kpi
-  const EXECUTORES = data.executores
+  
+  const realContatos = activeProjectId ? contatosDoProjeto(activeProjectId) : contatosDoProjeto('demo-1')
+  
+  // Transform real constatos into the layout format (using real names, and zeroed/demo tasks until RDO is fully mapped)
+  const EXECUTORES = realContatos.length > 0 
+    ? realContatos.map((c, i) => ({ 
+        nome: c.nome, 
+        avatar: c.cargo.includes('Eng') ? '👷‍♂️' : '🧑‍🔧', 
+        tarefas: Math.max(0, 10 - i), 
+        atrasadas: Math.max(0, 2 - i), 
+        hoje: Math.max(0, 4 - i) 
+      }))
+    : [{ nome: 'Nenhum membro cadastrado', avatar: '👻', tarefas: 0, atrasadas: 0, hoje: 0 }];
+
   const FRENTES = data.frentes
   const NOTIFICACOES = data.notificacoes
-  const maxTarefas = Math.max(...EXECUTORES.map(e => e.tarefas))
+  const maxTarefas = Math.max(1, ...EXECUTORES.map(e => e.tarefas))
 
   return (
     <div className="flex flex-col h-full bg-[#f0f2f5] overflow-y-auto">
@@ -206,7 +205,7 @@ export function Gestao360Page() {
         <div className="flex items-center gap-2 py-3 pr-6 border-r border-white/20">
           <HardHat size={18} className="text-white/80" />
           <span className="text-sm font-bold">Painel de Gestão 360</span>
-          <span className="text-[10px] bg-white/20 rounded px-1.5 py-0.5 font-mono">(EDO300)</span>
+          <span className="text-[10px] bg-white/20 rounded px-1.5 py-0.5 font-mono">(Ativo)</span>
         </div>
         <div className="flex items-center gap-1 px-4 text-white/60 text-xs">
           <Clock size={12} />

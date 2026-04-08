@@ -9,12 +9,12 @@ import { workflow, node, links } from '@n8n-as-code/transformer';
 // Property name                    Node type (short)         Flags
 // DisparoDiario6h                    scheduleTrigger
 // MontarQuestionarioMateus           code
-// EnviarParaMateusViaWhatsapp        httpRequest
+// EnviarParaMateusViaWhatsapp        httpRequest                [creds]
 // ReceberRespostaMateus              webhook
 // ParseRespostaCompleta              code
 // DadosCompletos                     if
 // MontarDashboardTexto               code
-// EnviarDashboardLuizFernando        httpRequest
+// EnviarDashboardLuizFernando        httpRequest                [creds]
 // GerarRelatorioEmail                code
 // EnviarEmailGerencia                httpRequest
 // RegistrarNaPlataforma              httpRequest
@@ -37,14 +37,23 @@ import { workflow, node, links } from '@n8n-as-code/transformer';
 //       .out(1) → ConfirmarRecebimento (↩ loop)
 // </workflow-map>
 
+// =====================================================================
+// METADATA DU WORKFLOW
+// =====================================================================
+
 @workflow({
+    id: 'HVPwaXUwSGHlK4J4',
     name: 'Gestão Osasco — Direcionamento + RDO + Dashboard',
     active: false,
     settings: { executionOrder: 'v1', callerPolicy: 'workflowsFromSameOwner', availableInMCP: false },
 })
 export class GestaoOsascoDirecionamentoRdoDashboardWorkflow {
+    // =====================================================================
+    // CONFIGURATION DES NOEUDS
+    // =====================================================================
 
     @node({
+        id: '465b46c4-3124-42d6-9516-454e73bf435c',
         name: 'Disparo Diário 6h',
         type: 'n8n-nodes-base.scheduleTrigger',
         version: 1.2,
@@ -62,6 +71,7 @@ export class GestaoOsascoDirecionamentoRdoDashboardWorkflow {
     };
 
     @node({
+        id: '59039353-8f96-4134-8169-bdaaff6380c2',
         name: 'Montar Questionário Mateus',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -136,11 +146,12 @@ return [{ json: {
     };
 
     @node({
+        id: 'ab59fe0f-efec-413b-bdf9-27bdeaa76010',
         name: 'Enviar para Mateus via WhatsApp',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [500, 300],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
     EnviarParaMateusViaWhatsapp = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
@@ -152,6 +163,8 @@ return [{ json: {
     };
 
     @node({
+        id: '5f17478d-9dee-4d86-ab4a-9adbe8c3ecef',
+        webhookId: '44d04167-9166-448e-af29-02063802ac4d',
         name: 'Receber Resposta Mateus',
         type: 'n8n-nodes-base.webhook',
         version: 2,
@@ -165,6 +178,7 @@ return [{ json: {
     };
 
     @node({
+        id: '7b6fd11b-24d8-4d8c-89a4-1bddd7cf51f9',
         name: 'Parse Resposta Completa',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -221,6 +235,7 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: 'f13247c6-27bc-42fa-9c67-983dae99f7a9',
         name: 'Dados Completos?',
         type: 'n8n-nodes-base.if',
         version: 2.2,
@@ -228,14 +243,20 @@ return [{ json: rdo }];
     })
     DadosCompletos = {
         conditions: {
-            options: { caseSensitive: true, leftValue: '' },
+            options: {
+                caseSensitive: true,
+                leftValue: '',
+            },
             combinator: 'and',
             conditions: [
                 {
                     id: 'rdo-valido',
                     leftValue: '={{ $json.valido }}',
                     rightValue: true,
-                    operator: { type: 'boolean', operation: 'equals' },
+                    operator: {
+                        type: 'boolean',
+                        operation: 'equals',
+                    },
                 },
             ],
         },
@@ -243,6 +264,7 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: '98106af0-554c-4745-83d2-53ecb7e01cbe',
         name: 'Montar Dashboard Texto',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -300,11 +322,12 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
     };
 
     @node({
+        id: '600b23cf-91ee-45b3-bd0e-6344dd308854',
         name: 'Enviar Dashboard Luiz Fernando',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [1000, 600],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
     EnviarDashboardLuizFernando = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
@@ -316,6 +339,7 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
     };
 
     @node({
+        id: '263ac22d-2640-4419-a4df-1d6c67e0f2e5',
         name: 'Gerar Relatório Email',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -403,6 +427,7 @@ return [{ json: {
     };
 
     @node({
+        id: 'c33ac907-5346-402f-804a-20bcdf4c0401',
         name: 'Enviar Email Gerência',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
@@ -418,6 +443,7 @@ return [{ json: {
     };
 
     @node({
+        id: '392fea66-646b-47b0-9b87-bea560c0e474',
         name: 'Registrar na Plataforma',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
@@ -433,6 +459,7 @@ return [{ json: {
     };
 
     @node({
+        id: '70ad7f1d-ed5e-4703-b63e-b8ec2ee01a1d',
         name: 'Confirmar Recebimento',
         type: 'n8n-nodes-base.respondToWebhook',
         version: 1.1,
@@ -442,8 +469,14 @@ return [{ json: {
         respondWith: 'json',
         responseBody:
             '={{ JSON.stringify({ status: "ok", message: "RDO Osasco registrado! Dashboard enviado para Luiz Fernando e relatorio para gerencia Fabio." }) }}',
-        options: { responseCode: 200 },
+        options: {
+            responseCode: 200,
+        },
     };
+
+    // =====================================================================
+    // ROUTAGE ET CONNEXIONS
+    // =====================================================================
 
     @links()
     defineRouting() {

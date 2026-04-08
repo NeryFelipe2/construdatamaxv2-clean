@@ -9,38 +9,47 @@ import { workflow, node, links } from '@n8n-as-code/transformer';
 // Property name                    Node type (short)         Flags
 // DisparoDiario7h                    scheduleTrigger
 // MontarQuestionarioJoao             code
-// EnviarParaJoaoWhatsApp             httpRequest
+// EnviarParaJoaoWhatsapp             httpRequest                [creds]
 // ReceberRespostaJoao                webhook
 // ParseRespostaJoao                  code
 // DadosCompletos                     if
 // MontarDashboardFelipe              code
-// EnviarDashboardFelipe              httpRequest
-// RegistrarPlataforma                httpRequest
+// EnviarDashboardParaFelipe          httpRequest                [creds]
+// RegistrarNaPlataforma              httpRequest
 // ConfirmarRecebimento               respondToWebhook
 //
 // ROUTING MAP
 // ──────────────────────────────────────────────────────────────────
 // DisparoDiario7h
 //    → MontarQuestionarioJoao
-//      → EnviarParaJoaoWhatsApp
+//      → EnviarParaJoaoWhatsapp
 // ReceberRespostaJoao
 //    → ParseRespostaJoao
 //      → DadosCompletos
 //        → MontarDashboardFelipe
-//          → EnviarDashboardFelipe
-//            → RegistrarPlataforma
+//          → EnviarDashboardParaFelipe
+//            → RegistrarNaPlataforma
 //              → ConfirmarRecebimento
-//       .out(1) → ConfirmarRecebimento
+//       .out(1) → ConfirmarRecebimento (↩ loop)
 // </workflow-map>
 
+// =====================================================================
+// METADATA DU WORKFLOW
+// =====================================================================
+
 @workflow({
+    id: 'asoqRI8fbz3SKlz5',
     name: 'Gestão ConstruData — Direcionamento João + Dashboard Felipe',
     active: false,
     settings: { executionOrder: 'v1', callerPolicy: 'workflowsFromSameOwner', availableInMCP: false },
 })
-export class GestaoConstruDataDirecionamentoJoaoWorkflow {
+export class GestaoConstrudataDirecionamentoJoaoDashboardFelipeWorkflow {
+    // =====================================================================
+    // CONFIGURATION DES NOEUDS
+    // =====================================================================
 
     @node({
+        id: 'd12639c7-e7bc-48bd-8ada-b9791a15c4e8',
         name: 'Disparo Diário 7h',
         type: 'n8n-nodes-base.scheduleTrigger',
         version: 1.2,
@@ -58,6 +67,7 @@ export class GestaoConstruDataDirecionamentoJoaoWorkflow {
     };
 
     @node({
+        id: 'f9ad6af2-68ca-4899-840b-e6dc314057fe',
         name: 'Montar Questionário João',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -132,13 +142,14 @@ return [{ json: {
     };
 
     @node({
+        id: 'c137f3db-2d35-4104-a959-28510f44b998',
         name: 'Enviar para João WhatsApp',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [500, 300],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
-    EnviarParaJoaoWhatsApp = {
+    EnviarParaJoaoWhatsapp = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
         method: 'POST',
         sendBody: true,
@@ -148,6 +159,8 @@ return [{ json: {
     };
 
     @node({
+        id: 'dd96e1d3-a3cc-437e-ae96-8d93a716f90e',
+        webhookId: '9fe69720-7c66-4e89-9e08-fc79b89e4996',
         name: 'Receber Resposta João',
         type: 'n8n-nodes-base.webhook',
         version: 2,
@@ -161,6 +174,7 @@ return [{ json: {
     };
 
     @node({
+        id: '604c2025-d908-4964-8de9-a3bfbcc40d13',
         name: 'Parse Resposta João',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -216,6 +230,7 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: 'd629a8fb-bfb2-4ad6-9afa-3a2cc1aa756e',
         name: 'Dados Completos?',
         type: 'n8n-nodes-base.if',
         version: 2.2,
@@ -223,14 +238,20 @@ return [{ json: rdo }];
     })
     DadosCompletos = {
         conditions: {
-            options: { caseSensitive: true, leftValue: '' },
+            options: {
+                caseSensitive: true,
+                leftValue: '',
+            },
             combinator: 'and',
             conditions: [
                 {
                     id: 'rdo-valido',
                     leftValue: '={{ $json.valido }}',
                     rightValue: true,
-                    operator: { type: 'boolean', operation: 'equals' },
+                    operator: {
+                        type: 'boolean',
+                        operation: 'equals',
+                    },
                 },
             ],
         },
@@ -238,6 +259,7 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: '7d592da9-e85b-4899-ade8-8e147297d4bd',
         name: 'Montar Dashboard Felipe',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -294,13 +316,14 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
     };
 
     @node({
+        id: '586ad14b-11d1-4c46-b907-daa2d93bae51',
         name: 'Enviar Dashboard para Felipe',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [1000, 600],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
-    EnviarDashboardFelipe = {
+    EnviarDashboardParaFelipe = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
         method: 'POST',
         sendBody: true,
@@ -310,12 +333,13 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
     };
 
     @node({
+        id: 'b20e4a3a-c677-4d8e-83ad-88b2156f3a9e',
         name: 'Registrar na Plataforma',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [1250, 600],
     })
-    RegistrarPlataforma = {
+    RegistrarNaPlataforma = {
         url: 'https://construdatamaxv2-clean.vercel.app/api/rdo/santos',
         method: 'POST',
         sendBody: true,
@@ -325,6 +349,7 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
     };
 
     @node({
+        id: '9b500d71-608e-45b5-bce4-e5ab61a5b585',
         name: 'Confirmar Recebimento',
         type: 'n8n-nodes-base.respondToWebhook',
         version: 1.1,
@@ -334,19 +359,25 @@ return [{ json: { dashboard, rdo: r, performancePct, custoMetro } }];
         respondWith: 'json',
         responseBody:
             '={{ JSON.stringify({ status: "ok", message: "RDO Santos registrado! Dashboard enviado para Felipe." }) }}',
-        options: { responseCode: 200 },
+        options: {
+            responseCode: 200,
+        },
     };
+
+    // =====================================================================
+    // ROUTAGE ET CONNEXIONS
+    // =====================================================================
 
     @links()
     defineRouting() {
         this.DisparoDiario7h.out(0).to(this.MontarQuestionarioJoao.in(0));
-        this.MontarQuestionarioJoao.out(0).to(this.EnviarParaJoaoWhatsApp.in(0));
+        this.MontarQuestionarioJoao.out(0).to(this.EnviarParaJoaoWhatsapp.in(0));
         this.ReceberRespostaJoao.out(0).to(this.ParseRespostaJoao.in(0));
         this.ParseRespostaJoao.out(0).to(this.DadosCompletos.in(0));
         this.DadosCompletos.out(0).to(this.MontarDashboardFelipe.in(0));
         this.DadosCompletos.out(1).to(this.ConfirmarRecebimento.in(0));
-        this.MontarDashboardFelipe.out(0).to(this.EnviarDashboardFelipe.in(0));
-        this.EnviarDashboardFelipe.out(0).to(this.RegistrarPlataforma.in(0));
-        this.RegistrarPlataforma.out(0).to(this.ConfirmarRecebimento.in(0));
+        this.MontarDashboardFelipe.out(0).to(this.EnviarDashboardParaFelipe.in(0));
+        this.EnviarDashboardParaFelipe.out(0).to(this.RegistrarNaPlataforma.in(0));
+        this.RegistrarNaPlataforma.out(0).to(this.ConfirmarRecebimento.in(0));
     }
 }

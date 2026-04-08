@@ -157,3 +157,28 @@ curl -X GET https://evolution-api-production-b130.up.railway.app/instance/connec
 | `n8nac-config.json` | Config n8n-as-code |
 | `workflows/.../gestao-pardinho-rdo-dashboard.workflow.ts` | Fluxo principal Pardinho |
 | `workflows/.../pardinho-lean-lps-planejamento.workflow.ts` | LPS Pardinho |
+
+---
+
+## 🟢 SESSÃO 08/04 — CC FIXES
+
+**Problema:** Respostas no WhatsApp não disparavam nada.
+**Causa raiz:** Os 5 workflows (Router + Pardinho + Osasco + ConstruData João + Sala Técnica) estavam `active: false`. Evolution API entregava o webhook em `/webhook/evolution-router` mas o workflow estava off → 404.
+**Fix:** Ativados via `npx n8nac workflow activate <id>`:
+- `CJRFUtzbL3pGpb4s` (Router) ✅
+- `uEejEvtqnNC2eGiv` (Sala Técnica) ✅
+- `3MlISSU8VYGAiiMR` (Pardinho) ✅
+- `HVPwaXUwSGHlK4J4` (Osasco) ✅
+- `asoqRI8fbz3SKlz5` (ConstruData João) ✅
+
+**Validação:** simulei `messages.upsert` no router via curl → 200 ok, dashboard montado, registrou.
+
+**SLNR Santos → Fabrizzio:**
+- `gestao-sala-tecnica-dashboard.workflow.ts` agora envia o dashboard pra **Fabrizzio (5574999076534)** em vez de Felipe. Pushed + reativado.
+- Contato `c-st-5` em `frontend/src/store/contatosStore.ts` corrigido (estava `557499076534` — 12 dígitos, faltava o 9 do celular).
+
+**Validação +55 em todos os projetos:**
+- Função `normalizeWhatsapp(input)` em `contatosStore.ts`. Aceita qualquer entrada, normaliza pra `55 DDD 9XXXXXXXX` (13 dígitos).
+- `addContato` e `updateContato` agora chamam — joga `Error` se número inválido (sem 9, sem DDD, ou tamanho errado). UI precisa fazer try/catch.
+
+**Reenvio das mensagens:** mandado anúncio "RDO ativo, responda quando receber a cobrança" via Evolution API pra Ícaro, Mateus, João, Gabriel, Vinicius e Fabrizzio. Todos HTTP 201. Cobranças completas voltam a disparar automaticamente nos cron (6/7/8h).

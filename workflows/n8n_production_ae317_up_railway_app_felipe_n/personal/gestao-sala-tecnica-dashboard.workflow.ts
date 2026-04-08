@@ -1,7 +1,7 @@
 import { workflow, node, links } from '@n8n-as-code/transformer';
 
 // <workflow-map>
-// Workflow : Gestão Sala Técnica — Cobrança e Acompanhamento
+// Workflow : Gestão Sala Técnica — Cobrança
 // Nodes   : 10  |  Connections: 9
 //
 // NODE INDEX
@@ -9,38 +9,47 @@ import { workflow, node, links } from '@n8n-as-code/transformer';
 // Property name                    Node type (short)         Flags
 // DisparoDiario8h                    scheduleTrigger
 // MontarCobrancaSalaTecnica          code
-// EnviarParaGabriel                  httpRequest
+// EnviarParaSalaTecnicaWhatsapp      httpRequest                [creds]
 // ReceberRespostaSalaTecnica         webhook
 // ParseRespostaSalaTecnica           code
 // ValidarResposta                    if
-// MontarDashboardSalaTecnica         code
-// EnviarDashboardFelipe              httpRequest
-// RegistrarPlataforma                httpRequest
+// MontarDashboardFelipe              code
+// EnviarDashboardParaFabrizzioGerenteSlnr httpRequest                [creds]
+// RegistrarNaPlataforma              httpRequest
 // ConfirmarRecebimento               respondToWebhook
 //
 // ROUTING MAP
 // ──────────────────────────────────────────────────────────────────
 // DisparoDiario8h
 //    → MontarCobrancaSalaTecnica
-//      → EnviarParaGabriel
+//      → EnviarParaSalaTecnicaWhatsapp
 // ReceberRespostaSalaTecnica
 //    → ParseRespostaSalaTecnica
 //      → ValidarResposta
-//        → MontarDashboardSalaTecnica
-//          → EnviarDashboardFelipe
-//            → RegistrarPlataforma
+//        → MontarDashboardFelipe
+//          → EnviarDashboardParaFabrizzioGerenteSlnr
+//            → RegistrarNaPlataforma
 //              → ConfirmarRecebimento
-//       .out(1) → ConfirmarRecebimento
+//       .out(1) → ConfirmarRecebimento (↩ loop)
 // </workflow-map>
 
+// =====================================================================
+// METADATA DU WORKFLOW
+// =====================================================================
+
 @workflow({
+    id: 'uEejEvtqnNC2eGiv',
     name: 'Gestão Sala Técnica — Cobrança',
-    active: false,
+    active: true,
     settings: { executionOrder: 'v1', callerPolicy: 'workflowsFromSameOwner', availableInMCP: false },
 })
-export class GestaoSalaTecnicaWorkflow {
+export class GestaoSalaTecnicaCobrancaWorkflow {
+    // =====================================================================
+    // CONFIGURATION DES NOEUDS
+    // =====================================================================
 
     @node({
+        id: 'f59b3f42-768b-470b-8e98-8f240241b7c1',
         name: 'Disparo Diário 8h',
         type: 'n8n-nodes-base.scheduleTrigger',
         version: 1.2,
@@ -58,6 +67,7 @@ export class GestaoSalaTecnicaWorkflow {
     };
 
     @node({
+        id: '2e1d1580-8b58-4164-9923-ab704a18f76e',
         name: 'Montar Cobrança Sala Técnica',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -110,13 +120,14 @@ return [
     };
 
     @node({
+        id: '511cfaa4-f210-455c-93fe-df18f2c00c64',
         name: 'Enviar para Sala Técnica WhatsApp',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [500, 300],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
-    EnviarParaGabriel = {
+    EnviarParaSalaTecnicaWhatsapp = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
         method: 'POST',
         sendBody: true,
@@ -126,6 +137,8 @@ return [
     };
 
     @node({
+        id: 'd9152db8-5d58-4cce-adcb-71efe746cb63',
+        webhookId: '6aaf6121-25e3-4b8f-b0fd-4b9c9c0cafdc',
         name: 'Receber Resposta Sala Técnica',
         type: 'n8n-nodes-base.webhook',
         version: 2,
@@ -139,6 +152,7 @@ return [
     };
 
     @node({
+        id: 'abe6480d-4e67-49e7-ab36-f784c056bead',
         name: 'Parse Resposta Sala Técnica',
         type: 'n8n-nodes-base.code',
         version: 2,
@@ -176,6 +190,7 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: '0e9bd6b0-ffa3-4881-a0ad-fe273b278039',
         name: 'Validar Resposta',
         type: 'n8n-nodes-base.if',
         version: 2.2,
@@ -183,14 +198,20 @@ return [{ json: rdo }];
     })
     ValidarResposta = {
         conditions: {
-            options: { caseSensitive: true, leftValue: '' },
+            options: {
+                caseSensitive: true,
+                leftValue: '',
+            },
             combinator: 'and',
             conditions: [
                 {
                     id: 'rdo-valido',
                     leftValue: '={{ $json.valido }}',
                     rightValue: true,
-                    operator: { type: 'boolean', operation: 'equals' },
+                    operator: {
+                        type: 'boolean',
+                        operation: 'equals',
+                    },
                 },
             ],
         },
@@ -198,18 +219,20 @@ return [{ json: rdo }];
     };
 
     @node({
+        id: 'c546d8a8-397d-4583-a205-df1559794349',
         name: 'Montar Dashboard Felipe',
         type: 'n8n-nodes-base.code',
         version: 2,
         position: [750, 600],
     })
-    MontarDashboardSalaTecnica = {
+    MontarDashboardFelipe = {
         language: 'javaScript',
         jsCode: `
 const r = $input.first().json;
 
 const dashboard = [
-  '📊 STATUS SALA TECNICA - ' + r.data,
+  '📊 STATUS SALA TECNICA - SLNR SANTOS - ' + r.data,
+  '👤 Para: Fabrizzio (Gerente SLNR)',
   'Projeto: SLNR Santos (CT 11481051)',
   'Respondido por: ' + r.reportado_por,
   '================================',
@@ -238,28 +261,30 @@ return [{ json: { dashboard, rdo: r } }];
     };
 
     @node({
-        name: 'Enviar Dashboard para Felipe',
+        id: 'bb65689c-9b49-454e-bf4b-e9f790b72ac3',
+        name: 'Enviar Dashboard para Fabrizzio (Gerente SLNR)',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [1000, 600],
-        credentials: { httpHeaderAuth: { id: '', name: 'Evolution API' } },
+        credentials: { httpHeaderAuth: { id: '1qo5XC8PQEzGWwAN', name: 'Evolution API' } },
     })
-    EnviarDashboardFelipe = {
+    EnviarDashboardParaFabrizzioGerenteSlnr = {
         url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
         method: 'POST',
         sendBody: true,
         contentType: 'json',
-        body: '={{ JSON.stringify({ number: "5561981846325", textMessage: { text: $json.dashboard } }) }}',
+        body: '={{ JSON.stringify({ number: "5574999076534", textMessage: { text: $json.dashboard } }) }}',
         options: {},
     };
 
     @node({
+        id: 'b527d0cb-4e03-4ed5-8263-8d3da31f7f95',
         name: 'Registrar na Plataforma',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
         position: [1250, 600],
     })
-    RegistrarPlataforma = {
+    RegistrarNaPlataforma = {
         url: 'https://construdatamaxv2-clean.vercel.app/api/rdo/sala-tecnica',
         method: 'POST',
         sendBody: true,
@@ -269,6 +294,7 @@ return [{ json: { dashboard, rdo: r } }];
     };
 
     @node({
+        id: '4cc8b461-5366-46cd-a8a0-bdb5d3209408',
         name: 'Confirmar Recebimento',
         type: 'n8n-nodes-base.respondToWebhook',
         version: 1.1,
@@ -278,19 +304,25 @@ return [{ json: { dashboard, rdo: r } }];
         respondWith: 'json',
         responseBody:
             '={{ JSON.stringify({ status: "ok", message: "Update da Sala Técnica registrado! Dashboard enviado ao Felipe." }) }}',
-        options: { responseCode: 200 },
+        options: {
+            responseCode: 200,
+        },
     };
+
+    // =====================================================================
+    // ROUTAGE ET CONNEXIONS
+    // =====================================================================
 
     @links()
     defineRouting() {
         this.DisparoDiario8h.out(0).to(this.MontarCobrancaSalaTecnica.in(0));
-        this.MontarCobrancaSalaTecnica.out(0).to(this.EnviarParaGabriel.in(0));
+        this.MontarCobrancaSalaTecnica.out(0).to(this.EnviarParaSalaTecnicaWhatsapp.in(0));
         this.ReceberRespostaSalaTecnica.out(0).to(this.ParseRespostaSalaTecnica.in(0));
         this.ParseRespostaSalaTecnica.out(0).to(this.ValidarResposta.in(0));
-        this.ValidarResposta.out(0).to(this.MontarDashboardSalaTecnica.in(0));
+        this.ValidarResposta.out(0).to(this.MontarDashboardFelipe.in(0));
         this.ValidarResposta.out(1).to(this.ConfirmarRecebimento.in(0));
-        this.MontarDashboardSalaTecnica.out(0).to(this.EnviarDashboardFelipe.in(0));
-        this.EnviarDashboardFelipe.out(0).to(this.RegistrarPlataforma.in(0));
-        this.RegistrarPlataforma.out(0).to(this.ConfirmarRecebimento.in(0));
+        this.MontarDashboardFelipe.out(0).to(this.EnviarDashboardParaFabrizzioGerenteSlnr.in(0));
+        this.EnviarDashboardParaFabrizzioGerenteSlnr.out(0).to(this.RegistrarNaPlataforma.in(0));
+        this.RegistrarNaPlataforma.out(0).to(this.ConfirmarRecebimento.in(0));
     }
 }

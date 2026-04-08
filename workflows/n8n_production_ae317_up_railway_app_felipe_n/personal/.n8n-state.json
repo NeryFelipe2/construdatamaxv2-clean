@@ -24,6 +24,26 @@
       "lastSyncedHash": "62cd1c851cfebe06a26f0fb2f0f8b1fb01a8795e614102946d8eafbf86c12a51",
       "lastSyncedAt": "2026-04-07T21:35:10.638Z",
       "filename": "pardinho-lean-lps-planejamento.workflow.ts"
+    },
+    "HVPwaXUwSGHlK4J4": {
+      "lastSyncedHash": "a783463cb199ab4d70402148c6e9f975b82440b89b3dde654e9c6b2b633822b5",
+      "lastSyncedAt": "2026-04-08T02:33:26.994Z",
+      "filename": "gestao-osasco-rdo-dashboard.workflow.ts"
+    },
+    "asoqRI8fbz3SKlz5": {
+      "lastSyncedHash": "2cdb12a4923d684ec76e88dca217d75f0e7684ff6879d2d7616b697eec5b7156",
+      "lastSyncedAt": "2026-04-08T03:01:49.709Z",
+      "filename": "gestao-construdata-joao-dashboard.workflow.ts"
+    },
+    "uEejEvtqnNC2eGiv": {
+      "lastSyncedHash": "ae5111def1aed1e4ee2bf7021640664f23662043137ebcfee13e56f63230d9cd",
+      "lastSyncedAt": "2026-04-08T12:15:23.075Z",
+      "filename": "gestao-sala-tecnica-dashboard.workflow.ts"
+    },
+    "CJRFUtzbL3pGpb4s": {
+      "lastSyncedHash": "f0d84813829cab624131a8f103ec912cdd9f97055c5943d752ae0d596d013cde",
+      "lastSyncedAt": "2026-04-08T15:58:43.638Z",
+      "filename": "gestao-whatsapp-router.workflow.ts"
     }
   }
 }
