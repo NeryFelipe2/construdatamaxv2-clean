@@ -33,6 +33,8 @@ const DEMO_CONTATOS: DbContato[] = [
   { id: 'c-st-1', nome: 'Vinicius', cargo: 'Técnico Sala Técnica', telefone_whatsapp: '5513978216285', projeto_id: 'sala-tecnica-1', frente_id: 'f-st-1', ativo: true, foto_url: null },
   { id: 'c-st-2', nome: 'Gabriel', cargo: 'Técnico Sala Técnica', telefone_whatsapp: '5513991995918', projeto_id: 'sala-tecnica-1', frente_id: 'f-st-2', ativo: true, foto_url: null },
   { id: 'c-st-3', nome: 'Felipe Nery', cargo: 'Coordenador', telefone_whatsapp: '5561981846325', projeto_id: 'sala-tecnica-1', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-st-4', nome: 'Thalita', cargo: 'Survey / Planejamento', telefone_whatsapp: '5511919803270', projeto_id: 'sala-tecnica-1', frente_id: 'f-st-2', ativo: true, foto_url: null },
+  { id: 'c-st-5', nome: 'Fabrizzio', cargo: 'Gerente (Consórcio)', telefone_whatsapp: '557499076534', projeto_id: 'sala-tecnica-1', frente_id: null, ativo: true, foto_url: null },
 ]
 
 interface ContatosState {
