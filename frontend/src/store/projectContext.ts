@@ -49,6 +49,12 @@ const DEMO_PROJETOS: DbProjeto[] = [
     orcamento_total: 32000000, status: 'ativo', responsavel_nome: 'Luiz Fernando',
     responsavel_telefone: '5537999425397', created_at: '2026-04-07T00:00:00Z',
   },
+  {
+    id: 'sala-tecnica-1', nome: 'Sala Técnica — SLNR Santos', contrato: 'CT 11481051', cidade: 'Santos',
+    cliente: 'SABESP', tipo: 'misto', data_inicio: '2024-01-15', data_fim: '2025-12-31',
+    orcamento_total: 18750000, status: 'ativo', responsavel_nome: 'Felipe Nery',
+    responsavel_telefone: '5561981846325', created_at: '2026-04-08T00:00:00Z',
+  },
 ]
 
 const DEMO_FRENTES: DbFrente[] = [
@@ -63,6 +69,11 @@ const DEMO_FRENTES: DbFrente[] = [
   { id: 'f-pard-1', projeto_id: 'pardinho-1', nome: 'Frente Rede Principal', setor: 'Centro Pardinho', tipo_rede: 'esgoto', extensao_total: 9500, pvs_total: 68, status: 'ativa' },
   { id: 'f-pard-2', projeto_id: 'pardinho-1', nome: 'Frente Ligações Prediais', setor: 'Bairros', tipo_rede: 'esgoto', extensao_total: 4200, pvs_total: 0, status: 'ativa' },
   { id: 'f-pard-3', projeto_id: 'pardinho-1', nome: 'Frente ETE / Emissário', setor: 'Área Rural', tipo_rede: 'esgoto', extensao_total: 3100, pvs_total: 22, status: 'pausada' },
+  // ─── Sala Técnica — SLNR Santos ───
+  { id: 'f-st-1', projeto_id: 'sala-tecnica-1', nome: 'Cadastro / As-Built', setor: 'Todos Núcleos', tipo_rede: 'esgoto', extensao_total: 26600, pvs_total: 185, status: 'ativa' },
+  { id: 'f-st-2', projeto_id: 'sala-tecnica-1', nome: 'Survey / Espacialização', setor: 'Todos Núcleos', tipo_rede: 'misto', extensao_total: 26600, pvs_total: 0, status: 'ativa' },
+  { id: 'f-st-3', projeto_id: 'sala-tecnica-1', nome: 'Topografia / Levantamento', setor: 'Campo', tipo_rede: 'misto', extensao_total: 26600, pvs_total: 0, status: 'ativa' },
+  { id: 'f-st-4', projeto_id: 'sala-tecnica-1', nome: 'Medição / EAP Trechos', setor: 'Planejamento', tipo_rede: 'misto', extensao_total: 26600, pvs_total: 0, status: 'pausada' },
 ]
 
 export const useProjectContext = create<ProjectContextState>((set, get) => ({

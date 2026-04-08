@@ -29,6 +29,10 @@ const DEMO_CONTATOS: DbContato[] = [
   { id: 'c-osc-6', nome: 'Luiz Fernando', cargo: 'Diretor', telefone_whatsapp: '5537999425397', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-osc-7', nome: 'Renato', cargo: 'Diretoria', telefone_whatsapp: '5528999154319', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-osc-8', nome: 'Buruca', cargo: 'Encarregado Geral', telefone_whatsapp: '5528999220853', projeto_id: 'demo-2', frente_id: null, ativo: true, foto_url: null },
+  // ─── Sala Técnica / SLNR Santos ───
+  { id: 'c-st-1', nome: 'Vinicius', cargo: 'Técnico Sala Técnica', telefone_whatsapp: '5513978216285', projeto_id: 'sala-tecnica-1', frente_id: 'f-st-1', ativo: true, foto_url: null },
+  { id: 'c-st-2', nome: 'Gabriel', cargo: 'Técnico Sala Técnica', telefone_whatsapp: '5513991995918', projeto_id: 'sala-tecnica-1', frente_id: 'f-st-2', ativo: true, foto_url: null },
+  { id: 'c-st-3', nome: 'Felipe Nery', cargo: 'Coordenador', telefone_whatsapp: '5561981846325', projeto_id: 'sala-tecnica-1', frente_id: null, ativo: true, foto_url: null },
 ]
 
 interface ContatosState {
