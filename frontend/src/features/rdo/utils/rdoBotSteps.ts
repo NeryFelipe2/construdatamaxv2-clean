@@ -36,6 +36,7 @@ export const NUCLEOS: BotOption[] = [
   { value: 'slnr-pg', label: 'SLNR Praia Grande', emoji: '3️⃣' },
   { value: 'slnr-guaruja', label: 'SLNR Guarujá', emoji: '4️⃣' },
   { value: 'pardinho-itapetininga', label: 'Pardinho - Consórcio Itapetininga', emoji: '5️⃣' },
+  { value: 'osasco-clu', label: 'Osasco - Consórcio CLU Osasco', emoji: '6️⃣' },
 ]
 
 export const PROJETOS: BotOption[] = [
@@ -43,6 +44,7 @@ export const PROJETOS: BotOption[] = [
   { value: 'ct-11481052', label: 'CT 11481052 - Rede Água', emoji: '2️⃣' },
   { value: 'ct-11481053', label: 'CT 11481053 - Ligações', emoji: '3️⃣' },
   { value: 'ct-pardinho-2026', label: 'CT Pardinho - Consórcio Itapetininga', emoji: '4️⃣' },
+  { value: 'ct-clu-osc-2026', label: 'CT CLU Osasco - Consórcio CLU', emoji: '5️⃣' },
 ]
 
 export const CLIMA_OPTIONS: BotOption[] = [

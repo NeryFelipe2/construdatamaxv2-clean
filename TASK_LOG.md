@@ -50,7 +50,39 @@
 ### CLAUDE CODE — FAZER:
 **Foco: INFRAESTRUTURA / EVOLUTION API**
 
-**Tarefa 1: Corrigir Evolution API no Railway**
+**Tarefa 1: Corrigir Evolution API no Railway** — ✅ RESOLVIDO (CC)
+- Diagnóstico: Evolution v2.2.3 exigia Postgres real (não aceita sqlite/disabled). Logs Prisma confirmaram.
+- Solução: Troquei imagem pra `atendai/evolution-api:v1.8.2` via Railway GraphQL (`serviceInstanceUpdate` + `serviceInstanceDeployV2`).
+- Resultado: HTTP 200, `{"version":"1.8.2"}` respondendo.
+
+**Tarefa 2: Criar instância WhatsApp** — ✅ FEITO (CC)
+- Instância: `construdata-felipe` (id `e798c92a-e53e-451d-ba2b-aefb90dbcd4a`)
+- Hash apikey instância: `29CB78F6-A424-4A35-9CAD-36D9C3F7ECA4`
+- **QR Code salvo:** `WHATSAPP_QR.png` na raiz do projeto. **Felipe: abrir WhatsApp → Aparelhos conectados → Conectar aparelho → escanear.**
+- QR expira em ~60s. Se expirar: `curl -X GET https://evolution-api-production-b130.up.railway.app/instance/connect/construdata-felipe -H "apikey: construdata2026"`
+
+**Tarefa 3: Conectar Evolution API → n8n** — 🟡 BLOQUEADO no manual (CC)
+- n8n public API está habilitado, mas não há API key estática nas vars (n8n exige key gerada pelo usuário em Settings → API).
+- **Felipe precisa fazer manual:** n8n → Credentials → New → "HTTP Header Auth" (ou criar credencial Evolution API genérica):
+  - Name: `Evolution API`
+  - Header Name: `apikey`
+  - Header Value: `construdata2026`
+  - Base URL pra usar nos workflows: `https://evolution-api-production-b130.up.railway.app`
+
+**(instruções originais abaixo, mantidas pra referência)**
+- ✅ Railway CLI autenticado (felipe.nery2@gmail.com), service `evolution-api` linkado
+- ✅ Vars setadas: `SERVER_URL`, `DATABASE_PROVIDER=postgresql`, `DATABASE_CONNECTION_URI`
+- ✅ Redeploy disparado
+- ❌ **AINDA 502.** Logs mostram: Evolution v2.2.3 **exige Postgres real** (não aceita `DATABASE_ENABLED=false` nem sqlite). Erro: `Prisma schema validation` — falta `DATABASE_URL` apontando pra um Postgres de verdade.
+- 🛑 **DECISÃO NECESSÁRIA DO FELIPE:**
+  - **Opção A:** Provisionar Postgres no Railway (`railway add --database postgres`). Consome créditos do projeto (~$5/mês tier mínimo). Restam $4.95.
+  - **Opção B:** Trocar imagem Docker pra `atendai/evolution-api:v1.8.2` (versão antiga que aceita sqlite/sem DB). Mais leve, sem custo extra.
+  - **Opção C:** Usar Postgres externo (Supabase free tier) e setar `DATABASE_URL` apontando pra ele.
+- Aguardando Felipe escolher A/B/C antes de continuar Tarefas 2 e 3.
+
+---
+
+**(instruções originais abaixo, mantidas pra referência)**
 O serviço `evolution-api` está CRASHED. Precisa:
 - Abrir Raw Editor das variáveis em: https://railway.com/project/cd0ef028-10b2-4cc5-9962-e508c986275c/service/3cdc529...
 - Ou usar curl para testar se já está UP:

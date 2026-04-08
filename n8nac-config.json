@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "activeInstanceId": "instance-ea9c8e97",
+  "instances": [
+    {
+      "id": "instance-ea9c8e97",
+      "name": "n8n-production-ae317.up.railway.app · Felipe Nery",
+      "host": "https://n8n-production-ae317.up.railway.app",
+      "syncFolder": "workflows",
+      "projectId": "personal",
+      "projectName": "Personal",
+      "instanceIdentifier": "n8n_production_ae317_up_railway_app_felipe_n",
+      "verification": {
+        "status": "verified",
+        "normalizedHost": "https://n8n-production-ae317.up.railway.app",
+        "userId": "089d0566-6da2-4304-82dc-7ebb170cbd82",
+        "userName": "Felipe Nery",
+        "userEmail": "felipe.nery2@gmail.com",
+        "lastCheckedAt": "2026-04-07T18:24:29.226Z"
+      }
+    }
+  ],
+  "host": "https://n8n-production-ae317.up.railway.app",
+  "syncFolder": "workflows",
+  "projectId": "personal",
+  "projectName": "Personal",
+  "instanceIdentifier": "n8n_production_ae317_up_railway_app_felipe_n"
+}

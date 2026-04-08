@@ -96,19 +96,49 @@ const PARDINHO_EXECUCAO = [
   { label: 'Cadastros Gerados', value: '6', pct: 8, icon: FileText },
 ]
 
-// ─── OSASCO ─────────────────────────────────────────────────────────────────
+// ─── OSASCO — Consórcio CLU Osasco ──────────────────────────────────────────
 const OSASCO_KPI = {
   nsAtivas: 32, nsAtrasadas: 14, nsHoje: 3, nsSemData: 2,
   tarefas: 185, tarefasAtrasadas: 28, tarefasHoje: 6, tarefasAmanha: 11,
   rdosHoje: 8, rdosPendentes: 2,
-  metrosExecutados: 3200, metrosMeta: 7200,
+  metrosExecutados: 3200, metrosMeta: 19500,
   pvsCadastrados: 93, pvsTotal: 150,
-  equipeCampo: 14, frentesAtivas: 2,
+  equipeCampo: 22, frentesAtivas: 2,
 }
+
+const OSASCO_EXECUTORES = [
+  { nome: 'Mateus Santos (Eng.)', avatar: '👷', tarefas: 22, atrasadas: 5, hoje: 6 },
+  { nome: 'Diego (Produção)', avatar: '🧑‍💼', tarefas: 18, atrasadas: 4, hoje: 5 },
+  { nome: 'Cláudia (Eng.)', avatar: '👩‍🔧', tarefas: 15, atrasadas: 3, hoje: 4 },
+  { nome: 'Carol (Sala Técnica)', avatar: '📐', tarefas: 12, atrasadas: 2, hoje: 3 },
+  { nome: 'Fábio (Gerente)', avatar: '👨‍💻', tarefas: 8, atrasadas: 1, hoje: 2 },
+]
+
+const OSASCO_FRENTES = [
+  { nome: 'Rua Cuiabá / Capex', ns: 14, progresso: 47 },
+  { nome: 'Rede Mega Integrado', ns: 12, progresso: 38 },
+  { nome: 'Ligações Prediais', ns: 6, progresso: 12 },
+]
+
+const OSASCO_NOTIFICACOES = [
+  { tipo: 'alerta', texto: 'Prazo de medição Capex vence em 5 dias', hora: '09:10' },
+  { tipo: 'ok', texto: 'RDO de Mateus Santos aprovado', hora: '08:45' },
+  { tipo: 'info', texto: '3.200m de rede executados no acumulado', hora: '08:20' },
+  { tipo: 'alerta', texto: 'Diego reportou falta de tubo DN300 no estoque', hora: 'Ontem' },
+  { tipo: 'ok', texto: 'Carol finalizou cadastro NTS das últimas 12 folhas', hora: 'Ontem' },
+  { tipo: 'info', texto: 'Luiz Fernando definiu novas áreas do contrato', hora: 'Ontem' },
+]
+
+const OSASCO_EXECUCAO = [
+  { label: 'Rede Executada', value: '3.200m', pct: 16, icon: TrendingUp },
+  { label: 'Ligações', value: '180', pct: 12, icon: Wrench },
+  { label: 'PVs Executados', value: '93', pct: 62, icon: Target },
+  { label: 'Cadastros Gerados', value: '74', pct: 55, icon: FileText },
+]
 
 PROJECT_DATA['demo-1'] = { kpi: SANTOS_KPI, executores: SANTOS_EXECUTORES, frentes: SANTOS_FRENTES, notificacoes: SANTOS_NOTIFICACOES, execucao: SANTOS_EXECUCAO }
 PROJECT_DATA['pardinho-1'] = { kpi: PARDINHO_KPI, executores: PARDINHO_EXECUTORES, frentes: PARDINHO_FRENTES, notificacoes: PARDINHO_NOTIFICACOES, execucao: PARDINHO_EXECUCAO }
-PROJECT_DATA['demo-2'] = { kpi: OSASCO_KPI, executores: SANTOS_EXECUTORES, frentes: [{ nome: 'Frente Norte A', ns: 10, progresso: 55 }, { nome: 'Frente Norte B', ns: 8, progresso: 42 }], notificacoes: SANTOS_NOTIFICACOES, execucao: [{ label: 'Rede Executada', value: '3.200m', pct: 44, icon: TrendingUp }, { label: 'Ligações', value: '180', pct: 38, icon: Wrench }, { label: 'PVs Executados', value: '93', pct: 62, icon: Target }, { label: 'Cadastros Gerados', value: '74', pct: 55, icon: FileText }] }
+PROJECT_DATA['demo-2'] = { kpi: OSASCO_KPI, executores: OSASCO_EXECUTORES, frentes: OSASCO_FRENTES, notificacoes: OSASCO_NOTIFICACOES, execucao: OSASCO_EXECUCAO }
 
 const DEFAULT_DATA = PROJECT_DATA['demo-1']
 

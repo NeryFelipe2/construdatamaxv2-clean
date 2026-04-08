@@ -38,10 +38,10 @@ const DEMO_PROJETOS: DbProjeto[] = [
     responsavel_telefone: '5513999999999', created_at: '2024-01-01T00:00:00Z',
   },
   {
-    id: 'demo-2', nome: 'Osasco Saneamento Norte', contrato: 'CT 2024-OSC', cidade: 'Osasco',
-    cliente: 'Prefeitura Osasco', tipo: 'misto', data_inicio: '2024-06-01', data_fim: '2026-06-01',
-    orcamento_total: 28000000, status: 'ativo', responsavel_nome: 'Bruno Silva',
-    responsavel_telefone: '5511988888888', created_at: '2024-06-01T00:00:00Z',
+    id: 'demo-2', nome: 'Osasco — Consórcio CLU Osasco', contrato: 'CT-CLU-OSC-2026', cidade: 'Osasco',
+    cliente: 'Consórcio CLU Osasco', tipo: 'esgoto', data_inicio: '2026-04-01', data_fim: '2028-03-31',
+    orcamento_total: 28000000, status: 'ativo', responsavel_nome: 'Fábio',
+    responsavel_telefone: '5511999999999', created_at: '2026-04-07T00:00:00Z',
   },
   {
     id: 'pardinho-1', nome: 'Pardinho — Consórcio Itapetininga', contrato: 'CT-PARDINHO-2026', cidade: 'Pardinho',
@@ -55,12 +55,14 @@ const DEMO_FRENTES: DbFrente[] = [
   { id: 'f-1', projeto_id: 'demo-1', nome: 'Verde e Teteu', setor: 'Zona Norte', tipo_rede: 'esgoto', extensao_total: 12500, pvs_total: 85, status: 'ativa' },
   { id: 'f-2', projeto_id: 'demo-1', nome: 'Pantanal', setor: 'Zona Leste', tipo_rede: 'esgoto', extensao_total: 8700, pvs_total: 62, status: 'ativa' },
   { id: 'f-3', projeto_id: 'demo-1', nome: 'Sao Manoel', setor: 'Centro', tipo_rede: 'esgoto', extensao_total: 5400, pvs_total: 38, status: 'pausada' },
-  { id: 'f-4', projeto_id: 'demo-2', nome: 'Frente Norte A', setor: 'Norte', tipo_rede: 'agua', extensao_total: 6000, pvs_total: 42, status: 'ativa' },
-  { id: 'f-5', projeto_id: 'demo-2', nome: 'Frente Norte B', setor: 'Norte', tipo_rede: 'esgoto', extensao_total: 7200, pvs_total: 51, status: 'ativa' },
+  // ─── Osasco — Consórcio CLU Osasco ───
+  { id: 'f-osc-1', projeto_id: 'demo-2', nome: 'Rua Cuiabá / Capex', setor: 'Centro Osasco', tipo_rede: 'esgoto', extensao_total: 6800, pvs_total: 48, status: 'ativa' },
+  { id: 'f-osc-2', projeto_id: 'demo-2', nome: 'Rede Mega Integrado', setor: 'Norte', tipo_rede: 'esgoto', extensao_total: 8500, pvs_total: 62, status: 'ativa' },
+  { id: 'f-osc-3', projeto_id: 'demo-2', nome: 'Ligações Prediais', setor: 'Diversos', tipo_rede: 'esgoto', extensao_total: 4200, pvs_total: 0, status: 'pausada' },
   // ─── Pardinho — Consórcio Itapetininga ───
   { id: 'f-pard-1', projeto_id: 'pardinho-1', nome: 'Frente Rede Principal', setor: 'Centro Pardinho', tipo_rede: 'esgoto', extensao_total: 9500, pvs_total: 68, status: 'ativa' },
   { id: 'f-pard-2', projeto_id: 'pardinho-1', nome: 'Frente Ligações Prediais', setor: 'Bairros', tipo_rede: 'esgoto', extensao_total: 4200, pvs_total: 0, status: 'ativa' },
-  { id: 'f-pard-3', projeto_id: 'pardinho-1', nome: 'Frente ETE / Emissário', setor: 'Área Rural', tipo_rede: 'esgoto', extensao_total: 3100, pvs_total: 22, status: 'planejada' },
+  { id: 'f-pard-3', projeto_id: 'pardinho-1', nome: 'Frente ETE / Emissário', setor: 'Área Rural', tipo_rede: 'esgoto', extensao_total: 3100, pvs_total: 22, status: 'pausada' },
 ]
 
 export const useProjectContext = create<ProjectContextState>((set, get) => ({

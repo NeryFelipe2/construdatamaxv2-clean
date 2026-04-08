@@ -33,8 +33,8 @@ const CONTRATOS: Record<string, { numero: string; empresa: string; cliente: stri
     cidade: 'Pardinho-SP', valorContrato: 32_000_000, prazoMeses: 21,
   },
   'demo-2': {
-    numero: 'CT 2024-OSC', empresa: 'ConstruDataMax Engenharia', cliente: 'Prefeitura Osasco',
-    cidade: 'Osasco', valorContrato: 28_000_000, prazoMeses: 24,
+    numero: 'CT-CLU-OSC-2026', empresa: 'Consórcio CLU Osasco', cliente: 'SABESP / Prefeitura Osasco',
+    cidade: 'Osasco-SP', valorContrato: 28_000_000, prazoMeses: 24,
   },
 }
 const DEFAULT_CONTRATO = CONTRATOS['demo-1']
