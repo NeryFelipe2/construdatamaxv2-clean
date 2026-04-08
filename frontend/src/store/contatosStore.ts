@@ -10,7 +10,8 @@ const DEMO_CONTATOS: DbContato[] = [
   { id: 'c-2', nome: 'Guajeru', cargo: 'Encarregado', telefone_whatsapp: '5513999002002', projeto_id: 'demo-1', frente_id: 'f-1', ativo: true, foto_url: null },
   { id: 'c-3', nome: 'Alexandro', cargo: 'Encarregado', telefone_whatsapp: '5513999003003', projeto_id: 'demo-1', frente_id: 'f-2', ativo: true, foto_url: null },
   { id: 'c-4', nome: 'Joao', cargo: 'Mestre', telefone_whatsapp: '5513999004004', projeto_id: 'demo-1', frente_id: 'f-2', ativo: true, foto_url: null },
-  { id: 'c-5', nome: 'Felipe Nery', cargo: 'Engenheiro', telefone_whatsapp: '5513999005005', projeto_id: 'demo-1', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-5', nome: 'Felipe Nery', cargo: 'Engenheiro / Diretor', telefone_whatsapp: '5561981846325', projeto_id: 'demo-1', frente_id: null, ativo: true, foto_url: null },
+  { id: 'c-6', nome: 'João', cargo: 'Diretor', telefone_whatsapp: '5561999996252', projeto_id: 'demo-1', frente_id: null, ativo: true, foto_url: null },
   // ─── Pardinho / Consórcio Itapetininga ───
   { id: 'c-pard-1', nome: 'Luiz Fernando', cargo: 'Diretor', telefone_whatsapp: '5537999425397', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
   { id: 'c-pard-2', nome: 'Ícaro', cargo: 'Engenheiro', telefone_whatsapp: '5537998268576', projeto_id: 'pardinho-1', frente_id: null, ativo: true, foto_url: null },
