@@ -103,7 +103,21 @@ function resolverProjectId(projetoNome) {
   const n = projetoNome.toLowerCase();
   if (n.includes('pardinho') || n.includes('itapetininga')) return PROJECT_IDS.pardinho;
   if (n.includes('osasco') || n.includes('clu') || n.includes('cuiab')) return PROJECT_IDS.osasco;
-  if (n.includes('sala') || n.includes('técnica') || n.includes('tecnica')) return PROJECT_IDS.sala;
+  // Projeto 3: Consórcio Se Liga na Rede (SLNR Santos) — inclui Sala Técnica,
+  // Planejamento (Junior/Valdean/Veronica) e Producao (José Márcio).
+  // Tudo aponta para o project_id 'sala' (que representa o Consórcio/SLNR no Supabase).
+  if (n.includes('sala') || n.includes('técnica') || n.includes('tecnica')
+      || n.includes('consorcio') || n.includes('consórcio') || n.includes('seliga')
+      || n.includes('planejamento') || n.includes('producao') || n.includes('produção')
+      || n.includes('jose marcio') || n.includes('josé márcio')
+      || n.includes('junior') || n.includes('valdean') || n.includes('veronica') || n.includes('verônica')) {
+    return PROJECT_IDS.sala;
+  }
+  // Projeto 4: RK Sub Empreita — ainda sem UUID próprio no Supabase, usa santos como fallback.
+  // TODO: criar row em supabase.projects para RK e adicionar UUID em PROJECT_IDS.
+  if (n.includes('rk') || n.includes('alexandre') || n.includes('igor') || n.includes('teteu')) {
+    return PROJECT_IDS.santos;
+  }
   return PROJECT_IDS.santos;
 }
 
