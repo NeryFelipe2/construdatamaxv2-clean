@@ -116,6 +116,50 @@ async function salvarSupabaseRdo(ctx, dados) {
   }
 }
 
+// Grava lançamentos financeiros derivados do RDO (diesel/alim/mo/mat) para o DRE.
+async function salvarLancamentosFinanceiros(ctx, projetoId, apontador, dataIso, custos) {
+  // FAIL-SAFE: exige projeto_id
+  if (!projetoId) return { ok: false, err: 'projeto_id ausente' };
+  const rows = [];
+  const lista = [
+    ['Mão de Obra', 'DIESEL/COMBUSTÍVEL', custos.diesel],
+    ['Mão de Obra', 'ALIMENTAÇÃO/HOTELARIA', custos.alimentacao],
+    ['Mão de Obra', 'MÃO DE OBRA', custos.mao_obra],
+    ['Materiais', 'MATERIAIS/LOCAÇÕES', custos.materiais],
+  ];
+  for (const item of lista) {
+    if (item[2] > 0) {
+      rows.push({
+        project_id: projetoId,
+        data: dataIso,
+        categoria: item[0],
+        descricao: item[1] + ' (' + apontador + ')',
+        valor: item[2],
+        tipo: 'DESPESA',
+        criado_por: apontador,
+      });
+    }
+  }
+  if (rows.length === 0) return { ok: true, count: 0 };
+  try {
+    await ctx.helpers.httpRequest({
+      method: 'POST',
+      url: SUPABASE_URL + '/lancamentos_financeiros',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation',
+      },
+      body: rows,
+      json: true,
+    });
+    return { ok: true, count: rows.length };
+  } catch (e) {
+    return { ok: false, err: (e && e.message) || String(e) };
+  }
+}
+
 // O corpo do webhook do Evolution vem em $input.first().json.body
 const payload = $input.first().json.body || $input.first().json;
 
@@ -832,7 +876,17 @@ if (proj && !proj.isGestor && /^\\s*\\d+\\s*[:=]/.test(trimmed)) {
       };
       const res = await salvarSupabaseRdo(this, rdoData);
       if (res.ok) {
-        await responder.call(this, '✅ *RDO recebido!*\\n💾 Gravado no dashboard.\\n\\n📊 ' + tagLines.length + ' topicos processados.');
+        // Grava também os lançamentos financeiros (custos do dia) para o DRE
+        const lancRes = await salvarLancamentosFinanceiros(this, pid, proj.responsavel, hoje, {
+          diesel: _num('custo_diesel'),
+          alimentacao: _num('custo_alim'),
+          mao_obra: _num('custo_mo'),
+          materiais: _num('custo_mat'),
+        });
+        const lancInfo = lancRes.ok && lancRes.count > 0
+          ? ('\\n💰 ' + lancRes.count + ' custo(s) no DRE.')
+          : '';
+        await responder.call(this, '✅ *RDO recebido!*\\n💾 Gravado no dashboard.' + lancInfo + '\\n\\n📊 ' + tagLines.length + ' topicos processados.');
         // notifica admin
         await responder.call(this, '📥 *RDO RECEBIDO*\\n👷 ' + proj.responsavel + ' (' + proj.nome + ')\\n' + tagLines.join('\\n').slice(0, 500), '5561981846325');
       } else {

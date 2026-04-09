@@ -17,6 +17,7 @@ import {
   MOCK_RDO_BUDGET_BRL,
 } from '@/data/mockRdo'
 import { apiRdoList, apiRdoCreate, apiRdoClose } from '@/lib/api'
+import { supabase } from '@/lib/supabase'
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -52,6 +53,9 @@ interface RdoState {
   fetchFromBackend:       (nucleo?: string) => Promise<void>
   createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
   closeRdoOnBackend:      (id: number) => Promise<void>
+
+  // ── Supabase sync (RDOs do WhatsApp) ─────────────────────────────────────────
+  loadFromSupabase:       () => Promise<void>
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -225,6 +229,75 @@ export const useRdoStore = create<RdoState>((set, get) => ({
       await apiRdoClose(id)
     } catch {
       // silent — local state already updated
+    }
+  },
+
+  // ── Carrega RDOs + custos do Supabase (populados pelo Router WhatsApp) ──────
+  loadFromSupabase: async () => {
+    if (!supabase) return
+    try {
+      const { data: rows, error } = await supabase
+        .from('rdos')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100)
+      if (error || !rows) return
+
+      const rdos: RDO[] = []
+      const entries: RdoFinancialEntry[] = []
+
+      for (const row of rows as Record<string, unknown>[]) {
+        const id = String(row.id)
+        const data = String(row.data || '').slice(0, 10)
+        const apontador = String(row.apontador || '-')
+        const obs = String(row.observacoes || '')
+        const fotos = (row.fotos as string[]) || []
+        const producaoM = Number(row.producao_m || 0)
+        const equipeN = Number(row.equipe_number || 0)
+        const now = String(row.created_at || new Date().toISOString())
+
+        rdos.push({
+          id,
+          number: rdos.length + 1,
+          date: data,
+          responsible: apontador,
+          weather: { manha: String(row.clima || 'bom'), tarde: String(row.clima || 'bom'), noite: '' } as unknown as RDO['weather'],
+          manpower: { diretos: equipeN, indiretos: 0 } as unknown as RDO['manpower'],
+          equipment: [],
+          services: [],
+          trechos: [{ nome: '-', metros: producaoM } as unknown as RdoTrechoEntry],
+          geolocation: null,
+          observations: obs,
+          incidents: '',
+          photos: fotos.map((f, i) => ({ id: id + '-p' + i, base64: f, label: '' }) as unknown as RDO['photos'][number]),
+          createdAt: now,
+          updatedAt: now,
+        } as RDO)
+
+        // Converte custos do dia em lançamentos financeiros
+        const custos: Array<[string, string, number]> = [
+          ['Mão de Obra', 'DIESEL/COMBUSTÍVEL', Number(row.custo_diesel || 0)],
+          ['Mão de Obra', 'ALIMENTAÇÃO/HOTELARIA', Number(row.custo_alimentacao || 0)],
+          ['Mão de Obra', 'MÃO DE OBRA', Number(row.custo_mao_obra || 0)],
+          ['Materiais', 'MATERIAIS/LOCAÇÕES', Number(row.custo_materiais || 0)],
+        ]
+        for (const [cat, desc, val] of custos) {
+          if (val > 0) {
+            entries.push({
+              id: id + '-' + desc,
+              date: data,
+              category: cat,
+              description: desc + ' (' + apontador + ')',
+              valueBRL: val,
+              type: 'expense',
+            })
+          }
+        }
+      }
+
+      set({ rdos, financialEntries: entries })
+    } catch {
+      // silent
     }
   },
 }))
