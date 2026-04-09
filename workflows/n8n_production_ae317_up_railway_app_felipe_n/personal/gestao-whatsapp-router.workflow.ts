@@ -450,6 +450,10 @@ function montarMenu(p, phoneDetectado) {
       '🔟 *Criar Tarefas* (Guia de Uso)',
       '1️⃣1️⃣ *Plano de Custos* (Financeiro)',
       '1️⃣2️⃣ *Tarefas Consórcio* (Delega por setor)',
+      '1️⃣3️⃣ *Enviar Tarefas por Pessoa*',
+      '1️⃣4️⃣ *Enviar Tarefas à Diretoria*',
+      '1️⃣5️⃣ *Enviar Tarefas aos Engenheiros*',
+      '1️⃣6️⃣ *Enviar Tarefas por Setor*',
       '',
       '📌 *Comandos Plataforma & IA:*',
       '• @gerar dashboard',
@@ -554,7 +558,7 @@ if (isSaudacao || isAjuda) {
 
 // Conversão de atalhos numéricos ou textuais para cmdMatch
 let finalCmdMatch = cmdMatch;
-const shortcutMatch = trimmed.match(/^(1[0-2]|[1-9]|s|m)$/i);
+const shortcutMatch = trimmed.match(/^(1[0-6]|[1-9]|s|m)$/i);
 
 if (shortcutMatch && proj) {
   const s = shortcutMatch[1].toLowerCase();
@@ -571,6 +575,10 @@ if (shortcutMatch && proj) {
     else if (s === '10') finalCmdMatch = [null, 'criartarefa', ''];
     else if (s === '11') finalCmdMatch = [null, 'planocustos', ''];
     else if (s === '12') finalCmdMatch = [null, 'criartarefaconsorcio', ''];
+    else if (s === '13') finalCmdMatch = [null, 'guiatarefapessoa', ''];
+    else if (s === '14') finalCmdMatch = [null, 'guiatarefadiretoria', ''];
+    else if (s === '15') finalCmdMatch = [null, 'guiatarefaengenheiros', ''];
+    else if (s === '16') finalCmdMatch = [null, 'guiatarefasetor', ''];
   } else {
     if (s === 'm') finalCmdMatch = [null, 'menu', ''];
     else if (s === 's') finalCmdMatch = [null, 'status', proj.nome];
@@ -933,7 +941,160 @@ Setores:
 
 _Ex: @tarefaconsorcio planejamento Atualizar cronograma da semana_
 _Obs: Fabrizzio sempre receberá uma cópia da tarefa._';
-  
+
+  } else if (cmd === 'guiatarefapessoa') {
+    resposta = '👤 *ENVIAR TAREFA POR PESSOA*
+
+Delegue uma tarefa para uma pessoa específica:
+
+*@tarefa <nome> <descrição>*
+
+Nomes aceitos:
+• *felipe*  (Gestor)
+• *icaro*   (Eng. Pardinho)
+• *mateus*  (Eng. Osasco)
+• *alexandre* / *igor* (RK Sub Empreita)
+• *gabriel* / *vinicius* (Sala Técnica)
+• *junior* / *valdean* / *veronica* (Planejamento)
+• *jose marcio* (Produção)
+• *thalita*  (Survey)
+
+_Ex: @tarefa icaro Focar na escavação da rede 2 até sexta_';
+
+  } else if (cmd === 'guiatarefadiretoria') {
+    resposta = '👔 *ENVIAR TAREFA À DIRETORIA*
+
+Delegue uma tarefa para todos os diretores de uma vez:
+
+*@tarefadiretoria <descrição>*
+
+Vai para:
+• *Renato*        (28 99915-4319)
+• *Luiz Fernando* (37 99942-5397)
+• *Fabrizzio*     (74 99907-6534)
+• *Felipe*        (61 98184-6325)
+
+_Ex: @tarefadiretoria alinhar custos do mês até quinta_
+_Todos recebem a mesma mensagem simultaneamente._';
+
+  } else if (cmd === 'guiatarefaengenheiros') {
+    resposta = '👷 *ENVIAR TAREFA AOS ENGENHEIROS*
+
+Delegue uma tarefa para todos os engenheiros de campo:
+
+*@tarefaengenheiros <descrição>*
+
+Vai para:
+• *Ícaro*     — Pardinho
+• *Mateus*    — Osasco
+• *Alexandre/Igor* — RK Sub Empreita
+
+_Ex: @tarefaengenheiros enviar foto da frente até 17h_
+_Cada diretor só atinge engenheiros do seu escopo._';
+
+  } else if (cmd === 'guiatarefasetor') {
+    resposta = '🏭 *ENVIAR TAREFA POR SETOR*
+
+Delegue tarefas por setor do Consórcio Se Liga na Rede:
+
+*@tarefaconsorcio <setor|todos> <descrição>*
+
+Setores:
+• *planejamento* (Veronica, Valdean, Junior)
+• *producao*     (José Márcio)
+• *sala*         (Gabriel, Vinicius)
+• *todos*        (atinge os 3 setores)
+
+_Ex: @tarefaconsorcio sala conferir projeto do trecho NS-12_
+_Obs: Fabrizzio sempre recebe uma cópia._';
+
+  } else if (cmd === 'tarefadiretoria') {
+    if (!proj || !proj.isDiretor) {
+      resposta = '❌ Permissão negada. Apenas diretoria pode delegar tarefas.';
+    } else if (!finalCmdMatch[2] || !finalCmdMatch[2].trim()) {
+      resposta = '❌ Faltou a descrição. Use: @tarefadiretoria <descrição>';
+    } else {
+      const descricao = finalCmdMatch[2].trim();
+      const diretores = [
+        {nome: 'Renato', tel: '5528999154319'},
+        {nome: 'Luiz Fernando', tel: '5537999425397'},
+        {nome: 'Fabrizzio', tel: '5574999076534'},
+        {nome: 'Felipe', tel: '5561981846325'},
+      ];
+      const msg = '🚨 *NOVA TAREFA — DIRETORIA* 🚨
+👤 Delegado por: *' + proj.responsavel + '*
+📝 *Tarefa:* ' + descricao + '
+_Protocolada no Painel Gestão 360._
+_Responda com "Ciente" para confirmar._';
+      const enviados = [];
+      const falhas = [];
+      for (const d of diretores) {
+        if (d.tel === phone) continue;
+        const r = await responder.call(this, msg, d.tel);
+        if (r.ok) enviados.push(d.nome); else falhas.push(d.nome + ' (' + r.err + ')');
+        try {
+          await salvarSupabase(this, 'tarefas', {
+            project_id: resolverProjectId('geral'),
+            delegado_por: proj.responsavel,
+            delegado_para: d.nome,
+            telefone_destino: d.tel,
+            descricao: descricao,
+            status: 'pendente',
+            prioridade: 'alta',
+          });
+        } catch(e) {}
+      }
+      resposta = '✅ Tarefa enviada para Diretoria: *' + enviados.join(', ') + '*';
+      if (falhas.length) resposta += '
+❌ Falhas: ' + falhas.join(', ');
+    }
+
+  } else if (cmd === 'tarefaengenheiros' || cmd === 'tarefaeng') {
+    if (!proj || !proj.isDiretor) {
+      resposta = '❌ Permissão negada. Apenas diretoria pode delegar tarefas.';
+    } else if (!finalCmdMatch[2] || !finalCmdMatch[2].trim()) {
+      resposta = '❌ Faltou a descrição. Use: @tarefaengenheiros <descrição>';
+    } else {
+      const descricao = finalCmdMatch[2].trim();
+      const escopoDir = proj.escopo || [];
+      const temEscopoEng = (pr) => escopoDir.includes('todos') || escopoDir.includes(pr);
+      const TODOS_ENG = [
+        { nome: 'Ícaro',     tel: '5537998268576', proj: 'pardinho' },
+        { nome: 'Mateus',    tel: '5561991015639', proj: 'osasco' },
+        { nome: 'Alexandre', tel: '5531998894664', proj: 'rk' },
+      ];
+      const destinos = TODOS_ENG.filter(e => temEscopoEng(e.proj));
+      if (destinos.length === 0) {
+        resposta = '❌ Você não tem escopo para nenhum engenheiro.';
+      } else {
+        const msg = '🚨 *NOVA TAREFA — ENGENHEIROS DE CAMPO* 🚨
+👤 Delegado por: *' + proj.responsavel + '*
+📝 *Tarefa:* ' + descricao + '
+_Protocolada no Painel Gestão 360._
+_Responda com "Ciente" para confirmar._';
+        const enviados = [];
+        const falhas = [];
+        for (const d of destinos) {
+          const r = await responder.call(this, msg, d.tel);
+          if (r.ok) enviados.push(d.nome + ' (' + d.proj + ')'); else falhas.push(d.nome + ' (' + r.err + ')');
+          try {
+            await salvarSupabase(this, 'tarefas', {
+              project_id: resolverProjectId(d.proj),
+              delegado_por: proj.responsavel,
+              delegado_para: d.nome,
+              telefone_destino: d.tel,
+              descricao: descricao,
+              status: 'pendente',
+              prioridade: 'normal',
+            });
+          } catch(e) {}
+        }
+        resposta = '✅ Tarefa enviada p/ engenheiros: *' + enviados.join(', ') + '*';
+        if (falhas.length) resposta += '
+❌ Falhas: ' + falhas.join(', ');
+      }
+    }
+
   } else if (cmd === 'meurdo' || cmd === 'meurdo') {
     if (!proj || !proj.isDiretor) {
       resposta = '❌ Apenas diretores podem preencher o RDO de supervisão.';

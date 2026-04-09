@@ -209,10 +209,27 @@ return [{ json: { rdo, confirmacao } }];
         position: [1000, 200],
     })
     SalvarNaPlataforma = {
-        url: 'https://construdatamaxv2-clean.vercel.app/api/rdo/register',
+        url: 'https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/rdos',
         method: 'POST',
         sendBody: true,
         contentType: 'json',
+        sendHeaders: true,
+        headerParameters: {
+            parameters: [
+                {
+                    name: 'apikey',
+                    value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4',
+                },
+                {
+                    name: 'Authorization',
+                    value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4',
+                },
+                {
+                    name: 'Prefer',
+                    value: 'return=representation',
+                },
+            ],
+        },
         body: '={{ JSON.stringify($json.rdo) }}',
         options: {},
     };
