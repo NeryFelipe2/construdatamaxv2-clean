@@ -24,6 +24,7 @@ const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
 const PlanejamentoPage = lazy(() => import("@/features/planejamento/index").then((m) => ({ default: m.PlanejamentoPage })));
 const Relatorio360Page = lazy(() => import("@/features/relatorio360/index").then((m) => ({ default: m.Relatorio360Page })));
+const RdoListaPage = lazy(() => import("@/features/rdo-lista/index").then((m) => ({ default: m.RdoListaPage })));
 const Rede360Page = lazy(() => import("@/features/rede-360/index").then((m) => ({ default: m.Rede360Page })));
 const LpsPage = lazy(() => import("@/features/lps-lean/index").then((m) => ({ default: m.LpsPage })));
 const BimPage = lazy(() => import("@/features/bim/index").then((m) => ({ default: m.BimPage })));
@@ -68,6 +69,7 @@ const navItems = [
   { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
   { section: "Operação de Campo" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
+  { label: "RDOs WhatsApp (Live)", icon: FileText, to: "/app/rdo-lista" },
   { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
   { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
   { section: "Recursos" },
@@ -411,6 +413,7 @@ export default function App() {
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
           <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
+          <Route path="rdo-lista" element={<LazyRoute><RdoListaPage /></LazyRoute>} />
           <Route path="projetos" element={<LazyRoute><ProjetosPage /></LazyRoute>} />
           <Route path="planejamento" element={<LazyRoute><PlanejamentoPage /></LazyRoute>} />
           <Route path="agenda" element={<LazyRoute><AgendaPage /></LazyRoute>} />
