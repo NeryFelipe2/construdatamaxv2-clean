@@ -81,6 +81,25 @@ const PROJECT_IDS = {
 };
 
 async function salvarSupabase(ctx, tabela, dados) {
+  // FAIL-SAFE CONFIDENCIALIDADE: nunca persiste sem project_id resolvido.
+  // Qualquer vazamento entre projetos (RK caindo em Santos, Pardinho caindo em Osasco)
+  // distorce medição e pode expor dados entre consórcios/clientes diferentes.
+  if (!dados || !dados.project_id) {
+    try {
+      await ctx.helpers.httpRequest({
+        method: 'POST',
+        url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
+        headers: { apikey: $env.get('EVOLUTION_API_KEY') || 'construdata2026', 'Content-Type': 'application/json' },
+        body: { number: '5561981846325', textMessage: { text: '🚨 *ALERTA CONFIDENCIALIDADE*
+Tentativa de salvar em `,
+        ' + tabela + ': ` SEM project_id resolvido. Dados recusados para evitar vazamento.
+
+Payload: ' + JSON.stringify(dados).slice(0, 400) } },
+        json: true,
+      });
+    } catch(_) {}
+    return false;
+  }
   try {
     await ctx.helpers.httpRequest({
       method: 'POST',
@@ -98,27 +117,51 @@ async function salvarSupabase(ctx, tabela, dados) {
   } catch (e) { return false; }
 }
 
+/**
+ * FAIL-SAFE: retorna null quando o projeto não é reconhecido com CERTEZA.
+ * Jamais aplica fallback silencioso para outro projeto — vazamento
+ * de dado entre Santos/Pardinho/Osasco/RK é inaceitável (confidencialidade
+ * entre consórcios distintos).
+ *
+ * Regra: só retorna UUID se houver match EXATO por palavra-chave única.
+ * Caller é obrigado a tratar null (não salvar, alertar admin).
+ */
 function resolverProjectId(projetoNome) {
-  if (!projetoNome) return PROJECT_IDS.santos;
+  if (!projetoNome) return null;
   const n = projetoNome.toLowerCase();
+
+  // Projeto 2: Pardinho
   if (n.includes('pardinho') || n.includes('itapetininga')) return PROJECT_IDS.pardinho;
+
+  // Projeto 1: Osasco
   if (n.includes('osasco') || n.includes('clu') || n.includes('cuiab')) return PROJECT_IDS.osasco;
-  // Projeto 3: Consórcio Se Liga na Rede (SLNR Santos) — inclui Sala Técnica,
-  // Planejamento (Junior/Valdean/Veronica) e Producao (José Márcio).
-  // Tudo aponta para o project_id 'sala' (que representa o Consórcio/SLNR no Supabase).
-  if (n.includes('sala') || n.includes('técnica') || n.includes('tecnica')
-      || n.includes('consorcio') || n.includes('consórcio') || n.includes('seliga')
-      || n.includes('planejamento') || n.includes('producao') || n.includes('produção')
+
+  // Projeto 3: Consórcio Se Liga na Rede (SLNR Santos)
+  // inclui Sala Técnica, Planejamento e Produção — todos no mesmo UUID 'sala'.
+  if (n.includes('consorcio') || n.includes('consórcio') || n.includes('seliga')
+      || n.includes('slnr') || n.includes('sala_tecnica') || n.includes('sala tecnica')
+      || n.includes('sala técnica') || n === 'sala' || n === 'planejamento'
+      || n === 'producao' || n === 'produção'
       || n.includes('jose marcio') || n.includes('josé márcio')
-      || n.includes('junior') || n.includes('valdean') || n.includes('veronica') || n.includes('verônica')) {
+      || n.includes('junior') || n.includes('valdean') || n.includes('veronica') || n.includes('verônica')
+      || n.includes('gabriel') || n.includes('vinicius') || n.includes('vinícius')
+      || n.includes('fabrizzio') || n.includes('fabrizio')) {
     return PROJECT_IDS.sala;
   }
-  // Projeto 4: RK Sub Empreita — ainda sem UUID próprio no Supabase, usa santos como fallback.
-  // TODO: criar row em supabase.projects para RK e adicionar UUID em PROJECT_IDS.
-  if (n.includes('rk') || n.includes('alexandre') || n.includes('igor') || n.includes('teteu')) {
-    return PROJECT_IDS.santos;
+
+  // Santos / ConstruData Brasília — só se explicitamente nomeado.
+  if (n.includes('santos') && !n.includes('seliga')) return PROJECT_IDS.santos;
+  if (n.includes('brasilia') || n.includes('brasília') || n.includes('joão') || n.includes('joao')) return PROJECT_IDS.santos;
+
+  // Projeto 4: RK Sub Empreita — SEM UUID próprio ainda.
+  // Retorna null explicitamente para NÃO vazar em outro projeto.
+  // Admin precisa criar row em supabase.projects e adicionar em PROJECT_IDS.rk.
+  if (n.includes('rk') || n.includes('alexandre') || n.includes('igor') || n.includes('sub empreita') || n.includes('teteu')) {
+    return null;
   }
-  return PROJECT_IDS.santos;
+
+  // Qualquer outro nome: recusa. Melhor perder um log do que vazar.
+  return null;
 }
 
 // Se não for mensagem, ignora
@@ -1384,10 +1427,17 @@ if (proj && proj.isDiretor && /^s*d+s*[:=]/m.test(trimmed)) {
   if (tagLines.length > 0) {
     const respondidos = RDO_DIRETOR_SUPERVISAO.filter(q => tagLines.some(t => t.startsWith(q.tag + ':'))).map(q => q.num);
     const pendentes = RDO_DIRETOR_SUPERVISAO.filter(q => !respondidos.includes(q.num));
-    // Salvar RDO de supervisão no Supabase
+    // GUARD confidencialidade: só salva se project_id foi resolvido com certeza.
     const hoje = new Date().toISOString().split('T')[0];
+    const pidSup = resolverProjectId(proj.nome);
+    if (!pidSup) {
+      await responder.call(this, '🚨 *RDO NÃO SALVO — projeto não identificado*
+Seu RDO de supervisão foi recebido mas não pôde ser vinculado a um projeto específico. Admin notificado.
+Motivo: project_id ausente para "' + proj.nome + '". Dado NÃO foi gravado para evitar vazamento entre projetos.');
+      return [{ json: { ignorar: true, motivo: 'project_id nulo - supervisão recusada', phone } }];
+    }
     await salvarSupabase(this, 'rdos', {
-      project_id: resolverProjectId(proj.nome),
+      project_id: pidSup,
       data: hoje,
       clima: 'bom',
       observacoes: 'RDO Supervisão — ' + proj.responsavel + ': ' + tagLines.join(' | '),
@@ -1455,10 +1505,21 @@ if (proj && !proj.isGestor && /^s*d+s*[:=]/m.test(trimmed)) {
       const cv = climaTag.split(':')[1].trim().toLowerCase();
       if (['bom','nublado','chuva','parado'].includes(cv)) climaVal = cv;
     }
-    // Salvar RDO do engenheiro no Supabase
+    // GUARD confidencialidade: só salva se project_id foi resolvido com certeza.
     const hoje = new Date().toISOString().split('T')[0];
+    const pidEng = resolverProjectId(proj.nome);
+    if (!pidEng) {
+      await responder.call(this, '🚨 *RDO NÃO SALVO — projeto não identificado*
+Seu RDO foi recebido mas não pôde ser vinculado a um projeto específico (' + proj.nome + '). Admin notificado.
+Dado NÃO foi gravado para evitar vazamento entre projetos.');
+      await responder.call(this, '🚨 *ALERTA CONFIDENCIALIDADE*
+RDO de *' + proj.responsavel + '* (' + proj.nome + ') recusado: project_id nao mapeado em PROJECT_IDS.
+Telefone: ' + phone + '
+Conteudo: ' + tagLines.join(' | ').slice(0, 300), ADMIN_PHONE);
+      return [{ json: { ignorar: true, motivo: 'project_id nulo - RDO engenheiro recusado', phone } }];
+    }
     const rdoSaved = await salvarSupabase(this, 'rdos', {
-      project_id: resolverProjectId(proj.nome),
+      project_id: pidEng,
       data: hoje,
       clima: climaVal,
       producao_m: metrosVal,
