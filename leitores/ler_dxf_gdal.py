@@ -261,7 +261,9 @@ def _extrair_tubos_conservador(gdf):
         # Critérios de inclusão (precisa ter pelo menos um)
         # TUBO, PROLONG, CONDUTO, PIPE = inequívocos
         inclui = any(p in layer_upper for p in [
-            "TUBO", "PROLONG", "CONDUTO", "PIPE", "COLETORA", "RECALQUE"
+            "TUBO", "PROLONG", "CONDUTO", "PIPE", "COLETORA", "COLETOR",
+            "RECALQUE", "REDE", "ESGOTO", "EMISSARIO", "EMISSÁRIO",
+            "INTERCEPTOR", "RAMAL", "AGUA_REDE", "ÁGUA_REDE",
         ])
         
         # "LINHA" só vale se vier com "TUBO" ou "CONDUTO"
@@ -317,8 +319,13 @@ def _extrair_tubos_brutal(gdf):
     tubos = tubos[tubos['ext_m'] > MIN_EXT_TUBO].copy()
     
     # Excluir layers que sabemos que NUNCA são tubos (ex: Molduras)
-    layers_nuncas = ["MOLDURA", "LEGENDA", "CARIMBO", "LINHA_CHAMADA"]
-    tubos = tubos[~tubos['Layer'].str.upper().isin(layers_nuncas)].copy()
+    layers_nuncas = ["MOLDURA", "LEGENDA", "CARIMBO", "LINHA_CHAMADA",
+                     "CURVA", "CONTORNO", "CONTOUR", "LOTE", "TERRENO",
+                     "QUADRA", "LIMITE", "HATCH", "VIA", "RUA", "CALC"]
+    mask_bad = tubos['Layer'].astype(str).str.upper().apply(
+        lambda s: any(b in s for b in layers_nuncas)
+    )
+    tubos = tubos[~mask_bad].copy()
 
     return tubos
 

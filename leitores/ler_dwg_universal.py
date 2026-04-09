@@ -256,7 +256,10 @@ def _ler_dxf_completo(dxf_path):
         if e.dxftype() == 'LWPOLYLINE':
             # Ignorar camadas clássicas de sujeira/topografia que causam tubos inventados
             layer_upper = e.dxf.layer.upper()
-            if any(bad in layer_upper for bad in ["TEXT", "CURVA", "CONTORNO", "CONTOUR", "LOTE", "TERRENO", "QUADRA", "LIMITE", "DETALHE", "COTAS", "HATCH"]):
+            if any(bad in layer_upper for bad in ["TEXT", "CURVA", "CONTORNO", "CONTOUR", "LOTE", "TERRENO", "QUADRA", "LIMITE", "DETALHE", "COTAS", "HATCH", "VIA", "RUA", "CALC", "MOLDURA", "CARIMBO", "LEGENDA", "PERFIL"]):
+                continue
+            # Whitelist NTS: so aceita layers de rede (TUBO/REDE/ESGOTO/COLETOR/EMISSARIO/INTERCEPTOR/RAMAL/CONDUTO/PIPE/PROLONG/RECALQUE)
+            if not any(good in layer_upper for good in ["TUBO", "REDE", "ESGOTO", "COLETOR", "EMISSARIO", "EMISSÁRIO", "INTERCEPTOR", "RAMAL", "CONDUTO", "PIPE", "PROLONG", "RECALQUE"]):
                 continue
                 
             pts = list(e.get_points())

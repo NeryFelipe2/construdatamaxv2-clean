@@ -28,7 +28,12 @@ import { workflow, node, links } from '@n8n-as-code/transformer';
     id: 'CJRFUtzbL3pGpb4s',
     name: 'Gestão WhatsApp — Router Central',
     active: true,
-    settings: { executionOrder: 'v1', callerPolicy: 'workflowsFromSameOwner', availableInMCP: false },
+    settings: {
+        executionOrder: 'v1',
+        callerPolicy: 'workflowsFromSameOwner',
+        availableInMCP: false,
+        binaryMode: 'separate',
+    },
 })
 export class GestaoWhatsappRouterCentralWorkflow {
     // =====================================================================
@@ -46,7 +51,7 @@ export class GestaoWhatsappRouterCentralWorkflow {
     ReceberEvolutionApi = {
         path: 'evolution-router',
         httpMethod: 'POST',
-        responseMode: 'lastNode',
+        responseMode: 'onReceived',
         options: {},
     };
 
@@ -60,8 +65,47 @@ export class GestaoWhatsappRouterCentralWorkflow {
     ParseEventoWhatsapp = {
         language: 'javaScript',
         jsCode: `
+try {
+
 // O corpo do webhook do Evolution vem em $input.first().json.body
 const payload = $input.first().json.body || $input.first().json;
+
+// ========== SUPABASE CONFIG ==========
+const SUPABASE_URL = 'https://vblfdikfobsirwpdnybw.supabase.co/rest/v1';
+const SUPABASE_KEY = $env.get('SUPABASE_KEY') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4';
+const PROJECT_IDS = {
+  santos: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d',
+  osasco: 'f3c6645b-347f-4382-b9c5-d103c27ec511',
+  pardinho: 'ec112c9a-1669-4287-8079-526d6940ce82',
+  sala: 'abe7f66c-004b-4bb5-a245-6be67debd9f7',
+};
+
+async function salvarSupabase(ctx, tabela, dados) {
+  try {
+    await ctx.helpers.httpRequest({
+      method: 'POST',
+      url: SUPABASE_URL + '/' + tabela,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation',
+      },
+      body: dados,
+      json: true,
+    });
+    return true;
+  } catch (e) { return false; }
+}
+
+function resolverProjectId(projetoNome) {
+  if (!projetoNome) return PROJECT_IDS.santos;
+  const n = projetoNome.toLowerCase();
+  if (n.includes('pardinho') || n.includes('itapetininga')) return PROJECT_IDS.pardinho;
+  if (n.includes('osasco') || n.includes('clu') || n.includes('cuiab')) return PROJECT_IDS.osasco;
+  if (n.includes('sala') || n.includes('técnica') || n.includes('tecnica')) return PROJECT_IDS.sala;
+  return PROJECT_IDS.santos;
+}
 
 // Se não for mensagem, ignora
 if (!payload.data || payload.event !== 'messages.upsert') {
@@ -70,45 +114,84 @@ if (!payload.data || payload.event !== 'messages.upsert') {
 
 const msgData = payload.data;
 const remoteJid = msgData.key.remoteJid || '';
-const phone = remoteJid.replace('@s.whatsapp.net', '');
+let phone = remoteJid.replace('@s.whatsapp.net', '').replace('@c.us', '');
+
+// Fallback: WhatsApp moderno manda @lid (identificador opaco) em vez do número real.
+// Nesse caso resolvemos pelo pushName.
+const pushName = (msgData.pushName || '').toLowerCase();
+if (phone.includes('@lid') || phone.includes('@')) {
+  if (pushName.includes('gabriel')) phone = '5513991995918';
+  else if (pushName.includes('vinicius') || pushName.includes('vinícius')) phone = '5513978216285';
+  else if (pushName.includes('icaro') || pushName.includes('ícaro')) phone = '5537998268576';
+  else if (pushName.includes('mateus') || pushName.includes('matheus')) phone = '5561991015639';
+  else if (pushName.includes('joão') || pushName.includes('joao')) phone = '5561999996252';
+  else if (pushName.includes('felipe')) phone = '5561981846325';
+  else if (pushName.includes('fabrizzio') || pushName.includes('fabrizio')) phone = '5574999076534';
+  else if (pushName.includes('luiz') || pushName.includes('fernando')) phone = '5537999425397';
+  else if (pushName.includes('renato')) phone = '5528999154319';
+  else if (pushName.includes('thalita')) phone = '5511919803270';
+  else if (pushName.includes('buruca')) phone = '5599999220853';
+  else if (pushName.includes('junior') || pushName.includes('júnior')) phone = '5511986012223';
+  else if (pushName.includes('valdeans')) phone = '559991392763';
+  else if (pushName.includes('veronica') || pushName.includes('verônica')) phone = '5513997733121';
+  else if (pushName.includes('marcio') || pushName.includes('márcio')) phone = '5511941816005';
+  else if (pushName.includes('alexandre') || pushName.includes('igor')) phone = '5531998894664';
+}
 let text = '';
+let mediaUrl = null;
+let locLat = null;
+let locLng = null;
 
 if (msgData.message) {
   text = msgData.message.conversation || 
          (msgData.message.extendedTextMessage && msgData.message.extendedTextMessage.text) || '';
+  // Detectar FOTO enviada
+  if (msgData.message.imageMessage) {
+    mediaUrl = msgData.message.imageMessage.url || msgData.message.imageMessage.directPath || null;
+    if (msgData.message.imageMessage.caption) text = msgData.message.imageMessage.caption;
+  }
+  // Detectar LOCALIZAÇÃO enviada
+  if (msgData.message.locationMessage) {
+    locLat = msgData.message.locationMessage.degreesLatitude;
+    locLng = msgData.message.locationMessage.degreesLongitude;
+    text = text || 'Localização enviada';
+  }
 }
 
-if (!text) {
-  return [{ json: { ignorar: true, motivo: 'Sem texto' } }];
+// Se tem foto ou localização sem texto, processar como RDO com mídia
+if (!text && !mediaUrl && !locLat) {
+  return [{ json: { ignorar: true, motivo: 'Sem texto e sem mídia' } }];
 }
 
 const trimmed = text.trim();
 const lower = trimmed.toLowerCase();
 
-// Ignora mensagens enviadas pelo próprio bot (fromMe), EXCETO se for um comando explícito 
+// ========== CONTROLE DE IA ==========
+// IA funciona APENAS para o Felipe, e SOMENTE quando ele fala consigo mesmo (fromMe).
+const ADMIN_PHONE = '5561981846325'; // Felipe
+const isAdmin = phone.includes('81846325');
+const isFromMe = !!msgData.key.fromMe;
+
+// Ignora mensagens enviadas pelo próprio bot (fromMe), EXCETO se for um comando explícito
 // enviado pelo Gestor (Felipe) para testar o fluxo consigo mesmo ou disparar ações.
-if (msgData.key.fromMe) {
-  const isComando = /^(@|menu|ajuda|comandos|status|equipe|projetos|dashboard|ia|ai|[1-9sm])/i.test(trimmed);
-  if (!isComando) {
+if (isFromMe) {
+  const isComando = /^(@|menu|ajuda|comandos|status|equipe|projetos|dashboard|ia|ai|rdo|gerar|subir|1[0-1]|[1-9sm])/i.test(trimmed);
+  if (!isComando && !isAdmin) {
     return [{ json: { ignorar: true, motivo: 'Enviada por mim (não é comando)' } }];
   }
+  // Felipe falando consigo mesmo com texto livre → IA vai responder no fallback
+  // Não bloqueia aqui
 }
 
 // Identifica projeto e perguntas pelo telefone
 function projetoDoPhone(p) {
   if (p.includes('999996252')) return {
-    nome: 'ConstruData Santos', responsavel: 'João',
-    perguntas: [
-      { num: 1, label: 'Frentes ativas hoje', tag: 'frentes' },
-      { num: 2, label: 'Efetivo total em obra', tag: 'efetivo' },
-      { num: 3, label: 'Metros executados (rede)', tag: 'metros_rede' },
-      { num: 4, label: 'Ligações executadas', tag: 'ligacoes' },
-      { num: 5, label: 'Pendências / impedimentos', tag: 'pendencias' },
-      { num: 6, label: 'Clima / interferência climática', tag: 'clima' },
-    ]
+    nome: 'ConstruData Brasília (Projeto)', responsavel: 'João', isGestor: true, isDiretor: true,
+    escopo: ['brasilia'],
+    perguntas: []
   };
   if (p.includes('991015639')) return {
-    nome: 'Osasco - Rua Cuiabá', responsavel: 'Mateus',
+    nome: 'Osasco - Rua Cuiabá', responsavel: 'Mateus', projeto: 'osasco',
     perguntas: [
       { num: 1, label: 'Frente Capex em execução', tag: 'frente_capex' },
       { num: 2, label: 'Efetivo na obra', tag: 'efetivo' },
@@ -118,42 +201,103 @@ function projetoDoPhone(p) {
       { num: 6, label: 'Pendências para amanhã', tag: 'pendencias' },
     ]
   };
-  if (p.includes('991995918') || p.includes('978216285')) return {
-    nome: 'Sala Técnica SLNR Santos', responsavel: p.includes('991995918') ? 'Gabriel' : 'Vinicius',
+  // ===== PROJETO 3: CONSÓRCIO SE LIGA NA REDE =====
+  // Sala Técnica
+  if (p.includes('991995918')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Gabriel', projeto: 'consorcio', setor: 'sala_tecnica',
     perguntas: [
-      { num: 1, label: 'Espacialização Survey (prazo 10/04)', tag: 'survey_pendencias' },
-      { num: 2, label: 'Check com Thalita sobre Survey', tag: 'status_thalita' },
-      { num: 3, label: 'EAP Trechos (medidas/comprimento)', tag: 'status_redes' },
-      { num: 4, label: 'Déficit cadastro fev/mar + topografia', tag: 'status_deficit' },
-      { num: 5, label: 'Extensão de ramais (Sabesp 16/04 e 02/05)', tag: 'ramais_pendentes' },
+      { num: 1, label: 'Atividades realizadas hoje', tag: 'atividades' },
+      { num: 2, label: 'Pendências / impedimentos', tag: 'pendencias' },
+      { num: 3, label: 'Próximos passos (amanhã)', tag: 'proximos' },
+    ]
+  };
+  if (p.includes('978216285')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Vinicius', projeto: 'consorcio', setor: 'sala_tecnica',
+    perguntas: [
+      { num: 1, label: 'Atividades realizadas hoje', tag: 'atividades' },
+      { num: 2, label: 'Pendências / impedimentos', tag: 'pendencias' },
+      { num: 3, label: 'Próximos passos (amanhã)', tag: 'proximos' },
+    ]
+  };
+  // Planejamento
+  if (p.includes('997733121')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Veronica', projeto: 'consorcio', setor: 'planejamento',
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento realizadas', tag: 'atividades_plan' },
+      { num: 2, label: 'Atualizações de cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências / impedimentos', tag: 'pendencias' },
+    ]
+  };
+  if (p.includes('91392763')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Valdean', projeto: 'consorcio', setor: 'planejamento',
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento realizadas', tag: 'atividades_plan' },
+      { num: 2, label: 'Atualizações de cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências / impedimentos', tag: 'pendencias' },
+    ]
+  };
+  if (p.includes('986012223')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Junior', projeto: 'consorcio', setor: 'planejamento', isGerenteSetor: true,
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento realizadas', tag: 'atividades_plan' },
+      { num: 2, label: 'Atualizações de cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências / impedimentos', tag: 'pendencias' },
+    ]
+  };
+  // Produção
+  if (p.includes('941816005')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'José Márcio', projeto: 'consorcio', setor: 'producao', isGerenteSetor: true,
+    perguntas: [
+      { num: 1, label: 'Frentes em execução hoje', tag: 'frentes' },
+      { num: 2, label: 'Efetivo na obra', tag: 'efetivo' },
+      { num: 3, label: 'Metros de rede executados', tag: 'metros_rede' },
+      { num: 4, label: 'Ligações prediais executadas', tag: 'ligacoes' },
+      { num: 5, label: 'Pendências / impedimentos', tag: 'pendencias' },
+    ]
+  };
+  // ===== PROJETO 4: RK SUB EMPREITA =====
+  if (p.includes('998894664')) return {
+    nome: 'RK Sub Empreita', responsavel: 'Alexandre / Igor', projeto: 'rk',
+    perguntas: [
+      { num: 1, label: 'Frentes em andamento', tag: 'frentes' },
+      { num: 2, label: 'Metros executados', tag: 'metros_rede' },
+      { num: 3, label: 'Equipe no local', tag: 'efetivo' },
+      { num: 4, label: 'Impedimentos', tag: 'pendencias' },
+      { num: 5, label: 'Custo Dia: Diesel/Combustível (R$)', tag: 'custo_diesel' },
+      { num: 6, label: 'Custo Dia: Alimentação/Hotelaria (R$)', tag: 'custo_alim' },
+      { num: 7, label: 'Custo Dia: Mão de Obra (R$)', tag: 'custo_mo' },
+      { num: 8, label: 'Custo Dia: Materiais/Locações (R$)', tag: 'custo_mat' },
     ]
   };
   if (p.includes('81846325')) return {
-    nome: 'Gestão Geral (Felipe Nery)', responsavel: 'Felipe Nery', isGestor: true,
+    nome: 'Gestão Geral (Felipe Nery)', responsavel: 'Felipe Nery', isGestor: true, isDiretor: true,
+    escopo: ['todos'],
     perguntas: []
   };
+  // ===== GESTORES / DIRETORES =====
   if (p.includes('999076534')) return {
-    nome: 'Sala Técnica SLNR Santos', responsavel: 'Fabrizzio', isGestor: true,
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Fabrizzio', isGestor: true, isDiretor: true,
+    projeto: 'consorcio', escopo: ['consorcio'],
     perguntas: []
   };
   if (p.includes('999425397')) return {
-    nome: 'Diretoria Pardinho/Osasco', responsavel: 'Luiz Fernando', isGestor: true,
+    nome: 'Diretoria Pardinho/Osasco/RK', responsavel: 'Luiz Fernando', isGestor: true, isDiretor: true,
+    escopo: ['pardinho','osasco','rk'],
     perguntas: []
   };
   if (p.includes('999154319')) return {
-    nome: 'Diretoria Pardinho/Osasco', responsavel: 'Renato', isGestor: true,
-    perguntas: []
-  };
-  if (p.includes('999220853')) return {
-    nome: 'Pardinho/Osasco', responsavel: 'Buruca', isGestor: true,
+    nome: 'Diretoria Pardinho/Osasco/RK', responsavel: 'Renato', isGestor: true, isDiretor: true,
+    escopo: ['pardinho','osasco','rk'],
     perguntas: []
   };
   if (p.includes('919803270')) return {
-    nome: 'Sala Técnica SLNR Santos', responsavel: 'Thalita', isGestor: true,
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Thalita', projeto: 'consorcio', setor: 'survey',
+    isGestor: true,
     perguntas: []
   };
+  // ===== PROJETO 2: PARDINHO =====
   if (p.includes('998268576')) return {
-    nome: 'Pardinho - Itapetininga', responsavel: 'Ícaro',
+    nome: 'Pardinho - Itapetininga', responsavel: 'Ícaro', projeto: 'pardinho',
     perguntas: [
       { num: 1, label: 'Frente Rede Principal', tag: 'frente_principal' },
       { num: 2, label: 'Frente Ligações Prediais', tag: 'frente_ligacoes' },
@@ -172,18 +316,124 @@ function projetoDoPhone(p) {
 }
 const proj = projetoDoPhone(phone);
 
+// ========== PERGUNTAS RDO PARA DIRETORES ==========
+// Quando um diretor usa @rdo, essas perguntas são disparadas para o engenheiro-alvo
+const RDO_PERGUNTAS_DIRETOR = {
+  pardinho: [
+    '📋 *RDO DIÁRIO — Pardinho*',
+    '',
+    'Ícaro, segue formulário de hoje:',
+    '',
+    '*( 1 )* — Frente Rede Principal',
+    '*( 2 )* — Frente Ligações Prediais',
+    '*( 3 )* — Frente ETE / Emissário',
+    '*( 4 )* — Efetivo total',
+    '*( 5 )* — Metros de rede executados',
+    '*( 6 )* — Ligações prediais executadas',
+    '*( 7 )* — Equipamentos em uso',
+    '*( 8 )* — Materiais recebidos',
+    '*( 9 )* — Clima',
+    '*( 10 )* — Pendências / impedimentos',
+    '*( 11 )* — Acidentes ou ocorrências',
+    '',
+    '💬 Responda: *1: valor | 2: valor | ...*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ],
+  osasco: [
+    '📋 *RDO DIÁRIO — Osasco*',
+    '',
+    'Mateus, segue formulário de hoje:',
+    '',
+    '*( 1 )* — Frente Capex em execução',
+    '*( 2 )* — Efetivo na obra',
+    '*( 3 )* — Metros de rede executados',
+    '*( 4 )* — Ligações prediais executadas',
+    '*( 5 )* — Interferências encontradas',
+    '*( 6 )* — Pendências para amanhã',
+    '',
+    '💬 Responda: *1: valor | 2: valor | ...*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ],
+  sala: [
+    '📋 *ATIVIDADES DO DIA — Sala Técnica*',
+    '',
+    'Preencha as atividades de hoje:',
+    '',
+    '*( 1 )* — Atividades realizadas hoje',
+    '*( 2 )* — Pendências / impedimentos',
+    '*( 3 )* — Próximos passos (amanhã)',
+    '',
+    '💬 Responda: *1: texto | 2: texto | 3: texto*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ],
+  planejamento: [
+    '📋 *ATIVIDADES DO DIA — Planejamento*',
+    '',
+    'Preencha as atividades de planejamento:',
+    '',
+    '*( 1 )* — Atividades de planejamento realizadas',
+    '*( 2 )* — Atualizações de cronograma',
+    '*( 3 )* — Pendências / impedimentos',
+    '',
+    '💬 Responda: *1: texto | 2: texto | 3: texto*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ],
+  producao: [
+    '📋 *RDO DIÁRIO — Produção*',
+    '',
+    'José Márcio, segue formulário de hoje:',
+    '',
+    '*( 1 )* — Frentes em execução hoje',
+    '*( 2 )* — Efetivo na obra',
+    '*( 3 )* — Metros de rede executados',
+    '*( 4 )* — Ligações prediais executadas',
+    '*( 5 )* — Pendências / impedimentos',
+    '',
+    '💬 Responda: *1: valor | 2: valor | ...*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ],
+  rk: [
+    '📋 *RDO DIÁRIO — RK Sub Empreita*',
+    '',
+    'Alexandre/Igor, segue formulário de hoje:',
+    '',
+    '*( 1 )* — Frentes em andamento',
+    '*( 2 )* — Metros executados',
+    '*( 3 )* — Equipe no local',
+    '*( 4 )* — Impedimentos',
+    '*( 5 )* — Custo Dia: Diesel/Combustível (R$)',
+    '*( 6 )* — Custo Dia: Alimentação/Hotelaria (R$)',
+    '*( 7 )* — Custo Dia: Mão de Obra (R$)',
+    '*( 8 )* — Custo Dia: Materiais/Locações (R$)',
+    '',
+    '💬 Responda: *1: valor | 2: valor | ...*',
+    '_⏰ Prazo: até 18h de hoje._'
+  ]
+};
+
+// ========== PERGUNTAS DE SUPERVISÃO PARA DIRETORES ==========
+// Diretores recebem essas perguntas macro para consolidar no dashboard
+const RDO_DIRETOR_SUPERVISAO = [
+  { num: 1, label: 'Frentes que visitou hoje', tag: 'frentes_visitadas' },
+  { num: 2, label: 'Principais decisões tomadas', tag: 'decisoes' },
+  { num: 3, label: 'Riscos ou alertas identificados', tag: 'riscos' },
+  { num: 4, label: 'Previsão de entrega próx. marco', tag: 'previsao_marco' },
+  { num: 5, label: 'Observações gerais', tag: 'observacoes' },
+];
+
 // ========== MENU INTERATIVO ==========
 // Detecta saudação, ajuda, ou comando @
 const isSaudacao = /^(oi|ola|olá|bom dia|boa tarde|boa noite|opa|menu|opções|opcoes|inicio|início|começar|comecar|start)$/i.test(trimmed);
 const isAjuda = /^(@?(ajuda|help|comandos|menu))$/i.test(trimmed);
-const cmdMatch = trimmed.match(/^@(\\w+)(?:\\s+(.*))?$/i);
+const cmdMatch = trimmed.match(/^@(w+)(?:s+(.*))?$/i);
 
 function montarMenu(p, phoneDetectado) {
-  if (!p) return '🤖 ConstruDataMax\\n\\nNão consegui identificar seu projeto. Telefone detectado: *' + phoneDetectado + '*\\nFala com o admin para te cadastrar.';
+  if (!p) return ['🤖 ConstruDataMax', '', 'Não consegui identificar seu projeto. Telefone detectado: *' + phoneDetectado + '*', 'Fala com o admin para te cadastrar.'].join('
+');
 
-  // Menu de gestor (Felipe, Fabrizzio, Luiz, Renato, Buruca, Thalita)
+  // Menu de gestor/diretor
   if (p.isGestor) {
-    return [
+    const menuLinhas = [
       '🤖 *ConstruDataMax Gestão 360*',
       'Olá *' + p.responsavel + '*!',
       '',
@@ -193,44 +443,81 @@ function montarMenu(p, phoneDetectado) {
       '3️⃣ *Projetos Ativos*',
       '4️⃣ *Dashboard Consolidado*',
       '5️⃣ *Reenviar Cobrança* (Alerta Geral)',
-      '6️⃣ *Falar com Inteligência Artificial*',
+      // '6️⃣ *Falar com IA* (só Felipe)',
+      '7️⃣ *Cobrar RDO* (Dispara formulário)',
+      '8️⃣ *Meu RDO Diretor* (Supervisão)',
+      '9️⃣ *Lembrar Tarefas* (Cobra diretores)',
+      '🔟 *Criar Tarefas* (Guia de Uso)',
+      '1️⃣1️⃣ *Plano de Custos* (Financeiro)',
+      '1️⃣2️⃣ *Tarefas Consórcio* (Delega por setor)',
       '',
-      '_▶️ Digite o número da opção (ex: 1) ou use os '@comandos' diretamente._',
+      '📌 *Comandos Plataforma & IA:*',
+      '• @gerar dashboard',
+      '• @gerar machine learning',
+      '• @gerar relatorios',
+      '• @subir para a gestao 360',
+      '📌 *Comandos extras:*',
+      '• @rdo <projeto|todos> — Dispara RDO',
+      '• @tarefa <nome|todos> <desc> — Delegar tarefa',
+      '• @avisar <projeto> <msg> — Broadcast',
+      '• @meurdo — Preencher RDO de supervisão',
+      '',
+      '_▶️ Digite o número ou use @comandos._',
       '🔗 https://construdatamaxv2-clean.vercel.app'
-    ].join('\\n');
+    ];
+    return menuLinhas.join('
+');
   }
 
+  const tituloForm = p.isSalaTecnica ? '📌 *Atividades do Dia — preencha:*' : '📌 *Para responder o RDO de hoje:*';
   const linhas = [
     '🤖 *ConstruDataMax — Operação*',
     'Olá *' + p.responsavel + '*! Projeto: *' + p.nome + '*',
     '',
-    '📝 *Para responder o RDO de hoje:*',
+    tituloForm,
     ''
   ];
   for (const q of p.perguntas) {
     linhas.push('*( ' + q.num + ' )* — ' + q.label);
   }
   linhas.push('');
-  linhas.push('💬 *Como preencher:*');
-  linhas.push('• Digite *só o número* (ex: *1*) e o bot vai perguntar o valor');
-  linhas.push('• Responda direto: *1: 50* (tópico 1 = 50)');
+  linhas.push('💬 *Como preencher (jeito rápido):*');
+  linhas.push('Copia o bloco abaixo, edita os valores e manda de volta numa mensagem só:');
+  linhas.push('');
+  for (const q of p.perguntas) {
+    linhas.push(q.num + ': ');
+  }
+  linhas.push('');
+  linhas.push('_Pode mandar tudo de uma vez ou um por linha. Também aceita texto livre nas pendências._');
   linhas.push('');
   linhas.push('🆘 *Outras Opções:*');
   linhas.push('*( M )* — Menu e Ajuda');
   linhas.push('*( S )* — Status do RDO');
-  return linhas.join('\\n');
+  return linhas.join('
+');
 }
 
 async function responder(msg, targetPhone = phone) {
   try {
-    await this.helpers.httpRequest({
+    const r = await this.helpers.httpRequest({
       method: 'POST',
       url: 'https://evolution-api-production-b130.up.railway.app/message/sendText/construdata-felipe',
-      headers: { apikey: 'construdata2026', 'Content-Type': 'application/json' },
+      headers: { apikey: $env.get('EVOLUTION_API_KEY') || 'construdata2026', 'Content-Type': 'application/json' },
       body: { number: targetPhone, textMessage: { text: msg } },
       json: true,
     });
-  } catch (e) {}
+    return { ok: true, target: targetPhone, r };
+  } catch (e) {
+    return { ok: false, target: targetPhone, err: (e && e.message) || String(e) };
+  }
+}
+
+async function explicarErroGroq(ctx, contexto) {
+  if (!isAdmin || !isFromMe) return 'Comando não reconhecido. Digite *menu* para ver os comandos disponíveis.';
+  const prompt = 'O usuário tentou usar um bot de WhatsApp de gestão de obras (ConstruDataMax) e cometeu um erro. Explique de forma MUITO simples (2-4 linhas, tom amigável, sem jargão técnico) o que ele fez de errado e como corrigir. Não invente comandos. Contexto:
+
+' + contexto;
+  return await perguntarGroq(ctx, prompt);
 }
 
 async function perguntarGroq(ctx, pergunta) {
@@ -239,11 +526,11 @@ async function perguntarGroq(ctx, pergunta) {
       method: 'POST',
       url: 'https://api.groq.com/openai/v1/chat/completions',
       headers: {
-        'Authorization': 'Bearer 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',
+        'Authorization': \`Bearer \${$env.get('GROQ_API_KEY') || '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'}\`,
         'Content-Type': 'application/json'
       },
       body: {
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         messages: [
           { role: 'system', content: 'Você é a IA da ConstruDataMax, assistente de engenharia e gestão de obras. Responda de forma concisa, direta e muito útil. Você sempre usa linguagem profissional voltada para a construção civil.' },
           { role: 'user', content: pergunta }
@@ -267,7 +554,7 @@ if (isSaudacao || isAjuda) {
 
 // Conversão de atalhos numéricos ou textuais para cmdMatch
 let finalCmdMatch = cmdMatch;
-const shortcutMatch = trimmed.match(/^([1-6sm])$/i);
+const shortcutMatch = trimmed.match(/^(1[0-2]|[1-9]|s|m)$/i);
 
 if (shortcutMatch && proj) {
   const s = shortcutMatch[1].toLowerCase();
@@ -276,8 +563,14 @@ if (shortcutMatch && proj) {
     else if (s === '2') finalCmdMatch = [null, 'equipe', ''];
     else if (s === '3') finalCmdMatch = [null, 'projetos', ''];
     else if (s === '4') finalCmdMatch = [null, 'dashboard', ''];
-    else if (s === '5') finalCmdMatch = [null, 'reenviar', 'pardinho']; // Envia para teste
-    else if (s === '6') finalCmdMatch = [null, 'ia', ''];
+    else if (s === '5') finalCmdMatch = [null, 'reenviar', 'todos'];
+    // else if (s === '6') finalCmdMatch = [null, 'ia', ''];
+    else if (s === '7') finalCmdMatch = [null, 'rdo', 'todos'];
+    else if (s === '8') finalCmdMatch = [null, 'meurdo', ''];
+    else if (s === '9') finalCmdMatch = [null, 'lembrar', 'diretores'];
+    else if (s === '10') finalCmdMatch = [null, 'criartarefa', ''];
+    else if (s === '11') finalCmdMatch = [null, 'planocustos', ''];
+    else if (s === '12') finalCmdMatch = [null, 'criartarefaconsorcio', ''];
   } else {
     if (s === 'm') finalCmdMatch = [null, 'menu', ''];
     else if (s === 's') finalCmdMatch = [null, 'status', proj.nome];
@@ -291,131 +584,589 @@ if (finalCmdMatch) {
   
   if (cmd === 'ajuda' || cmd === 'comandos' || cmd === 'help' || cmd === 'menu') {
     resposta = montarMenu(proj, phone);
+
   } else if (cmd === 'projeto') {
     resposta = '📋 Projeto: *' + (proj ? proj.nome : 'não identificado') + '*';
+
   } else if (cmd === 'status') {
-    const alvo = cmdMatch[2] ? cmdMatch[2].toLowerCase() : 'todos';
+    const alvo = finalCmdMatch[2] ? finalCmdMatch[2].toLowerCase() : 'todos';
     const hojeStr = new Date().toLocaleDateString('pt-BR');
-    let texto = '📊 *Status RDO de Hoje* — ' + hojeStr + '\\n\\n';
-    
-    if (alvo === 'todos' || alvo.includes('pardinho')) {
-      texto += '📌 *Pardinho* (Ícaro)\\n❌ Pendente: Falta reportar frente Ligações e Emissário\\n\\n';
+    const escopoStatus = (proj && proj.escopo) || [];
+    const temEscopo = (pr) => escopoStatus.includes('todos') || escopoStatus.includes(pr);
+    let texto = '📊 *Status RDO de Hoje* — ' + hojeStr + '
+
+';
+
+    if (temEscopo('pardinho') && (alvo === 'todos' || alvo.includes('pardinho'))) {
+      texto += '📌 *Pardinho* (Ícaro)
+❌ Pendente: Falta reportar frente Ligações e Emissário
+
+';
     }
-    if (alvo === 'todos' || alvo.includes('osasco')) {
-      texto += '📌 *Osasco* (Mateus)\\n✅ Entregue: 100% preenchido\\n\\n';
+    if (temEscopo('osasco') && (alvo === 'todos' || alvo.includes('osasco'))) {
+      texto += '📌 *Osasco* (Mateus)
+✅ Entregue: 100% preenchido
+
+';
     }
-    if (alvo === 'todos' || alvo.includes('santos')) {
-      texto += '📌 *ConstruData Santos* (João)\\n✅ Entregue: Sem interferências\\n\\n';
+    if (alvo === 'todos' || alvo.includes('brasil') || alvo.includes('santos')) {
+      texto += '📌 *ConstruData Brasília* (João)
+✅ Entregue: Sem interferências
+
+';
     }
-    if (alvo === 'todos' || alvo.includes('sala')) {
-      texto += '📌 *Sala Técnica SLNR* (Gabriel/Vinicius)\\n❌ Pendente: Espacialização Survey atrasada\\n\\n';
+    if (temEscopo('consorcio') && (alvo === 'todos' || alvo.includes('sala') || alvo.includes('consorcio'))) {
+      texto += '📌 *Consórcio — Sala Técnica* (Gabriel/Vinicius)
+';
     }
-    texto += '_Para cobrar, digite @reenviar <projeto>_';
+    if (temEscopo('consorcio') && (alvo === 'todos' || alvo.includes('plan') || alvo.includes('consorcio'))) {
+      texto += '📌 *Consórcio — Planejamento* (Junior/Valdean/Veronica)
+';
+    }
+    if (temEscopo('consorcio') && (alvo === 'todos' || alvo.includes('prod') || alvo.includes('consorcio'))) {
+      texto += '📌 *Consórcio — Produção* (José Márcio)
+';
+    }
+    if (temEscopo('rk') && (alvo === 'todos' || alvo.includes('rk'))) {
+      texto += '📌 *RK Sub Empreita* (Alexandre/Igor)
+';
+    }
+    texto += '_Para cobrar, digite @reenviar <projeto> ou @rdo <projeto>_';
     resposta = texto;
 
   } else if (cmd === 'equipe') {
-    resposta = '👥 *Contatos da Equipe*\\n' +
-      '• Felipe: GESTOR\\n' +
-      '• João (ConstruData Santos): 11999996252\\n' +
-      '• Mateus (Osasco): 61991015639\\n' +
-      '• Gabriel/Vinicius (Sala Técnica SLNR): 13991995918 / 13978216285\\n' +
-      '• Ícaro (Pardinho): 37998268576\\n' +
-      '• Thalita (Sala Técnica Sala): 11919803270\\n' +
-      '• Renato / Buruca / LF (Diretoria)\\n' +
-      '\\n_Use @avisar <projeto> <mensagem> para contatar_';
+    resposta = '👥 *Contatos por Projeto*
+
+' +
+      '📌 *Projeto 1: Osasco — Rua Cuiabá*
+' +
+      '  👷 Mateus — Engenheiro (61 99101-5639)
+' +
+      '  👔 Renato — Diretor (28 99915-4319)
+' +
+      '  👔 Luiz Fernando — Diretor (37 99942-5397)
+
+' +
+      '📌 *Projeto 2: Pardinho — Itapetininga*
+' +
+      '  👷 Ícaro — Engenheiro (37 99826-8576)
+' +
+      '  👔 Luiz Fernando — Diretor (37 99942-5397)
+
+' +
+      '📌 *Projeto 3: Consórcio Se Liga na Rede*
+' +
+      '  • Fabrizzio — Gerente Consórcio (74 99907-6534)
+' +
+      '  _Sala Técnica:_
+' +
+      '  • Gabriel (13 99199-5918)
+' +
+      '  • Vinicius (13 97821-6285)
+' +
+      '  _Planejamento:_
+' +
+      '  • Junior — Gerente (11 98601-2223)
+' +
+      '  • Valdean (99 9139-2763)
+' +
+      '  • Veronica (13 99773-3121)
+' +
+      '  _Produção:_
+' +
+      '  • José Márcio — Gerente (11 94181-6005)
+
+' +
+      '📌 *Projeto 4: RK Sub Empreita*
+' +
+      '  👷 Alexandre / Igor (31 99889-4664)
+' +
+      '  👔 Renato — Diretor (28 99915-4319)
+' +
+      '  👔 Luiz Fernando — Diretor (37 99942-5397)
+
+' +
+      '_Use @rdo <projeto>, @tarefaconsorcio <setor> <desc>_';
       
   } else if (cmd === 'projetos') {
-    resposta = '🏗️ *Projetos Ativos*\\n' +
-      '1. ConstruData Santos (Rumo)\\n' +
-      '2. Osasco - Rua Cuiabá (Capex)\\n' +
-      '3. Sala Técnica SLNR Santos\\n' +
-      '4. Pardinho - Itapetininga\\n' +
-      '\\n_Acompanhe em https://construdatamaxv2-clean.vercel.app_';
+    resposta = '🏗️ *Projetos Ativos*
+
+' +
+      '📌 *1. Osasco* — Rua Cuiabá
+' +
+      '   Eng: Mateus | Dir: Renato, Luiz Fernando
+
+' +
+      '📌 *2. Pardinho* — Itapetininga
+' +
+      '   Eng: Ícaro | Dir: Luiz Fernando
+
+' +
+      '📌 *3. Consórcio Se Liga na Rede*
+' +
+      '   Gerente: Fabrizzio
+' +
+      '   Sala Técnica: Gabriel, Vinicius
+' +
+      '   Planejamento: Junior (ger.), Valdean, Veronica
+' +
+      '   Produção: José Márcio (ger.)
+
+' +
+      '📌 *4. RK Sub Empreita*
+' +
+      '   Eng: Alexandre/Igor | Dir: Renato, Luiz Fernando
+
+' +
+      '_Acompanhe: https://construdatamaxv2-clean.vercel.app_';
 
   } else if (cmd === 'dashboard') {
-    resposta = '📈 *Dashboard Consolidado*\\n' +
-      'O dashboard consolidado de RDO já está atualizado e disponível.\\n\\n' +
-      'Acesse no portal:\\nhttps://construdatamaxv2-clean.vercel.app/dashboard/consolidado';
+    resposta = '📈 *Dashboard Consolidado*
+' +
+      'O dashboard consolidado de RDO já está atualizado e disponível.
+
+' +
+      'Acesse no portal:
+https://construdatamaxv2-clean.vercel.app/dashboard/consolidado';
+
+  // ===== @rdo <projeto|todos> — DISPARA FORMULÁRIO RDO PRO ENGENHEIRO =====
+  } else if (cmd === 'rdo') {
+    if (!proj || !proj.isGestor) {
+      resposta = '❌ Apenas diretores/gestores podem disparar RDO.';
+    } else {
+      const alvo = finalCmdMatch[2] ? finalCmdMatch[2].toLowerCase() : 'todos';
+      const hojeStr = new Date().toLocaleDateString('pt-BR');
+      const enviados = [];
+      const falhas = [];
+
+      // ===== SCOPE-BASED DISPATCH =====
+      const escopoDir = proj.escopo || [];
+      const temEscopo = (pr) => escopoDir.includes('todos') || escopoDir.includes(pr);
+
+      // Pardinho → Ícaro
+      if (temEscopo('pardinho') && (alvo === 'todos' || alvo.includes('pardinho'))) {
+        const msg = RDO_PERGUNTAS_DIRETOR.pardinho.join('
+') + '
+
+📅 ' + hojeStr;
+        const r = await responder.call(this, msg, '5537998268576');
+        if (r.ok) enviados.push('Ícaro (Pardinho)'); else falhas.push('Ícaro: ' + r.err);
+      }
+      // Osasco → Mateus
+      if (temEscopo('osasco') && (alvo === 'todos' || alvo.includes('osasco'))) {
+        const msg = RDO_PERGUNTAS_DIRETOR.osasco.join('
+') + '
+
+📅 ' + hojeStr;
+        const r = await responder.call(this, msg, '5561991015639');
+        if (r.ok) enviados.push('Mateus (Osasco)'); else falhas.push('Mateus: ' + r.err);
+      }
+      // RK → Alexandre/Igor
+      if (temEscopo('rk') && (alvo === 'todos' || alvo.includes('rk') || alvo.includes('teteu'))) {
+        const msg = RDO_PERGUNTAS_DIRETOR.rk.join('
+') + '
+
+📅 ' + hojeStr;
+        const r = await responder.call(this, msg, '5531998894664');
+        if (r.ok) enviados.push('Alexandre/Igor (RK)'); else falhas.push('Alexandre/Igor: ' + r.err);
+      }
+      // ===== CONSÓRCIO SE LIGA NA REDE (por setor) =====
+      const isConsorcioAlvo = alvo === 'todos' || alvo.includes('consorcio') || alvo.includes('seliga');
+      if (temEscopo('consorcio')) {
+        // Sala Técnica → Gabriel + Vinicius
+        if (isConsorcioAlvo || alvo.includes('sala')) {
+          const msg = RDO_PERGUNTAS_DIRETOR.sala.join('
+') + '
+
+📅 ' + hojeStr;
+          const r1 = await responder.call(this, msg, '5513991995918');
+          const r2 = await responder.call(this, msg, '5513978216285');
+          if (r1.ok) enviados.push('Gabriel (Sala)'); else falhas.push('Gabriel: ' + r1.err);
+          if (r2.ok) enviados.push('Vinicius (Sala)'); else falhas.push('Vinicius: ' + r2.err);
+        }
+        // Planejamento → Junior + Valdean + Veronica
+        if (isConsorcioAlvo || alvo.includes('plan')) {
+          const msg = RDO_PERGUNTAS_DIRETOR.planejamento.join('
+') + '
+
+📅 ' + hojeStr;
+          const r1 = await responder.call(this, msg, '5511986012223');
+          const r2 = await responder.call(this, msg, '559991392763');
+          const r3 = await responder.call(this, msg, '5513997733121');
+          if (r1.ok) enviados.push('Junior (Plan.)'); else falhas.push('Junior: ' + r1.err);
+          if (r2.ok) enviados.push('Valdean (Plan.)'); else falhas.push('Valdean: ' + r2.err);
+          if (r3.ok) enviados.push('Veronica (Plan.)'); else falhas.push('Veronica: ' + r3.err);
+        }
+        // Produção → José Márcio
+        if (isConsorcioAlvo || alvo.includes('prod')) {
+          const msg = RDO_PERGUNTAS_DIRETOR.producao.join('
+') + '
+
+📅 ' + hojeStr;
+          const r1 = await responder.call(this, msg, '5511941816005');
+          if (r1.ok) enviados.push('José Márcio (Prod.)'); else falhas.push('José Márcio: ' + r1.err);
+        }
+        // Notificar Fabrizzio quando OUTRO gestor dispara RDO pro Consórcio
+        if (phone !== '5574999076534' && enviados.some(e => e.includes('Sala') || e.includes('Plan') || e.includes('Prod'))) {
+          await responder.call(this, 'ℹ️ *RDO Consórcio disparado por ' + proj.responsavel + '*
+
+Enviado para: ' + enviados.filter(e => e.includes('Sala') || e.includes('Plan') || e.includes('Prod')).join(', '), '5574999076534');
+        }
+      }
+
+      // Diretores
+      if (alvo === 'todos' || alvo.includes('diretor')) {
+        const msg = '⚠️ *COBRANÇA DE RDO — DIRETORIA*
+
+Atenção Diretores, por favor enviem o RDO de Supervisão diário.
+Basta digitar *@meurdo* para preencher o relatório consolidado.';
+        const diretores = [
+          {nome: 'Renato', tel: '5528999154319'},
+          {nome: 'Luiz Fernando', tel: '5537999425397'},
+          {nome: 'Fabrizzio', tel: '5574999076534'}
+        ];
+        for (const dir of diretores) {
+          if (dir.tel !== phone) {
+            const r = await responder.call(this, msg, dir.tel);
+            if (r.ok) enviados.push(dir.nome + ' (Diretoria)'); else falhas.push(dir.nome + ': ' + r.err);
+          }
+        }
+      }
+
+      if (enviados.length > 0) {
+        resposta = '📋 *RDO disparado com sucesso!*
+
+✅ Enviado para: ' + enviados.join(', ');
+        if (falhas.length) resposta += '
+❌ Falhas: ' + falhas.join(', ');
+        resposta += '
+
+_Os engenheiros e diretores receberam o alerta._';
+      } else {
+        resposta = '❌ Projeto não encontrado ou sem permissão.
+Alvos: pardinho, osasco, rk, consorcio, sala, planejamento, producao, diretores, todos';
+      }
+    }
+
+  // ===== @meurdo — RDO DE SUPERVISÃO DO DIRETOR =====
+  } else if (cmd === 'gerar' || cmd === 'subir') {
+    if (!proj || (!proj.isGestor && !proj.isDiretor)) {
+      resposta = '❌ Apenas gestores podem emitir comandos de sistema.';
+    } else {
+      const acao = finalCmdMatch[2] ? finalCmdMatch[2].toLowerCase() : '';
+      if (acao.includes('dashboard') || acao.includes('machine learning') || acao.includes('relatório') || acao.includes('relatorio') || cmd === 'subir') {
+        const msgOperacao = cmd === 'subir' ? 'Sincronização com o painel Gestão 360' : 'Geração de ' + acao;
+        resposta = '✅ *COMANDO RECEBIDO:*
+Operação de ' + msgOperacao + ' iniciada no backend.
+⏳ Os dados estão sendo processados pela IA e serão consolidados na plataforma ConstruDataMax.';
+      } else {
+        resposta = '❌ Especifique o alvo. Exemplo:
+@gerar dashboard
+@gerar machine learning
+@gerar relatórios';
+      }
+    }
+    
+  } else if (cmd === 'lembrar') {
+    if (!proj || (!proj.isGestor && !proj.isDiretor)) {
+      resposta = '❌ Acesso negado. Apenas gestores podem disparar o lembrete de tarefas.';
+    } else {
+      // Avisa os diretores
+      const dirs = [
+        {nome: 'Luiz Fernando', tel: '5537999425397'},
+        {nome: 'Renato RK', tel: '5528999154319'},
+        {nome: 'Fabrizzio', tel: '5574999076534'}
+      ];
+      let oks = [];
+      const amanha = new Date().toLocaleDateString('pt-BR');
+      for (const d of dirs) {
+        if(d.tel !== phone) { 
+          const r = await responder.call(this, '⚠️ *LEMBRETE OBRIGATÓRIO* ⚠️
+
+Diretor ' + d.nome + ', por favor mande hoje as tarefas matinais para as suas equipes responsáveis.
+💡 *Como fazer:* Use *@tarefa <engenheiro> <descrição>*
+
+_Esteja atento aos projetos da sua alçada!_', d.tel);
+          if(r.ok) oks.push(d.nome);
+        }
+      }
+      resposta = '✅ Lembrete metódico disparado matinalmente para os Diretores: ' + oks.join(', ');
+    }
+  
+  } else if (cmd === 'criartarefa') {
+    resposta = '🛠️ *GUIA PARA CRIAR TAREFAS*
+
+Para atribuir obrigações aos engenheiros, escreva:
+
+*@tarefa <nome> <descrição>*
+
+Membros elegíveis:
+• *Ícaro* (Pardinho)
+• *Mateus* (Osasco)
+• *Alexandre* ou *Igor* (RK Sub)
+• *Junior*, *Valdeans*, *Veronica*, *Jose Marcio* (Sala Técnica)
+
+_Ex: @tarefa icaro Focar na escavação da rede 2._';
+
+  } else if (cmd === 'planocustos') {
+    resposta = '💰 *PLANO DE CONTAS (CUSTO DIÁRIO)*
+
+O preenchimento de Custos Diários foi EMBUTIDO no RDO normal dos equipamentos e equipes (Osasco, Pardinho e RK)!
+
+Ao responder o RDO, preencha as rubricas numéricas de:
+- Diesel/Combustível
+- Alimentação/Hotelaria
+- Mão de Obra Fixa/Avulsa
+- Materiais/Equipamentos';
+  
+  } else if (cmd === 'criartarefaconsorcio') {
+    resposta = '🛠️ *GUIA TAREFAS CONSÓRCIO SE LIGA*
+
+Para atribuir tarefas pontuais aos setores, escreva:
+
+*@tarefaconsorcio <setor|todos> <descrição>*
+
+Setores:
+• *planejamento* (Veronica, Valdean, Junior)
+• *producao* (Jose Marcio)
+• *sala* (Gabriel, Vinicius)
+
+_Ex: @tarefaconsorcio planejamento Atualizar cronograma da semana_
+_Obs: Fabrizzio sempre receberá uma cópia da tarefa._';
+  
+  } else if (cmd === 'meurdo' || cmd === 'meurdo') {
+    if (!proj || !proj.isDiretor) {
+      resposta = '❌ Apenas diretores podem preencher o RDO de supervisão.';
+    } else {
+      const hojeStr = new Date().toLocaleDateString('pt-BR');
+      const linhas = [
+        '📋 *RDO DE SUPERVISÃO — DIRETORIA*',
+        '📅 ' + hojeStr,
+        'Diretor: *' + proj.responsavel + '*',
+        '',
+      ];
+      for (const q of RDO_DIRETOR_SUPERVISAO) {
+        linhas.push('*( ' + q.num + ' )* — ' + q.label);
+      }
+      linhas.push('');
+      linhas.push('💬 Responda: *1: texto | 2: texto | ...*');
+      linhas.push('');
+      linhas.push('_Esse relatório consolida sua visão diário para o Dashboard 360._');
+      resposta = linhas.join('
+');
+    }
 
   } else if (cmd === 'reenviar') {
-    const alvo = cmdMatch[2] ? cmdMatch[2].toLowerCase() : '';
+    const alvo = finalCmdMatch[2] ? finalCmdMatch[2].toLowerCase() : '';
     let telefones = [];
-    if (alvo.includes('pardinho')) telefones.push('5537998268576');
+    if (alvo === 'todos' || alvo === '') {
+      telefones.push('5537998268576', '5561991015639', '5513991995918', '5513978216285');
+      telefones.push('5528999154319', '5537999425397', '5574999076534'); // Diretores
+    } else if (alvo.includes('pardinho')) telefones.push('5537998268576');
     else if (alvo.includes('osasco')) telefones.push('5561991015639');
-    else if (alvo.includes('santos')) telefones.push('5561999996252');
     else if (alvo.includes('sala')) telefones.push('5513991995918', '5513978216285');
+    else if (alvo.includes('diretor')) telefones.push('5528999154319', '5537999425397', '5574999076534');
 
     if (telefones.length > 0) {
-      resposta = '✅ Cobrança reenviada para a equipe de *' + (alvo.charAt(0).toUpperCase() + alvo.slice(1)) + '*!';
+      const results = [];
       for (const t of telefones) {
-        await responder.call(this, '⚠️ *COBRANÇA DE RDO*\\n\\nAtenção equipe, por favor preencham o RDO de hoje. Digite *menu* para ver os tópicos pendentes.', t);
+        const res = await responder.call(this, '⚠️ *COBRANÇA DE RDO*
+
+Atenção equipe, por favor preencham o RDO de hoje. Digite *menu* para ver os tópicos pendentes.', t);
+        results.push(res);
       }
+      const okList = results.filter(r => r.ok).map(r => r.target);
+      const failList = results.filter(r => !r.ok);
+      let r2 = '📤 *Resultado do envio para ' + alvo + '*
+';
+      if (okList.length) r2 += '✅ OK: ' + okList.join(', ') + '
+';
+      if (failList.length) {
+        r2 += '❌ Falhas:
+';
+        for (const f of failList) r2 += '• ' + f.target + ' → ' + f.err + '
+';
+      }
+      resposta = r2;
     } else {
-      resposta = '❌ Projeto não encontrado para reenviar cobrança. Tente @reenviar pardinho, osasco, santos ou sala.';
+      resposta = '❌ Projeto não reconhecido. Use: @reenviar pardinho, osasco, sala ou todos';
     }
 
   } else if (cmd === 'avisar') {
-    const args = cmdMatch[2] ? cmdMatch[2].split(' ') : [];
+    const args = finalCmdMatch[2] ? finalCmdMatch[2].split(' ') : [];
     if (args.length > 1) {
       const alvo = args[0].toLowerCase();
-      const mensagemAviso = cmdMatch[2].substring(alvo.length).trim();
+      const mensagemAviso = finalCmdMatch[2].substring(alvo.length).trim();
       let telefones = [];
-      if (alvo.includes('pardinho')) telefones.push('5537998268576');
+      if (alvo === 'todos') telefones.push('5537998268576','5561991015639','5561999996252','5513991995918','5513978216285','5511986012223','5531998894664');
+      else if (alvo.includes('rk')) telefones.push('5531998894664');
+      else if (alvo.includes('pardinho')) telefones.push('5537998268576');
       else if (alvo.includes('osasco')) telefones.push('5561991015639');
-      else if (alvo.includes('santos')) telefones.push('5561999996252');
+      else if (alvo.includes('brasil') || alvo.includes('santos')) telefones.push('5561999996252');
       else if (alvo.includes('sala')) telefones.push('5513991995918', '5513978216285');
 
       if (telefones.length > 0) {
         resposta = '✅ Aviso enviado para a equipe de *' + (alvo.charAt(0).toUpperCase() + alvo.slice(1)) + '*!';
         for (const t of telefones) {
-           await responder.call(this, '📢 *AVISO DA GESTÃO*\\n\\n' + mensagemAviso, t);
+           await responder.call(this, '📢 *AVISO DA GESTÃO*
+
+' + mensagemAviso, t);
         }
       } else {
-        resposta = '❌ Projeto não encontrado. Tente @avisar pardinho <mensagem>.';
+        resposta = '❌ Projeto não encontrado. Use: @avisar pardinho/osasco/sala <mensagem>';
       }
     } else {
-      resposta = '❌ Formato incorreto. Use: @avisar <projeto> <mensagem>';
+      resposta = '❌ Faltou a mensagem. Use: @avisar <projeto> <mensagem>
+Ex: @avisar osasco reunião amanhã 8h';
+    }
+
+  } else if (cmd === 'tarefaconsorcio' || cmd === 'tarefacons') {
+    const args = finalCmdMatch[2] ? finalCmdMatch[2].split(' ') : [];
+    if (!proj || !proj.isDiretor) {
+      resposta = '❌ Permissão negada. Apenas diretoria pode delegar tarefas.';
+    } else if (args.length > 1) {
+      const alvo = args[0].toLowerCase();
+      const descricao = finalCmdMatch[2].substring(args[0].length).trim();
+      const FABRIZZIO = '5574999076534';
+      
+      const CONSORCIO_ENG = [
+        { nome: 'Veronica', tel: '5513997733121', setor: 'planejamento' },
+        { nome: 'Valdean', tel: '559991392763', setor: 'planejamento' },
+        { nome: 'Junior', tel: '5511986012223', setor: 'planejamento' },
+        { nome: 'Jose Marcio', tel: '5511941816005', setor: 'producao' },
+        { nome: 'Gabriel', tel: '5513991995918', setor: 'salatecnica' },
+        { nome: 'Vinicius', tel: '5513978216285', setor: 'salatecnica' }
+      ];
+
+      let destinos = [];
+      if (alvo === 'todos') {
+        destinos = CONSORCIO_ENG.slice();
+      } else if (alvo.includes('plan')) {
+        destinos = CONSORCIO_ENG.filter(e => e.setor === 'planejamento');
+      } else if (alvo.includes('prod')) {
+        destinos = CONSORCIO_ENG.filter(e => e.setor === 'producao');
+      } else if (alvo.includes('sala')) {
+        destinos = CONSORCIO_ENG.filter(e => e.setor === 'salatecnica');
+      }
+
+      if (destinos.length > 0) {
+        const msg = '🚨 *NOVA TAREFA DELEGADA - CONSÓRCIO SE LIGA* 🚨
+
+👤 Delegado por: *' + proj.responsavel + '*
+📝 *Tarefa:* ' + descricao + '
+
+⚠️ _Protocolada no Painel Gestão 360._
+_Responda com "Ciente" para confirmar._';
+        const enviados = [];
+        const falhas = [];
+        for (const d of destinos) {
+          const r = await responder.call(this, msg, d.tel);
+          if (r.ok) enviados.push(d.nome); else falhas.push(d.nome + ' (' + r.err + ')');
+          // Tentativa de salvar na base para histórico do consorcio
+          try {
+            await salvarSupabase(this, 'tarefas', {
+              project_id: resolverProjectId('sala_tecnica'),
+              delegado_por: proj.responsavel,
+              delegado_para: d.nome,
+              telefone_destino: d.tel,
+              descricao: descricao,
+              status: 'pendente',
+              prioridade: 'normal',
+            });
+          } catch(e) {}
+        }
+        
+        const msgFabrizzio = 'ℹ️ *CÓPIA DE TAREFA - CONSÓRCIO SE LIGA*
+
+O diretor *' + proj.responsavel + '* enviou uma tarefa para o setor (' + alvo.toUpperCase() + ' - ' + enviados.join(', ') + ')
+
+📝 *Tarefa:* ' + descricao;
+        await responder.call(this, msgFabrizzio, FABRIZZIO);
+
+        resposta = '✅ Tarefa envidada p/ Consórcio: *' + enviados.join(', ') + '*
+*(Cópia enviada auto p/ Fabrizzio)*';
+        if (falhas.length) resposta += '
+❌ Falhas: ' + falhas.join(', ');
+      } else {
+        resposta = '❌ Setor não reconhecido. Use: @tarefaconsorcio <planejamento|producao|sala|todos> <descrição>';
+      }
+    } else {
+      resposta = '❌ Faltou o setor ou a descrição. Use: @tarefaconsorcio <setor|todos> <descrição>
+Ex: @tarefaconsorcio planejamento revisar cronograma';
     }
 
   } else if (cmd === 'tarefa' || cmd === 'task') {
-    const args = cmdMatch[2] ? cmdMatch[2].split(' ') : [];
-    if (args.length > 1 && proj.isGestor) {
+    const args = finalCmdMatch[2] ? finalCmdMatch[2].split(' ') : [];
+    if (!proj || !proj.isDiretor) {
+      resposta = '❌ Permissão negada. Apenas diretoria pode delegar tarefas.';
+    } else if (args.length > 1) {
       const alvo = args[0].toLowerCase();
-      const descricao = cmdMatch[2].substring(alvo.length).trim();
-      
-      let telefoneDestino = null;
-      if (alvo.includes('joao') || alvo.includes('joão')) telefoneDestino = '5561999996252';
-      else if (alvo.includes('mateus')) telefoneDestino = '5561991015639';
-      else if (alvo.includes('icaro') || alvo.includes('ícaro')) telefoneDestino = '5537998268576';
-      else if (alvo.includes('gabriel')) telefoneDestino = '5513991995918';
-      else if (alvo.includes('vinicius')) telefoneDestino = '5513978216285';
-      else if (alvo.includes('thalita')) telefoneDestino = '5511919803270';
-      else if (alvo.includes('felipe')) telefoneDestino = '5561981846325';
-      
-      if (telefoneDestino) {
-        resposta = '✅ Ordem de serviço enviada diretamente para o terminal corporativo de *' + (alvo.charAt(0).toUpperCase() + alvo.slice(1)) + '* com prioridade máxima!';
-        await responder.call(this, '🚨 *NOVA TAREFA DELEGADA (DIRETORIA)* 🚨\\n\\n👤 Delegado por: *' + proj.responsavel + '*\\n📝 *Tarefa:* ' + descricao + '\\n\\n⚠️ _Esta tarefa foi protocolada e está sendo rastreada no Painel Gestão 360._\\n_Responda com "Ciente" para confirmar._', telefoneDestino);
-      } else {
-        resposta = '❌ Executor não encontrado no cache rápido. Use o nome exato (Ex: mateus, icaro, joao, gabriel, thalita).';
+      const descricao = finalCmdMatch[2].substring(args[0].length).trim();
+      const FABRIZZIO = '5574999076534';
+
+      const TODOS_ENG = [
+        { nome: 'Ícaro',    tel: '5537998268576', proj: 'pardinho' },
+        { nome: 'Mateus',   tel: '5561991015639', proj: 'osasco' },
+        { nome: 'Gabriel',  tel: '5513991995918', proj: 'sala_tecnica' },
+        { nome: 'Vinicius', tel: '5513978216285', proj: 'sala_tecnica' },
+      ];
+      const escopoDir = proj.escopo || [];
+      const escopoTodos = escopoDir.includes('todos');
+
+      let destinos = [];
+      if (alvo === 'todos') {
+        destinos = escopoTodos ? TODOS_ENG.slice() : TODOS_ENG.filter(e => escopoDir.includes(e.proj));
       }
-    } else if (!proj.isGestor) {
-      resposta = '❌ Permissão negada. Apenas diretores e gerentes podem delegar ordens prioritárias (Gestor-Only).';
+      else if (alvo.includes('mateus') || alvo.includes('matheus')) destinos.push({nome:'Mateus', tel:'5561991015639'});
+      else if (alvo.includes('icaro') || alvo.includes('ícaro')) destinos.push({nome:'Ícaro', tel:'5537998268576'});
+      else if (alvo.includes('gabriel')) destinos.push({nome:'Gabriel', tel:'5513991995918'});
+      else if (alvo.includes('vinicius') || alvo.includes('vinícius')) destinos.push({nome:'Vinicius', tel:'5513978216285'});
+      else if (alvo.includes('thalita')) destinos.push({nome:'Thalita', tel:'5511919803270'});
+      else if (alvo.includes('felipe')) destinos.push({nome:'Felipe', tel:'5561981846325'});
+
+      if (destinos.length > 0) {
+        const msg = '🚨 *NOVA TAREFA DELEGADA (DIRETORIA)* 🚨
+
+👤 Delegado por: *' + proj.responsavel + '*
+📝 *Tarefa:* ' + descricao + '
+
+⚠️ _Protocolada no Painel Gestão 360._
+_Responda com "Ciente" para confirmar._';
+        const enviados = [];
+        const falhas = [];
+        for (const d of destinos) {
+          const r = await responder.call(this, msg, d.tel);
+          if (r.ok) enviados.push(d.nome); else falhas.push(d.nome + ' (' + r.err + ')');
+          // Salvar tarefa no Supabase
+          await salvarSupabase(this, 'tarefas', {
+            project_id: resolverProjectId(d.proj || proj.nome),
+            delegado_por: proj.responsavel,
+            delegado_para: d.nome,
+            telefone_destino: d.tel,
+            descricao: descricao,
+            status: 'pendente',
+            prioridade: 'normal',
+          });
+        }
+        resposta = '✅ Tarefa enviada para: *' + enviados.join(', ') + '* — 💾 Salva no Supabase';
+        if (falhas.length) resposta += '
+❌ Falhas: ' + falhas.join(', ');
+      } else {
+        resposta = '❌ Executor não cadastrado. Use: @tarefa <nome|todos> <descrição>
+Nomes: mateus, icaro, gabriel, vinicius, thalita';
+      }
     } else {
-      resposta = '❌ Erro de Sintaxe. Digite: *@tarefa <nome_do_executor> <descrição da tarefa>*';
+      resposta = '❌ Faltou o nome e a descrição. Use: @tarefa <nome|todos> <descrição>
+Ex: @tarefa todos enviar foto da frente até 17h';
     }
 
   } else if (cmd === 'ia' || cmd === 'ai') {
-    const pergunta = cmdMatch[2] ? cmdMatch[2].trim() : '';
-    if (pergunta) {
-      await responder.call(this, '⏳ A inteligência artificial está analisando sua solicitação...');
-      const respostaIA = await perguntarGroq(this, pergunta);
-      resposta = '🤖 *Assistente IA Llama-3*\\n\\n' + respostaIA;
-    } else {
-      resposta = '🤖 *Assistente IA Llama-3*\\nEstou pronto! Para perguntar qualquer coisa, basta digitar:\\n\\n*@ia <sua dúvida>*\\n\\nExemplo: *@ia Me explique o que é um traço de concreto 25 MPa.*';
-    }
+    resposta = '🤖 A IA está temporariamente desligada para manutenção.';
 
   } else {
-    resposta = '❓ Comando *@' + cmd + '* não reconhecido.\\nDigite *menu* pra ver as opções e comandos válidos.';
+    resposta = '❌ Comando *@' + cmd + '* não existe.
+
+Comandos válidos: menu, @status, @equipe, @projetos, @dashboard, @reenviar, @rdo, @meurdo, @tarefa, @avisar';
   }
 
   await responder.call(this, resposta);
@@ -428,61 +1179,175 @@ if (numMatchRdo && proj && !proj.isGestor) {
   const num = parseInt(numMatchRdo[1], 10);
   const q = proj.perguntas.find(x => x.num === num);
   if (q) {
-    const msg = '✏️ *Tópico ' + num + ' — ' + q.label + '*\\n\\nResponda agora o valor/status.\\nExemplo: *' + q.tag + ': 50*\\n\\nOu mande direto: *' + num + ': seu valor aqui*';
+    const msg = '✏️ *Tópico ' + num + ' — ' + q.label + '*
+
+Responda agora o valor/status.
+Exemplo: *' + q.tag + ': 50*
+
+Ou mande direto: *' + num + ': seu valor aqui*';
     await responder.call(this, msg);
     return [{ json: { ignorar: true, motivo: 'Pergunta tópico ' + num } }];
   }
 }
 
-// Resposta no formato "1: valor" ou "1: a | 2: b | 3: c" — converte pra tags e segue pro RDO
-if (proj && /^\\s*\\d+\\s*[:=]/.test(trimmed)) {
-  const partes = trimmed.split('|').map(s => s.trim());
+// ===== DIRETORES RESPONDENDO RDO DE SUPERVISÃO (formato 1: valor) =====
+if (proj && proj.isDiretor && /^s*d+s*[:=]/m.test(trimmed)) {
+  const partes = trimmed.split(/[|
+]/).map(s => s.trim()).filter(Boolean);
   const tagLines = [];
+  const ackLabels = [];
   for (const p of partes) {
-    const m = p.match(/^(\\d+)\\s*[:=]\\s*(.+)$/);
+    const m = p.match(/^(d+)s*[:=]s*(.+)$/);
     if (m) {
-      const q = proj.perguntas.find(x => x.num === parseInt(m[1], 10));
-      if (q) tagLines.push(q.tag + ': ' + m[2].trim());
+      const q = RDO_DIRETOR_SUPERVISAO.find(x => x.num === parseInt(m[1], 10));
+      if (q) {
+        tagLines.push(q.tag + ': ' + m[2].trim());
+        ackLabels.push('✅ *' + q.num + '. ' + q.label + '* → ' + m[2].trim());
+      }
     }
   }
   if (tagLines.length > 0) {
-    text = tagLines.join('\\n'); // sobrescreve text para o sub-workflow processar normalmente
+    const respondidos = RDO_DIRETOR_SUPERVISAO.filter(q => tagLines.some(t => t.startsWith(q.tag + ':'))).map(q => q.num);
+    const pendentes = RDO_DIRETOR_SUPERVISAO.filter(q => !respondidos.includes(q.num));
+    // Salvar RDO de supervisão no Supabase
+    const hoje = new Date().toISOString().split('T')[0];
+    await salvarSupabase(this, 'rdos', {
+      project_id: resolverProjectId(proj.nome),
+      data: hoje,
+      clima: 'bom',
+      observacoes: 'RDO Supervisão — ' + proj.responsavel + ': ' + tagLines.join(' | '),
+      apontador: proj.responsavel + ' (Diretor)',
+      status: 'aberto',
+    });
+    let ack = '📥 *RDO Supervisão Recebido!* 💾
+Diretor: *' + proj.responsavel + '*
+
+' + ackLabels.join('
+');
+    if (pendentes.length > 0) {
+      ack += '
+
+⏳ *Ainda faltam:*
+' + pendentes.map(q => '( ' + q.num + ' ) ' + q.label).join('
+');
+    } else {
+      ack += '
+
+🎉 *RDO Supervisão completo!* Consolidado no Dashboard 360.';
+    }
+    await responder.call(this, ack);
+    if (!isAdmin) {
+      await responder.call(this, '📋 *RDO SUPERVISÃO RECEBIDO*
+
+👤 Diretor: *' + proj.responsavel + '*
+' + ackLabels.join('
+'), ADMIN_PHONE);
+    }
+    return [{ json: { ignorar: true, motivo: 'RDO supervisão diretor recebido e salvo no Supabase', phone, text: tagLines.join('
+') } }];
   }
 }
 
-// ========== ROTEAMENTO RDO ==========
-// Só roteia se o phone for de um responder de RDO conhecido. Caso contrário ignora
-// (gestores caem aqui se mandarem texto que não é menu/comando — apenas confirmamos
-// recebimento sem disparar sub-workflow inexistente).
-let targetWebhook = '';
+// Resposta no formato "1: valor" ou "1: a | 2: b | 3: c" — converte pra tags e segue pro RDO (engenheiros)
+if (proj && !proj.isGestor && /^s*d+s*[:=]/m.test(trimmed)) {
+  const partes = trimmed.split(/[|
+]/).map(s => s.trim()).filter(Boolean);
+  const tagLines = [];
+  const ackLabels = [];
+  for (const p of partes) {
+    const m = p.match(/^(d+)s*[:=]s*(.+)$/);
+    if (m) {
+      const q = proj.perguntas.find(x => x.num === parseInt(m[1], 10));
+      if (q) {
+        tagLines.push(q.tag + ': ' + m[2].trim());
+        ackLabels.push('✅ *' + q.num + '. ' + q.label + '* → ' + m[2].trim());
+      }
+    }
+  }
+  if (tagLines.length > 0) {
+    text = tagLines.join('
+');
+    const respondidos = proj.perguntas.filter(q => tagLines.some(t => t.startsWith(q.tag + ':'))).map(q => q.num);
+    const pendentes = proj.perguntas.filter(q => !respondidos.includes(q.num));
+    // Extrair dados numéricos para o Supabase
+    const metrosTag = tagLines.find(t => t.startsWith('metros_rede:'));
+    const efetivoTag = tagLines.find(t => t.startsWith('efetivo:'));
+    const climaTag = tagLines.find(t => t.startsWith('clima:'));
+    const metrosVal = metrosTag ? parseFloat(metrosTag.split(':')[1]) || 0 : 0;
+    const efetivoVal = efetivoTag ? parseInt(efetivoTag.split(':')[1]) || 0 : 0;
+    let climaVal = 'bom';
+    if (climaTag) {
+      const cv = climaTag.split(':')[1].trim().toLowerCase();
+      if (['bom','nublado','chuva','parado'].includes(cv)) climaVal = cv;
+    }
+    // Salvar RDO do engenheiro no Supabase
+    const hoje = new Date().toISOString().split('T')[0];
+    const rdoSaved = await salvarSupabase(this, 'rdos', {
+      project_id: resolverProjectId(proj.nome),
+      data: hoje,
+      clima: climaVal,
+      producao_m: metrosVal,
+      equipe_number: efetivoVal,
+      observacoes: tagLines.join(' | '),
+      apontador: proj.responsavel,
+      latitude: locLat,
+      longitude: locLng,
+      fotos: mediaUrl ? [mediaUrl] : [],
+      status: pendentes.length === 0 ? 'aberto' : 'aberto',
+    });
+    let ack = '📥 *Recebido!* ' + (rdoSaved ? '💾' : '⚠️') + '
 
-if (phone.includes('999996252')) { // João
-  targetWebhook = 'https://n8n-production-ae317.up.railway.app/webhook/construdata-rdo-joao';
-} else if (phone.includes('991015639')) { // Mateus Santos
-  targetWebhook = 'https://n8n-production-ae317.up.railway.app/webhook/construdata-rdo-osasco';
-} else if (phone.includes('991995918') || phone.includes('978216285')) { // Gabriel ou Vinicius
-  targetWebhook = 'https://n8n-production-ae317.up.railway.app/webhook/construdata-rdo-sala-tecnica';
-} else if (phone.includes('998268576')) { // Icaro (Pardinho)
-  targetWebhook = 'https://n8n-production-ae317.up.railway.app/webhook/construdata-rdo-pardinho';
-} else {
-// ========== FALLBACK INTELIGENTE (IA) ==========
-// Se gestor mandar texto cru que não é comando, assumimos que é uma pergunta para IA.
-if (proj && proj.isGestor && !targetWebhook) {
-  await responder.call(this, '⏳ A inteligência artificial está analisando sua mensagem...');
-  const respostaIA = await perguntarGroq(this, text);
-  await responder.call(this, '🤖 *Assistente IA:*
+' + ackLabels.join('
+');
+    if (pendentes.length > 0) {
+      ack += '
+
+⏳ *Ainda faltam:*
+' + pendentes.map(q => '( ' + q.num + ' ) ' + q.label).join('
+');
+    } else {
+      ack += '
+
+🎉 *RDO completo!* Todos os tópicos respondidos e salvos no Supabase.';
+    }
+    await responder.call(this, ack);
+    const resumoRdo = '📥 *RDO RECEBIDO* ' + (rdoSaved ? '💾' : '') + '
+
+👷 *' + proj.responsavel + '* — ' + proj.nome + '
+' + ackLabels.join('
+');
+    await responder.call(this, resumoRdo, ADMIN_PHONE);
+    return [{ json: { ignorar: true, motivo: 'RDO recebido, processado e salvo no Supabase', phone, text } }];
+  }
+}
+
+// ========== FALLBACK — IA SÓ PRO FELIPE FALANDO CONSIGO MESMO ==========
+if (proj && proj.isGestor) {
+  // IA só responde se for o Felipe E estiver falando consigo mesmo (fromMe)
+  if (isAdmin && isFromMe) {
+    await responder.call(this, '⏳ Analisando sua mensagem...');
+    const respostaIA = await perguntarGroq(this, text);
+    await responder.call(this, '🤖 *Assistente IA:*
 
 ' + respostaIA);
-  return [{ json: { ignorar: true, motivo: 'Fallback IA para Gestor' } }];
+    return [{ json: { ignorar: true, motivo: 'IA respondeu Felipe (fromMe)' } }];
+  }
+  // Qualquer outro gestor ou Felipe recebendo msg de outros → silêncio
+  return [{ json: { ignorar: true, motivo: 'Texto livre gestor - silêncio (IA é só Felipe fromMe)' } }];
 }
 
-if (!targetWebhook) {
-  // Phone não é responder de RDO nem Gestor que fez RDO (impossível chegar aqui usualmente sem target, mas segurança)
-  await responder.call(this, '🤖 Recebi sua mensagem, mas não tem operação associada.\\n\\nDigite *menu* pra ver as opções.');
-  return [{ json: { ignorar: true, motivo: 'Phone sem destino: ' + phone } }];
+// Engenheiro mandou texto que não é número nem tag — NÃO responde (deixa a conversa normal)
+if (proj && !proj.isGestor) {
+  // Silêncio — o engenheiro pode estar só conversando com o Felipe
+  return [{ json: { ignorar: true, motivo: 'Texto livre engenheiro - IA desligada' } }];
 }
 
-return [{ json: { ignorar: false, phone, text, targetWebhook } }];
+// Phone desconhecido — NÃO responde (silêncio total)
+return [{ json: { ignorar: true, motivo: 'Phone sem destino: ' + phone } }];
+
+} catch (err) {
+  return [{ json: { error: err.message, stack: err.stack, ignorar: true } }];
+}
 `,
     };
 
@@ -517,7 +1382,7 @@ return [{ json: { ignorar: false, phone, text, targetWebhook } }];
         name: 'Encaminhar para Sub-Workflow',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.4,
-        position: [800, 200],
+        position: [750, 300],
     })
     EncaminharParaSubWorkflow = {
         url: '={{ $json.targetWebhook }}',

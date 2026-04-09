@@ -58,6 +58,210 @@ const fs = require('fs');
 const path = require('path');
 const lastTaskMap = {};
 
+// ── URL do backend FastAPI (rdo_engine) ──
+const API_URL = process.env.CONSTRUDATA_API_URL || 'http://localhost:8000';
+
+// ── Sessões em memória por número (wizard multi-passo) ──
+// { '5511999999999@c.us': { etapa, rdo } }
+const rdoSessions = {};
+
+// ────────────────────────────────────────────────────────────────────────
+// PARSER RDO BRUTAL — espelha campos do PDF hydronetwork/rdo
+// Template esperado (case-insensitive, blocos podem vir em qualquer ordem):
+//
+//   RDO
+//   NUCLEO: PARDINHO
+//   DATA: 08/04/2026
+//   RT: Felipe Nery
+//   TRECHO: NS003
+//   SISTEMA: esgoto
+//   EXECUTADO: 73 m
+//   CLIMA: sol/sol
+//
+//   SERVICOS:
+//   - ASSENTAMENTO REDE DN150 73 m
+//   - REMOCAO ENTULHO 20 m3
+//
+//   EQUIPE:
+//   - Encanador 2
+//   - Servente 3
+//
+//   FINANCEIRO:
+//   - MAO_OBRA ALIMENTACAO 400 DESPESA
+//   - EQUIPAMENTOS DIESEL 500 DESPESA
+//
+//   OCORRENCIAS:
+//   - interferencia raiz 10:30
+//
+//   OBS: texto livre
+// ────────────────────────────────────────────────────────────────────────
+const CAT_MAP = {
+    MO:'Mao de Obra', MAO:'Mao de Obra', MAO_OBRA:'Mao de Obra', MAOOBRA:'Mao de Obra',
+    EQ:'Equipamentos', EQUIP:'Equipamentos', EQUIPAMENTOS:'Equipamentos',
+    TR:'Transporte', TRANSP:'Transporte', TRANSPORTE:'Transporte',
+    OUT:'Outros', OUTROS:'Outros', MAT:'Materiais', MATERIAIS:'Materiais',
+};
+const HEADER_RE = /^(NUCLEO|DATA|RT|TRECHO|SISTEMA|EXECUTADO|CLIMA|SERVICOS|EQUIPE|FINANCEIRO|OCORRENCIAS|OBS|FOTOS)\s*[:：]/i;
+
+function _normDate(s) {
+    // 08/04/2026 → 2026-04-08 ; ou passthrough se ja ISO
+    const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (!m) return s;
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0');
+    let yy = m[3]; if (yy.length===2) yy = '20'+yy;
+    return `${yy}-${mm}-${dd}`;
+}
+
+function _parseServico(line) {
+    // 'ASSENTAMENTO REDE DN150 73 m'
+    const m = line.match(/(.+?)\s+([\d.,]+)\s*(m3|m2|ml|un|kg|t|h|m)\b\s*$/i);
+    let descricao, quantidade, unidade, dn_mm = 0;
+    if (m) {
+        descricao = m[1].trim().toUpperCase();
+        quantidade = parseFloat(m[2].replace(',','.'));
+        unidade = m[3].toLowerCase();
+    } else {
+        descricao = line.trim().toUpperCase(); quantidade = 0; unidade = 'un';
+    }
+    const dn = descricao.match(/DN\s*(\d{2,4})/i);
+    if (dn) dn_mm = parseInt(dn[1],10);
+    return { servico: descricao, qtd: quantidade, unidade, dn_mm };
+}
+
+function _parseEquipe(line) {
+    // 'Encanador 2'
+    const m = line.match(/^(.+?)\s+(\d+)\s*$/);
+    if (!m) return { funcao: line.trim(), qtd: 1 };
+    return { funcao: m[1].trim(), qtd: parseInt(m[2],10) };
+}
+
+function _parseFinanceiro(line) {
+    // 'MAO_OBRA ALIMENTACAO 400 DESPESA'
+    const toks = line.trim().split(/\s+/);
+    if (toks.length < 3) return null;
+    const catRaw = toks.shift().toUpperCase().replace(/-/g,'_');
+    const cat = CAT_MAP[catRaw] || catRaw.charAt(0)+catRaw.slice(1).toLowerCase();
+    let tipo = 'DESPESA';
+    if (toks.length && ['DESPESA','RECEITA'].includes(toks[toks.length-1].toUpperCase())) {
+        tipo = toks.pop().toUpperCase();
+    }
+    // valor = ultimo token numerico (suporta 2409.84, 2409,84, 2.409,84, R$500)
+    let valor = null, idx = -1;
+    for (let i = toks.length-1; i >= 0; i--) {
+        let raw = toks[i].replace(/R\$/i,'');
+        if (raw.includes(',')) {
+            // formato BR: tira pontos (milhar), troca virgula por ponto
+            raw = raw.replace(/\./g,'').replace(',','.');
+        }
+        const v = parseFloat(raw);
+        if (!isNaN(v) && /[\d]/.test(toks[i])) { valor = v; idx = i; break; }
+    }
+    if (valor === null) return null;
+    const descricao = toks.slice(0, idx).join(' ').toUpperCase() || '-';
+    return { categoria: cat, descricao, valor: Math.round(valor*100)/100, tipo };
+}
+
+function _parseOcorrencia(line) {
+    const m = line.match(/^(.+?)\s+(\d{1,2}:\d{2})\s*$/);
+    if (m) return { tipo: 'outro', desc: m[1].trim(), hora: m[2] };
+    return { tipo: 'outro', desc: line.trim(), hora: '' };
+}
+
+function parseRDO(body) {
+    const lines = body.split(/\r?\n/).map(l => l.trim());
+    const payload = {
+        data: new Date().toISOString().slice(0,10),
+        nucleo: 'REDE',
+        rt: '',
+        clima: {},
+        equipe: [],
+        ocorrencias: [],
+        fotos: [],
+        servicos: {},
+        financeiro: [],   // aceito pelo backend e encaminhado para logs
+        _trecho: '',
+        _sistema: '',
+        _executado: 0,
+        obs: '',
+    };
+    let block = null;
+    const buf = {};
+    for (const raw of lines) {
+        if (!raw) { block = null; continue; }
+        const head = raw.match(HEADER_RE);
+        if (head) {
+            block = head[1].toUpperCase();
+            const rest = raw.slice(head[0].length).trim();
+            if (['SERVICOS','EQUIPE','FINANCEIRO','OCORRENCIAS','FOTOS'].includes(block)) {
+                buf[block] = [];
+                if (rest) buf[block].push(rest.replace(/^[-*•]\s*/,''));
+            } else {
+                buf[block] = rest;
+            }
+            continue;
+        }
+        if (block && Array.isArray(buf[block])) {
+            buf[block].push(raw.replace(/^[-*•]\s*/,''));
+        } else if (block === 'OBS') {
+            buf.OBS = (buf.OBS ? buf.OBS + '\n' : '') + raw;
+        }
+    }
+    if (buf.NUCLEO)   payload.nucleo = buf.NUCLEO;
+    if (buf.DATA)     payload.data = _normDate(buf.DATA);
+    if (buf.RT)       payload.rt = buf.RT;
+    if (buf.TRECHO)   payload._trecho = buf.TRECHO;
+    if (buf.SISTEMA)  payload._sistema = buf.SISTEMA.toLowerCase();
+    if (buf.EXECUTADO) payload._executado = parseFloat(buf.EXECUTADO.replace(/[^\d.,]/g,'').replace(',','.')) || 0;
+    if (buf.CLIMA) {
+        const [ma, ta] = buf.CLIMA.split('/').map(s => (s||'').trim());
+        payload.clima = { manha: ma || '', tarde: ta || ma || '' };
+    }
+    if (buf.OBS) payload.obs = buf.OBS;
+
+    const nsKey = payload._trecho || 'GERAL';
+    payload.servicos[nsKey] = (buf.SERVICOS || []).map(_parseServico);
+    payload.equipe = (buf.EQUIPE || []).map(_parseEquipe).filter(e => e.funcao);
+    payload.financeiro = (buf.FINANCEIRO || []).map(_parseFinanceiro).filter(Boolean);
+    payload.ocorrencias = (buf.OCORRENCIAS || []).map(_parseOcorrencia);
+
+    return payload;
+}
+
+function resumoRDO(p) {
+    const L = [];
+    L.push('=== RDO ===');
+    L.push(`Data:     ${p.data}`);
+    L.push(`Nucleo:   ${p.nucleo}`);
+    L.push(`RT:       ${p.rt || '-'}`);
+    L.push(`Trecho:   ${p._trecho || '-'}  (${p._sistema || '-'})`);
+    L.push(`Executado: ${p._executado} m`);
+    L.push(`Equipe:   ${p.equipe.length} pessoa(s)`);
+    const servList = Object.values(p.servicos || {}).flat();
+    L.push(`Servicos: ${servList.length}`);
+    for (const s of servList) L.push(`  - ${s.servico} ${s.qtd}${s.unidade}`);
+    let td = 0, tr = 0;
+    for (const l of p.financeiro) { (l.tipo === 'DESPESA' ? td += l.valor : tr += l.valor); }
+    L.push(`Financeiro: -R$ ${td.toFixed(2)}  +R$ ${tr.toFixed(2)}  (${p.financeiro.length} lancamentos)`);
+    if (p.ocorrencias.length) L.push(`Ocorrencias: ${p.ocorrencias.length}`);
+    if (p.obs) L.push(`Obs: ${p.obs.slice(0,80)}`);
+    return L.join('\n');
+}
+
+async function enviarRDOParaAPI(payload) {
+    try {
+        const r = await fetch(`${API_URL}/api/rdo`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload),
+        });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return await r.json();
+    } catch (e) {
+        console.error('[RDO-API] Falha chamando POST /api/rdo:', e.message);
+        return null;
+    }
+}
+
 client.on('message', async message => {
     // IGNORAR GRUPOS COMPLETAMENTE
     if (message.from.includes('@g.us')) return;
@@ -68,7 +272,9 @@ client.on('message', async message => {
     const timestamp = new Date().toLocaleString('pt-BR');
     
     // SÓ INTERAGE SE A GENTE TIVER MANDADO UMA TAREFA PRA ESSE NÚMERO ANTES, OU SE FOR O PADRÃO RDO
-    const isRDO = message.body.toUpperCase().includes('EQUIPE REDE:') || message.body.toUpperCase().includes('MATERIAL:');
+    const up = message.body.toUpperCase();
+    const isRDOCompleto = /^\s*RDO\s*$/m.test(up) && /TRECHO\s*[:：]/.test(up);
+    const isRDO = isRDOCompleto || up.includes('EQUIPE REDE:') || up.includes('MATERIAL:');
     
     if (!lastTaskMap[message.from] && !isRDO && !message.hasMedia) return;
 
@@ -127,7 +333,26 @@ client.on('message', async message => {
     if (isRDO) {
         conteudo += `\n## 📝 RDO RECEBIDO DE CAMPO (WhatsApp)\n### 🕒 ${timestamp} | **Origem:** ${emissor}\n\n\`\`\`text\n${message.body}\n\`\`\`\n\n`;
         if (typeof mediaPath !== 'undefined' && mediaPath) conteudo += `📸 **Foto de Evidência Localizada em:** \`${mediaPath}\`\n\n---\n`;
-        client.sendMessage(message.from, '📋 *ConstruDataMax*\nRDO recebido e catalogado com sucesso na base de projetos (Obsidian / Plataforma).');
+
+        // ── RDO COMPLETO: parseia e envia pro backend FastAPI (rdo_engine) ──
+        if (isRDOCompleto) {
+            try {
+                const payload = parseRDO(message.body);
+                if (mediaPath) payload.fotos.push({ caminho: mediaPath, legenda: 'WhatsApp', ns_id: payload._trecho || null });
+                const resp = await enviarRDOParaAPI(payload);
+                const rdoNum = resp && (resp.numero || resp.id);
+                const resumo = resumoRDO(payload);
+                const confirm = rdoNum
+                    ? `✅ *RDO #${rdoNum}* gravado na plataforma.\n\n${resumo}`
+                    : `⚠️ RDO parseado mas backend offline — dados salvos em log.\n\n${resumo}`;
+                client.sendMessage(message.from, confirm);
+            } catch(e) {
+                console.error('[RDO-PARSE] Erro:', e);
+                client.sendMessage(message.from, `⚠️ RDO recebido mas erro no parse: ${e.message}\nEnvie no formato: RDO\\nNUCLEO: ...\\nTRECHO: ...\\nSERVICOS:\\n- ...`);
+            }
+        } else {
+            client.sendMessage(message.from, '📋 *ConstruDataMax*\nRDO recebido e catalogado com sucesso na base de projetos (Obsidian / Plataforma).');
+        }
     } else {
         conteudo += `\n### 🕒 ${timestamp}\n**Origem:** ${emissor}\n**Mensagem:** "${message.body}"\n**Status da Tarefa:** ${resposta === 'OK' ? '🟢 Concluída' : '🟡 Observação Anexada'}\n---\n`;
     }

@@ -91,151 +91,373 @@ def gerar_landxml(pvs, trechos, nucleo, out_path):
     log(f"  LandXML: {len(pvs)} structures + {len(trechos)} pipes -> {out_path}")
 
 
-def _setup_layers(doc):
-    for name, color in {"Margem": 7, "Campos": 7, "Texto_legenda": 7, "Rede_executada": 1,
-                         "Texto": 7, "Amarracao": 251, "Pecas": 1, "Simbolos": 7}.items():
-        if name not in doc.layers:
-            doc.layers.add(name, color=color)
-
-
-def _draw_carimbo(msp, info, x0, y0, w, h):
-    msp.add_lwpolyline([(x0,y0),(x0+w,y0),(x0+w,y0+h),(x0,y0+h),(x0,y0)], dxfattribs={"layer":"Campos"})
-    for dy in [8, 16, 24]:
-        msp.add_line((x0,y0+dy),(x0+w,y0+dy), dxfattribs={"layer":"Campos"})
-    th = 1.3
-    def txt(text, px, py):
-        msp.add_text(text, height=th, dxfattribs={"layer":"Texto_legenda","style":"Arial"}
-                     ).set_placement((x0+px, y0+py), align=TextEntityAlignment.BOTTOM_LEFT)
-    txt(f"Contrato: {info.get('contrato','')}", 1, 26)
-    txt(f"Data: {info.get('data','')}", 80, 26)
-    txt(f"Local: {info.get('rua','')}", 1, 18)
-    txt(f"Eng: {info.get('engenheiro','')}", 1, 10)
-    txt(f"Ext: {info.get('ext_exec','')}", 1, 2)
-    txt(f"Folha {info.get('n_folha','001')}", 200, 26)
-    txt("CADASTRO ESGOTO - SABESP", 200, 18)
-
-
-def _draw_rede_planta(msp, pvs_rua, trechos_rua, area):
-    ax, ay, aw, ah = area
-    xs = [p["x"] for p in pvs_rua.values() if p.get("x")]
-    ys = [p["y"] for p in pvs_rua.values() if p.get("y")]
-    if not xs: return
-    min_e, max_e, min_n, max_n = min(xs), max(xs), min(ys), max(ys)
-    dx, dy = max(max_e-min_e, 1), max(max_n-min_n, 1)
-    scale = min(aw*0.7/dx, ah*0.7/dy)
-    ox = ax + (aw - dx*scale)/2 - min_e*scale
-    oy = ay + (ah - dy*scale)/2 - min_n*scale
-    def tp(e, n): return (float(e)*scale+ox, float(n)*scale+oy)
-
-    for t in trechos_rua:
-        p0, p1 = pvs_rua.get(t["pv_ini"],{}), pvs_rua.get(t["pv_fim"],{})
-        if p0.get("x") and p1.get("x"):
-            x1,y1 = tp(p0["x"],p0["y"]); x2,y2 = tp(p1["x"],p1["y"])
-            msp.add_line((x1,y1),(x2,y2), dxfattribs={"layer":"Rede_executada"})
-            mx,my = (x1+x2)/2, (y1+y2)/2
-            ang = math.degrees(math.atan2(y2-y1, x2-x1))
-            msp.add_text(f"{t['ext_m']:.2f}m DN{t.get('dn_mm','?')}", height=1.2,
-                         dxfattribs={"layer":"Texto","style":"Arial","rotation":ang}
-                         ).set_placement((mx,my+1), align=TextEntityAlignment.BOTTOM_CENTER)
-
-    for nome, pv in pvs_rua.items():
-        if not pv.get("x"): continue
-        px,py = tp(pv["x"],pv["y"])
-        r = 1.5
-        msp.add_circle((px,py), r, dxfattribs={"layer":"Pecas"})
-        msp.add_line((px-r*.7,py-r*.7),(px+r*.7,py+r*.7), dxfattribs={"layer":"Pecas"})
-        msp.add_line((px-r*.7,py+r*.7),(px+r*.7,py-r*.7), dxfattribs={"layer":"Pecas"})
-        off = 3
-        for i, txt in enumerate([nome, f"CT:{pv.get('ct','-')}", f"CF:{pv.get('cf','-')}"]):
-            msp.add_text(txt, height=1.0, dxfattribs={"layer":"Texto","style":"Arial"}
-                         ).set_placement((px+off, py+off+3-i*1.3), align=TextEntityAlignment.BOTTOM_LEFT)
-
-
-def gerar_cadastro_dxf(pvs, trechos, nucleo, out_dir):
-    log("Gerando Cadastro DXF (NTS0292)...")
+def gerar_cadastro_dxf(pvs, trechos, nucleo, out_dir, cartografia=None):
+    """
+    Gera Cadastro DXF + PDF em folha A4 SABESP NTS0292 completa.
+    Usa cadastro.folha_a4 que implementa o layout correto:
+    - Margem externa + interna
+    - Carimbo completo com todas as faixas/divisões
+    - Checkbox AGUA/ESGOTO
+    - Logo Sabesp
+    - Formato ABNT-ISO A4 = 297 x 210
+    - Símbolo de Norte
+    - Simbologia PV/PI com linhas de chamada inteligentes
+    - Detalhes ampliados para trechos curtos
+    """
+    log("Gerando Cadastro DXF+PDF (NTS0292 - folha A4 completa)...")
     out = Path(out_dir) / "06_CADASTRO_DXF"
     out.mkdir(parents=True, exist_ok=True)
 
+    try:
+        from cadastro.folha_a4 import generate_batch, generate_dxf, generate_pdf
+    except ImportError:
+        log("  [ERRO] Modulo cadastro.folha_a4 não encontrado!")
+        log("  Tentando importação direta...")
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "folha_a4",
+                str(Path(__file__).parent / "cadastro" / "folha_a4.py")
+            )
+            folha_a4_mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(folha_a4_mod)
+            generate_batch = folha_a4_mod.generate_batch
+            generate_dxf = folha_a4_mod.generate_dxf
+            generate_pdf = folha_a4_mod.generate_pdf
+        except Exception as e2:
+            log(f"  [ERRO] Falha ao importar folha_a4: {e2}")
+            return
+
+    # Agrupar trechos por rua
     por_rua = defaultdict(list)
     for t in trechos:
-        por_rua[t.get("rua","Sem Rua") or "Sem Rua"].append(t)
+        por_rua[t.get("rua", "Sem Rua") or "Sem Rua"].append(t)
 
-    n = 0
-    for idx, (rua, tr_rua) in enumerate(sorted(por_rua.items())):
-        pvs_rua = {}
+    # Converter PVs para formato esperado pela folha_a4
+    def _conv_pv(nome, pv_data):
+        return {
+            "nome": nome,
+            "este": pv_data.get("x", 0),
+            "norte": pv_data.get("y", 0),
+            "cota_tampa": pv_data.get("ct", 0) or 0,
+            "cota_fundo": pv_data.get("cf", 0) or 0,
+            "prof": pv_data.get("prof", 0) or 0,
+            "tipo": "PV" if "PV" in nome.upper() else "PI",
+        }
+
+    # Gerar folhas agrupadas por rua (trechos contíguos na mesma folha)
+    folhas = []
+    rua_labels = []
+    for rua, tr_rua in sorted(por_rua.items()):
+        # Coletar PVs da rua em sequência
+        pvs_lista = []
+        nomes_vistos = set()
         for t in tr_rua:
             for nm in [t["pv_ini"], t["pv_fim"]]:
-                if nm in pvs: pvs_rua[nm] = pvs[nm]
-        ext = sum(t["ext_m"] for t in tr_rua)
+                if nm not in nomes_vistos and nm in pvs:
+                    nomes_vistos.add(nm)
+                    pvs_lista.append(_conv_pv(nm, pvs[nm]))
 
-        doc = ezdxf.new("R2010")
-        doc.styles.add("Arial", font="arial.ttf")
-        _setup_layers(doc)
-        msp = doc.modelspace()
-        msp.add_lwpolyline([(MARGEM,MARGEM),(FOLHA_W-MARGEM,MARGEM),
-                             (FOLHA_W-MARGEM,FOLHA_H-MARGEM),(MARGEM,FOLHA_H-MARGEM),
-                             (MARGEM,MARGEM)], dxfattribs={"layer":"Margem"})
+        if len(pvs_lista) >= 2:
+            # Se muitos PVs, dividir em folhas de até 8 PVs
+            MAX_PVS_POR_FOLHA = 8
+            for i in range(0, len(pvs_lista), MAX_PVS_POR_FOLHA - 1):
+                chunk = pvs_lista[i:i + MAX_PVS_POR_FOLHA]
+                if len(chunk) >= 2:
+                    folhas.append(chunk)
+                    rua_labels.append(rua)
 
-        _draw_carimbo(msp, {"contrato": CONTRATO, "engenheiro": ENGENHEIRO,
-                            "rua": rua, "data": datetime.now().strftime("%d/%m/%Y"),
-                            "ext_exec": f"{ext:.2f}m", "n_folha": f"{idx+1:03d}"},
-                      MARGEM, MARGEM, AREA_W, CARIMBO_H)
+    if not folhas:
+        log("  Sem folhas para gerar!")
+        return
 
-        _draw_rede_planta(msp, pvs_rua, tr_rua, (MARGEM, DESENHO_Y, AREA_W, DESENHO_H))
-        import unicodedata
-        rua_nfkd = unicodedata.normalize('NFKD', rua[:30])
-        rua_safe = ''.join(c for c in rua_nfkd if c.isascii() and c.isprintable())
-        rua_safe = re.sub(r'[<>:"/\\|?*]', '_', rua_safe).strip().rstrip('.')
-        if not rua_safe:
-            rua_safe = f"RUA_{idx+1}"
-        nome_arq = f"CAD_{idx+1:03d}_{rua_safe}.dxf"
-        doc.saveas(str(out / nome_arq))
-        n += 1
-    log(f"  {n} folhas DXF em {out}")
+    # Info do carimbo padrão SABESP
+    info_base = {
+        "tipo": "ESGOTO",
+        "contrato": CONTRATO,
+        "contratada": EMPRESA,
+        "municipio": "Santos - 3548500",
+        "local_tipo": f"SE LIGA NA REDE - {nucleo}",
+        "met_construtivo": "VCA",
+        "data_obra": datetime.now().strftime("%m/%Y"),
+        "data_desenho": datetime.now().strftime("%d/%m/%Y"),
+        "desenhista": ENGENHEIRO,
+    }
+
+    # Redes info
+    dn_mm = ""
+    material = ""
+    for t in trechos:
+        if t.get("dn_mm"):
+            dn_mm = str(t["dn_mm"])
+            break
+    for t in trechos:
+        if t.get("material"):
+            material = t["material"]
+            break
+
+    redes_info = {
+        "diametro": dn_mm or "200",
+        "material": material or "PVC",
+        "met_construtivo": "VCA",
+    }
+
+    base_name = f"CADASTRO A4 - {nucleo.upper().replace(' ', '_')}"
+
+    # Formatar cartografia se estiver no formato do extract (dict de layers)
+    cartografia_formatada = None
+    if cartografia and "layers" in cartografia:
+        cartografia_formatada = []
+        for layer_name, geom_list in cartografia["layers"].items():
+            for geom in geom_list:
+                if "pontos" in geom:
+                    cartografia_formatada.append(geom)
+
+    # Gerar usando generate_batch (produz DXF + PDF corretos)
+    try:
+        paths = generate_batch(
+            folhas, str(out), base_name,
+            info=info_base, redes_info=redes_info,
+            cartografia=cartografia_formatada
+        )
+        log(f"  {len(paths)} folhas A4 (DXF+PDF) geradas em {out}")
+    except Exception as e:
+        log(f"  [ERRO] Falha na geração batch: {e}")
+        # Fallback: gerar individualmente
+        n = 0
+        for i, folha_pvs in enumerate(folhas, 1):
+            info = dict(info_base)
+            info["n_folha"] = f"{i:03d}"
+            if i <= len(rua_labels):
+                info["observacoes"] = rua_labels[i - 1][:40]
+            try:
+                import unicodedata
+                rua_safe = ""
+                if i <= len(rua_labels):
+                    rua_nfkd = unicodedata.normalize('NFKD', rua_labels[i-1][:30])
+                    rua_safe = ''.join(c for c in rua_nfkd if c.isascii() and c.isprintable())
+                    rua_safe = re.sub(r'[<>:"/\\|?*]', '_', rua_safe).strip().rstrip('.')
+                if not rua_safe:
+                    rua_safe = f"FOLHA_{i:03d}"
+
+                dxf_path = str(out / f"{base_name} - {i:03d}.dxf")
+                pdf_path = str(out / f"{base_name} - {i:03d}.pdf")
+                generate_dxf(folha_pvs, dxf_path, info, redes_info, cartografia=cartografia_formatada)
+                generate_pdf(folha_pvs, pdf_path, info, redes_info, cartografia=cartografia_formatada)
+                n += 1
+            except Exception as e2:
+                log(f"  [WARN] Folha {i}: {e2}")
+        log(f"  {n} folhas geradas (fallback individual)")
 
 
 def gerar_dynamo_script(pvs, trechos, nucleo, out_path):
-    log("Gerando Dynamo Script...")
-    pvs_j = json.dumps({n: {"x":p["x"],"y":p["y"],"ct":p.get("ct",0),"cf":p.get("cf",0)} for n,p in pvs.items()})
-    tr_j = json.dumps([{"pv_ini":t["pv_ini"],"pv_fim":t["pv_fim"],"dn_mm":t.get("dn_mm",200),
-                         "cf_ini":t.get("cf_ini",0),"cf_fim":t.get("cf_fim",0)} for t in trechos])
+    """
+    Gera script Python Civil 3D .NET para importar LandXML como Pipe Network.
+    Uso correto: LandXMLImport evita bater na PartsList catalog sem parametro.
+    Cola em Dynamo > Python Script node ou executa em NETLOAD via _PYTHON.
+    """
+    log("Gerando Dynamo Script (LandXML import)...")
     net_name = f"REDE_{nucleo.upper().replace(' ','_')}"
+    slug = nucleo.lower().replace(' ', '_')
+    xml_fname = f"REDE_{slug.upper()}.xml"
 
-    script = f'''# Dynamo Script — ConstruData SABESP v6 — {nucleo}
+    script = f'''# -*- coding: utf-8 -*-
+# Dynamo / Civil 3D Python Script - ConstruData SABESP v6 - {nucleo}
 # Gerado em {datetime.now().strftime("%d/%m/%Y %H:%M")}
-# Cola no Dynamo (Python Script node) e executa
+# Rede: {len(pvs)} PVs | {len(trechos)} trechos
+#
+# USO:
+#   1. Abra o Civil 3D com o DWG do projeto ativo.
+#   2. Coloque o arquivo {xml_fname} na MESMA pasta deste script.
+#   3. Execute via Dynamo (Python Script) ou AutoCAD NETLOAD.
+#
+# O script importa o LandXML como PipeNetwork, respeitando CT/CF de cada PV.
 
-import clr, json
-clr.AddReference("AcMgd"); clr.AddReference("AcDbMgd"); clr.AddReference("AeccDbMgd")
+import os
+import clr
+clr.AddReference("AcMgd")
+clr.AddReference("AcDbMgd")
+clr.AddReference("AcCoreMgd")
+clr.AddReference("AeccDbMgd")
+
 from Autodesk.AutoCAD.ApplicationServices import Application
-from Autodesk.AutoCAD.DatabaseServices import *
-from Autodesk.AutoCAD.Geometry import Point3d
-from Autodesk.Civil.DatabaseServices import *
+from Autodesk.Civil.ApplicationServices import CivilApplication
 
-PVS = json.loads("""{pvs_j}""")
-TRECHOS = json.loads("""{tr_j}""")
+NET_NAME = "{net_name}"
+XML_NAME = "{xml_fname}"
 
 doc = Application.DocumentManager.MdiActiveDocument
-db = doc.Database
+db  = doc.Database
+ed  = doc.Editor
+
+# Resolve caminho do LandXML (mesma pasta do script ou do DWG)
+def _resolve_xml():
+    bases = []
+    try:
+        bases.append(os.path.dirname(__file__))
+    except NameError:
+        pass
+    try:
+        bases.append(os.path.dirname(doc.Name or ""))
+    except Exception:
+        pass
+    for base in bases:
+        if not base:
+            continue
+        cand = os.path.join(base, XML_NAME)
+        if os.path.isfile(cand):
+            return cand
+    return XML_NAME
+
+xml_path = _resolve_xml()
+ed.WriteMessage("\\n[ConstruData] Importando LandXML: " + xml_path)
+
+civdoc = CivilApplication.ActiveDocument
+
+# Metodo simples e garantido (Civil 3D >= 2018): CivilDocument.ImportLandXML(xmlFilePath)
+# Assina: void ImportLandXML(string xmlFilePath)
+# Importa sites, alinhamentos, pipe networks etc conforme o conteudo do XML.
 with doc.LockDocument():
-    with Transaction(db.TransactionManager.StartTransaction()) as tr:
-        net_id = PipeNetwork.Create(db, "{net_name}")
-        net = tr.GetObject(net_id, OpenMode.ForWrite)
-        sids = {{}}
-        for n, p in PVS.items():
-            sid = net.AddStructure(Point3d(p["x"],p["y"],p["ct"]), 0, True)
-            s = tr.GetObject(sid, OpenMode.ForWrite)
-            s.Name = n; s.SumpElevation = p["cf"]; s.RimElevation = p["ct"]
-            sids[n] = sid
-        for t in TRECHOS:
-            if t["pv_ini"] in sids and t["pv_fim"] in sids:
-                net.AddLineBetweenStructs(sids[t["pv_ini"]], sids[t["pv_fim"]])
-        tr.Commit()
-OUT = f"{{len(PVS)}} structures + {{len(TRECHOS)}} pipes"
+    try:
+        civdoc.ImportLandXML(xml_path)
+        ed.WriteMessage("\\n[ConstruData] Rede " + NET_NAME + " importada com sucesso.")
+    except Exception as ex:
+        ed.WriteMessage("\\n[ConstruData] FALHA ImportLandXML: " + str(ex))
+        raise
+
+OUT = NET_NAME + " importada de " + XML_NAME
 '''
     with open(str(out_path), "w", encoding="utf-8") as f:
         f.write(script)
-    log(f"  Dynamo: {out_path}")
+    log(f"  Dynamo PY: {out_path}")
+
+
+def gerar_dynamo_dyn(pvs, trechos, nucleo, out_path, py_script_path=None):
+    """
+    Gera arquivo .dyn (Dynamo 2.x JSON) contendo:
+    - File Path node apontando para o LandXML
+    - Python Script node que executa a importacao
+    Compatível com Dynamo for Civil 3D >= 2020.
+    """
+    log("Gerando Dynamo .dyn...")
+    slug = nucleo.lower().replace(' ', '_')
+    xml_fname = f"REDE_{slug.upper()}.xml"
+    net_name = f"REDE_{nucleo.upper().replace(' ','_')}"
+
+    py_code = (
+        "# Auto-gerado ConstruData SABESP v6 - " + nucleo + "\n"
+        "# IN[0] = caminho do LandXML\n"
+        "import clr\n"
+        "clr.AddReference('AcMgd')\n"
+        "clr.AddReference('AcDbMgd')\n"
+        "clr.AddReference('AeccDbMgd')\n"
+        "from Autodesk.AutoCAD.ApplicationServices import Application\n"
+        "from Autodesk.Civil.ApplicationServices import CivilApplication\n"
+        "xml_path = IN[0]\n"
+        "doc = Application.DocumentManager.MdiActiveDocument\n"
+        "civdoc = CivilApplication.ActiveDocument\n"
+        "with doc.LockDocument():\n"
+        "    civdoc.ImportLandXML(xml_path)\n"
+        "OUT = '" + net_name + " importada de ' + xml_path\n"
+    )
+
+    dyn = {
+        "Uuid": "a6b1c0d0-0000-0000-0000-000000000001",
+        "IsCustomNode": False,
+        "Description": f"ConstruData SABESP - Importa {xml_fname} como PipeNetwork",
+        "Name": f"criar_pipe_network_{slug}",
+        "ElementResolver": {"ResolutionMap": {}},
+        "Inputs": [],
+        "Outputs": [],
+        "Nodes": [
+            {
+                "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+                "NodeType": "ExtensionNode",
+                "HintPath": xml_fname,
+                "InputValue": xml_fname,
+                "Id": "11111111111111111111111111111111",
+                "Inputs": [],
+                "Outputs": [{
+                    "Id": "22222222222222222222222222222222",
+                    "Name": "",
+                    "Description": "File Path",
+                    "UsingDefaultValue": False,
+                    "Level": 2,
+                    "UseLevels": False,
+                    "KeepListStructure": False
+                }],
+                "Replication": "Disabled",
+                "Description": "Caminho do LandXML gerado pelo ConstruData"
+            },
+            {
+                "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+                "NodeType": "PythonScriptNode",
+                "Code": py_code,
+                "Engine": "IronPython2",
+                "VariableInputPorts": True,
+                "Id": "33333333333333333333333333333333",
+                "Inputs": [{
+                    "Id": "44444444444444444444444444444444",
+                    "Name": "IN[0]",
+                    "Description": "xml_path",
+                    "UsingDefaultValue": False,
+                    "Level": 2,
+                    "UseLevels": False,
+                    "KeepListStructure": False
+                }],
+                "Outputs": [{
+                    "Id": "55555555555555555555555555555555",
+                    "Name": "",
+                    "Description": "Resultado",
+                    "UsingDefaultValue": False,
+                    "Level": 2,
+                    "UseLevels": False,
+                    "KeepListStructure": False
+                }],
+                "Replication": "Disabled",
+                "Description": "Importa LandXML como PipeNetwork Civil 3D"
+            }
+        ],
+        "Connectors": [{
+            "Start": "22222222222222222222222222222222",
+            "End": "44444444444444444444444444444444",
+            "Id": "66666666666666666666666666666666",
+            "IsHidden": "False"
+        }],
+        "Dependencies": [],
+        "NodeLibraryDependencies": [],
+        "Thumbnail": "",
+        "GraphDocumentationURL": None,
+        "ExtensionWorkspaceData": [],
+        "Author": "ConstruData SABESP v6",
+        "Linting": {"activeLinter": "None", "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a", "warningCount": 0, "errorCount": 0},
+        "Bindings": [],
+        "View": {
+            "Dynamo": {
+                "ScaleFactor": 1.0,
+                "HasRunWithoutCrash": True,
+                "IsVisibleInDynamoLibrary": True,
+                "Version": "2.17.0.3472",
+                "RunType": "Manual",
+                "RunPeriod": "1000"
+            },
+            "Camera": {"Name": "_Background Preview", "EyeX": -17.0, "EyeY": 24.0, "EyeZ": 50.0,
+                        "LookX": 12.0, "LookY": -13.0, "LookZ": -58.0,
+                        "UpX": 0.0, "UpY": 1.0, "UpZ": 0.0},
+            "ConnectorPins": [],
+            "NodeViews": [
+                {"Id": "11111111111111111111111111111111", "Name": "File Path", "X": 40.0, "Y": 120.0,
+                 "ShowGeometry": True, "Excluded": False, "IsSetAsInput": True, "IsSetAsOutput": False, "IsFrozen": False, "IsVisible": True, "IsPinned": False},
+                {"Id": "33333333333333333333333333333333", "Name": "Python Script", "X": 400.0, "Y": 120.0,
+                 "ShowGeometry": True, "Excluded": False, "IsSetAsInput": False, "IsSetAsOutput": True, "IsFrozen": False, "IsVisible": True, "IsPinned": False}
+            ],
+            "Annotations": [],
+            "X": 0.0, "Y": 0.0, "Zoom": 1.0
+        }
+    }
+    with open(str(out_path), "w", encoding="utf-8") as f:
+        json.dump(dyn, f, indent=2, ensure_ascii=False)
+    log(f"  Dynamo .dyn: {out_path}")
 
 
 def gerar_autocad_scr(pvs, trechos, nucleo, out_path):
@@ -282,7 +504,11 @@ gerar_dynamo = gerar_dynamo_script
 gerar_scr = gerar_autocad_scr
 
 
-def processar(dxf_path, nucleo, out_base):
+def gerar_dynamo_dyn_wrapper(pvs, trechos, nucleo, out_path):
+    return gerar_dynamo_dyn(pvs, trechos, nucleo, out_path)
+
+
+def processar(dxf_path, nucleo, out_base, topo_txt=None, carto_dxf=None):
     log(f"{'='*60}")
     log(f"ConstruData v6 — Civil 3D + Cadastro: {nucleo}")
     log(f"{'='*60}")
@@ -291,14 +517,38 @@ def processar(dxf_path, nucleo, out_base):
     if not trechos:
         log("Sem trechos!"); return
 
-    log(f"Rede: {meta['n_pvs']} PVs, {meta['n_trechos']} trechos")
+    log(f"Rede Teórica: {meta['n_pvs']} PVs, {meta['n_trechos']} trechos")
+
+    # Motor AS-BUILT: Interpolação Topográfica (Snapping)
+    if topo_txt and Path(topo_txt).exists():
+        log(f"Processando As-Built via topografia: {Path(topo_txt).name}")
+        try:
+            from motor_asbuilt import parse_topografia_txt, interpolar_as_built
+            pts_topo = parse_topografia_txt(topo_txt)
+            log(f"  {len(pts_topo)} pontos lidos do arquivo topo.")
+            pvs = interpolar_as_built(pvs, pts_topo, raio_busca=15.0)
+        except Exception as e:
+            log(f"  [ERRO] Falha no Motor As-Built: {e}")
+
+    # Extração de Cartografia Base
+    cartografia = None
+    if carto_dxf and Path(carto_dxf).exists():
+        if str(carto_dxf).lower().endswith(".dwg"):
+            log("  [WARN] O motor de cartografia suporta nativamente ODA-DXF. Um DWG pode falhar se não houver conversor.")
+        log(f"Lendo base cartográfica: {Path(carto_dxf).name}")
+        try:
+            from cadastro.base_topografica import extrair_base_topografica
+            cartografia = extrair_base_topografica(dxf_path=carto_dxf)
+            log(f"  Cartografia extraída com sucesso.")
+        except Exception as e:
+            log(f"  [ERRO] Falha ao extrair cartografia: {e}")
 
     out = Path(out_base) / nucleo.upper().replace(" ", "_")
     out.mkdir(parents=True, exist_ok=True)
 
     slug = nucleo.lower().replace(" ", "_")
     gerar_landxml(pvs, trechos, nucleo, out / f"REDE_{slug.upper()}.xml")
-    gerar_cadastro_dxf(pvs, trechos, nucleo, str(out))
+    gerar_cadastro_dxf(pvs, trechos, nucleo, str(out), cartografia=cartografia)
     gerar_dynamo_script(pvs, trechos, nucleo, out / f"criar_pipe_network_{slug}.py")
     gerar_autocad_scr(pvs, trechos, nucleo, out / f"desenhar_rede_{slug}.scr")
     gerar_json_dados(pvs, trechos, nucleo, out / f"dados_{slug}.json")
@@ -308,10 +558,17 @@ def processar(dxf_path, nucleo, out_base):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Uso: python gerar_civil3d.py <arquivo.dxf> [pasta_saida]")
-        sys.exit(1)
-    dxf = sys.argv[1]
+    import argparse
+    parser = argparse.ArgumentParser(description="Gerador de Cadastro ConstruDataMax v6")
+    parser.add_argument("dxf", help="Arquivo DXF do projeto original contendo a rede teórica")
+    parser.add_argument("out", nargs="?", default="", help="Pasta de saída principal")
+    parser.add_argument("--topo", help="Arquivo TXT/GSI do levantamento topográfico real (para interpolação As-Built)")
+    parser.add_argument("--carto", help="Arquivo DXF base contendo a cartografia de fundo (Ruas, Quadras, Lotes)")
+    
+    args = parser.parse_args()
+
+    dxf = args.dxf
     nucleo = Path(dxf).stem.replace("_ESGOTO","").replace("_AGUA","").replace("_"," ").title()
-    out = sys.argv[2] if len(sys.argv) >= 3 else str(Path(dxf).parent / "SAIDA_CIVIL3D")
-    processar(dxf, nucleo, out)
+    out = args.out if args.out else str(Path(dxf).parent / "SAIDA_CIVIL3D")
+    
+    processar(dxf, nucleo, out, topo_txt=args.topo, carto_dxf=args.carto)
