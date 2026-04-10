@@ -76,6 +76,7 @@ const PROJECT_IDS = {
   osasco:   'f3c6645b-347f-4382-b9c5-d103c27ec511',
   pardinho: 'ec112c9a-1669-4287-8079-526d6940ce82',
   consorcio:'abe7f66c-004b-4bb5-a245-6be67debd9f7',
+  rk:'d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8',
 };
 
 // Fail-safe: retorna null pra projetos não reconhecidos com certeza.
@@ -91,13 +92,13 @@ function resolverProjectId(nome) {
       || n.indexOf('valdean') >= 0 || n.indexOf('veronica') >= 0 || n.indexOf('márcio') >= 0 || n.indexOf('marcio') >= 0
       || n.indexOf('fabrizzio') >= 0 || n.indexOf('fabrizio') >= 0) return PROJECT_IDS.consorcio;
   if (n.indexOf('brasilia') >= 0 || n.indexOf('brasília') >= 0 || n.indexOf('joão') >= 0 || n.indexOf('joao') >= 0) return PROJECT_IDS.brasilia;
-  // RK Sub Empreita ainda sem UUID — retorna null (sem vazamento)
+  if (n.indexOf('rk') >= 0 || n.indexOf('sub empreita') >= 0 || n.indexOf('alexandre') >= 0 || n.indexOf('igor') >= 0) return PROJECT_IDS.rk;
   return null;
 }
 
 async function salvarSupabaseRdo(ctx, dados) {
-  // FAIL-SAFE: exige projeto_id válido
-  if (!dados || !dados.projeto_id) return { ok: false, err: 'projeto_id ausente' };
+  // FAIL-SAFE: exige project_id válido
+  if (!dados || !dados.project_id) return { ok: false, err: 'project_id ausente' };
   try {
     const r = await ctx.helpers.httpRequest({
       method: 'POST',
@@ -212,12 +213,18 @@ function projetoDoPhone(p) {
   if (p.includes('991015639')) return {
     nome: 'Osasco - Rua Cuiabá', responsavel: 'Mateus',
     perguntas: [
-      { num: 1, label: 'Frente Capex em execução', tag: 'frente_capex' },
-      { num: 2, label: 'Efetivo na obra', tag: 'efetivo' },
-      { num: 3, label: 'Metros de rede executados', tag: 'metros_rede' },
-      { num: 4, label: 'Ligações prediais executadas', tag: 'ligacoes' },
-      { num: 5, label: 'Interferências encontradas', tag: 'interferencias' },
-      { num: 6, label: 'Pendências para amanhã', tag: 'pendencias' },
+      { num: 1, label: 'Frente Capex', tag: 'frente_capex' },
+      { num: 2, label: 'Efetivo', tag: 'efetivo' },
+      { num: 3, label: 'Metros de rede', tag: 'metros_rede' },
+      { num: 4, label: 'Ligações', tag: 'ligacoes' },
+      { num: 5, label: 'Interferências', tag: 'interferencias' },
+      { num: 6, label: 'Pendências', tag: 'pendencias' },
+      { num: 7, label: 'Ocorrências/Acidentes', tag: 'ocorrencias' },
+      { num: 8, label: 'Observações gerais', tag: 'observacoes' },
+      { num: 9, label: 'Diesel/Combustível R$', tag: 'custo_diesel' },
+      { num: 10, label: 'Alimentação/Hotelaria R$', tag: 'custo_alim' },
+      { num: 11, label: 'Mão de Obra R$', tag: 'custo_mo' },
+      { num: 12, label: 'Materiais/Locações R$', tag: 'custo_mat' },
     ]
   };
   if (p.includes('991995918') || p.includes('978216285')) return {
@@ -266,12 +273,73 @@ function projetoDoPhone(p) {
       { num: 3, label: 'Frente ETE / Emissário', tag: 'frente_ete' },
       { num: 4, label: 'Efetivo total', tag: 'efetivo' },
       { num: 5, label: 'Metros de rede executados', tag: 'metros_rede' },
-      { num: 6, label: 'Ligações prediais executadas', tag: 'ligacoes' },
+      { num: 6, label: 'Ligações executadas', tag: 'ligacoes' },
       { num: 7, label: 'Equipamentos em uso', tag: 'equipamentos' },
       { num: 8, label: 'Materiais recebidos', tag: 'materiais' },
       { num: 9, label: 'Clima', tag: 'clima' },
-      { num: 10, label: 'Pendências / impedimentos', tag: 'pendencias' },
-      { num: 11, label: 'Acidentes ou ocorrências', tag: 'acidentes' },
+      { num: 10, label: 'Pendências', tag: 'pendencias' },
+      { num: 11, label: 'Ocorrências/Acidentes', tag: 'ocorrencias' },
+      { num: 12, label: 'Observações gerais', tag: 'observacoes' },
+      { num: 13, label: 'Diesel/Combustível R$', tag: 'custo_diesel' },
+      { num: 14, label: 'Alimentação/Hotelaria R$', tag: 'custo_alim' },
+      { num: 15, label: 'Mão de Obra R$', tag: 'custo_mo' },
+      { num: 16, label: 'Materiais/Locações R$', tag: 'custo_mat' },
+    ]
+  };
+  // RK Sub Empreita — Alexandre/Igor
+  if (p.includes('998894664')) return {
+    nome: 'RK Sub Empreita', responsavel: 'Alexandre/Igor',
+    perguntas: [
+      { num: 1, label: 'Frentes em andamento', tag: 'frentes' },
+      { num: 2, label: 'Metros executados', tag: 'metros_rede' },
+      { num: 3, label: 'Equipe no local', tag: 'efetivo' },
+      { num: 4, label: 'Impedimentos', tag: 'pendencias' },
+      { num: 5, label: 'Ocorrências/Acidentes', tag: 'ocorrencias' },
+      { num: 6, label: 'Observações gerais', tag: 'observacoes' },
+      { num: 7, label: 'Diesel/Combustível R$', tag: 'custo_diesel' },
+      { num: 8, label: 'Alimentação/Hotelaria R$', tag: 'custo_alim' },
+      { num: 9, label: 'Mão de Obra R$', tag: 'custo_mo' },
+      { num: 10, label: 'Materiais/Locações R$', tag: 'custo_mat' },
+    ]
+  };
+  // Consórcio — Planejamento: Junior
+  if (p.includes('986012223')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Junior', setor: 'planejamento',
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento', tag: 'atividades_plan' },
+      { num: 2, label: 'Cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências', tag: 'pendencias' },
+    ]
+  };
+  // Consórcio — Planejamento: Valdeans
+  if (p.includes('991392763')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Valdeans', setor: 'planejamento',
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento', tag: 'atividades_plan' },
+      { num: 2, label: 'Cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências', tag: 'pendencias' },
+    ]
+  };
+  // Consórcio — Planejamento: Veronica
+  if (p.includes('997733121')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'Veronica', setor: 'planejamento',
+    perguntas: [
+      { num: 1, label: 'Atividades de planejamento', tag: 'atividades_plan' },
+      { num: 2, label: 'Cronograma', tag: 'cronograma' },
+      { num: 3, label: 'Pendências', tag: 'pendencias' },
+    ]
+  };
+  // Consórcio — Produção: José Márcio
+  if (p.includes('941816005')) return {
+    nome: 'Consórcio Se Liga na Rede', responsavel: 'José Márcio', setor: 'producao',
+    perguntas: [
+      { num: 1, label: 'Frentes em execução', tag: 'frentes' },
+      { num: 2, label: 'Efetivo', tag: 'efetivo' },
+      { num: 3, label: 'Metros de rede', tag: 'metros_rede' },
+      { num: 4, label: 'Ligações', tag: 'ligacoes' },
+      { num: 5, label: 'Pendências', tag: 'pendencias' },
+      { num: 6, label: 'Ocorrências/Acidentes', tag: 'ocorrencias' },
+      { num: 7, label: 'Observações gerais', tag: 'observacoes' },
     ]
   };
   return null;
@@ -839,7 +907,7 @@ if (numMatchRdo && proj && !proj.isGestor) {
 
 // Resposta no formato "1: valor" ou "1: a | 2: b | 3: c" — converte pra tags e segue pro RDO
 if (proj && !proj.isGestor && /^\\s*\\d+\\s*[:=]/.test(trimmed)) {
-  const partes = trimmed.split('|').map(s => s.trim());
+  const partes = trimmed.split(/[|\\n]/).map(s => s.trim()).filter(Boolean);
   const tagLines = [];
   const tagMap = {};
   for (const p of partes) {
@@ -864,12 +932,10 @@ if (proj && !proj.isGestor && /^\\s*\\d+\\s*[:=]/.test(trimmed)) {
       const _num = (k) => { const v = parseFloat((tagMap[k] || '0').replace(',', '.')); return isNaN(v) ? 0 : v; };
       const _int = (k) => { const v = parseInt(tagMap[k] || '0', 10); return isNaN(v) ? 0 : v; };
       const rdoData = {
-        projeto_id: pid,
+        project_id: pid,
         data: hoje,
         clima: (tagMap.clima || 'bom').toLowerCase().slice(0, 30),
-        turno: 'Diurno',
         status: 'aberto',
-        fotos: [],
         producao_m: _num('metros_rede'),
         equipe_number: _int('efetivo'),
         observacoes: tagLines.join(' | ').slice(0, 2000),
