@@ -65,6 +65,7 @@ export class GestaoWhatsappRouterCentralWorkflow {
     ParseEventoWhatsapp = {
         language: 'javaScript',
         jsCode: `
+try {
 // ========== SUPABASE CONFIG ==========
 const SUPABASE_URL = 'https://vblfdikfobsirwpdnybw.supabase.co/rest/v1';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4';
@@ -281,7 +282,7 @@ const proj = projetoDoPhone(phone);
 // Detecta saudação, ajuda, ou comando @
 const isSaudacao = /^(oi|ola|olá|bom dia|boa tarde|boa noite|opa|menu|opções|opcoes|inicio|início|começar|comecar|start)$/i.test(trimmed);
 const isAjuda = /^(@?(ajuda|help|comandos|menu))$/i.test(trimmed);
-const cmdMatch = trimmed.match(/^@(\\w+)(?:\\s+(.*))?$/i);
+const cmdMatch = trimmed.match(/^@(\\w+)(?:\\s+([\\s\\S]*))?$/i);
 
 function montarMenu(p, phoneDetectado) {
   if (!p) return '🤖 ConstruDataMax\\n\\nNão consegui identificar seu projeto. Telefone detectado: *' + phoneDetectado + '*\\nFala com o admin para te cadastrar.';
@@ -377,8 +378,12 @@ async function perguntarGroq(ctx, pergunta) {
   }
 }
 
-// Saudação ou pedido de ajuda → manda menu
+// Saudação ou pedido de ajuda → manda menu (SO se for telefone cadastrado)
 if (isSaudacao || isAjuda) {
+  if (!proj) {
+    // Desconhecido mandou "oi"/"menu" → silencia, nao e conversa do bot
+    return [{ json: { ignorar: true, motivo: 'Saudacao de telefone nao cadastrado - silencio: ' + phone } }];
+  }
   await responder.call(this, montarMenu(proj, phone));
   return [{ json: { ignorar: true, motivo: 'Menu enviado' } }];
 }
@@ -587,21 +592,21 @@ if (finalCmdMatch) {
       } else if (alvo === 'pardinho') {
         if (!temEscopo('pardinho')) { resposta = '❌ Seu escopo não inclui Pardinho.'; }
         else {
-          const msg = '📋 *RDO DIÁRIO — Pardinho*\\n📅 ' + hojeStr + '\\nÍcaro, responda (ex: 1: valor | 2: valor)\\n\\n*OPERACIONAL*\\n(1) Frente Rede Principal\\n(2) Frente Ligações Prediais\\n(3) Frente ETE / Emissário\\n(4) Efetivo total\\n(5) Metros de rede\\n(6) Ligações executadas\\n(7) Equipamentos\\n(8) Materiais\\n(9) Clima\\n(10) Pendências\\n(11) Acidentes\\n\\n*CUSTO DO DIA (R$)*\\n(12) Diesel/Combustível\\n(13) Alimentação/Hotelaria\\n(14) Mão de Obra\\n(15) Materiais/Locações';
+          const msg = '📋 *RDO DIÁRIO — Pardinho*\\n📅 ' + hojeStr + '\\nÍcaro, responda (ex: 1: valor | 2: valor)\\n\\n*OPERACIONAL*\\n(1) Frente Rede Principal\\n(2) Frente Ligações Prediais\\n(3) Frente ETE / Emissário\\n(4) Efetivo total\\n(5) Metros de rede\\n(6) Ligações executadas\\n(7) Equipamentos\\n(8) Materiais\\n(9) Clima\\n(10) Pendências\\n(11) Ocorrências/Acidentes\\n(12) Observações gerais\\n\\n*CUSTO DO DIA (R$)*\\n(13) Diesel/Combustível\\n(14) Alimentação/Hotelaria\\n(15) Mão de Obra\\n(16) Materiais/Locações';
           const r = await responder.call(this, msg, '5537998268576');
           resposta = r.ok ? '✅ RDO Pardinho enviado para Ícaro (com custos)' : ('❌ Falha: ' + r.err);
         }
       } else if (alvo === 'osasco') {
         if (!temEscopo('osasco')) { resposta = '❌ Seu escopo não inclui Osasco.'; }
         else {
-          const msg = '📋 *RDO DIÁRIO — Osasco*\\n📅 ' + hojeStr + '\\nMateus, responda (ex: 1: valor | 2: valor)\\n\\n*OPERACIONAL*\\n(1) Frente Capex\\n(2) Efetivo\\n(3) Metros de rede\\n(4) Ligações\\n(5) Interferências\\n(6) Pendências\\n\\n*CUSTO DO DIA (R$)*\\n(7) Diesel/Combustível\\n(8) Alimentação/Hotelaria\\n(9) Mão de Obra\\n(10) Materiais/Locações';
+          const msg = '📋 *RDO DIÁRIO — Osasco*\\n📅 ' + hojeStr + '\\nMateus, responda (ex: 1: valor | 2: valor)\\n\\n*OPERACIONAL*\\n(1) Frente Capex\\n(2) Efetivo\\n(3) Metros de rede\\n(4) Ligações\\n(5) Interferências\\n(6) Pendências\\n(7) Ocorrências/Acidentes\\n(8) Observações gerais\\n\\n*CUSTO DO DIA (R$)*\\n(9) Diesel/Combustível\\n(10) Alimentação/Hotelaria\\n(11) Mão de Obra\\n(12) Materiais/Locações';
           const r = await responder.call(this, msg, '5561991015639');
           resposta = r.ok ? '✅ RDO Osasco enviado para Mateus (com custos)' : ('❌ Falha: ' + r.err);
         }
       } else if (alvo === 'rk') {
         if (!temEscopo('rk')) { resposta = '❌ Seu escopo não inclui RK.'; }
         else {
-          const msg = '📋 *RDO DIÁRIO — RK Sub Empreita*\\n📅 ' + hojeStr + '\\nAlexandre/Igor, responda (ex: 1: valor | 2: valor)\\n\\n(1) Frentes em andamento\\n(2) Metros executados\\n(3) Equipe no local\\n(4) Impedimentos\\n(5) Diesel R$\\n(6) Alimentação/Hotelaria R$\\n(7) Mão de Obra R$\\n(8) Materiais/Locações R$';
+          const msg = '📋 *RDO DIÁRIO — RK Sub Empreita*\\n📅 ' + hojeStr + '\\nAlexandre/Igor, responda (ex: 1: valor | 2: valor)\\n\\n*OPERACIONAL*\\n(1) Frentes em andamento\\n(2) Metros executados\\n(3) Equipe no local\\n(4) Impedimentos\\n(5) Ocorrências/Acidentes\\n(6) Observações gerais\\n\\n*CUSTO DO DIA (R$)*\\n(7) Diesel/Combustível\\n(8) Alimentação/Hotelaria\\n(9) Mão de Obra\\n(10) Materiais/Locações';
           const r = await responder.call(this, msg, '5531998894664');
           resposta = r.ok ? '✅ RDO RK enviado para Alexandre/Igor' : ('❌ Falha: ' + r.err);
         }
@@ -638,7 +643,7 @@ if (finalCmdMatch) {
       } else if (alvo === 'producao' || alvo === 'produção' || alvo === 'prod') {
         if (!temEscopo('consorcio')) { resposta = '❌ Seu escopo não inclui Consórcio.'; }
         else {
-          const msg = '📋 *RDO — Produção Consórcio*\\n📅 ' + hojeStr + '\\nJosé Márcio, responda (ex: 1: valor | 2: valor)\\n\\n(1) Frentes em execução\\n(2) Efetivo\\n(3) Metros de rede\\n(4) Ligações\\n(5) Pendências';
+          const msg = '📋 *RDO — Produção Consórcio*\\n📅 ' + hojeStr + '\\nJosé Márcio, responda (ex: 1: valor | 2: valor)\\n\\n(1) Frentes em execução\\n(2) Efetivo\\n(3) Metros de rede\\n(4) Ligações\\n(5) Pendências\\n(6) Ocorrências/Acidentes\\n(7) Observações gerais';
           const r = await responder.call(this, msg, '5511941816005');
           resposta = r.ok ? '✅ RDO Produção enviado para José Márcio' : ('❌ Falha: ' + r.err);
           if (phone.indexOf('999076534') < 0 && r.ok) {
@@ -920,13 +925,16 @@ if (proj && proj.isGestor && !targetWebhook) {
 }
 
 if (!targetWebhook) {
-  // Phone não é responder de RDO nem Gestor que fez RDO (impossível chegar aqui usualmente sem target, mas segurança)
-  await responder.call(this, '🤖 Recebi sua mensagem, mas não tem operação associada.\\n\\nDigite *menu* pra ver as opções.');
-  return [{ json: { ignorar: true, motivo: 'Phone sem destino: ' + phone } }];
+  // Telefone desconhecido (amigos, familiares, conversas pessoais do Felipe).
+  // NUNCA responder — o bot não pode se meter em conversas alheias.
+  return [{ json: { ignorar: true, motivo: 'Telefone nao cadastrado - silencio: ' + phone } }];
 }
 }
 
 return [{ json: { ignorar: false, phone, text, targetWebhook } }];
+} catch (err) {
+  return [{ json: { error: err.message, stack: err.stack, ignorar: true } }];
+}
 `,
     };
 

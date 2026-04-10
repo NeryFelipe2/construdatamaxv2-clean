@@ -7,7 +7,8 @@ import { useCurrentDate, useCurrentReport } from '@/hooks/useRelatorio360'
 import { printRelatorio360PDF } from '../utils/relatorio360PdfExport'
 
 export function ReportHeader() {
-  const currentDate   = useCurrentDate()
+  const rawDate       = useCurrentDate()
+  const currentDate   = rawDate || new Date().toISOString().slice(0, 10)
   const report        = useCurrentReport()
   const { goToPrevDay, goToNextDay, goToDate, reports } = useRelatorio360Store()
 
@@ -15,8 +16,9 @@ export function ReportHeader() {
   const [periodStart, setPeriodStart] = useState('')
   const [periodEnd, setPeriodEnd]     = useState('')
 
-  const displayDate = format(parseISO(currentDate), "EEEE, dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-  const shortDate   = format(parseISO(currentDate), 'dd/MM/yyyy')
+  const safeDate    = (() => { try { return parseISO(currentDate) } catch { return new Date() } })()
+  const displayDate = format(safeDate, "EEEE, dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+  const shortDate   = format(safeDate, 'dd/MM/yyyy')
 
   const canPeriodPDF = !!periodStart && !!periodEnd && periodEnd >= periodStart
 

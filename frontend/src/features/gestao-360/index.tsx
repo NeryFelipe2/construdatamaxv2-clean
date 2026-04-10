@@ -5,10 +5,12 @@ import {
   ArrowUpRight, RefreshCw, Database, Wifi, WifiOff, Loader2
 } from 'lucide-react'
 import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
+import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseGestao } from '@/hooks/useSupabaseGestao'
+import { ControleFinanceiroPanel } from './components/ControleFinanceiroPanel'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-type TabId = 'atividades' | 'produtividade' | 'performance'
+type TabId = 'atividades' | 'produtividade' | 'performance' | 'financeiro'
 
 // ─── Helper Components ──────────────────────────────────────────────────────
 function MetricCard({ title, value, icon: Icon, color, sub, badge, badgeColor }: {
@@ -127,6 +129,7 @@ export function Gestao360Page() {
             { id: 'atividades' as TabId, label: 'Minhas atividades', sub: 'Executor' },
             { id: 'produtividade' as TabId, label: 'Gestão de produtividade', sub: 'Equipe' },
             { id: 'performance' as TabId, label: 'Gestão de performance', sub: 'Obra' },
+            { id: 'financeiro' as TabId, label: 'Painel Financeiro', sub: 'EVM & Custos' },
           ].map(t => (
             <button
               key={t.id}
@@ -351,6 +354,12 @@ export function Gestao360Page() {
           </div>
         </div>
       </div>
+
+      {tab === 'financeiro' && (
+        <div className="flex-1 overflow-y-auto px-6 py-6 border-t border-gray-200">
+          <ControleFinanceiroPanel />
+        </div>
+      )}
     </div>
   )
 }

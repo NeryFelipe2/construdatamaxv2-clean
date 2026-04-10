@@ -6,8 +6,8 @@
       "filename": "assistente-diario-obra.workflow.ts"
     },
     "cC3ofuHlwdtj8Idb": {
-      "lastSyncedHash": "bd778d036bb1d27b04be70b437ca932270062cec8d5419ed6641cd6dd94573a4",
-      "lastSyncedAt": "2026-04-07T19:18:15.987Z",
+      "lastSyncedHash": "fde34dc077cc4689edc2b64119d97772507f93578b698e906f5ffe8055bf37a5",
+      "lastSyncedAt": "2026-04-09T20:32:01.514Z",
       "filename": "webhook-rdo-whatsapp.workflow.ts"
     },
     "7ZFxLruxONFgd9Y7": {
@@ -16,8 +16,8 @@
       "filename": "alerta-medicao-prazos.workflow.ts"
     },
     "3MlISSU8VYGAiiMR": {
-      "lastSyncedHash": "0ee39682a2ec3e927bce1f60611d2610042bdd3e8dc40d292a58a52b509eeefd",
-      "lastSyncedAt": "2026-04-07T21:33:51.320Z",
+      "lastSyncedHash": "3130a001341af6ca0ac8f94ed450481c70ef508c3d1844559a7ac7e296932bc1",
+      "lastSyncedAt": "2026-04-09T02:26:59.438Z",
       "filename": "gestao-pardinho-rdo-dashboard.workflow.ts"
     },
     "3OLzegqMNGmSfWYr": {
@@ -26,8 +26,8 @@
       "filename": "pardinho-lean-lps-planejamento.workflow.ts"
     },
     "HVPwaXUwSGHlK4J4": {
-      "lastSyncedHash": "a783463cb199ab4d70402148c6e9f975b82440b89b3dde654e9c6b2b633822b5",
-      "lastSyncedAt": "2026-04-08T02:33:26.994Z",
+      "lastSyncedHash": "5c8eb7e8f7c6d0474360557cdd2477ab31ff9d394a888035a7f71a26172b53e2",
+      "lastSyncedAt": "2026-04-09T02:27:04.494Z",
       "filename": "gestao-osasco-rdo-dashboard.workflow.ts"
     },
     "asoqRI8fbz3SKlz5": {
@@ -41,9 +41,14 @@
       "filename": "gestao-sala-tecnica-dashboard.workflow.ts"
     },
     "CJRFUtzbL3pGpb4s": {
-      "lastSyncedHash": "f0d84813829cab624131a8f103ec912cdd9f97055c5943d752ae0d596d013cde",
-      "lastSyncedAt": "2026-04-08T15:58:43.638Z",
+      "lastSyncedHash": "f9112bfee80c58e4b7a43c5661e218d98c646bc9b603572ceb5da0684f43ecb2",
+      "lastSyncedAt": "2026-04-10T12:26:36.073Z",
       "filename": "gestao-whatsapp-router.workflow.ts"
+    },
+    "Nt0wfvxFL7hAWWvU": {
+      "lastSyncedHash": "89aa1bc586fafeea267dd74f015c7394547e1da13fd214c537aac1e482450e24",
+      "lastSyncedAt": "2026-04-09T20:32:38.109Z",
+      "filename": "cobranca-matinal-diretor.workflow.ts"
     }
   }
 }

@@ -44,7 +44,7 @@ const MODULE_GROUPS = [
   {
     category: "Data-Driven", id: "data",
     items: [
-      { label: "IA Analytics", to: "/app/ia-analytics", icon: Cpu },
+      // { label: "IA Analytics", to: "/app/ia-analytics", icon: Cpu },
       { label: "EVM", to: "/app/evm", icon: Calculator },
       { label: "Engine V5", to: "/app/engine-v5", icon: Cpu },
     ]
