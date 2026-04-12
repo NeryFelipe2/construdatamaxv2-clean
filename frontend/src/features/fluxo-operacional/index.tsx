@@ -33,10 +33,10 @@ const DEMO_REGRAS: AutomacaoRegra[] = [
 ]
 
 const DEMO_LOGS: LogExecucao[] = [
-  { id: "l-1", regra_id: "r-1", data: "2026-04-05 07:02", destinatario: "Bruno (Encarregado)", status: "enviado" },
-  { id: "l-2", regra_id: "r-1", data: "2026-04-05 07:02", destinatario: "Guajeru (Encarregado)", status: "enviado" },
+  { id: "l-1", regra_id: "r-1", data: "2026-04-05 07:02", destinatario: "Mateus (Encarregado — Osasco)", status: "enviado" },
+  { id: "l-2", regra_id: "r-1", data: "2026-04-05 07:02", destinatario: "Ícaro (Encarregado — Pardinho)", status: "enviado" },
   { id: "l-3", regra_id: "r-2", data: "2026-04-04 18:01", destinatario: "Felipe Nery (Engenheiro)", status: "enviado" },
-  { id: "l-4", regra_id: "r-1", data: "2026-04-04 07:03", destinatario: "Bruno (Encarregado)", status: "erro" },
+  { id: "l-4", regra_id: "r-1", data: "2026-04-04 07:03", destinatario: "Gabriel (Sala Técnica)", status: "enviado" },
 ]
 
 export function FluxoOperacionalPage() {
