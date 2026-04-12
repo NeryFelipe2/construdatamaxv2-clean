@@ -46,6 +46,7 @@ const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m)
 const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
 const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((m) => ({ default: m.default })));
 const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
+const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 const navItems = [
@@ -80,6 +81,7 @@ const navItems = [
   { section: "IA & Inteligência" },
   { label: "Engine V5", icon: Cpu, to: "/app/engine-v5" },
   { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
+  { label: "Agente Chat", icon: MessageSquare, to: "/app/agent-chat" },
   { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
   { section: "Comunicação" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
@@ -440,6 +442,7 @@ export default function App() {
           <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
           <Route path="engine-v5" element={<LazyRoute><EngineV5Dashboard /></LazyRoute>} />
           <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
+          <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
