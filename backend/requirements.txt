@@ -29,5 +29,7 @@ contextily
 groq
 mistralai
 cohere
+anthropic
+openai
 evolutionapi
 flask
