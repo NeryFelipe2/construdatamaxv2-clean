@@ -1,0 +1,45 @@
+# ============================================================
+# POSTGRESQL + REDIS — Banco de Dados + Cache
+# ============================================================
+# Deploy via Portainer → Stacks → Add Stack
+# ============================================================
+
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rk_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      POSTGRES_DB: ${POSTGRES_DB:-rk_main}
+    volumes:
+      - /opt/rk-infra/postgres_data:/var/lib/postgresql/data
+    networks:
+      - rk_internal
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD:-RkRedis2026!Pass} --appendonly yes
+    volumes:
+      - /opt/rk-infra/redis_data:/data
+    networks:
+      - rk_internal
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  rk_internal:
+    external: true

@@ -61,6 +61,8 @@ export interface WorkflowDecoratorOptions {
     name: string;
     /** Whether the workflow is active */
     active: boolean;
+    /** Workflow description */
+    description?: string;
     /** Workflow execution settings */
     settings?: WorkflowSettings;
     /** Project ID for organization */
@@ -74,6 +76,8 @@ export interface WorkflowDecoratorOptions {
 export interface NodeDecoratorOptions {
     /** Unique identifier of the node (matches workflow JSON) */
     id?: string;
+    /** Stable webhook ID assigned by n8n to webhook nodes */
+    webhookId?: string;
     /** Display name shown in n8n UI */
     name: string;
     /** Node type identifier (e.g. "n8n-nodes-base.httpRequest") */
@@ -191,6 +195,8 @@ declare module '@n8n-as-code/transformer' {
         name: string;
         /** Whether the workflow is active */
         active: boolean;
+        /** Workflow description */
+        description?: string;
         /** Workflow execution settings */
         settings?: WorkflowSettings;
         /** Project ID for organization */
@@ -204,6 +210,8 @@ declare module '@n8n-as-code/transformer' {
     export interface NodeDecoratorOptions {
         /** Unique identifier of the node (matches workflow JSON) */
         id?: string;
+        /** Stable webhook ID assigned by n8n to webhook nodes */
+        webhookId?: string;
         /** Display name shown in n8n UI */
         name: string;
         /** Node type identifier (e.g. "n8n-nodes-base.httpRequest") */

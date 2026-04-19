@@ -1,0 +1,139 @@
+# ============================================================
+# CONSTRUDATA — Docker Compose LOCAL (Windows / Dev)
+# ============================================================
+# USO: docker compose up -d
+# Para desenvolvimento/testes no seu PC
+# ============================================================
+
+version: "3.8"
+
+services:
+  # ---------- BANCO DE DADOS ----------
+  postgres:
+    image: postgres:16-alpine
+    container_name: rk-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rk_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      POSTGRES_DB: ${POSTGRES_DB:-rk_main}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rk_admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------- CACHE / FILA ----------
+  redis:
+    image: redis:7-alpine
+    container_name: rk-redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD:-RkRedis2026!Pass} --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-RkRedis2026!Pass}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------- N8N (Automações) ----------
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: rk-n8n
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Banco
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-rk_main}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-rk_admin}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      # Config
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-chave-local-dev-rk2026-mude-em-producao}
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+      - N8N_DEFAULT_LOCALE=pt-BR
+    volumes:
+      - n8n_data:/home/node/.n8n
+    ports:
+      - "5678:5678"
+
+  # ---------- EVOLUTION API (WhatsApp) ----------
+  evolution:
+    image: atendai/evolution-api:latest
+    container_name: rk-evolution
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Servidor
+      - SERVER_URL=http://localhost:8080
+      - SERVER_PORT=8080
+      # Auth
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-RkEvolution2026!ApiKey}
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      # Banco
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://${POSTGRES_USER:-rk_admin}:${POSTGRES_PASSWORD:-RkEng2026!SecurePass}@postgres:5432/${POSTGRES_DB:-rk_main}?schema=evolution
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_rk
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      # Redis
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://:${REDIS_PASSWORD:-RkRedis2026!Pass}@redis:6379
+      - CACHE_REDIS_PREFIX_KEY=evolution_rk
+      - CACHE_LOCAL_ENABLED=false
+      # OpenAI Transcrição
+      - OPENAI_ENABLED=true
+      # Webhook
+      - WEBHOOK_GLOBAL_ENABLED=false
+      # Logs
+      - LOG_LEVEL=WARN
+      - CORS_ORIGIN=*
+      - TZ=America/Sao_Paulo
+    volumes:
+      - evolution_data:/evolution/instances
+    ports:
+      - "8080:8080"
+
+  # ---------- PORTAINER (Gerenciador Visual) ----------
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: rk-portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+
+volumes:
+  postgres_data:
+  redis_data:
+  n8n_data:
+  evolution_data:
+  portainer_data:

@@ -1,0 +1,118 @@
+{
+  "id": "CJRFUtzbL3pGpb4s",
+  "name": "Gestão WhatsApp — Router Central (ATUALIZADO)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "evolution-router",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "5daaece5-e032-4841-a82e-a7ecfa234cd7",
+      "name": "Receber Evolution API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "0552e80c-7aeb-4aed-9a78-0e897e8a3058"
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "`\ntry {\n// ========== SUPABASE CONFIG ==========\nconst SUPABASE_URL = 'https://vblfdikfobsirwpdnybw.supabase.co/rest/v1';\nconst SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4';\n\n// UUIDs FIXOS dos projetos no Supabase (tabela projetos)\nconst PROJECT_IDS = {\n  brasilia: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d',\n  osasco:   'f3c6645b-347f-4382-b9c5-d103c27ec511',\n  pardinho: 'ec112c9a-1669-4287-8079-526d6940ce82',\n  tatui:    'c2bf8fda-b2e0-4bc1-9535-4891d596ea10',\n  consorcio:'abe7f66c-004b-4bb5-a245-6be67debd9f7',\n  rk:'d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8'"
+      },
+      "id": "32dc6592-31e4-4789-81e3-be3afc2b271f",
+      "name": "Parse Evento Whatsapp",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "nao-ignorar",
+              "leftValue": "={{ .ignorar }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c8b0f5e7-cc39-42cd-acea-3781ef7b212c",
+      "name": "Ignorar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ .targetWebhook }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: .phone, message: .text }) }}",
+        "options": {}
+      },
+      "id": "749c5875-da8b-4e1a-8c18-297ab3e22773",
+      "name": "Encaminhar para Sub-Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        800,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Receber Evolution API": {
+      "main": [
+        [
+          {
+            "node": "Parse Evento Whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Evento Whatsapp": {
+      "main": [
+        [
+          {
+            "node": "Ignorar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ignorar?": {
+      "main": [
+        [
+          {
+            "node": "Encaminhar para Sub-Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

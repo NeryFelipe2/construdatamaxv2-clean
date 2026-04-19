@@ -276,6 +276,37 @@ client.on('message', async message => {
     const isRDOCompleto = /^\s*RDO\s*$/m.test(up) && /TRECHO\s*[:：]/.test(up);
     const isRDO = isRDOCompleto || up.includes('EQUIPE REDE:') || up.includes('MATERIAL:');
     
+    // ==========================================
+    // MENU INTERATIVO E CAPTURA DE RDO
+    // ==========================================
+    if (resposta === 'MENU' || resposta === 'OI' || resposta === 'OLA' || resposta === 'OLÁ') {
+        const msgMenu = `🤖 *ConstruData RDO - Central*\n\nPara lançar sua medição, basta enviar uma única mensagem seguindo exatamente esta máscara:\n\n1: [Prod Prevista]\n2: [Prod Real]\n3: [Custo Previsto]\n4: [Custo Real]\n5: [Custo Prev Fixo]\n6: [Custo Prev Var]\n7: [Custo Real Fixo]\n8: [Custo Real Var]\n\n*_Exemplo:_*\n1: 150\n2: 120\n3: 5000\n4: 6000\n5: 1000\n6: 4000\n7: 1500\n8: 4500`;
+        return client.sendMessage(message.from, msgMenu);
+    }
+
+    if (/1\s*:/i.test(up) && /2\s*:/i.test(up) && /3\s*:/i.test(up) && /4\s*:/i.test(up)) {
+         client.sendMessage(message.from, '⏳ *ConstruData RDO*\nAnalisando grandezas e salvando banco de dados nuvem (Supabase)...');
+         try {
+             const r = await fetch(`${API_URL}/api/whatsapp/send`, {
+                 method: 'POST',
+                 headers: {'Content-Type': 'application/json'},
+                 body: JSON.stringify({
+                     telefone: emissor,
+                     mensagem: message.body,
+                     ns_id: 1 // Default
+                 }),
+             });
+             const dataApi = await r.json();
+             if (dataApi.ok) {
+                 return client.sendMessage(message.from, `✅ *RDO Gravado com Sucesso!*\n\nBanco: Supabase Nuvem\nOrigem: Vercel Serverless\n\nPronto para a proxima medição.`);
+             } else {
+                 return client.sendMessage(message.from, `❌ Falha no banco de dados. ${JSON.stringify(dataApi)}`);
+             }
+         } catch(e) {
+             return client.sendMessage(message.from, `❌ Motor da API (Python/Vercel) está offline no momento. O desconto do Google tá alto hoje: ${e.message}`);
+         }
+    }
+
     if (!lastTaskMap[message.from] && !isRDO && !message.hasMedia) return;
 
     console.log(`[RCV] Mensagem/Resposta recebida de ${emissor}`);
@@ -299,8 +330,8 @@ client.on('message', async message => {
         }
     }
 
-    // Se respondeu OK, a gente manda uma auto-resposta confirmando e atualiza LPS
-    if(resposta === 'OK' && lastTaskMap[message.from]) {
+    // Se respondeu OK ou CIENTE, a gente manda uma auto-resposta confirmando e atualiza LPS
+    if((resposta === 'OK' || resposta === 'CIENTE') && lastTaskMap[message.from]) {
         client.sendMessage(message.from, '✅ *Sistema ConstruDataMax*\nAviso recebido! Sua tarefa foi baixada como CONCLUÍDA na Torre de Controle.');
         
         // MÁGICA: ATUALIZAR O FRONTEND (LPS) EM TEMPO REAL!
@@ -316,8 +347,13 @@ client.on('message', async message => {
             fs.writeFileSync(jsPath, JSON.stringify(st, null, 2));
             console.log(`[LPS] Linha de Balanço Atualizada! Tarefa ${tId} do número ${emissor} marcada como CONCLUÍDA.`);
             
-            // Tira do mapa para não responder mais comandos OK velhos
+            // Tira do mapa para não responder mais comandos velhos
             delete lastTaskMap[message.from];
+            
+            // SE A TAREFA TINHA A VER COM RDO, JÁ MANDA O MENU DIRETO!
+            const msgMenu = `🤖 *ConstruData RDO - Central*\n\nComo sua tarefa era lançar medição, envie os dados na mesma mensagem seguindo exatamente esta máscara:\n\n1: [Prod Prevista]\n2: [Prod Real]\n3: [Custo Previsto]\n4: [Custo Real]\n5: [Custo Prev Fixo]\n6: [Custo Prev Var]\n7: [Custo Real Fixo]\n8: [Custo Real Var]\n\n*_Exemplo:_*\n1: 150\n2: 120\n3: 5000\n4: 6000\n5: 1000\n6: 4000\n7: 1500\n8: 4500`;
+            return client.sendMessage(message.from, msgMenu);
+
         } catch(e) {
             console.error('[LPS ERRO]', e);
         }

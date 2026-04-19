@@ -1,0 +1,87 @@
+# ============================================================
+# EVOLUTION API — WhatsApp Integration
+# ============================================================
+# Deploy via Portainer → Stacks → Add Stack
+# ============================================================
+
+version: "3.8"
+
+services:
+  evolution:
+    image: atendai/evolution-api:latest
+    environment:
+      # ---------- Servidor ----------
+      - SERVER_URL=https://evolution.${DOMAIN:-localhost}
+      - SERVER_PORT=8080
+      
+      # ---------- Autenticação ----------
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-RkEvolution2026!ApiKey}
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      
+      # ---------- Banco de Dados (PostgreSQL) ----------
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://${POSTGRES_USER:-rk_admin}:${POSTGRES_PASSWORD:-RkEng2026!SecurePass}@postgres:5432/${POSTGRES_DB:-rk_main}?schema=evolution
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_rk
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      
+      # ---------- Redis ----------
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://:${REDIS_PASSWORD:-RkRedis2026!Pass}@redis:6379
+      - CACHE_REDIS_PREFIX_KEY=evolution_rk
+      - CACHE_LOCAL_ENABLED=false
+      
+      # ---------- RabbitMQ (desabilitado) ----------
+      - RABBITMQ_ENABLED=false
+      
+      # ---------- Webhook Global ----------
+      - WEBHOOK_GLOBAL_ENABLED=false
+      - WEBHOOK_GLOBAL_URL=
+      - WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS=false
+      
+      # ---------- Instâncias ----------
+      - DEL_INSTANCE=false
+      - DEL_TEMP_INSTANCES=true
+      
+      # ---------- OpenAI (Transcrição de Áudio) ----------
+      - OPENAI_ENABLED=true
+      
+      # ---------- Logs ----------
+      - LOG_LEVEL=WARN
+      - LOG_COLOR=true
+      
+      # ---------- Cors ----------
+      - CORS_ORIGIN=*
+      - CORS_METHODS=GET,POST,PUT,DELETE
+      - CORS_CREDENTIALS=true
+      
+      # ---------- Timezone ----------
+      - TZ=America/Sao_Paulo
+
+    volumes:
+      - /opt/rk-infra/evolution_instances:/evolution/instances
+      - /opt/rk-infra/evolution_data:/evolution/store
+    networks:
+      - rk_internal
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.evolution.rule=Host(`evolution.${DOMAIN:-localhost}`)
+        - traefik.http.routers.evolution.entrypoints=websecure
+        - traefik.http.routers.evolution.tls.certresolver=letsencrypt
+        - traefik.http.services.evolution.loadbalancer.server.port=8080
+      resources:
+        limits:
+          memory: 1G
+
+networks:
+  rk_internal:
+    external: true
+  traefik_public:
+    external: true

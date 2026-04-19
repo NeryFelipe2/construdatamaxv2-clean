@@ -1,6 +1,6 @@
 # 🤖 AI Agents Guidelines
 <!-- n8n-as-code-start -->
-<!-- n8nac-version: 1.5.5 -->
+<!-- n8nac-version: 1.7.0 -->
 
 ## 🎭 Role: Expert n8n Workflow Engineer
 
@@ -18,31 +18,32 @@ You manage n8n workflows as **clean, version-controlled TypeScript files** using
 Before using any `n8nac` workflow command, check whether the workspace is initialized.
 
 ### Initialization Check
-- Look for `n8nac-config.json` in the workspace root.
+- Look for `n8nac-config.json` at the root of the target n8n-as-code workspace. If you are operating from another folder, use the target workspace path, not your own current root.
 - If `n8nac-config.json` is missing, or it exists but does not yet contain `projectId` and `projectName`, the workspace is not initialized yet.
 - **NEVER tell the user to run `npx --yes n8nac init` themselves.** You are the agent — it is YOUR job to run the command.
-- `npx --yes n8nac instance add` is the main setup command. It saves a new instance config, selects the active project, and activates that config in one flow. `npx --yes n8nac init` is the ergonomic alias.
-- The explicit 2-step flow is still supported when you need to inspect projects before choosing one: first `npx --yes n8nac init-auth --host <url> --api-key <key>`, then `npx --yes n8nac init-project`.
+- For autonomous agents, the default non-interactive initialization flow is the explicit 2-step sequence: `npx --yes n8nac init-auth --host <url> --api-key <key> [--sync-folder <path>]`, then `npx --yes n8nac init-project --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`. Use this when the project is not known yet and you need to discover or inspect projects before choosing one.
+- A 1-command non-interactive flow also exists when the host, API key, and project selector are already known: `npx --yes n8nac instance add --yes --host <url> --api-key <key> --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`. `npx --yes n8nac init` is the ergonomic alias.
 - If the workspace already has saved instance configs, inspect them with `npx --yes n8nac instance list --json` before deciding whether to add a new one or switch the active config.
 - Use `npx --yes n8nac instance select --instance-id <id>` or `npx --yes n8nac instance select --instance-name <name>` to switch saved configs non-interactively.
 - Use `npx --yes n8nac instance delete --instance-id <id> --yes` or `npx --yes n8nac instance delete --instance-name <name> --yes` to remove stale saved configs non-interactively.
-- If the user has already provided the n8n host and API key, prefer `npx --yes n8nac init-auth --host <url> --api-key <key>` when you still need to inspect the project list, or `npx --yes n8nac instance add --yes --host <url> --api-key <key> --project-id <id>|--project-name <name>|--project-index <n>` when the project selector is already known.
+- If the user has already provided the n8n host and API key, prefer the 2-step flow when you still need to inspect projects first. Use the 1-command flow only when the target project is already known.
 - If host or API key are missing, ask the user for them with a single clear question: "To initialize the workspace I need your n8n host URL and API key — what are they?" Then, once you have both values, run the appropriate command yourself.
 - Do not run `n8nac list`, `pull`, `push`, or edit workflow files until initialization is complete.
 - Never write `n8nac-config.json` by hand. Instance setup and switching must go through the documented `n8nac` commands so credentials, active selection, and AI context stay consistent.
 - Do not assume initialization has already happened just because the repository contains workflow files or plugin files.
 
-### Preferred Agent Command
-- Single-flow setup: `npx --yes n8nac instance add` (or `npx --yes n8nac init`)
-- Step 1 auth: `npx --yes n8nac init-auth --host <url> --api-key <key>`
-- Step 2 project selection: `npx --yes n8nac init-project --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`
+### Preferred Agent Commands
+- Default 2-step non-interactive auth: `npx --yes n8nac init-auth --host <url> --api-key <key> [--sync-folder <path>]`
+- Default 2-step non-interactive project selection: `npx --yes n8nac init-project --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`
+- Optional 1-command non-interactive setup when the project is already known: `npx --yes n8nac instance add --yes --host <url> --api-key <key> --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`
+- Optional 1-command alias: `npx --yes n8nac init --yes --host <url> --api-key <key> --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]`
 - Saved config management: `npx --yes n8nac instance list --json`, `npx --yes n8nac instance select --instance-id <id>|--instance-name <name>`, `npx --yes n8nac instance delete --instance-id <id>|--instance-name <name> --yes`
 - `npx --yes n8nac init-project` can run interactively after `npx --yes n8nac init-auth`, or non-interactively when the project selector is known.
 
 ### Required Order
 1. Check for `n8nac-config.json`.
 2. If saved configs already exist: inspect them with `npx --yes n8nac instance list --json`. Reuse them with `npx --yes n8nac instance select` instead of creating duplicates whenever that satisfies the user request.
-3. If initialization is missing and `N8N_HOST` / `N8N_API_KEY` are available: run `npx --yes n8nac init-auth --host <url> --api-key <key>` to discover projects, unless the project selector is already known and you can finish in one command with `npx --yes n8nac instance add --yes ...`.
+3. If initialization is missing and `N8N_HOST` / `N8N_API_KEY` are available: default to `npx --yes n8nac init-auth --host <url> --api-key <key> [--sync-folder <path>]` to discover projects. Only use `npx --yes n8nac instance add --yes --host <url> --api-key <key> --project-id <id>|--project-name <name>|--project-index <n> [--sync-folder <path>]` when the project is already known.
 4. If initialization is missing and credentials are absent: ask the user for the host URL and API key, then run the appropriate `n8nac` command yourself. **Do not ask the user to run the command.**
 5. After credentials are saved, inspect the listed projects. If only one project exists, run `npx --yes n8nac init-project --project-index 1 --sync-folder workflows`. If multiple projects exist, ask the user which one to use, then run `npx --yes n8nac init-project --project-id <id> [--sync-folder <path>]`.
 6. Only after initialization is complete, continue with workflow discovery, pull, edit, validate, and push steps.
@@ -58,11 +59,14 @@ n8n-as-code uses a **Git-like sync architecture**. The local code is the source 
 ### Git-like Sync Workflow
 
 1. **LIST FIRST**: Check status with `npx --yes n8nac list`
-   - `npx --yes n8nac list`: List all workflows with their sync status (lightweight — only reads metadata).
+   - `npx --yes n8nac list`: List all non-archived workflows with their sync status (lightweight — only reads metadata).
+   - `npx --yes n8nac list --include-archived`: List all workflows including archived ones.
+   - `npx --yes n8nac list --only-archived`: List only archived workflows.
    - `npx --yes n8nac list --local`: List only local `.workflow.ts` files.
    - `npx --yes n8nac list --remote`: List only remote workflows.
-   - Identify workflow IDs, filenames, and sync status.
-   - Read `n8nac-config.json` to understand the active sync context. The config defines `syncFolder`, `instanceIdentifier`, and `projectName`; `n8nac` builds the full local path under the hood.
+   - Identify workflow IDs, filenames, and sync status. Archived workflows are shown with an `[archived]` badge.
+   - ⚠️ **ARCHIVED WORKFLOWS ARE READ-ONLY**: Archived workflows cannot be pushed or modified via the API.
+   - Read `n8nac-config.json` to understand the active sync context. The config defines `syncFolder`, `instanceIdentifier`, `projectName`, and the pre-computed `workflowDir` (the canonical path string where workflow files live). In the common case it is workspace-relative, but it can be absolute when `syncFolder` is absolute. You never need to reconstruct it manually.
    - Always run `npx --yes n8nac` from the workspace root. Never construct sync paths manually.
 
 2. **PULL IF NEEDED**: Download remote changes before editing
@@ -71,23 +75,21 @@ n8n-as-code uses a **Git-like sync architecture**. The local code is the source 
 
 3. **EDIT / CREATE LOCALLY**: Work on the local `.workflow.ts` file inside the active workflow directory.
    - For an existing workflow: edit the pulled local file.
-   - For a brand-new workflow: create the file inside the active local workflow directory, never in the workspace root.
-   - First try to discover that directory from existing local workflow paths via `npx --yes n8nac list --local`.
-   - If there are no local workflows yet, run `npx --yes n8nac list` and use the directory portion of any reported `Local Path` as the active local workflow directory.
-   - Do **not** guess the directory from the instance identifier alone. The active directory can include a project subdirectory such as `personal`.
-   - Only if no workflow paths are available at all, inspect the directory created by initialization under the configured `syncFolder` and use its active project subdirectory.
-   - After writing a new file, confirm it appears in `npx --yes n8nac list --local` before running `npx --yes n8nac push <filename>` with the full filename such as `slack-notification.workflow.ts`.
+   - For a brand-new workflow: read `workflowDir` from the **active instance** in `n8nac-config.json` — that is the instance whose `id` matches `activeInstanceId`. That path string is the canonical location for all workflow files. In the common case it is workspace-relative, but it can be absolute. Create the file there; never in the workspace root.
+   - `workflowDir` is recomputed and persisted automatically on every `instance add` / `instance select` / `init`. It is always the authoritative source — do not reconstruct it from `syncFolder` + `instanceIdentifier` + `projectName` manually.
+   - After writing a new file, confirm it appears in `npx --yes n8nac list --local` before running `npx --yes n8nac push <path>` with either the absolute path or the workspace-root-relative path, such as `workflows/127_0_0_1_5678_yagr_l/personal/slack-notification.workflow.ts`.
 
 4. **PUSH**: Upload your changes explicitly
-   - `npx --yes n8nac push <filename>`: Upload the local workflow file to n8n. This is the only public push form.
-   - `npx --yes n8nac push <filename> --verify`: Push and immediately verify the live workflow against the local schema.
+   - `npx --yes n8nac push <path>`: Upload the local workflow file to n8n. This is the only public push form.
+   - `npx --yes n8nac push <path> --verify`: Push and immediately verify the live workflow against the local schema.
 
-   > ⚠️ **CRITICAL — what `filename` means**:
-   > - Use only the full workflow filename including the `.workflow.ts` suffix, for example `slack-notification.workflow.ts`.
+   > ⚠️ **CRITICAL — what `path` means**:
+   > - Always use the full workflow file path including the `.workflow.ts` suffix.
+   > - Use either the absolute path from `workflowDir` or the workspace-root-relative path that starts with `workflowDir`, for example `workflows/127_0_0_1_5678_yagr_l/personal/slack-notification.workflow.ts`.
+   > - Do **not** pass a bare filename such as `slack-notification.workflow.ts` — there is no automatic scope prefix and the push will fail.
    > - Do **not** omit the extension or pass a bare workflow name such as `slack-notification`.
-   > - Do **not** pass a path. `n8nac` resolves the real local path from `n8nac-config.json`.
    > - Do **not** use the workflow title from n8n as a CLI argument.
-   > - The remote source of truth remains the workflow ID; `push` simply starts from the local filename.
+   > - The remote source of truth remains the workflow ID; `push` resolves the file from the path you provide.
 
 5. **VERIFY (strongly recommended)**: After any push, validate the live workflow
    - `npx --yes n8nac verify <id>`: Fetches the workflow from n8n and checks all nodes against the schema.
@@ -140,11 +142,11 @@ n8n-as-code uses a **Git-like sync architecture**. The local code is the source 
 - **Explicit over automatic**: All operations are user-triggered or ai-agent-triggered.
 - **Point-in-time status**: `list` is lightweight and covers all workflows at once.
 - **Pull before edit**: Always ensure you have latest version before modifying.
-- **new workflows must be created in the active local workflow directory**: Do not write them in the repo root or an ad-hoc folder.
-- **push always starts from the local filename**: Never invent sync paths in the CLI command and never use the workflow title as a CLI identifier.
+- **new workflows must be created in the active local workflow directory**: Read `workflowDir` from the active instance in `n8nac-config.json` (the instance whose `id` === `activeInstanceId`) — this is always correct regardless of `--instance` overrides or prior `instance select` calls. In the common case it is workspace-relative, but it can be absolute if `syncFolder` is absolute. Do not write workflows in the repo root or an ad-hoc folder.
+- **push requires the full workflow file path**: Always use either the absolute path from `workflowDir` or the workspace-root-relative equivalent, such as `workflowDir/<filename>.workflow.ts` in the common relative case. Never use a bare filename. A bare name has no implicit scope prefix and will be rejected with a clear error showing the expected path.
 - **inspect then test after push for webhook/chat/form workflows**: Run `npx --yes n8nac test-plan <id>` first, then activate and test with `--prod`. **ALWAYS activate the workflow first (`workflow activate <id>`), then test with `npx --yes n8nac test <id> --prod`. Never use bare `test <id>` — it requires a manual arm step in the n8n editor and will fail without it.** A Class A error is not a bug — tell the user. A runtime-state issue is also not a code bug — fix the state/arming problem, not the workflow code. A Class B error is fixable — iterate.
 
-> `pull` and `resolve` always operate on **a single workflow ID**. `push` always starts from **a single local filename** in the active sync scope. `list` is the only command that covers all workflows at once.
+> `pull` and `resolve` always operate on **a single workflow ID**. `push` always starts from **the full path of the local workflow file** — either absolute or workspace-root-relative (e.g. `workflows/127_0_0_1_5678_yagr_l/personal/my-workflow.workflow.ts`). `list` is the only command that covers all workflows at once.
 
 If you skip the Pull step, your Push will be REJECTED by the Optimistic Concurrency Control (OCC) if the user modified the UI in the meantime.
 
@@ -194,7 +196,7 @@ npx --yes n8nac skills validate workflow.workflow.ts
 npx --yes n8nac verify <workflowId>
 ```
 - **Catches runtime errors** that local validate misses: non-existent typeVersion, invalid operation values, missing required params.
-- Tip: use `npx --yes n8nac push my-workflow.workflow.ts --verify` to do both in one command.
+- Tip: use `npx --yes n8nac push <workflowDir>/my-workflow.workflow.ts --verify` to do both in one command.
 
 ### Step 6: Inspect Webhook/Chat/Form Testability After Push
 ```bash
@@ -455,7 +457,7 @@ npx --yes n8nac skills validate workflow.workflow.ts
 ### 🔎 Verify Live Workflow (post-push)
 ```bash
 npx --yes n8nac verify <workflowId>          # Fetch from n8n + validate against schema
-npx --yes n8nac push my-workflow.workflow.ts --verify   # Push then verify in one step
+npx --yes n8nac push <workflowDir>/my-workflow.workflow.ts --verify   # Push then verify in one step
 ```
 Catches runtime errors (invalid typeVersion, bad operation values, missing required params) **before** the user notices them in the UI.
 

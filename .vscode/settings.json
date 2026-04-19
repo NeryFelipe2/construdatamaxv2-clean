@@ -5,5 +5,8 @@
   },
   "aider.executablePath": "C:\\Users\\felip\\.local\\bin\\aider.exe",
   "aider.autoAddOnOpen": true,
-  "aider.autoDropOnClose": true
+  "aider.autoDropOnClose": true,
+  "n8n.host": "https://n8n-production-ae317.up.railway.app",
+  "n8n.apiKey": "ea4a6885-cb58-4249-bfbb-deceb1788edc",
+  "n8n.syncFolder": "workflows/n8n_production_ae317_up_railway_app_felipe_n/personal"
 }

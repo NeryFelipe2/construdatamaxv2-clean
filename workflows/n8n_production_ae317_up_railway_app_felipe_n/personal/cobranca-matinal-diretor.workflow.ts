@@ -63,42 +63,57 @@ export class CobrancaMatinalTarefasDiretoresWorkflow {
     const diretores = [
       {
         nome: "Luiz Fernando Machado",
-        telefone: "5511993444697", // Substituir pelos reais depois
-        projetos: "Osasco, Pardinho e RK Sub Empreita"
-      },
-      {
-        nome: "Renato",
-        telefone: "5541999999999", // Substituir
-        projetos: "Osasco, Pardinho e RK Sub Empreita"
-      },
-      {
-        nome: "Fabrizzio",
-        telefone: "5574999076534",
-        projetos: "Sala Técnica Consórcio Se Liga Na Rede Santos"
+        telefone: "5537999425397",
+        projetos: "Osasco, Pardinho e RK Sub Empreita",
+        tipo: "tarefa"
       },
       {
         nome: "Felipe Nery (Gestor Geral)",
         telefone: "5561981846325",
-        projetos: "TODOS OS PROJETOS (Apoio na Delegação)"
+        projetos: "TODOS OS PROJETOS (Apoio na Delegação)",
+        tipo: "tarefa"
       }
     ];
 
-    const mensagens = diretores.map(d => {
-      return {
+    // COBRANÇA FINANCEIRA — Renato e Emilly (quem faz pagamentos)
+    const financeiros = [
+      {
+        nome: "Renato",
+        telefone: "5528999154319",
+        projetos: "Osasco, Pardinho, RK"
+      },
+      {
+        nome: "Emilly Anjos",
+        telefone: "5513974168911",
+        projetos: "Osasco, Pardinho, RK"
+      }
+    ];
+
+    const mensagens = [];
+
+    // Cobranças de TAREFAS
+    for (const d of diretores) {
+      mensagens.push({
         json: {
           number: d.telefone,
           textMessage: {
-            text: \`🚨 *ALERTA DA GESTÃO 360* 🚨
-
-Bom dia, Diretor *\${d.nome}*!
-
-Lembre-se de despachar as tarefas para seus engenheiros / equipe hoje para os projetos: *\${d.projetos}*
-
-Use o comando no Whatsapp da ConsturDataMax:\\n*@tarefa <nome_do_engenheiro> <descrição da tarefa>*\\nEx: *@tarefa mateus realizar topografia na rua X*\\n\\nUm ótimo dia de trabalho!\`
+            text: \`🚨 *ALERTA DA GESTÃO 360* 🚨\n\nBom dia, Diretor *\${d.nome}*!\n\nLembre-se de despachar as tarefas para seus engenheiros / equipe hoje para os projetos: *\${d.projetos}*\n\nUse o comando no Whatsapp:\n*@tarefa <nome> <descrição>*\nEx: *@tarefa mateus realizar topografia na rua X*\n\nUm ótimo dia de trabalho!\`
           }
         }
-      };
-    });
+      });
+    }
+
+    // Cobranças FINANCEIRAS diárias
+    for (const f of financeiros) {
+      mensagens.push({
+        json: {
+          number: f.telefone,
+          textMessage: {
+            text: \`💰 *COBRANÇA FINANCEIRA DIÁRIA* 💰\n\nBom dia, *\${f.nome}*!\n\nFez algum pagamento ontem ou hoje nos projetos *\${f.projetos}*?\n\n📸 *Envie o comprovante aqui* com a legenda:\n_Obra | Categoria | Descrição_\n\n💡 *Exemplos:*\n• Osasco | Diesel | Posto Shell\n• Pardinho | Material | Tubos Tigre\n• RK Sede | Alimentação | Marmita equipe\n\n⚠️ *Obras sem lançamento serão cobradas na diretoria.*\n\n_Sistema ConstruDataMax Gestão 360_\`
+          }
+        }
+      });
+    }
 
     return mensagens;
     `,
