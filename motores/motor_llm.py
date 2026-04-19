@@ -77,6 +77,20 @@ PROVIDERS = {
         "url_key": "https://dashboard.cohere.com/api-keys",
         "capacidades": ["texto", "rag", "dados"],
     },
+    "anthropic": {
+        "env_key": "ANTHROPIC_API_KEY",
+        "modelos": {"opus": "claude-opus-4-6", "sonnet": "claude-sonnet-4-6", "haiku": "claude-haiku-4-5-20251001"},
+        "free_limit": "pago (API key)",
+        "url_key": "https://console.anthropic.com/settings/keys",
+        "capacidades": ["texto", "codigo", "raciocinio", "agente"],
+    },
+    "openai": {
+        "env_key": "OPENAI_API_KEY",
+        "modelos": {"gpt4o": "gpt-4o", "gpt4o_mini": "gpt-4o-mini"},
+        "free_limit": "pago (API key)",
+        "url_key": "https://platform.openai.com/api-keys",
+        "capacidades": ["texto", "codigo", "visao", "raciocinio"],
+    },
 }
 
 # Roteamento: módulo → provider preferido → fallback
@@ -91,6 +105,9 @@ ROTEAMENTO = {
     "legenda_rdo":    ["gemini", "groq"],                   # multimodal ou texto
     "ml_explicacao":  ["mistral", "groq"],                  # raciocínio
     "chat":           ["groq", "mistral", "cohere"],        # geral
+    "agente":         ["anthropic", "openai", "groq"],       # agente principal
+    "decisao":        ["anthropic", "openai", "mistral"],    # raciocínio complexo
+    "codigo":         ["anthropic", "openai", "groq"],       # geração de código
 }
 
 
@@ -175,6 +192,18 @@ def _get_cohere():
         _clients["cohere"] = cohere.Client(api_key=_get_key("cohere"))
     return _clients["cohere"]
 
+def _get_anthropic():
+    if "anthropic" not in _clients:
+        from anthropic import Anthropic
+        _clients["anthropic"] = Anthropic(api_key=_get_key("anthropic"))
+    return _clients["anthropic"]
+
+def _get_openai():
+    if "openai" not in _clients:
+        from openai import OpenAI
+        _clients["openai"] = OpenAI(api_key=_get_key("openai"))
+    return _clients["openai"]
+
 
 # ══════════════════════════════════════════════════════════
 # CHAMADAS UNIFICADAS POR PROVIDER
@@ -250,11 +279,44 @@ def _call_cohere(prompt, modelo=None, system=None):
     return response.message.content[0].text
 
 
+def _call_anthropic(prompt, modelo=None, system=None):
+    """Chama Anthropic Claude (raciocínio + agente)."""
+    client = _get_anthropic()
+    modelo = modelo or PROVIDERS["anthropic"]["modelos"]["sonnet"]
+
+    kwargs = {"model": modelo, "max_tokens": 2048}
+    if system:
+        kwargs["system"] = system
+    kwargs["messages"] = [{"role": "user", "content": prompt}]
+
+    response = client.messages.create(**kwargs)
+    return response.content[0].text
+
+
+def _call_openai(prompt, modelo=None, system=None):
+    """Chama OpenAI GPT-4o."""
+    client = _get_openai()
+    modelo = modelo or PROVIDERS["openai"]["modelos"]["gpt4o"]
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    response = client.chat.completions.create(
+        model=modelo, messages=messages,
+        temperature=0.2, max_tokens=2048,
+    )
+    return response.choices[0].message.content
+
+
 CALL_MAP = {
     "gemini": _call_gemini,
     "groq": _call_groq,
     "mistral": _call_mistral,
     "cohere": _call_cohere,
+    "anthropic": _call_anthropic,
+    "openai": _call_openai,
 }
 
 
@@ -269,7 +331,8 @@ def chamar(modulo, prompt, **kwargs):
     
     Args:
         modulo: "foto", "pdf", "consulta", "resumo", "lps", "perdas",
-                "hidraulica", "legenda_rdo", "ml_explicacao", "chat"
+                "hidraulica", "legenda_rdo", "ml_explicacao", "chat",
+                "agente", "decisao", "codigo"
         prompt: texto do prompt
         **kwargs: imagem_bytes, pdf_bytes, system, etc.
     

@@ -304,7 +304,7 @@ def run_pipeline(input_path, nucleo=None, out_dir=None, data_inicio=None):
 
     print("\n▶ ETAPA 3/6 - Saidas Civil 3D")
     try:
-        from gerar_civil3d import gerar_landxml, gerar_cadastro_dxf, gerar_dynamo, gerar_scr
+        from gerar_civil3d import gerar_landxml, gerar_cadastro_dxf, gerar_dynamo, gerar_scr, gerar_dynamo_dyn
 
         c3d_dir = out_dir / "02_CIVIL3D"
         c3d_dir.mkdir(parents=True, exist_ok=True)
@@ -318,11 +318,14 @@ def run_pipeline(input_path, nucleo=None, out_dir=None, data_inicio=None):
         dynamo_path = c3d_dir / f"criar_pipe_network_{_nucleo_slug(nucleo)}.py"
         gerar_dynamo(pvs, trechos, nucleo, str(dynamo_path))
 
+        dyn_path = c3d_dir / f"criar_pipe_network_{_nucleo_slug(nucleo)}.dyn"
+        gerar_dynamo_dyn(pvs, trechos, nucleo, str(dyn_path))
+
         scr_path = c3d_dir / f"desenhar_rede_{_nucleo_slug(nucleo)}.scr"
         gerar_scr(pvs, trechos, nucleo, str(scr_path))
 
-        results["civil3d"] = [str(xml_path), str(dxf_dir), str(dynamo_path), str(scr_path)]
-        print("  ✓ LandXML + Cadastro DXF + Dynamo + .scr")
+        results["civil3d"] = [str(xml_path), str(dxf_dir), str(dynamo_path), str(dyn_path), str(scr_path)]
+        print("  ✓ LandXML + Cadastro DXF + Dynamo (.py + .dyn) + .scr")
     except ImportError:
         print("  ⚠ gerar_civil3d.py nao encontrado - pulando")
         results["civil3d"] = []

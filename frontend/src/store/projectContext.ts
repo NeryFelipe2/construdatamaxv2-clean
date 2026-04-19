@@ -29,28 +29,53 @@ export function selectFrentesDoProjetoAtivo(s: ProjectContextState): DbFrente[] 
   return s.frentes.filter(f => f.projeto_id === s.activeProjectId)
 }
 
-// Demo data when Supabase is not connected
+// UUIDs reais dos projetos no Supabase (mesmos usados pelo Router WhatsApp)
+// Essa sincronia permite que dados vindos do WhatsApp apareçam nos dashboards.
 const DEMO_PROJETOS: DbProjeto[] = [
   {
-    id: 'demo-1', nome: 'SLNR Santos', contrato: 'CT 11481051', cidade: 'Santos',
-    cliente: 'Sabesp', tipo: 'esgoto', data_inicio: '2024-01-15', data_fim: '2025-12-31',
-    orcamento_total: 45000000, status: 'ativo', responsavel_nome: 'Felipe Nery',
-    responsavel_telefone: '5513999999999', created_at: '2024-01-01T00:00:00Z',
+    id: 'abe7f66c-004b-4bb5-a245-6be67debd9f7', nome: 'Consórcio Se Liga na Rede — SLNR Santos', contrato: 'CT 11481051', cidade: 'Santos',
+    cliente: 'SABESP', tipo: 'esgoto', data_inicio: '2024-01-15', data_fim: '2025-12-31',
+    orcamento_total: 45000000, status: 'ativo', responsavel_nome: 'Fabrizzio',
+    responsavel_telefone: '5574999076534', created_at: '2024-01-01T00:00:00Z',
   },
   {
-    id: 'demo-2', nome: 'Osasco Saneamento Norte', contrato: 'CT 2024-OSC', cidade: 'Osasco',
-    cliente: 'Prefeitura Osasco', tipo: 'misto', data_inicio: '2024-06-01', data_fim: '2026-06-01',
-    orcamento_total: 28000000, status: 'ativo', responsavel_nome: 'Bruno Silva',
-    responsavel_telefone: '5511988888888', created_at: '2024-06-01T00:00:00Z',
+    id: 'f3c6645b-347f-4382-b9c5-d103c27ec511', nome: 'Osasco — Rua Cuiabá', contrato: 'CAPEX Osasco', cidade: 'Osasco',
+    cliente: 'CAPEX', tipo: 'esgoto', data_inicio: '2026-04-01', data_fim: '2028-03-31',
+    orcamento_total: 28000000, status: 'ativo', responsavel_nome: 'Mateus Santos',
+    responsavel_telefone: '5561991015639', created_at: '2026-04-07T00:00:00Z',
+  },
+  {
+    id: 'ec112c9a-1669-4287-8079-526d6940ce82', nome: 'Pardinho — Itapetininga', contrato: 'Consórcio Itapetininga', cidade: 'Pardinho',
+    cliente: 'Consórcio Itapetininga', tipo: 'esgoto', data_inicio: '2026-04-01', data_fim: '2027-12-31',
+    orcamento_total: 32000000, status: 'ativo', responsavel_nome: 'Ícaro',
+    responsavel_telefone: '5537998268576', created_at: '2026-04-07T00:00:00Z',
+  },
+  {
+    id: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d', nome: 'ConstruData Brasília', contrato: '-', cidade: 'Brasília',
+    cliente: 'ConstruData', tipo: 'esgoto', data_inicio: '2024-01-15', data_fim: '2025-12-31',
+    orcamento_total: 18750000, status: 'ativo', responsavel_nome: 'João',
+    responsavel_telefone: '5561999996252', created_at: '2026-04-08T00:00:00Z',
   },
 ]
 
+const UUID_CONSORCIO = 'abe7f66c-004b-4bb5-a245-6be67debd9f7'
+const UUID_OSASCO    = 'f3c6645b-347f-4382-b9c5-d103c27ec511'
+const UUID_PARDINHO  = 'ec112c9a-1669-4287-8079-526d6940ce82'
+const UUID_BRASILIA  = '2a28beec-b1f8-4b0c-8416-d0710bb35d9d'
+
 const DEMO_FRENTES: DbFrente[] = [
-  { id: 'f-1', projeto_id: 'demo-1', nome: 'Verde e Teteu', setor: 'Zona Norte', tipo_rede: 'esgoto', extensao_total: 12500, pvs_total: 85, status: 'ativa' },
-  { id: 'f-2', projeto_id: 'demo-1', nome: 'Pantanal', setor: 'Zona Leste', tipo_rede: 'esgoto', extensao_total: 8700, pvs_total: 62, status: 'ativa' },
-  { id: 'f-3', projeto_id: 'demo-1', nome: 'Sao Manoel', setor: 'Centro', tipo_rede: 'esgoto', extensao_total: 5400, pvs_total: 38, status: 'pausada' },
-  { id: 'f-4', projeto_id: 'demo-2', nome: 'Frente Norte A', setor: 'Norte', tipo_rede: 'agua', extensao_total: 6000, pvs_total: 42, status: 'ativa' },
-  { id: 'f-5', projeto_id: 'demo-2', nome: 'Frente Norte B', setor: 'Norte', tipo_rede: 'esgoto', extensao_total: 7200, pvs_total: 51, status: 'ativa' },
+  // ─── Consórcio Se Liga na Rede ───
+  { id: 'f-cons-1', projeto_id: UUID_CONSORCIO, nome: 'Sala Técnica', setor: 'Técnico', tipo_rede: 'esgoto', extensao_total: 26600, pvs_total: 185, status: 'ativa' },
+  { id: 'f-cons-2', projeto_id: UUID_CONSORCIO, nome: 'Planejamento', setor: 'Planejamento', tipo_rede: 'esgoto', extensao_total: 0, pvs_total: 0, status: 'ativa' },
+  { id: 'f-cons-3', projeto_id: UUID_CONSORCIO, nome: 'Produção', setor: 'Operacional', tipo_rede: 'esgoto', extensao_total: 12500, pvs_total: 85, status: 'ativa' },
+  // ─── Osasco — Rua Cuiabá ───
+  { id: 'f-osc-1', projeto_id: UUID_OSASCO, nome: 'Rua Cuiabá / Capex', setor: 'Centro Osasco', tipo_rede: 'esgoto', extensao_total: 6800, pvs_total: 48, status: 'ativa' },
+  // ─── Pardinho — Itapetininga ───
+  { id: 'f-pard-1', projeto_id: UUID_PARDINHO, nome: 'Frente Rede Principal', setor: 'Centro Pardinho', tipo_rede: 'esgoto', extensao_total: 9500, pvs_total: 68, status: 'ativa' },
+  { id: 'f-pard-2', projeto_id: UUID_PARDINHO, nome: 'Frente Ligações Prediais', setor: 'Bairros', tipo_rede: 'esgoto', extensao_total: 4200, pvs_total: 0, status: 'ativa' },
+  { id: 'f-pard-3', projeto_id: UUID_PARDINHO, nome: 'Frente ETE / Emissário', setor: 'Área Rural', tipo_rede: 'esgoto', extensao_total: 3100, pvs_total: 22, status: 'pausada' },
+  // ─── ConstruData Brasília ───
+  { id: 'f-bsb-1', projeto_id: UUID_BRASILIA, nome: 'Frente Principal', setor: 'Centro', tipo_rede: 'esgoto', extensao_total: 5000, pvs_total: 30, status: 'ativa' },
 ]
 
 export const useProjectContext = create<ProjectContextState>((set, get) => ({
@@ -75,7 +100,10 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
       if (data && data.length > 0) {
         set({ projetos: data as DbProjeto[] })
         const active = get().activeProjectId
-        if (!active || !data.find((p: any) => p.id === active)) {
+        // Force reset if stored ID is a demo ID (not a valid UUID) or doesn't exist in real data
+        const isValidUuid = active && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(active)
+        const existsInData = isValidUuid && data.find((p: any) => p.id === active)
+        if (!active || !existsInData) {
           get().setActiveProject(data[0].id)
         }
       }

@@ -1,0 +1,52 @@
+# ============================================================
+# TRAEFIK — Proxy Reverso + SSL Automático (Let's Encrypt)
+# ============================================================
+# Deploy: docker stack deploy -c traefik.yml traefik
+# ============================================================
+
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=traefik_public
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Redirecionar HTTP → HTTPS
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # SSL via Let's Encrypt
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-felipe@rkengenharia.com}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --log.level=ERROR
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/rk-infra/traefik_data:/letsencrypt
+    networks:
+      - traefik_public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        # Dashboard do Traefik (opcional)
+        - traefik.enable=true
+        - traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN:-localhost}`)
+        - traefik.http.routers.traefik-dashboard.entrypoints=websecure
+        - traefik.http.routers.traefik-dashboard.tls.certresolver=letsencrypt
+        - traefik.http.routers.traefik-dashboard.service=api@internal
+        - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
+
+networks:
+  traefik_public:
+    external: true

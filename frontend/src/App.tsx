@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/store/projectContext";
 import { useThemeStore, LayoutTheme } from "@/store/themeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
   Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
@@ -23,6 +24,7 @@ const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
 const PlanejamentoPage = lazy(() => import("@/features/planejamento/index").then((m) => ({ default: m.PlanejamentoPage })));
 const Relatorio360Page = lazy(() => import("@/features/relatorio360/index").then((m) => ({ default: m.Relatorio360Page })));
+const RdoListaPage = lazy(() => import("@/features/rdo-lista/index").then((m) => ({ default: m.RdoListaPage })));
 const Rede360Page = lazy(() => import("@/features/rede-360/index").then((m) => ({ default: m.Rede360Page })));
 const LpsPage = lazy(() => import("@/features/lps-lean/index").then((m) => ({ default: m.LpsPage })));
 const BimPage = lazy(() => import("@/features/bim/index").then((m) => ({ default: m.BimPage })));
@@ -44,6 +46,7 @@ const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m)
 const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
 const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((m) => ({ default: m.default })));
 const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
+const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 const navItems = [
@@ -67,6 +70,7 @@ const navItems = [
   { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
   { section: "Operação de Campo" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
+  { label: "RDOs WhatsApp (Live)", icon: FileText, to: "/app/rdo-lista" },
   { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
   { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
   { section: "Recursos" },
@@ -77,6 +81,7 @@ const navItems = [
   { section: "IA & Inteligência" },
   { label: "Engine V5", icon: Cpu, to: "/app/engine-v5" },
   { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
+  { label: "Agente Chat", icon: MessageSquare, to: "/app/agent-chat" },
   { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
   { section: "Comunicação" },
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
@@ -401,6 +406,7 @@ function NsV5Page() {
 export default function App() {
   return (
     <BrowserRouter>
+      <TourProvider>
       <ThemeSwitcherFab />
       <Routes>
         <Route path="/app" element={<AdaptiveShell />}>
@@ -409,6 +415,7 @@ export default function App() {
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
           <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
+          <Route path="rdo-lista" element={<LazyRoute><RdoListaPage /></LazyRoute>} />
           <Route path="projetos" element={<LazyRoute><ProjetosPage /></LazyRoute>} />
           <Route path="planejamento" element={<LazyRoute><PlanejamentoPage /></LazyRoute>} />
           <Route path="agenda" element={<LazyRoute><AgendaPage /></LazyRoute>} />
@@ -435,10 +442,12 @@ export default function App() {
           <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
           <Route path="engine-v5" element={<LazyRoute><EngineV5Dashboard /></LazyRoute>} />
           <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
+          <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
+      </TourProvider>
     </BrowserRouter>
   );
 }

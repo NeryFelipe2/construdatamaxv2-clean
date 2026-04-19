@@ -32,31 +32,48 @@ def _save(path: Path, data: list) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+import os
+from supabase import create_client
+
+# Configura o cliente do Supabase pegando das variáveis de ambiente da Vercel
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", os.environ.get("SUPABASE_ANON_KEY", os.environ.get("SUPABASE_KEY", "")))
+
+supabase = None
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
 # ---------------------------------------------------------------------------
 # Parser de RDO via texto WhatsApp
-# Campo format: "1:15 2:8h 3:Escavação 4:Retro 5:20tubos 6:N 7:Sol"
-# 1=funcionarios 2=horas 3=servico 4=equipamento 5=material 6=ocorrencia 7=clima
+# Exemplo de Payload do Eng: "1:150m 2:120m 3:5000 4:6000 5:1000 6:4000 7:1500 8:4500"
 # ---------------------------------------------------------------------------
 
 _CAMPOS = {
-    "1": "funcionarios",
-    "2": "horas_trabalhadas",
-    "3": "servico",
-    "4": "equipamento",
-    "5": "material",
-    "6": "ocorrencia",
-    "7": "clima",
+    "1": "producao_prevista",
+    "2": "producao_real",
+    "3": "custo_previsto",
+    "4": "custo_real",
+    "5": "custo_previsto_fixo",
+    "6": "custo_previsto_variavel",
+    "7": "custo_real_fixo",
+    "8": "custo_real_variavel"
 }
-
 
 def parse_rdo_whatsapp(texto: str) -> dict:
     resultado: dict = {}
     for m in re.finditer(r"(\d+)\s*:\s*([^\s]+)", texto):
         chave = _CAMPOS.get(m.group(1))
         if chave:
-            resultado[chave] = m.group(2).strip()
+            # Converte valores numéricos para salvar limpo no banco, senão vira string
+            valor = m.group(2).strip()
+            # Tenta converter para float se possivel, removendo R$ e m
+            clean_valor = re.sub(r"[^\d.,-]", "", valor).replace(",", ".")
+            try:
+                resultado[chave] = float(clean_valor)
+            except ValueError:
+                resultado[chave] = valor
     return resultado
-
 
 # ---------------------------------------------------------------------------
 # Endpoints
@@ -111,32 +128,44 @@ def disparar_rdo(ns_id: int):
 
 @router.get("/rdos")
 def listar_rdos_whatsapp(ns_id: int | None = Query(default=None)):
-    items = _load(RDOS_FILE)
-    if ns_id is not None:
-        items = [x for x in items if x.get("ns_id") == ns_id]
-    return {"items": items}
+    # Busca rdos direto do Supabase agora
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase nao configurado. Configure a variável no ambiente.")
+    
+    query = supabase.table("rk_rdo_diario").select("*")
+    if ns_id:
+        query = query.eq("ns_id", ns_id)
+        
+    res = query.execute()
+    return {"items": res.data}
 
 
 @router.post("/send")
 def enviar_mensagem(payload: dict):
     telefone = payload.get("telefone")
     mensagem = payload.get("mensagem")
+    ns_id = payload.get("ns_id")
+    
     if not telefone or not mensagem:
         raise HTTPException(status_code=400, detail="Campos 'telefone' e 'mensagem' obrigatorios")
-    # Salva RDO se o texto parecer um RDO
+        
+    # Salva RDO no SUPABASE se o texto parecer um RDO
     campos_rdo = parse_rdo_whatsapp(mensagem)
-    if campos_rdo:
-        rdos = _load(RDOS_FILE)
-        rdos.append({
-            "id": str(uuid.uuid4()),
+    if campos_rdo and supabase:
+        novo_registro = {
             "telefone": telefone,
-            "ns_id": payload.get("ns_id"),
-            "dados": campos_rdo,
+            "ns_id": ns_id,
             "texto_original": mensagem,
-            "recebido_em": datetime.utcnow().isoformat(),
-        })
-        _save(RDOS_FILE, rdos)
-    return {"ok": True, "telefone": telefone, "campos_rdo": campos_rdo or None}
+            "data_registro": datetime.utcnow().date().isoformat()
+        }
+        novo_registro.update(campos_rdo)
+        
+        try:
+            supabase.table("rk_rdo_diario").insert(novo_registro).execute()
+        except Exception as e:
+             raise HTTPException(status_code=500, detail=f"Erro ao salvar no banco Supabase: {str(e)}")
+
+    return {"ok": True, "telefone": telefone, "campos_rdo_inseridos": campos_rdo or None, "banco": "Supabase"}
 @router.post("/workflow_dispatch")
 def disparar_etapa_fluxograma(payload: dict):
     # payload: {"step_id": "1.1", "task": "...", "assignee_telefone": "5511999999999", "responsavel": "Comercial"}

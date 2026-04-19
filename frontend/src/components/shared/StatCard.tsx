@@ -1,16 +1,30 @@
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+type StatVariant = 'default' | 'accent' | 'success' | 'warning' | 'danger'
+
 interface StatCardProps {
   label: string
   value: string
   sub?: string
   icon: LucideIcon
   accent?: boolean
+  variant?: StatVariant
   className?: string
 }
 
-export function StatCard({ label, value, sub, icon: Icon, accent, className }: StatCardProps) {
+const VARIANT_COLORS: Record<StatVariant, { icon: string; value: string }> = {
+  default: { icon: 'bg-[#1a3662] text-[#6b6b6b]', value: 'text-[#f5f5f5]' },
+  accent:  { icon: 'bg-[#2abfdc]/15 text-[#2abfdc]', value: 'text-[#2abfdc]' },
+  success: { icon: 'bg-[#22c55e]/15 text-[#22c55e]', value: 'text-[#22c55e]' },
+  warning: { icon: 'bg-[#fbbf24]/15 text-[#fbbf24]', value: 'text-[#fbbf24]' },
+  danger:  { icon: 'bg-[#ef4444]/15 text-[#ef4444]', value: 'text-[#ef4444]' },
+}
+
+export function StatCard({ label, value, sub, icon: Icon, accent, variant, className }: StatCardProps) {
+  const resolved = variant ?? (accent ? 'accent' : 'default')
+  const colors = VARIANT_COLORS[resolved]
+
   return (
     <div
       className={cn(
@@ -25,7 +39,7 @@ export function StatCard({ label, value, sub, icon: Icon, accent, className }: S
         <div
           className={cn(
             'flex items-center justify-center w-8 h-8 rounded-lg',
-            accent ? 'bg-[#2abfdc]/15 text-[#2abfdc]' : 'bg-[#1a3662] text-[#6b6b6b]'
+            colors.icon
           )}
         >
           <Icon size={16} />
@@ -35,7 +49,7 @@ export function StatCard({ label, value, sub, icon: Icon, accent, className }: S
         <span
           className={cn(
             'text-2xl font-bold font-mono',
-            accent ? 'text-[#2abfdc]' : 'text-[#f5f5f5]'
+            colors.value
           )}
         >
           {value}

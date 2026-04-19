@@ -31,3 +31,4 @@ mistralai
 cohere
 evolutionapi
 flask
+anthropic

@@ -32,6 +32,9 @@ from api.routes_geradores import router as geradores_router
 from api.routes_analytics import router as analytics_router
 from api.routes_leitores import router as leitores_router
 
+# ─── Agent Chat Router ─────────────────────────────────────────────────────
+from api.routes_agent import router as agent_router
+
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
 
@@ -63,6 +66,7 @@ app.include_router(engine_v5_router)
 app.include_router(geradores_router)
 app.include_router(analytics_router)
 app.include_router(leitores_router)
+app.include_router(agent_router)
 
 # Mount ConstruPlan Flask Offline Backend (Brutal Injection)
 try:
@@ -95,7 +99,7 @@ def health():
         "display_name": PLATFORM_DISPLAY_NAME,
         "version": "3.0.0",
         "engine": "Unified V5",
-        "routers": 13,
+        "routers": 14,
         "motores": len(list(motores_path.glob("*.py"))) - 1 if motores_path.exists() else 0,
         "geradores": len(list(geradores_path.glob("gerar_*.py"))) if geradores_path.exists() else 0,
     }

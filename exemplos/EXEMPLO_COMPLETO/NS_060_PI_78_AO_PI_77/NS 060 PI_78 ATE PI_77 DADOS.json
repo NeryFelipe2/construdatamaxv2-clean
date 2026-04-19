@@ -1,0 +1,39 @@
+{
+  "ns_id": 60,
+  "nucleo": "Pantanal Baixo",
+  "trecho": {
+    "pv_ini": "PI_78",
+    "pv_fim": "PI_77",
+    "dn_mm": 200,
+    "ext_m": 19.73,
+    "decl_mm": 0.0746,
+    "decl_pct": 7.46,
+    "material": "PVC",
+    "rua": "RUA IGUAPE",
+    "layer": "TUBO_PVC",
+    "is_agua": false,
+    "ct_ini": -1.898,
+    "ct_fim": -0.324,
+    "cf_ini": -2.498,
+    "cf_fim": -0.924,
+    "prof_ini": 0.6,
+    "prof_fim": 0.6,
+    "v_ms": 2.851,
+    "q_ls": 89.582,
+    "tau_pa": 36.59
+  },
+  "pv_montante": {
+    "ct": -1.898,
+    "cf": -2.498,
+    "prof": 0.6,
+    "x": 362489.27841082844,
+    "y": 7352504.179477354
+  },
+  "pv_jusante": {
+    "ct": -0.324,
+    "cf": -0.924,
+    "prof": 0.6,
+    "x": 362510.0112088827,
+    "y": 7352500.584658166
+  }
+}

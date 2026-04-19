@@ -1,0 +1,54 @@
+{
+  "workflows": {
+    "8qGfvzqfYAwGXCzF": {
+      "lastSyncedHash": "391d2ef9aeb5a9fe9f4c2147f4be82e54c752af291c762ce29ea2ea24bc4bf06",
+      "lastSyncedAt": "2026-04-07T19:17:42.504Z",
+      "filename": "assistente-diario-obra.workflow.ts"
+    },
+    "cC3ofuHlwdtj8Idb": {
+      "lastSyncedHash": "fde34dc077cc4689edc2b64119d97772507f93578b698e906f5ffe8055bf37a5",
+      "lastSyncedAt": "2026-04-09T20:32:01.514Z",
+      "filename": "webhook-rdo-whatsapp.workflow.ts"
+    },
+    "7ZFxLruxONFgd9Y7": {
+      "lastSyncedHash": "cd1cd4d1a62f831a5394c05bb28d196e03f7564ff582a93d46674cdd196b29ed",
+      "lastSyncedAt": "2026-04-07T21:07:43.046Z",
+      "filename": "alerta-medicao-prazos.workflow.ts"
+    },
+    "3MlISSU8VYGAiiMR": {
+      "lastSyncedHash": "3130a001341af6ca0ac8f94ed450481c70ef508c3d1844559a7ac7e296932bc1",
+      "lastSyncedAt": "2026-04-09T02:26:59.438Z",
+      "filename": "gestao-pardinho-rdo-dashboard.workflow.ts"
+    },
+    "3OLzegqMNGmSfWYr": {
+      "lastSyncedHash": "62cd1c851cfebe06a26f0fb2f0f8b1fb01a8795e614102946d8eafbf86c12a51",
+      "lastSyncedAt": "2026-04-07T21:35:10.638Z",
+      "filename": "pardinho-lean-lps-planejamento.workflow.ts"
+    },
+    "HVPwaXUwSGHlK4J4": {
+      "lastSyncedHash": "5c8eb7e8f7c6d0474360557cdd2477ab31ff9d394a888035a7f71a26172b53e2",
+      "lastSyncedAt": "2026-04-09T02:27:04.494Z",
+      "filename": "gestao-osasco-rdo-dashboard.workflow.ts"
+    },
+    "asoqRI8fbz3SKlz5": {
+      "lastSyncedHash": "2cdb12a4923d684ec76e88dca217d75f0e7684ff6879d2d7616b697eec5b7156",
+      "lastSyncedAt": "2026-04-08T03:01:49.709Z",
+      "filename": "gestao-construdata-joao-dashboard.workflow.ts"
+    },
+    "uEejEvtqnNC2eGiv": {
+      "lastSyncedHash": "ae5111def1aed1e4ee2bf7021640664f23662043137ebcfee13e56f63230d9cd",
+      "lastSyncedAt": "2026-04-08T12:15:23.075Z",
+      "filename": "gestao-sala-tecnica-dashboard.workflow.ts"
+    },
+    "CJRFUtzbL3pGpb4s": {
+      "lastSyncedHash": "8a3cd3a675094a506bdf6cf34fd66cbe5d1743e15859f0196eb748bdd3cc8cf9",
+      "lastSyncedAt": "2026-04-18T02:15:35.923Z",
+      "filename": "gestao-whatsapp-router.workflow.ts"
+    },
+    "Nt0wfvxFL7hAWWvU": {
+      "lastSyncedHash": "89aa1bc586fafeea267dd74f015c7394547e1da13fd214c537aac1e482450e24",
+      "lastSyncedAt": "2026-04-09T20:32:38.109Z",
+      "filename": "cobranca-matinal-diretor.workflow.ts"
+    }
+  }
+}

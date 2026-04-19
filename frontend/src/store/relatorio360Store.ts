@@ -37,7 +37,7 @@ interface Relatorio360State {
 
 export const useRelatorio360Store = create<Relatorio360State>((set, get) => ({
   reports: initialReports,
-  currentDate: Object.keys(initialReports)[0],
+  currentDate: Object.keys(initialReports)[0] ?? new Date().toISOString().slice(0, 10),
 
   goToDate: (date) => set({ currentDate: date }),
 
@@ -267,7 +267,7 @@ export const useRelatorio360Store = create<Relatorio360State>((set, get) => ({
   },
 
   loadDemoData: () =>
-    set({ reports: initialReports, currentDate: Object.keys(initialReports)[0] }),
+    set({ reports: initialReports, currentDate: Object.keys(initialReports)[0] ?? new Date().toISOString().slice(0, 10) }),
 
   clearData: () =>
     set({ reports: {} }),
