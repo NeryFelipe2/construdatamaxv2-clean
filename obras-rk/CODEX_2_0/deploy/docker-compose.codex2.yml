@@ -1,0 +1,133 @@
+name: obras-rk-codex2
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: obras-rk-codex2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rk_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      POSTGRES_DB: ${POSTGRES_DB:-rk_main}
+    volumes:
+      - codex2_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "55433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rk_admin}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: obras-rk-codex2-redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD:-RkRedis2026!Pass} --appendonly yes
+    volumes:
+      - codex2_redis_data:/data
+    ports:
+      - "56380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-RkRedis2026!Pass}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ../../..
+      dockerfile: Dockerfile
+    container_name: obras-rk-codex2-api
+    restart: unless-stopped
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      CONSTRUDATA_API_BASE_URL: ${CONSTRUDATA_API_BASE_URL:-http://localhost:8788}
+      DATABASE_URL: ${DATABASE_URL:-}
+    ports:
+      - "8788:8787"
+
+  n8n:
+    build:
+      context: ../../..
+      dockerfile: obras-rk/CODEX_2_0/deploy/Dockerfile.n8n
+    container_name: obras-rk-codex2-n8n
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB:-rk_main}
+      DB_POSTGRESDB_USER: ${POSTGRES_USER:-rk_admin}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5679/}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:-rk-codex2-local-2026}
+      N8N_DEFAULT_LOCALE: pt-BR
+      N8N_SECURE_COOKIE: "false"
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      GENERIC_TIMEZONE: America/Sao_Paulo
+      TZ: America/Sao_Paulo
+      EVOLUTION_API_URL: ${EVOLUTION_API_URL:-http://evolution:8080}
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY:-construdata2026}
+      EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE:-construdata-felipe}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      - codex2_n8n_data:/home/node/.n8n
+    ports:
+      - "5679:5678"
+
+  evolution:
+    build:
+      context: ../../..
+      dockerfile: obras-rk/CODEX_2_0/deploy/Dockerfile.evolution
+    container_name: obras-rk-codex2-evolution
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SERVER_URL: ${EVOLUTION_PUBLIC_URL:-http://localhost:8081}
+      SERVER_PORT: 8080
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-construdata2026}
+      AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://${POSTGRES_USER:-rk_admin}:${POSTGRES_PASSWORD:-RkEng2026!SecurePass}@postgres:5432/${POSTGRES_DB:-rk_main}?schema=evolution
+      DATABASE_CONNECTION_CLIENT_NAME: evolution_codex2
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "true"
+      DATABASE_SAVE_MESSAGE_UPDATE: "true"
+      DATABASE_SAVE_DATA_CONTACTS: "true"
+      DATABASE_SAVE_DATA_CHATS: "true"
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://:${REDIS_PASSWORD:-RkRedis2026!Pass}@redis:6379
+      CACHE_REDIS_PREFIX_KEY: evolution_codex2
+      CACHE_LOCAL_ENABLED: "false"
+      OPENAI_ENABLED: "true"
+      LOG_LEVEL: WARN
+      TZ: America/Sao_Paulo
+    volumes:
+      - codex2_evolution_instances:/evolution/instances
+      - codex2_evolution_data:/evolution/store
+    ports:
+      - "8081:8080"
+
+volumes:
+  codex2_postgres_data:
+    name: obras-rk-codex2_postgres_data
+  codex2_redis_data:
+    name: obras-rk-codex2_redis_data
+  codex2_n8n_data:
+    name: obras-rk-codex2_n8n_data
+  codex2_evolution_instances:
+    name: obras-rk-codex2_evolution_instances
+  codex2_evolution_data:
+    name: obras-rk-codex2_evolution_data

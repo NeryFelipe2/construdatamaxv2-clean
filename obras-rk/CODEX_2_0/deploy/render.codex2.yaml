@@ -1,0 +1,141 @@
+﻿services:
+  - type: web
+    name: obras-rk-codex2-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: ohio
+    plan: starter
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: CONSTRUDATA_API_BASE_URL
+        value: https://obras-rk-codex2-api.onrender.com
+
+  - type: web
+    name: obras-rk-codex2-n8n
+    runtime: docker
+    dockerfilePath: ./obras-rk/CODEX_2_0/deploy/Dockerfile.n8n
+    dockerContext: .
+    region: ohio
+    plan: starter
+    autoDeploy: true
+    disk:
+      name: obras-rk-codex2-n8n-data
+      mountPath: /home/node/.n8n
+      sizeGB: 1
+    envVars:
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: obras-rk-codex2-n8n-db
+          property: host
+      - key: DB_POSTGRESDB_PORT
+        fromDatabase:
+          name: obras-rk-codex2-n8n-db
+          property: port
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: obras-rk-codex2-n8n-db
+          property: database
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: obras-rk-codex2-n8n-db
+          property: user
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: obras-rk-codex2-n8n-db
+          property: password
+      - key: N8N_HOST
+        value: obras-rk-codex2-n8n.onrender.com
+      - key: N8N_PORT
+        value: "5678"
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        value: https://obras-rk-codex2-n8n.onrender.com/
+      - key: N8N_ENCRYPTION_KEY
+        sync: false
+      - key: GENERIC_TIMEZONE
+        value: America/Sao_Paulo
+      - key: TZ
+        value: America/Sao_Paulo
+      - key: N8N_DEFAULT_LOCALE
+        value: pt-BR
+      - key: N8N_SECURE_COOKIE
+        value: "false"
+      - key: EVOLUTION_API_URL
+        value: https://obras-rk-codex2-evolution.onrender.com
+      - key: EVOLUTION_API_KEY
+        sync: false
+      - key: EVOLUTION_INSTANCE
+        value: construdata-felipe
+      - key: GEMINI_API_KEY
+        sync: false
+
+  - type: web
+    name: obras-rk-codex2-evolution
+    runtime: docker
+    dockerfilePath: ./obras-rk/CODEX_2_0/deploy/Dockerfile.evolution
+    dockerContext: .
+    region: ohio
+    plan: starter
+    autoDeploy: true
+    disk:
+      name: obras-rk-codex2-evolution-instances
+      mountPath: /evolution/instances
+      sizeGB: 1
+    envVars:
+      - key: SERVER_URL
+        value: https://obras-rk-codex2-evolution.onrender.com
+      - key: SERVER_PORT
+        value: "8080"
+      - key: AUTHENTICATION_API_KEY
+        sync: false
+      - key: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
+        value: "true"
+      - key: DATABASE_PROVIDER
+        value: postgresql
+      - key: DATABASE_CONNECTION_URI
+        fromDatabase:
+          name: obras-rk-codex2-evolution-db
+          property: connectionString
+      - key: DATABASE_CONNECTION_CLIENT_NAME
+        value: evolution_codex2
+      - key: DATABASE_SAVE_DATA_INSTANCE
+        value: "true"
+      - key: DATABASE_SAVE_DATA_NEW_MESSAGE
+        value: "true"
+      - key: DATABASE_SAVE_MESSAGE_UPDATE
+        value: "true"
+      - key: DATABASE_SAVE_DATA_CONTACTS
+        value: "true"
+      - key: DATABASE_SAVE_DATA_CHATS
+        value: "true"
+      - key: CACHE_REDIS_ENABLED
+        value: "false"
+      - key: CACHE_LOCAL_ENABLED
+        value: "true"
+      - key: OPENAI_ENABLED
+        value: "true"
+      - key: LOG_LEVEL
+        value: WARN
+      - key: TZ
+        value: America/Sao_Paulo
+
+databases:
+  - name: obras-rk-codex2-n8n-db
+    databaseName: n8n_codex2
+    user: n8n_codex2
+    plan: starter
+    region: ohio
+  - name: obras-rk-codex2-evolution-db
+    databaseName: evolution_codex2
+    user: evolution_codex2
+    plan: starter
+    region: ohio

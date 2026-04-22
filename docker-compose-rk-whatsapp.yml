@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: rk-whatsapp-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: unless-stopped
+    networks:
+      - rk-network
+
+  evolution-api:
+    image: atendai/evolution-api:v2.2.0
+    container_name: rk-whatsapp-evolution
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_URL=http://localhost:8080
+      - AUTHENTICATION_TYPE=apikey
+      - AUTHENTICATION_API_KEY=construdata2026
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:postgres@db:5432/evolution
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    networks:
+      - rk-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: rk-whatsapp-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=evolution
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - rk-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: rk-whatsapp-redis
+    volumes:
+      - ./redis_data:/data
+    restart: unless-stopped
+    networks:
+      - rk-network
+
+volumes:
+  n8n_data:
+  postgres_data:
+  redis_data:
+
+networks:
+  rk-network:
+    driver: bridge

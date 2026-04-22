@@ -1,0 +1,422 @@
+{
+  "id": "codex2Master0422",
+  "name": "CONSTRUDATA_CODEX2_MASTER",
+  "active": false,
+  "nodes": [
+    {
+      "id": "3a8b0cee-a9c6-47ba-a0ce-6c8d2ee71c7f",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "codex2-whatsapp-master",
+        "options": {}
+      }
+    },
+    {
+      "id": "4b870c66-b37b-47ba-bab5-2d9c10e2439d",
+      "name": "Extract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -960,
+        304
+      ],
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete', 'send.message'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const fromMe = msg.key?.fromMe || false;\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  if (fromMe && text.includes('Version: CODEX 2.0')) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;"
+      }
+    },
+    {
+      "id": "1440cfdc-6a34-4a1d-a8d4-d578ce9adfae",
+      "name": "Lookup Contato",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -720,
+        192
+      ],
+      "parameters": {
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "d1ff0c79-24a7-45f8-8e22-928461d11ade",
+      "name": "Get State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -720,
+        432
+      ],
+      "parameters": {
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?phone_number=eq.{{ $node.Extract.json.phone }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ec91f804-9eeb-419c-824d-43eb2d96942b",
+      "name": "Decide",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        304
+      ],
+      "parameters": {
+        "jsCode": "const stateRaw = $json;\nconst extracted = $('Extract').first().json;\nconst phone = extracted.phone;\nconst text = extracted.text || '';\nconst hasImage = extracted.hasImage;\nconst raw = extracted.raw;\nconst imageBase64 = extracted.imageBase64;\n\nconst contatoRaw = $('Lookup Contato').first().json;\nlet contato = null;\nif (contatoRaw && contatoRaw.nome) contato = contatoRaw;\nelse if (Array.isArray(contatoRaw) && contatoRaw.length > 0) contato = contatoRaw[0];\nif (!contato || !contato.nome) return [];\n\nconst stateList = Array.isArray(stateRaw) ? stateRaw : (stateRaw ? [stateRaw] : []);\nconst current = stateList.length > 0 && stateList[0].current_step ? stateList[0] : null;\n\nconst user = {\n  phone,\n  nome: contato.nome,\n  cargo: contato.cargo,\n  projeto_id: contato.projeto_id,\n  frente_id: contato.frente_id,\n};\n\nconst fullMenu = [\n  '🤖 ConstruDataMax Gestão 360',\n  'Olá ' + user.nome + '!',\n  '',\n  '📊 Opções de Comando:',\n  '1️⃣ Status RDO Hoje',\n  '2️⃣ Equipe e Contatos',\n  '3️⃣ Projetos Ativos',\n  '4️⃣ Dashboard Consolidado',\n  '5️⃣ Reenviar Cobrança (Alerta Geral)',\n  '6️⃣ Falar com Inteligência Artificial',\n  '7️⃣ Cobrar RDO (Dispara formulário)',\n  '8️⃣ Meu RDO Diretor (Supervisão)',\n  '9️⃣ Lembrar Tarefas (Cobra diretores)',\n  '🔟 Criar Tarefas (Guia de Uso)',\n  '1️⃣1️⃣ Plano de Custos (Financeiro)',\n  '1️⃣2️⃣ Tarefas Consórcio (Delega por setor)',\n  '1️⃣3️⃣ Enviar Tarefa por Pessoa',\n  '1️⃣4️⃣ Enviar Tarefa à Diretoria',\n  '1️⃣5️⃣ Enviar Tarefa aos Engenheiros',\n  '1️⃣6️⃣ Enviar Tarefa por Setor',\n  '',\n  '▶️ Digite o número da opção (ex: 1) ou use os @comandos diretamente.',\n  '🔗 https://construdatamaxv2-clean.vercel.app',\n  'Construdata Gestão 360 powered by FCN-Construções e Saneamento',\n].join('\\n');\n\nconst directorRdo = '📋 MEU RDO DIRETOR — Supervisão\\n\\nResponda os tópicos do dia (formato: 1: texto | 2: texto):\\n\\n(1) Frentes visitadas hoje\\n(2) Decisões tomadas\\n(3) Riscos/alertas\\n(4) Previsão próximo marco\\n(5) Observações gerais';\nconst lembrar = '⏰ LEMBRAR TAREFAS\\n\\nUse: @lembrar <nome>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @lembrar renato';\nconst tarefaPessoa = '👤 TAREFA POR PESSOA\\n\\nUse: @tarefa <nome> <descrição>\\n\\nNomes: icaro, mateus, alexandre, igor, gabriel, vinicius, junior, valdean, veronica, jose marcio, thalita, felipe\\n\\nEx: @tarefa icaro enviar foto do trecho até 17h';\nconst tarefaDiretoria = '👔 TAREFA DIRETORIA\\n\\nUse: @tarefadiretoria <nome> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes aceitos:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @tarefadiretoria renato revisar custos Osasco até sexta';\nconst tarefaEngenheiros = '👷 TAREFA ENGENHEIROS\\n\\nUse: @tarefaengenheiros <projeto> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nProjetos:\\n* pardinho -> Ícaro\\n* tatui -> Ícaro\\n* osasco -> Mateus\\n* rk -> Alexandre/Igor\\n\\nEx: @tarefaengenheiros tatui foto da frente até 17h';\nconst tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorcio <setor> <descrição>\\n\\nSetores: planejamento, producao, sala, todos\\n\\nFabrizzio sempre recebe cópia.\\nEx: @tarefaconsorcio sala revisar NS-12';\nconst planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';\n\nconst lower = text.toLowerCase().trim();\nif (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {\n  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '8' || lower === '@meurdo' || lower === '#meurdo') {\n  return { action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '9' || lower === '@guialembrar') {\n  return { action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '10') {\n  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {\n  return { action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user };\n}\nif (lower === '12' || lower === '@guiatarefasetor') {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '13' || lower === '@guiatarefa' || lower === '@guiatarefapessoa') {\n  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '14' || lower === '@guiatarefadiretoria') {\n  return { action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '15' || lower === '@guiatarefaengenheiros') {\n  return { action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '16') {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {\n  const flow = current.current_flow || 'rdo';\n  return {\n    action: 'continue_' + flow,\n    phone,\n    text,\n    hasImage,\n    imageBase64,\n    raw,\n    state: current.current_step,\n    data: current.flow_data || {},\n    user,\n  };\n}\nif (lower === '1' || lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {\n  return { action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: {}, user };\n}\nif (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower.startsWith('@tarefa') || lower.includes('#tarefa')) {\n  return { action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user };\n}\nif (lower === '2' || lower === '3' || lower === '4' || lower === '5' || lower === '6') {\n  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nreturn { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };"
+      }
+    },
+    {
+      "id": "55006253-8669-4dd5-b64f-e9c457cd3e4e",
+      "name": "Is RDO?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        112
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "rdo",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "rdo",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "541c8282-d17a-49d4-9450-5b83aeb5f722",
+      "name": "Is Financeiro?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "fin",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "fin",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "1faab6c4-2476-47fd-a775-6856559e5f98",
+      "name": "Call RDO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.WEBHOOK_URL || 'http://localhost:5678/').replace(/\\/$/, '')) + '/webhook/codex2Rdo042226/webhook/codex2-sub-rdo' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.phone, text: $json.text, state: $json.state, data: $json.data, user: $json.user }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "cc7a8526-1f0d-497b-8af9-de0e28cf76cf",
+      "name": "Call Financeiro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        0,
+        304
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.WEBHOOK_URL || 'http://localhost:5678/').replace(/\\/$/, '')) + '/webhook/codex2Fin042226/webhook/codex2-financeiro' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.phone, text: $json.text, hasImage: $json.hasImage, imageBase64: $json.imageBase64, raw: $json.raw, state: $json.state, data: $json.data, user: $json.user }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "3ce33bc8-7545-4745-894c-939d311b76e9",
+      "name": "Send Help",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        0,
+        608
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.EVOLUTION_API_URL || 'http://evolution:8080').replace(/\\/$/, '')) + '/message/sendText/' + ($env.EVOLUTION_INSTANCE || 'construdata-felipe') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.EVOLUTION_API_KEY || 'construdata2026' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ number: $json.phone, text: $json.helpText }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "6bf8945d-f8ff-4eee-a97f-2259d78e78b0",
+      "name": "Is Tarefa?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        704
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "tar",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "tarefa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9d413e7a-f111-4342-b246-a84953446c48",
+      "name": "Call Tarefa",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        0,
+        704
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.WEBHOOK_URL || 'http://localhost:5678/').replace(/\\/$/, '')) + '/webhook/codex2Task04226/webhook/codex2-sub-tarefa' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.phone, text: $json.text, user_nome: $json.user.nome, user_id: $json.user.projeto_id }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract": {
+      "main": [
+        [
+          {
+            "node": "Lookup Contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Contato": {
+      "main": [
+        [
+          {
+            "node": "Get State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get State": {
+      "main": [
+        [
+          {
+            "node": "Decide",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide": {
+      "main": [
+        [
+          {
+            "node": "Is RDO?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is RDO?": {
+      "main": [
+        [
+          {
+            "node": "Call RDO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Financeiro?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Financeiro?": {
+      "main": [
+        [
+          {
+            "node": "Call Financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Tarefa?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Tarefa?": {
+      "main": [
+        [
+          {
+            "node": "Call Tarefa",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Help",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}
