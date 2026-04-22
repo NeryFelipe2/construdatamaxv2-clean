@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { UserCog, Plus, Phone, Trash2, Edit2, Search, X } from "lucide-react"
 import { useProjectContext } from "@/store/projectContext"
 import { useContatosStore } from "@/store/contatosStore"
@@ -10,11 +10,16 @@ export function GestaoContatosPage() {
   const activeProjectId = useProjectContext(s => s.activeProjectId)
   const allFrentes = useProjectContext(s => s.frentes)
   const allContatos = useContatosStore(s => s.contatos)
+  const fetchContatos = useContatosStore(s => s.fetchContatos)
   const addContato = useContatosStore(s => s.addContato)
   const updateContato = useContatosStore(s => s.updateContato)
   const removeContato = useContatosStore(s => s.removeContato)
   const frentes = useMemo(() => allFrentes.filter(f => f.projeto_id === activeProjectId), [allFrentes, activeProjectId])
   const contatos = useMemo(() => allContatos.filter(c => c.projeto_id === activeProjectId), [allContatos, activeProjectId])
+
+  useEffect(() => {
+    if (activeProjectId) fetchContatos(activeProjectId)
+  }, [activeProjectId, fetchContatos])
 
   const [showForm, setShowForm] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)

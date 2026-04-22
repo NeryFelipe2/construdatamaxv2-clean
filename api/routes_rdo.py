@@ -1,20 +1,58 @@
-"""Rotas REST relacionadas ao RDO."""
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
+from supabase import create_client
 
 from campo.rdo_engine import RDOEngine
 
 router = APIRouter(tags=["rdo"])
 engine = RDOEngine()
 
+SUPABASE_URL = os.environ.get("SUPABASE_URL", os.environ.get("VITE_SUPABASE_URL", ""))
+SUPABASE_KEY = os.environ.get(
+    "SUPABASE_SERVICE_ROLE_KEY",
+    os.environ.get(
+        "SUPABASE_SERVICE_KEY",
+        os.environ.get("SUPABASE_ANON_KEY", os.environ.get("VITE_SUPABASE_ANON_KEY", os.environ.get("SUPABASE_KEY", ""))),
+    ),
+)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if (SUPABASE_URL and SUPABASE_KEY) else None
+
 
 @router.get("/api/rdo")
 def api_listar_rdo(nucleo: str = Query(default="")):
-    return {"items": engine.listar_rdos(nucleo=nucleo)}
+    # 1) Origem principal local do engine
+    local_items = engine.listar_rdos(nucleo=nucleo)
+    if local_items:
+        return {"items": local_items}
+
+    # 2) Fallback Supabase: tabela rdos
+    if supabase:
+        try:
+            q = supabase.table("rdos").select("*").order("created_at", desc=True)
+            if nucleo:
+                q = q.eq("nucleo", nucleo)
+            res = q.execute()
+            if res.data:
+                return {"items": res.data}
+        except Exception:
+            pass
+
+        # 3) Fallback legado: rk_rdo_diario
+        try:
+            q = supabase.table("rk_rdo_diario").select("*").order("data_registro", desc=True)
+            if nucleo:
+                q = q.eq("nucleo", nucleo)
+            res = q.execute()
+            return {"items": res.data or []}
+        except Exception:
+            pass
+
+    return {"items": []}
 
 
 @router.post("/api/rdo")
