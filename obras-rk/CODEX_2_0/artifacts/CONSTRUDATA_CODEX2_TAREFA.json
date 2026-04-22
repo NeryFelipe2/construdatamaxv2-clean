@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "2001522f-1f74-40aa-8943-2d2cf0e35e5b",
+      "id": "124e010d-dd19-4bc3-82c5-279378c2d3bf",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "14cd0429-0d75-43a4-8e7e-0c790ca00f83",
+      "id": "f6f61864-d32b-42b6-a89c-f753cab4c6dc",
       "name": "Parse Tarefa",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "0df14c93-f7de-49f7-9e91-0ac252417758",
+      "id": "eedb4ef6-dadf-4869-b945-63d83e1cce00",
       "name": "Buscar Responsavel",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -61,7 +61,7 @@
       }
     },
     {
-      "id": "a59d4352-060a-43f9-ad81-5462dfcef106",
+      "id": "3a1b3eae-11df-4964-b679-9302d86ef46a",
       "name": "Montar Tarefa",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "3cc04a3e-c08d-4df0-8387-4566e1931da7",
+      "id": "eecf3913-1b5d-43e7-b411-7ed30141d91f",
       "name": "Insert Supabase",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -108,12 +108,12 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\"descricao\":\"{{ $json.descricao }}\",\"responsavel\":\"{{ $json.responsavel }}\",\"delegante\":\"{{ $json.delegante }}\",\"tipo\":\"{{ $json.tipo }}\",\"status\":\"{{ $json.status }}\",\"prioridade\":\"{{ $json.prioridade }}\",\"origem\":\"{{ $json.origem }}\"}",
+        "jsonBody": "={\"descricao\":\"{{ $json.descricao }}\",\"responsavel\":\"{{ $json.responsavel }}\",\"responsavel_phone\":\"{{ $json.responsavelTel }}\",\"delegante\":\"{{ $json.delegante }}\",\"delegante_phone\":\"{{ $json.delegantePhone }}\",\"tipo\":\"{{ $json.tipo }}\",\"status\":\"{{ $json.status }}\",\"prioridade\":\"{{ $json.prioridade }}\",\"origem\":\"{{ $json.origem }}\"}",
         "options": {}
       }
     },
     {
-      "id": "4a09edfa-26c5-45ba-8970-4182f4fd3c72",
+      "id": "571468c2-8825-4a5c-a00f-2256fb4c3b16",
       "name": "Confirmar Delegante",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "id": "2c9422d5-0849-4efa-aa91-b7fdd979cb6c",
+      "id": "4c0ed3fc-c311-4d9d-96b1-f56202db8bc9",
       "name": "Tem Tel Resp?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -172,7 +172,7 @@
       }
     },
     {
-      "id": "299b4fcc-135d-4bed-a6ed-49c8cc05f81b",
+      "id": "9925e011-c210-4014-b7fe-8b77aca2abc9",
       "name": "Notificar Responsavel",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -199,7 +199,7 @@
       }
     },
     {
-      "id": "776dd602-ea6f-4007-b255-257606bcf448",
+      "id": "fe350425-3e79-4aa5-90bb-ed4880679692",
       "name": "Response OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
