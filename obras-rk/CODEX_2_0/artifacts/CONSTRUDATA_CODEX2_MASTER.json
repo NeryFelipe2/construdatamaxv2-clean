@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "d850f2cd-51c8-40a5-a01a-31e9799f883d",
+      "id": "9a3d69b5-7e79-464a-b4a8-1abdd7e922d9",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": "c5c6e617-df3c-41d7-b80e-558ca9454fc6",
+      "id": "c6f3cfc7-715f-4345-9d56-551952fcfeef",
       "name": "Extract",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -28,11 +28,11 @@
         304
       ],
       "parameters": {
-        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete', 'send.message'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const fromMe = msg.key?.fromMe || false;\n  if (fromMe) continue;\n\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;"
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete', 'send.message'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  const fromMe = msg.key?.fromMe || false;\n  const normalized = (text || '').trim().toLowerCase();\n  const ownCommand = /^(menu|m|ajuda|help|comandos|opcoes|opções|oi|ola|olá|bom dia|boa tarde|boa noite|[1-9]|1[0-6])$/.test(normalized) || normalized.startsWith('@') || normalized.startsWith('#');\n  if (fromMe && !ownCommand) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;"
       }
     },
     {
-      "id": "a1eef13c-9db2-4dd5-a790-c83997c059a8",
+      "id": "638867b3-cb8c-4d97-9c7f-a77f3b001f3b",
       "name": "Lookup Contato",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": "a10d2aec-5211-4536-b9f6-8e4553511c70",
+      "id": "52500d38-9142-4614-ae8b-addfc5fb9b9a",
       "name": "Get State",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -68,7 +68,7 @@
         432
       ],
       "parameters": {
-        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?phone_number=eq.{{ $node.Extract.json.phone }}",
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $node.Extract.json.phone }},phone_number.eq.{{ (() => { const p = $node.Extract.json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "f147d08d-fb18-40a2-8fa2-2f04c6892992",
+      "id": "d5638f17-5957-45bc-8089-2a6f6658f6ac",
       "name": "Decide",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": "90083df0-d09a-4c7a-97b0-46701c38be6f",
+      "id": "d0ac3809-f731-4270-b83e-f10f572199e3",
       "name": "Is RDO?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "ffce2458-7831-4a44-b3e9-61a81d2a92fc",
+      "id": "5b58e1d9-878b-457a-8183-251115276eeb",
       "name": "Is Financeiro?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": "af387ab6-2c52-4d41-a4d2-4d40a4ee82b5",
+      "id": "e8eed4aa-4976-4770-a47c-71a4a46af2cd",
       "name": "Call RDO",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -190,7 +190,7 @@
       }
     },
     {
-      "id": "acc4f155-57bb-4607-90b7-b862df507027",
+      "id": "80aa59a7-154a-4531-8421-2e9c6f5f83cd",
       "name": "Call Financeiro",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -217,7 +217,7 @@
       }
     },
     {
-      "id": "9024dc11-abd8-4871-9262-02c914b09dc6",
+      "id": "1e633853-d49c-4f1f-b6d8-e0b45af23f3c",
       "name": "Send Help",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -244,7 +244,7 @@
       }
     },
     {
-      "id": "f1581ee6-d7e8-4a40-8f4d-4079a186ea24",
+      "id": "65624628-7b8a-4952-8d3a-9df35515faa6",
       "name": "Is Tarefa?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -276,7 +276,7 @@
       }
     },
     {
-      "id": "3a2b088d-8d68-43b8-892c-a48f5b5158d0",
+      "id": "66ed6065-2861-418e-94bc-48d1638099a8",
       "name": "Call Tarefa",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,

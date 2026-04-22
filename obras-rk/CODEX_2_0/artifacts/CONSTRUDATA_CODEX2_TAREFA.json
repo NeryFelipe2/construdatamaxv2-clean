@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "a9572b4e-a67f-45ae-978a-db606ae77798",
+      "id": "69544860-fa6b-4e69-8da1-f7819fd001df",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "984df977-5a97-4451-9cd2-9da88d5daf1f",
+      "id": "eb3b40c5-26c3-4220-9a88-369fcef9a606",
       "name": "Parse Tarefa",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "41a2e95d-3059-4da3-a0a7-c4d5cfefa822",
+      "id": "6fb7126d-1ce0-4233-a0df-fa6e265ab7d7",
       "name": "Buscar Responsavel",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -61,7 +61,7 @@
       }
     },
     {
-      "id": "d4215ec5-2450-4c7f-87b9-76b81393f818",
+      "id": "87541f4e-d670-43d9-9e16-2580ec8cc52a",
       "name": "Montar Tarefa",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "94659275-0a4b-481d-b002-b9e0475463bd",
+      "id": "aa21c7bf-2a84-4f7a-ad13-5e1790b70573",
       "name": "Insert Supabase",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -113,7 +113,7 @@
       }
     },
     {
-      "id": "e86436b5-83e0-40e2-91c5-aca5a2efe017",
+      "id": "a2c739d4-275a-4caf-8e83-3136cb33ab7d",
       "name": "Confirmar Delegante",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -140,7 +140,7 @@
       }
     },
     {
-      "id": "6f676e29-005a-466b-9b10-e724827a2691",
+      "id": "fc3bfc26-6111-4f6d-b254-2629def910d5",
       "name": "Tem Tel Resp?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -172,7 +172,7 @@
       }
     },
     {
-      "id": "46e1ff39-bf83-44f5-9c62-7da667233547",
+      "id": "16edbcc9-43d0-4344-a42e-f6d1c4f5005d",
       "name": "Notificar Responsavel",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -199,7 +199,7 @@
       }
     },
     {
-      "id": "2acd8e12-5079-43bc-88e6-dd9260e3354b",
+      "id": "8a919403-40d3-4d80-a054-f5127d6a1b87",
       "name": "Response OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
