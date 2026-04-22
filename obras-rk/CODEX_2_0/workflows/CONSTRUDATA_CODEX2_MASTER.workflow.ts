@@ -127,6 +127,7 @@ const text = extracted.text || '';
 const hasImage = extracted.hasImage;
 const raw = extracted.raw;
 const imageBase64 = extracted.imageBase64;
+const emit = (payload) => [{ json: payload }];
 
 const contatoRaw = $('Lookup Contato').first().json;
 let contato = null;
@@ -182,38 +183,38 @@ const planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de cust
 
 const lower = text.toLowerCase().trim();
 if (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {
-  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '8' || lower === '@meurdo' || lower === '#meurdo') {
-  return { action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '9' || lower === '@guialembrar') {
-  return { action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '10') {
-  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {
-  return { action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user };
+  return emit({ action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user });
 }
 if (lower === '12' || lower === '@guiatarefasetor') {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '13' || lower === '@guiatarefa' || lower === '@guiatarefapessoa') {
-  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '14' || lower === '@guiatarefadiretoria') {
-  return { action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '15' || lower === '@guiatarefaengenheiros') {
-  return { action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '16') {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {
   const flow = current.current_flow || 'rdo';
-  return {
+  return emit({
     action: 'continue_' + flow,
     phone,
     text,
@@ -223,21 +224,21 @@ if (current && current.current_step && current.current_step !== 'idle' && curren
     state: current.current_step,
     data: current.flow_data || {},
     user,
-  };
+  });
 }
-if (lower === '1' || lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
-  return { action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: {}, user };
+if (['1', '2', '3', '4', '5', '7'].includes(lower) || lower.includes('#rdo') || lower.includes('@rdo')) {
+  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });
+}
+if (lower === '6') {
+  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower, ai_mode: true }, user });
 }
 if (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower.startsWith('@tarefa') || lower.includes('#tarefa')) {
-  return { action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user };
+  return emit({ action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user });
 }
-if (lower === '2' || lower === '3' || lower === '4' || lower === '5' || lower === '6') {
-  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
-}
-return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };`,
+return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });`,
     };
 
     @node({

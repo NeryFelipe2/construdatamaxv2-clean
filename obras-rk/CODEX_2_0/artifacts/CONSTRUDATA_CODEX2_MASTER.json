@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "775e0dcf-9370-44d8-8a95-30457b1d3645",
+      "id": "d850f2cd-51c8-40a5-a01a-31e9799f883d",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": "2da3e113-ec0b-427a-9b75-e248c4ddac76",
+      "id": "c5c6e617-df3c-41d7-b80e-558ca9454fc6",
       "name": "Extract",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "a7887e67-67b5-4685-a157-199b8d42b086",
+      "id": "a1eef13c-9db2-4dd5-a790-c83997c059a8",
       "name": "Lookup Contato",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": "0c1f4c7e-95e2-4026-bbd9-4918f58714b4",
+      "id": "a10d2aec-5211-4536-b9f6-8e4553511c70",
       "name": "Get State",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "9a4dbdfd-ecd2-45de-8538-446b5914ac21",
+      "id": "f147d08d-fb18-40a2-8fa2-2f04c6892992",
       "name": "Decide",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -95,11 +95,11 @@
         304
       ],
       "parameters": {
-        "jsCode": "const stateRaw = $json;\nconst extracted = $('Extract').first().json;\nconst phone = extracted.phone;\nconst text = extracted.text || '';\nconst hasImage = extracted.hasImage;\nconst raw = extracted.raw;\nconst imageBase64 = extracted.imageBase64;\n\nconst contatoRaw = $('Lookup Contato').first().json;\nlet contato = null;\nif (contatoRaw && contatoRaw.nome) contato = contatoRaw;\nelse if (Array.isArray(contatoRaw) && contatoRaw.length > 0) contato = contatoRaw[0];\nif (!contato || !contato.nome) return [];\n\nconst stateList = Array.isArray(stateRaw) ? stateRaw : (stateRaw ? [stateRaw] : []);\nconst current = stateList.length > 0 && stateList[0].current_step ? stateList[0] : null;\n\nconst user = {\n  phone,\n  nome: contato.nome,\n  cargo: contato.cargo,\n  projeto_id: contato.projeto_id,\n  frente_id: contato.frente_id,\n};\n\nconst fullMenu = [\n  '🤖 ConstruDataMax Gestão 360',\n  'Olá ' + user.nome + '!',\n  '',\n  '📊 Opções de Comando:',\n  '1️⃣ Status RDO Hoje',\n  '2️⃣ Equipe e Contatos',\n  '3️⃣ Projetos Ativos',\n  '4️⃣ Dashboard Consolidado',\n  '5️⃣ Reenviar Cobrança (Alerta Geral)',\n  '6️⃣ Falar com Inteligência Artificial',\n  '7️⃣ Cobrar RDO (Dispara formulário)',\n  '8️⃣ Meu RDO Diretor (Supervisão)',\n  '9️⃣ Lembrar Tarefas (Cobra diretores)',\n  '🔟 Criar Tarefas (Guia de Uso)',\n  '1️⃣1️⃣ Plano de Custos (Financeiro)',\n  '1️⃣2️⃣ Tarefas Consórcio (Delega por setor)',\n  '1️⃣3️⃣ Enviar Tarefa por Pessoa',\n  '1️⃣4️⃣ Enviar Tarefa à Diretoria',\n  '1️⃣5️⃣ Enviar Tarefa aos Engenheiros',\n  '1️⃣6️⃣ Enviar Tarefa por Setor',\n  '',\n  '▶️ Digite o número da opção (ex: 1) ou use os @comandos diretamente.',\n  '🔗 https://construdatamaxv2-clean.vercel.app',\n  'Construdata Gestão 360 powered by FCN-Construções e Saneamento',\n].join('\\n');\n\nconst directorRdo = '📋 MEU RDO DIRETOR — Supervisão\\n\\nResponda os tópicos do dia (formato: 1: texto | 2: texto):\\n\\n(1) Frentes visitadas hoje\\n(2) Decisões tomadas\\n(3) Riscos/alertas\\n(4) Previsão próximo marco\\n(5) Observações gerais';\nconst lembrar = '⏰ LEMBRAR TAREFAS\\n\\nUse: @lembrar <nome>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @lembrar renato';\nconst tarefaPessoa = '👤 TAREFA POR PESSOA\\n\\nUse: @tarefa <nome> <descrição>\\n\\nNomes: icaro, mateus, alexandre, igor, gabriel, vinicius, junior, valdean, veronica, jose marcio, thalita, felipe\\n\\nEx: @tarefa icaro enviar foto do trecho até 17h';\nconst tarefaDiretoria = '👔 TAREFA DIRETORIA\\n\\nUse: @tarefadiretoria <nome> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes aceitos:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @tarefadiretoria renato revisar custos Osasco até sexta';\nconst tarefaEngenheiros = '👷 TAREFA ENGENHEIROS\\n\\nUse: @tarefaengenheiros <projeto> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nProjetos:\\n* pardinho -> Ícaro\\n* tatui -> Ícaro\\n* osasco -> Mateus\\n* rk -> Alexandre/Igor\\n\\nEx: @tarefaengenheiros tatui foto da frente até 17h';\nconst tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorcio <setor> <descrição>\\n\\nSetores: planejamento, producao, sala, todos\\n\\nFabrizzio sempre recebe cópia.\\nEx: @tarefaconsorcio sala revisar NS-12';\nconst planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';\n\nconst lower = text.toLowerCase().trim();\nif (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {\n  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '8' || lower === '@meurdo' || lower === '#meurdo') {\n  return { action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '9' || lower === '@guialembrar') {\n  return { action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '10') {\n  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {\n  return { action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user };\n}\nif (lower === '12' || lower === '@guiatarefasetor') {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '13' || lower === '@guiatarefa' || lower === '@guiatarefapessoa') {\n  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '14' || lower === '@guiatarefadiretoria') {\n  return { action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '15' || lower === '@guiatarefaengenheiros') {\n  return { action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower === '16') {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {\n  const flow = current.current_flow || 'rdo';\n  return {\n    action: 'continue_' + flow,\n    phone,\n    text,\n    hasImage,\n    imageBase64,\n    raw,\n    state: current.current_step,\n    data: current.flow_data || {},\n    user,\n  };\n}\nif (lower === '1' || lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {\n  return { action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: {}, user };\n}\nif (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {\n  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nif (lower.startsWith('@tarefa') || lower.includes('#tarefa')) {\n  return { action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user };\n}\nif (lower === '2' || lower === '3' || lower === '4' || lower === '5' || lower === '6') {\n  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };\n}\nreturn { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };"
+        "jsCode": "const stateRaw = $json;\nconst extracted = $('Extract').first().json;\nconst phone = extracted.phone;\nconst text = extracted.text || '';\nconst hasImage = extracted.hasImage;\nconst raw = extracted.raw;\nconst imageBase64 = extracted.imageBase64;\nconst emit = (payload) => [{ json: payload }];\n\nconst contatoRaw = $('Lookup Contato').first().json;\nlet contato = null;\nif (contatoRaw && contatoRaw.nome) contato = contatoRaw;\nelse if (Array.isArray(contatoRaw) && contatoRaw.length > 0) contato = contatoRaw[0];\nif (!contato || !contato.nome) return [];\n\nconst stateList = Array.isArray(stateRaw) ? stateRaw : (stateRaw ? [stateRaw] : []);\nconst current = stateList.length > 0 && stateList[0].current_step ? stateList[0] : null;\n\nconst user = {\n  phone,\n  nome: contato.nome,\n  cargo: contato.cargo,\n  projeto_id: contato.projeto_id,\n  frente_id: contato.frente_id,\n};\n\nconst fullMenu = [\n  '🤖 ConstruDataMax Gestão 360',\n  'Olá ' + user.nome + '!',\n  '',\n  '📊 Opções de Comando:',\n  '1️⃣ Status RDO Hoje',\n  '2️⃣ Equipe e Contatos',\n  '3️⃣ Projetos Ativos',\n  '4️⃣ Dashboard Consolidado',\n  '5️⃣ Reenviar Cobrança (Alerta Geral)',\n  '6️⃣ Falar com Inteligência Artificial',\n  '7️⃣ Cobrar RDO (Dispara formulário)',\n  '8️⃣ Meu RDO Diretor (Supervisão)',\n  '9️⃣ Lembrar Tarefas (Cobra diretores)',\n  '🔟 Criar Tarefas (Guia de Uso)',\n  '1️⃣1️⃣ Plano de Custos (Financeiro)',\n  '1️⃣2️⃣ Tarefas Consórcio (Delega por setor)',\n  '1️⃣3️⃣ Enviar Tarefa por Pessoa',\n  '1️⃣4️⃣ Enviar Tarefa à Diretoria',\n  '1️⃣5️⃣ Enviar Tarefa aos Engenheiros',\n  '1️⃣6️⃣ Enviar Tarefa por Setor',\n  '',\n  '▶️ Digite o número da opção (ex: 1) ou use os @comandos diretamente.',\n  '🔗 https://construdatamaxv2-clean.vercel.app',\n  'Construdata Gestão 360 powered by FCN-Construções e Saneamento',\n].join('\\n');\n\nconst directorRdo = '📋 MEU RDO DIRETOR — Supervisão\\n\\nResponda os tópicos do dia (formato: 1: texto | 2: texto):\\n\\n(1) Frentes visitadas hoje\\n(2) Decisões tomadas\\n(3) Riscos/alertas\\n(4) Previsão próximo marco\\n(5) Observações gerais';\nconst lembrar = '⏰ LEMBRAR TAREFAS\\n\\nUse: @lembrar <nome>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @lembrar renato';\nconst tarefaPessoa = '👤 TAREFA POR PESSOA\\n\\nUse: @tarefa <nome> <descrição>\\n\\nNomes: icaro, mateus, alexandre, igor, gabriel, vinicius, junior, valdean, veronica, jose marcio, thalita, felipe\\n\\nEx: @tarefa icaro enviar foto do trecho até 17h';\nconst tarefaDiretoria = '👔 TAREFA DIRETORIA\\n\\nUse: @tarefadiretoria <nome> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nNomes aceitos:\\n* renato\\n* luiz (ou lf)\\n* fabrizzio\\n* felipe\\n\\nEx: @tarefadiretoria renato revisar custos Osasco até sexta';\nconst tarefaEngenheiros = '👷 TAREFA ENGENHEIROS\\n\\nUse: @tarefaengenheiros <projeto> <descrição>\\n\\n⚠️ Sem envio em massa — confidencialidade entre projetos.\\n\\nProjetos:\\n* pardinho -> Ícaro\\n* tatui -> Ícaro\\n* osasco -> Mateus\\n* rk -> Alexandre/Igor\\n\\nEx: @tarefaengenheiros tatui foto da frente até 17h';\nconst tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorcio <setor> <descrição>\\n\\nSetores: planejamento, producao, sala, todos\\n\\nFabrizzio sempre recebe cópia.\\nEx: @tarefaconsorcio sala revisar NS-12';\nconst planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';\n\nconst lower = text.toLowerCase().trim();\nif (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {\n  return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '8' || lower === '@meurdo' || lower === '#meurdo') {\n  return emit({ action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '9' || lower === '@guialembrar') {\n  return emit({ action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '10') {\n  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {\n  return emit({ action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user });\n}\nif (lower === '12' || lower === '@guiatarefasetor') {\n  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '13' || lower === '@guiatarefa' || lower === '@guiatarefapessoa') {\n  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '14' || lower === '@guiatarefadiretoria') {\n  return emit({ action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '15' || lower === '@guiatarefaengenheiros') {\n  return emit({ action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower === '16') {\n  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {\n  const flow = current.current_flow || 'rdo';\n  return emit({\n    action: 'continue_' + flow,\n    phone,\n    text,\n    hasImage,\n    imageBase64,\n    raw,\n    state: current.current_step,\n    data: current.flow_data || {},\n    user,\n  });\n}\nif (['1', '2', '3', '4', '5', '7'].includes(lower) || lower.includes('#rdo') || lower.includes('@rdo')) {\n  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });\n}\nif (lower === '6') {\n  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower, ai_mode: true }, user });\n}\nif (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {\n  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });\n}\nif (lower.startsWith('@tarefa') || lower.includes('#tarefa')) {\n  return emit({ action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user });\n}\nreturn emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });"
       }
     },
     {
-      "id": "6382414d-e5e4-4283-a4d3-6444869bc92b",
+      "id": "90083df0-d09a-4c7a-97b0-46701c38be6f",
       "name": "Is RDO?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "1478be1f-0ee0-4d72-8c34-5d753c4d1a1f",
+      "id": "ffce2458-7831-4a44-b3e9-61a81d2a92fc",
       "name": "Is Financeiro?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": "9f1f4fc9-6814-49c0-83e9-0724cc07963b",
+      "id": "af387ab6-2c52-4d41-a4d2-4d40a4ee82b5",
       "name": "Call RDO",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -190,7 +190,7 @@
       }
     },
     {
-      "id": "323195fb-9d0a-4e51-a388-43076a583dc7",
+      "id": "acc4f155-57bb-4607-90b7-b862df507027",
       "name": "Call Financeiro",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -217,7 +217,7 @@
       }
     },
     {
-      "id": "f4347e6b-060e-4971-8daa-0980d9013bf6",
+      "id": "9024dc11-abd8-4871-9262-02c914b09dc6",
       "name": "Send Help",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -244,7 +244,7 @@
       }
     },
     {
-      "id": "18183bfe-c763-430b-adab-342b7b7459bf",
+      "id": "f1581ee6-d7e8-4a40-8f4d-4079a186ea24",
       "name": "Is Tarefa?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -276,7 +276,7 @@
       }
     },
     {
-      "id": "0086db9c-6340-45ff-b901-a4977240b870",
+      "id": "3a2b088d-8d68-43b8-892c-a48f5b5158d0",
       "name": "Call Tarefa",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
