@@ -182,6 +182,13 @@ const tarefaEngenheiros = '👷 TAREFA ENGENHEIROS\\n\\nUse: @tarefaengenheiros 
 const tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorcio <setor> <descrição>\\n\\nSetores: planejamento, producao, sala, todos\\n\\nFabrizzio sempre recebe cópia.\\nEx: @tarefaconsorcio sala revisar NS-12';
 const planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';
 
+const statusRdo = '📊 STATUS RDO HOJE\\n\\nConsulta rápida do RDO operacional.\\n\\nPara lançar um novo RDO, use a opção 7 ou envie @rdo.\\nPara acompanhar no painel, acesse:\\nhttps://construdatamaxv2-clean.vercel.app';
+const equipeContatos = '👥 EQUIPE E CONTATOS\\n\\nPrincipais alçadas cadastradas:\\nFelipe Nery - Diretor / Gestor\\nLuiz Fernando - Diretor Pardinho/Osasco/RK\\nRenato - Diretor Osasco/RK\\nFabrizzio - Gerente Consórcio\\nÍcaro - Engenheiro de Campo\\nMateus - Engenheiro de Campo\\nAlexandre/Igor - RK Sub Empreita\\nGabriel/Vinicius - Sala Técnica';
+const projetosAtivos = '🏗️ PROJETOS ATIVOS\\n\\n1 - Tatuí\\n2 - Osasco\\n3 - Consórcio Se Liga na Rede\\n4 - Pardinho\\n5 - Brasília\\n6 - RK Sub Empreita\\n\\nPara lançar RDO de obra, envie @rdo ou escolha 7.';
+const dashboardConsolidado = '📈 DASHBOARD CONSOLIDADO\\n\\nAcesse o ConstruData Gestão 360:\\nhttps://construdatamaxv2-clean.vercel.app\\n\\nO RDO enviado pelo WhatsApp sobe no Supabase e aparece no painel da obra vinculada.';
+const reenviarCobranca = '📣 REENVIAR COBRANÇA\\n\\nComando reservado para alerta geral de RDO/cobrança.\\n\\nSe quiser cobrar RDO agora, use a opção 7.';
+const iaMenu = '🤖 INTELIGÊNCIA ARTIFICIAL\\n\\nEnvie sua pergunta depois de @ia.\\n\\nEx: @ia resumir status das obras\\n\\nPara RDO, use @rdo ou opção 7.';
+
 const lower = text.toLowerCase().trim();
 if (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {
   return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
@@ -194,6 +201,24 @@ if (lower === '9' || lower === '@guialembrar') {
 }
 if (lower === '10') {
   return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '1') {
+  return emit({ action: 'help', helpText: statusRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '2') {
+  return emit({ action: 'help', helpText: equipeContatos, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '3') {
+  return emit({ action: 'help', helpText: projetosAtivos, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '4') {
+  return emit({ action: 'help', helpText: dashboardConsolidado, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '5') {
+  return emit({ action: 'help', helpText: reenviarCobranca, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '6' || lower === '@ia' || lower.startsWith('@ia ')) {
+  return emit({ action: 'help', helpText: iaMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {
   return emit({ action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user });
@@ -227,11 +252,8 @@ if (current && current.current_step && current.current_step !== 'idle' && curren
     user,
   });
 }
-if (['1', '2', '3', '4', '5', '7'].includes(lower) || lower.includes('#rdo') || lower.includes('@rdo')) {
+if (lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
   return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });
-}
-if (lower === '6') {
-  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower, ai_mode: true }, user });
 }
 if (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {
   return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
