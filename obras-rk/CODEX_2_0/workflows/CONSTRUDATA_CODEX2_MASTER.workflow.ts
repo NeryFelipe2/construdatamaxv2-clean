@@ -183,8 +183,8 @@ const tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorc
 const planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';
 
 const statusRdo = '📊 STATUS RDO HOJE\\n\\nConsulta rápida do RDO operacional.\\n\\nPara lançar um novo RDO, use a opção 7 ou envie @rdo.\\nPara acompanhar no painel, acesse:\\nhttps://construdatamaxv2-clean.vercel.app';
-const equipeContatos = '👥 EQUIPE E CONTATOS\\n\\nPrincipais alçadas cadastradas:\\nFelipe Nery - Diretor / Gestor\\nLuiz Fernando - Diretor Pardinho/Osasco/RK\\nRenato - Diretor Osasco/RK\\nFabrizzio - Gerente Consórcio\\nÍcaro - Engenheiro de Campo\\nMateus - Engenheiro de Campo\\nAlexandre/Igor - RK Sub Empreita\\nGabriel/Vinicius - Sala Técnica';
-const projetosAtivos = '🏗️ PROJETOS ATIVOS\\n\\n1 - Tatuí\\n2 - Osasco\\n3 - Consórcio Se Liga na Rede\\n4 - Pardinho\\n5 - Brasília\\n6 - RK Sub Empreita\\n\\nPara lançar RDO de obra, envie @rdo ou escolha 7.';
+const equipeContatos = '👥 EQUIPE E CONTATOS\\n\\nDIRETORIA RK\\nFelipe Nery - Diretor RK\\nLuiz Fernando - Diretor RK\\nRenato - Diretor RK\\n\\nOBRAS / OPERAÇÃO\\nMateus - Osasco Eng\\nÍcaro - Tatuí\\nIgor - RK Santos Empreita\\n\\nCONSÓRCIO / SLNR\\nFabrizzio - Gerente/Diretor (recebe info)\\nJunior - Planejamento\\nValdeans - Planejamento\\nVeronica - Planejamento\\nGabriel - Sala Técnica\\nVinicius - Sala Técnica\\nJosé Marcio - Gerente Produção';
+const projetosAtivos = '🏗️ PROJETOS ATIVOS / RDO\\n\\n1 - Tatuí — Obra RK. Diretores: Felipe, Luiz e Renato\\n2 - Osasco — Obra RK. Diretores: Felipe, Luiz e Renato\\n3 - Consórcio / SLNR — Felipe como gerente de sala técnica\\n4 - Pardinho — Obra RK. Diretores: Felipe, Luiz e Renato\\n5 - Brasília — ConstruData\\n6 - RK Sub / Santos Empreita — Obra RK. Diretores: Felipe, Luiz e Renato\\n\\nPara lançar RDO de obra, envie @rdo ou escolha 7.';
 const dashboardConsolidado = '📈 DASHBOARD CONSOLIDADO\\n\\nAcesse o ConstruData Gestão 360:\\nhttps://construdatamaxv2-clean.vercel.app\\n\\nO RDO enviado pelo WhatsApp sobe no Supabase e aparece no painel da obra vinculada.';
 const reenviarCobranca = '📣 REENVIAR COBRANÇA\\n\\nComando reservado para alerta geral de RDO/cobrança.\\n\\nSe quiser cobrar RDO agora, use a opção 7.';
 const iaMenu = '🤖 INTELIGÊNCIA ARTIFICIAL\\n\\nEnvie sua pergunta depois de @ia.\\n\\nEx: @ia resumir status das obras\\n\\nPara RDO, use @rdo ou opção 7.';
@@ -238,6 +238,9 @@ if (lower === '15' || lower === '@guiatarefaengenheiros') {
 if (lower === '16') {
   return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
+if (lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
+  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });
+}
 if (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {
   const flow = current.current_flow || 'rdo';
   return emit({
@@ -251,9 +254,6 @@ if (current && current.current_step && current.current_step !== 'idle' && curren
     data: current.flow_data || {},
     user,
   });
-}
-if (lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
-  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });
 }
 if (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {
   return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
