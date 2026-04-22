@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ChevronDown, ChevronRight, Plus, Trash2, MapPin, Upload, X,
-  CloudSun, Users, Wrench, ClipboardList, Route, Camera, Pencil, ClipboardPaste, FileText,
+  CloudSun, Users, Wrench, ClipboardList, Route, Camera, Pencil, ClipboardPaste, FileText, DollarSign,
 } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
 import { useCompanySettingsStore } from '@/store/companySettingsStore'
@@ -128,6 +128,14 @@ export function NovoRdoPanel() {
   const [rdoClimaManha,       setRdoClimaManha]       = useState('')
   const [rdoClimaTarde,       setRdoClimaTarde]       = useState('')
   const [rdoClimaNoite,       setRdoClimaNoite]       = useState('')
+  const [machineCostBRL,      setMachineCostBRL]      = useState(0)
+  const [equipmentCostBRL,    setEquipmentCostBRL]    = useState(0)
+  const [rentalCostBRL,       setRentalCostBRL]       = useState(0)
+  const [directCostBRL,       setDirectCostBRL]       = useState(0)
+  const [indirectCostBRL,     setIndirectCostBRL]     = useState(0)
+  const [stoppageNotes,       setStoppageNotes]       = useState('')
+  const [productionNotes,     setProductionNotes]     = useState('')
+  const [lpsLinked,           setLpsLinked]           = useState(true)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -319,6 +327,15 @@ export function NovoRdoPanel() {
       climaManha:                 rdoClimaManha || undefined,
       climaTarde:                 rdoClimaTarde || undefined,
       climaNoite:                 rdoClimaNoite || undefined,
+      machineCostBRL,
+      equipmentCostBRL,
+      rentalCostBRL,
+      directCostBRL,
+      indirectCostBRL,
+      dailyCostBRL: machineCostBRL + equipmentCostBRL + rentalCostBRL + directCostBRL + indirectCostBRL,
+      stoppageNotes,
+      productionNotes,
+      lpsLinked,
     })
     setActiveTab('historico')
   }
@@ -342,6 +359,8 @@ export function NovoRdoPanel() {
     setRdoFuncDiretos(0); setRdoFuncIndiretos(0); setRdoQtdEquip(0)
     setRdoNumeroOS(''); setRdoContrato('')
     setRdoClimaManha(''); setRdoClimaTarde(''); setRdoClimaNoite('')
+    setMachineCostBRL(0); setEquipmentCostBRL(0); setRentalCostBRL(0)
+    setDirectCostBRL(0); setIndirectCostBRL(0); setStoppageNotes(''); setProductionNotes(''); setLpsLinked(true)
     setRdoNumber(rdos.length + 1)
   }
 
@@ -648,6 +667,67 @@ export function NovoRdoPanel() {
             >
               <Plus size={14} /> Adicionar Equipamento
             </button>
+          </div>
+        </Section>
+
+        <Section title="Custos do Dia e LPS" icon={<DollarSign size={16} className="text-[#f97316]" />}>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              {[
+                ['Maquina', machineCostBRL, setMachineCostBRL],
+                ['Equipamentos', equipmentCostBRL, setEquipmentCostBRL],
+                ['Locacoes', rentalCostBRL, setRentalCostBRL],
+                ['Diretos', directCostBRL, setDirectCostBRL],
+                ['Indiretos', indirectCostBRL, setIndirectCostBRL],
+              ].map(([label, value, setter]) => (
+                <div key={label as string}>
+                  <label className="block text-[#a3a3a3] text-xs mb-1">{label as string}</label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={value as number}
+                    onChange={(e) => (setter as (value: number) => void)(Number(e.target.value))}
+                    className={inputCls}
+                    placeholder="0,00"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[#a3a3a3] text-xs mb-1">Resumo da producao</label>
+                <textarea
+                  value={productionNotes}
+                  onChange={(e) => setProductionNotes(e.target.value)}
+                  rows={3}
+                  placeholder="O que foi produzido, frente, rua, trecho, meta e realizado."
+                  className={`${inputCls} resize-none`}
+                />
+              </div>
+              <div>
+                <label className="block text-[#a3a3a3] text-xs mb-1">Paralisacoes / restricoes</label>
+                <textarea
+                  value={stoppageNotes}
+                  onChange={(e) => setStoppageNotes(e.target.value)}
+                  rows={3}
+                  placeholder="Parou? Motivo, duracao, impacto e responsavel pela remocao da restricao."
+                  className={`${inputCls} resize-none`}
+                />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 text-[#f5f5f5] text-sm">
+              <input
+                type="checkbox"
+                checked={lpsLinked}
+                onChange={(e) => setLpsLinked(e.target.checked)}
+                className="accent-[#f97316]"
+              />
+              Vincular este RDO ao LPS / Last Planner do ConstruData
+            </label>
+            <div className="text-[#a3a3a3] text-xs">
+              Total do dia: {(machineCostBRL + equipmentCostBRL + rentalCostBRL + directCostBRL + indirectCostBRL).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </div>
           </div>
         </Section>
 

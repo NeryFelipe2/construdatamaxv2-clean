@@ -253,33 +253,79 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         const obs = String(row.observacoes || '')
         const fotos = (row.fotos as string[]) || []
         const producaoM = Number(row.producao_m || 0)
+        const ligacoesDia = Number(row.ligacoes_dia || 0)
         const equipeN = Number(row.equipe_number || 0)
         const now = String(row.created_at || new Date().toISOString())
+        const diesel = Number(row.custo_diesel || 0)
+        const alimentacao = Number(row.custo_alimentacao || 0)
+        const maoObra = Number(row.custo_mao_obra || 0)
+        const materiais = Number(row.custo_materiais || 0)
+        const dailyCost = diesel + alimentacao + maoObra + materiais
+        const lat = row.latitude == null ? '' : String(row.latitude)
+        const lng = row.longitude == null ? '' : String(row.longitude)
+        const projectId = row.project_id ? String(row.project_id) : ''
+        const trechoCode = projectId ? projectId.slice(0, 8).toUpperCase() : `RDO-${data || id.slice(0, 8)}`
+        const equipmentMatch = obs.match(/Equipamentos?:\s*([^|]+)/i)
+        const stoppageMatch = obs.match(/(?:Paralisa(?:c|ç)(?:ao|ão|oes|ões)|Pendencias?|Ocorrencias?):\s*([^|]+)/i)
 
         rdos.push({
           id,
           number: rdos.length + 1,
           date: data,
           responsible: apontador,
-          weather: { manha: String(row.clima || 'bom'), tarde: String(row.clima || 'bom'), noite: '' } as unknown as RDO['weather'],
-          manpower: { diretos: equipeN, indiretos: 0 } as unknown as RDO['manpower'],
-          equipment: [],
-          services: [],
-          trechos: [{ nome: '-', metros: producaoM } as unknown as RdoTrechoEntry],
-          geolocation: null,
+          weather: {
+            morning: String(row.clima || 'good') as RDO['weather']['morning'],
+            afternoon: String(row.clima || 'good') as RDO['weather']['afternoon'],
+            night: String(row.clima || 'good') as RDO['weather']['night'],
+            temperatureC: 25,
+          },
+          manpower: { foremanCount: 0, officialCount: 0, helperCount: Math.max(0, equipeN), operatorCount: 0 },
+          equipment: equipmentMatch?.[1]
+            ? equipmentMatch[1].split(',').map((name, i) => ({
+                id: `${id}-eq-${i}`,
+                name: name.trim(),
+                quantity: 1,
+                hours: 8,
+                costBRL: 0,
+              })).filter((e) => e.name)
+            : [],
+          services: [
+            ...(producaoM > 0 ? [{ id: `${id}-prod`, description: 'Producao executada no dia', quantity: producaoM, unit: 'm' }] : []),
+            ...(ligacoesDia > 0 ? [{ id: `${id}-lig`, description: 'Ligacoes executadas no dia', quantity: ligacoesDia, unit: 'un' }] : []),
+          ],
+          trechos: [{
+            id: `${id}-trecho`,
+            trechoCode,
+            trechoDescription: obs ? obs.slice(0, 160) : 'RDO recebido via WhatsApp',
+            plannedMeters: Math.max(producaoM, 1),
+            executedMeters: producaoM,
+            status: producaoM > 0 ? 'in_progress' : 'not_started',
+            source: 'rdo',
+            system: 'outro',
+          }],
+          geolocation: lat && lng ? { lat, lng } : null,
           observations: obs,
-          incidents: '',
+          incidents: stoppageMatch?.[1]?.trim() || '',
           photos: fotos.map((f, i) => ({ id: id + '-p' + i, base64: f, label: '' }) as unknown as RDO['photos'][number]),
+          machineCostBRL: diesel,
+          equipmentCostBRL: materiais,
+          rentalCostBRL: materiais,
+          directCostBRL: maoObra + materiais + diesel,
+          indirectCostBRL: alimentacao,
+          dailyCostBRL: dailyCost,
+          stoppageNotes: stoppageMatch?.[1]?.trim() || '',
+          productionNotes: producaoM > 0 ? `${producaoM} m executados` : '',
+          lpsLinked: Boolean(projectId),
           createdAt: now,
           updatedAt: now,
         } as RDO)
 
         // Converte custos do dia em lançamentos financeiros
         const custos: Array<[string, string, number]> = [
-          ['Mão de Obra', 'DIESEL/COMBUSTÍVEL', Number(row.custo_diesel || 0)],
-          ['Mão de Obra', 'ALIMENTAÇÃO/HOTELARIA', Number(row.custo_alimentacao || 0)],
-          ['Mão de Obra', 'MÃO DE OBRA', Number(row.custo_mao_obra || 0)],
-          ['Materiais', 'MATERIAIS/LOCAÇÕES', Number(row.custo_materiais || 0)],
+          ['Maquinas', 'DIESEL/COMBUSTIVEL', diesel],
+          ['Indiretos', 'ALIMENTACAO/HOTELARIA', alimentacao],
+          ['Mao de Obra', 'MAO DE OBRA', maoObra],
+          ['Equipamentos/Locacoes', 'MATERIAIS/LOCACOES', materiais],
         ]
         for (const [cat, desc, val] of custos) {
           if (val > 0) {
