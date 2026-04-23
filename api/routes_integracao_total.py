@@ -4,6 +4,7 @@ import os
 from datetime import date, datetime
 from typing import Any
 
+import httpx
 from fastapi import APIRouter, HTTPException
 
 from api.supabase_client import (
@@ -130,18 +131,34 @@ def health_integrations():
     tables = {table: table_status(client, table) for table in TABLES_CANONICAS}
     ok_tables = sum(1 for status in tables.values() if status.get("ok"))
     status = "connected" if ok_tables == len(TABLES_CANONICAS) else "partial" if ok_tables else "local"
+    evolution_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
+    evolution_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY")
+    evolution_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
     whatsapp_configured = bool(
-        os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL")
+        evolution_url
     ) and bool(
-        os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY")
+        evolution_key
     )
+    whatsapp_state = "not_configured"
+    if whatsapp_configured:
+        whatsapp_state = "configured"
+        try:
+            response = httpx.get(
+                f"{evolution_url}/instance/connectionState/{evolution_instance}",
+                headers={"apikey": evolution_key},
+                timeout=4.0,
+            )
+            if response.status_code < 400:
+                whatsapp_state = response.json().get("instance", {}).get("state") or "configured"
+        except Exception:
+            whatsapp_state = "configured"
     return {
         "ok": status in {"connected", "partial"},
         "status": status,
         "supabase": supabase_config(),
         "tables": tables,
         "render_api": "connected",
-        "whatsapp": "configured" if whatsapp_configured else "not_configured",
+        "whatsapp": whatsapp_state,
         "n8n": "external",
         "checked_at": datetime.utcnow().isoformat(),
     }

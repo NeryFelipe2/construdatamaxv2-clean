@@ -71,6 +71,158 @@ def _menu_text(nome: str | None = None) -> str:
     )
 
 
+def _project_label(project_id: str | None) -> str:
+    if not supabase or not project_id:
+        return "Projeto atual"
+    try:
+        res = supabase.table("projetos").select("nome").eq("id", project_id).limit(1).execute()
+        if res.data:
+            return res.data[0].get("nome") or "Projeto atual"
+    except Exception:
+        pass
+    return "Projeto atual"
+
+
+def _count_table(table: str, project_id: str | None = None, **filters) -> int:
+    if not supabase:
+        return 0
+    try:
+        query = supabase.table(table).select("id")
+        if project_id:
+            query = query.in_("projeto_id", _related_project_ids(project_id))
+        for key, value in filters.items():
+            query = query.eq(key, value)
+        res = query.limit(1000).execute()
+        return len(res.data or [])
+    except Exception:
+        return 0
+
+
+def _projects_text() -> str:
+    if not supabase:
+        return "🏗️ Projetos Ativos\nSupabase nao configurado no backend."
+    try:
+        res = supabase.table("projetos").select("id,nome,cidade,status").eq("ativo", True).limit(20).execute()
+        rows = res.data or []
+    except Exception:
+        rows = []
+    if not rows:
+        return "🏗️ Projetos Ativos\nNenhum projeto ativo encontrado."
+    lines = ["🏗️ Projetos Ativos"]
+    for index, row in enumerate(rows, start=1):
+        cidade = f" — {row.get('cidade')}" if row.get("cidade") else ""
+        lines.append(f"{index}. {row.get('nome')}{cidade}")
+    return "\n".join(lines)
+
+
+def _contacts_text(project_id: str | None) -> str:
+    if not supabase:
+        return "👥 Equipe e Contatos\nSupabase nao configurado no backend."
+    try:
+        query = supabase.table("contatos").select("nome,cargo,telefone_whatsapp,alcada,setor").eq("ativo", True)
+        if project_id:
+            query = query.in_("projeto_id", _related_project_ids(project_id))
+        res = query.limit(30).execute()
+        rows = res.data or []
+    except Exception:
+        rows = []
+    if not rows:
+        return "👥 Equipe e Contatos\nNenhum contato ativo encontrado para este projeto."
+    lines = ["👥 Equipe e Contatos"]
+    for row in rows[:20]:
+        cargo = row.get("cargo") or row.get("alcada") or row.get("setor") or "Responsavel"
+        phone = row.get("telefone_whatsapp") or "sem telefone"
+        lines.append(f"• {row.get('nome')} — {cargo} — +{phone}")
+    return "\n".join(lines)
+
+
+def _rdo_status_text(project_id: str | None) -> str:
+    today = datetime.utcnow().date().isoformat()
+    projeto = _project_label(project_id)
+    rdos_hoje = _count_table("rdos", project_id, data=today)
+    rdos_total = _count_table("rdos", project_id)
+    return (
+        f"📋 Status RDO Hoje\n"
+        f"Projeto: {projeto}\n"
+        f"Data: {today}\n"
+        f"RDOs hoje: {rdos_hoje}\n"
+        f"Total no projeto: {rdos_total}\n\n"
+        "Para enviar RDO: use @rdo e informe producao, equipe, maquinas, custos, ocorrencias, fotos e localizacao.\n"
+        "Web: https://construdatamaxv2-clean.vercel.app/app/rdo"
+    )
+
+
+def _dashboard_text(project_id: str | None) -> str:
+    projeto = _project_label(project_id)
+    frentes = _count_table("frentes", project_id)
+    rdos = _count_table("rdos", project_id)
+    tarefas = _count_table("tarefas", project_id)
+    restricoes = _count_table("lps_restricoes", project_id, status="aberta")
+    return (
+        f"📊 Dashboard Consolidado\n"
+        f"Projeto: {projeto}\n"
+        f"Frentes: {frentes}\n"
+        f"RDOs: {rdos}\n"
+        f"Tarefas: {tarefas}\n"
+        f"Restricoes LPS abertas: {restricoes}\n\n"
+        "Painel web: https://construdatamaxv2-clean.vercel.app"
+    )
+
+
+def _command_text(option: str, project_id: str | None, nome: str | None = None) -> str:
+    commands = {
+        "1": lambda: _rdo_status_text(project_id),
+        "2": lambda: _contacts_text(project_id),
+        "3": _projects_text,
+        "4": lambda: _dashboard_text(project_id),
+        "5": lambda: (
+            "🚨 Reenviar Cobranca\n"
+            "Use @cobrarrdo <nome> ou @lembrar <nome> para disparo individual.\n"
+            "Evito envio em massa automatico pelo numero 5 para nao vazar tarefas entre projetos."
+        ),
+        "6": lambda: (
+            "🤖 Inteligencia Artificial ConstruData\n"
+            "Envie sua pergunta em texto. Para RDO, use @rdo. Para tarefas, use @tarefa."
+        ),
+        "7": lambda: (
+            "📋 Cobrar RDO\n"
+            "Engenheiro deve preencher: producao, equipe, maquinas, equipamentos, locacoes, mao de obra, materiais, "
+            "custos diretos/indiretos, ocorrencias, paralisacoes, fotos e localizacao.\n"
+            "Link: https://construdatamaxv2-clean.vercel.app/app/rdo"
+        ),
+        "8": lambda: (
+            "📋 MEU RDO DIRETOR — Supervisao\n\n"
+            "Responda os topicos do dia no formato:\n"
+            "1: frentes visitadas | 2: decisoes tomadas | 3: riscos/alertas | 4: proximo marco | 5: observacoes"
+        ),
+        "9": lambda: (
+            "⏰ LEMBRAR TAREFAS\n\n"
+            "Use: @lembrar <nome>\n"
+            "Nomes principais: renato, luiz, fabrizzio, felipe, mateus, igor, icaro, joao."
+        ),
+        "10": lambda: (
+            "🧾 CRIAR TAREFAS\n\n"
+            "Use: @tarefa <nome> <descricao>\n"
+            "Ex: @tarefa mateus enviar RDO de Osasco com custos do dia"
+        ),
+        "11": lambda: (
+            "💰 Plano de Custos\n"
+            "Informe custos do dia no RDO: maquinas, mao de obra, locacoes, materiais, diretos e indiretos."
+        ),
+        "12": lambda: (
+            "🏭 TAREFA POR SETOR (Consorcio)\n\n"
+            "Use: @tarefaconsorcio <setor> <descricao>\n"
+            "Setores: planejamento, producao, sala, todos.\n"
+            "Fabrizzio sempre recebe copia."
+        ),
+        "13": lambda: "👤 Enviar Tarefa por Pessoa\nUse: @tarefa <nome> <descricao>",
+        "14": lambda: "🏛️ Enviar Tarefa a Diretoria\nUse: @tarefadiretoria <descricao>",
+        "15": lambda: "👷 Enviar Tarefa aos Engenheiros\nUse: @tarefaengenheiros <descricao>",
+        "16": lambda: "🏗️ Enviar Tarefa por Setor\nUse: @tarefasetor <setor> <descricao>",
+    }
+    return commands.get(option, lambda: _menu_text(nome))()
+
+
 def _send_evolution_text(telefone: str, mensagem: str) -> str:
     evo_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
     evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
@@ -193,6 +345,12 @@ def _texto_payload(payload: dict) -> tuple[str, str | None]:
     )
     telefone = payload.get("telefone") or payload.get("from") or key.get("remoteJid")
     return str(text or "").strip(), str(telefone) if telefone else None
+
+
+def _is_from_me(payload: dict) -> bool:
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    key = data.get("key") if isinstance(data.get("key"), dict) else {}
+    return bool(payload.get("fromMe") or data.get("fromMe") or key.get("fromMe"))
 
 
 @router.get("/numeros")
@@ -321,6 +479,9 @@ def enviar_mensagem(payload: dict):
 
 @router.post("/webhook")
 def receber_webhook(payload: dict):
+    if _is_from_me(payload):
+        return {"ok": True, "ignored": "from_me"}
+
     texto, telefone = _texto_payload(payload)
     telefone = _normalize_phone(telefone)
     contact_project_id, contact_name = _contact_project_for_phone(telefone)
@@ -328,13 +489,22 @@ def receber_webhook(payload: dict):
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
     texto_normalizado = texto.lower().strip()
 
-    if texto.lower() in {"menu", "oi", "olá", "ola"}:
+    if texto_normalizado in {"menu", "oi", "olá", "ola"}:
         resposta = "menu"
         mensagem = _menu_text(payload.get("nome") or contact_name)
         delivery = _send_evolution_text(telefone or "", mensagem) if telefone else "not_configured"
         _log_whatsapp("out", {"tipo": "menu", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
         return {"ok": True, "route": resposta, "reply": mensagem, "delivery": delivery}
-    elif "@rdo" in texto_normalizado or texto.strip().startswith(("1", "7", "8")):
+
+    option_match = re.fullmatch(r"0?([1-9]|1[0-6])", texto_normalizado)
+    if option_match:
+        option = option_match.group(1)
+        mensagem = _command_text(option, projeto_id, payload.get("nome") or contact_name)
+        delivery = _send_evolution_text(telefone or "", mensagem) if telefone else "not_configured"
+        _log_whatsapp("out", {"tipo": f"menu_option_{option}", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
+        return {"ok": True, "route": f"menu_option_{option}", "reply": mensagem, "delivery": delivery}
+
+    if "@rdo" in texto_normalizado:
         resposta = "rdo"
     else:
         resposta = "registrado"
@@ -360,7 +530,10 @@ def receber_webhook(payload: dict):
         except Exception as exc:
             raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {exc}") from exc
 
-    return {"ok": True, "route": resposta}
+    fallback = "Recebi sua mensagem. Digite menu para ver as opcoes ou use @rdo / @tarefa."
+    delivery = _send_evolution_text(telefone or "", fallback) if telefone else "not_configured"
+    _log_whatsapp("out", {"tipo": "fallback", "status": delivery}, telefone=telefone, mensagem=fallback, projeto_id=projeto_id)
+    return {"ok": True, "route": resposta, "reply": fallback, "delivery": delivery}
 
 
 @router.post("/workflow_dispatch")
