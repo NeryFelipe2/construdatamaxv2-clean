@@ -114,6 +114,12 @@ export const apiProjetoCriarRdo = (projectId: string, payload: Record<string, un
 export const apiProjetoTarefas = (projectId: string) =>
   get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/tarefas`);
 
+export const apiProjetoCriarTarefa = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/tarefas`, payload);
+
+export const apiProjetoCriarLpsRestricao = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/lps-restricoes`, payload);
+
 export const apiProjetoContatos = (projectId: string) =>
   get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/contatos`);
 

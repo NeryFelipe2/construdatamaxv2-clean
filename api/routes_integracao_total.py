@@ -21,7 +21,10 @@ def _select(table: str, project_id: str | None = None, limit: int = 200) -> list
         return []
     query = client.table(table).select("*").limit(limit)
     if project_id:
-        query = query.eq("projeto_id", project_id)
+        if table == "rdos":
+            query = query.or_(f"projeto_id.eq.{project_id},project_id.eq.{project_id}")
+        else:
+            query = query.eq("projeto_id", project_id)
     try:
         return _items(query.execute())
     except Exception:
@@ -109,6 +112,45 @@ def listar_tarefas_projeto(project_id: str):
     return {"items": _select("tarefas", project_id=project_id, limit=300)}
 
 
+@router.post("/api/projetos/{project_id}/tarefas", status_code=201)
+def criar_tarefa_projeto(project_id: str, payload: dict[str, Any]):
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    row["projeto_id"] = project_id
+    row.setdefault("descricao", row.get("titulo") or row.get("task") or "Tarefa sem descricao")
+    row.setdefault("status", "pendente")
+    row.setdefault("prioridade", "normal")
+    row.setdefault("origem", "api")
+    try:
+        created = client.table("tarefas").insert(row).execute()
+        data = _items(created)
+        return data[0] if data else row
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao gravar tarefa: {exc}") from exc
+
+
+@router.post("/api/projetos/{project_id}/lps-restricoes", status_code=201)
+def criar_lps_restricao(project_id: str, payload: dict[str, Any]):
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    row["projeto_id"] = project_id
+    row.setdefault("descricao", row.get("titulo") or row.get("restricao") or "Restricao sem descricao")
+    row.setdefault("status", "aberto")
+    row.setdefault("origem", "api")
+    try:
+        created = client.table("lps_restricoes").insert(row).execute()
+        data = _items(created)
+        return data[0] if data else row
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao gravar restricao LPS: {exc}") from exc
+
+
 @router.get("/api/projetos/{project_id}/contatos")
 def listar_contatos_projeto(project_id: str):
     _project_or_404(project_id)
@@ -171,4 +213,3 @@ def gestao360_projeto(project_id: str):
             "lps": "Conectado" if payload["restricoes"] else "Parcial",
         },
     }
-
