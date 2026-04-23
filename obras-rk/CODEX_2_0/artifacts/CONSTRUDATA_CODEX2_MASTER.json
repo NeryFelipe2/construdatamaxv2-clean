@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "ed21ab36-94c4-41dd-9e66-6683b1d66bc8",
+      "id": "d083785e-b97c-4c39-b692-ff97caf6022c",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": "f8d473be-0cb0-495d-8932-ba8eee9bf4a4",
+      "id": "43877df1-1785-49dd-9843-6f7e25a66b5d",
       "name": "Extract",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -28,11 +28,11 @@
         304
       ],
       "parameters": {
-        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete', 'send.message'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  const fromMe = msg.key?.fromMe || false;\n  const normalized = (text || '').trim().toLowerCase();\n  const ownCommand = /^(menu|m|ajuda|help|comandos|opcoes|opções|dashboard|painel|dash|grafico|gráfico|oi|ola|olá|bom dia|boa tarde|boa noite|[1-9]|1[0-6])$/.test(normalized) || normalized.startsWith('@') || normalized.startsWith('#');\n  if (fromMe && !ownCommand) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;"
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  const fromMe = msg.key?.fromMe || false;\n  const normalized = (text || '').trim().toLowerCase();\n  const ownCommand = /^(menu|m|ajuda|help|comandos|opcoes|opções|dashboard|painel|dash|grafico|gráfico|oi|ola|olá|bom dia|boa tarde|boa noite|[1-9]|1[0-6])$/.test(normalized) || normalized.startsWith('@') || normalized.startsWith('#');\n  if (fromMe && !ownCommand) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;"
       }
     },
     {
-      "id": "92db3c92-d532-40c3-a0ef-082917b5becb",
+      "id": "b5507d78-09a6-4a1b-bb47-55bfa507ffb9",
       "name": "Lookup Contato",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": "61e7a9ab-f60c-46e1-a170-84df4e39de37",
+      "id": "e379d0fb-0a5f-4017-a28a-60a7c50e0659",
       "name": "Get State",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "52d5f760-222b-4ab6-ab4a-6b39ad782e61",
+      "id": "bc8969a3-3be6-408f-9057-e6595cce67fc",
       "name": "Decide",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": "78103e51-19cd-4610-9e49-f5fb9dba11d6",
+      "id": "24287553-138e-448f-9c3a-4984071b06eb",
       "name": "Is RDO?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "638a49e3-71b5-485b-82f1-85e7734202f3",
+      "id": "5b4d1775-a384-4263-8f77-fd52b834dc67",
       "name": "Is Financeiro?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": "45b3171f-b948-4d3e-a862-0e8bb2d3b9cf",
+      "id": "b74af94d-be75-4db0-a0b0-5b8f99856b08",
       "name": "Call RDO",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -190,7 +190,7 @@
       }
     },
     {
-      "id": "1a2130b8-fa71-4678-949d-cca2b2f9f9d3",
+      "id": "f53ab9fa-d8d1-47a3-b502-b8dd328ce1d7",
       "name": "Call Financeiro",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -217,7 +217,7 @@
       }
     },
     {
-      "id": "fe93d571-6285-4956-9ba2-f4627e0ee3fb",
+      "id": "8a47392d-8849-48f4-8791-861d9bf0c789",
       "name": "Is Dashboard?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -249,7 +249,7 @@
       }
     },
     {
-      "id": "744a9dc0-1685-4c7c-a6d1-f9257c078e70",
+      "id": "ffc65c3d-30ef-4569-9ac8-a44ccdd9c795",
       "name": "Build Dashboard Image",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -262,7 +262,7 @@
       }
     },
     {
-      "id": "5d081184-1e72-4bec-9b29-7777db63ba27",
+      "id": "9a55df70-8832-4c2f-a056-7f9fb7d6dc15",
       "name": "Send Dashboard Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -289,7 +289,7 @@
       }
     },
     {
-      "id": "dccda660-9611-4e92-894b-ce53ca5b59cb",
+      "id": "e5546b6d-4c16-4fe5-bed3-8338454dd670",
       "name": "Send Help",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -316,7 +316,7 @@
       }
     },
     {
-      "id": "f4949905-e273-4409-b8a7-1a412d71b41c",
+      "id": "e7d01c93-87be-4c6c-9fdf-cd18e2c98e7d",
       "name": "Is Tarefa?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -348,7 +348,7 @@
       }
     },
     {
-      "id": "8ca8d706-cbe5-4f23-84c3-8426acfd068c",
+      "id": "5ba2f0c6-baae-46a8-9e36-55beff6b2b84",
       "name": "Call Tarefa",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
