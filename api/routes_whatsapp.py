@@ -564,10 +564,12 @@ def receber_webhook(payload: dict):
         except Exception as exc:
             raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {exc}") from exc
 
-    fallback = "Recebi sua mensagem. Digite menu para ver as opcoes ou use @rdo / @tarefa."
-    delivery = _send_evolution_text(telefone or "", fallback) if telefone else "not_configured"
-    _log_whatsapp("out", {"tipo": "fallback", "status": delivery}, telefone=telefone, mensagem=fallback, projeto_id=projeto_id)
-    return {"ok": True, "route": resposta, "reply": fallback, "delivery": delivery}
+    return {
+        "ok": True,
+        "route": "ignored_not_command",
+        "reply": None,
+        "delivery": "blocked",
+    }
 
 
 @router.post("/workflow_dispatch")
