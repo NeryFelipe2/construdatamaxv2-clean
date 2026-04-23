@@ -378,6 +378,41 @@ def _is_from_me(payload: dict) -> bool:
     return bool(payload.get("fromMe") or data.get("fromMe") or key.get("fromMe"))
 
 
+def _remote_phone(payload: dict) -> str | None:
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    key = data.get("key") if isinstance(data.get("key"), dict) else {}
+    return _normalize_phone(key.get("remoteJid") or payload.get("from") or payload.get("telefone"))
+
+
+def _self_test_phones() -> set[str]:
+    raw = (
+        os.environ.get("WHATSAPP_SELF_TEST_PHONES")
+        or os.environ.get("WHATSAPP_SELF_TEST_PHONE")
+        or ""
+    )
+    phones: set[str] = set()
+    for token in re.split(r"[\s,;]+", raw.strip()):
+        for variant in _phone_variants(token):
+            phones.add(variant)
+    return phones
+
+
+def _extract_self_test_command(payload: dict, texto: str) -> str | None:
+    if not _is_from_me(payload):
+        return None
+
+    remote_phone = _remote_phone(payload)
+    if not remote_phone or remote_phone not in _self_test_phones():
+        return None
+
+    stripped = str(texto or "").strip()
+    if not stripped.startswith("#"):
+        return None
+
+    command = stripped[1:].strip()
+    return command or None
+
+
 @router.get("/numeros")
 def listar_numeros(ns_id: int | None = Query(default=None), project_id: str | None = Query(default=None)):
     items = _load(DATA_FILE)
@@ -504,10 +539,12 @@ def enviar_mensagem(payload: dict):
 
 @router.post("/webhook")
 def receber_webhook(payload: dict):
-    if _is_from_me(payload):
-        return {"ok": True, "ignored": "from_me"}
-
     texto, telefone = _texto_payload(payload)
+    self_test_command = _extract_self_test_command(payload, texto)
+    if _is_from_me(payload) and not self_test_command:
+        return {"ok": True, "ignored": "from_me"}
+    if self_test_command:
+        texto = self_test_command
     telefone = _normalize_phone(telefone)
     contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
     projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
