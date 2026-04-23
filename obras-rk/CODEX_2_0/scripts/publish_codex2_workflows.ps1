@@ -37,6 +37,20 @@ $files = @(
   'CONSTRUDATA_CODEX2_TAREFA'
 )
 
+function Ensure-N8nWebhookRows {
+  @'
+insert into webhook_entity ("webhookPath", method, node, "workflowId")
+values
+('codex2Master0422/webhook/codex2-whatsapp-master', 'POST', 'Webhook', 'codex2Master0422'),
+('codex2Rdo042226/webhook/codex2-sub-rdo', 'POST', 'Webhook', 'codex2Rdo042226'),
+('codex2Fin042226/webhook/codex2-financeiro', 'POST', 'Webhook', 'codex2Fin042226'),
+('codex2Task04226/webhook/codex2-sub-tarefa', 'POST', 'Webhook', 'codex2Task04226')
+on conflict ("webhookPath", method) do update
+set node = excluded.node,
+    "workflowId" = excluded."workflowId";
+'@ | docker exec -i $postgresContainer psql -U rk_admin -d rk_main | Out-Host
+}
+
 foreach ($name in $files) {
   $src = Join-Path $workflows "$name.workflow.ts"
   $out = Join-Path $artifacts "$name.json"
@@ -60,4 +74,15 @@ foreach ($id in @('codex2Master0422','codex2Rdo042226','codex2Fin042226','codex2
   docker exec $n8nContainer n8n publish:workflow --id=$id | Out-Host
 }
 
-Write-Host "CODEX 2.0 workflows published and activated on $n8nContainer."
+docker restart $n8nContainer | Out-Host
+Start-Sleep -Seconds 8
+Ensure-N8nWebhookRows
+
+@'
+select "workflowId","webhookPath",method
+from webhook_entity
+where "workflowId" in ('codex2Master0422','codex2Rdo042226','codex2Fin042226','codex2Task04226')
+order by "workflowId","webhookPath";
+'@ | docker exec -i $postgresContainer psql -U rk_admin -d rk_main | Out-Host
+
+Write-Host "CODEX 2.0 workflows published, restarted and webhook rows ensured on $n8nContainer."

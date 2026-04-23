@@ -78,7 +78,7 @@ export class ConstrudataCodex2MasterWorkflow {
         position: [-720, 192],
     })
     LookupContato = {
-        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})",
+        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&order=created_at.desc.nullslast,id.asc&limit=1",
         sendHeaders: true,
         headerParameters: {
             parameters: [
@@ -103,7 +103,7 @@ export class ConstrudataCodex2MasterWorkflow {
         alwaysOutputData: true,
     })
     GetState = {
-        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $node.Extract.json.phone }},phone_number.eq.{{ (() => { const p = $node.Extract.json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
+        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $('Extract').first().json.phone }},phone_number.eq.{{ (() => { const p = $('Extract').first().json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
         sendHeaders: true,
         headerParameters: {
             parameters: [

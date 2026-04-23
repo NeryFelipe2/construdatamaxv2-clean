@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "330005fb-9242-4ef0-9111-e4f500500137",
+      "id": "ed21ab36-94c4-41dd-9e66-6683b1d66bc8",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": "a482edd2-9f91-4ea3-8c36-99cfbdc7a952",
+      "id": "f8d473be-0cb0-495d-8932-ba8eee9bf4a4",
       "name": "Extract",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "07822df0-837b-48b5-a2dc-7bf8b7a6d4cc",
+      "id": "92db3c92-d532-40c3-a0ef-082917b5becb",
       "name": "Lookup Contato",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -41,7 +41,7 @@
         192
       ],
       "parameters": {
-        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})",
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&order=created_at.desc.nullslast,id.asc&limit=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": "0c01e80e-f827-4d5b-842e-748c998bcd4e",
+      "id": "61e7a9ab-f60c-46e1-a170-84df4e39de37",
       "name": "Get State",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -68,7 +68,7 @@
         432
       ],
       "parameters": {
-        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $node.Extract.json.phone }},phone_number.eq.{{ (() => { const p = $node.Extract.json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $('Extract').first().json.phone }},phone_number.eq.{{ (() => { const p = $('Extract').first().json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "776431a1-4b50-4b9a-8b76-f97b297c4c1f",
+      "id": "52d5f760-222b-4ab6-ab4a-6b39ad782e61",
       "name": "Decide",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": "9f8799c4-2a07-4545-91b3-dc8f29b9df61",
+      "id": "78103e51-19cd-4610-9e49-f5fb9dba11d6",
       "name": "Is RDO?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "e7d4f36d-ac18-4f9c-aeaf-8128dcabd4d0",
+      "id": "638a49e3-71b5-485b-82f1-85e7734202f3",
       "name": "Is Financeiro?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": "a0ce4c91-a8c7-43ee-9bab-264616f885c4",
+      "id": "45b3171f-b948-4d3e-a862-0e8bb2d3b9cf",
       "name": "Call RDO",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -190,7 +190,7 @@
       }
     },
     {
-      "id": "a8186e7a-24f1-40b6-b69c-702e69e8389d",
+      "id": "1a2130b8-fa71-4678-949d-cca2b2f9f9d3",
       "name": "Call Financeiro",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -217,7 +217,7 @@
       }
     },
     {
-      "id": "d595058b-0624-4bd9-ab2a-4e2cec8c91df",
+      "id": "fe93d571-6285-4956-9ba2-f4627e0ee3fb",
       "name": "Is Dashboard?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -249,7 +249,7 @@
       }
     },
     {
-      "id": "3ecb77c4-9860-4df8-8162-1a86594dabda",
+      "id": "744a9dc0-1685-4c7c-a6d1-f9257c078e70",
       "name": "Build Dashboard Image",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -262,7 +262,7 @@
       }
     },
     {
-      "id": "1e1d6f12-fb84-486e-885d-e453cea01d4f",
+      "id": "5d081184-1e72-4bec-9b29-7777db63ba27",
       "name": "Send Dashboard Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -289,7 +289,7 @@
       }
     },
     {
-      "id": "9ee98e54-5d2c-486a-a867-a6fed362e216",
+      "id": "dccda660-9611-4e92-894b-ce53ca5b59cb",
       "name": "Send Help",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -316,7 +316,7 @@
       }
     },
     {
-      "id": "90626ad2-09b2-467f-97d3-a735c50a1d43",
+      "id": "f4949905-e273-4409-b8a7-1a412d71b41c",
       "name": "Is Tarefa?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -348,7 +348,7 @@
       }
     },
     {
-      "id": "158c5c92-9be0-47e5-98ef-c7dd8db0d4e2",
+      "id": "8ca8d706-cbe5-4f23-84c3-8426acfd068c",
       "name": "Call Tarefa",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
