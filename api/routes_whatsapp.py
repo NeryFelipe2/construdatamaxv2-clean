@@ -43,6 +43,15 @@ def _normalize_phone(value: str | None) -> str | None:
     return digits or None
 
 
+def _normalize_destination(value: str | None) -> str | None:
+    if not value:
+        return None
+    raw = str(value).strip()
+    if raw.endswith("@g.us") or raw.endswith("@s.whatsapp.net"):
+        return raw
+    return _normalize_phone(raw)
+
+
 def _phone_variants(value: str | None) -> list[str]:
     digits = _normalize_phone(value)
     if not digits:
@@ -240,7 +249,7 @@ def _command_text(option: str, project_id: str | None, nome: str | None = None) 
     return commands.get(option, lambda: _menu_text(nome))()
 
 
-def _send_evolution_text(telefone: str, mensagem: str) -> str:
+def _send_evolution_text(destino: str, mensagem: str) -> str:
     enabled = os.environ.get("WHATSAPP_SEND_ENABLED", "false").strip().lower()
     if enabled not in {"1", "true", "yes", "on"}:
         return "disabled"
@@ -253,9 +262,10 @@ def _send_evolution_text(telefone: str, mensagem: str) -> str:
     try:
         endpoint = f"{evo_url}/message/sendText/{evo_instance}"
         headers = {"apikey": evo_key} if evo_key else {}
+        target = _normalize_destination(destino) or destino
         resp = httpx.post(
             endpoint,
-            json={"number": _normalize_phone(telefone) or telefone, "text": mensagem},
+            json={"number": target, "text": mensagem},
             headers=headers,
             timeout=12.0,
         )
@@ -324,6 +334,8 @@ _CAMPOS = {
     "8": "custo_real_variavel",
 }
 
+_MISSING_COLUMN_RE = re.compile(r"Could not find the '([^']+)' column")
+
 
 def parse_rdo_whatsapp(texto: str) -> dict:
     resultado: dict = {}
@@ -338,6 +350,34 @@ def parse_rdo_whatsapp(texto: str) -> dict:
         except ValueError:
             resultado[chave] = valor
     return resultado
+
+
+def _insert_resilient(table: str, row: dict, required_keys: list[str] | None = None) -> dict:
+    if not supabase:
+        return {"ok": False, "error": "supabase_not_configured", "row": row, "removed": []}
+
+    pending = {k: v for k, v in row.items() if v is not None}
+    required = set(required_keys or [])
+    removed: list[str] = []
+
+    while pending:
+        try:
+            result = supabase.table(table).insert(pending).execute()
+            return {"ok": True, "data": result.data or [], "row": pending, "removed": removed}
+        except Exception as exc:
+            message = str(exc)
+            match = _MISSING_COLUMN_RE.search(message)
+            if not match:
+                return {"ok": False, "error": message, "row": pending, "removed": removed}
+
+            column = match.group(1)
+            if column in required or column not in pending:
+                return {"ok": False, "error": message, "row": pending, "removed": removed}
+
+            pending.pop(column, None)
+            removed.append(column)
+
+    return {"ok": False, "error": "empty_row_after_schema_filter", "row": pending, "removed": removed}
 
 
 def _log_whatsapp(direction: str, payload: dict, telefone: str | None = None, mensagem: str | None = None, projeto_id: str | None = None):
@@ -542,10 +582,9 @@ def enviar_mensagem(payload: dict):
             "data_registro": datetime.utcnow().date().isoformat(),
         }
         novo_registro.update(campos_rdo)
-        try:
-            supabase.table("rk_rdo_diario").insert(novo_registro).execute()
-        except Exception as exc:
-            raise HTTPException(status_code=500, detail=f"Erro ao salvar no Supabase: {exc}") from exc
+        insert_result = _insert_resilient("rk_rdo_diario", novo_registro)
+        if not insert_result.get("ok"):
+            raise HTTPException(status_code=500, detail=f"Erro ao salvar no Supabase: {insert_result.get('error')}") from None
 
     delivery = _send_evolution_text(telefone, mensagem)
 
@@ -554,18 +593,20 @@ def enviar_mensagem(payload: dict):
 
 @router.post("/webhook")
 def receber_webhook(payload: dict):
-    texto, telefone = _texto_payload(payload)
+    texto, destino_raw = _texto_payload(payload)
+    destino_resposta = _remote_jid(payload) or destino_raw
     self_test_command = _extract_self_test_command(payload, texto)
     if _is_from_me(payload) and not self_test_command:
         return {"ok": True, "ignored": "from_me"}
     if self_test_command:
         texto = self_test_command
-    telefone = _normalize_phone(telefone)
+    telefone = _normalize_phone(destino_raw)
+    destino_grupo = bool(destino_resposta and str(destino_resposta).endswith("@g.us"))
     contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
     projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
 
-    if telefone and not registered_phone:
+    if telefone and not registered_phone and not destino_grupo:
         return {
             "ok": True,
             "ignored": "unregistered_phone",
@@ -578,7 +619,7 @@ def receber_webhook(payload: dict):
     if texto_normalizado in {"menu", "oi", "olá", "ola"}:
         resposta = "menu"
         mensagem = _menu_text(payload.get("nome") or contact_name)
-        delivery = _send_evolution_text(telefone or "", mensagem) if telefone else "not_configured"
+        delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
         _log_whatsapp("out", {"tipo": "menu", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
         return {"ok": True, "route": resposta, "reply": mensagem, "delivery": delivery}
 
@@ -586,7 +627,7 @@ def receber_webhook(payload: dict):
     if option_match:
         option = option_match.group(1)
         mensagem = _command_text(option, projeto_id, payload.get("nome") or contact_name)
-        delivery = _send_evolution_text(telefone or "", mensagem) if telefone else "not_configured"
+        delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
         _log_whatsapp("out", {"tipo": f"menu_option_{option}", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
         return {"ok": True, "route": f"menu_option_{option}", "reply": mensagem, "delivery": delivery}
 
@@ -607,14 +648,39 @@ def receber_webhook(payload: dict):
             "payload_original": payload,
         }
         row.update(campos_rdo)
-        try:
-            supabase.table("rdos").insert(row).execute()
-            confirmacao = "OK, RDO recebido e registrado no ConstruData."
-            delivery = _send_evolution_text(telefone or "", confirmacao) if telefone else "not_configured"
-            _log_whatsapp("out", {"tipo": "confirmacao_rdo", "status": delivery}, telefone=telefone, mensagem=confirmacao, projeto_id=projeto_id)
-            return {"ok": True, "route": "rdo", "reply": confirmacao, "delivery": delivery}
-        except Exception as exc:
-            raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {exc}") from exc
+        rdos_insert = _insert_resilient("rdos", row, required_keys=["projeto_id", "data", "status"])
+        rk_insert = {"ok": False, "error": "not_attempted", "removed": []}
+        if campos_rdo:
+            rk_row = {
+                "projeto_id": projeto_id,
+                "telefone": telefone,
+                "texto_original": texto,
+                "data_registro": datetime.utcnow().date().isoformat(),
+            }
+            rk_row.update(campos_rdo)
+            rk_insert = _insert_resilient("rk_rdo_diario", rk_row)
+
+        if not rdos_insert.get("ok") and not rk_insert.get("ok"):
+            detail = rdos_insert.get("error") or rk_insert.get("error") or "erro_desconhecido"
+            raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {detail}")
+
+        confirmacao = "OK, RDO recebido e registrado no ConstruData."
+        delivery = _send_evolution_text(destino_resposta or telefone or "", confirmacao) if (destino_resposta or telefone) else "not_configured"
+        _log_whatsapp("out", {"tipo": "confirmacao_rdo", "status": delivery}, telefone=telefone, mensagem=confirmacao, projeto_id=projeto_id)
+        return {
+            "ok": True,
+            "route": "rdo",
+            "reply": confirmacao,
+            "delivery": delivery,
+            "persisted": {
+                "rdos": bool(rdos_insert.get("ok")),
+                "rk_rdo_diario": bool(rk_insert.get("ok")),
+                "removed_columns": {
+                    "rdos": rdos_insert.get("removed", []),
+                    "rk_rdo_diario": rk_insert.get("removed", []),
+                },
+            },
+        }
 
     return {
         "ok": True,
