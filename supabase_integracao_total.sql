@@ -355,19 +355,19 @@ on conflict (id) do update set
 insert into public.contatos (projeto_id, nome, cargo, setor, telefone_whatsapp, alcada, recebe_cobranca, recebe_info, ativo)
 values
   ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Felipe Nery', 'Diretor', 'Diretoria', '5561981846325', 'diretor', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Luiz Fernando', 'Diretor', 'Diretoria', null, 'diretor', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Renato', 'Diretor Financeiro', 'Diretoria', null, 'diretor', true, true, true),
+  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Luiz Fernando', 'Diretor', 'Diretoria', 'sem-telefone-luiz', 'diretor', true, true, true),
+  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Renato', 'Diretor Financeiro', 'Diretoria', 'sem-telefone-renato', 'diretor', true, true, true),
   ('f3c6645b-347f-4382-b9c5-d103c27ec511', 'Mateus Santos', 'Engenheiro', 'Osasco', '5561991015639', 'engenheiro_obra', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Icaro Atila', 'Engenheiro', 'Tatui', null, 'engenheiro_obra', true, true, true),
+  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Icaro Atila', 'Engenheiro', 'Tatui', 'sem-telefone-icaro', 'engenheiro_obra', true, true, true),
   ('d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb', 'Igor Max', 'Engenheiro', 'RK Santos', '5531985898482', 'engenheiro_obra', true, true, true),
   ('2a28beec-b1f8-4b0c-8416-d0710bb35d9d', 'Joao', 'Diretor Brasilia', 'Brasilia', '5561999996252', 'diretor', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Fabrizzio', 'Gerente/Diretor', 'Consorcio / SLNR', null, 'info', false, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Junior', 'Planejamento', 'Consorcio / SLNR', null, 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Valdeans', 'Planejamento', 'Consorcio / SLNR', null, 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Gabriel', 'Sala Tecnica', 'Consorcio / SLNR', null, 'sala_tecnica', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Vinicius', 'Sala Tecnica', 'Consorcio / SLNR', null, 'sala_tecnica', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Veronica', 'Planejamento', 'Consorcio / SLNR', null, 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Jose Marcio', 'Gerente Producao', 'Consorcio / SLNR', null, 'producao', true, true, true)
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Fabrizzio', 'Gerente/Diretor', 'Consorcio / SLNR', 'sem-telefone-fabrizzio', 'info', false, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Junior', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-junior', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Valdeans', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-valdeans', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Gabriel', 'Sala Tecnica', 'Consorcio / SLNR', 'sem-telefone-gabriel', 'sala_tecnica', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Vinicius', 'Sala Tecnica', 'Consorcio / SLNR', 'sem-telefone-vinicius', 'sala_tecnica', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Veronica', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-veronica', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Jose Marcio', 'Gerente Producao', 'Consorcio / SLNR', 'sem-telefone-jose-marcio', 'producao', true, true, true)
 on conflict do nothing;
 
 create index if not exists idx_frentes_projeto_id on public.frentes(projeto_id);
@@ -413,4 +413,3 @@ begin
     end if;
   end loop;
 end $$;
-
