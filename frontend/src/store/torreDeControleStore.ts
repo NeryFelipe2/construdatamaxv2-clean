@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { MOCK_OBRAS } from '@/data/mockTorreDeControle'
 import type { ConstructionSite, ConstructionRisk } from '@/types'
+import type { DbProjeto } from '@/lib/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -30,6 +31,7 @@ interface TorreActions {
   loadDemoData: () => void
   clearData: () => void
   loadFromPipeline: () => void
+  loadFromProjectContext: () => void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -159,6 +161,44 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
             : [...s.sites, newSite],
           selectedId: newSite.id,
         }
+      })
+    })
+  },
+
+  loadFromProjectContext: () => {
+    import('./projectContext').then(({ useProjectContext }) => {
+      const { projetos, activeProjectId } = useProjectContext.getState()
+      if (!projetos.length) return
+
+      const toSite = (p: DbProjeto): ConstructionSite => ({
+        id: p.id,
+        code: p.contrato || p.id.slice(0, 8).toUpperCase(),
+        name: p.nome,
+        company: p.cliente || 'ConstruData',
+        owner: p.cliente || 'ConstruData',
+        manager: p.responsavel_nome || '',
+        description: `${p.tipo || 'obra'} - ${p.cidade || ''}`.trim(),
+        status: p.status === 'pausado' ? 'paused' : p.status === 'concluido' ? 'completed' : 'active',
+        street: '',
+        number: '',
+        district: '',
+        city: p.cidade || '',
+        state: p.cidade === 'Brasilia' ? 'DF' : 'SP',
+        cep: '',
+        buildingType: p.tipo || 'saneamento',
+        totalArea: Number(p.orcamento_total || 0),
+        floors: 1,
+        startDate: p.data_inicio || new Date().toISOString().slice(0, 10),
+        expectedEnd: p.data_fim || '',
+        lat: p.cidade === 'Pardinho' ? -23.0828 : p.cidade === 'Osasco' ? -23.5329 : p.cidade === 'Santos' ? -23.9608 : null,
+        lng: p.cidade === 'Pardinho' ? -48.3694 : p.cidade === 'Osasco' ? -46.7918 : p.cidade === 'Santos' ? -46.3336 : null,
+        risks: [],
+      })
+
+      const sites = projetos.map(toSite)
+      set({
+        sites,
+        selectedId: activeProjectId && sites.some((s) => s.id === activeProjectId) ? activeProjectId : sites[0]?.id ?? null,
       })
     })
   },

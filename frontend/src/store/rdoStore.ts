@@ -16,7 +16,7 @@ import {
   MOCK_RDO_FINANCIAL_ENTRIES,
   MOCK_RDO_BUDGET_BRL,
 } from '@/data/mockRdo'
-import { apiRdoList, apiRdoCreate, apiRdoClose } from '@/lib/api'
+import { apiRdoList, apiRdoCreate, apiRdoClose, apiProjetoRdos } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -55,7 +55,7 @@ interface RdoState {
   closeRdoOnBackend:      (id: number) => Promise<void>
 
   // ── Supabase sync (RDOs do WhatsApp) ─────────────────────────────────────────
-  loadFromSupabase:       () => Promise<void>
+  loadFromSupabase:       (projectId?: string | null) => Promise<void>
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -233,20 +233,35 @@ export const useRdoStore = create<RdoState>((set, get) => ({
   },
 
   // ── Carrega RDOs + custos do Supabase (populados pelo Router WhatsApp) ──────
-  loadFromSupabase: async () => {
-    if (!supabase) return
+  loadFromSupabase: async (projectId) => {
     try {
-      const { data: rows, error } = await supabase
-        .from('rdos')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100)
-      if (error || !rows) return
+      let rows: Record<string, unknown>[] | null = null
+      if (projectId) {
+        try {
+          const apiRows = await apiProjetoRdos(projectId)
+          rows = (apiRows.items ?? []) as Record<string, unknown>[]
+        } catch {
+          rows = null
+        }
+      }
+
+      if (!rows && supabase) {
+        let query = supabase
+          .from('rdos')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100)
+        if (projectId) query = query.eq('projeto_id', projectId)
+        const { data, error } = await query
+        if (error || !data) return
+        rows = data as Record<string, unknown>[]
+      }
+      if (!rows) return
 
       const rdos: RDO[] = []
       const entries: RdoFinancialEntry[] = []
 
-      for (const row of rows as Record<string, unknown>[]) {
+      for (const row of rows) {
         const id = String(row.id)
         const data = String(row.data || '').slice(0, 10)
         const apontador = String(row.apontador || '-')
@@ -260,11 +275,11 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         const alimentacao = Number(row.custo_alimentacao || 0)
         const maoObra = Number(row.custo_mao_obra || 0)
         const materiais = Number(row.custo_materiais || 0)
-        const dailyCost = diesel + alimentacao + maoObra + materiais
+        const dailyCost = Number(row.custo_total_dia || 0) || diesel + alimentacao + maoObra + materiais
         const lat = row.latitude == null ? '' : String(row.latitude)
         const lng = row.longitude == null ? '' : String(row.longitude)
-        const projectId = row.project_id ? String(row.project_id) : ''
-        const trechoCode = projectId ? projectId.slice(0, 8).toUpperCase() : `RDO-${data || id.slice(0, 8)}`
+        const projetoId = row.projeto_id ? String(row.projeto_id) : row.project_id ? String(row.project_id) : ''
+        const trechoCode = projetoId ? projetoId.slice(0, 8).toUpperCase() : `RDO-${data || id.slice(0, 8)}`
         const equipmentMatch = obs.match(/Equipamentos?:\s*([^|]+)/i)
         const stoppageMatch = obs.match(/(?:Paralisa(?:c|ç)(?:ao|ão|oes|ões)|Pendencias?|Ocorrencias?):\s*([^|]+)/i)
 
@@ -315,7 +330,7 @@ export const useRdoStore = create<RdoState>((set, get) => ({
           dailyCostBRL: dailyCost,
           stoppageNotes: stoppageMatch?.[1]?.trim() || '',
           productionNotes: producaoM > 0 ? `${producaoM} m executados` : '',
-          lpsLinked: Boolean(projectId),
+          lpsLinked: Boolean(projetoId || row.lps_id),
           createdAt: now,
           updatedAt: now,
         } as RDO)

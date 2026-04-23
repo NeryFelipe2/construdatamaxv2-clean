@@ -3,6 +3,7 @@
  */
 import { useEffect } from 'react'
 import { useRdoStore } from '@/store/rdoStore'
+import { useProjectContext } from '@/store/projectContext'
 import { RdoHeader }      from './components/RdoHeader'
 import { DashboardPanel } from './components/DashboardPanel'
 import { NovoRdoPanel }   from './components/NovoRdoPanel'
@@ -15,13 +16,14 @@ import { WhatsAppFluxoPanel } from './components/WhatsAppFluxoPanel'
 export function RdoPage() {
   const activeTab = useRdoStore((s) => s.activeTab)
   const loadFromSupabase = useRdoStore((s) => s.loadFromSupabase)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
 
   // Carrega RDOs do Supabase (gravados pelo Router WhatsApp) + refresh 30s
   useEffect(() => {
-    loadFromSupabase()
-    const t = setInterval(loadFromSupabase, 30000)
+    loadFromSupabase(activeProjectId)
+    const t = setInterval(() => loadFromSupabase(activeProjectId), 30000)
     return () => clearInterval(t)
-  }, [loadFromSupabase])
+  }, [loadFromSupabase, activeProjectId])
 
   function renderPanel() {
     switch (activeTab) {

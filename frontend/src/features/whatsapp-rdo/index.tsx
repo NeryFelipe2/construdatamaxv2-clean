@@ -3,7 +3,8 @@ import {
   MessageSquare, Phone, Send, Trash2, Plus, RefreshCw,
   CheckCircle, Clock, AlertTriangle, Users,
 } from "lucide-react";
-import { apiWhatsappNumeros, apiWhatsappCadastrar, apiWhatsappDisparar, apiRdoList } from "@/lib/api";
+import { apiWhatsappNumeros, apiWhatsappCadastrar, apiWhatsappDisparar, apiRdoList, apiProjetoContatos, apiProjetoRdos } from "@/lib/api";
+import { useProjectContext } from "@/store/projectContext";
 
 type NumeroWA = { id: string; telefone: string; nome: string; funcao: string; ns_id: number };
 type RdoItem = Record<string, unknown>;
@@ -14,6 +15,7 @@ export function WhatsAppRdoPage() {
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
   const [tab, setTab] = useState<"numeros" | "rdos" | "config">("numeros");
+  const activeProjectId = useProjectContext((s) => s.activeProjectId);
 
   // Form state
   const [novoTel, setNovoTel] = useState("");
@@ -25,16 +27,25 @@ export function WhatsAppRdoPage() {
     setLoading(true);
     try {
       const [nR, rR] = await Promise.allSettled([
-        apiWhatsappNumeros(),
-        apiRdoList(),
+        activeProjectId ? apiProjetoContatos(activeProjectId) : apiWhatsappNumeros(),
+        activeProjectId ? apiProjetoRdos(activeProjectId) : apiRdoList(),
       ]);
-      if (nR.status === "fulfilled") setNumeros((nR.value as any).items ?? []);
+      if (nR.status === "fulfilled") {
+        const items = ((nR.value as any).items ?? []).map((c: any) => ({
+          id: String(c.id),
+          telefone: c.telefone ?? c.telefone_whatsapp ?? "",
+          nome: c.nome ?? "-",
+          funcao: c.funcao ?? c.cargo ?? c.alcada ?? "responsavel",
+          ns_id: Number(c.ns_id ?? 1),
+        }));
+        setNumeros(items);
+      }
       if (rR.status === "fulfilled") setRdos(((rR.value as any).items ?? []).slice(0, 20));
     } catch { /* ignore */ }
     setLoading(false);
   }
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => { refresh(); }, [activeProjectId]);
 
   async function handleAdd() {
     if (!novoTel || !novoNome) { setMsg("Preencha telefone e nome"); return; }

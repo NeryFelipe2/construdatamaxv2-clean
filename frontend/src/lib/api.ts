@@ -46,6 +46,7 @@ async function patch<T>(path: string, body?: unknown): Promise<T> {
 
 // ─── Health ──────────────────────────────────────────────────────────────────
 export const apiHealth = () => get<{ ok: boolean; app: string; display_name: string }>("/health");
+export const apiHealthIntegrations = () => get<Record<string, unknown>>("/api/health/integrations");
 
 // ─── Dashboard / Gestao ──────────────────────────────────────────────────────
 export const apiDashboard = (nucleo?: string) =>
@@ -96,6 +97,31 @@ export const apiRdoClose = (id: number) =>
   patch<Record<string, unknown>>(`/api/rdo/${id}/fechar`);
 
 export const apiRdoPdf = (id: number) => url(`/api/rdo/${id}/pdf`);
+
+// ─── Integracao Total / Render facade ───────────────────────────────────────
+export const apiProjetos = () =>
+  get<{ items: Array<Record<string, unknown>>; source?: string }>("/api/projetos");
+
+export const apiProjetoDashboard = (projectId: string) =>
+  get<Record<string, unknown>>(`/api/projetos/${projectId}/dashboard`);
+
+export const apiProjetoRdos = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/rdos`);
+
+export const apiProjetoCriarRdo = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/rdos`, payload);
+
+export const apiProjetoTarefas = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/tarefas`);
+
+export const apiProjetoContatos = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/contatos`);
+
+export const apiProjetoTorre = (projectId: string) =>
+  get<Record<string, unknown>>(`/api/projetos/${projectId}/torre`);
+
+export const apiProjetoGestao360 = (projectId: string) =>
+  get<Record<string, unknown>>(`/api/projetos/${projectId}/gestao360`);
 
 // ─── Cadastro / GeoJSON ──────────────────────────────────────────────────────
 export const apiGeoJson = (nucleo?: string) =>

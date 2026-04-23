@@ -5,37 +5,27 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
-from supabase import create_client
 
+from api.supabase_client import get_supabase
 from campo.rdo_engine import RDOEngine
 
 router = APIRouter(tags=["rdo"])
 engine = RDOEngine()
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", os.environ.get("VITE_SUPABASE_URL", ""))
-SUPABASE_KEY = os.environ.get(
-    "SUPABASE_SERVICE_ROLE_KEY",
-    os.environ.get(
-        "SUPABASE_SERVICE_KEY",
-        os.environ.get("SUPABASE_ANON_KEY", os.environ.get("VITE_SUPABASE_ANON_KEY", os.environ.get("SUPABASE_KEY", ""))),
-    ),
-)
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if (SUPABASE_URL and SUPABASE_KEY) else None
+supabase = get_supabase()
 
 
 @router.get("/api/rdo")
 def api_listar_rdo(nucleo: str = Query(default="")):
-    # 1) Origem principal local do engine
-    local_items = engine.listar_rdos(nucleo=nucleo)
-    if local_items:
-        return {"items": local_items}
-
-    # 2) Fallback Supabase: tabela rdos
+    # 1) Origem principal em producao: Supabase canonico
     if supabase:
         try:
             q = supabase.table("rdos").select("*").order("created_at", desc=True)
             if nucleo:
                 q = q.eq("nucleo", nucleo)
+            project_id = os.environ.get("DEFAULT_PROJECT_ID", "")
+            if project_id and not nucleo:
+                q = q.eq("projeto_id", project_id)
             res = q.execute()
             if res.data:
                 return {"items": res.data}
@@ -52,13 +42,23 @@ def api_listar_rdo(nucleo: str = Query(default="")):
         except Exception:
             pass
 
-    return {"items": []}
+    # 2) Fallback local do engine para ambiente offline
+    return {"items": engine.listar_rdos(nucleo=nucleo)}
 
 
 @router.post("/api/rdo")
 def api_criar_rdo(payload: dict):
     if not payload.get("data"):
         raise HTTPException(status_code=400, detail="Campo 'data' obrigatorio")
+    if payload.get("projeto_id") and supabase:
+        row = dict(payload)
+        row.setdefault("origem", "web")
+        row.setdefault("status", "recebido")
+        try:
+            res = supabase.table("rdos").insert(row).execute()
+            return (res.data or [row])[0]
+        except Exception:
+            pass
     return engine.criar_rdo_completo(payload)
 
 

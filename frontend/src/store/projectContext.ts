@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase, type DbProjeto, type DbFrente } from '@/lib/supabase'
+import { apiProjetos } from '@/lib/api'
 
 const STORAGE_KEY = 'cdata-active-project'
 
@@ -158,8 +159,25 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
   },
 
   fetchProjetos: async () => {
-    if (!supabase) return
     set({ loading: true })
+    try {
+      const api = await apiProjetos()
+      const rows = (api.items ?? []) as unknown as DbProjeto[]
+      if (rows.length > 0) {
+        set({ projetos: rows })
+        const active = get().activeProjectId
+        const existsInData = active && rows.find((p) => p.id === active)
+        if (!active || !existsInData) get().setActiveProject(rows[0].id)
+        set({ loading: false })
+        return
+      }
+    } catch {
+      // fallback Supabase/local abaixo
+    }
+    if (!supabase) {
+      set({ loading: false })
+      return
+    }
     try {
       const { data } = await supabase.from('projetos').select('*').order('created_at', { ascending: false })
       if (data && data.length > 0) {

@@ -5,7 +5,6 @@ import {
   ArrowUpRight, RefreshCw, Database, Wifi, WifiOff, Loader2
 } from 'lucide-react'
 import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
-import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseGestao } from '@/hooks/useSupabaseGestao'
 import { ControleFinanceiroPanel } from './components/ControleFinanceiroPanel'
 

@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useProjectContext } from '@/store/projectContext'
+import { useTorreStore } from '@/store/torreDeControleStore'
 import { ObrasListPanel }  from './components/ObrasListPanel'
 import { ObrasMap }         from './components/ObrasMap'
 import { ObraDetailPanel }  from './components/ObraDetailPanel'
@@ -15,6 +17,13 @@ const MOBILE_TABS: { key: MobileTab; label: string }[] = [
 
 export function TorreDeControlePage() {
   const [mobileTab, setMobileTab] = useState<MobileTab>('lista')
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const projetos = useProjectContext((s) => s.projetos)
+  const loadFromProjectContext = useTorreStore((s) => s.loadFromProjectContext)
+
+  useEffect(() => {
+    loadFromProjectContext()
+  }, [loadFromProjectContext, activeProjectId, projetos.length])
 
   return (
     <>
