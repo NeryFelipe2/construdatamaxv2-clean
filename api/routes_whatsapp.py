@@ -43,6 +43,23 @@ def _normalize_phone(value: str | None) -> str | None:
     return digits or None
 
 
+def _phone_variants(value: str | None) -> list[str]:
+    digits = _normalize_phone(value)
+    if not digits:
+        return []
+
+    variants = [digits]
+    if digits.startswith("55"):
+        national = digits[2:]
+        if len(national) == 11 and national[2] == "9":
+            variants.append("55" + national[:2] + national[3:])
+        elif len(national) == 10:
+            variants.append("55" + national[:2] + "9" + national[2:])
+
+    seen: set[str] = set()
+    return [phone for phone in variants if not (phone in seen or seen.add(phone))]
+
+
 def _menu_text(nome: str | None = None) -> str:
     saudacao = f"Ola {nome}!" if nome else "Ola!"
     return (
@@ -224,6 +241,10 @@ def _command_text(option: str, project_id: str | None, nome: str | None = None) 
 
 
 def _send_evolution_text(telefone: str, mensagem: str) -> str:
+    enabled = os.environ.get("WHATSAPP_SEND_ENABLED", "false").strip().lower()
+    if enabled not in {"1", "true", "yes", "on"}:
+        return "disabled"
+
     evo_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
     evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
     evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
@@ -243,25 +264,29 @@ def _send_evolution_text(telefone: str, mensagem: str) -> str:
         return f"error:{exc}"
 
 
-def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | None]:
-    phone = _normalize_phone(telefone)
-    if not phone or not supabase:
-        return None, None
+def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | None, str | None]:
+    phones = _phone_variants(telefone)
+    if not phones or not supabase:
+        return None, None, None
     try:
         res = (
             supabase.table("contatos")
             .select("nome,projeto_id,telefone_whatsapp")
-            .eq("telefone_whatsapp", phone)
+            .in_("telefone_whatsapp", phones)
             .eq("ativo", True)
             .limit(1)
             .execute()
         )
         if res.data:
             contact = res.data[0]
-            return _canonical_project_id(contact.get("projeto_id")), contact.get("nome")
+            return (
+                _canonical_project_id(contact.get("projeto_id")),
+                contact.get("nome"),
+                _normalize_phone(contact.get("telefone_whatsapp")),
+            )
     except Exception:
         pass
-    return None, None
+    return None, None, None
 
 
 def _dedupe_numeros(items: list[dict]) -> list[dict]:
@@ -484,9 +509,18 @@ def receber_webhook(payload: dict):
 
     texto, telefone = _texto_payload(payload)
     telefone = _normalize_phone(telefone)
-    contact_project_id, contact_name = _contact_project_for_phone(telefone)
-    projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id or os.environ.get("DEFAULT_PROJECT_ID"))
+    contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
+    projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
+
+    if telefone and not registered_phone:
+        return {
+            "ok": True,
+            "ignored": "unregistered_phone",
+            "telefone": telefone,
+            "delivery": "blocked",
+        }
+
     texto_normalizado = texto.lower().strip()
 
     if texto_normalizado in {"menu", "oi", "olá", "ola"}:
