@@ -158,6 +158,27 @@ def configure_local_webhook() -> None:
     response.raise_for_status()
 
 
+def configure_local_settings() -> None:
+    evo_key = _pick_evolution_key(["construdata2026", "RkEvolution2026!ApiKey", "TROQUE_ESTA_API_KEY_EVOLUTION"])
+    payload = {
+        "rejectCall": False,
+        "msgCall": "",
+        "groupsIgnore": False,
+        "alwaysOnline": False,
+        "readMessages": False,
+        "readStatus": False,
+        "syncFullHistory": False,
+        "wavoipToken": "",
+    }
+    response = requests.post(
+        f"{LOCAL_EVOLUTION}/settings/set/construdata-felipe",
+        headers={"apikey": evo_key},
+        json=payload,
+        timeout=20,
+    )
+    response.raise_for_status()
+
+
 def _webhook_payload(message_text: str, remote_jid: str = "5561981846325@s.whatsapp.net") -> dict:
     payload = {
         "event": "MESSAGES_UPSERT",
@@ -177,9 +198,9 @@ def _call_webhook(payload: dict) -> dict:
 
 def local_logic_test() -> dict:
     scenarios = {
-        "menu": "#menu",
-        "opcao_1": "#1",
-        "rdo": "#@rdo 1: 120 2: 110 3: 1500 4: 1700 observacao teste automatizado",
+        "menu": "construdata teste",
+        "opcao_1": "construdata teste 1",
+        "rdo": "construdata teste @rdo 1: 120 2: 110 3: 1500 4: 1700 observacao teste automatizado",
     }
     return {name: _call_webhook(_webhook_payload(message_text)) for name, message_text in scenarios.items()}
 
@@ -204,6 +225,7 @@ def summary() -> dict:
 def cmd_start() -> None:
     ensure_docker_stack()
     start_bridge()
+    configure_local_settings()
     configure_local_webhook()
     print(json.dumps({"ok": True, "stage": "started", **summary()}, ensure_ascii=False, indent=2))
 

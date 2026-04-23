@@ -449,9 +449,9 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
         return None
 
     stripped = str(texto or "").strip()
+    lowered = stripped.lower()
     remote_jid = _remote_jid(payload) or ""
     if remote_jid.endswith("@g.us"):
-        lowered = stripped.lower()
         if not lowered.startswith("#bot "):
             return None
         command = stripped[5:].strip()
@@ -460,6 +460,13 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
     remote_phone = _remote_phone(payload)
     if not remote_phone or remote_phone not in _self_test_phones():
         return None
+
+    if lowered == "construdata teste":
+        return "menu"
+
+    if lowered.startswith("construdata teste "):
+        command = stripped[len("construdata teste ") :].strip()
+        return command or "menu"
 
     if not stripped.startswith("#"):
         return None
