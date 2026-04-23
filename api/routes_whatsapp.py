@@ -10,13 +10,119 @@ from pathlib import Path
 import httpx
 from fastapi import APIRouter, HTTPException, Query
 
-from api.supabase_client import get_supabase
+from api.supabase_client import PROJECT_ID_ALIASES, get_supabase
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = REPO_ROOT / "data" / "whatsapp_numeros.json"
 
 router = APIRouter(tags=["whatsapp"], prefix="/api/whatsapp")
 
 supabase = get_supabase()
+
+
+def _canonical_project_id(project_id: str | None) -> str | None:
+    if not project_id:
+        return project_id
+    return PROJECT_ID_ALIASES.get(str(project_id), str(project_id))
+
+
+def _related_project_ids(project_id: str | None) -> list[str]:
+    canonical = _canonical_project_id(project_id)
+    if not canonical:
+        return []
+    ids = [canonical]
+    ids.extend(alias for alias, target in PROJECT_ID_ALIASES.items() if target == canonical)
+    if project_id and str(project_id) not in ids:
+        ids.append(str(project_id))
+    return ids
+
+
+def _normalize_phone(value: str | None) -> str | None:
+    if not value:
+        return None
+    digits = re.sub(r"\D", "", str(value))
+    return digits or None
+
+
+def _menu_text(nome: str | None = None) -> str:
+    saudacao = f"Ola {nome}!" if nome else "Ola!"
+    return (
+        "🤖 ConstruDataMax Gestao 360\n"
+        f"{saudacao}\n\n"
+        "📊 Opcoes de Comando:\n"
+        "1️⃣ Status RDO Hoje\n"
+        "2️⃣ Equipe e Contatos\n"
+        "3️⃣ Projetos Ativos\n"
+        "4️⃣ Dashboard Consolidado\n"
+        "5️⃣ Reenviar Cobranca (Alerta Geral)\n"
+        "6️⃣ Falar com Inteligencia Artificial\n"
+        "7️⃣ Cobrar RDO (Dispara formulario)\n"
+        "8️⃣ Meu RDO Diretor (Supervisao)\n"
+        "9️⃣ Lembrar Tarefas (Cobra diretores)\n"
+        "🔟 Criar Tarefas (Guia de Uso)\n"
+        "1️⃣1️⃣ Plano de Custos (Financeiro)\n"
+        "1️⃣2️⃣ Tarefas Consorcio (Delega por setor)\n"
+        "1️⃣3️⃣ Enviar Tarefa por Pessoa\n"
+        "1️⃣4️⃣ Enviar Tarefa a Diretoria\n"
+        "1️⃣5️⃣ Enviar Tarefa aos Engenheiros\n"
+        "1️⃣6️⃣ Enviar Tarefa por Setor\n\n"
+        "▶️ Digite o numero da opcao (ex: 1) ou use os @comandos diretamente.\n"
+        "🔗 https://construdatamaxv2-clean.vercel.app\n"
+        "Construdata Gestao 360 powered by FCN-Construcoes e Saneamento"
+    )
+
+
+def _send_evolution_text(telefone: str, mensagem: str) -> str:
+    evo_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
+    evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
+    evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
+    if not evo_url:
+        return "not_configured"
+    try:
+        endpoint = f"{evo_url}/message/sendText/{evo_instance}"
+        headers = {"apikey": evo_key} if evo_key else {}
+        resp = httpx.post(
+            endpoint,
+            json={"number": _normalize_phone(telefone) or telefone, "text": mensagem},
+            headers=headers,
+            timeout=12.0,
+        )
+        return "sent" if resp.status_code < 400 else f"error_{resp.status_code}"
+    except Exception as exc:
+        return f"error:{exc}"
+
+
+def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | None]:
+    phone = _normalize_phone(telefone)
+    if not phone or not supabase:
+        return None, None
+    try:
+        res = (
+            supabase.table("contatos")
+            .select("nome,projeto_id,telefone_whatsapp")
+            .eq("telefone_whatsapp", phone)
+            .eq("ativo", True)
+            .limit(1)
+            .execute()
+        )
+        if res.data:
+            contact = res.data[0]
+            return _canonical_project_id(contact.get("projeto_id")), contact.get("nome")
+    except Exception:
+        pass
+    return None, None
+
+
+def _dedupe_numeros(items: list[dict]) -> list[dict]:
+    by_phone: dict[str, dict] = {}
+    for item in items:
+        phone = _normalize_phone(item.get("telefone"))
+        if not phone or str(item.get("telefone", "")).startswith("sem-telefone"):
+            continue
+        item = {**item, "telefone": phone, "projeto_id": _canonical_project_id(item.get("projeto_id"))}
+        existing = by_phone.get(phone)
+        if not existing or len(str(item.get("funcao") or "")) > len(str(existing.get("funcao") or "")):
+            by_phone[phone] = item
+    return list(by_phone.values())
 
 
 def _load(path: Path) -> list:
@@ -96,7 +202,7 @@ def listar_numeros(ns_id: int | None = Query(default=None), project_id: str | No
         try:
             query = supabase.table("contatos").select("id,nome,cargo,telefone_whatsapp,projeto_id,alcada,setor").eq("ativo", True)
             if project_id:
-                query = query.eq("projeto_id", project_id)
+                query = query.in_("projeto_id", _related_project_ids(project_id))
             res = query.execute()
             supa_items = [
                 {
@@ -114,6 +220,7 @@ def listar_numeros(ns_id: int | None = Query(default=None), project_id: str | No
                 items = supa_items
         except Exception:
             pass
+    items = _dedupe_numeros(items)
     if ns_id is not None:
         items = [x for x in items if x.get("ns_id") == ns_id]
     return {"items": items}
@@ -207,23 +314,7 @@ def enviar_mensagem(payload: dict):
         except Exception as exc:
             raise HTTPException(status_code=500, detail=f"Erro ao salvar no Supabase: {exc}") from exc
 
-    delivery = "not_configured"
-    evo_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
-    evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
-    evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
-    if evo_url:
-        try:
-            endpoint = f"{evo_url}/message/sendText/{evo_instance}"
-            headers = {"apikey": evo_key} if evo_key else {}
-            resp = httpx.post(
-                endpoint,
-                json={"number": telefone, "text": mensagem},
-                headers=headers,
-                timeout=12.0,
-            )
-            delivery = "sent" if resp.status_code < 400 else f"error_{resp.status_code}"
-        except Exception as exc:
-            delivery = f"error:{exc}"
+    delivery = _send_evolution_text(telefone, mensagem)
 
     return {"ok": True, "telefone": telefone, "campos_rdo_inseridos": campos_rdo or None, "banco": "Supabase", "delivery": delivery}
 
@@ -231,18 +322,25 @@ def enviar_mensagem(payload: dict):
 @router.post("/webhook")
 def receber_webhook(payload: dict):
     texto, telefone = _texto_payload(payload)
-    projeto_id = payload.get("projeto_id") or os.environ.get("DEFAULT_PROJECT_ID")
+    telefone = _normalize_phone(telefone)
+    contact_project_id, contact_name = _contact_project_for_phone(telefone)
+    projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id or os.environ.get("DEFAULT_PROJECT_ID"))
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
+    texto_normalizado = texto.lower().strip()
 
     if texto.lower() in {"menu", "oi", "olá", "ola"}:
         resposta = "menu"
-    elif "@rdo" in texto.lower() or texto.strip().startswith(("1", "7", "8")):
+        mensagem = _menu_text(payload.get("nome") or contact_name)
+        delivery = _send_evolution_text(telefone or "", mensagem) if telefone else "not_configured"
+        _log_whatsapp("out", {"tipo": "menu", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
+        return {"ok": True, "route": resposta, "reply": mensagem, "delivery": delivery}
+    elif "@rdo" in texto_normalizado or texto.strip().startswith(("1", "7", "8")):
         resposta = "rdo"
     else:
         resposta = "registrado"
 
     campos_rdo = parse_rdo_whatsapp(texto)
-    if supabase and (campos_rdo or "@rdo" in texto.lower()):
+    if supabase and (campos_rdo or "@rdo" in texto_normalizado):
         row = {
             "projeto_id": projeto_id,
             "data": datetime.utcnow().date().isoformat(),
@@ -255,8 +353,10 @@ def receber_webhook(payload: dict):
         row.update(campos_rdo)
         try:
             supabase.table("rdos").insert(row).execute()
-            _log_whatsapp("out", {"tipo": "confirmacao_rdo", "status": "enfileirado"}, telefone=telefone, mensagem="OK, RDO recebido e registrado no ConstruData.", projeto_id=projeto_id)
-            return {"ok": True, "route": "rdo", "reply": "OK, RDO recebido e registrado no ConstruData."}
+            confirmacao = "OK, RDO recebido e registrado no ConstruData."
+            delivery = _send_evolution_text(telefone or "", confirmacao) if telefone else "not_configured"
+            _log_whatsapp("out", {"tipo": "confirmacao_rdo", "status": delivery}, telefone=telefone, mensagem=confirmacao, projeto_id=projeto_id)
+            return {"ok": True, "route": "rdo", "reply": confirmacao, "delivery": delivery}
         except Exception as exc:
             raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {exc}") from exc
 

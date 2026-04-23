@@ -25,10 +25,24 @@ TABLES_CANONICAS = [
     "workflow_events",
 ]
 
+PROJECT_ID_ALIASES: dict[str, str] = {
+    "c2bf8fda-1111-4444-8888-aaaaaaaaaaaa": "c2bf8fda-b2e0-4bc1-9535-4891d596ea10",
+    "d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb": "d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8",
+}
+
+CANONICAL_PROJECT_IDS = [
+    "c2bf8fda-b2e0-4bc1-9535-4891d596ea10",
+    "f3c6645b-347f-4382-b9c5-d103c27ec511",
+    "abe7f66c-004b-4bb5-a245-6be67debd9f7",
+    "ec112c9a-1669-4287-8079-526d6940ce82",
+    "2a28beec-b1f8-4b0c-8416-d0710bb35d9d",
+    "d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8",
+]
+
 
 PROJETOS_OFICIAIS: list[dict[str, Any]] = [
     {
-        "id": "c2bf8fda-1111-4444-8888-aaaaaaaaaaaa",
+        "id": "c2bf8fda-b2e0-4bc1-9535-4891d596ea10",
         "nome": "Tatui - RK",
         "contrato": "CT-TATUI-2026",
         "cidade": "Tatui",
@@ -83,7 +97,7 @@ PROJETOS_OFICIAIS: list[dict[str, Any]] = [
         "responsavel_telefone": "5561999996252",
     },
     {
-        "id": "d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb",
+        "id": "d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8",
         "nome": "RK SUB Empreita",
         "contrato": "RK-SUB-2026",
         "cidade": "Santos",
@@ -131,4 +145,3 @@ def table_status(client: Client | None, table: str) -> dict[str, Any]:
         return {"ok": True}
     except Exception as exc:
         return {"ok": False, "error": str(exc)}
-

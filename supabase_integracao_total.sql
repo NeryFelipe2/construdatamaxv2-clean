@@ -313,12 +313,12 @@ create table if not exists public.workflow_events (
 insert into public.projetos
   (id, nome, contrato, cidade, cliente, tipo, data_inicio, data_fim, orcamento_total, status, responsavel_nome, responsavel_telefone)
 values
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Tatui - RK', 'CT-TATUI-2026', 'Tatui', 'RK', 'esgoto', '2026-04-01', '2027-12-31', 18000000, 'ativo', 'Felipe Nery', '5561981846325'),
+  ('c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Tatui - RK', 'CT-TATUI-2026', 'Tatui', 'RK', 'esgoto', '2026-04-01', '2027-12-31', 18000000, 'ativo', 'Felipe Nery', '5561981846325'),
   ('f3c6645b-347f-4382-b9c5-d103c27ec511', 'Osasco - Rua Cuiaba', 'CT-CLU-OSC-2026', 'Osasco', 'RK', 'esgoto', '2026-04-01', '2027-12-31', 28000000, 'ativo', 'Mateus Santos', '5561991015639'),
   ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Consorcio Se Liga na Rede - SLNR Santos', 'CT-11481051', 'Santos', 'Consorcio', 'esgoto', '2026-04-01', '2027-12-31', 45000000, 'ativo', 'Felipe Nery', '5561981846325'),
   ('ec112c9a-1669-4287-8079-526d6940ce82', 'Pardinho - Consorcio Itapetininga', 'PARD-2026', 'Pardinho', 'Consorcio Itapetininga', 'esgoto', '2026-04-01', '2027-12-31', 32000000, 'ativo', 'Fabio', '5537999000001'),
   ('2a28beec-b1f8-4b0c-8416-d0710bb35d9d', 'ConstruData Brasilia', 'CD-BSB-2026', 'Brasilia', 'ConstruData', 'esgoto', '2026-04-01', '2027-12-31', 18750000, 'ativo', 'Joao', '5561999996252'),
-  ('d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb', 'RK SUB Empreita', 'RK-SUB-2026', 'Santos', 'RK', 'esgoto', '2026-04-01', '2027-12-31', 23000000, 'ativo', 'Felipe Nery', '5561981846325')
+  ('d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8', 'RK SUB Empreita', 'RK-SUB-2026', 'Santos', 'RK', 'esgoto', '2026-04-01', '2027-12-31', 23000000, 'ativo', 'Felipe Nery', '5561981846325')
 on conflict (id) do update set
   nome = excluded.nome,
   contrato = excluded.contrato,
@@ -335,14 +335,14 @@ on conflict (id) do update set
 
 insert into public.frentes (id, projeto_id, nome, setor, tipo_rede, extensao_total, pvs_total, status)
 values
-  ('11111111-1111-4111-8111-111111111111', 'c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Frente Tatui Principal', 'Campo', 'esgoto', 7200, 40, 'ativa'),
+  ('11111111-1111-4111-8111-111111111111', 'c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Frente Tatui Principal', 'Campo', 'esgoto', 7200, 40, 'ativa'),
   ('22222222-2222-4222-8222-222222222222', 'f3c6645b-347f-4382-b9c5-d103c27ec511', 'Rua Cuiaba / CLU', 'Osasco', 'esgoto', 6800, 48, 'ativa'),
   ('33333333-3333-4333-8333-333333333333', 'abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Sala Tecnica', 'Tecnico', 'esgoto', 26600, 185, 'ativa'),
   ('44444444-4444-4444-8444-444444444444', 'abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Planejamento', 'Planejamento', 'esgoto', 0, 0, 'ativa'),
   ('55555555-5555-4555-8555-555555555555', 'abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Producao', 'Operacional', 'esgoto', 12500, 85, 'ativa'),
   ('66666666-6666-4666-8666-666666666666', 'ec112c9a-1669-4287-8079-526d6940ce82', 'Frente Rede Principal', 'Centro Pardinho', 'esgoto', 9500, 68, 'ativa'),
   ('77777777-7777-4777-8777-777777777777', '2a28beec-b1f8-4b0c-8416-d0710bb35d9d', 'Frente Principal', 'Centro', 'esgoto', 5000, 30, 'ativa'),
-  ('88888888-8888-4888-8888-888888888888', 'd4e5f6a7-1111-2222-3333-bbbbbbbbbbbb', 'Subempreita Santos', 'Santos', 'esgoto', 6400, 39, 'ativa')
+  ('88888888-8888-4888-8888-888888888888', 'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8', 'Subempreita Santos', 'Santos', 'esgoto', 6400, 39, 'ativa')
 on conflict (id) do update set
   projeto_id = excluded.projeto_id,
   nome = excluded.nome,
@@ -354,20 +354,20 @@ on conflict (id) do update set
 
 insert into public.contatos (projeto_id, nome, cargo, setor, telefone_whatsapp, alcada, recebe_cobranca, recebe_info, ativo)
 values
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Felipe Nery', 'Diretor', 'Diretoria', '5561981846325', 'diretor', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Luiz Fernando', 'Diretor', 'Diretoria', 'sem-telefone-luiz', 'diretor', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Renato', 'Diretor Financeiro', 'Diretoria', 'sem-telefone-renato', 'diretor', true, true, true),
+  ('c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Felipe Nery', 'Diretor', 'Diretoria', '5561981846325', 'diretor', true, true, true),
+  ('c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Luiz Fernando', 'Diretor', 'Diretoria', '5537999425397', 'diretor', true, true, true),
+  ('c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Renato', 'Diretor Financeiro', 'Diretoria', '5528999154319', 'diretor', true, true, true),
   ('f3c6645b-347f-4382-b9c5-d103c27ec511', 'Mateus Santos', 'Engenheiro', 'Osasco', '5561991015639', 'engenheiro_obra', true, true, true),
-  ('c2bf8fda-1111-4444-8888-aaaaaaaaaaaa', 'Icaro Atila', 'Engenheiro', 'Tatui', 'sem-telefone-icaro', 'engenheiro_obra', true, true, true),
-  ('d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb', 'Igor Max', 'Engenheiro', 'RK Santos', '5531985898482', 'engenheiro_obra', true, true, true),
+  ('c2bf8fda-b2e0-4bc1-9535-4891d596ea10', 'Icaro Atila', 'Engenheiro', 'Tatui', '5537998268576', 'engenheiro_obra', true, true, true),
+  ('d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8', 'Igor Max', 'Engenheiro', 'RK Santos', '5531985898482', 'engenheiro_obra', true, true, true),
   ('2a28beec-b1f8-4b0c-8416-d0710bb35d9d', 'Joao', 'Diretor Brasilia', 'Brasilia', '5561999996252', 'diretor', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Fabrizzio', 'Gerente/Diretor', 'Consorcio / SLNR', 'sem-telefone-fabrizzio', 'info', false, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Junior', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-junior', 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Valdeans', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-valdeans', 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Gabriel', 'Sala Tecnica', 'Consorcio / SLNR', 'sem-telefone-gabriel', 'sala_tecnica', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Vinicius', 'Sala Tecnica', 'Consorcio / SLNR', 'sem-telefone-vinicius', 'sala_tecnica', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Veronica', 'Planejamento', 'Consorcio / SLNR', 'sem-telefone-veronica', 'planejamento', true, true, true),
-  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Jose Marcio', 'Gerente Producao', 'Consorcio / SLNR', 'sem-telefone-jose-marcio', 'producao', true, true, true)
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Fabrizzio', 'Gerente/Diretor', 'Consorcio / SLNR', '5574999076534', 'info', false, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Junior', 'Planejamento', 'Consorcio / SLNR', '5511986012223', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Valdeans', 'Planejamento', 'Consorcio / SLNR', '5599991392763', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Gabriel', 'Sala Tecnica', 'Consorcio / SLNR', '5513991995918', 'sala_tecnica', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Vinicius', 'Sala Tecnica', 'Consorcio / SLNR', '5513978216285', 'sala_tecnica', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Veronica', 'Planejamento', 'Consorcio / SLNR', '5513997733121', 'planejamento', true, true, true),
+  ('abe7f66c-004b-4bb5-a245-6be67debd9f7', 'Jose Marcio', 'Gerente Producao', 'Consorcio / SLNR', '5511941816005', 'producao', true, true, true)
 on conflict do nothing;
 
 create index if not exists idx_frentes_projeto_id on public.frentes(projeto_id);

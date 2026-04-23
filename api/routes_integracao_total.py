@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+import os
 from datetime import date, datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
-from api.supabase_client import PROJETOS_OFICIAIS, TABLES_CANONICAS, get_supabase, supabase_config, table_status
+from api.supabase_client import (
+    CANONICAL_PROJECT_IDS,
+    PROJECT_ID_ALIASES,
+    PROJETOS_OFICIAIS,
+    TABLES_CANONICAS,
+    get_supabase,
+    supabase_config,
+    table_status,
+)
 
 router = APIRouter(tags=["integracao-total"])
 
@@ -15,25 +24,88 @@ def _items(res: Any) -> list[dict[str, Any]]:
     return data if isinstance(data, list) else []
 
 
+def _canonical_project_id(project_id: str | None) -> str | None:
+    if not project_id:
+        return project_id
+    return PROJECT_ID_ALIASES.get(str(project_id), str(project_id))
+
+
+def _related_project_ids(project_id: str | None) -> list[str]:
+    canonical = _canonical_project_id(project_id)
+    if not canonical:
+        return []
+    ids = [canonical]
+    ids.extend(alias for alias, target in PROJECT_ID_ALIASES.items() if target == canonical)
+    if project_id and str(project_id) not in ids:
+        ids.append(str(project_id))
+    return ids
+
+
+def _canonical_project_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    official_by_id = {str(p.get("id")): dict(p) for p in PROJETOS_OFICIAIS}
+    by_id: dict[str, dict[str, Any]] = {project_id: dict(project) for project_id, project in official_by_id.items()}
+
+    for row in rows:
+        row_id = str(row.get("id") or "")
+        canonical_id = _canonical_project_id(row_id)
+        if not canonical_id:
+            continue
+        if canonical_id in official_by_id:
+            merged = {**official_by_id[canonical_id], **{k: v for k, v in row.items() if v not in (None, "")}}
+            merged["id"] = canonical_id
+            # Keep the operational names stable even if legacy rows used older labels.
+            merged["nome"] = official_by_id[canonical_id].get("nome") or merged.get("nome")
+            by_id[canonical_id] = merged
+        elif canonical_id not in by_id:
+            by_id[canonical_id] = {**row, "id": canonical_id}
+
+    ordered = [by_id[project_id] for project_id in CANONICAL_PROJECT_IDS if project_id in by_id]
+    extras = [row for project_id, row in by_id.items() if project_id not in CANONICAL_PROJECT_IDS]
+    return ordered + extras
+
+
+def _dedupe(rows: list[dict[str, Any]], *keys: str) -> list[dict[str, Any]]:
+    seen: set[tuple[Any, ...]] = set()
+    result: list[dict[str, Any]] = []
+    for row in rows:
+        key = tuple(row.get(k) for k in keys) if keys else (row.get("id"),)
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(row)
+    return result
+
+
 def _select(table: str, project_id: str | None = None, limit: int = 200) -> list[dict[str, Any]]:
     client = get_supabase()
     if client is None:
         return []
     query = client.table(table).select("*").limit(limit)
     if project_id:
+        ids = _related_project_ids(project_id)
         if table == "rdos":
-            query = query.or_(f"projeto_id.eq.{project_id},project_id.eq.{project_id}")
-        else:
-            query = query.eq("projeto_id", project_id)
+            id_filter = ",".join(ids)
+            query = query.or_(f"projeto_id.in.({id_filter}),project_id.in.({id_filter})")
+        elif table != "projetos":
+            query = query.in_("projeto_id", ids)
     try:
-        return _items(query.execute())
+        rows = _items(query.execute())
+        if project_id and table == "rdos":
+            ids = set(_related_project_ids(project_id))
+            return [
+                row
+                for row in rows
+                if str(row.get("projeto_id") or row.get("project_id") or "") in ids
+            ]
+        return rows
     except Exception:
         return []
 
 
 def _project_or_404(project_id: str) -> dict[str, Any]:
-    for projeto in _select("projetos", limit=500) or PROJETOS_OFICIAIS:
-        if str(projeto.get("id")) == project_id:
+    canonical_id = _canonical_project_id(project_id)
+    for projeto in _canonical_project_rows(_select("projetos", limit=500)):
+        if str(projeto.get("id")) == canonical_id:
             return projeto
     raise HTTPException(status_code=404, detail="Projeto nao encontrado")
 
@@ -58,13 +130,18 @@ def health_integrations():
     tables = {table: table_status(client, table) for table in TABLES_CANONICAS}
     ok_tables = sum(1 for status in tables.values() if status.get("ok"))
     status = "connected" if ok_tables == len(TABLES_CANONICAS) else "partial" if ok_tables else "local"
+    whatsapp_configured = bool(
+        os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL")
+    ) and bool(
+        os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY")
+    )
     return {
         "ok": status in {"connected", "partial"},
         "status": status,
         "supabase": supabase_config(),
         "tables": tables,
         "render_api": "connected",
-        "whatsapp": "configured" if client else "partial",
+        "whatsapp": "configured" if whatsapp_configured else "not_configured",
         "n8n": "external",
         "checked_at": datetime.utcnow().isoformat(),
     }
@@ -73,7 +150,7 @@ def health_integrations():
 @router.get("/api/projetos")
 def listar_projetos():
     rows = _select("projetos", limit=500)
-    return {"items": rows or PROJETOS_OFICIAIS, "source": "supabase" if rows else "fallback"}
+    return {"items": _canonical_project_rows(rows), "source": "supabase" if rows else "fallback"}
 
 
 @router.get("/api/projetos/{project_id}/rdos")
@@ -84,12 +161,14 @@ def listar_rdos_projeto(project_id: str):
 
 @router.post("/api/projetos/{project_id}/rdos", status_code=201)
 def criar_rdo_projeto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
     _project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
     row = dict(payload)
     row["projeto_id"] = project_id
+    row.setdefault("project_id", project_id)
     row.setdefault("data", date.today().isoformat())
     row.setdefault("origem", "web")
     row.setdefault("status", "recebido")
@@ -114,16 +193,26 @@ def listar_tarefas_projeto(project_id: str):
 
 @router.post("/api/projetos/{project_id}/tarefas", status_code=201)
 def criar_tarefa_projeto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
     _project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
     row = dict(payload)
     row["projeto_id"] = project_id
+    row.setdefault("project_id", project_id)
+    row.setdefault("titulo", row.get("descricao") or row.get("task") or "Tarefa sem titulo")
     row.setdefault("descricao", row.get("titulo") or row.get("task") or "Tarefa sem descricao")
     row.setdefault("status", "pendente")
     row.setdefault("prioridade", "normal")
     row.setdefault("origem", "api")
+    row.setdefault("responsavel_nome", row.get("responsavel") or row.get("responsavel_nome") or "Responsavel")
+    row.setdefault("responsavel", row.get("responsavel_nome"))
+    row.setdefault("responsavel_telefone", row.get("responsavel_phone") or row.get("responsavel_telefone") or "sem-telefone")
+    row.setdefault("responsavel_phone", row.get("responsavel_telefone"))
+    row.setdefault("delegante_nome", row.get("delegante") or row.get("delegante_nome") or "ConstruData")
+    row.setdefault("delegante", row.get("delegante_nome"))
+    row.setdefault("delegante_phone", row.get("delegante_telefone") or row.get("delegante_phone") or "sistema")
     try:
         created = client.table("tarefas").insert(row).execute()
         data = _items(created)
@@ -134,6 +223,7 @@ def criar_tarefa_projeto(project_id: str, payload: dict[str, Any]):
 
 @router.post("/api/projetos/{project_id}/lps-restricoes", status_code=201)
 def criar_lps_restricao(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
     _project_or_404(project_id)
     client = get_supabase()
     if client is None:
@@ -154,7 +244,7 @@ def criar_lps_restricao(project_id: str, payload: dict[str, Any]):
 @router.get("/api/projetos/{project_id}/contatos")
 def listar_contatos_projeto(project_id: str):
     _project_or_404(project_id)
-    return {"items": _select("contatos", project_id=project_id, limit=300)}
+    return {"items": _dedupe(_select("contatos", project_id=project_id, limit=300), "telefone_whatsapp", "nome")}
 
 
 @router.get("/api/projetos/{project_id}/dashboard")

@@ -24,12 +24,12 @@ export function selectFrentesDoProjetoAtivo(s: ProjectContextState): DbFrente[] 
   return s.frentes.filter((f) => f.projeto_id === s.activeProjectId)
 }
 
-const UUID_TATUI = 'c2bf8fda-1111-4444-8888-aaaaaaaaaaaa'
+const UUID_TATUI = 'c2bf8fda-b2e0-4bc1-9535-4891d596ea10'
 const UUID_OSASCO = 'f3c6645b-347f-4382-b9c5-d103c27ec511'
 const UUID_CONSORCIO = 'abe7f66c-004b-4bb5-a245-6be67debd9f7'
 const UUID_PARDINHO = 'ec112c9a-1669-4287-8079-526d6940ce82'
 const UUID_BRASILIA = '2a28beec-b1f8-4b0c-8416-d0710bb35d9d'
-const UUID_RKSUB = 'd4e5f6a7-1111-2222-3333-bbbbbbbbbbbb'
+const UUID_RKSUB = 'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8'
 
 const DEMO_PROJETOS: DbProjeto[] = [
   {
