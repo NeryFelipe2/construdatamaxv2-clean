@@ -384,6 +384,13 @@ def _remote_phone(payload: dict) -> str | None:
     return _normalize_phone(key.get("remoteJid") or payload.get("from") or payload.get("telefone"))
 
 
+def _remote_jid(payload: dict) -> str | None:
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    key = data.get("key") if isinstance(data.get("key"), dict) else {}
+    jid = key.get("remoteJid") or payload.get("from") or payload.get("telefone")
+    return str(jid) if jid else None
+
+
 def _self_test_phones() -> set[str]:
     raw = (
         os.environ.get("WHATSAPP_SELF_TEST_PHONES")
@@ -401,11 +408,19 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
     if not _is_from_me(payload):
         return None
 
+    stripped = str(texto or "").strip()
+    remote_jid = _remote_jid(payload) or ""
+    if remote_jid.endswith("@g.us"):
+        lowered = stripped.lower()
+        if not lowered.startswith("#bot "):
+            return None
+        command = stripped[5:].strip()
+        return command or None
+
     remote_phone = _remote_phone(payload)
     if not remote_phone or remote_phone not in _self_test_phones():
         return None
 
-    stripped = str(texto or "").strip()
     if not stripped.startswith("#"):
         return None
 
