@@ -10,7 +10,7 @@ from pathlib import Path
 import httpx
 from fastapi import APIRouter, HTTPException, Query
 
-from api.supabase_client import PROJECT_ID_ALIASES, get_supabase
+from api.supabase_client import CANONICAL_PROJECT_IDS, PROJECT_ID_ALIASES, PROJETOS_OFICIAIS, get_supabase
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = REPO_ROOT / "data" / "whatsapp_numeros.json"
 
@@ -99,7 +99,7 @@ def _menu_text(nome: str | None = None) -> str:
 
 def _project_label(project_id: str | None) -> str:
     if not supabase or not project_id:
-        return "Projeto atual"
+        return "Todos os projetos"
     try:
         res = supabase.table("projetos").select("nome").eq("id", project_id).limit(1).execute()
         if res.data:
@@ -107,6 +107,26 @@ def _project_label(project_id: str | None) -> str:
     except Exception:
         pass
     return "Projeto atual"
+
+
+def _active_projects() -> list[dict]:
+    if not supabase:
+        return list(PROJETOS_OFICIAIS)
+    try:
+        res = supabase.table("projetos").select("id,nome,cidade,status").eq("ativo", True).limit(100).execute()
+        rows = res.data or []
+    except Exception:
+        rows = []
+    canonical_set = set(CANONICAL_PROJECT_IDS)
+    canonical_rows = [row for row in rows if str(row.get("id")) in canonical_set]
+    if canonical_rows:
+        rows = canonical_rows
+
+    if not rows:
+        rows = list(PROJETOS_OFICIAIS)
+
+    order = {project_id: index for index, project_id in enumerate(CANONICAL_PROJECT_IDS)}
+    return sorted(rows, key=lambda row: (order.get(str(row.get("id")), 999), str(row.get("nome") or "")))
 
 
 def _count_table(table: str, project_id: str | None = None, **filters) -> int:
@@ -125,13 +145,7 @@ def _count_table(table: str, project_id: str | None = None, **filters) -> int:
 
 
 def _projects_text() -> str:
-    if not supabase:
-        return "🏗️ Projetos Ativos\nSupabase nao configurado no backend."
-    try:
-        res = supabase.table("projetos").select("id,nome,cidade,status").eq("ativo", True).limit(20).execute()
-        rows = res.data or []
-    except Exception:
-        rows = []
+    rows = _active_projects()
     if not rows:
         return "🏗️ Projetos Ativos\nNenhum projeto ativo encontrado."
     lines = ["🏗️ Projetos Ativos"]
@@ -164,6 +178,33 @@ def _contacts_text(project_id: str | None) -> str:
 
 def _rdo_status_text(project_id: str | None) -> str:
     today = datetime.utcnow().date().isoformat()
+    if not project_id:
+        rows = _active_projects()
+        lines = [
+            "📋 Status RDO Hoje",
+            "Projeto: Todos os projetos",
+            f"Data: {today}",
+            "",
+        ]
+        total_hoje = 0
+        total_geral = 0
+        for index, row in enumerate(rows, start=1):
+            current_id = str(row.get("id"))
+            rdos_hoje = _count_table("rdos", current_id, data=today)
+            rdos_total = _count_table("rdos", current_id)
+            total_hoje += rdos_hoje
+            total_geral += rdos_total
+            lines.append(f"{index}. {row.get('nome')}: hoje {rdos_hoje} | total {rdos_total}")
+        lines.extend([
+            "",
+            f"Total geral hoje: {total_hoje}",
+            f"Total geral no sistema: {total_geral}",
+            "",
+            "Para enviar RDO: use @rdo e informe producao, equipe, maquinas, custos, ocorrencias, fotos e localizacao.",
+            "Web: https://construdatamaxv2-clean.vercel.app/app/rdo",
+        ])
+        return "\n".join(lines)
+
     projeto = _project_label(project_id)
     rdos_hoje = _count_table("rdos", project_id, data=today)
     rdos_total = _count_table("rdos", project_id)
@@ -179,6 +220,26 @@ def _rdo_status_text(project_id: str | None) -> str:
 
 
 def _dashboard_text(project_id: str | None) -> str:
+    if not project_id:
+        today = datetime.utcnow().date().isoformat()
+        projetos = len(_active_projects())
+        frentes = _count_table("frentes")
+        rdos_hoje = _count_table("rdos", data=today)
+        rdos = _count_table("rdos")
+        tarefas = _count_table("tarefas")
+        restricoes = _count_table("lps_restricoes", status="aberta")
+        return (
+            f"📊 Dashboard Consolidado\n"
+            f"Projeto: Todos os projetos\n"
+            f"Projetos ativos: {projetos}\n"
+            f"Frentes: {frentes}\n"
+            f"RDOs hoje: {rdos_hoje}\n"
+            f"RDOs total: {rdos}\n"
+            f"Tarefas: {tarefas}\n"
+            f"Restricoes LPS abertas: {restricoes}\n\n"
+            "Painel web: https://construdatamaxv2-clean.vercel.app"
+        )
+
     projeto = _project_label(project_id)
     frentes = _count_table("frentes", project_id)
     rdos = _count_table("rdos", project_id)
@@ -292,18 +353,53 @@ def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | 
     try:
         res = (
             supabase.table("contatos")
-            .select("nome,projeto_id,telefone_whatsapp")
+            .select("nome,projeto_id,telefone_whatsapp,cargo,alcada,setor")
             .in_("telefone_whatsapp", phones)
             .eq("ativo", True)
-            .limit(1)
+            .limit(50)
             .execute()
         )
         if res.data:
-            contact = res.data[0]
+            project_ids = {
+                _canonical_project_id(contact.get("projeto_id"))
+                for contact in res.data
+                if contact.get("projeto_id")
+            }
+            director_scope = any(
+                re.search(
+                    r"diretor|diretoria|gerente",
+                    " ".join(str(contact.get(field) or "") for field in ("cargo", "alcada", "setor")),
+                    flags=re.IGNORECASE,
+                )
+                for contact in res.data
+            )
+            first = res.data[0]
+            registered_phone = _normalize_phone(first.get("telefone_whatsapp"))
+            if len(project_ids) > 1 or director_scope:
+                return None, first.get("nome"), registered_phone
+            return (_canonical_project_id(first.get("projeto_id")), first.get("nome"), registered_phone)
+
+        projects = (
+            supabase.table("projetos")
+            .select("id,responsavel_nome,responsavel_telefone")
+            .in_("responsavel_telefone", phones)
+            .eq("ativo", True)
+            .limit(50)
+            .execute()
+        )
+        if projects.data:
+            project_ids = {
+                _canonical_project_id(project.get("id"))
+                for project in projects.data
+                if project.get("id")
+            }
+            first = projects.data[0]
+            if len(project_ids) > 1:
+                return None, first.get("responsavel_nome"), _normalize_phone(first.get("responsavel_telefone"))
             return (
-                _canonical_project_id(contact.get("projeto_id")),
-                contact.get("nome"),
-                _normalize_phone(contact.get("telefone_whatsapp")),
+                _canonical_project_id(first.get("id")),
+                first.get("responsavel_nome"),
+                _normalize_phone(first.get("responsavel_telefone")),
             )
     except Exception:
         pass

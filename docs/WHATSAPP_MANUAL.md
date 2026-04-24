@@ -208,6 +208,11 @@ Essa trava evita o problema de o bot responder em grupo. Em privado, o proprio
 numero conectado pode testar o menu e as opcoes sem whitelist de telefone. A
 whitelist continua valendo para mensagens recebidas de outros numeros.
 
+Para diretoria/gerencia ou numeros vinculados a mais de um projeto, as opcoes
+`1` e `4` respondem em escopo consolidado, listando os 6 projetos canonicos.
+Para engenheiro/apontador vinculado a uma unica obra, a resposta fica filtrada
+no projeto dele.
+
 Variavel operacional relacionada:
 
 ```text
