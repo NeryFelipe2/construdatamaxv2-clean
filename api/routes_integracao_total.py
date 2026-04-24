@@ -606,10 +606,11 @@ def health_integrations():
     if whatsapp_configured:
         whatsapp_state = "configured"
         try:
+            evolution_health_timeout = float(os.environ.get("EVOLUTION_HEALTH_TIMEOUT_SECONDS") or 15)
             response = httpx.get(
                 f"{evolution_url}/instance/connectionState/{evolution_instance}",
                 headers={"apikey": evolution_key},
-                timeout=4.0,
+                timeout=evolution_health_timeout,
             )
             if response.status_code < 400:
                 whatsapp_state = response.json().get("instance", {}).get("state") or "configured"
