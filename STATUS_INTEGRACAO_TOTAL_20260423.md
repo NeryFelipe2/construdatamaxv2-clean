@@ -852,3 +852,96 @@ Estado no fim desta rodada:
 - fachada backend editada esta sintaticamente valida e testada isoladamente;
 - fase 1 ainda nao terminou;
 - a proxima frente correta e `RDO + WhatsApp RDO + deploy/runtime real`.
+
+---
+
+## 19. Fechamento runtime Render/RDO/WhatsApp - 2026-04-23 23:41 BRT
+
+### 19.1 Commits finais enviados
+
+- `dd74c10e` - `Adapt RDO child persistence to production schema`
+- `047dfcd0` - `Coerce RDO child quantities for Supabase schema`
+
+Ambos foram enviados para:
+
+- `main`
+- `codex/codex2-runtime-fixes`
+
+O Render foi redeployado manualmente via CLI no servico:
+
+- `srv-d750kldm5p6s73feojbg`
+
+Deploy final validado:
+
+- `dep-d7lddfsm0tmc73ev9e40`
+
+### 19.2 Problema encontrado em producao
+
+O Render ja estava com Supabase e WhatsApp configurados, mas o endpoint de RDO completo falhava porque:
+
+- o payload mandava blocos como `atividades`, `equipe`, `ocorrencias`, `custos_diretos`, `custos_indiretos` e `localizacao`;
+- a tabela `rdos` nao possui todas essas colunas diretamente;
+- algumas tabelas filhas existem com schema menor que o schema ideal da migracao;
+- `rdo_atividades` no banco real nao possui `rdo_id`, apenas `equipe_id`;
+- `rdo_equipamentos.quantidade` e `rdo_mao_obra.quantidade` exigem inteiro.
+
+### 19.3 Ajuste feito
+
+A API agora:
+
+- normaliza aliases do RDO antes de inserir;
+- grava em `rdos` somente colunas aceitas pela tabela principal;
+- preserva o payload bruto em `payload_original.raw`;
+- grava equipes, atividades, materiais, equipamentos, mao de obra e ocorrencias nas tabelas filhas;
+- filtra colunas filhas por tabela para respeitar o schema real do Supabase;
+- busca atividades por `equipe_id` quando `rdo_atividades.rdo_id` nao existe;
+- converte quantidades de equipamentos e mao de obra para inteiro antes de inserir.
+
+### 19.4 Teste real aprovado no Render
+
+Endpoint testado:
+
+- `POST https://construdatamaxv2-clean.onrender.com/api/projetos/2a28beec-b1f8-4b0c-8416-d0710bb35d9d/rdos`
+
+RDO real criado:
+
+- `ddde5bf8-2a2b-47ef-a4ab-26df31b47361`
+- marcador: `TESTE_FINAL_CODEX_20260423-234126`
+
+Resultado:
+
+- `health_integrations`: OK, `status=connected`, `whatsapp=configured`, `n8n=external`
+- criacao de RDO completo: OK
+- detalhe do RDO: OK
+- filhos retornados:
+  - equipes: 2
+  - atividades: 2
+  - materiais: 1
+  - equipamentos: 1
+  - mao_obra: 1
+  - ocorrencias: 2
+- dashboard depois do RDO: OK
+  - `rdos_total=6`
+  - `custo_total_dia=6780.0`
+- rota de logs WhatsApp: OK
+- rota de agendamentos WhatsApp: OK
+
+### 19.5 Estado final desta passada
+
+O nucleo API/Supabase/Render para RDO completo esta funcionando em producao.
+
+Tambem estao publicados e respondendo:
+
+- `/api/health/integrations`
+- `/api/projetos`
+- `/api/projetos/{project_id}/rdos`
+- `/api/projetos/{project_id}/rdos/{rdo_id}`
+- `/api/projetos/{project_id}/dashboard`
+- `/api/projetos/{project_id}/whatsapp/logs`
+- `/api/projetos/{project_id}/whatsapp/agendamentos`
+
+### 19.6 Observacao operacional importante
+
+O teste validou o backend/Render/Supabase e rotas de WhatsApp, sem disparar mensagem real para contatos.
+
+O envio ativo pelo WhatsApp ainda deve ser testado de forma controlada, com numero/grupo de teste definido, para evitar repeticao do problema anterior de mandar mensagem para conversa errada.
