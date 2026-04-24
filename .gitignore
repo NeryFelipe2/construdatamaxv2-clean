@@ -1,32 +1,246 @@
-# Saidas geradas
+# ========================================
+# ConstruDataMaxV2 - .gitignore
+# Atualizado 2026-04-24 (limpeza XGBoost)
+# ========================================
+
+# === Saidas geradas ===
 SAIDA_BIM_SABESP/
 SAIDA_COMPLETA/
 SAIDA_CRIADORES/
 SAIDA_HYDRONETWORK/
 SAIDA_*/
+output/
 __pycache__/
 *.pyc
 
-# Arquivos compactados
+# === Arquivos compactados ===
 *.zip
 *.rar
 
-# Referencia
+# === Referencia ===
 fil32es/
 
-# Temporarios
+# === Temporarios ===
 *.tmp
 *.bak
 ~$*
 ~$*.xlsx
 .env
+.env*.local
 
-# IFC exemplo grande
+# === IFC exemplo grande ===
 CONSTRUDATA_HYDRONETWORK_V7_FINAL/PACOTE_FINAL_V2/VERDE_TETEU_3D.ifc
+
+# === Aider ===
 .aider*
 
-# Frontend build artifacts
+# === Frontend build ===
 frontend/node_modules/
 frontend/dist/
 .vercel
-.env*.local
+
+# === Scripts soltos de debug (regra XGBoost) ===
+_check_*.py
+_criar_*.py
+_gen_*.py
+_gerar_*.py
+_inspect_*.py
+_read_*.py
+_reconnect_*.py
+_tmp_*/
+fix_*.py
+fix_*.sql
+fix_*.txt
+setup_final.py
+testar_*.py
+teste_*.py
+conectar_*.py
+configurar_*.py
+importar_*.py
+ativar_*.py
+pipeline_etl_*.py
+sincronizar_*.ps1
+gerar_*.py
+gerar_*.ps1
+
+# === Batch scripts soltos ===
+AIDER_*.bat
+AUTOMACAO_*.bat
+EXECUTAR_*.bat
+FIX_*.bat
+importar_*.bat
+start_n8n.bat
+
+# === Workflow exports e temporarios n8n ===
+tmp_n8n_export/
+n8n_local/
+WORKFLOW_*.json
+all_workflows_exported.json
+n8n_export_all.json
+
+# === Artefatos de apresentacao/relatorio soltos ===
+Pitch_*.pdf
+QR_WHATSAPP*.png
+criar_powerpoint_*.py
+criar_workflow_*.py
+
+# === Documentos de status/resumo temporarios (raiz) ===
+# (Mantemos STATUS_INTEGRACAO_TOTAL_*.md por serem de referencia)
+RESUMO_*.md
+SOLICITACAO_*.md
+PLANO_UNIFICACAO_*.md
+INVENTARIO_COMPLETO.md
+CARTAO_REFERENCIA_RAPIDA.md
+GUIA_RAPIDO_AUTOMACAO.md
+DIAGRAMA_ARQUITETURA_UNIFICADA.md
+RESUMO_EXECUTIVO_UNIFICACAO.md
+REFACTORING_ETL.md
+SUPER-WORKFLOW-GUIA.md
+SUPERDOCUMENTACAO_*.md
+CONSTRUDATA_MASTER_WORKFLOWS_EVOLUTION.md
+
+# === Dados brutos / planilhas soltas ===
+01_SYNC_SUPABASE_EXCEL.py
+dados_consolidados.json
+
+# === IDE / Claude worktrees ===
+.claude/worktrees/
+.kilo/
+.lingma/
+
+# === Workspace files ===
+*.code-workspace
+Workspace/
+EPANET/
+DBFS/
+OBSIDIAN_SYNC/
+
+# === Databricks ===
+databricks.yml
+
+# === Imagens WhatsApp ===
+WhatsApp Image *.jpeg
+WhatsApp Image *.png
+
+# === obras-rk internal junk ===
+obras-rk/.kilo/
+obras-rk/_tmp_*/
+obras-rk/_check_*.py
+obras-rk/_crear_*.py
+obras-rk/_gen_*.py
+obras-rk/_gerar_*.py
+obras-rk/_inspect_*.py
+obras-rk/_read_*.py
+obras-rk/_reconnect_*.py
+obras-rk/fix_*.py
+obras-rk/teste_*.py
+obras-rk/versao_*.py
+obras-rk/__builtins__.pyi
+obras-rk/databricks.yml
+obras-rk/*.bat
+obras-rk/OBSIDIAN_SYNC/
+obras-rk/VERSAOGEMINI/
+obras-rk/LINGMAN/
+obras-rk/_BACKUP_HISTORICO_*/
+obras-rk/local_5678_*/
+obras-rk/rk_local_5678/
+obras-rk/docker-infra/
+obras-rk/nfs/
+obras-rk/AUTOMACAO_RK*.py
+obras-rk/MOTOR_EXCEL_*.py
+obras-rk/EXPORTAR_*.py
+obras-rk/GESTOR_*.py
+obras-rk/SINCRONIZA_*.py
+obras-rk/analisa_*.py
+obras-rk/atualizar_*.py
+obras-rk/check_*.py
+obras-rk/insert_*.py
+obras-rk/inserir_*.py
+obras-rk/inspect_*.py
+obras-rk/inventario_*.py
+obras-rk/list_*.py
+obras-rk/montar_*.py
+obras-rk/motor_*.py
+obras-rk/relatorio_*.py
+obras-rk/rk_databricks_*.py
+obras-rk/routes_*.py
+obras-rk/set_*.py
+obras-rk/sync_*.py
+obras-rk/CONTROLE_CONSOLIDADO_RK*.py
+obras-rk/pm2_n8n_wrapper.js
+obras-rk/code_node.js
+obras-rk/node_code.js
+obras-rk/DASHBOARD_RK.html
+obras-rk/fix_railway_n8n.webp
+obras-rk/n8nac-config.json
+obras-rk/*.n8n
+obras-rk/requirements.txt
+
+# === Planilhas soltas de obra (dados sensíveis, não devem ir pro git) ===
+obras-rk/202604_Controle_de_Obra_*.xlsx
+obras-rk/CONTROLE_CONSOLIDADO_*.xlsx
+obras-rk/CONTROLE_RK_*.xlsx
+obras-rk/VERSAO_CHATGITHUB.xlsx
+obras-rk/TASKS_OSASCO.xlsx
+obras-rk/Extrato_Custos_Prontos.xlsx
+obras-rk/Resumo_Previa_Custos_Fixos.xlsx
+obras-rk/PLANILHA\ DE\ PAGAMENTO\ RK.xlsx
+obras-rk/RELA*O\ DE\ FUNCIONARIOS*
+obras-rk/MEDI*O_ESGOTO*
+obras-rk/Checklist_Biselli.pdf
+obras-rk/CHECKLIST_TAREFAS_BISELLI.pdf
+
+# === Diretórios de dados por obra ===
+obras-rk/CACHOEIRO/
+obras-rk/OSASCO/
+obras-rk/PARDINHO/
+obras-rk/TATUI/
+obras-rk/TEOFILO\ OTONI/
+obras-rk/SANTOS\ EMPREITA\ RK/
+obras-rk/PACOTE_ENTREGA_BISELLI/
+obras-rk/CODEX/
+obras-rk/agentes/
+obras-rk/construdata/
+obras-rk/tests/
+
+# === Workflow exports dentro de obras-rk ===
+obras-rk/CONSTRUDATA_*.json
+obras-rk/Fluxo_n8n_*.json
+obras-rk/ZAP_RK_*.json
+obras-rk/all_workflows_exported.json
+
+# === SQL migrations soltos ===
+obras-rk/supabase_*.sql
+
+# === Docs de status/changelog que ficam melhor no Obsidian ===
+obras-rk/ARQUITETURA_SISTEMA.md
+obras-rk/AUDITORIA_*.md
+obras-rk/CHANGELOG*.md
+obras-rk/CHECKLIST_*.md
+obras-rk/PLANO_INTEGRACAO_*.md
+obras-rk/RELATORIO_*.md
+obras-rk/STATUS_*.md
+obras-rk/REUNIÃO_*.md
+
+# === WhatsApp images ===
+obras-rk/WhatsApp Image *
+
+# === Workflows root level ===
+workflows/local_5678_*/
+workflows/n8n_production_*/
+workflows/MEGA_*.json
+
+# === Root misc ===
+artifacts/
+scripts/
+import-*.ps1
+motor_atas.py
+fix.sql
+ARQUITETURA_SISTEMA.md
+CHANGELOG.md
+CHECKLIST_*.md
+STATUS_16ABR_FINAL.md
+STATUS_EXECUCAO_RAPIDA.md
+STATUS_WORKFLOW_BONITO.md
+REUNI*O_14_04_2026.md
+\#\ *
