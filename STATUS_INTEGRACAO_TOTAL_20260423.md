@@ -945,3 +945,107 @@ Tambem estao publicados e respondendo:
 O teste validou o backend/Render/Supabase e rotas de WhatsApp, sem disparar mensagem real para contatos.
 
 O envio ativo pelo WhatsApp ainda deve ser testado de forma controlada, com numero/grupo de teste definido, para evitar repeticao do problema anterior de mandar mensagem para conversa errada.
+
+---
+
+## 20. Continuacao WhatsApp cloud - 2026-04-24
+
+### 20.1 Estado encontrado
+
+O Docker local nao estava acessivel:
+
+- Docker daemon nao respondeu em `npipe:////./pipe/dockerDesktopLinuxEngine`;
+- `http://localhost:5678/healthz` nao respondeu;
+- `http://localhost:8080/` nao respondeu.
+
+Portanto, o caminho local `Docker -> n8n local -> Evolution local` nao estava disponivel nesta passada.
+
+### 20.2 Render/Supabase
+
+O backend Render continuou saudavel:
+
+- `/api/health/integrations`: OK
+- Supabase: OK
+- tabelas canonicas: OK
+- `/api/whatsapp/numeros`: OK
+
+### 20.3 Problema real do WhatsApp
+
+O backend Render estava apontando para uma URL antiga de tunnel Cloudflare:
+
+- `https://monkey-midwest-justify-exhaust.trycloudflare.com`
+
+Essa URL nao resolvia mais DNS e causava:
+
+- `Name or service not known`
+
+As variaveis foram atualizadas no Render para:
+
+- `EVOLUTION_URL=https://construdata-evolution.onrender.com`
+- `EVOLUTION_API_URL=https://construdata-evolution.onrender.com`
+
+### 20.4 Evolution Render
+
+A Evolution publica existe e responde:
+
+- `https://construdata-evolution.onrender.com/`
+
+Mas a instancia `construdata-felipe` nao existia mais. Ela foi recriada:
+
+- instancia: `construdata-felipe`
+- status atual: `connecting`
+- webhook configurado: `https://construdatamaxv2-clean.onrender.com/api/whatsapp/webhook`
+- eventos: `MESSAGES_UPSERT`, `QRCODE_UPDATED`, `CONNECTION_UPDATE`, `SEND_MESSAGE`
+
+Importante:
+
+- Isso nao prova que o WhatsApp do Felipe esteja desconectado no celular.
+- Prova apenas que a instancia cloud da Evolution no Render ainda nao esta autenticada/conectada.
+- Se o WhatsApp ainda funciona em outro ambiente, ele provavelmente esta conectado em outro gateway, nao nessa Evolution cloud.
+
+### 20.5 Ajuste de seguranca
+
+A API foi ajustada para nao tentar enviar mensagem quando a Evolution nao estiver conectada.
+
+Antes:
+
+- tentava enviar mesmo com a instancia `connecting`;
+- gerava timeout;
+- ficava pouco claro se o problema era menu, webhook ou Evolution.
+
+Agora:
+
+- verifica `/instance/connectionState/{instance}`;
+- se a instancia nao estiver `open`/`connected`, retorna `not_connected_<estado>`;
+- no estado atual retorna `not_connected_connecting`;
+- evita timeout e evita tentativa cega de envio.
+
+Commit:
+
+- `70bb62f9` - `Clarify WhatsApp connection state before sending`
+
+### 20.6 Teste seguro aprovado
+
+Webhook simulado, sem envio real:
+
+- endpoint: `POST /api/whatsapp/webhook`
+- payload: grupo falso com `#bot menu`
+
+Resultado:
+
+- `ok=true`
+- `route=menu`
+- `delivery=not_connected_connecting`
+- menu retornou visualmente com emojis corretos
+- health passou a mostrar `whatsapp=connecting`
+
+### 20.7 O que falta de verdade
+
+Falta conectar a instancia cloud da Evolution no Render ou apontar o Render para uma Evolution que ja esteja conectada.
+
+Sem isso:
+
+- o menu e a regra funcionam no backend;
+- RDO e dashboard funcionam;
+- logs funcionam;
+- mas o WhatsApp real nao recebe resposta porque nao ha sessao WhatsApp aberta nessa Evolution cloud.
