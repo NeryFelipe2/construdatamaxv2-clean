@@ -16,8 +16,36 @@ import {
   MOCK_RDO_FINANCIAL_ENTRIES,
   MOCK_RDO_BUDGET_BRL,
 } from '@/data/mockRdo'
-import { apiRdoList, apiRdoCreate, apiRdoClose, apiProjetoRdos } from '@/lib/api'
+import {
+  apiRdoList,
+  apiRdoCreate,
+  apiRdoClose,
+  apiProjetoRdos,
+  apiProjetoCriarRdo,
+  type CanonicalIntegrationStatus,
+} from '@/lib/api'
 import { supabase } from '@/lib/supabase'
+
+const ALLOW_DEMO_DATA = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
+
+function mapWeatherToDb(value: string | undefined): string | null {
+  const normalized = String(value || '').trim().toLowerCase()
+  if (!normalized) return null
+  if (normalized === 'good') return 'bom'
+  if (normalized === 'cloudy') return 'nublado'
+  if (normalized === 'rain') return 'chuva'
+  if (normalized === 'storm') return 'tempestade'
+  if (['bom', 'nublado', 'chuva', 'tempestade'].includes(normalized)) return normalized
+  return null
+}
+
+function mapWeatherFromDb(value: string | null | undefined): RDO['weather']['morning'] {
+  const normalized = String(value || '').trim().toLowerCase()
+  if (normalized === 'nublado') return 'cloudy'
+  if (normalized === 'chuva') return 'rain'
+  if (normalized === 'tempestade') return 'storm'
+  return 'good'
+}
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -26,6 +54,8 @@ interface RdoState {
   rdos:             RDO[]
   financialEntries: RdoFinancialEntry[]
   budgetBRL:        number
+  integrationStatus: CanonicalIntegrationStatus
+  currentProjectId: string | null
 
   // ── Navigation ──────────────────────────────────────────────────────────────
   setActiveTab: (tab: RdoTab) => void
@@ -52,6 +82,7 @@ interface RdoState {
   // ── Backend sync ─────────────────────────────────────────────────────────────
   fetchFromBackend:       (nucleo?: string) => Promise<void>
   createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
+  createRdoForProject:    (projectId: string, rdo: Omit<RDO, 'id' | 'number' | 'createdAt' | 'updatedAt'>) => Promise<Record<string, unknown> | null>
   closeRdoOnBackend:      (id: number) => Promise<void>
 
   // ── Supabase sync (RDOs do WhatsApp) ─────────────────────────────────────────
@@ -62,9 +93,11 @@ interface RdoState {
 
 export const useRdoStore = create<RdoState>((set, get) => ({
   activeTab:        'dashboard',
-  rdos:             MOCK_RDOS,
-  financialEntries: MOCK_RDO_FINANCIAL_ENTRIES,
-  budgetBRL:        MOCK_RDO_BUDGET_BRL,
+  rdos:             ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+  financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+  budgetBRL:        ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+  integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+  currentProjectId: null,
 
   // ── Navigation ────────────────────────────────────────────────────────────────
 
@@ -224,6 +257,110 @@ export const useRdoStore = create<RdoState>((set, get) => ({
     }
   },
 
+  createRdoForProject: async (projectId, rdo) => {
+    const productionMeters = rdo.trechos.reduce((sum, trecho) => sum + (trecho.executedMeters || 0), 0)
+    const servicesSummary = rdo.services
+      .map((service) => `${service.description}: ${service.quantity} ${service.unit}`)
+      .join(' | ')
+    const equipmentSummary = rdo.equipment
+      .map((item) => `${item.name} x${item.quantity} (${item.hours}h)`)
+      .join(', ')
+    const observations = [
+      rdo.observations?.trim(),
+      rdo.productionNotes?.trim() ? `Producao: ${rdo.productionNotes.trim()}` : '',
+      rdo.stoppageNotes?.trim() ? `Paralisacoes: ${rdo.stoppageNotes.trim()}` : '',
+      servicesSummary ? `Servicos: ${servicesSummary}` : '',
+      equipmentSummary ? `Equipamentos: ${equipmentSummary}` : '',
+    ]
+      .filter(Boolean)
+      .join(' | ')
+
+      const climaDb = mapWeatherToDb(rdo.weather.morning)
+      const payload: Record<string, unknown> = {
+        projeto_id: projectId,
+        data: rdo.date,
+        origem: 'web',
+        status: 'recebido',
+        apontador: rdo.responsible,
+        engenheiro: rdo.responsible,
+        turno: 'dia',
+        producao: rdo.productionNotes || servicesSummary || observations,
+      equipe_number:
+        (rdo.manpower.foremanCount || 0) +
+        (rdo.manpower.officialCount || 0) +
+        (rdo.manpower.helperCount || 0) +
+        (rdo.manpower.operatorCount || 0),
+      equipe: JSON.stringify({
+        foremanCount: rdo.manpower.foremanCount || 0,
+        officialCount: rdo.manpower.officialCount || 0,
+        helperCount: rdo.manpower.helperCount || 0,
+        operatorCount: rdo.manpower.operatorCount || 0,
+        employeeNames: rdo.manpower.employeeNames || [],
+      }),
+      producao_m: productionMeters,
+      observacoes: observations,
+      ocorrencias: rdo.incidents || rdo.ocorrencias || '',
+      fotos: rdo.photos.map((photo) => photo.base64),
+      latitude: rdo.geolocation?.lat ? Number(rdo.geolocation.lat) : null,
+      longitude: rdo.geolocation?.lng ? Number(rdo.geolocation.lng) : null,
+      maquinas: rdo.equipment.map((item) => ({
+        nome: item.name,
+        quantidade: item.quantity,
+        horas: item.hours,
+        custoBRL: item.costBRL || 0,
+      })),
+      equipamentos: rdo.equipment.map((item) => ({
+        nome: item.name,
+        quantidade: item.quantity,
+        horas: item.hours,
+        custoBRL: item.costBRL || 0,
+      })),
+      locacoes: rdo.equipment.filter((item) => (item.costBRL || 0) > 0).map((item) => ({
+        nome: item.name,
+        custoBRL: item.costBRL || 0,
+      })),
+      mao_obra: [
+        { tipo: 'encarregado', quantidade: rdo.manpower.foremanCount || 0 },
+        { tipo: 'oficial', quantidade: rdo.manpower.officialCount || 0 },
+        { tipo: 'ajudante', quantidade: rdo.manpower.helperCount || 0 },
+        { tipo: 'operador', quantidade: rdo.manpower.operatorCount || 0 },
+      ].filter((item) => item.quantidade > 0),
+      materiais: rdo.services.map((service) => ({
+        descricao: service.description,
+        quantidade: service.quantity,
+        unidade: service.unit,
+      })),
+      custo_direto:
+        (rdo.machineCostBRL || 0) +
+        (rdo.equipmentCostBRL || 0) +
+        (rdo.rentalCostBRL || 0) +
+        (rdo.directCostBRL || 0),
+      custo_indireto: rdo.indirectCostBRL || 0,
+      custo_total_dia:
+        rdo.dailyCostBRL ||
+        (rdo.machineCostBRL || 0) +
+          (rdo.equipmentCostBRL || 0) +
+          (rdo.rentalCostBRL || 0) +
+          (rdo.directCostBRL || 0) +
+          (rdo.indirectCostBRL || 0),
+        paralisacoes: rdo.stoppageNotes || '',
+        payload_original: rdo,
+      }
+      if (climaDb) {
+        payload.clima = climaDb
+      }
+
+    try {
+      const created = await apiProjetoCriarRdo(projectId, payload)
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId })
+      return created
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId })
+      return null
+    }
+  },
+
   closeRdoOnBackend: async (id) => {
     try {
       await apiRdoClose(id)
@@ -235,11 +372,13 @@ export const useRdoStore = create<RdoState>((set, get) => ({
   // ── Carrega RDOs + custos do Supabase (populados pelo Router WhatsApp) ──────
   loadFromSupabase: async (projectId) => {
     try {
+      set({ currentProjectId: projectId ?? null })
       let rows: Record<string, unknown>[] | null = null
       if (projectId) {
         try {
           const apiRows = await apiProjetoRdos(projectId)
           rows = (apiRows.items ?? []) as Record<string, unknown>[]
+          set({ integrationStatus: 'connected' })
         } catch {
           rows = null
         }
@@ -255,8 +394,17 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         const { data, error } = await query
         if (error || !data) return
         rows = data as Record<string, unknown>[]
+        set({ integrationStatus: 'partial' })
       }
-      if (!rows) return
+      if (!rows) {
+        set({
+          rdos: ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+          financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+          budgetBRL: ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+          integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+        })
+        return
+      }
 
       const rdos: RDO[] = []
       const entries: RdoFinancialEntry[] = []
@@ -289,9 +437,9 @@ export const useRdoStore = create<RdoState>((set, get) => ({
           date: data,
           responsible: apontador,
           weather: {
-            morning: String(row.clima || 'good') as RDO['weather']['morning'],
-            afternoon: String(row.clima || 'good') as RDO['weather']['afternoon'],
-            night: String(row.clima || 'good') as RDO['weather']['night'],
+            morning: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
+            afternoon: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
+            night: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
             temperatureC: 25,
           },
           manpower: { foremanCount: 0, officialCount: 0, helperCount: Math.max(0, equipeN), operatorCount: 0 },
@@ -356,9 +504,19 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         }
       }
 
-      set({ rdos, financialEntries: entries })
+      set({
+        rdos,
+        financialEntries: entries,
+        budgetBRL: ALLOW_DEMO_DATA && entries.length === 0 ? MOCK_RDO_BUDGET_BRL : 0,
+        integrationStatus: rows.length > 0 ? get().integrationStatus : (ALLOW_DEMO_DATA ? 'local' : 'partial'),
+      })
     } catch {
-      // silent
+      set({
+        rdos: ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+        financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+        budgetBRL: ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+        integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+      })
     }
   },
 }))

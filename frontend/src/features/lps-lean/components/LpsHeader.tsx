@@ -32,6 +32,7 @@ export function LpsHeader() {
   const activeTab    = useLpsStore((s) => s.activeTab)
   const setActiveTab = useLpsStore((s) => s.setActiveTab)
   const activities   = useLpsStore((s) => s.activities)
+  const connectionStatus = useLpsStore((s) => s.connectionStatus)
 
   const weekly = useMemo(() => computeWeeklyPPC(activities), [activities])
 
@@ -76,6 +77,15 @@ export function LpsHeader() {
             <p className="text-xs font-bold text-white leading-tight">LPS / Lean</p>
             <p className="text-[10px] text-[#6b6b6b] leading-tight">Last Planner System</p>
           </div>
+          <span className={`ml-2 inline-flex items-center rounded-full px-2 py-1 text-[10px] font-semibold ${
+            connectionStatus === 'connected'
+              ? 'bg-green-500/15 text-green-300'
+              : connectionStatus === 'partial'
+                ? 'bg-yellow-500/15 text-yellow-300'
+                : 'bg-[#484848] text-[#a3a3a3]'
+          }`}>
+            {connectionStatus === 'connected' ? 'Conectado' : connectionStatus === 'partial' ? 'Parcial' : 'Local'}
+          </span>
         </div>
 
         <div className="w-px h-8 bg-[#484848] shrink-0" />

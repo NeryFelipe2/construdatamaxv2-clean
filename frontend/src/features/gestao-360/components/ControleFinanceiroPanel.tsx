@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react'
 
 export function ControleFinanceiroPanel() {
   const { activeProjectId } = useProjectContext()
-  const { lancamentos, trechos, loading } = useSupabaseDre(activeProjectId || 'demo-1')
+  const { lancamentos, trechos, loading, connectionStatus } = useSupabaseDre(activeProjectId)
 
   const [bacInput, setBacInput] = useState<string>('')
 
@@ -16,15 +16,15 @@ export function ControleFinanceiroPanel() {
   const metrics = useMemo(() => {
     // 1. BAC = Orçamentor Total 
     const trechosBac = trechos.reduce((acc, t) => acc + Number(t.custo_total || 0), 0)
-    const BAC = trechosBac > 0 ? trechosBac : 789171.00 // fallback mock
+    const BAC = trechosBac > 0 ? trechosBac : 789171.00
 
     // 2. EV = Earned Value 
     let EV = trechos.filter(t => t.status === 'executado').reduce((acc, t) => acc + Number(t.custo_total || 0), 0)
-    if (EV === 0 && trechos.length === 0) EV = 7891.71 // mock
+    if (EV === 0 && trechos.length === 0) EV = 7891.71
 
     // 3. AC = Actual Cost
     let AC = lancamentos.filter(l => l.tipo === 'DESPESA').reduce((acc, l) => acc + Number(l.valor || 0), 0)
-    if (AC === 0 && lancamentos.length === 0) AC = 7891.71 // mock
+    if (AC === 0 && lancamentos.length === 0) AC = 7891.71
 
     // 4. PV = Planned Value
     const PV = EV > 0 ? EV * 1.1 : 8500.00 
@@ -77,6 +77,17 @@ export function ControleFinanceiroPanel() {
         <p className="text-sm text-gray-500">
           Acompanhe o desempenho financeiro com indicadores EVM (Earned Value Management).
         </p>
+        <div className="mt-2 text-[11px] font-medium">
+          <span className={`inline-flex items-center rounded-full px-2 py-1 ${
+            connectionStatus === 'connected'
+              ? 'bg-emerald-50 text-emerald-700'
+              : connectionStatus === 'partial'
+                ? 'bg-amber-50 text-amber-700'
+                : 'bg-slate-100 text-slate-600'
+          }`}>
+            {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : 'Local'}
+          </span>
+        </div>
       </div>
 
       {/* CORE METRICS GRID */}

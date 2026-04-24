@@ -1,31 +1,6 @@
-/**
- * useSupabaseGestao.ts — Fetches REAL operational data from Supabase
- * for the Gestão 360 dashboard. Replaces all hardcoded mock data.
- *
- * Tables queried: projetos, frentes, contatos, rdos, tarefas
- */
-import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '@/lib/supabase'
-import type { DbProjeto, DbFrente, DbContato } from '@/lib/supabase'
-
-interface DbRdoReal {
-  id: string
-  project_id: string | null
-  data: string
-  clima: string
-  equipe_number: number
-  producao_m: number
-  ligacoes_dia: number
-  observacoes: string
-  spi: number
-  latitude: number | null
-  longitude: number | null
-  fotos: string[]
-  apontador: string | null
-  turno: string | null
-  status: string | null
-  created_at: string
-}
+import { useCallback, useEffect, useState } from 'react'
+import { apiProjetoGestao360, type ApiProjetoGestao360Payload, type CanonicalIntegrationStatus } from '@/lib/api'
+import { supabase, type DbContato, type DbFrente, type DbProjeto } from '@/lib/supabase'
 
 export interface TarefaResumo {
   id: string
@@ -38,7 +13,6 @@ export interface TarefaResumo {
   createdAt: string
 }
 
-// ─── Derived KPI shape ───────────────────────────────────────────────────────
 export interface GestaoKpi {
   frentesAtivas: number
   frentesPausadas: number
@@ -96,6 +70,7 @@ export interface NotificacaoItem {
 interface SupabaseGestaoData {
   loading: boolean
   error: string | null
+  connectionStatus: CanonicalIntegrationStatus
   kpi: GestaoKpi
   frentes: FrenteResumo[]
   contatos: ContatoResumo[]
@@ -107,30 +82,309 @@ interface SupabaseGestaoData {
   refresh: () => Promise<void>
 }
 
-const today = new Date().toISOString().slice(0, 10)
+interface DbRdoFallback {
+  id: string
+  projeto_id?: string | null
+  project_id?: string | null
+  data: string
+  clima?: string | null
+  turno?: string | null
+  status?: string | null
+  created_at?: string | null
+  apontador?: string | null
+  producao_m?: number | null
+}
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
+const TODAY = new Date().toISOString().slice(0, 10)
+
+function buildAvatarLabel(cargo: string): string {
+  const normalized = cargo.toLowerCase()
+  if (normalized.includes('diretor') || normalized.includes('engen')) return '👷'
+  if (normalized.includes('planejamento')) return '📋'
+  if (normalized.includes('sala') || normalized.includes('tecnica')) return '🧠'
+  return '🧰'
+}
+
+function defaultKpi(): GestaoKpi {
+  return {
+    frentesAtivas: 0,
+    frentesPausadas: 0,
+    totalFrentes: 0,
+    extensaoTotal: 0,
+    extensaoExecutada: 0,
+    pvsTotal: 0,
+    pvsCadastrados: 0,
+    equipeCampo: 0,
+    rdosHoje: 0,
+    rdosPendentes: 0,
+    rdosFechados: 0,
+    totalRdos: 0,
+    contatosAtivos: 0,
+  }
+}
+
+function buildNotifications(args: {
+  frentes: FrenteResumo[]
+  rdos: RdoResumo[]
+  contatos: ContatoResumo[]
+  restricoes: Array<Record<string, unknown>>
+}): NotificacaoItem[] {
+  const items: NotificacaoItem[] = []
+
+  args.frentes
+    .filter((frente) => String(frente.status).toLowerCase() === 'pausada')
+    .forEach((frente) => {
+      items.push({
+        tipo: 'alerta',
+        texto: `Frente "${frente.nome}" esta pausada`,
+        hora: 'Status atual',
+      })
+    })
+
+  if (args.restricoes.length > 0) {
+    items.push({
+      tipo: 'alerta',
+      texto: `${args.restricoes.length} restricao(oes) aberta(s) no projeto`,
+      hora: 'LPS / Torre',
+    })
+  }
+
+  const rdosHoje = args.rdos.filter((rdo) => rdo.data === TODAY)
+  if (rdosHoje.length > 0) {
+    items.push({
+      tipo: 'ok',
+      texto: `${rdosHoje.length} RDO(s) registrados hoje`,
+      hora: 'Hoje',
+    })
+  } else {
+    items.push({
+      tipo: 'alerta',
+      texto: 'Nenhum RDO registrado ainda. Aguardando dados do WhatsApp.',
+      hora: 'Acao necessaria',
+    })
+  }
+
+  if (args.contatos.length > 0) {
+    items.push({
+      tipo: 'info',
+      texto: `${args.contatos.length} membros da equipe ativos no projeto`,
+      hora: 'Status atual',
+    })
+  }
+
+  return items
+}
+
+function mapApiPayload(payload: ApiProjetoGestao360Payload): Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> {
+  const frentesResumo: FrenteResumo[] = (payload.frentes || []).map((frente) => ({
+    id: String(frente.id || crypto.randomUUID()),
+    nome: String(frente.nome || 'Frente'),
+    setor: String(frente.setor || 'Projeto'),
+    extensaoTotal: Number(frente.extensao_total || 0),
+    extensaoExecutada: Number(frente.extensao_executada || 0),
+    pvs: Number(frente.pvs_total || 0),
+    status: String(frente.status || 'ativa'),
+    progresso: Number(frente.progresso || 0),
+  }))
+
+  const contatos = (payload.contatos || []).map((contato) => ({
+    id: String(contato.id || crypto.randomUUID()),
+    nome: String(contato.nome || 'Contato'),
+    cargo: String(contato.cargo || contato.alcada || 'Responsavel'),
+    telefone: String(contato.telefone_whatsapp || contato.telefone || ''),
+    projetoId: String(contato.projeto_id || payload.projeto.id),
+    avatar: buildAvatarLabel(String(contato.cargo || contato.alcada || '')),
+    rdosHoje: 0,
+    rdosPendentes: 0,
+  }))
+
+  const rdosResumo: RdoResumo[] = (payload.rdos || []).map((rdo) => ({
+    id: String(rdo.id || crypto.randomUUID()),
+    data: String(rdo.data || '').slice(0, 10),
+    clima: String(rdo.clima || 'Sem clima'),
+    turno: String(rdo.turno || 'Diurno'),
+    status: String(rdo.status || 'recebido'),
+    frenteNome: String(rdo.apontador || rdo.responsavel || 'WhatsApp'),
+    createdAt: String(rdo.created_at || new Date().toISOString()),
+  }))
+
+  const tarefasResumo: TarefaResumo[] = (payload.tarefas || []).map((tarefa) => ({
+    id: String(tarefa.id || crypto.randomUUID()),
+    delegadoPor: String(tarefa.delegante || tarefa.delegante_nome || 'ConstruData'),
+    delegadoPara: String(tarefa.responsavel || tarefa.responsavel_nome || 'Responsavel'),
+    descricao: String(tarefa.descricao || tarefa.titulo || 'Tarefa'),
+    status: String(tarefa.status || 'pendente'),
+    prioridade: String(tarefa.prioridade || 'normal'),
+    prazo: tarefa.prazo ? String(tarefa.prazo) : null,
+    createdAt: String(tarefa.created_at || new Date().toISOString()),
+  }))
+
+  const restricoes = payload.restricoes || []
+  const kpis = payload.kpis || {
+    frentes: frentesResumo.length,
+    rdos_total: rdosResumo.length,
+    rdos_hoje: rdosResumo.filter((rdo) => rdo.data === TODAY).length,
+    tarefas_pendentes: tarefasResumo.filter((tarefa) => !['concluida', 'concluido', 'done'].includes(tarefa.status.toLowerCase())).length,
+    contatos: contatos.length,
+    restricoes_abertas: restricoes.length,
+    custo_total_dia: 0,
+  }
+
+  const pausadas = frentesResumo.filter((frente) => frente.status.toLowerCase() === 'pausada').length
+  const fechados = rdosResumo.filter((rdo) => rdo.status.toLowerCase().includes('fech')).length
+  const pendentes = rdosResumo.filter((rdo) => !rdo.status.toLowerCase().includes('fech')).length
+
+  return {
+    connectionStatus: payload.status || 'partial',
+    kpi: {
+      frentesAtivas: Math.max(0, Number(kpis.frentes || 0) - pausadas),
+      frentesPausadas: pausadas,
+      totalFrentes: Number(kpis.frentes || frentesResumo.length),
+      extensaoTotal: frentesResumo.reduce((sum, frente) => sum + frente.extensaoTotal, 0),
+      extensaoExecutada: frentesResumo.reduce((sum, frente) => sum + frente.extensaoExecutada, 0),
+      pvsTotal: frentesResumo.reduce((sum, frente) => sum + frente.pvs, 0),
+      pvsCadastrados: 0,
+      equipeCampo: contatos.filter((contato) => /(diretor|engen|campo|tecnic|planejamento|sala)/i.test(contato.cargo)).length,
+      rdosHoje: Number(kpis.rdos_hoje || 0),
+      rdosPendentes: pendentes,
+      rdosFechados: fechados,
+      totalRdos: Number(kpis.rdos_total || rdosResumo.length),
+      contatosAtivos: Number(kpis.contatos || contatos.length),
+    },
+    frentes: frentesResumo,
+    contatos,
+    rdos: rdosResumo,
+    tarefas: tarefasResumo,
+    notificacoes: buildNotifications({
+      frentes: frentesResumo,
+      rdos: rdosResumo,
+      contatos,
+      restricoes,
+    }),
+    projetoNome: String(payload.projeto?.nome || 'Projeto'),
+    isConnected: (payload.status || 'partial') !== 'local',
+  }
+}
+
+async function loadFromSupabaseFallback(projetoId: string): Promise<Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> | null> {
+  if (!supabase) return null
+
+  const [projRes, frentesRes, contatosRes, rdosRes, tarefasRes] = await Promise.all([
+    supabase.from('projetos').select('*').eq('id', projetoId).single(),
+    supabase.from('frentes').select('*').eq('projeto_id', projetoId),
+    supabase.from('contatos').select('*').eq('projeto_id', projetoId).eq('ativo', true),
+    supabase.from('rdos').select('*').or(`projeto_id.eq.${projetoId},project_id.eq.${projetoId}`).order('data', { ascending: false }).limit(50),
+    supabase.from('tarefas').select('*').or(`projeto_id.eq.${projetoId},project_id.eq.${projetoId}`).order('created_at', { ascending: false }).limit(50),
+  ])
+
+  const projeto = (projRes.data || null) as DbProjeto | null
+  const frentes = (frentesRes.data || []) as DbFrente[]
+  const contatos = (contatosRes.data || []) as DbContato[]
+  const rdos = (rdosRes.data || []) as DbRdoFallback[]
+  const tarefas = (tarefasRes.data || []) as Array<Record<string, unknown>>
+
+  const frentesResumo: FrenteResumo[] = frentes.map((frente) => ({
+    id: frente.id,
+    nome: frente.nome,
+    setor: frente.setor,
+    extensaoTotal: Number(frente.extensao_total || 0),
+    extensaoExecutada: 0,
+    pvs: Number(frente.pvs_total || 0),
+    status: String(frente.status || 'ativa'),
+    progresso: 0,
+  }))
+
+  const contatosResumo: ContatoResumo[] = contatos.map((contato) => ({
+    id: contato.id,
+    nome: contato.nome,
+    cargo: contato.cargo,
+    telefone: contato.telefone_whatsapp,
+    projetoId: contato.projeto_id,
+    avatar: buildAvatarLabel(contato.cargo),
+    rdosHoje: 0,
+    rdosPendentes: 0,
+  }))
+
+  const rdosResumo: RdoResumo[] = rdos.map((rdo) => ({
+    id: rdo.id,
+    data: String(rdo.data || '').slice(0, 10),
+    clima: String(rdo.clima || 'Sem clima'),
+    turno: String(rdo.turno || 'Diurno'),
+    status: String(rdo.status || 'recebido'),
+    frenteNome: String(rdo.apontador || 'WhatsApp'),
+    createdAt: String(rdo.created_at || new Date().toISOString()),
+  }))
+
+  const tarefasResumo: TarefaResumo[] = tarefas.map((tarefa) => ({
+    id: String(tarefa.id || crypto.randomUUID()),
+    delegadoPor: String(tarefa.delegante || tarefa.delegante_nome || 'ConstruData'),
+    delegadoPara: String(tarefa.responsavel || tarefa.responsavel_nome || 'Responsavel'),
+    descricao: String(tarefa.descricao || tarefa.titulo || 'Tarefa'),
+    status: String(tarefa.status || 'pendente'),
+    prioridade: String(tarefa.prioridade || 'normal'),
+    prazo: tarefa.prazo ? String(tarefa.prazo) : null,
+    createdAt: String(tarefa.created_at || new Date().toISOString()),
+  }))
+
+  const rdosHoje = rdosResumo.filter((rdo) => rdo.data === TODAY)
+  const rdosFechados = rdosResumo.filter((rdo) => rdo.status.toLowerCase().includes('fech'))
+  const rdosPendentes = rdosResumo.filter((rdo) => !rdo.status.toLowerCase().includes('fech'))
+
+  return {
+    connectionStatus: 'partial',
+    kpi: {
+      frentesAtivas: frentesResumo.filter((frente) => frente.status.toLowerCase() === 'ativa').length,
+      frentesPausadas: frentesResumo.filter((frente) => frente.status.toLowerCase() === 'pausada').length,
+      totalFrentes: frentesResumo.length,
+      extensaoTotal: frentesResumo.reduce((sum, frente) => sum + frente.extensaoTotal, 0),
+      extensaoExecutada: rdos.reduce((sum, rdo) => sum + Number(rdo.producao_m || 0), 0),
+      pvsTotal: frentesResumo.reduce((sum, frente) => sum + frente.pvs, 0),
+      pvsCadastrados: 0,
+      equipeCampo: contatosResumo.length,
+      rdosHoje: rdosHoje.length,
+      rdosPendentes: rdosPendentes.length,
+      rdosFechados: rdosFechados.length,
+      totalRdos: rdosResumo.length,
+      contatosAtivos: contatosResumo.length,
+    },
+    frentes: frentesResumo,
+    contatos: contatosResumo,
+    rdos: rdosResumo,
+    tarefas: tarefasResumo,
+    notificacoes: buildNotifications({
+      frentes: frentesResumo,
+      rdos: rdosResumo,
+      contatos: contatosResumo,
+      restricoes: [],
+    }),
+    projetoNome: projeto?.nome || 'Projeto',
+    isConnected: true,
+  }
+}
+
 export function useSupabaseGestao(projetoId: string | null): SupabaseGestaoData {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [projeto, setProjeto] = useState<DbProjeto | null>(null)
-  const [frentes, setFrentes] = useState<DbFrente[]>([])
-  const [contatos, setContatos] = useState<DbContato[]>([])
-  const [rdos, setRdos] = useState<DbRdoReal[]>([])
-  const [tarefasRaw, setTarefasRaw] = useState<any[]>([])
+  const [connectionStatus, setConnectionStatus] = useState<CanonicalIntegrationStatus>('local')
+  const [kpi, setKpi] = useState<GestaoKpi>(defaultKpi())
+  const [frentes, setFrentes] = useState<FrenteResumo[]>([])
+  const [contatos, setContatos] = useState<ContatoResumo[]>([])
+  const [rdos, setRdos] = useState<RdoResumo[]>([])
+  const [tarefas, setTarefas] = useState<TarefaResumo[]>([])
+  const [notificacoes, setNotificacoes] = useState<NotificacaoItem[]>([])
+  const [projetoNome, setProjetoNome] = useState('Carregando...')
 
-  const isConnected = !!supabase
-
-  const fetchData = useCallback(async () => {
-    if (!supabase || !projetoId) {
+  const refresh = useCallback(async () => {
+    if (!projetoId) {
       setLoading(false)
-      return
-    }
-
-    // Skip if projetoId is a demo ID (not a valid UUID)
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(projetoId)
-    if (!isUuid) {
-      setLoading(false)
+      setConnectionStatus('local')
+      setKpi(defaultKpi())
+      setFrentes([])
+      setContatos([])
+      setRdos([])
+      setTarefas([])
+      setNotificacoes([])
+      setProjetoNome('Sem projeto')
       return
     }
 
@@ -138,170 +392,72 @@ export function useSupabaseGestao(projetoId: string | null): SupabaseGestaoData 
     setError(null)
 
     try {
-      // Parallel fetch — rdos uses project_id (English column name in DB)
-      const [projRes, frentesRes, contatosRes, rdosRes, tarefasRes] = await Promise.all([
-        supabase.from('projetos').select('*').eq('id', projetoId).single(),
-        supabase.from('frentes').select('*').eq('projeto_id', projetoId),
-        supabase.from('contatos').select('*').eq('projeto_id', projetoId).eq('ativo', true),
-        supabase.from('rdos').select('*').eq('project_id', projetoId).order('data', { ascending: false }).limit(50),
-        supabase.from('tarefas').select('*').eq('project_id', projetoId).order('created_at', { ascending: false }).limit(50).then(r => r).catch(() => ({ data: [], error: null })),
+      const payload = await apiProjetoGestao360(projetoId)
+      const mapped = mapApiPayload(payload)
+      setConnectionStatus(mapped.connectionStatus)
+      setKpi(mapped.kpi)
+      setFrentes(mapped.frentes)
+      setContatos(mapped.contatos)
+      setRdos(mapped.rdos)
+      setTarefas(mapped.tarefas)
+      setNotificacoes(mapped.notificacoes)
+      setProjetoNome(mapped.projetoNome)
+      setLoading(false)
+      return
+    } catch (apiError) {
+      try {
+        const fallback = await loadFromSupabaseFallback(projetoId)
+        if (fallback) {
+          setConnectionStatus(fallback.connectionStatus)
+          setKpi(fallback.kpi)
+          setFrentes(fallback.frentes)
+          setContatos(fallback.contatos)
+          setRdos(fallback.rdos)
+          setTarefas(fallback.tarefas)
+          setNotificacoes(fallback.notificacoes)
+          setProjetoNome(fallback.projetoNome)
+          setLoading(false)
+          return
+        }
+      } catch (supabaseError) {
+        setError(supabaseError instanceof Error ? supabaseError.message : String(supabaseError))
+      }
+
+      setConnectionStatus('local')
+      setKpi(defaultKpi())
+      setFrentes([])
+      setContatos([])
+      setRdos([])
+      setTarefas([])
+      setNotificacoes([
+        {
+          tipo: 'alerta',
+          texto: 'Falha ao carregar a visao canonica do projeto.',
+          hora: 'API / local',
+        },
       ])
-
-      if (projRes.data) setProjeto(projRes.data as DbProjeto)
-      if (frentesRes.data) setFrentes(frentesRes.data as DbFrente[])
-      if (contatosRes.data) setContatos(contatosRes.data as DbContato[])
-      if (rdosRes.data) setRdos(rdosRes.data as DbRdoReal[])
-      if (tarefasRes.data) setTarefasRaw(tarefasRes.data as any[])
-
-      if (projRes.error) setError(projRes.error.message)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err))
-    } finally {
+      setProjetoNome('Projeto')
+      setError(apiError instanceof Error ? apiError.message : String(apiError))
       setLoading(false)
     }
   }, [projetoId])
 
-  useEffect(() => { fetchData() }, [fetchData])
-
-  // ── Compute KPIs ─────────────────────────────────────────────────────────
-  const frentesAtivas = frentes.filter(f => f.status === 'ativa')
-  const rdosHoje = rdos.filter(r => r.data === today)
-  const rdosPendentes = rdos.filter(r => r.status === 'aberto')
-  const rdosFechados = rdos.filter(r => r.status === 'fechado')
-
-  const kpi: GestaoKpi = {
-    frentesAtivas: frentesAtivas.length,
-    frentesPausadas: frentes.filter(f => f.status === 'pausada').length,
-    totalFrentes: frentes.length,
-    extensaoTotal: frentes.reduce((s, f) => s + (f.extensao_total || 0), 0),
-    extensaoExecutada: rdos.reduce((s, r) => s + (r.producao_m || 0), 0),
-    pvsTotal: frentes.reduce((s, f) => s + (f.pvs_total || 0), 0),
-    pvsCadastrados: 0,
-    equipeCampo: contatos.filter(c => c.cargo.includes('Campo') || c.cargo.includes('Tecnico')).length,
-    rdosHoje: rdosHoje.length,
-    rdosPendentes: rdosPendentes.length,
-    rdosFechados: rdosFechados.length,
-    totalRdos: rdos.length,
-    contatosAtivos: contatos.length,
-  }
-
-  // ── Frentes with progress ────────────────────────────────────────────────
-  const frentesResumo: FrenteResumo[] = frentes.map(f => ({
-    id: f.id,
-    nome: f.nome,
-    setor: f.setor,
-    extensaoTotal: f.extensao_total,
-    extensaoExecutada: 0,
-    pvs: f.pvs_total,
-    status: f.status,
-    progresso: 0, // Will be filled from rdo_atividades aggregation
-  }))
-
-  // ── Contatos with RDO info ───────────────────────────────────────────────
-  const contatosResumo: ContatoResumo[] = contatos.map(c => ({
-    id: c.id,
-    nome: c.nome,
-    cargo: c.cargo,
-    telefone: c.telefone_whatsapp,
-    projetoId: c.projeto_id,
-    avatar: c.cargo.includes('Eng') || c.cargo.includes('Diretor') ? '👷‍♂️' :
-            c.cargo.includes('Gestor') ? '👩‍💼' : '🧑‍🔧',
-    rdosHoje: 0,
-    rdosPendentes: 0,
-  }))
-
-  // ── RDOs formatted ───────────────────────────────────────────────────────
-  const rdosResumo: RdoResumo[] = rdos.map(r => ({
-    id: r.id,
-    data: r.data,
-    clima: r.clima,
-    turno: r.turno || 'Diurno',
-    status: r.status || 'aberto',
-    frenteNome: r.apontador || 'WhatsApp',
-    createdAt: r.created_at,
-  }))
-
-  // ── Tarefas formatted ────────────────────────────────────────────────────
-  const tarefasResumo: TarefaResumo[] = tarefasRaw.map(t => ({
-    id: t.id,
-    delegadoPor: t.delegado_por || '',
-    delegadoPara: t.delegado_para || '',
-    descricao: t.descricao || '',
-    status: t.status || 'pendente',
-    prioridade: t.prioridade || 'normal',
-    prazo: t.prazo,
-    createdAt: t.created_at,
-  }))
-
-  // ── Auto-generate notifications from real data ───────────────────────────
-  const notificacoes: NotificacaoItem[] = []
-
-  // Frentes pausadas = alertas
-  frentes.filter(f => f.status === 'pausada').forEach(f => {
-    notificacoes.push({
-      tipo: 'alerta',
-      texto: `Frente "${f.nome}" está pausada`,
-      hora: 'Status atual',
-    })
-  })
-
-  // RDOs pendentes
-  if (rdosPendentes.length > 0) {
-    notificacoes.push({
-      tipo: 'alerta',
-      texto: `${rdosPendentes.length} RDO(s) pendentes de fechamento`,
-      hora: 'Hoje',
-    })
-  }
-
-  // RDOs preenchidos hoje
-  if (rdosHoje.length > 0) {
-    notificacoes.push({
-      tipo: 'ok',
-      texto: `${rdosHoje.length} RDO(s) registrados hoje`,
-      hora: 'Hoje',
-    })
-  }
-
-  // Contatos ativos
-  if (contatos.length > 0) {
-    notificacoes.push({
-      tipo: 'info',
-      texto: `${contatos.length} membros da equipe ativos no projeto`,
-      hora: 'Status atual',
-    })
-  }
-
-  // If no rdos at all
-  if (rdos.length === 0) {
-    notificacoes.push({
-      tipo: 'alerta',
-      texto: 'Nenhum RDO registrado ainda. Aguardando dados do WhatsApp.',
-      hora: 'Ação necessária',
-    })
-  }
-
-  // Fill at least 3 notifications
-  if (notificacoes.length === 0) {
-    notificacoes.push({
-      tipo: 'info',
-      texto: 'Sistema operacional. Aguardando atividade.',
-      hora: 'Agora',
-    })
-  }
+  useEffect(() => {
+    refresh()
+  }, [refresh])
 
   return {
     loading,
     error,
+    connectionStatus,
     kpi,
-    frentes: frentesResumo,
-    contatos: contatosResumo,
-    rdos: rdosResumo,
-    tarefas: tarefasResumo,
+    frentes,
+    contatos,
+    rdos,
+    tarefas,
     notificacoes,
-    projetoNome: projeto?.nome || 'Carregando...',
-    isConnected,
-    refresh: fetchData,
+    projetoNome,
+    isConnected: connectionStatus !== 'local',
+    refresh,
   }
 }
-

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
 import { useCompanySettingsStore } from '@/store/companySettingsStore'
+import { useProjectContext } from '@/store/projectContext'
 import { rdoSchema } from '../schemas'
 import type { RdoFormData } from '../schemas'
 import type { RdoEquipmentEntry, RdoServiceEntry, RdoTrechoEntry, RdoPhoto, RdoTrechoStatus } from '@/types'
@@ -79,8 +80,9 @@ const selectCls = 'w-full bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 p
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function NovoRdoPanel() {
-  const { rdos, addRdo, setActiveTab, loadTrechosFromPlanejamento } = useRdoStore()
+  const { rdos, addRdo, createRdoForProject, setActiveTab, loadTrechosFromPlanejamento } = useRdoStore()
   const logos = useCompanySettingsStore((s) => s.logos)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const nextNumber = rdos.length + 1
 
   // react-hook-form for core fields (rdoSchema)
@@ -297,9 +299,9 @@ export function NovoRdoPanel() {
   }
 
   // ── Submit ────────────────────────────────────────────────────────────────
-  function onValid(data: RdoFormData) {
+  async function onValid(data: RdoFormData) {
     setSubmitError(null)
-    addRdo({
+    const payload = {
       date:        data.date,
       responsible: data.responsible,
       weather:     data.weather,
@@ -336,7 +338,18 @@ export function NovoRdoPanel() {
       stoppageNotes,
       productionNotes,
       lpsLinked,
-    })
+    }
+
+    if (activeProjectId) {
+      const created = await createRdoForProject(activeProjectId, payload)
+      if (!created) {
+        setSubmitError('Nao foi possivel gravar o RDO no projeto ativo.')
+        return
+      }
+    } else {
+      addRdo(payload)
+    }
+
     setActiveTab('historico')
   }
 

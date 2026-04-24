@@ -1,6 +1,7 @@
 /**
  * LpsPage — Last Planner System / Lean Construction module.
  */
+import { useEffect } from 'react'
 import { LpsHeader } from './components/LpsHeader'
 import { SemaforoPanel } from './components/SemaforoPanel'
 import { LookAheadPanel } from './components/LookAheadPanel'
@@ -13,9 +14,16 @@ import { AlertasPanel } from './components/AlertasPanel'
 import { MaoDeObraLpsPanel } from './components/MaoDeObraLpsPanel'
 import { IntegracoesPanel } from './components/IntegracoesPanel'
 import { useLpsStore } from '@/store/lpsStore'
+import { useProjectContext } from '@/store/projectContext'
 
 export function LpsPage() {
   const activeTab = useLpsStore((s) => s.activeTab)
+  const loadFromProject = useLpsStore((s) => s.loadFromProject)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+
+  useEffect(() => {
+    if (activeProjectId) void loadFromProject(activeProjectId)
+  }, [activeProjectId, loadFromProject])
 
   return (
     <div className="flex flex-col h-full bg-gray-950 overflow-hidden">

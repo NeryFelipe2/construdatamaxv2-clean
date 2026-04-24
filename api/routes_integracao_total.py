@@ -87,6 +87,8 @@ def _select(table: str, project_id: str | None = None, limit: int = 200) -> list
         if table == "rdos":
             id_filter = ",".join(ids)
             query = query.or_(f"projeto_id.in.({id_filter}),project_id.in.({id_filter})")
+        elif table in {"lancamentos_financeiros", "trechos_custo"}:
+            query = query.in_("project_id", ids)
         elif table != "projetos":
             query = query.in_("projeto_id", ids)
     try:
@@ -123,6 +125,272 @@ def _sum(rows: list[dict[str, Any]], *keys: str) -> float:
                 except (TypeError, ValueError):
                     pass
     return total
+
+
+def _item(res: Any) -> dict[str, Any] | None:
+    items = _items(res)
+    return items[0] if items else None
+
+
+def _as_list(value: Any) -> list[dict[str, Any]]:
+    if isinstance(value, list):
+        return [item for item in value if isinstance(item, dict)]
+    return []
+
+
+def _normalize_rdo_clima(value: Any) -> str | None:
+    normalized = str(value or "").strip().lower()
+    aliases = {
+        "good": "bom",
+        "cloudy": "nublado",
+        "rain": "chuva",
+        "storm": "tempestade",
+        "bom": "bom",
+        "nublado": "nublado",
+        "chuva": "chuva",
+        "tempestade": "tempestade",
+    }
+    return aliases.get(normalized)
+
+
+def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, Any]:
+    row = dict(payload)
+    row["projeto_id"] = project_id
+    row.setdefault("project_id", project_id)
+    row.setdefault("data", date.today().isoformat())
+    row.setdefault("origem", "web")
+    row.setdefault("status", "recebido")
+    for list_field in ("maquinas", "equipamentos", "locacoes", "mao_obra", "materiais", "restricoes"):
+        value = row.get(list_field)
+        row[list_field] = value if isinstance(value, list) else []
+    fotos = row.get("fotos")
+    row["fotos"] = fotos if isinstance(fotos, list) else []
+    payload_original = row.get("payload_original")
+    row["payload_original"] = payload_original if isinstance(payload_original, dict) else {}
+    clima = _normalize_rdo_clima(row.get("clima"))
+    if clima:
+        row["clima"] = clima
+    else:
+        row.pop("clima", None)
+    return row
+
+
+def _safe_insert_many(client: Any, table: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
+    if not rows:
+        return {"ok": True, "count": 0, "items": []}
+    try:
+        result = client.table(table).insert(rows).execute()
+        items = _items(result)
+        return {"ok": True, "count": len(items) if items else len(rows), "items": items}
+    except Exception as exc:
+        return {"ok": False, "count": 0, "items": [], "error": str(exc)}
+
+
+def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict[str, Any]:
+    apontador = row.get("apontador") or row.get("engenheiro") or "Responsavel"
+    payload_original = row.get("payload_original") if isinstance(row.get("payload_original"), dict) else {}
+    services = _as_list(payload_original.get("services"))
+    trechos = _as_list(payload_original.get("trechos"))
+    maquinas = _as_list(row.get("maquinas"))
+    equipamentos = _as_list(row.get("equipamentos"))
+    locacoes = _as_list(row.get("locacoes"))
+    mao_obra = _as_list(row.get("mao_obra"))
+    materiais = _as_list(row.get("materiais"))
+
+    equipe_rows: list[dict[str, Any]] = []
+    for item in mao_obra:
+        quantidade = int(float(item.get("quantidade") or 0))
+        if quantidade <= 0:
+            continue
+        equipe_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": item.get("tipo") or item.get("cargo") or "equipe",
+                "lider_nome": apontador,
+                "quantidade": quantidade,
+                "metadata": item,
+            }
+        )
+    if not equipe_rows and row.get("equipe_number"):
+        equipe_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": "equipe_principal",
+                "lider_nome": apontador,
+                "quantidade": int(float(row.get("equipe_number") or 0)),
+                "metadata": {"equipe": row.get("equipe")},
+            }
+        )
+
+    equipes_result = _safe_insert_many(client, "rdo_equipes", equipe_rows)
+    equipe_id = None
+    if equipes_result.get("items"):
+        equipe_id = equipes_result["items"][0].get("id")
+
+    atividade_rows: list[dict[str, Any]] = []
+    for service in services:
+        atividade_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "equipe_id": equipe_id,
+                "servico": service.get("description") or service.get("descricao") or "Servico",
+                "metragem": float(service.get("quantity") or 0) if str(service.get("unit") or "").lower() == "m" else 0,
+                "observacao": f"{service.get('quantity', 0)} {service.get('unit') or 'un'}",
+            }
+        )
+    for trecho in trechos:
+        atividade_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "equipe_id": equipe_id,
+                "rua": trecho.get("trechoCode") or "",
+                "servico": trecho.get("trechoDescription") or "Trecho executado",
+                "metragem": float(trecho.get("executedMeters") or 0),
+                "observacao": trecho.get("status") or "",
+            }
+        )
+
+    material_rows = [
+        {
+            "rdo_id": rdo_id,
+            "descricao": item.get("descricao") or item.get("description") or "Material",
+            "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
+            "unidade": item.get("unidade") or item.get("unit") or "un",
+            "custo": float(item.get("custo") or item.get("costBRL") or 0),
+        }
+        for item in materiais
+    ]
+
+    equipamento_rows = [
+        {
+            "rdo_id": rdo_id,
+            "tipo": "maquina",
+            "descricao": item.get("nome") or item.get("description") or "Maquina",
+            "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
+            "horas": float(item.get("horas") or item.get("hours") or 0),
+            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+        }
+        for item in maquinas
+    ] + [
+        {
+            "rdo_id": rdo_id,
+            "tipo": "equipamento",
+            "descricao": item.get("nome") or item.get("description") or "Equipamento",
+            "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
+            "horas": float(item.get("horas") or item.get("hours") or 0),
+            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+        }
+        for item in equipamentos
+    ] + [
+        {
+            "rdo_id": rdo_id,
+            "tipo": "locacao",
+            "descricao": item.get("nome") or item.get("description") or "Locacao",
+            "quantidade": float(item.get("quantidade") or item.get("quantity") or 1),
+            "horas": float(item.get("horas") or item.get("hours") or 0),
+            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+        }
+        for item in locacoes
+    ]
+
+    mao_obra_rows = [
+        {
+            "rdo_id": rdo_id,
+            "cargo": item.get("cargo") or item.get("tipo") or "Equipe",
+            "quantidade": float(item.get("quantidade") or 0),
+            "horas": float(item.get("horas") or item.get("hours") or 0),
+            "custo": float(item.get("custo") or item.get("costBRL") or 0),
+        }
+        for item in mao_obra
+    ]
+
+    ocorrencia_rows: list[dict[str, Any]] = []
+    if row.get("ocorrencias"):
+        ocorrencia_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": "ocorrencia",
+                "descricao": row.get("ocorrencias"),
+                "paralisa_obra": False,
+            }
+        )
+    if row.get("paralisacoes"):
+        ocorrencia_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": "paralisacao",
+                "descricao": row.get("paralisacoes"),
+                "paralisa_obra": True,
+            }
+        )
+
+    return {
+        "equipes": equipes_result,
+        "atividades": _safe_insert_many(client, "rdo_atividades", atividade_rows),
+        "materiais": _safe_insert_many(client, "rdo_materiais", material_rows),
+        "equipamentos": _safe_insert_many(client, "rdo_equipamentos", equipamento_rows),
+        "mao_obra": _safe_insert_many(client, "rdo_mao_obra", mao_obra_rows),
+        "ocorrencias": _safe_insert_many(client, "rdo_ocorrencias", ocorrencia_rows),
+    }
+
+
+def _normalize_whatsapp_schedule_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    destinatarios = payload.get("destinatarios")
+    if not isinstance(destinatarios, list):
+        destinatarios = []
+    clean_destinatarios: list[dict[str, Any]] = []
+    for item in destinatarios:
+        if isinstance(item, dict):
+            clean_destinatarios.append(
+                {
+                    "nome": item.get("nome") or item.get("name") or "Contato",
+                    "telefone": item.get("telefone") or item.get("phone") or "",
+                    "contato_id": item.get("contato_id") or item.get("id"),
+                }
+            )
+        elif isinstance(item, str):
+            clean_destinatarios.append({"nome": item, "telefone": "", "contato_id": None})
+    return {
+        "templateId": payload.get("templateId") or payload.get("template_id") or "custom",
+        "templateNome": payload.get("templateNome") or payload.get("template_nome") or payload.get("nome") or "Fluxo WhatsApp",
+        "mensagem": payload.get("mensagem") or payload.get("message") or "",
+        "frequencia": payload.get("frequencia") or payload.get("frequency") or "diario",
+        "horario": payload.get("horario") or payload.get("time") or "07:00",
+        "destinatarios": clean_destinatarios,
+        "ativo": bool(payload.get("ativo", True)),
+        "origem": payload.get("origem") or "api",
+        "totalEnviados": int(payload.get("totalEnviados") or payload.get("total_enviados") or 0),
+        "ultimaExecucao": payload.get("ultimaExecucao") or payload.get("ultima_execucao"),
+    }
+
+
+def _schedule_from_event(row: dict[str, Any]) -> dict[str, Any]:
+    payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+    schedule = _normalize_whatsapp_schedule_payload(payload)
+    status = str(row.get("status") or "").strip().lower()
+    schedule["id"] = row.get("id")
+    schedule["projeto_id"] = row.get("projeto_id")
+    schedule["workflow_id"] = row.get("workflow_id")
+    schedule["execution_id"] = row.get("execution_id")
+    schedule["created_at"] = row.get("created_at")
+    schedule["updated_status"] = row.get("status")
+    schedule["ativo"] = status not in {"cancelado", "pausado", "inactive", "deleted"} and bool(schedule.get("ativo", True))
+    return schedule
+
+
+def _whatsapp_log_item(row: dict[str, Any]) -> dict[str, Any]:
+    payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+    return {
+        "id": row.get("id"),
+        "telefone": row.get("telefone") or payload.get("telefone") or "",
+        "nome": row.get("nome") or payload.get("nome") or "Contato",
+        "direction": row.get("direction") or "outbound",
+        "tipo": row.get("tipo") or payload.get("tipo") or "mensagem",
+        "mensagem": row.get("mensagem") or payload.get("mensagem") or "",
+        "status": row.get("status") or "recebido",
+        "created_at": row.get("created_at"),
+        "payload": payload,
+    }
 
 
 @router.get("/api/health/integrations")
@@ -170,10 +438,74 @@ def listar_projetos():
     return {"items": _canonical_project_rows(rows), "source": "supabase" if rows else "fallback"}
 
 
+@router.post("/api/projetos", status_code=201)
+def criar_projeto(payload: dict[str, Any]):
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    row.setdefault("nome", row.get("titulo") or "Projeto sem nome")
+    row.setdefault("contrato", row.get("codigo") or "")
+    row.setdefault("cidade", "")
+    row.setdefault("cliente", "ConstruData")
+    row.setdefault("tipo", "esgoto")
+    row.setdefault("data_inicio", date.today().isoformat())
+    row.setdefault("data_fim", None)
+    row.setdefault("orcamento_total", 0)
+    row.setdefault("status", "ativo")
+    row.setdefault("responsavel_nome", row.get("responsavel_nome") or row.get("responsavel") or "")
+    row.setdefault("responsavel_telefone", row.get("responsavel_telefone") or "")
+    try:
+        created = client.table("projetos").insert(row).execute()
+        data = _items(created)
+        if not data:
+            return row
+        canonical = _canonical_project_rows(data)
+        return canonical[0] if canonical else data[0]
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao gravar projeto: {exc}") from exc
+
+
 @router.get("/api/projetos/{project_id}/rdos")
 def listar_rdos_projeto(project_id: str):
     _project_or_404(project_id)
     return {"items": _select("rdos", project_id=project_id, limit=300)}
+
+
+@router.get("/api/projetos/{project_id}/rdos/{rdo_id}")
+def detalhar_rdo_projeto(project_id: str, rdo_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        rdo = (
+            client.table("rdos")
+            .select("*")
+            .eq("id", rdo_id)
+            .eq("projeto_id", project_id)
+            .limit(1)
+            .execute()
+        )
+        row = _item(rdo)
+        if row is None:
+            raise HTTPException(status_code=404, detail="RDO nao encontrado")
+        return {
+            "rdo": row,
+            "children": {
+                "equipes": _items(client.table("rdo_equipes").select("*").eq("rdo_id", rdo_id).execute()),
+                "atividades": _items(client.table("rdo_atividades").select("*").eq("rdo_id", rdo_id).execute()),
+                "materiais": _items(client.table("rdo_materiais").select("*").eq("rdo_id", rdo_id).execute()),
+                "equipamentos": _items(client.table("rdo_equipamentos").select("*").eq("rdo_id", rdo_id).execute()),
+                "mao_obra": _items(client.table("rdo_mao_obra").select("*").eq("rdo_id", rdo_id).execute()),
+                "ocorrencias": _items(client.table("rdo_ocorrencias").select("*").eq("rdo_id", rdo_id).execute()),
+            },
+        }
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao detalhar RDO: {exc}") from exc
 
 
 @router.post("/api/projetos/{project_id}/rdos", status_code=201)
@@ -183,21 +515,39 @@ def criar_rdo_projeto(project_id: str, payload: dict[str, Any]):
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
-    row = dict(payload)
-    row["projeto_id"] = project_id
-    row.setdefault("project_id", project_id)
-    row.setdefault("data", date.today().isoformat())
-    row.setdefault("origem", "web")
-    row.setdefault("status", "recebido")
+    row = _normalize_rdo_row(payload, project_id)
     try:
         created = client.table("rdos").insert(row).execute()
-        event = {"projeto_id": project_id, "tipo": "rdo_created", "payload": row, "origem": row.get("origem")}
+        data = _items(created)
+        created_row = data[0] if data else row
+        child_persistence = None
+        if created_row.get("id"):
+            child_persistence = _persist_rdo_children(client, str(created_row["id"]), row)
+        event = {
+            "projeto_id": project_id,
+            "tipo": "rdo_created",
+            "payload": {
+                "rdo_id": created_row.get("id"),
+                "data": created_row.get("data"),
+                "origem": row.get("origem"),
+                "status": created_row.get("status"),
+                "child_persistence": child_persistence,
+            },
+            "origem": row.get("origem"),
+        }
         try:
             client.table("workflow_events").insert(event).execute()
         except Exception:
             pass
-        data = _items(created)
-        return data[0] if data else row
+        if created_row.get("id") and row.get("lps_id"):
+            try:
+                client.table("lps_restricoes").update({"rdo_id": created_row["id"]}).eq("id", row["lps_id"]).execute()
+            except Exception:
+                pass
+        return {
+            **created_row,
+            "child_persistence": child_persistence or {},
+        }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO: {exc}") from exc
 
@@ -258,10 +608,223 @@ def criar_lps_restricao(project_id: str, payload: dict[str, Any]):
         raise HTTPException(status_code=500, detail=f"Erro ao gravar restricao LPS: {exc}") from exc
 
 
+@router.get("/api/projetos/{project_id}/lps-restricoes")
+def listar_lps_restricoes_projeto(project_id: str):
+    _project_or_404(project_id)
+    return {"items": _select("lps_restricoes", project_id=project_id, limit=300)}
+
+
 @router.get("/api/projetos/{project_id}/contatos")
 def listar_contatos_projeto(project_id: str):
     _project_or_404(project_id)
     return {"items": _dedupe(_select("contatos", project_id=project_id, limit=300), "telefone_whatsapp", "nome")}
+
+
+@router.post("/api/projetos/{project_id}/contatos", status_code=201)
+def criar_contato_projeto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    row["projeto_id"] = project_id
+    row.setdefault("nome", row.get("responsavel") or "Contato sem nome")
+    row.setdefault("cargo", row.get("papel") or "Responsavel")
+    row.setdefault("telefone_whatsapp", row.get("telefone") or row.get("telefone_whatsapp") or "sem-telefone")
+    row.setdefault("frente_id", None)
+    row.setdefault("ativo", True)
+    row.setdefault("foto_url", None)
+    try:
+        created = client.table("contatos").insert(row).execute()
+        data = _items(created)
+        return data[0] if data else row
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao gravar contato: {exc}") from exc
+
+
+@router.patch("/api/projetos/{project_id}/contatos/{contato_id}")
+def atualizar_contato_projeto(project_id: str, contato_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    if "telefone" in row and "telefone_whatsapp" not in row:
+        row["telefone_whatsapp"] = row.pop("telefone")
+    try:
+        updated = (
+            client.table("contatos")
+            .update(row)
+            .eq("id", contato_id)
+            .eq("projeto_id", project_id)
+            .execute()
+        )
+        data = _items(updated)
+        return data[0] if data else {"id": contato_id, "projeto_id": project_id, **row}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar contato: {exc}") from exc
+
+
+@router.delete("/api/projetos/{project_id}/contatos/{contato_id}")
+def remover_contato_projeto(project_id: str, contato_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        client.table("contatos").delete().eq("id", contato_id).eq("projeto_id", project_id).execute()
+        return {"ok": True, "id": contato_id}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao remover contato: {exc}") from exc
+
+
+@router.get("/api/projetos/{project_id}/whatsapp/logs")
+def listar_whatsapp_logs_projeto(project_id: str, limit: int = 100):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        rows = _items(
+            client.table("whatsapp_logs")
+            .select("*")
+            .eq("projeto_id", project_id)
+            .order("created_at", desc=True)
+            .limit(max(1, min(limit, 500)))
+            .execute()
+        )
+        return {
+            "items": [_whatsapp_log_item(row) for row in rows],
+            "status": "connected",
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao carregar logs de WhatsApp: {exc}") from exc
+
+
+@router.get("/api/projetos/{project_id}/whatsapp/agendamentos")
+def listar_whatsapp_agendamentos_projeto(project_id: str, limit: int = 100):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        rows = _items(
+            client.table("workflow_events")
+            .select("*")
+            .eq("projeto_id", project_id)
+            .eq("tipo", "whatsapp_schedule")
+            .order("created_at", desc=True)
+            .limit(max(1, min(limit, 300)))
+            .execute()
+        )
+        return {
+            "items": [_schedule_from_event(row) for row in rows],
+            "status": "connected",
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao carregar agendamentos de WhatsApp: {exc}") from exc
+
+
+@router.post("/api/projetos/{project_id}/whatsapp/agendamentos", status_code=201)
+def criar_whatsapp_agendamento_projeto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    schedule_payload = _normalize_whatsapp_schedule_payload(payload)
+    status = "ativo" if schedule_payload.get("ativo", True) else "pausado"
+    row = {
+        "projeto_id": project_id,
+        "tipo": "whatsapp_schedule",
+        "origem": schedule_payload.get("origem") or "api",
+        "status": status,
+        "payload": schedule_payload,
+    }
+    try:
+        created = client.table("workflow_events").insert(row).execute()
+        item = _item(created)
+        return _schedule_from_event(item or row)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao criar agendamento de WhatsApp: {exc}") from exc
+
+
+@router.patch("/api/projetos/{project_id}/whatsapp/agendamentos/{agendamento_id}")
+def atualizar_whatsapp_agendamento_projeto(project_id: str, agendamento_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        current = _item(
+            client.table("workflow_events")
+            .select("*")
+            .eq("id", agendamento_id)
+            .eq("projeto_id", project_id)
+            .eq("tipo", "whatsapp_schedule")
+            .limit(1)
+            .execute()
+        )
+        if current is None:
+            raise HTTPException(status_code=404, detail="Agendamento nao encontrado")
+        current_payload = current.get("payload") if isinstance(current.get("payload"), dict) else {}
+        merged_payload = _normalize_whatsapp_schedule_payload({**current_payload, **payload})
+        status = "ativo" if merged_payload.get("ativo", True) else "pausado"
+        updated = (
+            client.table("workflow_events")
+            .update({"payload": merged_payload, "status": status})
+            .eq("id", agendamento_id)
+            .eq("projeto_id", project_id)
+            .execute()
+        )
+        item = _item(updated)
+        return _schedule_from_event(item or {**current, "payload": merged_payload, "status": status})
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar agendamento de WhatsApp: {exc}") from exc
+
+
+@router.delete("/api/projetos/{project_id}/whatsapp/agendamentos/{agendamento_id}")
+def remover_whatsapp_agendamento_projeto(project_id: str, agendamento_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        current = _item(
+            client.table("workflow_events")
+            .select("*")
+            .eq("id", agendamento_id)
+            .eq("projeto_id", project_id)
+            .eq("tipo", "whatsapp_schedule")
+            .limit(1)
+            .execute()
+        )
+        if current is None:
+            raise HTTPException(status_code=404, detail="Agendamento nao encontrado")
+        current_payload = current.get("payload") if isinstance(current.get("payload"), dict) else {}
+        current_payload["ativo"] = False
+        updated = (
+            client.table("workflow_events")
+            .update({"payload": current_payload, "status": "cancelado"})
+            .eq("id", agendamento_id)
+            .eq("projeto_id", project_id)
+            .execute()
+        )
+        item = _item(updated)
+        return {"ok": True, "item": _schedule_from_event(item or {**current, "payload": current_payload, "status": "cancelado"})}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao remover agendamento de WhatsApp: {exc}") from exc
 
 
 @router.get("/api/projetos/{project_id}/dashboard")
@@ -285,9 +848,36 @@ def dashboard_projeto(project_id: str):
             "custo_total_dia": custo_total,
         },
         "frentes": frentes,
+        "contatos": _dedupe(contatos, "telefone_whatsapp", "nome")[:100],
         "rdos": rdos[:20],
         "tarefas": tarefas[:30],
         "restricoes": restricoes[:30],
+        "status": "connected" if get_supabase() else "local",
+    }
+
+
+@router.get("/api/projetos/{project_id}/financeiro")
+def financeiro_projeto(project_id: str):
+    projeto = _project_or_404(project_id)
+    lancamentos = _select("lancamentos_financeiros", project_id=project_id, limit=500)
+    trechos = _select("trechos_custo", project_id=project_id, limit=500)
+    despesas = [
+        row for row in lancamentos
+        if str(row.get("tipo", "")).strip().upper() in {"DESPESA", "CUSTO", "SAIDA"}
+    ]
+    receitas = [
+        row for row in lancamentos
+        if str(row.get("tipo", "")).strip().upper() in {"RECEITA", "ENTRADA"}
+    ]
+    return {
+        "projeto": projeto,
+        "lancamentos": lancamentos,
+        "trechos": trechos,
+        "resumo": {
+            "receitas": _sum(receitas, "valor"),
+            "despesas": _sum(despesas, "valor"),
+            "trechos_total": _sum(trechos, "custo_total", "valor_total"),
+        },
         "status": "connected" if get_supabase() else "local",
     }
 
@@ -308,15 +898,56 @@ def torre_projeto(project_id: str):
 @router.get("/api/projetos/{project_id}/gestao360")
 def gestao360_projeto(project_id: str):
     payload = dashboard_projeto(project_id)
+    financeiro = financeiro_projeto(project_id)
     return {
         **payload,
         "custos": {
             "diario": payload["kpis"]["custo_total_dia"],
             "rdos": len(payload["rdos"]),
+            "lancamentos": len(financeiro["lancamentos"]),
+            "despesas_total": financeiro["resumo"]["despesas"],
+            "receitas_total": financeiro["resumo"]["receitas"],
         },
         "integracoes": {
             "rdo": "Conectado" if payload["rdos"] else "Parcial",
             "tarefas": "Conectado" if payload["tarefas"] else "Parcial",
             "lps": "Conectado" if payload["restricoes"] else "Parcial",
+            "financeiro": "Conectado" if financeiro["lancamentos"] or financeiro["trechos"] else "Parcial",
         },
     }
+
+
+@router.patch("/api/projetos/{project_id}/lps-restricoes/{restricao_id}")
+def atualizar_lps_restricao(project_id: str, restricao_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    row = dict(payload)
+    try:
+        updated = (
+            client.table("lps_restricoes")
+            .update(row)
+            .eq("id", restricao_id)
+            .eq("projeto_id", project_id)
+            .execute()
+        )
+        data = _items(updated)
+        return data[0] if data else {"id": restricao_id, "projeto_id": project_id, **row}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar restricao LPS: {exc}") from exc
+
+
+@router.delete("/api/projetos/{project_id}/lps-restricoes/{restricao_id}")
+def remover_lps_restricao(project_id: str, restricao_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    try:
+        client.table("lps_restricoes").delete().eq("id", restricao_id).eq("projeto_id", project_id).execute()
+        return {"ok": True, "id": restricao_id}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Erro ao remover restricao LPS: {exc}") from exc

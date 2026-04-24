@@ -1,14 +1,16 @@
 import { create } from 'zustand'
 import { supabase, type DbProjeto, type DbFrente } from '@/lib/supabase'
-import { apiProjetos } from '@/lib/api'
+import { apiCriarProjeto, apiProjetoDashboard, apiProjetos, type CanonicalIntegrationStatus } from '@/lib/api'
 
 const STORAGE_KEY = 'cdata-active-project'
+const ALLOW_DEMO_DATA = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
 
 interface ProjectContextState {
   projetos: DbProjeto[]
   frentes: DbFrente[]
   activeProjectId: string | null
   loading: boolean
+  integrationStatus: CanonicalIntegrationStatus
   setActiveProject: (id: string) => void
   fetchProjetos: () => Promise<void>
   fetchFrentes: (projetoId: string) => Promise<void>
@@ -137,16 +139,17 @@ const DEMO_FRENTES: DbFrente[] = [
 ]
 
 export const useProjectContext = create<ProjectContextState>((set, get) => ({
-  projetos: DEMO_PROJETOS,
-  frentes: DEMO_FRENTES,
+  projetos: [],
+  frentes: [],
   activeProjectId: (() => {
     try {
-      return localStorage.getItem(STORAGE_KEY) || DEMO_PROJETOS[0]?.id || null
+      return localStorage.getItem(STORAGE_KEY) || null
     } catch {
-      return DEMO_PROJETOS[0]?.id || null
+      return null
     }
   })(),
   loading: false,
+  integrationStatus: 'local',
 
   setActiveProject: (id) => {
     try {
@@ -164,10 +167,12 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
       const api = await apiProjetos()
       const rows = (api.items ?? []) as unknown as DbProjeto[]
       if (rows.length > 0) {
-        set({ projetos: rows })
+        set({ projetos: rows, integrationStatus: 'connected' })
         const active = get().activeProjectId
         const existsInData = active && rows.find((p) => p.id === active)
+        const nextActiveId = !active || !existsInData ? rows[0].id : active
         if (!active || !existsInData) get().setActiveProject(rows[0].id)
+        else get().fetchFrentes(nextActiveId)
         set({ loading: false })
         return
       }
@@ -175,38 +180,112 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
       // fallback Supabase/local abaixo
     }
     if (!supabase) {
-      set({ loading: false })
+      if (ALLOW_DEMO_DATA) {
+        set({
+          projetos: DEMO_PROJETOS,
+          frentes: DEMO_FRENTES,
+          integrationStatus: 'local',
+          activeProjectId: get().activeProjectId || DEMO_PROJETOS[0]?.id || null,
+          loading: false,
+        })
+        return
+      }
+      set({ projetos: [], frentes: [], integrationStatus: 'local', loading: false })
       return
     }
     try {
       const { data } = await supabase.from('projetos').select('*').order('created_at', { ascending: false })
       if (data && data.length > 0) {
-        set({ projetos: data as DbProjeto[] })
+        set({ projetos: data as DbProjeto[], integrationStatus: 'partial' })
         const active = get().activeProjectId
         const existsInData = active && data.find((p: any) => p.id === active)
+        const nextActiveId = !active || !existsInData ? data[0].id : active
         if (!active || !existsInData) get().setActiveProject(data[0].id)
+        else get().fetchFrentes(nextActiveId)
+      } else if (ALLOW_DEMO_DATA) {
+        set({
+          projetos: DEMO_PROJETOS,
+          frentes: DEMO_FRENTES,
+          integrationStatus: 'local',
+        })
+      } else {
+        set({ projetos: [], frentes: [], integrationStatus: 'local' })
       }
     } catch {
-      // keep demo data
+      if (ALLOW_DEMO_DATA) {
+        set({
+          projetos: DEMO_PROJETOS,
+          frentes: DEMO_FRENTES,
+          integrationStatus: 'local',
+          activeProjectId: get().activeProjectId || DEMO_PROJETOS[0]?.id || null,
+        })
+      } else {
+        set({ projetos: [], frentes: [], integrationStatus: 'local' })
+      }
     }
     set({ loading: false })
   },
 
   fetchFrentes: async (projetoId) => {
-    if (!supabase) return
+    if (!projetoId) {
+      set({ frentes: [] })
+      return
+    }
+    try {
+      const payload = await apiProjetoDashboard(projetoId)
+      const rows = (payload.frentes ?? []) as unknown as DbFrente[]
+      if (rows.length > 0) {
+        set((s) => ({
+          frentes: [...s.frentes.filter((f) => f.projeto_id !== projetoId), ...rows],
+          integrationStatus: payload.status === 'connected' ? 'connected' : s.integrationStatus,
+        }))
+        return
+      }
+    } catch {
+      // fallback below
+    }
+    if (!supabase) {
+      if (ALLOW_DEMO_DATA) {
+        set((s) => ({
+          frentes: [
+            ...s.frentes.filter((f) => f.projeto_id !== projetoId),
+            ...DEMO_FRENTES.filter((f) => f.projeto_id === projetoId),
+          ],
+        }))
+      } else {
+        set((s) => ({ frentes: s.frentes.filter((f) => f.projeto_id !== projetoId) }))
+      }
+      return
+    }
     try {
       const { data } = await supabase.from('frentes').select('*').eq('projeto_id', projetoId)
       if (data) {
         set((s) => ({
           frentes: [...s.frentes.filter((f) => f.projeto_id !== projetoId), ...(data as DbFrente[])],
+          integrationStatus: s.integrationStatus === 'connected' ? 'connected' : 'partial',
         }))
       }
     } catch {
-      // keep demo
+      if (ALLOW_DEMO_DATA) {
+        set((s) => ({
+          frentes: [
+            ...s.frentes.filter((f) => f.projeto_id !== projetoId),
+            ...DEMO_FRENTES.filter((f) => f.projeto_id === projetoId),
+          ],
+        }))
+      }
     }
   },
 
   addProjeto: async (p) => {
+    try {
+      const created = await apiCriarProjeto(p as unknown as Record<string, unknown>)
+      const novo = created as unknown as DbProjeto
+      set((s) => ({ projetos: [novo, ...s.projetos], integrationStatus: 'connected' }))
+      return novo
+    } catch {
+      // fallback below
+    }
     if (!supabase) {
       const novo: DbProjeto = { ...p, id: `prj-${Date.now()}`, created_at: new Date().toISOString() } as DbProjeto
       set((s) => ({ projetos: [novo, ...s.projetos] }))
