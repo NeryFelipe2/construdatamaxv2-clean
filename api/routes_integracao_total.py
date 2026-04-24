@@ -613,8 +613,10 @@ def health_integrations():
             )
             if response.status_code < 400:
                 whatsapp_state = response.json().get("instance", {}).get("state") or "configured"
+            else:
+                whatsapp_state = f"error_{response.status_code}"
         except Exception:
-            whatsapp_state = "configured"
+            whatsapp_state = "unreachable"
     return {
         "ok": status in {"connected", "partial"},
         "status": status,
