@@ -191,6 +191,16 @@ RDO_INSERT_COLUMNS = {
 }
 
 
+CHILD_INSERT_COLUMNS = {
+    "rdo_equipes": {"rdo_id", "tipo", "lider_id", "lider_nome"},
+    "rdo_atividades": {"equipe_id", "rua", "servico", "tubo", "metragem", "pecas", "casas", "observacao"},
+    "rdo_materiais": {"rdo_id", "descricao", "quantidade", "unidade"},
+    "rdo_equipamentos": {"rdo_id", "tipo", "quantidade"},
+    "rdo_mao_obra": {"rdo_id", "cargo", "quantidade"},
+    "rdo_ocorrencias": {"rdo_id", "tipo", "descricao"},
+}
+
+
 def _stringify_summary(value: Any) -> str:
     if isinstance(value, str):
         return value
@@ -261,12 +271,27 @@ def _rdo_insert_row(row: dict[str, Any]) -> dict[str, Any]:
 def _safe_insert_many(client: Any, table: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
     if not rows:
         return {"ok": True, "count": 0, "items": []}
+    allowed_columns = CHILD_INSERT_COLUMNS.get(table)
+    if allowed_columns:
+        rows = [{key: value for key, value in row.items() if key in allowed_columns} for row in rows]
     try:
         result = client.table(table).insert(rows).execute()
         items = _items(result)
         return {"ok": True, "count": len(items) if items else len(rows), "items": items}
     except Exception as exc:
         return {"ok": False, "count": 0, "items": [], "error": str(exc)}
+
+
+def _select_child_rows(client: Any, table: str, rdo_id: str, equipe_ids: list[str] | None = None) -> list[dict[str, Any]]:
+    try:
+        return _items(client.table(table).select("*").eq("rdo_id", rdo_id).execute())
+    except Exception:
+        if table == "rdo_atividades" and equipe_ids:
+            try:
+                return _items(client.table(table).select("*").in_("equipe_id", equipe_ids).execute())
+            except Exception:
+                return []
+        return []
 
 
 def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict[str, Any]:
@@ -657,15 +682,17 @@ def detalhar_rdo_projeto(project_id: str, rdo_id: str):
         row = _item(rdo)
         if row is None:
             raise HTTPException(status_code=404, detail="RDO nao encontrado")
+        equipes = _select_child_rows(client, "rdo_equipes", rdo_id)
+        equipe_ids = [str(item.get("id")) for item in equipes if item.get("id")]
         return {
             "rdo": row,
             "children": {
-                "equipes": _items(client.table("rdo_equipes").select("*").eq("rdo_id", rdo_id).execute()),
-                "atividades": _items(client.table("rdo_atividades").select("*").eq("rdo_id", rdo_id).execute()),
-                "materiais": _items(client.table("rdo_materiais").select("*").eq("rdo_id", rdo_id).execute()),
-                "equipamentos": _items(client.table("rdo_equipamentos").select("*").eq("rdo_id", rdo_id).execute()),
-                "mao_obra": _items(client.table("rdo_mao_obra").select("*").eq("rdo_id", rdo_id).execute()),
-                "ocorrencias": _items(client.table("rdo_ocorrencias").select("*").eq("rdo_id", rdo_id).execute()),
+                "equipes": equipes,
+                "atividades": _select_child_rows(client, "rdo_atividades", rdo_id, equipe_ids),
+                "materiais": _select_child_rows(client, "rdo_materiais", rdo_id),
+                "equipamentos": _select_child_rows(client, "rdo_equipamentos", rdo_id),
+                "mao_obra": _select_child_rows(client, "rdo_mao_obra", rdo_id),
+                "ocorrencias": _select_child_rows(client, "rdo_ocorrencias", rdo_id),
             },
         }
     except HTTPException:
