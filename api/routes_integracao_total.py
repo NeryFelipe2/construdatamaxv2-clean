@@ -153,6 +153,68 @@ def _normalize_rdo_clima(value: Any) -> str | None:
     return aliases.get(normalized)
 
 
+RDO_INSERT_COLUMNS = {
+    "id",
+    "projeto_id",
+    "project_id",
+    "frente_id",
+    "data",
+    "engenheiro",
+    "apontador",
+    "clima",
+    "turno",
+    "producao",
+    "producao_m",
+    "equipe",
+    "equipe_number",
+    "maquinas",
+    "equipamentos",
+    "locacoes",
+    "mao_obra",
+    "materiais",
+    "custo_direto",
+    "custo_indireto",
+    "custo_total_dia",
+    "ocorrencias",
+    "paralisacoes",
+    "observacoes",
+    "fotos",
+    "latitude",
+    "longitude",
+    "lps_id",
+    "restricoes",
+    "origem",
+    "status",
+    "payload_original",
+    "created_at",
+    "updated_at",
+}
+
+
+def _stringify_summary(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        parts: list[str] = []
+        for item in value:
+            if isinstance(item, dict):
+                parts.append(
+                    str(
+                        item.get("descricao")
+                        or item.get("description")
+                        or item.get("nome")
+                        or item.get("name")
+                        or item
+                    )
+                )
+            elif item not in (None, ""):
+                parts.append(str(item))
+        return "; ".join(parts)
+    if isinstance(value, dict):
+        return str(value.get("descricao") or value.get("description") or value.get("nome") or value.get("name") or value)
+    return "" if value is None else str(value)
+
+
 def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, Any]:
     row = dict(payload)
     row["projeto_id"] = project_id
@@ -160,19 +222,40 @@ def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, An
     row.setdefault("data", date.today().isoformat())
     row.setdefault("origem", "web")
     row.setdefault("status", "recebido")
+    row.setdefault("engenheiro", row.get("responsavel") or row.get("responsavel_nome") or row.get("apontador"))
+    row.setdefault("apontador", row.get("responsavel") or row.get("responsavel_nome") or row.get("engenheiro"))
+    if row.get("custos_diretos") is not None and row.get("custo_direto") is None:
+        row["custo_direto"] = row.get("custos_diretos")
+    if row.get("custos_indiretos") is not None and row.get("custo_indireto") is None:
+        row["custo_indireto"] = row.get("custos_indiretos")
+    localizacao = row.get("localizacao")
+    if isinstance(localizacao, dict):
+        row.setdefault("latitude", localizacao.get("lat") or localizacao.get("latitude"))
+        row.setdefault("longitude", localizacao.get("lng") or localizacao.get("lon") or localizacao.get("longitude"))
     for list_field in ("maquinas", "equipamentos", "locacoes", "mao_obra", "materiais", "restricoes"):
         value = row.get(list_field)
         row[list_field] = value if isinstance(value, list) else []
+    if "equipe" in row and isinstance(row.get("equipe"), list):
+        row["equipe_lista"] = row["equipe"]
+        row["equipe"] = _stringify_summary(row["equipe"])
+    if "ocorrencias" in row and isinstance(row.get("ocorrencias"), list):
+        row["ocorrencias_lista"] = row["ocorrencias"]
+        row["ocorrencias"] = _stringify_summary(row["ocorrencias"])
     fotos = row.get("fotos")
     row["fotos"] = fotos if isinstance(fotos, list) else []
     payload_original = row.get("payload_original")
     row["payload_original"] = payload_original if isinstance(payload_original, dict) else {}
+    row["payload_original"].setdefault("raw", payload)
     clima = _normalize_rdo_clima(row.get("clima"))
     if clima:
         row["clima"] = clima
     else:
         row.pop("clima", None)
     return row
+
+
+def _rdo_insert_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in row.items() if key in RDO_INSERT_COLUMNS}
 
 
 def _safe_insert_many(client: Any, table: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -191,13 +274,27 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
     payload_original = row.get("payload_original") if isinstance(row.get("payload_original"), dict) else {}
     services = _as_list(payload_original.get("services"))
     trechos = _as_list(payload_original.get("trechos"))
+    atividades = _as_list(row.get("atividades"))
+    equipe_lista = _as_list(row.get("equipe_lista"))
     maquinas = _as_list(row.get("maquinas"))
     equipamentos = _as_list(row.get("equipamentos"))
     locacoes = _as_list(row.get("locacoes"))
     mao_obra = _as_list(row.get("mao_obra"))
     materiais = _as_list(row.get("materiais"))
+    ocorrencias_lista = _as_list(row.get("ocorrencias_lista"))
 
     equipe_rows: list[dict[str, Any]] = []
+    for item in equipe_lista:
+        quantidade = int(float(item.get("quantidade") or item.get("qtd") or 1))
+        equipe_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": item.get("funcao") or item.get("cargo") or item.get("tipo") or "equipe",
+                "lider_nome": apontador,
+                "quantidade": quantidade,
+                "metadata": item,
+            }
+        )
     for item in mao_obra:
         quantidade = int(float(item.get("quantidade") or 0))
         if quantidade <= 0:
@@ -249,14 +346,35 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
                 "observacao": trecho.get("status") or "",
             }
         )
+    for atividade in atividades:
+        quantidade = float(atividade.get("quantidade") or atividade.get("quantity") or atividade.get("metragem") or 0)
+        unidade = atividade.get("unidade") or atividade.get("unit") or "un"
+        atividade_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "equipe_id": equipe_id,
+                "rua": atividade.get("rua") or atividade.get("local") or "",
+                "servico": atividade.get("servico") or atividade.get("descricao") or atividade.get("description") or "Atividade",
+                "metragem": quantidade if str(unidade).lower() in {"m", "metro", "metros"} else 0,
+                "observacao": f"{quantidade:g} {unidade}".strip(),
+            }
+        )
 
     material_rows = [
         {
             "rdo_id": rdo_id,
-            "descricao": item.get("descricao") or item.get("description") or "Material",
+            "descricao": item.get("descricao") or item.get("description") or item.get("nome") or "Material",
             "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
             "unidade": item.get("unidade") or item.get("unit") or "un",
-            "custo": float(item.get("custo") or item.get("costBRL") or 0),
+            "custo": float(
+                item.get("custo")
+                or item.get("costBRL")
+                or (
+                    float(item.get("quantidade") or item.get("quantity") or 0)
+                    * float(item.get("custo_unitario") or item.get("unitCostBRL") or 0)
+                )
+                or 0
+            ),
         }
         for item in materiais
     ]
@@ -268,7 +386,17 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
             "descricao": item.get("nome") or item.get("description") or "Maquina",
             "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
             "horas": float(item.get("horas") or item.get("hours") or 0),
-            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+            "custo": float(
+                item.get("custo")
+                or item.get("custoBRL")
+                or item.get("costBRL")
+                or (
+                    float(item.get("quantidade") or item.get("quantity") or 0)
+                    * float(item.get("horas") or item.get("hours") or 0)
+                    * float(item.get("custo_hora") or item.get("hourCostBRL") or 0)
+                )
+                or 0
+            ),
         }
         for item in maquinas
     ] + [
@@ -278,7 +406,17 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
             "descricao": item.get("nome") or item.get("description") or "Equipamento",
             "quantidade": float(item.get("quantidade") or item.get("quantity") or 0),
             "horas": float(item.get("horas") or item.get("hours") or 0),
-            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+            "custo": float(
+                item.get("custo")
+                or item.get("custoBRL")
+                or item.get("costBRL")
+                or (
+                    float(item.get("quantidade") or item.get("quantity") or 0)
+                    * float(item.get("horas") or item.get("hours") or 0)
+                    * float(item.get("custo_hora") or item.get("hourCostBRL") or 0)
+                )
+                or 0
+            ),
         }
         for item in equipamentos
     ] + [
@@ -288,7 +426,17 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
             "descricao": item.get("nome") or item.get("description") or "Locacao",
             "quantidade": float(item.get("quantidade") or item.get("quantity") or 1),
             "horas": float(item.get("horas") or item.get("hours") or 0),
-            "custo": float(item.get("custo") or item.get("custoBRL") or item.get("costBRL") or 0),
+            "custo": float(
+                item.get("custo")
+                or item.get("custoBRL")
+                or item.get("costBRL")
+                or (
+                    float(item.get("quantidade") or item.get("quantity") or 1)
+                    * float(item.get("horas") or item.get("hours") or 0)
+                    * float(item.get("custo_hora") or item.get("hourCostBRL") or 0)
+                )
+                or 0
+            ),
         }
         for item in locacoes
     ]
@@ -296,16 +444,34 @@ def _persist_rdo_children(client: Any, rdo_id: str, row: dict[str, Any]) -> dict
     mao_obra_rows = [
         {
             "rdo_id": rdo_id,
-            "cargo": item.get("cargo") or item.get("tipo") or "Equipe",
+            "cargo": item.get("cargo") or item.get("funcao") or item.get("tipo") or "Equipe",
             "quantidade": float(item.get("quantidade") or 0),
             "horas": float(item.get("horas") or item.get("hours") or 0),
-            "custo": float(item.get("custo") or item.get("costBRL") or 0),
+            "custo": float(
+                item.get("custo")
+                or item.get("costBRL")
+                or (
+                    float(item.get("quantidade") or 0)
+                    * float(item.get("horas") or item.get("hours") or 0)
+                    * float(item.get("custo_hora") or item.get("hourCostBRL") or 0)
+                )
+                or 0
+            ),
         }
         for item in mao_obra
     ]
 
     ocorrencia_rows: list[dict[str, Any]] = []
-    if row.get("ocorrencias"):
+    for item in ocorrencias_lista:
+        ocorrencia_rows.append(
+            {
+                "rdo_id": rdo_id,
+                "tipo": item.get("tipo") or "ocorrencia",
+                "descricao": item.get("descricao") or item.get("description") or "Ocorrencia",
+                "paralisa_obra": bool(item.get("paralisa_obra") or item.get("paralisacao")),
+            }
+        )
+    if row.get("ocorrencias") and not ocorrencias_lista:
         ocorrencia_rows.append(
             {
                 "rdo_id": rdo_id,
@@ -516,10 +682,11 @@ def criar_rdo_projeto(project_id: str, payload: dict[str, Any]):
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
     row = _normalize_rdo_row(payload, project_id)
+    insert_row = _rdo_insert_row(row)
     try:
-        created = client.table("rdos").insert(row).execute()
+        created = client.table("rdos").insert(insert_row).execute()
         data = _items(created)
-        created_row = data[0] if data else row
+        created_row = data[0] if data else insert_row
         child_persistence = None
         if created_row.get("id"):
             child_persistence = _persist_rdo_children(client, str(created_row["id"]), row)
