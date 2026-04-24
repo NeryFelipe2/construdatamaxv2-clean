@@ -274,6 +274,10 @@ def _safe_insert_many(client: Any, table: str, rows: list[dict[str, Any]]) -> di
     allowed_columns = CHILD_INSERT_COLUMNS.get(table)
     if allowed_columns:
         rows = [{key: value for key, value in row.items() if key in allowed_columns} for row in rows]
+    if table in {"rdo_equipamentos", "rdo_mao_obra"}:
+        for row in rows:
+            if row.get("quantidade") is not None:
+                row["quantidade"] = int(float(row.get("quantidade") or 0))
     try:
         result = client.table(table).insert(rows).execute()
         items = _items(result)
