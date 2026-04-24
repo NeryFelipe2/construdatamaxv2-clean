@@ -190,28 +190,23 @@ Quando o mesmo WhatsApp esta conectado como bot e o Felipe digita uma mensagem,
 a Evolution entrega o evento como `fromMe=true`.
 
 Regra de seguranca:
-- mensagens `fromMe=true` sao ignoradas por padrao;
-- em grupos, o teste seguro sempre funciona com `#bot <comando>`;
-- se `WHATSAPP_SELF_TEST_GROUPS` estiver configurado, comandos simples tambem sao aceitos nesse grupo especifico.
+- mensagens `fromMe=true` em grupos sao ignoradas;
+- mensagens `fromMe=true` em conversa individual sao liberadas para comandos seguros;
+- comandos seguros: `menu`, `oi`, opcoes `1` a `16`, `@comandos`, `#comando` e `construdata teste`.
 
 Exemplos:
-
-```text
-#bot menu
-#bot 1
-#bot @rdo
-```
-
-Com grupo liberado em `WHATSAPP_SELF_TEST_GROUPS`:
 
 ```text
 menu
 1
 @rdo
+#menu
+construdata teste menu
 ```
 
-Essa trava evita o problema de o bot responder dentro de qualquer conversa aberta
-no WhatsApp do proprio numero conectado.
+Essa trava evita o problema de o bot responder em grupo. Em privado, o proprio
+numero conectado pode testar o menu e as opcoes sem whitelist de telefone. A
+whitelist continua valendo para mensagens recebidas de outros numeros.
 
 Variavel operacional relacionada:
 

@@ -442,39 +442,6 @@ def _remote_jid(payload: dict) -> str | None:
     return str(jid) if jid else None
 
 
-def _self_test_phones() -> set[str]:
-    raw = (
-        os.environ.get("WHATSAPP_SELF_TEST_PHONES")
-        or os.environ.get("WHATSAPP_SELF_TEST_PHONE")
-        or ""
-    )
-    phones: set[str] = set()
-    for token in re.split(r"[\s,;]+", raw.strip()):
-        for variant in _phone_variants(token):
-            phones.add(variant)
-    return phones
-
-
-def _self_test_groups() -> set[str]:
-    raw = (
-        os.environ.get("WHATSAPP_SELF_TEST_GROUPS")
-        or os.environ.get("WHATSAPP_SELF_TEST_GROUP")
-        or ""
-    )
-    groups: set[str] = set()
-    for token in re.split(r"[\s,;]+", raw.strip()):
-        token = token.strip()
-        if not token:
-            continue
-        if token.endswith("@g.us"):
-            groups.add(token)
-            continue
-        digits = _normalize_phone(token)
-        if digits:
-            groups.add(f"{digits}@g.us")
-    return groups
-
-
 def _is_safe_self_test_command(texto: str) -> bool:
     lowered = str(texto or "").strip().lower()
     if lowered in {"menu", "oi", "olá", "ola"}:
@@ -494,15 +461,6 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
     lowered = stripped.lower()
     remote_jid = _remote_jid(payload) or ""
     if remote_jid.endswith("@g.us"):
-        if lowered.startswith("#bot "):
-            command = stripped[5:].strip()
-            return command or None
-        if remote_jid in _self_test_groups() and _is_safe_self_test_command(stripped):
-            return stripped
-        return None
-
-    remote_phone = _remote_phone(payload)
-    if not remote_phone or remote_phone not in _self_test_phones():
         return None
 
     if lowered == "construdata teste":
@@ -512,11 +470,14 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
         command = stripped[len("construdata teste ") :].strip()
         return command or "menu"
 
-    if not stripped.startswith("#"):
-        return None
+    if stripped.startswith("#"):
+        command = stripped[1:].strip()
+        return command or None
 
-    command = stripped[1:].strip()
-    return command or None
+    if _is_safe_self_test_command(stripped):
+        return stripped
+
+    return None
 
 
 @router.get("/numeros")
@@ -649,6 +610,7 @@ def receber_webhook(payload: dict):
     self_test_command = _extract_self_test_command(payload, texto)
     if _is_from_me(payload) and not self_test_command:
         return {"ok": True, "ignored": "from_me"}
+    is_self_test_command = bool(self_test_command)
     if self_test_command:
         texto = self_test_command
     telefone = _normalize_phone(destino_raw)
@@ -657,7 +619,7 @@ def receber_webhook(payload: dict):
     projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
 
-    if telefone and not registered_phone and not destino_grupo:
+    if telefone and not registered_phone and not destino_grupo and not is_self_test_command:
         return {
             "ok": True,
             "ignored": "unregistered_phone",
