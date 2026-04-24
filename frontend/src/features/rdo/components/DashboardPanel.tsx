@@ -7,6 +7,11 @@ import { useRdoStore } from '@/store/rdoStore'
 import { useLpsStore } from '@/store/lpsStore'
 import type { RdoTrechoStatus } from '@/types'
 
+function asNumber(value: unknown): number {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : 0
+}
+
 const STATUS_LABEL: Record<RdoTrechoStatus, string> = {
   not_started: 'Não Iniciado',
   in_progress: 'Em Execução',
@@ -94,13 +99,13 @@ function LineChart({ data }: { data: { date: string; meters: number }[] }) {
   const PAD = { l: 48, r: 16, t: 12, b: 28 }
   const iw = W - PAD.l - PAD.r
   const ih = H - PAD.t - PAD.b
-  const maxM = Math.max(...data.map((d) => d.meters), 1)
+  const maxM = Math.max(...data.map((d) => asNumber(d.meters)), 1)
   const n = data.length
 
   const pts = data
     .map((d, i) => {
       const x = PAD.l + (i / (n - 1)) * iw
-      const y = PAD.t + ih - (d.meters / maxM) * ih
+      const y = PAD.t + ih - (asNumber(d.meters) / maxM) * ih
       return `${x.toFixed(1)},${y.toFixed(1)}`
     })
     .join(' ')
@@ -130,7 +135,7 @@ function LineChart({ data }: { data: { date: string; meters: number }[] }) {
       <polyline points={pts} fill="none" stroke="#0ea5e9" strokeWidth="2" />
       {data.map((d, i) => {
         const x = PAD.l + (i / (n - 1)) * iw
-        const y = PAD.t + ih - (d.meters / maxM) * ih
+        const y = PAD.t + ih - (asNumber(d.meters) / maxM) * ih
         return <circle key={d.date} cx={x} cy={y} r="3" fill="#0ea5e9" />
       })}
     </svg>
@@ -160,8 +165,8 @@ export function DashboardPanel() {
           map.set(t.trechoCode, {
             code: t.trechoCode,
             desc: t.trechoDescription,
-            planned: t.plannedMeters,
-            executed: t.executedMeters,
+            planned: asNumber(t.plannedMeters),
+            executed: asNumber(t.executedMeters),
             status: t.status,
           })
         }
@@ -199,7 +204,7 @@ export function DashboardPanel() {
     const dateMap = new Map<string, number>()
     for (const rdo of rdos) {
       const prev = dateMap.get(rdo.date) ?? 0
-      const dayExec = rdo.trechos.reduce((s, t) => s + t.executedMeters, 0)
+      const dayExec = rdo.trechos.reduce((s, t) => s + asNumber(t.executedMeters), 0)
       dateMap.set(rdo.date, Math.max(prev, dayExec))
     }
     const sorted = [...dateMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))
@@ -212,12 +217,12 @@ export function DashboardPanel() {
     const m = new Map<string, number>()
     for (const rdo of rdos) {
       for (const s of rdo.services) {
-        m.set(s.description, (m.get(s.description) ?? 0) + s.quantity)
+        m.set(s.description, (m.get(s.description) ?? 0) + asNumber(s.quantity))
       }
     }
     return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
   }, [rdos])
-  const maxSvc = serviceMap[0]?.[1] ?? 1
+  const maxSvc = Math.max(asNumber(serviceMap[0]?.[1]), 1)
 
   // Filter trechos table
   const filteredTrechos = trechos.filter((t) => {
@@ -353,8 +358,8 @@ export function DashboardPanel() {
         const allTrechos = rdos.flatMap((r) => r.trechos)
         const sysData = SYSTEMS.map((s) => {
           const entries = allTrechos.filter((t) => (t.system ?? 'outro') === s.key)
-          const planned  = entries.reduce((acc, t) => acc + t.plannedMeters, 0)
-          const executed = entries.reduce((acc, t) => acc + t.executedMeters, 0)
+          const planned  = entries.reduce((acc, t) => acc + asNumber(t.plannedMeters), 0)
+          const executed = entries.reduce((acc, t) => acc + asNumber(t.executedMeters), 0)
           return { ...s, planned, executed, pct: planned > 0 ? Math.min(100, (executed / planned) * 100) : 0 }
         }).filter((s) => s.planned > 0 || s.executed > 0)
 

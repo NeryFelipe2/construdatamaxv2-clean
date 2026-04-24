@@ -18,11 +18,14 @@ import { useSupabaseDre } from '@/lib/useSupabaseDre'
 type TabId = 'dre' | 'fluxo' | 'eficiencia' | 'custos'
 
 const CONTRATOS: Record<string, { numero: string; empresa: string; cliente: string; cidade: string; valorContrato: number; prazoMeses: number }> = {
-  'demo-1': { numero: 'CT 11481051', empresa: 'ConstruDataMax Engenharia', cliente: 'SABESP', cidade: 'Santos / Osasco', valorContrato: 18_750_000, prazoMeses: 18 },
-  'pardinho-1': { numero: 'CT-PARDINHO-2026', empresa: 'Consórcio Itapetininga', cliente: 'Prefeitura Pardinho', cidade: 'Pardinho-SP', valorContrato: 32_000_000, prazoMeses: 21 },
-  'demo-2': { numero: 'CT-CLU-OSC-2026', empresa: 'Consórcio CLU Osasco', cliente: 'SABESP / Prefeitura Osasco', cidade: 'Osasco-SP', valorContrato: 28_000_000, prazoMeses: 24 },
+    'abe7f66c-004b-4bb5-a245-6be67debd9f7': { numero: 'CT 11481051', empresa: 'ConstruDataMax Engenharia', cliente: 'SABESP', cidade: 'Santos / Osasco', valorContrato: 18_750_000, prazoMeses: 18 },
+  'ec112c9a-1669-4287-8079-526d6940ce82': { numero: 'CT-PARDINHO-2026', empresa: 'Consórcio Itapetininga', cliente: 'Prefeitura Pardinho', cidade: 'Pardinho-SP', valorContrato: 32_000_000, prazoMeses: 21 },
+  'f3c6645b-347f-4382-b9c5-d103c27ec511': { numero: 'CT-CLU-OSC-2026', empresa: 'Consórcio CLU Osasco', cliente: 'SABESP / Prefeitura Osasco', cidade: 'Osasco-SP', valorContrato: 28_000_000, prazoMeses: 24 },
+  'c2bf8fda-b2e0-4bc1-9535-4891d596ea10': { numero: 'CT-TATUI-2026', empresa: 'RK', cliente: 'RK', cidade: 'Tatui-SP', valorContrato: 18_000_000, prazoMeses: 18 },
+  '2a28beec-b1f8-4b0c-8416-d0710bb35d9d': { numero: 'CT-11481051', empresa: 'ConstruData Brasilia', cliente: 'ConstruData', cidade: 'Brasilia-DF', valorContrato: 12_000_000, prazoMeses: 12 },
+  'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8': { numero: 'RK-SUB-2026', empresa: 'RK Subempreita', cliente: 'RK', cidade: 'Santos-SP', valorContrato: 9_500_000, prazoMeses: 12 },
 }
-const DEFAULT_CONTRATO = CONTRATOS['demo-1']
+const DEFAULT_CONTRATO = CONTRATOS['abe7f66c-004b-4bb5-a245-6be67debd9f7']
 
 // Fallbacks enquanto tabelas não têm dados reais
 const DRE_FALLBACK = {
@@ -141,7 +144,7 @@ export function DreFinanceiroPage() {
   const { activeProjectId } = useProjectContext()
   const CONTRATO = (activeProjectId && CONTRATOS[activeProjectId]) || DEFAULT_CONTRATO
 
-  const { lancamentos, trechos, loading, refresh } = useSupabaseDre(activeProjectId)
+  const { lancamentos, trechos, loading, connectionStatus, refresh } = useSupabaseDre(activeProjectId)
 
   // Dados reais ou fallback
   const receitasDB = lancamentos.filter(x => x.tipo === 'RECEITA').map(x => ({ desc: x.descricao, valor: Number(x.valor) }))
@@ -186,7 +189,7 @@ export function DreFinanceiroPage() {
         <div className="flex items-center gap-4">
           <button onClick={refresh} className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg text-xs hover:bg-cyan-500/20 transition-colors">
             <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
-            {isRealData ? '🟢 Dados Reais' : '🟡 Demo'}
+            {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : isRealData ? 'Dados Locais' : 'Local'}
           </button>
           <div className="text-right">
             <div className="text-[10px] text-[#5a8caa] uppercase">Valor Contrato</div>
@@ -391,7 +394,7 @@ export function DreFinanceiroPage() {
               <div className="px-5 py-3 border-b border-[#20406a] flex items-center justify-between">
                 <SectionTitle icon={Calculator}>Garantia de Custo por Trecho — Planejado vs Real</SectionTitle>
                 <span className="text-[10px] text-[#5a8caa] bg-[#0d2040] px-3 py-1 rounded-full border border-[#20406a]">
-                  {isRealData ? '🟢 Dados do Supabase' : '🟡 Dados Demo'}
+                  {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : isRealData ? 'Dados Locais' : 'Local'}
                 </span>
               </div>
               <div className="overflow-x-auto">
@@ -533,3 +536,4 @@ export function DreFinanceiroPage() {
     </div>
   )
 }
+
