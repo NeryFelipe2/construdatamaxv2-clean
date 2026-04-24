@@ -181,3 +181,34 @@ O payload e normalizado automaticamente para os formatos:
 - Evolution API v2 (`data.messages[]`)
 - Meta Cloud API (`from`, `text`)
 - Formato local (`sender`, `message.conversation`)
+
+---
+
+## 6. Teste com o proprio numero do bot
+
+Quando o mesmo WhatsApp esta conectado como bot e o Felipe digita uma mensagem,
+a Evolution entrega o evento como `fromMe=true`.
+
+Regra de seguranca:
+- mensagens `fromMe=true` sao ignoradas por padrao;
+- em grupos, o teste seguro sempre funciona com `#bot <comando>`;
+- se `WHATSAPP_SELF_TEST_GROUPS` estiver configurado, comandos simples tambem sao aceitos nesse grupo especifico.
+
+Exemplos:
+
+```text
+#bot menu
+#bot 1
+#bot @rdo
+```
+
+Com grupo liberado em `WHATSAPP_SELF_TEST_GROUPS`:
+
+```text
+menu
+1
+@rdo
+```
+
+Essa trava evita o problema de o bot responder dentro de qualquer conversa aberta
+no WhatsApp do proprio numero conectado.

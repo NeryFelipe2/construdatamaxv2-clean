@@ -454,6 +454,37 @@ def _self_test_phones() -> set[str]:
     return phones
 
 
+def _self_test_groups() -> set[str]:
+    raw = (
+        os.environ.get("WHATSAPP_SELF_TEST_GROUPS")
+        or os.environ.get("WHATSAPP_SELF_TEST_GROUP")
+        or ""
+    )
+    groups: set[str] = set()
+    for token in re.split(r"[\s,;]+", raw.strip()):
+        token = token.strip()
+        if not token:
+            continue
+        if token.endswith("@g.us"):
+            groups.add(token)
+            continue
+        digits = _normalize_phone(token)
+        if digits:
+            groups.add(f"{digits}@g.us")
+    return groups
+
+
+def _is_safe_self_test_command(texto: str) -> bool:
+    lowered = str(texto or "").strip().lower()
+    if lowered in {"menu", "oi", "olá", "ola"}:
+        return True
+    if re.fullmatch(r"0?([1-9]|1[0-6])", lowered):
+        return True
+    if lowered.startswith("@"):
+        return True
+    return lowered.startswith("construdata teste")
+
+
 def _extract_self_test_command(payload: dict, texto: str) -> str | None:
     if not _is_from_me(payload):
         return None
@@ -462,10 +493,12 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
     lowered = stripped.lower()
     remote_jid = _remote_jid(payload) or ""
     if remote_jid.endswith("@g.us"):
-        if not lowered.startswith("#bot "):
-            return None
-        command = stripped[5:].strip()
-        return command or None
+        if lowered.startswith("#bot "):
+            command = stripped[5:].strip()
+            return command or None
+        if remote_jid in _self_test_groups() and _is_safe_self_test_command(stripped):
+            return stripped
+        return None
 
     remote_phone = _remote_phone(payload)
     if not remote_phone or remote_phone not in _self_test_phones():
