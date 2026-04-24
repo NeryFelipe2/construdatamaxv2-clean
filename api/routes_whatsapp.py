@@ -260,10 +260,11 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
     if not evo_url:
         return "not_configured"
     try:
+        timeout_seconds = float(os.environ.get("EVOLUTION_SEND_TIMEOUT_SECONDS") or 30)
         state_response = httpx.get(
             f"{evo_url}/instance/connectionState/{evo_instance}",
             headers={"apikey": evo_key} if evo_key else {},
-            timeout=6.0,
+            timeout=min(timeout_seconds, 15.0),
         )
         if state_response.status_code >= 400:
             return f"instance_error_{state_response.status_code}"
@@ -277,7 +278,7 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
             endpoint,
             json={"number": target, "text": mensagem},
             headers=headers,
-            timeout=12.0,
+            timeout=timeout_seconds,
         )
         return "sent" if resp.status_code < 400 else f"error_{resp.status_code}"
     except Exception as exc:

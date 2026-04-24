@@ -212,3 +212,12 @@ menu
 
 Essa trava evita o problema de o bot responder dentro de qualquer conversa aberta
 no WhatsApp do proprio numero conectado.
+
+Variavel operacional relacionada:
+
+```text
+EVOLUTION_SEND_TIMEOUT_SECONDS=30
+```
+
+O timeout maior reduz falso erro quando a Evolution/Render acorda devagar.
+Nao ha retry automatico de envio para evitar mensagem duplicada no WhatsApp.
