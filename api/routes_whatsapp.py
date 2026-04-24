@@ -615,6 +615,10 @@ def receber_webhook(payload: dict):
         texto = self_test_command
     telefone = _normalize_phone(destino_raw)
     destino_grupo = bool(destino_resposta and str(destino_resposta).endswith("@g.us"))
+    if destino_grupo:
+        _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=None)
+        return {"ok": True, "ignored": "group_message", "delivery": "blocked"}
+
     contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
     projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)

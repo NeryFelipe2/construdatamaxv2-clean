@@ -190,7 +190,7 @@ Quando o mesmo WhatsApp esta conectado como bot e o Felipe digita uma mensagem,
 a Evolution entrega o evento como `fromMe=true`.
 
 Regra de seguranca:
-- mensagens `fromMe=true` em grupos sao ignoradas;
+- mensagens de grupos sao ignoradas;
 - mensagens `fromMe=true` em conversa individual sao liberadas para comandos seguros;
 - comandos seguros: `menu`, `oi`, opcoes `1` a `16`, `@comandos`, `#comando` e `construdata teste`.
 
