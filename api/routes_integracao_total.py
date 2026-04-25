@@ -633,6 +633,21 @@ def _safe_table_update(client: Any, table: str, row: dict[str, Any], **eq_filter
         return {"ok": False, "error": str(exc), "item": row}
 
 
+def _is_missing_table_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    return "pgrst205" in text or "could not find the table" in text or "schema cache" in text
+
+
+def _migration_required_response(table: str, exc: Exception, items: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    return {
+        "items": items or [],
+        "status": "migration_required",
+        "table": table,
+        "message": f"Tabela {table} ainda nao existe no Supabase. Execute docs/supabase_log_planejamento_ml_20260425.sql.",
+        "error": str(exc),
+    }
+
+
 def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dict[str, Any] | None:
     day = parse_date(data_ref)
     try:
@@ -1055,6 +1070,35 @@ def listar_logs_operacionais(project_id: str, limit: int = 100, severity: str | 
             query = query.eq("subsystem", subsystem)
         return {"items": _items(query.execute()), "status": "connected"}
     except Exception as exc:
+        if _is_missing_table_error(exc):
+            fallback_items: list[dict[str, Any]] = []
+            try:
+                fallback_rows = _items(
+                    client.table("workflow_events")
+                    .select("*")
+                    .eq("projeto_id", project_id)
+                    .eq("tipo", "operational_log_fallback")
+                    .order("created_at", desc=True)
+                    .limit(max(1, min(limit, 500)))
+                    .execute()
+                )
+                for event in fallback_rows:
+                    payload = event.get("payload") if isinstance(event.get("payload"), dict) else {}
+                    if severity and payload.get("severity") != severity:
+                        continue
+                    if subsystem and payload.get("subsystem") != subsystem:
+                        continue
+                    fallback_items.append(
+                        {
+                            **payload,
+                            "id": payload.get("id") or event.get("id"),
+                            "created_at": payload.get("created_at") or event.get("created_at"),
+                            "fallback_event_id": event.get("id"),
+                        }
+                    )
+            except Exception:
+                fallback_items = []
+            return _migration_required_response("operational_logs", exc, fallback_items)
         raise HTTPException(status_code=500, detail=f"Erro ao listar logs operacionais: {exc}") from exc
 
 
@@ -1194,6 +1238,8 @@ def listar_planejamentos_semanais(project_id: str, limit: int = 100):
             project_id=project_id,
             error_message=f"Erro ao listar planejamentos semanais: {exc}",
         )
+        if _is_missing_table_error(exc):
+            return _migration_required_response("planejamentos_semanais", exc)
         raise HTTPException(status_code=500, detail=f"Erro ao listar planejamentos semanais: {exc}") from exc
 
 
@@ -1340,6 +1386,8 @@ def listar_desvios_planejamento(project_id: str, limit: int = 200):
         )
         return {"items": rows, "status": "connected"}
     except Exception as exc:
+        if _is_missing_table_error(exc):
+            return _migration_required_response("desvios_planejamento", exc)
         raise HTTPException(status_code=500, detail=f"Erro ao listar desvios: {exc}") from exc
 
 
@@ -1368,6 +1416,14 @@ def recalcular_desvios_ml(project_id: str):
             project_id=project_id,
             error_message=f"Erro ao recalcular desvios: {exc}",
         )
+        if _is_missing_table_error(exc):
+            return {
+                "ok": False,
+                "status": "migration_required",
+                "table": "desvios_planejamento",
+                "message": "Tabelas de planejamento/ML ainda nao existem no Supabase. Execute docs/supabase_log_planejamento_ml_20260425.sql.",
+                "error": str(exc),
+            }
         raise HTTPException(status_code=500, detail=f"Erro ao recalcular desvios: {exc}") from exc
 
 
@@ -1389,6 +1445,8 @@ def listar_replanejamentos(project_id: str, limit: int = 100):
         )
         return {"items": rows, "status": "connected"}
     except Exception as exc:
+        if _is_missing_table_error(exc):
+            return _migration_required_response("replanejamentos", exc)
         raise HTTPException(status_code=500, detail=f"Erro ao listar replanejamentos: {exc}") from exc
 
 
