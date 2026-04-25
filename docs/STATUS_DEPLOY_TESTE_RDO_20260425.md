@@ -24,7 +24,8 @@ Assim, o ciclo ja funciona em modo fallback. Depois da migration, os mesmos endp
 - `dd013782` - Order RDOs by recent creation
 - `75dd7171` - Document deployment and RDO test status
 - `297f4912` - Add workflow event fallback for planning cycle
-- `PENDENTE` - Harden planning fallback dashboard reads
+- `1f66cefb` - Harden planning fallback reads
+- `c8429dc7` - Retry operational fallback reads
 
 ## Deploys confirmados
 
@@ -33,9 +34,10 @@ Assim, o ciclo ja funciona em modo fallback. Depois da migration, os mesmos endp
 Servico: `srv-d750kldm5p6s73feojbg`  
 URL: `https://construdatamaxv2-clean.onrender.com`
 
-Ultimo deploy live validado antes desta atualizacao:
+Ultimo deploy live validado:
 
-- Commit: `297f49129ec0cd4beaf2c752a939b1176247ee0a`
+- Commit: `c8429dc73953093203fdf99b6c1fbf0263c65201`
+- Deploy: `dep-d7minb1o3t8c73e71p70`
 - Status: `live`
 
 Health validado:
@@ -47,7 +49,7 @@ Observacao atual:
 
 - `render_api`: `connected`
 - `n8n`: `external`
-- `whatsapp`: no ultimo health retornou `unreachable`, indicando que a Evolution publica nao respondeu ao backend no momento do teste.
+- `whatsapp`: no ultimo health final retornou `open`.
 - tabelas novas de planejamento/log/ML ainda ausentes no schema Supabase.
 
 ### Vercel frontend
@@ -220,13 +222,38 @@ Correcao:
 - Falha de fallback grava log operacional em vez de sumir silenciosamente.
 - `GET /desvios` e `GET /replanejamentos` tambem tratam erro transiente como caso de fallback, nao como 500 definitivo.
 
+## Teste final apos deploy `c8429dc7`
+
+Endpoints verificados em producao:
+
+```text
+GET /api/projetos/{tatui}/rdos                  -> 200, 3 itens
+GET /api/projetos/{tatui}/planejamentos-semanais -> 200, status fallback, 1 item
+GET /api/projetos/{tatui}/desvios               -> 200, status fallback, 1 item
+GET /api/projetos/{tatui}/replanejamentos       -> 200, status fallback, 1 item
+GET /api/projetos/{tatui}/logs                  -> 200, status migration_required, 16 itens fallback
+```
+
+Dashboard verificado 5 vezes seguidas:
+
+```text
+rdos_total: 3
+planejamento_ativo: true
+desvios_total: 1
+desvios_criticos: 1
+replanejamentos_rascunho: 1
+ppc_medio: 40.0
+```
+
+Resultado: a API de producao esta estavel para o ciclo operacional mesmo antes da migration canonica.
+
 ## Estado atual das integracoes
 
 `GET /api/health/integrations`:
 
 - `render_api`: `connected`
 - `n8n`: `external`
-- `whatsapp`: `unreachable` no ultimo teste
+- `whatsapp`: `open` no ultimo teste final
 - `status`: `partial`
 
 Tabelas ainda faltando no Supabase:
