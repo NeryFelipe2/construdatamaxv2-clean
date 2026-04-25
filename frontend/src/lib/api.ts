@@ -32,12 +32,24 @@ export interface ApiProjetoDashboardPayload {
     contatos: number;
     restricoes_abertas: number;
     custo_total_dia: number;
+    planejamento_ativo?: boolean;
+    desvios_total?: number;
+    desvios_criticos?: number;
+    logs_abertos?: number;
+    replanejamentos_rascunho?: number;
+    ppc_medio?: number;
+    spi_medio?: number;
+    cpi_medio?: number;
   };
   frentes: Array<Record<string, unknown>>;
   contatos: Array<Record<string, unknown>>;
   rdos: Array<Record<string, unknown>>;
   tarefas: Array<Record<string, unknown>>;
   restricoes: Array<Record<string, unknown>>;
+  planejamento?: Record<string, unknown> | null;
+  desvios?: Array<Record<string, unknown>>;
+  logs?: Array<Record<string, unknown>>;
+  replanejamentos?: Array<Record<string, unknown>>;
   status: CanonicalIntegrationStatus;
 }
 
@@ -46,6 +58,9 @@ export interface ApiProjetoTorrePayload {
   frentes: Array<Record<string, unknown>>;
   riscos: Array<Record<string, unknown>>;
   restricoes: Array<Record<string, unknown>>;
+  logs?: Array<Record<string, unknown>>;
+  desvios?: Array<Record<string, unknown>>;
+  replanejamentos?: Array<Record<string, unknown>>;
   kpis: ApiProjetoDashboardPayload["kpis"];
   status: CanonicalIntegrationStatus;
 }
@@ -58,6 +73,7 @@ export interface ApiProjetoGestao360Payload extends ApiProjetoDashboardPayload {
     despesas_total?: number;
     receitas_total?: number;
   };
+  planejamento_operacional?: Record<string, unknown>;
   integracoes: Record<string, string>;
 }
 
@@ -269,6 +285,44 @@ export const apiProjetoWhatsappAgendamentos = (projectId: string) =>
   get<{ items: ApiProjetoWhatsappAgendamentoRecord[]; status: CanonicalIntegrationStatus }>(
     `/api/projetos/${projectId}/whatsapp/agendamentos`
   );
+
+export const apiProjetoLogs = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/logs`
+  );
+
+export const apiProjetoPlanejamentosSemanais = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/planejamentos-semanais`
+  );
+
+export const apiProjetoCriarPlanejamentoSemanal = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/planejamentos-semanais`, payload);
+
+export const apiProjetoValidarPlanejamentoSemanal = (
+  projectId: string,
+  planId: string,
+  payload: Record<string, unknown>
+) => post<Record<string, unknown>>(`/api/projetos/${projectId}/planejamentos-semanais/${planId}/validar`, payload);
+
+export const apiProjetoDesvios = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/desvios`
+  );
+
+export const apiProjetoRecalcularDesviosMl = (projectId: string) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/ml/recalcular-desvios`);
+
+export const apiProjetoReplanejamentos = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/replanejamentos`
+  );
+
+export const apiProjetoValidarReplanejamento = (
+  projectId: string,
+  replanejamentoId: string,
+  payload: Record<string, unknown>
+) => post<Record<string, unknown>>(`/api/projetos/${projectId}/replanejamentos/${replanejamentoId}/validar`, payload);
 
 export const apiProjetoCriarWhatsappAgendamento = (projectId: string, payload: Record<string, unknown>) =>
   post<ApiProjetoWhatsappAgendamentoRecord>(`/api/projetos/${projectId}/whatsapp/agendamentos`, payload);

@@ -23,6 +23,13 @@ TABLES_CANONICAS = [
     "lps_restricoes",
     "whatsapp_logs",
     "workflow_events",
+    "operational_logs",
+    "planejamentos_semanais",
+    "planejamento_itens",
+    "planejamento_validacoes",
+    "desvios_planejamento",
+    "ml_execucoes",
+    "replanejamentos",
 ]
 
 PROJECT_ID_ALIASES: dict[str, str] = {

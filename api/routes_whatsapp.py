@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -10,6 +11,7 @@ from pathlib import Path
 import httpx
 from fastapi import APIRouter, HTTPException, Query
 
+from api.operational import log_operational_event, safe_float
 from api.supabase_client import PROJECT_ID_ALIASES, get_supabase
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = REPO_ROOT / "data" / "whatsapp_numeros.json"
@@ -195,6 +197,73 @@ def _dashboard_text(project_id: str | None) -> str:
     )
 
 
+def _planejamento_text(project_id: str | None) -> str:
+    projeto = _project_label(project_id)
+    return (
+        "ðŸ“… Planejamento Semanal\n"
+        f"Projeto: {projeto}\n\n"
+        "Engenheiro: lance a programacao semanal por frente/atividade no ConstruData.\n"
+        "Diretor: valide o plano antes dele virar oficial.\n"
+        "Depois os RDOs serao comparados contra o planejado e o ML gerara desvios/replanejamento.\n\n"
+        "Link: https://construdatamaxv2-clean.vercel.app/app/planejamento"
+    )
+
+
+def _desvios_text(project_id: str | None) -> str:
+    if not supabase:
+        return "ðŸ“‰ Desvios Planejado x Realizado\nSupabase nao configurado no backend."
+    projeto = _project_label(project_id)
+    try:
+        query = supabase.table("desvios_planejamento").select("*").order("created_at", desc=True).limit(20)
+        if project_id:
+            query = query.in_("projeto_id", _related_project_ids(project_id))
+        rows = query.execute().data or []
+    except Exception as exc:
+        log_operational_event(
+            subsystem="whatsapp",
+            severity="error",
+            status="open",
+            project_id=project_id,
+            error_message=f"Erro ao consultar desvios via WhatsApp: {exc}",
+        )
+        rows = []
+    if not rows:
+        return (
+            "ðŸ“‰ Desvios Planejado x Realizado\n"
+            f"Projeto: {projeto}\n"
+            "Nenhum desvio registrado ainda. Lance/valide planejamento semanal e depois envie RDOs."
+        )
+    criticos = [r for r in rows if str(r.get("severidade")).lower() in {"critical", "high"}]
+    desvio_medio = sum(abs(safe_float(r.get("desvio_percentual"))) for r in rows) / max(1, len(rows))
+    lines = [
+        "ðŸ“‰ Desvios Planejado x Realizado",
+        f"Projeto: {projeto}",
+        f"Registros recentes: {len(rows)} | Criticos/altos: {len(criticos)} | Desvio medio: {desvio_medio:.1f}%",
+        "",
+    ]
+    for row in rows[:5]:
+        lines.append(
+            f"- {row.get('atividade')}: {safe_float(row.get('desvio_percentual')):.1f}% | "
+            f"{row.get('severidade')} | {row.get('acao_recomendada') or 'monitorar'}"
+        )
+    lines.append("\nWeb: https://construdatamaxv2-clean.vercel.app")
+    return "\n".join(lines)
+
+
+def _log_delivery_if_needed(delivery: str, *, telefone: str | None, project_id: str | None, tipo: str, mensagem: str) -> None:
+    if delivery in {"sent", "disabled", "not_configured"} or str(delivery).startswith("sent_retry"):
+        return
+    log_operational_event(
+        subsystem="evolution",
+        severity="error" if str(delivery).startswith("error") else "warning",
+        status="open",
+        project_id=project_id,
+        telefone=telefone,
+        error_message=f"Falha no envio WhatsApp: {delivery}",
+        payload={"tipo": tipo, "mensagem_preview": mensagem[:500], "delivery": delivery},
+    )
+
+
 def _command_text(option: str, project_id: str | None, nome: str | None = None) -> str:
     commands = {
         "1": lambda: _rdo_status_text(project_id),
@@ -259,19 +328,54 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
     evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
     if not evo_url:
         return "not_configured"
+
     try:
-        endpoint = f"{evo_url}/message/sendText/{evo_instance}"
-        headers = {"apikey": evo_key} if evo_key else {}
-        target = _normalize_destination(destino) or destino
-        resp = httpx.post(
-            endpoint,
-            json={"number": target, "text": mensagem},
-            headers=headers,
-            timeout=12.0,
-        )
-        return "sent" if resp.status_code < 400 else f"error_{resp.status_code}"
-    except Exception as exc:
-        return f"error:{exc}"
+        attempts = max(1, int(os.environ.get("EVOLUTION_SEND_RETRIES") or 2))
+    except ValueError:
+        attempts = 2
+    try:
+        timeout_seconds = float(os.environ.get("EVOLUTION_SEND_TIMEOUT_SECONDS") or 30)
+    except ValueError:
+        timeout_seconds = 30.0
+    try:
+        retry_delay = max(0.0, float(os.environ.get("EVOLUTION_SEND_RETRY_DELAY_SECONDS") or 5))
+    except ValueError:
+        retry_delay = 5.0
+
+    endpoint = f"{evo_url}/message/sendText/{evo_instance}"
+    headers = {"apikey": evo_key} if evo_key else {}
+    target = _normalize_destination(destino) or destino
+    last_error = ""
+    for attempt in range(1, attempts + 1):
+        try:
+            state_response = httpx.get(
+                f"{evo_url}/instance/connectionState/{evo_instance}",
+                headers=headers,
+                timeout=min(timeout_seconds, 15.0),
+            )
+            if state_response.status_code >= 400:
+                last_error = f"instance_error_{state_response.status_code}"
+            else:
+                state = (state_response.json().get("instance") or {}).get("state")
+                if state and str(state).lower() not in {"open", "connected"}:
+                    last_error = f"not_connected_{state}"
+                else:
+                    resp = httpx.post(
+                        endpoint,
+                        json={"number": target, "text": mensagem},
+                        headers=headers,
+                        timeout=timeout_seconds,
+                    )
+                    if resp.status_code < 400:
+                        return "sent" if attempt == 1 else f"sent_retry_{attempt}"
+                    last_error = f"error_{resp.status_code}"
+        except Exception as exc:
+            last_error = f"error:{exc}"
+
+        if attempt < attempts and retry_delay:
+            time.sleep(retry_delay)
+
+    return last_error or "error:unknown"
 
 
 def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | None, str | None]:
@@ -627,14 +731,30 @@ def receber_webhook(payload: dict):
         resposta = "menu"
         mensagem = _menu_text(payload.get("nome") or contact_name)
         delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
+        _log_delivery_if_needed(delivery, telefone=telefone, project_id=projeto_id, tipo="menu", mensagem=mensagem)
         _log_whatsapp("out", {"tipo": "menu", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
         return {"ok": True, "route": resposta, "reply": mensagem, "delivery": delivery}
+
+    if "@planejamento" in texto_normalizado or "#planejamento" in texto_normalizado:
+        mensagem = _planejamento_text(projeto_id)
+        delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
+        _log_delivery_if_needed(delivery, telefone=telefone, project_id=projeto_id, tipo="planejamento", mensagem=mensagem)
+        _log_whatsapp("out", {"tipo": "planejamento", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
+        return {"ok": True, "route": "planejamento", "reply": mensagem, "delivery": delivery}
+
+    if "@desvios" in texto_normalizado or "#desvios" in texto_normalizado:
+        mensagem = _desvios_text(projeto_id)
+        delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
+        _log_delivery_if_needed(delivery, telefone=telefone, project_id=projeto_id, tipo="desvios", mensagem=mensagem)
+        _log_whatsapp("out", {"tipo": "desvios", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
+        return {"ok": True, "route": "desvios", "reply": mensagem, "delivery": delivery}
 
     option_match = re.fullmatch(r"0?([1-9]|1[0-6])", texto_normalizado)
     if option_match:
         option = option_match.group(1)
         mensagem = _command_text(option, projeto_id, payload.get("nome") or contact_name)
         delivery = _send_evolution_text(destino_resposta or telefone or "", mensagem) if (destino_resposta or telefone) else "not_configured"
+        _log_delivery_if_needed(delivery, telefone=telefone, project_id=projeto_id, tipo=f"menu_option_{option}", mensagem=mensagem)
         _log_whatsapp("out", {"tipo": f"menu_option_{option}", "status": delivery}, telefone=telefone, mensagem=mensagem, projeto_id=projeto_id)
         return {"ok": True, "route": f"menu_option_{option}", "reply": mensagem, "delivery": delivery}
 
@@ -669,10 +789,38 @@ def receber_webhook(payload: dict):
 
         if not rdos_insert.get("ok") and not rk_insert.get("ok"):
             detail = rdos_insert.get("error") or rk_insert.get("error") or "erro_desconhecido"
+            log_operational_event(
+                subsystem="rdo",
+                severity="error",
+                status="open",
+                project_id=projeto_id,
+                telefone=telefone,
+                error_message=f"Erro ao gravar RDO WhatsApp: {detail}",
+                payload={"rdos": rdos_insert, "rk_rdo_diario": rk_insert, "texto": texto},
+            )
             raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO WhatsApp: {detail}")
+
+        deviation_result = {"ok": False, "reason": "not_attempted"}
+        if rdos_insert.get("ok") and rdos_insert.get("data") and projeto_id:
+            try:
+                from api.routes_integracao_total import _generate_deviations_for_rdo
+
+                deviation_result = _generate_deviations_for_rdo(supabase, projeto_id, rdos_insert["data"][0], row)
+            except Exception as exc:
+                deviation_result = {"ok": False, "error": str(exc)}
+                log_operational_event(
+                    subsystem="planejamento",
+                    severity="warning",
+                    status="open",
+                    project_id=projeto_id,
+                    telefone=telefone,
+                    error_message=f"Erro ao gerar desvios do RDO WhatsApp: {exc}",
+                    payload={"rdo": rdos_insert.get("data"), "texto": texto},
+                )
 
         confirmacao = "OK, RDO recebido e registrado no ConstruData."
         delivery = _send_evolution_text(destino_resposta or telefone or "", confirmacao) if (destino_resposta or telefone) else "not_configured"
+        _log_delivery_if_needed(delivery, telefone=telefone, project_id=projeto_id, tipo="confirmacao_rdo", mensagem=confirmacao)
         _log_whatsapp("out", {"tipo": "confirmacao_rdo", "status": delivery}, telefone=telefone, mensagem=confirmacao, projeto_id=projeto_id)
         return {
             "ok": True,
@@ -686,6 +834,7 @@ def receber_webhook(payload: dict):
                     "rdos": rdos_insert.get("removed", []),
                     "rk_rdo_diario": rk_insert.get("removed", []),
                 },
+                "deviation_result": deviation_result,
             },
         }
 
