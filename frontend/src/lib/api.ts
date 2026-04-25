@@ -5,6 +5,101 @@
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
+export type CanonicalIntegrationStatus = "connected" | "partial" | "local";
+
+export interface ApiProjetoRecord extends Record<string, unknown> {
+  id: string;
+  nome: string;
+  contrato?: string | null;
+  cidade?: string | null;
+  cliente?: string | null;
+  tipo?: string | null;
+  status?: string | null;
+  data_inicio?: string | null;
+  data_fim?: string | null;
+  orcamento_total?: number | null;
+  responsavel_nome?: string | null;
+  responsavel_telefone?: string | null;
+}
+
+export interface ApiProjetoDashboardPayload {
+  projeto: ApiProjetoRecord;
+  kpis: {
+    frentes: number;
+    rdos_total: number;
+    rdos_hoje: number;
+    tarefas_pendentes: number;
+    contatos: number;
+    restricoes_abertas: number;
+    custo_total_dia: number;
+  };
+  frentes: Array<Record<string, unknown>>;
+  contatos: Array<Record<string, unknown>>;
+  rdos: Array<Record<string, unknown>>;
+  tarefas: Array<Record<string, unknown>>;
+  restricoes: Array<Record<string, unknown>>;
+  status: CanonicalIntegrationStatus;
+}
+
+export interface ApiProjetoTorrePayload {
+  projeto: ApiProjetoRecord;
+  frentes: Array<Record<string, unknown>>;
+  riscos: Array<Record<string, unknown>>;
+  restricoes: Array<Record<string, unknown>>;
+  kpis: ApiProjetoDashboardPayload["kpis"];
+  status: CanonicalIntegrationStatus;
+}
+
+export interface ApiProjetoGestao360Payload extends ApiProjetoDashboardPayload {
+  custos: {
+    diario: number;
+    rdos: number;
+    lancamentos?: number;
+    despesas_total?: number;
+    receitas_total?: number;
+  };
+  integracoes: Record<string, string>;
+}
+
+export interface ApiProjetoFinanceiroPayload {
+  projeto: ApiProjetoRecord;
+  lancamentos: Array<Record<string, unknown>>;
+  trechos: Array<Record<string, unknown>>;
+  resumo: {
+    receitas: number;
+    despesas: number;
+    trechos_total: number;
+  };
+  status: CanonicalIntegrationStatus;
+}
+
+export interface ApiProjetoWhatsappLogRecord {
+  id: string;
+  telefone: string;
+  nome: string;
+  direction: string;
+  tipo: string;
+  mensagem: string;
+  status: string;
+  created_at?: string | null;
+  payload?: Record<string, unknown>;
+}
+
+export interface ApiProjetoWhatsappAgendamentoRecord {
+  id: string;
+  templateId: string;
+  templateNome: string;
+  mensagem: string;
+  frequencia: string;
+  horario: string;
+  destinatarios: Array<{ nome: string; telefone: string; contato_id?: string | null }>;
+  ativo: boolean;
+  totalEnviados: number;
+  ultimaExecucao?: string | null;
+  created_at?: string | null;
+  updated_status?: string | null;
+}
+
 function url(path: string, params?: Record<string, string>): string {
   const base = API_BASE ? `${API_BASE}${path}` : path;
   const u = new URL(base, window.location.origin);
@@ -46,6 +141,7 @@ async function patch<T>(path: string, body?: unknown): Promise<T> {
 
 // ─── Health ──────────────────────────────────────────────────────────────────
 export const apiHealth = () => get<{ ok: boolean; app: string; display_name: string }>("/health");
+export const apiHealthIntegrations = () => get<Record<string, unknown>>("/api/health/integrations");
 
 // ─── Dashboard / Gestao ──────────────────────────────────────────────────────
 export const apiDashboard = (nucleo?: string) =>
@@ -96,6 +192,105 @@ export const apiRdoClose = (id: number) =>
   patch<Record<string, unknown>>(`/api/rdo/${id}/fechar`);
 
 export const apiRdoPdf = (id: number) => url(`/api/rdo/${id}/pdf`);
+
+// ─── Integracao Total / Render facade ───────────────────────────────────────
+export const apiProjetos = () =>
+  get<{ items: ApiProjetoRecord[]; source?: string }>("/api/projetos");
+
+export const apiCriarProjeto = (payload: Record<string, unknown>) =>
+  post<ApiProjetoRecord>("/api/projetos", payload);
+
+export const apiProjetoDashboard = (projectId: string) =>
+  get<ApiProjetoDashboardPayload>(`/api/projetos/${projectId}/dashboard`);
+
+export const apiProjetoRdos = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/rdos`);
+
+export const apiProjetoCriarRdo = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/rdos`, payload);
+
+export const apiProjetoTarefas = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/tarefas`);
+
+export const apiProjetoCriarTarefa = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/tarefas`, payload);
+
+export const apiProjetoContatos = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/contatos`);
+
+export const apiProjetoCriarContato = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/contatos`, payload);
+
+export const apiProjetoAtualizarContato = (projectId: string, contatoId: string, payload: Record<string, unknown>) =>
+  patch<Record<string, unknown>>(`/api/projetos/${projectId}/contatos/${contatoId}`, payload);
+
+export const apiProjetoRemoverContato = (projectId: string, contatoId: string) =>
+  fetch(url(`/api/projetos/${projectId}/contatos/${contatoId}`), { method: "DELETE" }).then(async (r) => {
+    if (!r.ok) {
+      const d = await r.json().catch(() => ({}));
+      throw new Error(d.detail || `API /api/projetos/${projectId}/contatos/${contatoId}: ${r.status}`);
+    }
+    return r.json() as Promise<Record<string, unknown>>;
+  });
+
+export const apiProjetoTorre = (projectId: string) =>
+  get<ApiProjetoTorrePayload>(`/api/projetos/${projectId}/torre`);
+
+export const apiProjetoGestao360 = (projectId: string) =>
+  get<ApiProjetoGestao360Payload>(`/api/projetos/${projectId}/gestao360`);
+
+export const apiProjetoLpsRestricoes = (projectId: string) =>
+  get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/lps-restricoes`);
+
+export const apiProjetoCriarLpsRestricao = (projectId: string, payload: Record<string, unknown>) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/lps-restricoes`, payload);
+
+export const apiProjetoAtualizarLpsRestricao = (projectId: string, restricaoId: string, payload: Record<string, unknown>) =>
+  patch<Record<string, unknown>>(`/api/projetos/${projectId}/lps-restricoes/${restricaoId}`, payload);
+
+export const apiProjetoRemoverLpsRestricao = (projectId: string, restricaoId: string) =>
+  fetch(url(`/api/projetos/${projectId}/lps-restricoes/${restricaoId}`), { method: "DELETE" }).then(async (r) => {
+    if (!r.ok) {
+      const d = await r.json().catch(() => ({}));
+      throw new Error(d.detail || `API /api/projetos/${projectId}/lps-restricoes/${restricaoId}: ${r.status}`);
+    }
+    return r.json() as Promise<Record<string, unknown>>;
+  });
+
+export const apiProjetoFinanceiro = (projectId: string) =>
+  get<ApiProjetoFinanceiroPayload>(`/api/projetos/${projectId}/financeiro`);
+
+export const apiProjetoWhatsappLogs = (projectId: string) =>
+  get<{ items: ApiProjetoWhatsappLogRecord[]; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/whatsapp/logs`
+  );
+
+export const apiProjetoWhatsappAgendamentos = (projectId: string) =>
+  get<{ items: ApiProjetoWhatsappAgendamentoRecord[]; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/whatsapp/agendamentos`
+  );
+
+export const apiProjetoCriarWhatsappAgendamento = (projectId: string, payload: Record<string, unknown>) =>
+  post<ApiProjetoWhatsappAgendamentoRecord>(`/api/projetos/${projectId}/whatsapp/agendamentos`, payload);
+
+export const apiProjetoAtualizarWhatsappAgendamento = (
+  projectId: string,
+  agendamentoId: string,
+  payload: Record<string, unknown>
+) =>
+  patch<ApiProjetoWhatsappAgendamentoRecord>(
+    `/api/projetos/${projectId}/whatsapp/agendamentos/${agendamentoId}`,
+    payload
+  );
+
+export const apiProjetoRemoverWhatsappAgendamento = (projectId: string, agendamentoId: string) =>
+  fetch(url(`/api/projetos/${projectId}/whatsapp/agendamentos/${agendamentoId}`), { method: "DELETE" }).then(async (r) => {
+    if (!r.ok) {
+      const d = await r.json().catch(() => ({}));
+      throw new Error(d.detail || `API /api/projetos/${projectId}/whatsapp/agendamentos/${agendamentoId}: ${r.status}`);
+    }
+    return r.json() as Promise<Record<string, unknown>>;
+  });
 
 // ─── Cadastro / GeoJSON ──────────────────────────────────────────────────────
 export const apiGeoJson = (nucleo?: string) =>

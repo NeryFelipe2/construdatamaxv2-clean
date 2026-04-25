@@ -4,7 +4,13 @@
  */
 import { useMemo, useState } from 'react'
 import { useRdoStore } from '@/store/rdoStore'
+import { useLpsStore } from '@/store/lpsStore'
 import type { RdoTrechoStatus } from '@/types'
+
+function asNumber(value: unknown): number {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : 0
+}
 
 const STATUS_LABEL: Record<RdoTrechoStatus, string> = {
   not_started: 'Não Iniciado',
@@ -93,13 +99,13 @@ function LineChart({ data }: { data: { date: string; meters: number }[] }) {
   const PAD = { l: 48, r: 16, t: 12, b: 28 }
   const iw = W - PAD.l - PAD.r
   const ih = H - PAD.t - PAD.b
-  const maxM = Math.max(...data.map((d) => d.meters), 1)
+  const maxM = Math.max(...data.map((d) => asNumber(d.meters)), 1)
   const n = data.length
 
   const pts = data
     .map((d, i) => {
       const x = PAD.l + (i / (n - 1)) * iw
-      const y = PAD.t + ih - (d.meters / maxM) * ih
+      const y = PAD.t + ih - (asNumber(d.meters) / maxM) * ih
       return `${x.toFixed(1)},${y.toFixed(1)}`
     })
     .join(' ')
@@ -129,7 +135,7 @@ function LineChart({ data }: { data: { date: string; meters: number }[] }) {
       <polyline points={pts} fill="none" stroke="#0ea5e9" strokeWidth="2" />
       {data.map((d, i) => {
         const x = PAD.l + (i / (n - 1)) * iw
-        const y = PAD.t + ih - (d.meters / maxM) * ih
+        const y = PAD.t + ih - (asNumber(d.meters) / maxM) * ih
         return <circle key={d.date} cx={x} cy={y} r="3" fill="#0ea5e9" />
       })}
     </svg>
@@ -140,6 +146,8 @@ function LineChart({ data }: { data: { date: string; meters: number }[] }) {
 
 export function DashboardPanel() {
   const { rdos } = useRdoStore()
+  const lpsActivities = useLpsStore((s) => s.activities)
+  const lpsRestrictions = useLpsStore((s) => s.restrictions)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
 
@@ -157,8 +165,8 @@ export function DashboardPanel() {
           map.set(t.trechoCode, {
             code: t.trechoCode,
             desc: t.trechoDescription,
-            planned: t.plannedMeters,
-            executed: t.executedMeters,
+            planned: asNumber(t.plannedMeters),
+            executed: asNumber(t.executedMeters),
             status: t.status,
           })
         }
@@ -173,6 +181,17 @@ export function DashboardPanel() {
   const totalExecuted = trechos.reduce((s, t) => s + t.executed, 0)
   const progressPct   = totalPlanned > 0 ? (totalExecuted / totalPlanned) * 100 : 0
   const rdosToday     = rdos.filter((r) => r.date === today).length
+  const totalDailyCost = rdos.reduce((s, r) => s + (r.dailyCostBRL ?? 0), 0)
+  const totalDirectCost = rdos.reduce((s, r) => s + (r.directCostBRL ?? 0), 0)
+  const totalIndirectCost = rdos.reduce((s, r) => s + (r.indirectCostBRL ?? 0), 0)
+  const rdosWithPhoto = rdos.filter((r) => r.photos.length > 0).length
+  const rdosWithGps = rdos.filter((r) => r.geolocation?.lat && r.geolocation?.lng).length
+  const rdosWithStoppage = rdos.filter((r) => r.stoppageNotes || r.incidents).length
+  const linkedToLps = rdos.filter((r) => r.lpsLinked).length
+  const openRestrictions = lpsRestrictions.filter((r) => r.status !== 'resolvida').length
+  const lpsPlanned = lpsActivities.filter((a) => a.planned).length
+  const lpsCompleted = lpsActivities.filter((a) => a.completed).length
+  const lpsPpc = lpsPlanned > 0 ? (lpsCompleted / lpsPlanned) * 100 : 0
 
   const counts = {
     completed:   trechos.filter((t) => t.status === 'completed').length,
@@ -185,7 +204,7 @@ export function DashboardPanel() {
     const dateMap = new Map<string, number>()
     for (const rdo of rdos) {
       const prev = dateMap.get(rdo.date) ?? 0
-      const dayExec = rdo.trechos.reduce((s, t) => s + t.executedMeters, 0)
+      const dayExec = rdo.trechos.reduce((s, t) => s + asNumber(t.executedMeters), 0)
       dateMap.set(rdo.date, Math.max(prev, dayExec))
     }
     const sorted = [...dateMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))
@@ -198,12 +217,12 @@ export function DashboardPanel() {
     const m = new Map<string, number>()
     for (const rdo of rdos) {
       for (const s of rdo.services) {
-        m.set(s.description, (m.get(s.description) ?? 0) + s.quantity)
+        m.set(s.description, (m.get(s.description) ?? 0) + asNumber(s.quantity))
       }
     }
     return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
   }, [rdos])
-  const maxSvc = serviceMap[0]?.[1] ?? 1
+  const maxSvc = Math.max(asNumber(serviceMap[0]?.[1]), 1)
 
   // Filter trechos table
   const filteredTrechos = trechos.filter((t) => {
@@ -221,6 +240,44 @@ export function DashboardPanel() {
         <KpiCard label="Progresso Geral"  value={`${progressPct.toFixed(1)}%`} accent />
         <KpiCard label="Metros Executados" value={`${totalExecuted.toFixed(2)} m`} accent />
         <KpiCard label="RDOs Hoje"        value={String(rdosToday)} />
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[1.25fr_0.75fr] gap-4">
+        <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-4">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <h2 className="text-white text-sm font-semibold">Painel operacional do RDO</h2>
+              <p className="text-[#a3a3a3] text-xs mt-1">Maquina, producao, equipe, equipamentos, locacoes, custos, fotos, localizacao e ocorrencias.</p>
+            </div>
+            <span className="px-2 py-1 rounded bg-[#f97316]/15 text-[#f97316] text-xs border border-[#f97316]/30">
+              WhatsApp + Web
+            </span>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <KpiCard label="Custo do Dia" value={totalDailyCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} accent />
+            <KpiCard label="Custos Diretos" value={totalDirectCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
+            <KpiCard label="Indiretos" value={totalIndirectCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
+            <KpiCard label="Paralisacoes/Ocorr." value={String(rdosWithStoppage)} sub="RDOs com alerta" />
+            <KpiCard label="Fotos" value={`${rdosWithPhoto}/${rdos.length}`} sub="RDOs com anexo" />
+            <KpiCard label="Localizacao" value={`${rdosWithGps}/${rdos.length}`} sub="GPS preenchido" />
+            <KpiCard label="Vinculo LPS" value={`${linkedToLps}/${rdos.length}`} sub="Projeto vinculado" accent />
+            <KpiCard label="Restricoes LPS" value={String(openRestrictions)} sub={`PPC ${lpsPpc.toFixed(0)}%`} />
+          </div>
+        </div>
+
+        <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-4">
+          <h2 className="text-white text-sm font-semibold mb-3">Leitura por perfil</h2>
+          <div className="space-y-3">
+            <div className="rounded-lg border border-[#525252] bg-[#343434] p-3">
+              <div className="text-[#f97316] text-xs font-semibold mb-1">Engenharia de obra</div>
+              <p className="text-[#d4d4d4] text-xs leading-relaxed">RDO completo com producao, mao de obra, maquinas, equipamentos, locacoes, custos diarios, anexos, GPS, ocorrencias e paralisacoes.</p>
+            </div>
+            <div className="rounded-lg border border-[#525252] bg-[#343434] p-3">
+              <div className="text-sky-300 text-xs font-semibold mb-1">Sala tecnica</div>
+              <p className="text-[#d4d4d4] text-xs leading-relaxed">RDO gerencial baseado em tarefas feitas, nao feitas, restricoes, pendencias LPS e impacto no fluxo de planejamento.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Row 2 KPIs */}
@@ -301,8 +358,8 @@ export function DashboardPanel() {
         const allTrechos = rdos.flatMap((r) => r.trechos)
         const sysData = SYSTEMS.map((s) => {
           const entries = allTrechos.filter((t) => (t.system ?? 'outro') === s.key)
-          const planned  = entries.reduce((acc, t) => acc + t.plannedMeters, 0)
-          const executed = entries.reduce((acc, t) => acc + t.executedMeters, 0)
+          const planned  = entries.reduce((acc, t) => acc + asNumber(t.plannedMeters), 0)
+          const executed = entries.reduce((acc, t) => acc + asNumber(t.executedMeters), 0)
           return { ...s, planned, executed, pct: planned > 0 ? Math.min(100, (executed / planned) * 100) : 0 }
         }).filter((s) => s.planned > 0 || s.executed > 0)
 

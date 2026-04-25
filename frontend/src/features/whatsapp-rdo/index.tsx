@@ -3,7 +3,18 @@ import {
   MessageSquare, Phone, Send, Trash2, Plus, RefreshCw,
   CheckCircle, Clock, AlertTriangle, Users,
 } from "lucide-react";
-import { apiWhatsappNumeros, apiWhatsappCadastrar, apiWhatsappDisparar, apiRdoList } from "@/lib/api";
+import {
+  apiWhatsappNumeros,
+  apiWhatsappCadastrar,
+  apiWhatsappDisparar,
+  apiWhatsappSend,
+  apiRdoList,
+  apiProjetoContatos,
+  apiProjetoRdos,
+  apiProjetoCriarContato,
+  type CanonicalIntegrationStatus,
+} from "@/lib/api";
+import { useProjectContext } from "@/store/projectContext";
 
 type NumeroWA = { id: string; telefone: string; nome: string; funcao: string; ns_id: number };
 type RdoItem = Record<string, unknown>;
@@ -14,6 +25,8 @@ export function WhatsAppRdoPage() {
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
   const [tab, setTab] = useState<"numeros" | "rdos" | "config">("numeros");
+  const activeProjectId = useProjectContext((s) => s.activeProjectId);
+  const [integrationStatus, setIntegrationStatus] = useState<CanonicalIntegrationStatus>(activeProjectId ? "partial" : "local");
 
   // Form state
   const [novoTel, setNovoTel] = useState("");
@@ -25,31 +38,61 @@ export function WhatsAppRdoPage() {
     setLoading(true);
     try {
       const [nR, rR] = await Promise.allSettled([
-        apiWhatsappNumeros(),
-        apiRdoList(),
+        activeProjectId ? apiProjetoContatos(activeProjectId) : apiWhatsappNumeros(),
+        activeProjectId ? apiProjetoRdos(activeProjectId) : apiRdoList(),
       ]);
-      if (nR.status === "fulfilled") setNumeros((nR.value as any).items ?? []);
+      if (nR.status === "fulfilled") {
+        const items = ((nR.value as any).items ?? []).map((c: any) => ({
+          id: String(c.id),
+          telefone: c.telefone ?? c.telefone_whatsapp ?? "",
+          nome: c.nome ?? "-",
+          funcao: c.funcao ?? c.cargo ?? c.alcada ?? "responsavel",
+          ns_id: Number(c.ns_id ?? 1),
+        }));
+        setNumeros(items);
+        setIntegrationStatus(activeProjectId ? "connected" : "local");
+      }
       if (rR.status === "fulfilled") setRdos(((rR.value as any).items ?? []).slice(0, 20));
     } catch { /* ignore */ }
     setLoading(false);
   }
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => { refresh(); }, [activeProjectId]);
 
   async function handleAdd() {
     if (!novoTel || !novoNome) { setMsg("Preencha telefone e nome"); return; }
     try {
-      await apiWhatsappCadastrar({ ns_id: Number(novoNsId) || 1, telefone: novoTel, nome: novoNome, funcao: novoFuncao });
-      setMsg(`Numero ${novoTel} cadastrado!`);
+      if (activeProjectId) {
+        await apiProjetoCriarContato(activeProjectId, {
+          nome: novoNome,
+          telefone_whatsapp: novoTel,
+          cargo: novoFuncao,
+          alcada: novoFuncao,
+          setor: "obra",
+          ativo: true,
+        });
+        setIntegrationStatus("connected");
+      } else {
+        await apiWhatsappCadastrar({ ns_id: Number(novoNsId) || 1, telefone: novoTel, nome: novoNome, funcao: novoFuncao });
+      }
+      setMsg(`Numero ${novoTel} cadastrado${activeProjectId ? " no projeto ativo" : ""}!`);
       setNovoTel(""); setNovoNome("");
       refresh();
     } catch (e: any) { setMsg(e.message); }
   }
 
-  async function handleDisparar(nsId: number) {
+  async function handleDisparar(numero: NumeroWA) {
     try {
-      await apiWhatsappDisparar(nsId);
-      setMsg(`Disparo enviado para NS ${nsId}`);
+      if (activeProjectId) {
+        await apiWhatsappSend({
+          telefone: numero.telefone,
+          mensagem: `📋 COBRANCA RDO\n\n${numero.nome}, envie o RDO da obra pelo WhatsApp ou pelo ConstruData Web.\nProjeto: ${activeProjectId}\n\nUse "menu" ou "@rdo" para iniciar.`,
+        });
+        setMsg(`Cobranca enviada para ${numero.nome}`);
+      } else {
+        await apiWhatsappDisparar(numero.ns_id);
+        setMsg(`Disparo enviado para NS ${numero.ns_id}`);
+      }
     } catch (e: any) { setMsg(e.message); }
   }
 
@@ -70,6 +113,15 @@ export function WhatsAppRdoPage() {
           <h1 className="text-xl font-bold text-[#e4f2f8]">WhatsApp RDO</h1>
           <p className="text-sm text-[#5a8caa]">Gestao de RDOs preenchidos via WhatsApp</p>
         </div>
+        <span className={`px-2.5 py-1 rounded-full text-[11px] font-medium border ${
+          integrationStatus === "connected"
+            ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+            : integrationStatus === "partial"
+            ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
+            : "bg-slate-500/10 text-slate-300 border-slate-500/20"
+        }`}>
+          {integrationStatus === "connected" ? "Canonico" : integrationStatus === "partial" ? "Parcial" : "Local"}
+        </span>
         <button onClick={refresh} className="ml-auto p-2 rounded-lg hover:bg-[#14294e] text-[#6b6b6b] hover:text-[#2abfdc] transition-colors">
           <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
         </button>
@@ -157,7 +209,7 @@ export function WhatsAppRdoPage() {
                   <span className="text-xs text-[#5a8caa] font-mono">{n.telefone}</span>
                   <span className="text-xs text-[#5a8caa] ml-2">NS #{n.ns_id}</span>
                 </div>
-                <button onClick={() => handleDisparar(n.ns_id)}
+                <button onClick={() => handleDisparar(n)}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#2abfdc]/10 text-[#2abfdc] hover:bg-[#2abfdc]/20 text-xs transition-colors">
                   <Send size={12} /> Disparar RDO
                 </button>

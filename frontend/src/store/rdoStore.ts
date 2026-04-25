@@ -16,8 +16,36 @@ import {
   MOCK_RDO_FINANCIAL_ENTRIES,
   MOCK_RDO_BUDGET_BRL,
 } from '@/data/mockRdo'
-import { apiRdoList, apiRdoCreate, apiRdoClose } from '@/lib/api'
+import {
+  apiRdoList,
+  apiRdoCreate,
+  apiRdoClose,
+  apiProjetoRdos,
+  apiProjetoCriarRdo,
+  type CanonicalIntegrationStatus,
+} from '@/lib/api'
 import { supabase } from '@/lib/supabase'
+
+const ALLOW_DEMO_DATA = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
+
+function mapWeatherToDb(value: string | undefined): string | null {
+  const normalized = String(value || '').trim().toLowerCase()
+  if (!normalized) return null
+  if (normalized === 'good') return 'bom'
+  if (normalized === 'cloudy') return 'nublado'
+  if (normalized === 'rain') return 'chuva'
+  if (normalized === 'storm') return 'tempestade'
+  if (['bom', 'nublado', 'chuva', 'tempestade'].includes(normalized)) return normalized
+  return null
+}
+
+function mapWeatherFromDb(value: string | null | undefined): RDO['weather']['morning'] {
+  const normalized = String(value || '').trim().toLowerCase()
+  if (normalized === 'nublado') return 'cloudy'
+  if (normalized === 'chuva') return 'rain'
+  if (normalized === 'tempestade') return 'storm'
+  return 'good'
+}
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -26,6 +54,8 @@ interface RdoState {
   rdos:             RDO[]
   financialEntries: RdoFinancialEntry[]
   budgetBRL:        number
+  integrationStatus: CanonicalIntegrationStatus
+  currentProjectId: string | null
 
   // ── Navigation ──────────────────────────────────────────────────────────────
   setActiveTab: (tab: RdoTab) => void
@@ -52,19 +82,22 @@ interface RdoState {
   // ── Backend sync ─────────────────────────────────────────────────────────────
   fetchFromBackend:       (nucleo?: string) => Promise<void>
   createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
+  createRdoForProject:    (projectId: string, rdo: Omit<RDO, 'id' | 'number' | 'createdAt' | 'updatedAt'>) => Promise<Record<string, unknown> | null>
   closeRdoOnBackend:      (id: number) => Promise<void>
 
   // ── Supabase sync (RDOs do WhatsApp) ─────────────────────────────────────────
-  loadFromSupabase:       () => Promise<void>
+  loadFromSupabase:       (projectId?: string | null) => Promise<void>
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
 export const useRdoStore = create<RdoState>((set, get) => ({
   activeTab:        'dashboard',
-  rdos:             MOCK_RDOS,
-  financialEntries: MOCK_RDO_FINANCIAL_ENTRIES,
-  budgetBRL:        MOCK_RDO_BUDGET_BRL,
+  rdos:             ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+  financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+  budgetBRL:        ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+  integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+  currentProjectId: null,
 
   // ── Navigation ────────────────────────────────────────────────────────────────
 
@@ -224,6 +257,110 @@ export const useRdoStore = create<RdoState>((set, get) => ({
     }
   },
 
+  createRdoForProject: async (projectId, rdo) => {
+    const productionMeters = rdo.trechos.reduce((sum, trecho) => sum + (trecho.executedMeters || 0), 0)
+    const servicesSummary = rdo.services
+      .map((service) => `${service.description}: ${service.quantity} ${service.unit}`)
+      .join(' | ')
+    const equipmentSummary = rdo.equipment
+      .map((item) => `${item.name} x${item.quantity} (${item.hours}h)`)
+      .join(', ')
+    const observations = [
+      rdo.observations?.trim(),
+      rdo.productionNotes?.trim() ? `Producao: ${rdo.productionNotes.trim()}` : '',
+      rdo.stoppageNotes?.trim() ? `Paralisacoes: ${rdo.stoppageNotes.trim()}` : '',
+      servicesSummary ? `Servicos: ${servicesSummary}` : '',
+      equipmentSummary ? `Equipamentos: ${equipmentSummary}` : '',
+    ]
+      .filter(Boolean)
+      .join(' | ')
+
+      const climaDb = mapWeatherToDb(rdo.weather.morning)
+      const payload: Record<string, unknown> = {
+        projeto_id: projectId,
+        data: rdo.date,
+        origem: 'web',
+        status: 'recebido',
+        apontador: rdo.responsible,
+        engenheiro: rdo.responsible,
+        turno: 'dia',
+        producao: rdo.productionNotes || servicesSummary || observations,
+      equipe_number:
+        (rdo.manpower.foremanCount || 0) +
+        (rdo.manpower.officialCount || 0) +
+        (rdo.manpower.helperCount || 0) +
+        (rdo.manpower.operatorCount || 0),
+      equipe: JSON.stringify({
+        foremanCount: rdo.manpower.foremanCount || 0,
+        officialCount: rdo.manpower.officialCount || 0,
+        helperCount: rdo.manpower.helperCount || 0,
+        operatorCount: rdo.manpower.operatorCount || 0,
+        employeeNames: rdo.manpower.employeeNames || [],
+      }),
+      producao_m: productionMeters,
+      observacoes: observations,
+      ocorrencias: rdo.incidents || rdo.ocorrencias || '',
+      fotos: rdo.photos.map((photo) => photo.base64),
+      latitude: rdo.geolocation?.lat ? Number(rdo.geolocation.lat) : null,
+      longitude: rdo.geolocation?.lng ? Number(rdo.geolocation.lng) : null,
+      maquinas: rdo.equipment.map((item) => ({
+        nome: item.name,
+        quantidade: item.quantity,
+        horas: item.hours,
+        custoBRL: item.costBRL || 0,
+      })),
+      equipamentos: rdo.equipment.map((item) => ({
+        nome: item.name,
+        quantidade: item.quantity,
+        horas: item.hours,
+        custoBRL: item.costBRL || 0,
+      })),
+      locacoes: rdo.equipment.filter((item) => (item.costBRL || 0) > 0).map((item) => ({
+        nome: item.name,
+        custoBRL: item.costBRL || 0,
+      })),
+      mao_obra: [
+        { tipo: 'encarregado', quantidade: rdo.manpower.foremanCount || 0 },
+        { tipo: 'oficial', quantidade: rdo.manpower.officialCount || 0 },
+        { tipo: 'ajudante', quantidade: rdo.manpower.helperCount || 0 },
+        { tipo: 'operador', quantidade: rdo.manpower.operatorCount || 0 },
+      ].filter((item) => item.quantidade > 0),
+      materiais: rdo.services.map((service) => ({
+        descricao: service.description,
+        quantidade: service.quantity,
+        unidade: service.unit,
+      })),
+      custo_direto:
+        (rdo.machineCostBRL || 0) +
+        (rdo.equipmentCostBRL || 0) +
+        (rdo.rentalCostBRL || 0) +
+        (rdo.directCostBRL || 0),
+      custo_indireto: rdo.indirectCostBRL || 0,
+      custo_total_dia:
+        rdo.dailyCostBRL ||
+        (rdo.machineCostBRL || 0) +
+          (rdo.equipmentCostBRL || 0) +
+          (rdo.rentalCostBRL || 0) +
+          (rdo.directCostBRL || 0) +
+          (rdo.indirectCostBRL || 0),
+        paralisacoes: rdo.stoppageNotes || '',
+        payload_original: rdo,
+      }
+      if (climaDb) {
+        payload.clima = climaDb
+      }
+
+    try {
+      const created = await apiProjetoCriarRdo(projectId, payload)
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId })
+      return created
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId })
+      return null
+    }
+  },
+
   closeRdoOnBackend: async (id) => {
     try {
       await apiRdoClose(id)
@@ -233,53 +370,125 @@ export const useRdoStore = create<RdoState>((set, get) => ({
   },
 
   // ── Carrega RDOs + custos do Supabase (populados pelo Router WhatsApp) ──────
-  loadFromSupabase: async () => {
-    if (!supabase) return
+  loadFromSupabase: async (projectId) => {
     try {
-      const { data: rows, error } = await supabase
-        .from('rdos')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100)
-      if (error || !rows) return
+      set({ currentProjectId: projectId ?? null })
+      let rows: Record<string, unknown>[] | null = null
+      if (projectId) {
+        try {
+          const apiRows = await apiProjetoRdos(projectId)
+          rows = (apiRows.items ?? []) as Record<string, unknown>[]
+          set({ integrationStatus: 'connected' })
+        } catch {
+          rows = null
+        }
+      }
+
+      if (!rows && supabase) {
+        let query = supabase
+          .from('rdos')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100)
+        if (projectId) query = query.eq('projeto_id', projectId)
+        const { data, error } = await query
+        if (error || !data) return
+        rows = data as Record<string, unknown>[]
+        set({ integrationStatus: 'partial' })
+      }
+      if (!rows) {
+        set({
+          rdos: ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+          financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+          budgetBRL: ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+          integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+        })
+        return
+      }
 
       const rdos: RDO[] = []
       const entries: RdoFinancialEntry[] = []
 
-      for (const row of rows as Record<string, unknown>[]) {
+      for (const row of rows) {
         const id = String(row.id)
         const data = String(row.data || '').slice(0, 10)
         const apontador = String(row.apontador || '-')
         const obs = String(row.observacoes || '')
         const fotos = (row.fotos as string[]) || []
         const producaoM = Number(row.producao_m || 0)
+        const ligacoesDia = Number(row.ligacoes_dia || 0)
         const equipeN = Number(row.equipe_number || 0)
         const now = String(row.created_at || new Date().toISOString())
+        const diesel = Number(row.custo_diesel || 0)
+        const alimentacao = Number(row.custo_alimentacao || 0)
+        const maoObra = Number(row.custo_mao_obra || 0)
+        const materiais = Number(row.custo_materiais || 0)
+        const dailyCost = Number(row.custo_total_dia || 0) || diesel + alimentacao + maoObra + materiais
+        const lat = row.latitude == null ? '' : String(row.latitude)
+        const lng = row.longitude == null ? '' : String(row.longitude)
+        const projetoId = row.projeto_id ? String(row.projeto_id) : row.project_id ? String(row.project_id) : ''
+        const trechoCode = projetoId ? projetoId.slice(0, 8).toUpperCase() : `RDO-${data || id.slice(0, 8)}`
+        const equipmentMatch = obs.match(/Equipamentos?:\s*([^|]+)/i)
+        const stoppageMatch = obs.match(/(?:Paralisa(?:c|ç)(?:ao|ão|oes|ões)|Pendencias?|Ocorrencias?):\s*([^|]+)/i)
 
         rdos.push({
           id,
           number: rdos.length + 1,
           date: data,
           responsible: apontador,
-          weather: { manha: String(row.clima || 'bom'), tarde: String(row.clima || 'bom'), noite: '' } as unknown as RDO['weather'],
-          manpower: { diretos: equipeN, indiretos: 0 } as unknown as RDO['manpower'],
-          equipment: [],
-          services: [],
-          trechos: [{ nome: '-', metros: producaoM } as unknown as RdoTrechoEntry],
-          geolocation: null,
+          weather: {
+            morning: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
+            afternoon: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
+            night: mapWeatherFromDb(row.clima ? String(row.clima) : undefined),
+            temperatureC: 25,
+          },
+          manpower: { foremanCount: 0, officialCount: 0, helperCount: Math.max(0, equipeN), operatorCount: 0 },
+          equipment: equipmentMatch?.[1]
+            ? equipmentMatch[1].split(',').map((name, i) => ({
+                id: `${id}-eq-${i}`,
+                name: name.trim(),
+                quantity: 1,
+                hours: 8,
+                costBRL: 0,
+              })).filter((e) => e.name)
+            : [],
+          services: [
+            ...(producaoM > 0 ? [{ id: `${id}-prod`, description: 'Producao executada no dia', quantity: producaoM, unit: 'm' }] : []),
+            ...(ligacoesDia > 0 ? [{ id: `${id}-lig`, description: 'Ligacoes executadas no dia', quantity: ligacoesDia, unit: 'un' }] : []),
+          ],
+          trechos: [{
+            id: `${id}-trecho`,
+            trechoCode,
+            trechoDescription: obs ? obs.slice(0, 160) : 'RDO recebido via WhatsApp',
+            plannedMeters: Math.max(producaoM, 1),
+            executedMeters: producaoM,
+            status: producaoM > 0 ? 'in_progress' : 'not_started',
+            source: 'rdo',
+            system: 'outro',
+          }],
+          geolocation: lat && lng ? { lat, lng } : null,
           observations: obs,
-          incidents: '',
+          incidents: stoppageMatch?.[1]?.trim() || '',
           photos: fotos.map((f, i) => ({ id: id + '-p' + i, base64: f, label: '' }) as unknown as RDO['photos'][number]),
+          machineCostBRL: diesel,
+          equipmentCostBRL: materiais,
+          rentalCostBRL: materiais,
+          directCostBRL: maoObra + materiais + diesel,
+          indirectCostBRL: alimentacao,
+          dailyCostBRL: dailyCost,
+          stoppageNotes: stoppageMatch?.[1]?.trim() || '',
+          productionNotes: producaoM > 0 ? `${producaoM} m executados` : '',
+          lpsLinked: Boolean(projetoId || row.lps_id),
           createdAt: now,
           updatedAt: now,
         } as RDO)
 
         // Converte custos do dia em lançamentos financeiros
         const custos: Array<[string, string, number]> = [
-          ['Mão de Obra', 'DIESEL/COMBUSTÍVEL', Number(row.custo_diesel || 0)],
-          ['Mão de Obra', 'ALIMENTAÇÃO/HOTELARIA', Number(row.custo_alimentacao || 0)],
-          ['Mão de Obra', 'MÃO DE OBRA', Number(row.custo_mao_obra || 0)],
-          ['Materiais', 'MATERIAIS/LOCAÇÕES', Number(row.custo_materiais || 0)],
+          ['Maquinas', 'DIESEL/COMBUSTIVEL', diesel],
+          ['Indiretos', 'ALIMENTACAO/HOTELARIA', alimentacao],
+          ['Mao de Obra', 'MAO DE OBRA', maoObra],
+          ['Equipamentos/Locacoes', 'MATERIAIS/LOCACOES', materiais],
         ]
         for (const [cat, desc, val] of custos) {
           if (val > 0) {
@@ -295,9 +504,19 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         }
       }
 
-      set({ rdos, financialEntries: entries })
+      set({
+        rdos,
+        financialEntries: entries,
+        budgetBRL: ALLOW_DEMO_DATA && entries.length === 0 ? MOCK_RDO_BUDGET_BRL : 0,
+        integrationStatus: rows.length > 0 ? get().integrationStatus : (ALLOW_DEMO_DATA ? 'local' : 'partial'),
+      })
     } catch {
-      // silent
+      set({
+        rdos: ALLOW_DEMO_DATA ? MOCK_RDOS : [],
+        financialEntries: ALLOW_DEMO_DATA ? MOCK_RDO_FINANCIAL_ENTRIES : [],
+        budgetBRL: ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
+        integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+      })
     }
   },
 }))

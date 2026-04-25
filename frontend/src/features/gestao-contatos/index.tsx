@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { UserCog, Plus, Phone, Trash2, Edit2, Search, X } from "lucide-react"
 import { useProjectContext } from "@/store/projectContext"
 import { useContatosStore } from "@/store/contatosStore"
@@ -10,11 +10,17 @@ export function GestaoContatosPage() {
   const activeProjectId = useProjectContext(s => s.activeProjectId)
   const allFrentes = useProjectContext(s => s.frentes)
   const allContatos = useContatosStore(s => s.contatos)
+  const fetchContatos = useContatosStore(s => s.fetchContatos)
   const addContato = useContatosStore(s => s.addContato)
   const updateContato = useContatosStore(s => s.updateContato)
   const removeContato = useContatosStore(s => s.removeContato)
+  const integrationStatus = useContatosStore(s => s.integrationStatus)
   const frentes = useMemo(() => allFrentes.filter(f => f.projeto_id === activeProjectId), [allFrentes, activeProjectId])
   const contatos = useMemo(() => allContatos.filter(c => c.projeto_id === activeProjectId), [allContatos, activeProjectId])
+
+  useEffect(() => {
+    if (activeProjectId) fetchContatos(activeProjectId)
+  }, [activeProjectId, fetchContatos])
 
   const [showForm, setShowForm] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
@@ -54,6 +60,15 @@ export function GestaoContatosPage() {
           <h1 className="text-lg font-bold text-[#e4f2f8]">Gestao de Contatos</h1>
           <p className="text-xs text-[#5a8caa]">Cadastre telefones WhatsApp dos responsaveis</p>
         </div>
+        <span className={`text-[10px] px-2.5 py-1 rounded-full border ${
+          integrationStatus === 'connected'
+            ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+            : integrationStatus === 'partial'
+              ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+              : 'bg-[#20406a] text-[#8fb3c8] border-[#20406a]'
+        }`}>
+          {integrationStatus === 'connected' ? 'Conectado' : integrationStatus === 'partial' ? 'Parcial' : 'Local'}
+        </span>
         <button onClick={() => { resetForm(); setShowForm(true) }} className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30 text-xs font-medium hover:bg-purple-500/30 transition-colors">
           <Plus size={14} /> Novo Contato
         </button>

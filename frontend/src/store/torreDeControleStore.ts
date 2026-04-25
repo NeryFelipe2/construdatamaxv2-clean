@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 import { MOCK_OBRAS } from '@/data/mockTorreDeControle'
-import type { ConstructionSite, ConstructionRisk } from '@/types'
+import { apiProjetoDashboard, apiProjetoTorre } from '@/lib/api'
+import { mapDbProjetoToConstructionSite } from '@/lib/canonicalProject'
+import type { DbProjeto } from '@/lib/supabase'
+import type { ConstructionRisk, ConstructionSite } from '@/types'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+const ALLOW_DEMO_DATA = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
 
 interface EditingRisk {
   siteId: string
@@ -12,7 +15,7 @@ interface EditingRisk {
 interface TorreState {
   sites: ConstructionSite[]
   selectedId: string | null
-  editingId: string | null      // 'new' | site.id | null
+  editingId: string | null
   editingRisk: EditingRisk | null
 }
 
@@ -30,32 +33,41 @@ interface TorreActions {
   loadDemoData: () => void
   clearData: () => void
   loadFromPipeline: () => void
+  loadFromProjectContext: () => Promise<void>
 }
 
-// ─── Store ────────────────────────────────────────────────────────────────────
+function mergeSite(existing: ConstructionSite | undefined, incoming: ConstructionSite): ConstructionSite {
+  if (!existing) return incoming
+  return {
+    ...existing,
+    ...incoming,
+    risks: incoming.risks.length > 0 ? incoming.risks : existing.risks,
+    budgetLines: incoming.budgetLines?.length ? incoming.budgetLines : existing.budgetLines,
+    planningMilestones: incoming.planningMilestones?.length ? incoming.planningMilestones : existing.planningMilestones,
+    executionMilestones: incoming.executionMilestones?.length ? incoming.executionMilestones : existing.executionMilestones,
+  }
+}
 
-export const useTorreStore = create<TorreState & TorreActions>((set) => ({
-  // ── Initial state ──────────────────────────────────────────────────────────
-  sites: MOCK_OBRAS,
-  selectedId: MOCK_OBRAS[0]?.id ?? null,
+export const useTorreStore = create<TorreState & TorreActions>((set, get) => ({
+  sites: [],
+  selectedId: null,
   editingId: null,
   editingRisk: null,
 
-  // ── Site CRUD ──────────────────────────────────────────────────────────────
   addSite: (payload) =>
-    set((s) => {
+    set((state) => {
       const id = `obr-${Date.now()}`
-      return { sites: [...s.sites, { ...payload, id }], selectedId: id }
+      return { sites: [...state.sites, { ...payload, id }], selectedId: id }
     }),
 
   updateSite: (id, patch) =>
-    set((s) => ({
-      sites: s.sites.map((site) => (site.id === id ? { ...site, ...patch } : site)),
+    set((state) => ({
+      sites: state.sites.map((site) => (site.id === id ? { ...site, ...patch } : site)),
     })),
 
   deleteSite: (id) =>
-    set((s) => {
-      const remaining = s.sites.filter((site) => site.id !== id)
+    set((state) => {
+      const remaining = state.sites.filter((site) => site.id !== id)
       return {
         sites: remaining,
         selectedId: remaining[0]?.id ?? null,
@@ -64,64 +76,51 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
     }),
 
   updateLocation: (id, lat, lng) =>
-    set((s) => ({
-      sites: s.sites.map((site) => (site.id === id ? { ...site, lat, lng } : site)),
+    set((state) => ({
+      sites: state.sites.map((site) => (site.id === id ? { ...site, lat, lng } : site)),
     })),
 
-  // ── Selection ──────────────────────────────────────────────────────────────
   selectSite: (id) => set({ selectedId: id }),
-
-  // ── Dialog state ───────────────────────────────────────────────────────────
   setEditing: (id) => set({ editingId: id }),
   setEditingRisk: (args) => set({ editingRisk: args }),
 
-  // ── Risk CRUD ──────────────────────────────────────────────────────────────
   addRisk: (siteId, risk) =>
-    set((s) => ({
-      sites: s.sites.map((site) =>
+    set((state) => ({
+      sites: state.sites.map((site) =>
         site.id === siteId
           ? { ...site, risks: [...site.risks, { ...risk, id: `risk-${Date.now()}` }] }
-          : site
+          : site,
       ),
     })),
 
   updateRisk: (siteId, riskId, patch) =>
-    set((s) => ({
-      sites: s.sites.map((site) =>
+    set((state) => ({
+      sites: state.sites.map((site) =>
         site.id === siteId
-          ? { ...site, risks: site.risks.map((r) => (r.id === riskId ? { ...r, ...patch } : r)) }
-          : site
+          ? { ...site, risks: site.risks.map((risk) => (risk.id === riskId ? { ...risk, ...patch } : risk)) }
+          : site,
       ),
     })),
 
   deleteRisk: (siteId, riskId) =>
-    set((s) => ({
-      sites: s.sites.map((site) =>
+    set((state) => ({
+      sites: state.sites.map((site) =>
         site.id === siteId
-          ? { ...site, risks: site.risks.filter((r) => r.id !== riskId) }
-          : site
+          ? { ...site, risks: site.risks.filter((risk) => risk.id !== riskId) }
+          : site,
       ),
     })),
 
-  loadDemoData: () =>
-    set({ sites: MOCK_OBRAS, selectedId: MOCK_OBRAS[0]?.id ?? null }),
+  loadDemoData: () => set({ sites: MOCK_OBRAS, selectedId: MOCK_OBRAS[0]?.id ?? null }),
+  clearData: () => set({ sites: [], selectedId: null }),
 
-  clearData: () =>
-    set({ sites: [], selectedId: null }),
-
-  /**
-   * Carrega dados do pipelineStore central (integração ConstruData).
-   * Cria um site na Torre de Controle para cada núcleo com dados do pipeline.
-   */
   loadFromPipeline: () => {
     import('./pipelineStore').then(({ usePipelineStore }) => {
-      const { nodes, summary, nsList, hasRealData, dashboard } = usePipelineStore.getState()
+      const { nodes, summary, hasRealData, dashboard } = usePipelineStore.getState()
       if (!hasRealData || !summary) return
 
-      // Centro geográfico dos nós
-      const avgLat = nodes.length > 0 ? nodes.reduce((s, n) => s + n.lat, 0) / nodes.length : -23.55
-      const avgLng = nodes.length > 0 ? nodes.reduce((s, n) => s + n.lng, 0) / nodes.length : -46.63
-
+      const avgLat = nodes.length > 0 ? nodes.reduce((sum, node) => sum + node.lat, 0) / nodes.length : -23.55
+      const avgLng = nodes.length > 0 ? nodes.reduce((sum, node) => sum + node.lng, 0) / nodes.length : -46.63
       const dash = dashboard as Record<string, unknown> | null
       const pctFisico = dash?.pct_fisico != null ? Number(dash.pct_fisico) : 0
 
@@ -129,7 +128,7 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
         id: `pipeline-${summary.nucleo || Date.now()}`,
         code: `REDE-${summary.nucleo || 'PIPELINE'}`,
         name: `Rede ${summary.nucleo || 'Pipeline'}`,
-        company: 'FCN Construções e Saneamento',
+        company: 'FCN Construcoes e Saneamento',
         owner: 'SABESP',
         manager: '',
         description: `Rede de saneamento - ${summary.nucleo || 'Pipeline'}`,
@@ -137,7 +136,7 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
         street: '',
         number: '',
         district: '',
-        city: 'São Paulo',
+        city: 'Sao Paulo',
         state: 'SP',
         cep: '',
         buildingType: 'saneamento',
@@ -150,16 +149,50 @@ export const useTorreStore = create<TorreState & TorreActions>((set) => ({
         risks: [],
       }
 
-      set((s) => {
-        // Atualiza se já existe, adiciona se não
-        const exists = s.sites.some(site => site.id === newSite.id)
+      set((state) => {
+        const exists = state.sites.some((site) => site.id === newSite.id)
         return {
           sites: exists
-            ? s.sites.map(site => site.id === newSite.id ? { ...site, ...newSite, risks: site.risks } : site)
-            : [...s.sites, newSite],
+            ? state.sites.map((site) => (site.id === newSite.id ? { ...site, ...newSite, risks: site.risks } : site))
+            : [...state.sites, newSite],
           selectedId: newSite.id,
         }
       })
     })
+  },
+
+  loadFromProjectContext: async () => {
+    try {
+      const [{ useProjectContext }] = await Promise.all([import('./projectContext')])
+      const { projetos, activeProjectId } = useProjectContext.getState()
+      if (!projetos.length) {
+        if (ALLOW_DEMO_DATA) set({ sites: MOCK_OBRAS, selectedId: MOCK_OBRAS[0]?.id ?? null })
+        return
+      }
+
+      const dashboard = activeProjectId ? await apiProjetoDashboard(activeProjectId).catch(() => null) : null
+      const torre = activeProjectId ? await apiProjetoTorre(activeProjectId).catch(() => null) : null
+
+      const nextSites = projetos.map((projeto) => {
+        const existing = get().sites.find((site) => site.id === projeto.id)
+        const isActive = projeto.id === activeProjectId
+        const mapped = mapDbProjetoToConstructionSite(projeto as DbProjeto, {
+          existing,
+          dashboard: isActive ? dashboard : null,
+          torre: isActive ? torre : null,
+        })
+        return mergeSite(existing, mapped)
+      })
+
+      set({
+        sites: nextSites,
+        selectedId: activeProjectId && nextSites.some((site) => site.id === activeProjectId)
+          ? activeProjectId
+          : nextSites[0]?.id ?? null,
+      })
+    } catch {
+      if (ALLOW_DEMO_DATA) set({ sites: MOCK_OBRAS, selectedId: MOCK_OBRAS[0]?.id ?? null })
+      else set({ sites: [], selectedId: null })
+    }
   },
 }))

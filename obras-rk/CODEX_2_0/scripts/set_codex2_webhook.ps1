@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 
 $instanceName = 'construdata-felipe'
 $apiKey = $env:EVOLUTION_API_KEY

@@ -1219,6 +1219,7 @@ export interface RdoEquipmentEntry {
   name:     string
   quantity: number
   hours:    number
+  costBRL?:  number
 }
 
 export interface RdoServiceEntry {
@@ -1226,6 +1227,7 @@ export interface RdoServiceEntry {
   description: string
   quantity:    number
   unit:        string
+  lpsActivityId?: string
 }
 
 export interface RdoTrechoEntry {
@@ -1286,6 +1288,17 @@ export interface RDO {
   climaManha?:                  string
   climaTarde?:                  string
   climaNoite?:                  string
+
+  // -- Custos e controle operacional ------------------------------------------------
+  machineCostBRL?:       number
+  equipmentCostBRL?:     number
+  rentalCostBRL?:        number
+  directCostBRL?:        number
+  indirectCostBRL?:      number
+  dailyCostBRL?:         number
+  stoppageNotes?:        string
+  productionNotes?:      string
+  lpsLinked?:            boolean
 
   createdAt:    string
   updatedAt:    string
