@@ -265,7 +265,8 @@ def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, An
     row["fotos"] = fotos if isinstance(fotos, list) else []
     payload_original = row.get("payload_original")
     row["payload_original"] = payload_original if isinstance(payload_original, dict) else {}
-    row["payload_original"].setdefault("raw", payload)
+    raw_payload = {key: value for key, value in payload.items() if key != "payload_original"}
+    row["payload_original"].setdefault("raw", raw_payload)
     clima = _normalize_rdo_clima(row.get("clima"))
     if clima:
         row["clima"] = clima
