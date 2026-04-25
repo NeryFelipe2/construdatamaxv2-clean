@@ -5,6 +5,7 @@
 import { useMemo, useState } from 'react'
 import { useRdoStore } from '@/store/rdoStore'
 import { useLpsStore } from '@/store/lpsStore'
+import { OperationalCyclePanel } from '@/features/operational/components/OperationalCyclePanel'
 import type { RdoTrechoStatus } from '@/types'
 
 function asNumber(value: unknown): number {
@@ -241,6 +242,8 @@ export function DashboardPanel() {
         <KpiCard label="Metros Executados" value={`${totalExecuted.toFixed(2)} m`} accent />
         <KpiCard label="RDOs Hoje"        value={String(rdosToday)} />
       </div>
+
+      <OperationalCyclePanel />
 
       <div className="grid grid-cols-1 xl:grid-cols-[1.25fr_0.75fr] gap-4">
         <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-4">
