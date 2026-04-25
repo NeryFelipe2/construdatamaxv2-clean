@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -320,30 +321,52 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
     evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
     if not evo_url:
         return "not_configured"
+
+    timeout_seconds = float(os.environ.get("EVOLUTION_SEND_TIMEOUT_SECONDS") or 30)
     try:
-        timeout_seconds = float(os.environ.get("EVOLUTION_SEND_TIMEOUT_SECONDS") or 30)
-        state_response = httpx.get(
-            f"{evo_url}/instance/connectionState/{evo_instance}",
-            headers={"apikey": evo_key} if evo_key else {},
-            timeout=min(timeout_seconds, 15.0),
-        )
-        if state_response.status_code >= 400:
-            return f"instance_error_{state_response.status_code}"
-        state = (state_response.json().get("instance") or {}).get("state")
-        if state and str(state).lower() not in {"open", "connected"}:
-            return f"not_connected_{state}"
-        endpoint = f"{evo_url}/message/sendText/{evo_instance}"
-        headers = {"apikey": evo_key} if evo_key else {}
-        target = _normalize_destination(destino) or destino
-        resp = httpx.post(
-            endpoint,
-            json={"number": target, "text": mensagem},
-            headers=headers,
-            timeout=timeout_seconds,
-        )
-        return "sent" if resp.status_code < 400 else f"error_{resp.status_code}"
-    except Exception as exc:
-        return f"error:{exc}"
+        attempts = max(1, int(os.environ.get("EVOLUTION_SEND_RETRIES") or 2))
+    except ValueError:
+        attempts = 2
+    try:
+        retry_delay = max(0.0, float(os.environ.get("EVOLUTION_SEND_RETRY_DELAY_SECONDS") or 5))
+    except ValueError:
+        retry_delay = 5.0
+
+    endpoint = f"{evo_url}/message/sendText/{evo_instance}"
+    headers = {"apikey": evo_key} if evo_key else {}
+    target = _normalize_destination(destino) or destino
+    last_error = ""
+
+    for attempt in range(1, attempts + 1):
+        try:
+            state_response = httpx.get(
+                f"{evo_url}/instance/connectionState/{evo_instance}",
+                headers=headers,
+                timeout=min(timeout_seconds, 15.0),
+            )
+            if state_response.status_code >= 400:
+                last_error = f"instance_error_{state_response.status_code}"
+            else:
+                state = (state_response.json().get("instance") or {}).get("state")
+                if state and str(state).lower() not in {"open", "connected"}:
+                    last_error = f"not_connected_{state}"
+                else:
+                    resp = httpx.post(
+                        endpoint,
+                        json={"number": target, "text": mensagem},
+                        headers=headers,
+                        timeout=timeout_seconds,
+                    )
+                    if resp.status_code < 400:
+                        return "sent" if attempt == 1 else f"sent_retry_{attempt}"
+                    last_error = f"error_{resp.status_code}"
+        except Exception as exc:
+            last_error = f"error:{exc}"
+
+        if attempt < attempts and retry_delay:
+            time.sleep(retry_delay)
+
+    return last_error or "error:unknown"
 
 
 def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | None, str | None]:
