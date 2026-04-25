@@ -238,7 +238,6 @@ def _stringify_summary(value: Any) -> str:
 def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, Any]:
     row = dict(payload)
     row["projeto_id"] = project_id
-    row.setdefault("project_id", project_id)
     row.setdefault("data", date.today().isoformat())
     row.setdefault("origem", "web")
     row.setdefault("status", "recebido")
@@ -276,7 +275,10 @@ def _normalize_rdo_row(payload: dict[str, Any], project_id: str) -> dict[str, An
 
 
 def _rdo_insert_row(row: dict[str, Any]) -> dict[str, Any]:
-    return {key: value for key, value in row.items() if key in RDO_INSERT_COLUMNS}
+    insert_row = {key: value for key, value in row.items() if key in RDO_INSERT_COLUMNS}
+    if insert_row.get("project_id") == insert_row.get("projeto_id"):
+        insert_row.pop("project_id", None)
+    return insert_row
 
 
 def _safe_insert_many(client: Any, table: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
