@@ -659,6 +659,21 @@ def _migration_required_response(table: str, exc: Exception, items: list[dict[st
     }
 
 
+def _is_transient_backend_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    return any(
+        marker in text
+        for marker in (
+            "resource temporarily unavailable",
+            "timeout",
+            "timed out",
+            "connection reset",
+            "connection aborted",
+            "server disconnected",
+        )
+    )
+
+
 def _fallback_item_from_event(event: dict[str, Any]) -> dict[str, Any]:
     payload = event.get("payload") if isinstance(event.get("payload"), dict) else {}
     item = dict(payload.get("item") if isinstance(payload.get("item"), dict) else payload)
@@ -720,6 +735,53 @@ def _fallback_plan_event(client: Any, project_id: str, plan_id: str) -> dict[str
     return None
 
 
+def _operational_fallback_rows(client: Any, project_id: str, table: str, limit: int = 200) -> list[dict[str, Any]]:
+    fallback_type = {
+        "planejamentos_semanais": FALLBACK_PLAN_TYPE,
+        "desvios_planejamento": FALLBACK_DEVIATION_TYPE,
+        "ml_execucoes": FALLBACK_ML_TYPE,
+        "replanejamentos": FALLBACK_REPLAN_TYPE,
+    }.get(table)
+    if fallback_type:
+        return _fallback_events(client, project_id, fallback_type, limit=limit)
+    if table != "operational_logs":
+        return []
+    try:
+        rows = _items(
+            client.table("workflow_events")
+            .select("*")
+            .eq("projeto_id", project_id)
+            .eq("tipo", "operational_log_fallback")
+            .order("created_at", desc=True)
+            .limit(max(1, min(limit, 500)))
+            .execute()
+        )
+    except Exception:
+        return []
+    items: list[dict[str, Any]] = []
+    for event in rows:
+        payload = event.get("payload") if isinstance(event.get("payload"), dict) else {}
+        items.append(
+            {
+                **payload,
+                "id": payload.get("id") or event.get("id"),
+                "created_at": payload.get("created_at") or event.get("created_at"),
+                "fallback_event_id": event.get("id"),
+            }
+        )
+    return items
+
+
+def _select_operational_rows(table: str, project_id: str, limit: int = 200) -> list[dict[str, Any]]:
+    rows = _select(table, project_id=project_id, limit=limit)
+    if rows:
+        return rows
+    client = get_supabase()
+    if client is None:
+        return []
+    return _operational_fallback_rows(client, _canonical_project_id(project_id) or project_id, table, limit=limit)
+
+
 def _build_plan_item_rows(
     payload: dict[str, Any],
     project_id: str,
@@ -773,6 +835,15 @@ def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dic
         return rows[0] if rows else None
     except Exception as exc:
         if _is_missing_table_error(exc):
+            for plan in _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=100):
+                status = str(plan.get("status") or "").lower()
+                if status not in {"ativo", "aprovado"}:
+                    continue
+                start = parse_date(plan.get("semana_inicio"), day)
+                end = parse_date(plan.get("semana_fim"), day)
+                if start <= day <= end:
+                    return plan
+        if _is_transient_backend_error(exc):
             for plan in _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=100):
                 status = str(plan.get("status") or "").lower()
                 if status not in {"ativo", "aprovado"}:
@@ -1407,7 +1478,7 @@ def listar_planejamentos_semanais(project_id: str, limit: int = 100):
             project_id=project_id,
             error_message=f"Erro ao listar planejamentos semanais: {exc}",
         )
-        if _is_missing_table_error(exc):
+        if _is_missing_table_error(exc) or _is_transient_backend_error(exc):
             fallback = _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=limit)
             response = _migration_required_response("planejamentos_semanais", exc, fallback)
             response["status"] = "fallback"
@@ -2003,10 +2074,10 @@ def dashboard_projeto(project_id: str):
     tarefas = _select("tarefas", project_id=project_id)
     contatos = _select("contatos", project_id=project_id)
     restricoes = _select("lps_restricoes", project_id=project_id)
-    planejamentos = _select("planejamentos_semanais", project_id=project_id, limit=50)
-    desvios = _select("desvios_planejamento", project_id=project_id, limit=200)
-    logs = _select("operational_logs", project_id=project_id, limit=100)
-    replanejamentos = _select("replanejamentos", project_id=project_id, limit=50)
+    planejamentos = _select_operational_rows("planejamentos_semanais", project_id=project_id, limit=50)
+    desvios = _select_operational_rows("desvios_planejamento", project_id=project_id, limit=200)
+    logs = _select_operational_rows("operational_logs", project_id=project_id, limit=100)
+    replanejamentos = _select_operational_rows("replanejamentos", project_id=project_id, limit=50)
     active_plan = next((p for p in planejamentos if str(p.get("status")).lower() in {"ativo", "aprovado"}), None)
     critical_deviations = [d for d in desvios if str(d.get("severidade")).lower() in {"critical", "high"}]
     ppc_medio = sum(safe_float(d.get("ppc")) for d in desvios) / max(1, len(desvios))

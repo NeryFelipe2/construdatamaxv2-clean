@@ -4,7 +4,16 @@
 
 O backend Render, o frontend Vercel e o GitHub foram atualizados. O fluxo real de RDO via API foi testado em producao e gravou no Supabase.
 
-Ainda falta aplicar a migration SQL das tabelas novas de planejamento/log/ML no Supabase. Sem ela, o sistema opera RDO/dashboard, mas o ciclo completo `planejamento semanal -> desvios -> ML -> replanejamento` fica em modo `migration_required`.
+Ainda falta aplicar a migration SQL das tabelas novas de planejamento/log/ML no Supabase. Para nao travar a operacao enquanto isso nao acontece, o backend usa `workflow_events` como fallback operacional para:
+
+- planejamento semanal;
+- validacao do diretor;
+- desvios planejado x realizado;
+- execucao ML/regras;
+- replanejamento em rascunho;
+- logs operacionais.
+
+Assim, o ciclo ja funciona em modo fallback. Depois da migration, os mesmos endpoints passam a usar as tabelas canonicas.
 
 ## Commits publicados em `main`
 
@@ -13,6 +22,9 @@ Ainda falta aplicar a migration SQL das tabelas novas de planejamento/log/ML no 
 - `dfb6164e` - Fix RDO payload circular reference
 - `2fce95da` - Use canonical projeto_id for RDO inserts
 - `dd013782` - Order RDOs by recent creation
+- `75dd7171` - Document deployment and RDO test status
+- `297f4912` - Add workflow event fallback for planning cycle
+- `PENDENTE` - Harden planning fallback dashboard reads
 
 ## Deploys confirmados
 
@@ -21,15 +33,22 @@ Ainda falta aplicar a migration SQL das tabelas novas de planejamento/log/ML no 
 Servico: `srv-d750kldm5p6s73feojbg`  
 URL: `https://construdatamaxv2-clean.onrender.com`
 
-Ultimo deploy live:
+Ultimo deploy live validado antes desta atualizacao:
 
-- Commit: `dd013782e567b4976e27af5757516cdd3392c796`
+- Commit: `297f49129ec0cd4beaf2c752a939b1176247ee0a`
 - Status: `live`
 
 Health validado:
 
 - `GET /health` -> `200`
 - `GET /api/health/integrations` -> `200`, status `partial`
+
+Observacao atual:
+
+- `render_api`: `connected`
+- `n8n`: `external`
+- `whatsapp`: no ultimo health retornou `unreachable`, indicando que a Evolution publica nao respondeu ao backend no momento do teste.
+- tabelas novas de planejamento/log/ML ainda ausentes no schema Supabase.
 
 ### Vercel frontend
 
@@ -73,6 +92,73 @@ Isso prova o caminho:
 
 para RDO.
 
+## Teste real do ciclo planejamento -> RDO -> desvio -> ML -> replanejamento
+
+Projeto usado:
+
+- Tatui - RK
+- `c2bf8fda-b2e0-4bc1-9535-4891d596ea10`
+
+Como a migration ainda nao foi aplicada, o teste rodou em fallback via `workflow_events`.
+
+### Planejamento semanal
+
+- Endpoint: `POST /api/projetos/{id}/planejamentos-semanais`
+- Planejamento criado: `c441796c-57dd-477f-ac2c-bb6c1027388c`
+- Status inicial: `rascunho`
+- Atividade planejada:
+  - `Assentamento rede teste fallback`
+  - meta: `10 m`
+  - equipe planejada: `2`
+  - custo previsto: `1000`
+
+### Validacao do diretor
+
+- Endpoint: `POST /api/projetos/{id}/planejamentos-semanais/{plan_id}/validar`
+- Decisao: `aprovado`
+- Status apos validacao: `ativo`
+
+### RDO abaixo do planejado
+
+- Endpoint: `POST /api/projetos/{id}/rdos`
+- RDO criado: `6b605b3f-235e-4446-a912-e2cb41fd692c`
+- Producao realizada: `4 m`
+- Custo do dia: `1300`
+
+### Desvio gerado
+
+- Endpoint: `GET /api/projetos/{id}/desvios`
+- Status: `fallback`
+- Desvio criado: `272a3a4d-90bc-43be-bc88-c80ee335424c`
+- PPC: `40`
+- SPI: `0.4`
+- CPI: `0.769`
+- Desvio percentual: `-60`
+- Severidade: `critical`
+- Acao recomendada: `Replanejar sequencia, reforcar equipe/equipamento e validar frente com diretor.`
+
+### ML / regras
+
+- Endpoint: `POST /api/projetos/{id}/ml/recalcular-desvios`
+- Resultado: `ok`
+- Modelo usado: `rules`
+- `fallback_used`: `true`
+- Score: `88.0769`
+- Risco: `alto`
+
+### Replanejamento
+
+- Endpoint: `GET /api/projetos/{id}/replanejamentos`
+- Status: `fallback`
+- Replanejamento criado: `f1defb43-1f36-4860-adea-a12eab0ba5fc`
+- Status: `rascunho`
+
+Isso prova o caminho atual:
+
+`Planejamento semanal -> validacao diretor -> RDO -> desvio -> ML/regras -> replanejamento rascunho`
+
+mesmo antes da migration final.
+
 ## Bugs encontrados e corrigidos durante teste real
 
 ### 1. `payload_original` circular
@@ -110,13 +196,25 @@ Correcao:
 - Agora retornam `200` com `status: migration_required`.
 - `/logs` tenta ler fallback de `workflow_events` quando `operational_logs` ainda nao existe.
 
+### 4. Listagem de planejamento oscilou com erro transiente
+
+Problema:
+
+- Em um teste de producao, `GET /api/projetos/{id}/planejamentos-semanais` retornou `500` com `[Errno 11] Resource temporarily unavailable`.
+- O dado existia no fallback, mas o endpoint so caia para fallback quando o erro era explicitamente `PGRST205`.
+
+Correcao:
+
+- Erros transientes de backend/PostgREST tambem passam a degradar para fallback.
+- O dashboard canonico agora tambem considera fallback para planejamento, desvios, logs e replanejamentos enquanto a migration nao foi aplicada.
+
 ## Estado atual das integracoes
 
 `GET /api/health/integrations`:
 
 - `render_api`: `connected`
 - `n8n`: `external`
-- `whatsapp`: `open`
+- `whatsapp`: `unreachable` no ultimo teste
 - `status`: `partial`
 
 Tabelas ainda faltando no Supabase:
@@ -191,4 +289,3 @@ Depois disso, testar:
 5. Rodar ML.
 6. Confirmar `ml_execucoes`.
 7. Confirmar `replanejamentos` em `rascunho`.
-
