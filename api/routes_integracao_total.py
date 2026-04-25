@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import uuid
 from datetime import date, datetime, timedelta
 from typing import Any
 
@@ -28,6 +29,11 @@ from api.supabase_client import (
 )
 
 router = APIRouter(tags=["integracao-total"])
+
+FALLBACK_PLAN_TYPE = "planejamento_semanal_fallback"
+FALLBACK_DEVIATION_TYPE = "desvio_planejamento_fallback"
+FALLBACK_ML_TYPE = "ml_execucao_fallback"
+FALLBACK_REPLAN_TYPE = "replanejamento_fallback"
 
 
 def _items(res: Any) -> list[dict[str, Any]]:
@@ -653,6 +659,103 @@ def _migration_required_response(table: str, exc: Exception, items: list[dict[st
     }
 
 
+def _fallback_item_from_event(event: dict[str, Any]) -> dict[str, Any]:
+    payload = event.get("payload") if isinstance(event.get("payload"), dict) else {}
+    item = dict(payload.get("item") if isinstance(payload.get("item"), dict) else payload)
+    item.setdefault("id", event.get("id"))
+    item.setdefault("projeto_id", event.get("projeto_id"))
+    item.setdefault("status", event.get("status"))
+    item.setdefault("created_at", event.get("created_at"))
+    item["_fallback_event_id"] = event.get("id")
+    if isinstance(payload.get("itens"), list):
+        item["itens"] = payload["itens"]
+    if isinstance(payload.get("sugestoes"), list):
+        item["sugestoes"] = payload["sugestoes"]
+    if isinstance(payload.get("metricas"), dict):
+        item["metricas"] = payload["metricas"]
+    return item
+
+
+def _fallback_events(client: Any, project_id: str, tipo: str, limit: int = 300) -> list[dict[str, Any]]:
+    try:
+        rows = _items(
+            client.table("workflow_events")
+            .select("*")
+            .eq("projeto_id", project_id)
+            .eq("tipo", tipo)
+            .order("created_at", desc=True)
+            .limit(max(1, min(limit, 500)))
+            .execute()
+        )
+        return [_fallback_item_from_event(row) for row in rows]
+    except Exception:
+        return []
+
+
+def _fallback_store_event(
+    client: Any,
+    *,
+    project_id: str,
+    tipo: str,
+    status: str,
+    payload: dict[str, Any],
+    origem: str = "api",
+) -> dict[str, Any]:
+    row = {
+        "projeto_id": project_id,
+        "tipo": tipo,
+        "origem": origem,
+        "status": status,
+        "payload": payload,
+    }
+    result = client.table("workflow_events").insert(row).execute()
+    event = _item(result) or row
+    return _fallback_item_from_event(event)
+
+
+def _fallback_plan_event(client: Any, project_id: str, plan_id: str) -> dict[str, Any] | None:
+    for plan in _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=500):
+        if str(plan.get("id")) == str(plan_id) or str(plan.get("_fallback_event_id")) == str(plan_id):
+            return plan
+    return None
+
+
+def _build_plan_item_rows(
+    payload: dict[str, Any],
+    project_id: str,
+    plan_id: str,
+    semana_inicio: str,
+    semana_fim: str,
+) -> list[dict[str, Any]]:
+    item_rows = []
+    for item in _as_list(payload.get("itens") or payload.get("atividades")):
+        item_rows.append(
+            {
+                "id": item.get("id") or str(uuid.uuid4()),
+                "planejamento_id": plan_id,
+                "projeto_id": project_id,
+                "frente_id": item.get("frente_id"),
+                "atividade": item.get("atividade") or item.get("titulo") or item.get("descricao") or "Atividade semanal",
+                "descricao": item.get("descricao") or item.get("observacao"),
+                "unidade": item.get("unidade") or "m",
+                "quantidade_planejada": safe_float(
+                    item.get("quantidade_planejada")
+                    or item.get("meta_quantidade")
+                    or item.get("meta")
+                    or item.get("quantidade")
+                ),
+                "equipe_planejada": safe_int(item.get("equipe_planejada") or item.get("equipe")),
+                "custo_previsto": safe_float(item.get("custo_previsto") or item.get("custo")),
+                "data_inicio": item.get("data_inicio") or semana_inicio,
+                "data_fim": item.get("data_fim") or semana_fim,
+                "restricoes": item.get("restricoes") if isinstance(item.get("restricoes"), list) else [],
+                "status": item.get("status") or "planejado",
+                "payload": item,
+            }
+        )
+    return item_rows
+
+
 def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dict[str, Any] | None:
     day = parse_date(data_ref)
     try:
@@ -669,6 +772,15 @@ def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dic
         )
         return rows[0] if rows else None
     except Exception as exc:
+        if _is_missing_table_error(exc):
+            for plan in _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=100):
+                status = str(plan.get("status") or "").lower()
+                if status not in {"ativo", "aprovado"}:
+                    continue
+                start = parse_date(plan.get("semana_inicio"), day)
+                end = parse_date(plan.get("semana_fim"), day)
+                if start <= day <= end:
+                    return plan
         log_operational_event(
             subsystem="planejamento",
             severity="warning",
@@ -681,6 +793,8 @@ def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dic
 
 
 def _plan_items(client: Any, plan_id: str) -> list[dict[str, Any]]:
+    if str(plan_id).startswith("fallback:"):
+        return []
     try:
         return _items(
             client.table("planejamento_itens")
@@ -689,7 +803,9 @@ def _plan_items(client: Any, plan_id: str) -> list[dict[str, Any]]:
             .order("created_at", desc=False)
             .execute()
         )
-    except Exception:
+    except Exception as exc:
+        if _is_missing_table_error(exc):
+            return []
         return []
 
 
@@ -744,7 +860,7 @@ def _generate_deviations_for_rdo(client: Any, project_id: str, rdo_row: dict[str
         )
         return {"ok": False, "reason": "no_active_plan", "items": []}
 
-    items = _plan_items(client, str(plan["id"]))
+    items = plan.get("itens") if isinstance(plan.get("itens"), list) else _plan_items(client, str(plan["id"]))
     if not items:
         return {"ok": False, "reason": "plan_without_items", "items": []}
 
@@ -797,6 +913,21 @@ def _generate_deviations_for_rdo(client: Any, project_id: str, rdo_row: dict[str
             "payload": {"rdo": rdo_row, "planejamento_item": item, "atividades_realizadas": atividades},
         }
         result = _safe_table_insert(client, "desvios_planejamento", row)
+        if not result.get("ok") and _is_missing_table_error(Exception(str(result.get("error")))):
+            try:
+                result = {
+                    "ok": True,
+                    "item": _fallback_store_event(
+                        client,
+                        project_id=project_id,
+                        tipo=FALLBACK_DEVIATION_TYPE,
+                        status=severity,
+                        payload={"item": row},
+                        origem="api",
+                    ),
+                }
+            except Exception:
+                result = {"ok": False}
         if result.get("ok"):
             inserted.append(result["item"])
 
@@ -840,14 +971,19 @@ def _deterministic_ml(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _run_ml_for_project(client: Any, project_id: str) -> dict[str, Any]:
-    rows = _items(
-        client.table("desvios_planejamento")
-        .select("*")
-        .eq("projeto_id", project_id)
-        .order("created_at", desc=True)
-        .limit(300)
-        .execute()
-    )
+    try:
+        rows = _items(
+            client.table("desvios_planejamento")
+            .select("*")
+            .eq("projeto_id", project_id)
+            .order("created_at", desc=True)
+            .limit(300)
+            .execute()
+        )
+    except Exception as exc:
+        if not _is_missing_table_error(exc):
+            raise
+        rows = _fallback_events(client, project_id, FALLBACK_DEVIATION_TYPE, limit=300)
     if not rows:
         return {"ok": False, "reason": "no_deviations"}
 
@@ -911,6 +1047,18 @@ def _run_ml_for_project(client: Any, project_id: str) -> dict[str, Any]:
         "error_message": error_message,
     }
     ml_insert = _safe_table_insert(client, "ml_execucoes", ml_row)
+    if not ml_insert.get("ok") and _is_missing_table_error(Exception(str(ml_insert.get("error")))):
+        ml_insert = {
+            "ok": True,
+            "item": _fallback_store_event(
+                client,
+                project_id=project_id,
+                tipo=FALLBACK_ML_TYPE,
+                status=status,
+                payload={"item": ml_row},
+                origem="api",
+            ),
+        }
     replan = _create_replan_draft(client, project_id, plan_id, ml_insert.get("item"), rows, ml_result)
     return {"ok": True, "ml": ml_insert.get("item"), "replanejamento": replan, "desvios": rows[:50]}
 
@@ -958,7 +1106,23 @@ def _create_replan_draft(
         "metricas": ml_result.get("resultado") or {},
         "payload": {"ml": ml_exec, "desvios_analisados": len(desvios)},
     }
-    return _safe_table_insert(client, "replanejamentos", row)
+    result = _safe_table_insert(client, "replanejamentos", row)
+    if not result.get("ok") and _is_missing_table_error(Exception(str(result.get("error")))):
+        try:
+            return {
+                "ok": True,
+                "item": _fallback_store_event(
+                    client,
+                    project_id=project_id,
+                    tipo=FALLBACK_REPLAN_TYPE,
+                    status="rascunho",
+                    payload={"item": row, "sugestoes": sugestoes, "metricas": row["metricas"]},
+                    origem="api",
+                ),
+            }
+        except Exception:
+            return result
+    return result
 
 
 @router.get("/api/health/integrations")
@@ -1244,7 +1408,10 @@ def listar_planejamentos_semanais(project_id: str, limit: int = 100):
             error_message=f"Erro ao listar planejamentos semanais: {exc}",
         )
         if _is_missing_table_error(exc):
-            return _migration_required_response("planejamentos_semanais", exc)
+            fallback = _fallback_events(client, project_id, FALLBACK_PLAN_TYPE, limit=limit)
+            response = _migration_required_response("planejamentos_semanais", exc, fallback)
+            response["status"] = "fallback"
+            return response
         raise HTTPException(status_code=500, detail=f"Erro ao listar planejamentos semanais: {exc}") from exc
 
 
@@ -1268,35 +1435,13 @@ def criar_planejamento_semanal(project_id: str, payload: dict[str, Any]):
         "versao": safe_int(payload.get("versao"), 1),
         "payload": payload,
     }
+    fallback_plan_id = str(uuid.uuid4())
+    fallback_items = _build_plan_item_rows(payload, project_id, fallback_plan_id, semana_inicio, plan_row["semana_fim"])
     try:
         created = client.table("planejamentos_semanais").insert(plan_row).execute()
         plan = _item(created) or plan_row
         plan_id = str(plan.get("id"))
-        item_rows = []
-        for item in _as_list(payload.get("itens") or payload.get("atividades")):
-            item_rows.append(
-                {
-                    "planejamento_id": plan_id,
-                    "projeto_id": project_id,
-                    "frente_id": item.get("frente_id"),
-                    "atividade": item.get("atividade") or item.get("titulo") or item.get("descricao") or "Atividade semanal",
-                    "descricao": item.get("descricao") or item.get("observacao"),
-                    "unidade": item.get("unidade") or "m",
-                    "quantidade_planejada": safe_float(
-                        item.get("quantidade_planejada")
-                        or item.get("meta_quantidade")
-                        or item.get("meta")
-                        or item.get("quantidade")
-                    ),
-                    "equipe_planejada": safe_int(item.get("equipe_planejada") or item.get("equipe")),
-                    "custo_previsto": safe_float(item.get("custo_previsto") or item.get("custo")),
-                    "data_inicio": item.get("data_inicio") or semana_inicio,
-                    "data_fim": item.get("data_fim") or plan_row["semana_fim"],
-                    "restricoes": item.get("restricoes") if isinstance(item.get("restricoes"), list) else [],
-                    "status": item.get("status") or "planejado",
-                    "payload": item,
-                }
-            )
+        item_rows = _build_plan_item_rows(payload, project_id, plan_id, semana_inicio, plan_row["semana_fim"])
         persisted_items = []
         if item_rows:
             persisted_items = _items(client.table("planejamento_itens").insert(item_rows).execute())
@@ -1318,6 +1463,16 @@ def criar_planejamento_semanal(project_id: str, payload: dict[str, Any]):
             error_message=f"Erro ao criar planejamento semanal: {exc}",
             payload=payload,
         )
+        if _is_missing_table_error(exc):
+            plan = {**plan_row, "id": fallback_plan_id, "itens": fallback_items, "status": plan_row["status"], "_fallback": True}
+            return _fallback_store_event(
+                client,
+                project_id=project_id,
+                tipo=FALLBACK_PLAN_TYPE,
+                status=plan["status"],
+                payload={"item": plan, "itens": fallback_items},
+                origem=plan_row["origem"],
+            )
         raise HTTPException(status_code=500, detail=f"Erro ao criar planejamento semanal: {exc}") from exc
 
 
@@ -1370,6 +1525,28 @@ def validar_planejamento_semanal(project_id: str, plan_id: str, payload: dict[st
             error_message=f"Erro ao validar planejamento: {exc}",
             payload={"plan_id": plan_id, **payload},
         )
+        if _is_missing_table_error(exc):
+            plan = _fallback_plan_event(client, project_id, plan_id)
+            if plan is None:
+                raise HTTPException(status_code=404, detail="Planejamento fallback nao encontrado") from exc
+            updated_plan = {**plan, "status": new_status, "updated_at": datetime.utcnow().isoformat()}
+            event_id = updated_plan.get("_fallback_event_id")
+            try:
+                if event_id:
+                    client.table("workflow_events").update(
+                        {"status": new_status, "payload": {"item": updated_plan, "itens": updated_plan.get("itens", [])}}
+                    ).eq("id", event_id).eq("projeto_id", project_id).execute()
+            except Exception:
+                pass
+            validation = _fallback_store_event(
+                client,
+                project_id=project_id,
+                tipo="planejamento_validacao_fallback",
+                status=new_status,
+                payload={"item": {"planejamento_id": plan_id, "decisao": new_status, **payload}},
+                origem="api",
+            )
+            return {"planejamento": updated_plan, "validacao": validation, "status": new_status}
         raise HTTPException(status_code=500, detail=f"Erro ao validar planejamento: {exc}") from exc
 
 
@@ -1392,7 +1569,10 @@ def listar_desvios_planejamento(project_id: str, limit: int = 200):
         return {"items": rows, "status": "connected"}
     except Exception as exc:
         if _is_missing_table_error(exc):
-            return _migration_required_response("desvios_planejamento", exc)
+            fallback = _fallback_events(client, project_id, FALLBACK_DEVIATION_TYPE, limit=limit)
+            response = _migration_required_response("desvios_planejamento", exc, fallback)
+            response["status"] = "fallback"
+            return response
         raise HTTPException(status_code=500, detail=f"Erro ao listar desvios: {exc}") from exc
 
 
@@ -1451,7 +1631,10 @@ def listar_replanejamentos(project_id: str, limit: int = 100):
         return {"items": rows, "status": "connected"}
     except Exception as exc:
         if _is_missing_table_error(exc):
-            return _migration_required_response("replanejamentos", exc)
+            fallback = _fallback_events(client, project_id, FALLBACK_REPLAN_TYPE, limit=limit)
+            response = _migration_required_response("replanejamentos", exc, fallback)
+            response["status"] = "fallback"
+            return response
         raise HTTPException(status_code=500, detail=f"Erro ao listar replanejamentos: {exc}") from exc
 
 
