@@ -101,6 +101,8 @@ def _select(table: str, project_id: str | None = None, limit: int = 200) -> list
             query = query.in_("project_id", ids)
         elif table != "projetos":
             query = query.in_("projeto_id", ids)
+    if table == "rdos":
+        query = query.order("created_at", desc=True)
     try:
         rows = _items(query.execute())
         if project_id and table == "rdos":
