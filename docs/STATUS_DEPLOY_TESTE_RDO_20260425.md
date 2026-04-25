@@ -208,6 +208,18 @@ Correcao:
 - Erros transientes de backend/PostgREST tambem passam a degradar para fallback.
 - O dashboard canonico agora tambem considera fallback para planejamento, desvios, logs e replanejamentos enquanto a migration nao foi aplicada.
 
+### 5. Fallback `workflow_events` tambem precisava retry
+
+Problema:
+
+- Depois do deploy, RDO e dashboard ficaram OK, mas endpoints de `desvios` e `replanejamentos` ainda oscilaram quando a leitura do fallback em `workflow_events` falhou temporariamente.
+
+Correcao:
+
+- A leitura de fallback agora tenta ate 3 vezes em erro transiente.
+- Falha de fallback grava log operacional em vez de sumir silenciosamente.
+- `GET /desvios` e `GET /replanejamentos` tambem tratam erro transiente como caso de fallback, nao como 500 definitivo.
+
 ## Estado atual das integracoes
 
 `GET /api/health/integrations`:

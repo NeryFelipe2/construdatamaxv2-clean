@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import time
 import uuid
 from datetime import date, datetime, timedelta
 from typing import Any
@@ -692,19 +693,35 @@ def _fallback_item_from_event(event: dict[str, Any]) -> dict[str, Any]:
 
 
 def _fallback_events(client: Any, project_id: str, tipo: str, limit: int = 300) -> list[dict[str, Any]]:
-    try:
-        rows = _items(
-            client.table("workflow_events")
-            .select("*")
-            .eq("projeto_id", project_id)
-            .eq("tipo", tipo)
-            .order("created_at", desc=True)
-            .limit(max(1, min(limit, 500)))
-            .execute()
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            rows = _items(
+                client.table("workflow_events")
+                .select("*")
+                .eq("projeto_id", project_id)
+                .eq("tipo", tipo)
+                .order("created_at", desc=True)
+                .limit(max(1, min(limit, 500)))
+                .execute()
+            )
+            return [_fallback_item_from_event(row) for row in rows]
+        except Exception as exc:
+            last_error = exc
+            if attempt < 2 and _is_transient_backend_error(exc):
+                time.sleep(0.35 * (attempt + 1))
+                continue
+            break
+    if last_error is not None:
+        log_operational_event(
+            subsystem="supabase",
+            severity="warning",
+            status="open",
+            project_id=project_id,
+            error_message=f"Erro ao ler fallback {tipo}: {last_error}",
+            payload={"tipo": tipo, "limit": limit},
         )
-        return [_fallback_item_from_event(row) for row in rows]
-    except Exception:
-        return []
+    return []
 
 
 def _fallback_store_event(
@@ -1639,7 +1656,7 @@ def listar_desvios_planejamento(project_id: str, limit: int = 200):
         )
         return {"items": rows, "status": "connected"}
     except Exception as exc:
-        if _is_missing_table_error(exc):
+        if _is_missing_table_error(exc) or _is_transient_backend_error(exc):
             fallback = _fallback_events(client, project_id, FALLBACK_DEVIATION_TYPE, limit=limit)
             response = _migration_required_response("desvios_planejamento", exc, fallback)
             response["status"] = "fallback"
@@ -1701,7 +1718,7 @@ def listar_replanejamentos(project_id: str, limit: int = 100):
         )
         return {"items": rows, "status": "connected"}
     except Exception as exc:
-        if _is_missing_table_error(exc):
+        if _is_missing_table_error(exc) or _is_transient_backend_error(exc):
             fallback = _fallback_events(client, project_id, FALLBACK_REPLAN_TYPE, limit=limit)
             response = _migration_required_response("replanejamentos", exc, fallback)
             response["status"] = "fallback"
