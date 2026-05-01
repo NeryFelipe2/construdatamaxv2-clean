@@ -1,16 +1,54 @@
 import { useSupabaseDre } from '@/lib/useSupabaseDre'
+import { apiProjetoControleFluxo, apiProjetoPreencherControleFluxo } from '@/lib/api'
 import { useProjectContext } from '@/store/projectContext'
 import {
   DollarSign, TrendingDown, TrendingUp, AlertTriangle,
   Activity, Calendar, FileText, PieChart, Loader2
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export function ControleFinanceiroPanel() {
   const { activeProjectId } = useProjectContext()
-  const { lancamentos, trechos, loading, connectionStatus } = useSupabaseDre(activeProjectId)
+  const { lancamentos, trechos, loading, connectionStatus, refresh } = useSupabaseDre(activeProjectId)
 
   const [bacInput, setBacInput] = useState<string>('')
+  const [textoFluxo, setTextoFluxo] = useState('')
+  const [fluxo, setFluxo] = useState<any>(null)
+  const [salvandoFluxo, setSalvandoFluxo] = useState(false)
+
+  const carregarFluxo = async () => {
+    if (!activeProjectId) {
+      setFluxo(null)
+      return
+    }
+    try {
+      const payload: any = await apiProjetoControleFluxo(activeProjectId)
+      setFluxo(payload.fluxo ?? null)
+    } catch {
+      setFluxo(null)
+    }
+  }
+
+  useEffect(() => {
+    void carregarFluxo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProjectId])
+
+  const salvarTextoFluxo = async () => {
+    if (!activeProjectId || !textoFluxo.trim()) return
+    setSalvandoFluxo(true)
+    try {
+      const payload: any = await apiProjetoPreencherControleFluxo(activeProjectId, textoFluxo)
+      setFluxo(payload.fluxo ?? null)
+      setTextoFluxo('')
+      await refresh()
+      alert('Controle de obra e fluxo projetado preenchidos.')
+    } catch (e: any) {
+      alert(e?.message || 'Falha ao preencher controle/fluxo.')
+    } finally {
+      setSalvandoFluxo(false)
+    }
+  }
 
   // ----- Financial Calculations -----
   const metrics = useMemo(() => {
@@ -56,6 +94,7 @@ export function ControleFinanceiroPanel() {
   const formatBRL = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
   }
+  const fluxoResumo = (fluxo?.resumo ?? {}) as Record<string, number>
 
   if (loading) {
     return (
@@ -87,6 +126,54 @@ export function ControleFinanceiroPanel() {
           }`}>
             {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : 'Local'}
           </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <FileText size={16} className="text-blue-500" />
+              Preencher com Texto
+            </h3>
+            <button
+              type="button"
+              onClick={salvarTextoFluxo}
+              disabled={salvandoFluxo || !textoFluxo.trim()}
+              className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold disabled:opacity-40"
+            >
+              {salvandoFluxo ? 'Processando...' : 'Lancar'}
+            </button>
+          </div>
+          <textarea
+            value={textoFluxo}
+            onChange={(e) => setTextoFluxo(e.target.value)}
+            className="w-full min-h-[145px] rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800 outline-none focus:border-blue-500"
+            placeholder={`Data base: 26/04/2026\nObra: Tatui\nResponsavel: Icaro\n\nCustos fixos:\n- Administrativo abril R$ 8.500,00\n\nMedicao prevista:\n- Medicao abril R$ 82.000,00\n\nRecebimento previsto:\n- Recebimento 20/05/2026 R$ 82.000,00\n\nDesvios:\n- Atraso de material impacta producao`}
+          />
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <TrendingUp size={16} className="text-emerald-500" />
+            Fluxo Projetado
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg bg-rose-50 p-3">
+              <div className="text-[10px] uppercase font-bold text-rose-500">Custos</div>
+              <div className="text-lg font-bold text-rose-700">{formatBRL(Number(fluxoResumo.custos_projetados || 0))}</div>
+            </div>
+            <div className="rounded-lg bg-emerald-50 p-3">
+              <div className="text-[10px] uppercase font-bold text-emerald-500">Recebimentos</div>
+              <div className="text-lg font-bold text-emerald-700">{formatBRL(Number(fluxoResumo.receitas_previstas || 0))}</div>
+            </div>
+            <div className="rounded-lg bg-slate-50 p-3 col-span-2">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Saldo projetado</div>
+              <div className={`text-2xl font-bold ${Number(fluxoResumo.saldo_projetado || 0) >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                {formatBRL(Number(fluxoResumo.saldo_projetado || 0))}
+              </div>
+              <div className="text-[10px] text-gray-400 mt-1">{Number(fluxoResumo.lancamentos || 0)} lancamento(s) projetado(s)</div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -80,7 +80,7 @@ const selectCls = 'w-full bg-[#484848] border border-[#5e5e5e] rounded-lg px-3 p
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function NovoRdoPanel() {
-  const { rdos, addRdo, createRdoForProject, setActiveTab, loadTrechosFromPlanejamento } = useRdoStore()
+  const { rdos, addRdo, createRdoForProject, createRdoTextForProject, setActiveTab, loadTrechosFromPlanejamento, isSaving } = useRdoStore()
   const logos = useCompanySettingsStore((s) => s.logos)
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const nextNumber = rdos.length + 1
@@ -300,6 +300,11 @@ export function NovoRdoPanel() {
 
   // ── Submit ────────────────────────────────────────────────────────────────
   async function onValid(data: RdoFormData) {
+    if (!activeProjectId) {
+      setSubmitError('Nenhum projeto selecionado. Por favor, selecione um projeto antes de salvar.')
+      return
+    }
+
     setSubmitError(null)
     const payload = {
       date:        data.date,
@@ -340,17 +345,18 @@ export function NovoRdoPanel() {
       lpsLinked,
     }
 
-    if (activeProjectId) {
+    try {
       const created = await createRdoForProject(activeProjectId, payload)
-      if (!created) {
-        setSubmitError('Nao foi possivel gravar o RDO no projeto ativo.')
-        return
+      if (created) {
+        alert('RDO enviado com sucesso!')
+        setActiveTab('historico')
+      } else {
+        setSubmitError('Erro ao enviar RDO para o servidor. Verifique sua conexão.')
       }
-    } else {
-      addRdo(payload)
+    } catch (err: any) {
+      console.error('Save error:', err)
+      setSubmitError(err.message || 'Falha crítica ao salvar RDO.')
     }
-
-    setActiveTab('historico')
   }
 
   function handleClear() {
@@ -375,6 +381,20 @@ export function NovoRdoPanel() {
     setMachineCostBRL(0); setEquipmentCostBRL(0); setRentalCostBRL(0)
     setDirectCostBRL(0); setIndirectCostBRL(0); setStoppageNotes(''); setProductionNotes(''); setLpsLinked(true)
     setRdoNumber(rdos.length + 1)
+  }
+
+  async function handleCreateFromText(text: string) {
+    if (!activeProjectId) {
+      setSubmitError('Nenhum projeto selecionado. Por favor, selecione um projeto antes de salvar.')
+      return
+    }
+    const created = await createRdoTextForProject(activeProjectId, text)
+    if (created) {
+      alert('Texto processado: RDO, custos, planejamento e desvios gravados.')
+      setActiveTab('historico')
+    } else {
+      setSubmitError('Erro ao processar texto no servidor.')
+    }
   }
 
   return (
@@ -1041,10 +1061,18 @@ export function NovoRdoPanel() {
           </button>
           <button
             type="submit"
-            className="px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+            disabled={isSaving}
+            className="px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             style={{ backgroundColor: '#0ea5e9' }}
           >
-            Salvar RDO
+            {isSaving ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              'Salvar RDO'
+            )}
           </button>
         </div>
       </form>
@@ -1053,6 +1081,7 @@ export function NovoRdoPanel() {
         <TextParseModal
           onClose={() => setShowTextParse(false)}
           onApply={handleApplyParsed}
+          onCreate={async (text) => handleCreateFromText(text)}
         />
       )}
     </div>

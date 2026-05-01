@@ -1197,7 +1197,8 @@ export interface PlanScenario {
 
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
-export type RdoTab = 'dashboard' | 'novo' | 'historico' | 'integracao' | 'financeiro' | 'whatsapp-bot' | 'whatsapp-fluxo'
+export type RdoReviewStatus = 'rascunho' | 'extraido' | 'em_revisao' | 'finalizado' | 'rejeitado'
+export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'integracao' | 'financeiro' | 'whatsapp-bot' | 'whatsapp-fluxo'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
@@ -1248,6 +1249,16 @@ export interface RdoPhoto {
   uploadedAt: string
 }
 
+export interface RdoEvidence {
+  id: string
+  rdoId?: string
+  name: string
+  kind: string
+  sha256?: string
+  previewBase64?: string
+  uploadedAt?: string
+}
+
 export interface RdoFinancialEntry {
   id:          string
   date:        string   // yyyy-MM-dd
@@ -1271,6 +1282,7 @@ export interface RDO {
   observations: string
   incidents:    string
   photos:       RdoPhoto[]
+  evidencias?:  RdoEvidence[]
   logoId?:      string   // ID of the SavedLogo to use in PDF export
 
   // ── Contrato / Identificação ─────────────────────────────────────────────────
@@ -1299,6 +1311,11 @@ export interface RDO {
   stoppageNotes?:        string
   productionNotes?:      string
   lpsLinked?:            boolean
+  origem?:               string
+  statusRevisao?:        RdoReviewStatus
+  assinaturaPresente?:   boolean
+  pendingFields?:        string[]
+  extractionConfidence?: Record<string, number>
 
   createdAt:    string
   updatedAt:    string

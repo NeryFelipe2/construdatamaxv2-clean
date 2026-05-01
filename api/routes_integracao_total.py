@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import base64
+import hashlib
 import os
+import re
 import time
+import unicodedata
 import uuid
 from datetime import date, datetime, timedelta
 from typing import Any
 
 import httpx
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from api.operational import (
     action_for_deviation,
@@ -208,6 +212,8 @@ RDO_INSERT_COLUMNS = {
     "created_at",
     "updated_at",
 }
+
+RDO_REVIEW_STATUSES = {"rascunho", "extraido", "em_revisao", "finalizado", "rejeitado"}
 
 
 CHILD_INSERT_COLUMNS = {
@@ -835,6 +841,166 @@ def _build_plan_item_rows(
     return item_rows
 
 
+def _strip_accents(value: str) -> str:
+    return "".join(
+        char for char in unicodedata.normalize("NFKD", value or "")
+        if not unicodedata.combining(char)
+    ).lower().strip()
+
+
+def _find_kv(text: str, keys: list[str]) -> str | None:
+    wanted = {_strip_accents(key) for key in keys}
+    for line in text.splitlines():
+        raw = line.strip()
+        if ":" not in raw and "=" not in raw:
+            continue
+        sep = ":" if ":" in raw else "="
+        left, right = raw.split(sep, 1)
+        if _strip_accents(left) in wanted:
+            return right.strip()
+    return None
+
+
+def _money(value: Any) -> float:
+    raw = re.sub(r"[^\d,.\-]", "", str(value or ""))
+    if "," in raw and "." in raw:
+        raw = raw.replace(".", "").replace(",", ".")
+    elif "," in raw:
+        raw = raw.replace(",", ".")
+    return safe_float(raw)
+
+
+def _first_number(value: Any) -> float:
+    match = re.search(r"(\d+(?:[,.]\d+)?)", str(value or ""))
+    return _money(match.group(1)) if match else 0.0
+
+
+def _extract_rdo_text(text: str) -> dict[str, Any]:
+    raw = text or ""
+    date_raw = _find_kv(raw, ["data", "dia"])
+    data_ref = parse_date(date_raw).isoformat() if date_raw else date.today().isoformat()
+    responsavel = (
+        _find_kv(raw, ["responsavel", "engenheiro", "encarregado", "apontador", "lider"])
+        or "Responsavel nao informado"
+    )
+    producao = _find_kv(raw, ["producao", "servico executado", "atividade", "servico"]) or raw[:900]
+    local = _find_kv(raw, ["local", "obra", "rua", "frente", "nucleo"]) or ""
+    empreiteira = _find_kv(raw, ["empreiteira", "subempreiteira", "empresa", "contratada"]) or ""
+    ocorrencias = _find_kv(raw, ["ocorrencia", "ocorrencias", "desvio", "paralisacao", "restricao"]) or ""
+    equipe = _find_kv(raw, ["equipe", "mao de obra", "funcionarios"])
+    producao_m = _first_number(_find_kv(raw, ["metragem", "metros", "producao m"]) or producao)
+    custo_direto = _money(_find_kv(raw, ["custo direto", "custos diretos", "direto"]))
+    custo_indireto = _money(_find_kv(raw, ["custo indireto", "custos indiretos", "indireto"]))
+    custo_total = _money(_find_kv(raw, ["custo total", "total do dia", "total"])) or custo_direto + custo_indireto
+    equipe_number = int(_first_number(equipe)) if equipe else 0
+    assinatura = bool(re.search(r"\b(assinado|assinatura|rubrica|validado)\b", _strip_accents(raw)))
+    fields = {
+        "data": data_ref,
+        "responsavel": responsavel,
+        "local": local,
+        "empreiteira": empreiteira,
+        "producao": producao,
+        "producao_m": producao_m,
+        "equipe_number": equipe_number,
+        "custo_direto": custo_direto,
+        "custo_indireto": custo_indireto,
+        "custo_total_dia": custo_total,
+        "ocorrencias": ocorrencias,
+        "assinatura_presente": assinatura,
+    }
+    pending = [key for key in ["local", "producao", "producao_m"] if not fields.get(key)]
+    confidence = {
+        key: 0.92 if fields.get(key) not in ("", 0, 0.0, None, "Responsavel nao informado") else 0.35
+        for key in fields
+    }
+    return {
+        "fields": fields,
+        "confidence": confidence,
+        "pending_fields": pending,
+        "raw_text": raw,
+        "status_revisao": "em_revisao" if pending else "extraido",
+    }
+
+
+def _payload_from_extraction(project_id: str, extraction: dict[str, Any], origem: str) -> dict[str, Any]:
+    fields = extraction.get("fields") if isinstance(extraction.get("fields"), dict) else {}
+    return {
+        "projeto_id": project_id,
+        "project_id": project_id,
+        "data": fields.get("data") or date.today().isoformat(),
+        "origem": origem,
+        "status": "aberto",
+        "apontador": fields.get("responsavel"),
+        "engenheiro": fields.get("responsavel"),
+        "turno": "dia",
+        "producao": fields.get("producao") or "",
+        "producao_m": safe_float(fields.get("producao_m")),
+        "equipe_number": safe_int(fields.get("equipe_number")),
+        "custo_direto": safe_float(fields.get("custo_direto")),
+        "custo_indireto": safe_float(fields.get("custo_indireto")),
+        "custo_total_dia": safe_float(fields.get("custo_total_dia")),
+        "ocorrencias": fields.get("ocorrencias") or "",
+        "observacoes": fields.get("local") or "",
+        "payload_original": {
+            "rdo_v5": extraction,
+            "status_revisao": extraction.get("status_revisao"),
+            "local": fields.get("local"),
+            "empreiteira": fields.get("empreiteira"),
+            "assinatura_presente": fields.get("assinatura_presente"),
+        },
+        "atividades": [{
+            "local": fields.get("local"),
+            "servico": fields.get("producao") or "Producao RDO",
+            "quantidade": safe_float(fields.get("producao_m")),
+            "unidade": "m",
+        }],
+        "ocorrencias_lista": [{"tipo": "desvio", "descricao": fields.get("ocorrencias")}]
+        if fields.get("ocorrencias") else [],
+    }
+
+
+def _rdo_review_payload(row: dict[str, Any]) -> dict[str, Any]:
+    payload = row.get("payload_original") if isinstance(row.get("payload_original"), dict) else {}
+    v5 = payload.get("rdo_v5") if isinstance(payload.get("rdo_v5"), dict) else {}
+    return {"payload_original": payload, "rdo_v5": v5}
+
+
+def _rdo_status_from_review(status_revisao: str) -> str:
+    return "fechado" if status_revisao == "finalizado" else "aberto"
+
+
+def _evidence_event(client: Any, project_id: str, rdo_id: str | None, payload: dict[str, Any]) -> dict[str, Any]:
+    return _safe_table_insert(client, "workflow_events", {
+        "projeto_id": project_id,
+        "tipo": "rdo_evidencia",
+        "origem": payload.get("origem") or "web",
+        "status": payload.get("status") or "ativo",
+        "payload": {"rdo_id": rdo_id, **payload},
+    })
+
+
+def _rdo_medicao_fontes(client: Any, project_id: str, rdo_id: str) -> list[dict[str, Any]]:
+    equipes = _select_child_rows(client, "rdo_equipes", rdo_id)
+    equipe_ids = [str(item.get("id")) for item in equipes if item.get("id")]
+    atividades = _select_child_rows(client, "rdo_atividades", rdo_id, equipe_ids)
+    fontes = []
+    for item in atividades:
+        quantidade = safe_float(item.get("metragem"))
+        if quantidade <= 0:
+            continue
+        fontes.append({
+            "projeto_id": project_id,
+            "rdo_id": rdo_id,
+            "trecho": item.get("rua"),
+            "servico": item.get("servico"),
+            "quantidade": quantidade,
+            "unidade": "m",
+            "origem": "rdo_finalizado",
+            "evidencia_id": None,
+        })
+    return fontes
+
+
 def _active_week_plan(client: Any, project_id: str, data_ref: Any = None) -> dict[str, Any] | None:
     day = parse_date(data_ref)
     try:
@@ -1459,6 +1625,153 @@ def criar_rdo_projeto(project_id: str, payload: dict[str, Any]):
             payload={"payload": payload},
         )
         raise HTTPException(status_code=500, detail=f"Erro ao gravar RDO: {exc}") from exc
+
+
+@router.post("/api/projetos/{project_id}/preencher-texto", status_code=201)
+def preencher_texto_projeto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    texto = str(payload.get("texto") or payload.get("text") or "").strip()
+    if not texto:
+        raise HTTPException(status_code=400, detail="Campo texto obrigatorio")
+    extraction = _extract_rdo_text(texto)
+    row_payload = _payload_from_extraction(project_id, extraction, "texto")
+    created = criar_rdo_projeto(project_id, row_payload)
+    client = get_supabase()
+    if client is not None:
+        log_operational_event(
+            subsystem="rdo",
+            severity="info",
+            status="resolved",
+            project_id=project_id,
+            payload={"rdo_id": created.get("id"), "status_revisao": extraction.get("status_revisao")},
+            origem="texto",
+        )
+    return {"rdo": created, "extraction": extraction, "status": "connected" if client else "local"}
+
+
+@router.post("/api/projetos/{project_id}/rdos/automatico/texto", status_code=201)
+def criar_rdo_automatico_texto(project_id: str, payload: dict[str, Any]):
+    return preencher_texto_projeto(project_id, payload)
+
+
+@router.post("/api/projetos/{project_id}/rdos/automatico/upload", status_code=201)
+async def criar_rdo_automatico_upload(
+    project_id: str,
+    arquivo: UploadFile = File(...),
+    texto: str = Form(default=""),
+):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    content = await arquivo.read()
+    digest = hashlib.sha256(content).hexdigest()
+    guessed_text = texto.strip()
+    if not guessed_text:
+        try:
+            guessed_text = content.decode("utf-8", errors="ignore")
+        except Exception:
+            guessed_text = ""
+    if not guessed_text.strip():
+        guessed_text = f"Documento: {arquivo.filename or 'rdo'}\nOrigem: upload\n"
+    extraction = _extract_rdo_text(guessed_text)
+    extraction["arquivo"] = {
+        "nome": arquivo.filename,
+        "content_type": arquivo.content_type,
+        "sha256": digest,
+        "size": len(content),
+    }
+    row_payload = _payload_from_extraction(project_id, extraction, "upload")
+    created = criar_rdo_projeto(project_id, row_payload)
+    preview = ""
+    if arquivo.content_type and arquivo.content_type.startswith("image/"):
+        preview = "data:" + arquivo.content_type + ";base64," + base64.b64encode(content).decode("ascii")
+    evidence = _evidence_event(client, project_id, str(created.get("id") or ""), {
+        "nome": arquivo.filename,
+        "content_type": arquivo.content_type,
+        "sha256": digest,
+        "size": len(content),
+        "preview_base64": preview,
+        "origem": "upload",
+        "status": "preservado",
+    })
+    return {"rdo": created, "extraction": extraction, "evidence": evidence.get("item"), "status": "connected"}
+
+
+@router.get("/api/projetos/{project_id}/rdos/{rdo_id}/evidencias")
+def listar_rdo_evidencias(project_id: str, rdo_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    rows = _items(
+        client.table("workflow_events")
+        .select("*")
+        .eq("projeto_id", project_id)
+        .eq("tipo", "rdo_evidencia")
+        .order("created_at", desc=True)
+        .execute()
+    )
+    return {"items": [row for row in rows if (row.get("payload") or {}).get("rdo_id") == rdo_id], "status": "connected"}
+
+
+@router.patch("/api/projetos/{project_id}/rdos/{rdo_id}/revisar")
+def revisar_rdo_projeto(project_id: str, rdo_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    current = _item(client.table("rdos").select("*").eq("id", rdo_id).eq("projeto_id", project_id).limit(1).execute())
+    if current is None:
+        raise HTTPException(status_code=404, detail="RDO nao encontrado")
+    review = _rdo_review_payload(current)
+    merged = {**review["rdo_v5"], "revisao": payload, "status_revisao": payload.get("status_revisao") or "em_revisao"}
+    payload_original = {**review["payload_original"], "rdo_v5": merged, "status_revisao": merged["status_revisao"]}
+    result = _safe_table_update(
+        client,
+        "rdos",
+        {"status": _rdo_status_from_review(merged["status_revisao"]), "payload_original": payload_original},
+        id=rdo_id,
+        projeto_id=project_id,
+    )
+    return {"ok": bool(result.get("ok")), "rdo": result.get("item"), "status_revisao": merged["status_revisao"]}
+
+
+@router.post("/api/projetos/{project_id}/rdos/{rdo_id}/finalizar")
+def finalizar_rdo_projeto(project_id: str, rdo_id: str, payload: dict[str, Any] | None = None):
+    result = revisar_rdo_projeto(project_id, rdo_id, {"status_revisao": "finalizado", **(payload or {})})
+    client = get_supabase()
+    if client is not None:
+        fontes = _rdo_medicao_fontes(client, _canonical_project_id(project_id) or project_id, rdo_id)
+        log_operational_event(
+            subsystem="medicao",
+            severity="info",
+            status="resolved",
+            project_id=_canonical_project_id(project_id) or project_id,
+            payload={"rdo_id": rdo_id, "fontes": fontes},
+            origem="rdo",
+        )
+        result["medicao_fontes"] = fontes
+    return result
+
+
+@router.post("/api/projetos/{project_id}/rdos/{rdo_id}/rejeitar")
+def rejeitar_rdo_projeto(project_id: str, rdo_id: str, payload: dict[str, Any] | None = None):
+    return revisar_rdo_projeto(project_id, rdo_id, {"status_revisao": "rejeitado", **(payload or {})})
+
+
+@router.get("/api/projetos/{project_id}/rdos/{rdo_id}/medicao-fontes")
+def listar_rdo_medicao_fontes(project_id: str, rdo_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    return {"items": _rdo_medicao_fontes(client, project_id, rdo_id), "status": "connected"}
 
 
 @router.get("/api/projetos/{project_id}/planejamentos-semanais")
@@ -2159,6 +2472,63 @@ def financeiro_projeto(project_id: str):
     }
 
 
+@router.get("/api/projetos/{project_id}/controle-fluxo")
+def controle_fluxo_projeto(project_id: str):
+    financeiro = financeiro_projeto(project_id)
+    lancamentos = financeiro["lancamentos"]
+    receitas_previstas = _sum([r for r in lancamentos if str(r.get("tipo", "")).upper() in {"RECEITA", "ENTRADA"}], "valor", "valor_previsto")
+    custos_projetados = _sum(lancamentos, "custo_previsto", "valor_previsto", "valor")
+    return {
+        **financeiro,
+        "fluxo_projetado": {
+            "receitas_previstas": receitas_previstas,
+            "custos_projetados": custos_projetados,
+            "saldo_projetado": receitas_previstas - custos_projetados,
+            "memoria": "lancamentos_financeiros + trechos_custo + RDO",
+        },
+        "resumo": {
+            **financeiro["resumo"],
+            "receitas_previstas": receitas_previstas,
+            "custos_projetados": custos_projetados,
+            "saldo_projetado": receitas_previstas - custos_projetados,
+            "lancamentos": len(lancamentos),
+        },
+    }
+
+
+@router.post("/api/projetos/{project_id}/controle-fluxo/preencher-texto", status_code=201)
+def preencher_controle_fluxo_texto(project_id: str, payload: dict[str, Any]):
+    project_id = _canonical_project_id(project_id) or project_id
+    _project_or_404(project_id)
+    texto = str(payload.get("texto") or payload.get("text") or "").strip()
+    if not texto:
+        raise HTTPException(status_code=400, detail="Campo texto obrigatorio")
+    receita = _money(_find_kv(texto, ["receita", "receita prevista", "medicao", "medição", "recebimento"]))
+    custo_fixo = _money(_find_kv(texto, ["custo fixo", "fixo"]))
+    custo_direto = _money(_find_kv(texto, ["custo direto", "direto"]))
+    custo_indireto = _money(_find_kv(texto, ["custo indireto", "indireto"]))
+    custo_variavel = _money(_find_kv(texto, ["custo variavel", "variavel", "variável"]))
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    event = _safe_table_insert(client, "workflow_events", {
+        "projeto_id": project_id,
+        "tipo": "controle_fluxo_texto",
+        "origem": "texto",
+        "status": "processado",
+        "payload": {
+            "texto": texto,
+            "receita_prevista": receita,
+            "custo_fixo": custo_fixo,
+            "custo_direto": custo_direto,
+            "custo_indireto": custo_indireto,
+            "custo_variavel": custo_variavel,
+            "saldo_projetado": receita - custo_fixo - custo_direto - custo_indireto - custo_variavel,
+        },
+    })
+    return {"ok": event.get("ok"), "item": event.get("item"), "status": "connected"}
+
+
 @router.get("/api/projetos/{project_id}/torre")
 def torre_projeto(project_id: str):
     payload = dashboard_projeto(project_id)
@@ -2206,6 +2576,54 @@ def gestao360_projeto(project_id: str):
             "financeiro": "Conectado" if financeiro["lancamentos"] or financeiro["trechos"] else "Parcial",
             "planejamento_ml": "Conectado" if payload.get("planejamento") or payload.get("desvios") else "Parcial",
         },
+    }
+
+
+@router.get("/api/relatorio360/rdo/{rdo_id}")
+def relatorio360_rdo(rdo_id: str, project_id: str | None = None):
+    client = get_supabase()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Supabase nao configurado")
+    query = client.table("rdos").select("*").eq("id", rdo_id).limit(1)
+    if project_id:
+        query = query.eq("projeto_id", _canonical_project_id(project_id) or project_id)
+    rdo = _item(query.execute())
+    if rdo is None:
+        raise HTTPException(status_code=404, detail="RDO nao encontrado")
+    project = _canonical_project_id(str(rdo.get("projeto_id") or project_id or "")) or str(rdo.get("projeto_id") or "")
+    detail = detalhar_rdo_projeto(project, rdo_id)
+    evidencias = listar_rdo_evidencias(project, rdo_id)["items"]
+    fontes = _rdo_medicao_fontes(client, project, rdo_id)
+    return {
+        "rdo": detail["rdo"],
+        "children": detail["children"],
+        "evidencias": evidencias,
+        "medicao_fontes": fontes,
+        "resumo": {
+            "data": rdo.get("data"),
+            "responsavel": rdo.get("apontador") or rdo.get("engenheiro"),
+            "producao_m": safe_float(rdo.get("producao_m")),
+            "custo_total_dia": safe_float(rdo.get("custo_total_dia")),
+            "ocorrencias": rdo.get("ocorrencias"),
+            "fotos": len(rdo.get("fotos") or []),
+        },
+        "status": "connected",
+    }
+
+
+@router.get("/api/projetos/{project_id}/bi/analytics")
+def bi_analytics_projeto(project_id: str):
+    payload = dashboard_projeto(project_id)
+    financeiro = controle_fluxo_projeto(project_id)
+    return {
+        "projeto": payload["projeto"],
+        "kpis": payload["kpis"],
+        "planejamento": payload.get("planejamento"),
+        "desvios": payload.get("desvios", []),
+        "replanejamentos": payload.get("replanejamentos", []),
+        "financeiro": financeiro.get("resumo", {}),
+        "rdos": payload.get("rdos", []),
+        "status": payload["status"],
     }
 
 

@@ -81,10 +81,15 @@ export interface ApiProjetoFinanceiroPayload {
   projeto: ApiProjetoRecord;
   lancamentos: Array<Record<string, unknown>>;
   trechos: Array<Record<string, unknown>>;
+  fluxo_projetado?: Record<string, unknown>;
   resumo: {
     receitas: number;
     despesas: number;
     trechos_total: number;
+    receitas_previstas?: number;
+    custos_projetados?: number;
+    saldo_projetado?: number;
+    lancamentos?: number;
   };
   status: CanonicalIntegrationStatus;
 }
@@ -114,6 +119,24 @@ export interface ApiProjetoWhatsappAgendamentoRecord {
   ultimaExecucao?: string | null;
   created_at?: string | null;
   updated_status?: string | null;
+}
+
+export type ApiRdoReviewStatus = "rascunho" | "extraido" | "em_revisao" | "finalizado" | "rejeitado";
+
+export interface ApiRdoExtractionPayload {
+  fields: Record<string, unknown>;
+  confidence: Record<string, number>;
+  pending_fields: string[];
+  raw_text?: string;
+  status_revisao: ApiRdoReviewStatus;
+  arquivo?: Record<string, unknown>;
+}
+
+export interface ApiRdoAutomaticoResult {
+  rdo?: Record<string, unknown>;
+  extraction?: ApiRdoExtractionPayload;
+  evidence?: Record<string, unknown>;
+  status?: CanonicalIntegrationStatus;
 }
 
 function url(path: string, params?: Record<string, string>): string {
@@ -225,6 +248,37 @@ export const apiProjetoRdos = (projectId: string) =>
 export const apiProjetoCriarRdo = (projectId: string, payload: Record<string, unknown>) =>
   post<Record<string, unknown>>(`/api/projetos/${projectId}/rdos`, payload);
 
+export const apiProjetoPreencherTexto = (projectId: string, texto: string) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/preencher-texto`, { texto });
+
+export const apiProjetoRdoAutomaticoTexto = (projectId: string, texto: string) =>
+  post<ApiRdoAutomaticoResult>(`/api/projetos/${projectId}/rdos/automatico/texto`, { texto });
+
+export const apiProjetoRdoAutomaticoUpload = (projectId: string, fd: FormData) =>
+  post<ApiRdoAutomaticoResult>(`/api/projetos/${projectId}/rdos/automatico/upload`, fd);
+
+export const apiProjetoRdoEvidencias = (projectId: string, rdoId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/rdos/${rdoId}/evidencias`
+  );
+
+export const apiProjetoRdoRevisar = (projectId: string, rdoId: string, payload: Record<string, unknown>) =>
+  patch<Record<string, unknown>>(`/api/projetos/${projectId}/rdos/${rdoId}/revisar`, payload);
+
+export const apiProjetoRdoFinalizar = (projectId: string, rdoId: string, payload: Record<string, unknown> = {}) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/rdos/${rdoId}/finalizar`, payload);
+
+export const apiProjetoRdoRejeitar = (projectId: string, rdoId: string, payload: Record<string, unknown> = {}) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/rdos/${rdoId}/rejeitar`, payload);
+
+export const apiProjetoRdoMedicaoFontes = (projectId: string, rdoId: string) =>
+  get<{ items: Array<Record<string, unknown>>; status: CanonicalIntegrationStatus }>(
+    `/api/projetos/${projectId}/rdos/${rdoId}/medicao-fontes`
+  );
+
+export const apiRelatorio360Rdo = (rdoId: string, projectId?: string) =>
+  get<Record<string, unknown>>(`/api/relatorio360/rdo/${rdoId}`, projectId ? { project_id: projectId } : undefined);
+
 export const apiProjetoTarefas = (projectId: string) =>
   get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/tarefas`);
 
@@ -276,6 +330,12 @@ export const apiProjetoRemoverLpsRestricao = (projectId: string, restricaoId: st
 export const apiProjetoFinanceiro = (projectId: string) =>
   get<ApiProjetoFinanceiroPayload>(`/api/projetos/${projectId}/financeiro`);
 
+export const apiProjetoControleFluxo = (projectId: string) =>
+  get<Record<string, unknown>>(`/api/projetos/${projectId}/controle-fluxo`);
+
+export const apiProjetoPreencherControleFluxo = (projectId: string, texto: string) =>
+  post<Record<string, unknown>>(`/api/projetos/${projectId}/controle-fluxo/preencher-texto`, { texto });
+
 export const apiProjetoWhatsappLogs = (projectId: string) =>
   get<{ items: ApiProjetoWhatsappLogRecord[]; status: CanonicalIntegrationStatus }>(
     `/api/projetos/${projectId}/whatsapp/logs`
@@ -323,6 +383,9 @@ export const apiProjetoValidarReplanejamento = (
   replanejamentoId: string,
   payload: Record<string, unknown>
 ) => post<Record<string, unknown>>(`/api/projetos/${projectId}/replanejamentos/${replanejamentoId}/validar`, payload);
+
+export const apiProjetoBiAnalytics = (projectId: string) =>
+  get<Record<string, unknown>>(`/api/projetos/${projectId}/bi/analytics`);
 
 export const apiProjetoCriarWhatsappAgendamento = (projectId: string, payload: Record<string, unknown>) =>
   post<ApiProjetoWhatsappAgendamentoRecord>(`/api/projetos/${projectId}/whatsapp/agendamentos`, payload);

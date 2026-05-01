@@ -7,6 +7,7 @@ import { useProjectContext } from '@/store/projectContext'
 import { RdoHeader }      from './components/RdoHeader'
 import { DashboardPanel } from './components/DashboardPanel'
 import { NovoRdoPanel }   from './components/NovoRdoPanel'
+import { RdoAutomaticoPanel } from './components/RdoAutomaticoPanel'
 import { HistoricoPanel } from './components/HistoricoPanel'
 import { IntegracaoPanel } from './components/IntegracaoPanel'
 import { FinanceiroPanel } from './components/FinanceiroPanel'
@@ -29,6 +30,7 @@ export function RdoPage() {
     switch (activeTab) {
       case 'dashboard':       return <DashboardPanel />
       case 'novo':            return <NovoRdoPanel />
+      case 'automatico':      return <RdoAutomaticoPanel />
       case 'historico':       return <HistoricoPanel />
       case 'integracao':      return <IntegracaoPanel />
       case 'financeiro':      return <FinanceiroPanel />

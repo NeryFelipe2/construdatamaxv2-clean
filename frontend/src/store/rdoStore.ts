@@ -22,6 +22,14 @@ import {
   apiRdoClose,
   apiProjetoRdos,
   apiProjetoCriarRdo,
+  apiProjetoPreencherTexto,
+  apiProjetoRdoAutomaticoTexto,
+  apiProjetoRdoAutomaticoUpload,
+  apiProjetoRdoFinalizar,
+  apiProjetoRdoRejeitar,
+  apiProjetoRdoRevisar,
+  apiProjetoRdoMedicaoFontes,
+  type ApiRdoAutomaticoResult,
   type CanonicalIntegrationStatus,
 } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
@@ -56,6 +64,9 @@ interface RdoState {
   budgetBRL:        number
   integrationStatus: CanonicalIntegrationStatus
   currentProjectId: string | null
+  isSaving:         boolean
+  automaticoResult: ApiRdoAutomaticoResult | null
+  medicaoFontes:    Array<Record<string, unknown>>
 
   // ── Navigation ──────────────────────────────────────────────────────────────
   setActiveTab: (tab: RdoTab) => void
@@ -83,6 +94,13 @@ interface RdoState {
   fetchFromBackend:       (nucleo?: string) => Promise<void>
   createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
   createRdoForProject:    (projectId: string, rdo: Omit<RDO, 'id' | 'number' | 'createdAt' | 'updatedAt'>) => Promise<Record<string, unknown> | null>
+  createRdoTextForProject: (projectId: string, texto: string) => Promise<Record<string, unknown> | null>
+  createAutomaticoFromText: (projectId: string, texto: string) => Promise<ApiRdoAutomaticoResult | null>
+  uploadAutomatico:       (projectId: string, fd: FormData) => Promise<ApiRdoAutomaticoResult | null>
+  revisarRdo:             (projectId: string, rdoId: string, payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
+  finalizarRdo:           (projectId: string, rdoId: string) => Promise<Record<string, unknown> | null>
+  rejeitarRdo:            (projectId: string, rdoId: string, motivo?: string) => Promise<Record<string, unknown> | null>
+  loadMedicaoFontes:      (projectId: string, rdoId: string) => Promise<Array<Record<string, unknown>>>
   closeRdoOnBackend:      (id: number) => Promise<void>
 
   // ── Supabase sync (RDOs do WhatsApp) ─────────────────────────────────────────
@@ -98,6 +116,9 @@ export const useRdoStore = create<RdoState>((set, get) => ({
   budgetBRL:        ALLOW_DEMO_DATA ? MOCK_RDO_BUDGET_BRL : 0,
   integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
   currentProjectId: null,
+  isSaving:         false,
+  automaticoResult: null,
+  medicaoFontes:    [],
 
   // ── Navigation ────────────────────────────────────────────────────────────────
 
@@ -258,6 +279,7 @@ export const useRdoStore = create<RdoState>((set, get) => ({
   },
 
   createRdoForProject: async (projectId, rdo) => {
+    set({ isSaving: true })
     const productionMeters = rdo.trechos.reduce((sum, trecho) => sum + (trecho.executedMeters || 0), 0)
     const servicesSummary = rdo.services
       .map((service) => `${service.description}: ${service.quantity} ${service.unit}`)
@@ -353,11 +375,101 @@ export const useRdoStore = create<RdoState>((set, get) => ({
     try {
       const created = await apiProjetoCriarRdo(projectId, payload)
       await get().loadFromSupabase(projectId)
-      set({ integrationStatus: 'connected', currentProjectId: projectId })
+      set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
       return created
     } catch {
-      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId })
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
       return null
+    }
+  },
+
+  createRdoTextForProject: async (projectId, texto) => {
+    set({ isSaving: true })
+    try {
+      const created = await apiProjetoPreencherTexto(projectId, texto)
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
+      return created
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  createAutomaticoFromText: async (projectId, texto) => {
+    set({ isSaving: true })
+    try {
+      const result = await apiProjetoRdoAutomaticoTexto(projectId, texto)
+      await get().loadFromSupabase(projectId)
+      set({ automaticoResult: result, integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
+      return result
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  uploadAutomatico: async (projectId, fd) => {
+    set({ isSaving: true })
+    try {
+      const result = await apiProjetoRdoAutomaticoUpload(projectId, fd)
+      await get().loadFromSupabase(projectId)
+      set({ automaticoResult: result, integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
+      return result
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  revisarRdo: async (projectId, rdoId, payload) => {
+    set({ isSaving: true })
+    try {
+      const result = await apiProjetoRdoRevisar(projectId, rdoId, payload)
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
+      return result
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  finalizarRdo: async (projectId, rdoId) => {
+    set({ isSaving: true })
+    try {
+      const result = await apiProjetoRdoFinalizar(projectId, rdoId)
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false, medicaoFontes: (result.medicao_fontes as Array<Record<string, unknown>>) ?? [] })
+      return result
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  rejeitarRdo: async (projectId, rdoId, motivo) => {
+    set({ isSaving: true })
+    try {
+      const result = await apiProjetoRdoRejeitar(projectId, rdoId, { motivo })
+      await get().loadFromSupabase(projectId)
+      set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
+      return result
+    } catch {
+      set({ integrationStatus: ALLOW_DEMO_DATA ? 'local' : 'partial', currentProjectId: projectId, isSaving: false })
+      return null
+    }
+  },
+
+  loadMedicaoFontes: async (projectId, rdoId) => {
+    try {
+      const result = await apiProjetoRdoMedicaoFontes(projectId, rdoId)
+      const items = result.items ?? []
+      set({ medicaoFontes: items, integrationStatus: 'connected' })
+      return items
+    } catch {
+      set({ medicaoFontes: [] })
+      return []
     }
   },
 
@@ -419,6 +531,15 @@ export const useRdoStore = create<RdoState>((set, get) => ({
         const ligacoesDia = Number(row.ligacoes_dia || 0)
         const equipeN = Number(row.equipe_number || 0)
         const now = String(row.created_at || new Date().toISOString())
+        const payloadOriginal = (row.payload_original && typeof row.payload_original === 'object')
+          ? row.payload_original as Record<string, any>
+          : {}
+        const rdoV5 = (payloadOriginal.rdo_v5 && typeof payloadOriginal.rdo_v5 === 'object')
+          ? payloadOriginal.rdo_v5 as Record<string, any>
+          : {}
+        const extractedFields = (rdoV5.fields && typeof rdoV5.fields === 'object')
+          ? rdoV5.fields as Record<string, any>
+          : {}
         const diesel = Number(row.custo_diesel || 0)
         const alimentacao = Number(row.custo_alimentacao || 0)
         const maoObra = Number(row.custo_mao_obra || 0)
@@ -479,6 +600,12 @@ export const useRdoStore = create<RdoState>((set, get) => ({
           stoppageNotes: stoppageMatch?.[1]?.trim() || '',
           productionNotes: producaoM > 0 ? `${producaoM} m executados` : '',
           lpsLinked: Boolean(projetoId || row.lps_id),
+          origem: String(row.origem || ''),
+          statusRevisao: String(payloadOriginal.status_revisao || rdoV5.status_revisao || (row.status === 'fechado' ? 'finalizado' : 'rascunho')) as RDO['statusRevisao'],
+          assinaturaPresente: Boolean(payloadOriginal.assinatura_presente || extractedFields.assinatura_presente),
+          pendingFields: Array.isArray(rdoV5.pending_fields) ? rdoV5.pending_fields.map(String) : [],
+          extractionConfidence: (rdoV5.confidence && typeof rdoV5.confidence === 'object') ? rdoV5.confidence as Record<string, number> : undefined,
+          evidencias: [],
           createdAt: now,
           updatedAt: now,
         } as RDO)

@@ -10,6 +10,7 @@ import type { RdoTab } from '@/types'
 const TABS: { key: RdoTab; label: string; icon?: React.ReactNode }[] = [
   { key: 'dashboard',       label: 'Dashboard'         },
   { key: 'novo',            label: '+ Novo RDO'         },
+  { key: 'automatico',      label: 'RDO Automatico'    },
   { key: 'historico',       label: 'Histórico de RDOs'  },
   { key: 'integracao',      label: 'RDO × Planejamento' },
   { key: 'financeiro',      label: 'Financeiro'         },
