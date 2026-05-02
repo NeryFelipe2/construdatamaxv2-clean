@@ -2501,10 +2501,14 @@ def controle_fluxo_projeto(project_id: str):
         _sum([r for r in lancamentos if str(r.get("tipo", "")).upper() in {"RECEITA", "ENTRADA"}], "valor", "valor_previsto")
         + _sum(controle_lancamentos, "receita_prevista")
     )
-    custos_projetados = (
-        _sum(lancamentos, "custo_previsto", "valor_previsto", "valor")
-        + _sum(controle_lancamentos, "custo_fixo", "custo_direto", "custo_indireto", "custo_variavel")
+    custos_texto = sum(
+        safe_float(item.get("custo_fixo"))
+        + safe_float(item.get("custo_direto"))
+        + safe_float(item.get("custo_indireto"))
+        + safe_float(item.get("custo_variavel"))
+        for item in controle_lancamentos
     )
+    custos_projetados = _sum(lancamentos, "custo_previsto", "valor_previsto", "valor") + custos_texto
     resumo_fluxo = {
         **financeiro["resumo"],
         "receitas_previstas": receitas_previstas,
