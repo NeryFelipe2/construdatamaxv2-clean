@@ -2474,25 +2474,59 @@ def financeiro_projeto(project_id: str):
 
 @router.get("/api/projetos/{project_id}/controle-fluxo")
 def controle_fluxo_projeto(project_id: str):
+    project_id = _canonical_project_id(project_id) or project_id
     financeiro = financeiro_projeto(project_id)
     lancamentos = financeiro["lancamentos"]
-    receitas_previstas = _sum([r for r in lancamentos if str(r.get("tipo", "")).upper() in {"RECEITA", "ENTRADA"}], "valor", "valor_previsto")
-    custos_projetados = _sum(lancamentos, "custo_previsto", "valor_previsto", "valor")
+    controle_texto = []
+    client = get_supabase()
+    if client is not None:
+        controle_texto = _fallback_events(client, project_id, "controle_fluxo_texto", limit=500)
+    controle_lancamentos = [
+        {
+            "id": item.get("id"),
+            "created_at": item.get("created_at"),
+            "tipo": "CONTROLE_TEXTO",
+            "origem": "preencher_com_texto",
+            "receita_prevista": safe_float(item.get("receita_prevista")),
+            "custo_fixo": safe_float(item.get("custo_fixo")),
+            "custo_direto": safe_float(item.get("custo_direto")),
+            "custo_indireto": safe_float(item.get("custo_indireto")),
+            "custo_variavel": safe_float(item.get("custo_variavel")),
+            "saldo_projetado": safe_float(item.get("saldo_projetado")),
+            "texto": item.get("texto"),
+        }
+        for item in controle_texto
+    ]
+    receitas_previstas = (
+        _sum([r for r in lancamentos if str(r.get("tipo", "")).upper() in {"RECEITA", "ENTRADA"}], "valor", "valor_previsto")
+        + _sum(controle_lancamentos, "receita_prevista")
+    )
+    custos_projetados = (
+        _sum(lancamentos, "custo_previsto", "valor_previsto", "valor")
+        + _sum(controle_lancamentos, "custo_fixo", "custo_direto", "custo_indireto", "custo_variavel")
+    )
+    resumo_fluxo = {
+        **financeiro["resumo"],
+        "receitas_previstas": receitas_previstas,
+        "custos_projetados": custos_projetados,
+        "saldo_projetado": receitas_previstas - custos_projetados,
+        "lancamentos": len(lancamentos) + len(controle_lancamentos),
+    }
+    fluxo = {
+        "resumo": resumo_fluxo,
+        "lancamentos": controle_lancamentos,
+        "memoria": "lancamentos_financeiros + trechos_custo + workflow_events.controle_fluxo_texto + RDO",
+    }
     return {
         **financeiro,
+        "fluxo": fluxo,
         "fluxo_projetado": {
             "receitas_previstas": receitas_previstas,
             "custos_projetados": custos_projetados,
             "saldo_projetado": receitas_previstas - custos_projetados,
-            "memoria": "lancamentos_financeiros + trechos_custo + RDO",
+            "memoria": fluxo["memoria"],
         },
-        "resumo": {
-            **financeiro["resumo"],
-            "receitas_previstas": receitas_previstas,
-            "custos_projetados": custos_projetados,
-            "saldo_projetado": receitas_previstas - custos_projetados,
-            "lancamentos": len(lancamentos),
-        },
+        "resumo": resumo_fluxo,
     }
 
 
@@ -2526,7 +2560,12 @@ def preencher_controle_fluxo_texto(project_id: str, payload: dict[str, Any]):
             "saldo_projetado": receita - custo_fixo - custo_direto - custo_indireto - custo_variavel,
         },
     })
-    return {"ok": event.get("ok"), "item": event.get("item"), "status": "connected"}
+    return {
+        "ok": event.get("ok"),
+        "item": event.get("item"),
+        "fluxo": controle_fluxo_projeto(project_id).get("fluxo"),
+        "status": "connected",
+    }
 
 
 @router.get("/api/projetos/{project_id}/torre")
