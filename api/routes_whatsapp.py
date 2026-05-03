@@ -12,7 +12,14 @@ import httpx
 from fastapi import APIRouter, HTTPException, Query
 
 from api.operational import log_operational_event, safe_float
-from api.supabase_client import CANONICAL_PROJECT_IDS, PROJECT_ID_ALIASES, PROJETOS_OFICIAIS, get_supabase
+from api.supabase_client import (
+    PROJETOS_OFICIAIS,
+    canonical_project_id as _shared_canonical_project_id,
+    get_supabase,
+    is_rk_project,
+    related_project_ids as _shared_related_project_ids,
+    rk_project_ids,
+)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = REPO_ROOT / "data" / "whatsapp_numeros.json"
 
@@ -22,20 +29,17 @@ supabase = get_supabase()
 
 
 def _canonical_project_id(project_id: str | None) -> str | None:
-    if not project_id:
-        return project_id
-    return PROJECT_ID_ALIASES.get(str(project_id), str(project_id))
+    return _shared_canonical_project_id(project_id)
 
 
 def _related_project_ids(project_id: str | None) -> list[str]:
-    canonical = _canonical_project_id(project_id)
-    if not canonical:
-        return []
-    ids = [canonical]
-    ids.extend(alias for alias, target in PROJECT_ID_ALIASES.items() if target == canonical)
-    if project_id and str(project_id) not in ids:
-        ids.append(str(project_id))
-    return ids
+    return _shared_related_project_ids(project_id)
+
+
+def _rk_scope_project_ids(project_id: str | None = None) -> list[str]:
+    if project_id:
+        return _related_project_ids(project_id) if is_rk_project(project_id) else []
+    return rk_project_ids(include_aliases=True)
 
 
 def _normalize_phone(value: str | None) -> str | None:
@@ -100,6 +104,8 @@ def _menu_text(nome: str | None = None) -> str:
 
 
 def _project_label(project_id: str | None) -> str:
+    if project_id and not is_rk_project(project_id):
+        return "Projeto fora do escopo RK"
     if not supabase or not project_id:
         return "Todos os projetos"
     try:
@@ -113,21 +119,21 @@ def _project_label(project_id: str | None) -> str:
 
 def _active_projects() -> list[dict]:
     if not supabase:
-        return list(PROJETOS_OFICIAIS)
+        return [project for project in PROJETOS_OFICIAIS if is_rk_project(project.get("id"))]
     try:
-        res = supabase.table("projetos").select("id,nome,cidade,status").eq("ativo", True).limit(100).execute()
-        rows = res.data or []
+        res = supabase.table("projetos").select("id,nome,cidade,status").in_("id", rk_project_ids()).limit(100).execute()
+        rows = [
+            row
+            for row in (res.data or [])
+            if str(row.get("status") or "ativo").lower() == "ativo" and is_rk_project(row.get("id"))
+        ]
     except Exception:
         rows = []
-    canonical_set = set(CANONICAL_PROJECT_IDS)
-    canonical_rows = [row for row in rows if str(row.get("id")) in canonical_set]
-    if canonical_rows:
-        rows = canonical_rows
 
     if not rows:
-        rows = list(PROJETOS_OFICIAIS)
+        rows = [project for project in PROJETOS_OFICIAIS if is_rk_project(project.get("id"))]
 
-    order = {project_id: index for index, project_id in enumerate(CANONICAL_PROJECT_IDS)}
+    order = {project_id: index for index, project_id in enumerate(rk_project_ids())}
     return sorted(rows, key=lambda row: (order.get(str(row.get("id")), 999), str(row.get("nome") or "")))
 
 
@@ -137,7 +143,12 @@ def _count_table(table: str, project_id: str | None = None, **filters) -> int:
     try:
         query = supabase.table(table).select("id")
         if project_id:
-            query = query.in_("projeto_id", _related_project_ids(project_id))
+            ids = _rk_scope_project_ids(project_id)
+            if not ids:
+                return 0
+            query = query.in_("projeto_id", ids)
+        elif table != "projetos":
+            query = query.in_("projeto_id", _rk_scope_project_ids())
         for key, value in filters.items():
             query = query.eq(key, value)
         res = query.limit(1000).execute()
@@ -148,6 +159,17 @@ def _count_table(table: str, project_id: str | None = None, **filters) -> int:
 
 def _projects_text() -> str:
     rows = _active_projects()
+    if not supabase:
+        return "🏗️ Projetos Ativos\nSupabase nao configurado no backend."
+    try:
+        res = supabase.table("projetos").select("id,nome,cidade,status").in_("id", rk_project_ids()).limit(20).execute()
+        rows = [
+            row
+            for row in (res.data or [])
+            if str(row.get("status") or "ativo").lower() == "ativo" and is_rk_project(row.get("id"))
+        ]
+    except Exception:
+        rows = []
     if not rows:
         return "🏗️ Projetos Ativos\nNenhum projeto ativo encontrado."
     lines = ["🏗️ Projetos Ativos"]
@@ -161,9 +183,14 @@ def _contacts_text(project_id: str | None) -> str:
     if not supabase:
         return "👥 Equipe e Contatos\nSupabase nao configurado no backend."
     try:
-        query = supabase.table("contatos").select("nome,cargo,telefone_whatsapp,alcada,setor").eq("ativo", True)
+        query = supabase.table("contatos").select("nome,cargo,telefone_whatsapp,projeto_id,alcada,setor").eq("ativo", True)
         if project_id:
-            query = query.in_("projeto_id", _related_project_ids(project_id))
+            ids = _rk_scope_project_ids(project_id)
+            if not ids:
+                return "Equipe e Contatos RK\nProjeto fora do escopo RK dos agentes."
+            query = query.in_("projeto_id", ids)
+        else:
+            query = query.in_("projeto_id", _rk_scope_project_ids())
         res = query.limit(30).execute()
         rows = res.data or []
     except Exception:
@@ -259,6 +286,8 @@ def _dashboard_text(project_id: str | None) -> str:
 
 
 def _planejamento_text(project_id: str | None) -> str:
+    if project_id and not is_rk_project(project_id):
+        return "Planejamento Semanal\nProjeto fora do escopo RK dos agentes."
     projeto = _project_label(project_id)
     return (
         "ðŸ“… Planejamento Semanal\n"
@@ -273,11 +302,15 @@ def _planejamento_text(project_id: str | None) -> str:
 def _desvios_text(project_id: str | None) -> str:
     if not supabase:
         return "ðŸ“‰ Desvios Planejado x Realizado\nSupabase nao configurado no backend."
+    if project_id and not is_rk_project(project_id):
+        return "Desvios Planejado x Realizado\nProjeto fora do escopo RK dos agentes."
     projeto = _project_label(project_id)
     try:
         query = supabase.table("desvios_planejamento").select("*").order("created_at", desc=True).limit(20)
         if project_id:
-            query = query.in_("projeto_id", _related_project_ids(project_id))
+            query = query.in_("projeto_id", _rk_scope_project_ids(project_id))
+        else:
+            query = query.in_("projeto_id", _rk_scope_project_ids())
         rows = query.execute().data or []
     except Exception as exc:
         log_operational_event(
@@ -448,6 +481,7 @@ def _contact_project_for_phone(telefone: str | None) -> tuple[str | None, str | 
             supabase.table("contatos")
             .select("nome,projeto_id,telefone_whatsapp,cargo,alcada,setor")
             .in_("telefone_whatsapp", phones)
+            .in_("projeto_id", _rk_scope_project_ids())
             .eq("ativo", True)
             .limit(50)
             .execute()
@@ -506,6 +540,8 @@ def _dedupe_numeros(items: list[dict]) -> list[dict]:
         if not phone or str(item.get("telefone", "")).startswith("sem-telefone"):
             continue
         item = {**item, "telefone": phone, "projeto_id": _canonical_project_id(item.get("projeto_id"))}
+        if not is_rk_project(item.get("projeto_id")):
+            continue
         existing = by_phone.get(phone)
         if not existing or len(str(item.get("funcao") or "")) > len(str(existing.get("funcao") or "")):
             by_phone[phone] = item
@@ -670,13 +706,27 @@ def _extract_self_test_command(payload: dict, texto: str) -> str | None:
 
 
 @router.get("/numeros")
-def listar_numeros(ns_id: int | None = Query(default=None), project_id: str | None = Query(default=None)):
+def listar_numeros(
+    ns_id: int | None = Query(default=None),
+    project_id: str | None = Query(default=None),
+    scope: str = Query(default="rk"),
+    modo: str | None = Query(default=None),
+):
+    scope = scope if isinstance(scope, str) else "rk"
+    modo = modo if isinstance(modo, str) else None
+    effective_scope = (modo or scope or "rk").strip().lower()
+    if effective_scope not in {"rk", "obras_rk", "rk_only"}:
+        effective_scope = "rk"
+    if project_id and not is_rk_project(project_id):
+        return {"items": [], "scope": effective_scope, "blocked_project_id": _canonical_project_id(project_id)}
     items = _load(DATA_FILE)
     if supabase:
         try:
             query = supabase.table("contatos").select("id,nome,cargo,telefone_whatsapp,projeto_id,alcada,setor").eq("ativo", True)
             if project_id:
-                query = query.in_("projeto_id", _related_project_ids(project_id))
+                query = query.in_("projeto_id", _rk_scope_project_ids(project_id))
+            else:
+                query = query.in_("projeto_id", _rk_scope_project_ids())
             res = query.execute()
             supa_items = [
                 {
@@ -697,14 +747,42 @@ def listar_numeros(ns_id: int | None = Query(default=None), project_id: str | No
     items = _dedupe_numeros(items)
     if ns_id is not None:
         items = [x for x in items if x.get("ns_id") == ns_id]
-    return {"items": items}
+    return {"items": items, "scope": effective_scope, "project_ids": rk_project_ids()}
 
 
 @router.post("/numeros", status_code=201)
 def registrar_numero(payload: dict):
-    for campo in ("ns_id", "telefone", "nome", "funcao"):
+    for campo in ("ns_id", "telefone", "nome", "funcao", "projeto_id"):
         if campo not in payload:
             raise HTTPException(status_code=400, detail=f"Campo '{campo}' obrigatorio")
+    project_id = _canonical_project_id(payload.get("projeto_id") or payload.get("project_id"))
+    if not is_rk_project(project_id):
+        raise HTTPException(status_code=400, detail="Projeto fora do escopo RK dos agentes")
+    if supabase:
+        try:
+            row = {
+                "projeto_id": project_id,
+                "nome": payload["nome"],
+                "telefone_whatsapp": _normalize_phone(payload["telefone"]),
+                "cargo": payload["funcao"],
+                "alcada": payload.get("alcada") or payload["funcao"],
+                "setor": payload.get("setor") or "obra",
+                "ativo": True,
+                "recebe_cobranca": True,
+                "recebe_info": True,
+            }
+            created = supabase.table("contatos").insert(row).execute()
+            item = (created.data or [row])[0]
+            return {
+                "id": item.get("id"),
+                "ns_id": payload["ns_id"],
+                "telefone": item.get("telefone_whatsapp"),
+                "nome": item.get("nome"),
+                "funcao": item.get("cargo") or item.get("alcada"),
+                "projeto_id": item.get("projeto_id"),
+            }
+        except Exception:
+            pass
     items = _load(DATA_FILE)
     novo = {
         "id": str(uuid.uuid4()),
@@ -712,6 +790,7 @@ def registrar_numero(payload: dict):
         "telefone": payload["telefone"],
         "nome": payload["nome"],
         "funcao": payload["funcao"],
+        "projeto_id": project_id,
         "criado_em": datetime.utcnow().isoformat(),
     }
     items.append(novo)
@@ -729,18 +808,54 @@ def remover_numero(numero_id: str):
 
 
 @router.post("/disparar/{ns_id}")
-def disparar_rdo(ns_id: int):
-    numeros = [x for x in _load(DATA_FILE) if x.get("ns_id") == ns_id]
+def disparar_rdo(
+    ns_id: int,
+    project_id: str | None = Query(default=None),
+    dry_run: bool = Query(default=True),
+):
+    project_id = project_id if isinstance(project_id, str) else None
+    dry_run = dry_run if isinstance(dry_run, bool) else True
+    if project_id and not is_rk_project(project_id):
+        raise HTTPException(status_code=404, detail="Projeto fora do escopo RK dos agentes")
+    allowed_ids = set(_rk_scope_project_ids(project_id))
+    numeros = [
+        x
+        for x in _load(DATA_FILE)
+        if x.get("ns_id") == ns_id and _canonical_project_id(x.get("projeto_id")) in allowed_ids
+    ]
     if not numeros and supabase:
         try:
-            res = supabase.table("contatos").select("nome,telefone_whatsapp").eq("ativo", True).execute()
-            numeros = [{"telefone": c.get("telefone_whatsapp"), "nome": c.get("nome")} for c in (res.data or [])]
+            res = (
+                supabase.table("contatos")
+                .select("nome,telefone_whatsapp,projeto_id")
+                .eq("ativo", True)
+                .in_("projeto_id", list(allowed_ids))
+                .execute()
+            )
+            numeros = [
+                {
+                    "telefone": c.get("telefone_whatsapp"),
+                    "nome": c.get("nome"),
+                    "projeto_id": c.get("projeto_id"),
+                    "ns_id": ns_id,
+                }
+                for c in (res.data or [])
+            ]
         except Exception:
             numeros = []
+    numeros = _dedupe_numeros(numeros)
     if not numeros:
         raise HTTPException(status_code=404, detail="Nenhum numero cadastrado para este NS")
-    enviados = [{"telefone": n.get("telefone"), "nome": n.get("nome"), "status": "enfileirado"} for n in numeros]
-    return {"ns_id": ns_id, "enviados": enviados}
+    enviados = [
+        {
+            "telefone": n.get("telefone"),
+            "nome": n.get("nome"),
+            "projeto_id": n.get("projeto_id"),
+            "status": "dry_run" if dry_run else "enfileirado",
+        }
+        for n in numeros
+    ]
+    return {"ns_id": ns_id, "scope": "rk", "dry_run": dry_run, "enviados": enviados}
 
 
 @router.get("/rdos")
@@ -749,6 +864,7 @@ def listar_rdos_whatsapp(ns_id: int | None = Query(default=None)):
         raise HTTPException(status_code=500, detail="Supabase nao configurado no Render.")
     try:
         query = supabase.table("rdos").select("*").order("created_at", desc=True)
+        query = query.in_("projeto_id", _rk_scope_project_ids())
         if ns_id:
             query = query.eq("ns_id", ns_id)
         res = query.execute()
@@ -757,11 +873,15 @@ def listar_rdos_whatsapp(ns_id: int | None = Query(default=None)):
     except Exception:
         pass
 
-    query = supabase.table("rk_rdo_diario").select("*").order("data_registro", desc=True)
-    if ns_id:
-        query = query.eq("ns_id", ns_id)
-    res = query.execute()
-    return {"items": res.data or []}
+    try:
+        query = supabase.table("rk_rdo_diario").select("*").order("data_registro", desc=True)
+        query = query.in_("projeto_id", _rk_scope_project_ids())
+        if ns_id:
+            query = query.eq("ns_id", ns_id)
+        res = query.execute()
+        return {"items": res.data or []}
+    except Exception:
+        return {"items": []}
 
 
 @router.post("/send")
@@ -772,11 +892,52 @@ def enviar_mensagem(payload: dict):
     if not telefone or not mensagem:
         raise HTTPException(status_code=400, detail="Campos 'telefone' e 'mensagem' obrigatorios")
 
+    contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
+    projeto_id = _canonical_project_id(payload.get("projeto_id") or payload.get("project_id") or contact_project_id)
+    payload = {**payload, "projeto_id": projeto_id, "escopo": "rk"}
+    if not is_rk_project(projeto_id):
+        _log_whatsapp(
+            "out",
+            {**payload, "status": "blocked_non_rk"},
+            telefone=telefone,
+            mensagem=mensagem,
+            projeto_id=projeto_id,
+        )
+        return {
+            "ok": True,
+            "telefone": telefone,
+            "delivery": "blocked_non_rk",
+            "reason": "Projeto fora do escopo RK dos agentes",
+        }
+    if not supabase:
+        return {
+            "ok": True,
+            "telefone": telefone,
+            "projeto_id": projeto_id,
+            "delivery": "blocked_contacts_unavailable",
+            "reason": "Supabase/contatos indisponivel para validar escopo RK",
+        }
+    if supabase and not registered_phone:
+        _log_whatsapp(
+            "out",
+            {**payload, "status": "blocked_unregistered_phone"},
+            telefone=telefone,
+            mensagem=mensagem,
+            projeto_id=projeto_id,
+        )
+        return {
+            "ok": True,
+            "telefone": telefone,
+            "delivery": "blocked_unregistered_phone",
+            "reason": "Telefone nao esta em contatos ativos RK",
+        }
+
     campos_rdo = parse_rdo_whatsapp(mensagem)
-    _log_whatsapp("out", payload, telefone=telefone, mensagem=mensagem, projeto_id=payload.get("projeto_id"))
+    _log_whatsapp("out", payload, telefone=registered_phone or telefone, mensagem=mensagem, projeto_id=projeto_id)
 
     if campos_rdo and supabase:
         novo_registro = {
+            "projeto_id": projeto_id,
             "telefone": telefone,
             "ns_id": ns_id,
             "texto_original": mensagem,
@@ -787,9 +948,17 @@ def enviar_mensagem(payload: dict):
         if not insert_result.get("ok"):
             raise HTTPException(status_code=500, detail=f"Erro ao salvar no Supabase: {insert_result.get('error')}") from None
 
-    delivery = _send_evolution_text(telefone, mensagem)
+    delivery = _send_evolution_text(registered_phone or telefone, mensagem)
 
-    return {"ok": True, "telefone": telefone, "campos_rdo_inseridos": campos_rdo or None, "banco": "Supabase", "delivery": delivery}
+    return {
+        "ok": True,
+        "telefone": registered_phone or telefone,
+        "nome": contact_name,
+        "projeto_id": projeto_id,
+        "campos_rdo_inseridos": campos_rdo or None,
+        "banco": "Supabase",
+        "delivery": delivery,
+    }
 
 
 @router.post("/webhook")
@@ -811,6 +980,14 @@ def receber_webhook(payload: dict):
     contact_project_id, contact_name, registered_phone = _contact_project_for_phone(telefone)
     projeto_id = _canonical_project_id(payload.get("projeto_id") or contact_project_id)
     _log_whatsapp("in", payload, telefone=telefone, mensagem=texto, projeto_id=projeto_id)
+
+    if projeto_id and not is_rk_project(projeto_id):
+        return {
+            "ok": True,
+            "ignored": "non_rk_project",
+            "projeto_id": projeto_id,
+            "delivery": "blocked",
+        }
 
     if telefone and not registered_phone and not destino_grupo and not is_self_test_command:
         return {
@@ -948,6 +1125,14 @@ def disparar_etapa_fluxograma(payload: dict):
     responsavel = payload.get("responsavel")
     if not telefone or not task:
         raise HTTPException(status_code=400, detail="assignee_telefone e task obrigatorios")
+    contact_project_id, _, registered_phone = _contact_project_for_phone(telefone)
+    projeto_id = _canonical_project_id(payload.get("projeto_id") or payload.get("project_id") or contact_project_id)
+    if not is_rk_project(projeto_id):
+        return {"ok": True, "disparado": False, "delivery": "blocked_non_rk", "projeto_id": projeto_id}
+    if not supabase:
+        return {"ok": True, "disparado": False, "delivery": "blocked_contacts_unavailable", "projeto_id": projeto_id}
+    if supabase and not registered_phone:
+        return {"ok": True, "disparado": False, "delivery": "blocked_unregistered_phone", "projeto_id": projeto_id}
 
     mensagem = (
         f"*NOVA TAREFA DESIGNADA*\n\n"
@@ -957,8 +1142,13 @@ def disparar_etapa_fluxograma(payload: dict):
         f"Etapa: {payload.get('step_id')}\n\n"
         f"Responda 'OK' quando concluir."
     )
-    try:
-        httpx.post("http://localhost:8090/api/send", json={"number": telefone, "text": mensagem}, timeout=5.0)
-    except Exception:
-        pass
-    return {"ok": True, "disparado": True, "telefone": telefone, "preview": mensagem}
+    delivery = _send_evolution_text(registered_phone or telefone, mensagem)
+    _log_delivery_if_needed(delivery, telefone=registered_phone or telefone, project_id=projeto_id, tipo="workflow_dispatch", mensagem=mensagem)
+    _log_whatsapp(
+        "out",
+        {**payload, "tipo": "workflow_dispatch", "status": delivery, "escopo": "rk"},
+        telefone=registered_phone or telefone,
+        mensagem=mensagem,
+        projeto_id=projeto_id,
+    )
+    return {"ok": True, "disparado": delivery == "sent", "telefone": registered_phone or telefone, "projeto_id": projeto_id, "delivery": delivery, "preview": mensagem}

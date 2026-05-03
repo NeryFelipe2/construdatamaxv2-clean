@@ -26,6 +26,7 @@ from api.routes_whatsapp import router as whatsapp_router
 from api.routes_integracao_total import router as integracao_total_router
 from api.routes_notificacoes import router as notificacoes_router
 from api.routes_motores import router as motores_router
+from api.routes_pmbok import router as pmbok_router
 
 # ─── NEW V5 Engine Routers (4) ──────────────────────────────────────────────
 from api.routes_engine_v5 import router as engine_v5_router
@@ -62,6 +63,7 @@ app.include_router(whatsapp_router)
 app.include_router(integracao_total_router)
 app.include_router(notificacoes_router)
 app.include_router(motores_router)
+app.include_router(pmbok_router)
 
 # ─── Register V5 Engine Routers ─────────────────────────────────────────────
 app.include_router(engine_v5_router)

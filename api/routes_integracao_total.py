@@ -29,6 +29,7 @@ from api.supabase_client import (
     PROJETOS_OFICIAIS,
     TABLES_CANONICAS,
     get_supabase,
+    is_rk_project,
     supabase_config,
     table_status,
 )
@@ -134,6 +135,13 @@ def _project_or_404(project_id: str) -> dict[str, Any]:
         if str(projeto.get("id")) == canonical_id:
             return projeto
     raise HTTPException(status_code=404, detail="Projeto nao encontrado")
+
+
+def _rk_project_or_404(project_id: str) -> dict[str, Any]:
+    projeto = _project_or_404(project_id)
+    if not is_rk_project(str(projeto.get("id") or project_id)):
+        raise HTTPException(status_code=404, detail="Projeto fora do escopo RK dos agentes")
+    return projeto
 
 
 def _sum(rows: list[dict[str, Any]], *keys: str) -> float:
@@ -2253,7 +2261,7 @@ def remover_contato_projeto(project_id: str, contato_id: str):
 @router.get("/api/projetos/{project_id}/whatsapp/logs")
 def listar_whatsapp_logs_projeto(project_id: str, limit: int = 100):
     project_id = _canonical_project_id(project_id) or project_id
-    _project_or_404(project_id)
+    _rk_project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
@@ -2277,7 +2285,7 @@ def listar_whatsapp_logs_projeto(project_id: str, limit: int = 100):
 @router.get("/api/projetos/{project_id}/whatsapp/agendamentos")
 def listar_whatsapp_agendamentos_projeto(project_id: str, limit: int = 100):
     project_id = _canonical_project_id(project_id) or project_id
-    _project_or_404(project_id)
+    _rk_project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
@@ -2302,7 +2310,7 @@ def listar_whatsapp_agendamentos_projeto(project_id: str, limit: int = 100):
 @router.post("/api/projetos/{project_id}/whatsapp/agendamentos", status_code=201)
 def criar_whatsapp_agendamento_projeto(project_id: str, payload: dict[str, Any]):
     project_id = _canonical_project_id(project_id) or project_id
-    _project_or_404(project_id)
+    _rk_project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
@@ -2326,7 +2334,7 @@ def criar_whatsapp_agendamento_projeto(project_id: str, payload: dict[str, Any])
 @router.patch("/api/projetos/{project_id}/whatsapp/agendamentos/{agendamento_id}")
 def atualizar_whatsapp_agendamento_projeto(project_id: str, agendamento_id: str, payload: dict[str, Any]):
     project_id = _canonical_project_id(project_id) or project_id
-    _project_or_404(project_id)
+    _rk_project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")
@@ -2363,7 +2371,7 @@ def atualizar_whatsapp_agendamento_projeto(project_id: str, agendamento_id: str,
 @router.delete("/api/projetos/{project_id}/whatsapp/agendamentos/{agendamento_id}")
 def remover_whatsapp_agendamento_projeto(project_id: str, agendamento_id: str):
     project_id = _canonical_project_id(project_id) or project_id
-    _project_or_404(project_id)
+    _rk_project_or_404(project_id)
     client = get_supabase()
     if client is None:
         raise HTTPException(status_code=503, detail="Supabase nao configurado")

@@ -37,6 +37,61 @@ PROJECT_ID_ALIASES: dict[str, str] = {
     "d4e5f6a7-1111-2222-3333-bbbbbbbbbbbb": "d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8",
 }
 
+RK_PROJECT_IDS = [
+    "c2bf8fda-b2e0-4bc1-9535-4891d596ea10",  # Tatui - RK
+    "f3c6645b-347f-4382-b9c5-d103c27ec511",  # Osasco - Rua Cuiaba
+    "d4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8",  # RK SUB Empreita
+]
+
+RK_PROJECT_ID_SET = set(RK_PROJECT_IDS)
+
+EXCLUDED_AGENT_PROJECT_IDS = [
+    "abe7f66c-004b-4bb5-a245-6be67debd9f7",  # Consorcio Se Liga na Rede - SLNR Santos
+    "ec112c9a-1669-4287-8079-526d6940ce82",  # Pardinho - Consorcio Itapetininga
+    "2a28beec-b1f8-4b0c-8416-d0710bb35d9d",  # ConstruData Brasilia
+]
+
+
+def canonical_project_id(project_id: str | None) -> str | None:
+    if not project_id:
+        return project_id
+    return PROJECT_ID_ALIASES.get(str(project_id), str(project_id))
+
+
+def related_project_ids(project_id: str | None) -> list[str]:
+    canonical = canonical_project_id(project_id)
+    if not canonical:
+        return []
+    ids = [canonical]
+    ids.extend(alias for alias, target in PROJECT_ID_ALIASES.items() if target == canonical)
+    if project_id and str(project_id) not in ids:
+        ids.append(str(project_id))
+    return ids
+
+
+def rk_project_ids(include_aliases: bool = False) -> list[str]:
+    if not include_aliases:
+        return list(RK_PROJECT_IDS)
+    ids: list[str] = []
+    for project_id in RK_PROJECT_IDS:
+        ids.extend(related_project_ids(project_id))
+    return list(dict.fromkeys(ids))
+
+
+def is_rk_project(project_id: str | None) -> bool:
+    return canonical_project_id(project_id) in RK_PROJECT_ID_SET
+
+
+def filter_rk_rows(rows: list[dict[str, Any]], project_keys: tuple[str, ...] = ("projeto_id", "project_id")) -> list[dict[str, Any]]:
+    scoped: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        project_id = next((row.get(key) for key in project_keys if row.get(key)), None)
+        if is_rk_project(str(project_id) if project_id else None):
+            scoped.append(row)
+    return scoped
+
 CANONICAL_PROJECT_IDS = [
     "c2bf8fda-b2e0-4bc1-9535-4891d596ea10",
     "f3c6645b-347f-4382-b9c5-d103c27ec511",
