@@ -54,3 +54,9 @@ Para voltar esta mudanca:
 - `/api/whatsapp/send` com `projeto_id` SLNR retorna `blocked_non_rk`.
 - Cobranca PMBOK ignora engenheiro de projeto fora da allowlist RK.
 - Logs de disparo real de WhatsApp carregam `projeto_id` RK quando o envio passa.
+
+## Atualizacao 2026-05-03 - Health Integrations
+
+- Adicionado `api/startup_migrations.py` para aplicar automaticamente, no boot do Render, a migration idempotente `docs/supabase_log_planejamento_ml_20260425.sql`.
+- Objetivo: criar/garantir `operational_logs`, `planejamentos_semanais`, `planejamento_itens`, `planejamento_validacoes`, `desvios_planejamento`, `ml_execucoes` e `replanejamentos` sem depender de etapa manual.
+- Health de Evolution passou a mostrar `whatsapp_state`, `evolution_url` e `evolution_instance`, inclusive quando faltar API key.

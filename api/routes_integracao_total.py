@@ -1393,15 +1393,15 @@ def health_integrations():
     tables = {table: table_status(client, table) for table in TABLES_CANONICAS}
     ok_tables = sum(1 for status in tables.values() if status.get("ok"))
     status = "connected" if ok_tables == len(TABLES_CANONICAS) else "partial" if ok_tables else "local"
-    evolution_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
+    evolution_url = (
+        os.environ.get("EVOLUTION_URL")
+        or os.environ.get("EVOLUTION_API_URL")
+        or "https://construdata-evolution.onrender.com"
+    ).rstrip("/")
     evolution_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY")
     evolution_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
-    whatsapp_configured = bool(
-        evolution_url
-    ) and bool(
-        evolution_key
-    )
-    whatsapp_state = "not_configured"
+    whatsapp_configured = bool(evolution_url and evolution_key)
+    whatsapp_state = "missing_api_key" if evolution_url and not evolution_key else "not_configured"
     if whatsapp_configured:
         whatsapp_state = "configured"
         try:
@@ -1424,6 +1424,9 @@ def health_integrations():
         "tables": tables,
         "render_api": "connected",
         "whatsapp": whatsapp_state,
+        "whatsapp_state": whatsapp_state,
+        "evolution_url": bool(evolution_url),
+        "evolution_instance": evolution_instance,
         "n8n": "external",
         "checked_at": datetime.utcnow().isoformat(),
     }

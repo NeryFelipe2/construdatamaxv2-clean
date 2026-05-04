@@ -417,7 +417,11 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
     if enabled not in {"1", "true", "yes", "on"}:
         return "disabled"
 
-    evo_url = (os.environ.get("EVOLUTION_URL") or os.environ.get("EVOLUTION_API_URL") or "").rstrip("/")
+    evo_url = (
+        os.environ.get("EVOLUTION_URL")
+        or os.environ.get("EVOLUTION_API_URL")
+        or "https://construdata-evolution.onrender.com"
+    ).rstrip("/")
     evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
     evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
     if not evo_url:

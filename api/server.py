@@ -39,6 +39,7 @@ from api.routes_agent import router as agent_router
 
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
+from api.startup_migrations import apply_operational_schema_migration
 
 app = FastAPI(
     title=f"{PLATFORM_DISPLAY_NAME} API — Unified V5 Engine",
@@ -86,6 +87,11 @@ except Exception as exc:
 @app.on_event("startup")
 def on_startup():
     bootstrap_database(force_import=False)
+    result = apply_operational_schema_migration()
+    if not result.get("ok"):
+        import logging
+
+        logging.warning("Operational schema migration not applied: %s", result)
 
 
 @app.get("/")
