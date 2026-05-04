@@ -60,3 +60,4 @@ Para voltar esta mudanca:
 - Adicionado `api/startup_migrations.py` para aplicar automaticamente, no boot do Render, a migration idempotente `docs/supabase_log_planejamento_ml_20260425.sql`.
 - Objetivo: criar/garantir `operational_logs`, `planejamentos_semanais`, `planejamento_itens`, `planejamento_validacoes`, `desvios_planejamento`, `ml_execucoes` e `replanejamentos` sem depender de etapa manual.
 - Health de Evolution passou a mostrar `whatsapp_state`, `evolution_url` e `evolution_instance`, inclusive quando faltar API key.
+- Variaveis `EVOLUTION_*` sao higienizadas com `strip()` antes de montar headers/URLs, evitando falso `unreachable` por whitespace em segredo ou instancia.

@@ -421,9 +421,13 @@ def _send_evolution_text(destino: str, mensagem: str) -> str:
         os.environ.get("EVOLUTION_URL")
         or os.environ.get("EVOLUTION_API_URL")
         or "https://construdata-evolution.onrender.com"
-    ).rstrip("/")
-    evo_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
-    evo_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or ""
+    ).strip().rstrip("/")
+    evo_instance = (
+        os.environ.get("EVOLUTION_INSTANCE")
+        or os.environ.get("EVOLUTION_DEFAULT_INSTANCE")
+        or "construdata-felipe"
+    ).strip() or "construdata-felipe"
+    evo_key = (os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or "").strip()
     if not evo_url:
         return "not_configured"
 

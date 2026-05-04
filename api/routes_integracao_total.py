@@ -1397,9 +1397,13 @@ def health_integrations():
         os.environ.get("EVOLUTION_URL")
         or os.environ.get("EVOLUTION_API_URL")
         or "https://construdata-evolution.onrender.com"
-    ).rstrip("/")
-    evolution_key = os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY")
-    evolution_instance = os.environ.get("EVOLUTION_INSTANCE") or os.environ.get("EVOLUTION_DEFAULT_INSTANCE") or "construdata-felipe"
+    ).strip().rstrip("/")
+    evolution_key = (os.environ.get("EVOLUTION_API_KEY") or os.environ.get("AUTHENTICATION_API_KEY") or "").strip()
+    evolution_instance = (
+        os.environ.get("EVOLUTION_INSTANCE")
+        or os.environ.get("EVOLUTION_DEFAULT_INSTANCE")
+        or "construdata-felipe"
+    ).strip() or "construdata-felipe"
     whatsapp_configured = bool(evolution_url and evolution_key)
     whatsapp_state = "missing_api_key" if evolution_url and not evolution_key else "not_configured"
     if whatsapp_configured:
