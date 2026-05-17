@@ -24,9 +24,12 @@ def apply_operational_schema_migration() -> dict[str, object]:
         return {"ok": False, "skipped": True, "reason": f"psycopg2 indisponivel: {exc}"}
 
     try:
-        conn = psycopg2.connect(database_url)
+        timeout_seconds = int(os.environ.get("DATABASE_CONNECT_TIMEOUT_SECONDS", "5"))
+        conn = psycopg2.connect(database_url, connect_timeout=timeout_seconds)
         conn.autocommit = True
         with conn.cursor() as cur:
+            statement_timeout_ms = int(os.environ.get("DATABASE_STARTUP_STATEMENT_TIMEOUT_MS", "5000"))
+            cur.execute("SET statement_timeout = %s", (statement_timeout_ms,))
             cur.execute(sql_path.read_text(encoding="utf-8"))
         conn.close()
         return {"ok": True, "skipped": False, "migration": sql_path.name}

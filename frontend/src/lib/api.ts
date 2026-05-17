@@ -146,10 +146,18 @@ function url(path: string, params?: Record<string, string>): string {
   return u.toString();
 }
 
+async function readJson<T>(response: Response, path: string): Promise<T> {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.toLowerCase().includes("application/json")) {
+    throw new Error(`API ${path}: expected JSON, got ${contentType || "unknown content type"}`);
+  }
+  return response.json();
+}
+
 async function get<T>(path: string, params?: Record<string, string>): Promise<T> {
   const r = await fetch(url(path, params));
   if (!r.ok) throw new Error(`API ${path}: ${r.status}`);
-  return r.json();
+  return readJson<T>(r, path);
 }
 
 async function post<T>(path: string, body?: unknown): Promise<T> {
@@ -162,7 +170,7 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
     const d = await r.json().catch(() => ({}));
     throw new Error(d.detail || `API ${path}: ${r.status}`);
   }
-  return r.json();
+  return readJson<T>(r, path);
 }
 
 async function patch<T>(path: string, body?: unknown): Promise<T> {
@@ -175,11 +183,17 @@ async function patch<T>(path: string, body?: unknown): Promise<T> {
     const d = await r.json().catch(() => ({}));
     throw new Error(d.detail || `API ${path}: ${r.status}`);
   }
-  return r.json();
+  return readJson<T>(r, path);
 }
 
 // ─── Health ──────────────────────────────────────────────────────────────────
-export const apiHealth = () => get<{ ok: boolean; app: string; display_name: string }>("/health");
+export const apiHealth = async () => {
+  const health = await get<{ ok: boolean; app: string; display_name: string }>("/health");
+  if (health.app !== "construdatamaxv2") {
+    throw new Error("API /health did not return the ConstruData backend payload");
+  }
+  return health;
+};
 export const apiHealthIntegrations = () => get<Record<string, unknown>>("/api/health/integrations");
 
 // ─── Dashboard / Gestao ──────────────────────────────────────────────────────

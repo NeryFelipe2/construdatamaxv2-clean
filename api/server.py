@@ -36,6 +36,7 @@ from api.routes_leitores import router as leitores_router
 
 # ─── Agent Chat Router ─────────────────────────────────────────────────────
 from api.routes_agent import router as agent_router
+from api.routes_agentes_orquestrador import router as orquestrador_router
 
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
@@ -72,6 +73,7 @@ app.include_router(geradores_router)
 app.include_router(analytics_router)
 app.include_router(leitores_router)
 app.include_router(agent_router)
+app.include_router(orquestrador_router)
 
 # Mount ConstruPlan Flask Offline Backend (Brutal Injection)
 try:
@@ -84,13 +86,25 @@ except Exception as exc:
     logging.error(f"Failed to mount Flask Construplan Backend: {exc}")
 
 
+STARTUP_STATUS = {
+    "database_bootstrap": {"ok": None, "skipped": False, "reason": "not_run"},
+    "operational_migration": {"ok": None, "skipped": False, "reason": "not_run"},
+}
+
+
 @app.on_event("startup")
 def on_startup():
-    bootstrap_database(force_import=False)
-    result = apply_operational_schema_migration()
-    if not result.get("ok"):
-        import logging
+    import logging
 
+    try:
+        STARTUP_STATUS["database_bootstrap"] = bootstrap_database(force_import=False)
+    except Exception as exc:
+        STARTUP_STATUS["database_bootstrap"] = {"ok": False, "skipped": True, "reason": str(exc)}
+        logging.warning("Database bootstrap skipped so /health can stay available: %s", exc)
+
+    result = apply_operational_schema_migration()
+    STARTUP_STATUS["operational_migration"] = result
+    if not result.get("ok"):
         logging.warning("Operational schema migration not applied: %s", result)
 
 
@@ -109,9 +123,10 @@ def health():
         "display_name": PLATFORM_DISPLAY_NAME,
         "version": "3.0.0",
         "engine": "Unified V5",
-        "routers": 14,
+        "routers": 15,
         "motores": len(list(motores_path.glob("*.py"))) - 1 if motores_path.exists() else 0,
         "geradores": len(list(geradores_path.glob("gerar_*.py"))) if geradores_path.exists() else 0,
+        "startup": STARTUP_STATUS,
     }
 
 
