@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 import tempfile
+import os
 
 # Garante que o repo root está no sys.path para imports dos motores
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -92,9 +93,21 @@ STARTUP_STATUS = {
 }
 
 
+def _startup_db_tasks_enabled() -> bool:
+    raw = os.getenv("CONSTRUDATA_RUN_STARTUP_DB_TASKS", "false").strip().lower()
+    return raw in {"1", "true", "yes", "sim", "on"}
+
+
 @app.on_event("startup")
 def on_startup():
     import logging
+
+    if not _startup_db_tasks_enabled():
+        reason = "disabled_by_CONSTRUDATA_RUN_STARTUP_DB_TASKS"
+        STARTUP_STATUS["database_bootstrap"] = {"ok": None, "skipped": True, "reason": reason}
+        STARTUP_STATUS["operational_migration"] = {"ok": None, "skipped": True, "reason": reason}
+        logging.warning("Startup DB tasks skipped so /health can stay available: %s", reason)
+        return
 
     try:
         STARTUP_STATUS["database_bootstrap"] = bootstrap_database(force_import=False)
@@ -102,10 +115,14 @@ def on_startup():
         STARTUP_STATUS["database_bootstrap"] = {"ok": False, "skipped": True, "reason": str(exc)}
         logging.warning("Database bootstrap skipped so /health can stay available: %s", exc)
 
-    result = apply_operational_schema_migration()
-    STARTUP_STATUS["operational_migration"] = result
-    if not result.get("ok"):
-        logging.warning("Operational schema migration not applied: %s", result)
+    try:
+        result = apply_operational_schema_migration()
+        STARTUP_STATUS["operational_migration"] = result
+        if not result.get("ok"):
+            logging.warning("Operational schema migration not applied: %s", result)
+    except Exception as exc:
+        STARTUP_STATUS["operational_migration"] = {"ok": False, "skipped": True, "reason": str(exc)}
+        logging.warning("Operational schema migration crashed but /health stays available: %s", exc)
 
 
 @app.get("/")

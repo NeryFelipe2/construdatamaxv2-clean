@@ -13,3 +13,9 @@ services:
         sync: false
       - key: CONSTRUDATA_API_BASE_URL
         sync: false
+      - key: CONSTRUDATA_RUN_STARTUP_DB_TASKS
+        value: "false"
+      - key: DATABASE_CONNECT_TIMEOUT_SECONDS
+        value: "5"
+      - key: DATABASE_STARTUP_STATEMENT_TIMEOUT_MS
+        value: "5000"
