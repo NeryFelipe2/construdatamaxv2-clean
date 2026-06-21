@@ -45,3 +45,16 @@ def test_maioria_sem_dn_e_flagada():
                for i in range(9)]
     avisos = checar_sanidade(pvs, trechos)
     assert any("brutal" in a.lower() or "dn" in a.lower() for a in avisos)
+
+
+def test_modo_brutal_pelo_meta_e_flagado():
+    pvs, trechos = _rede_ok()
+    meta = {"motor": "GDAL/OGR v5 (BRUTAL)"}
+    avisos = checar_sanidade(pvs, trechos, meta)
+    assert any("brutal" in a.lower() for a in avisos)
+
+
+def test_meta_conservador_nao_flaga():
+    pvs, trechos = _rede_ok()
+    meta = {"motor": "GDAL/OGR v5 (conservador)"}
+    assert checar_sanidade(pvs, trechos, meta) == []

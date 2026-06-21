@@ -4,7 +4,7 @@ Recebe as estruturas já lidas (não lê DXF) e devolve uma lista de avisos
 legíveis. Vazia = rede confiável. É a trava para o bug histórico de
 "tubos fantasmas" (inventar/perder rede por tolerância de snap).
 """
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # Limiares (centralizar em config/INI numa fase futura)
 MAX_TRECHOS_POR_PV = 4.0     # acima disso, provável invenção
@@ -12,9 +12,18 @@ EXT_MAX_M = 1000.0           # trecho único > 1 km em rede urbana é suspeito
 EXT_MIN_M = 0.5              # trecho < 0,5 m é ruído
 
 
-def checar_sanidade(pvs: Dict[str, dict], trechos: List[dict]) -> List[str]:
+def checar_sanidade(pvs: Dict[str, dict], trechos: List[dict],
+                    meta: Optional[dict] = None) -> List[str]:
     avisos: List[str] = []
     ids = set(pvs.keys())
+
+    # Sinal definitivo do leitor: meta["motor"] = "...(BRUTAL)" quando caiu no
+    # modo que aceita qualquer linha como tubo (ler_dxf_gdal.py:1041).
+    if meta and "BRUTAL" in str(meta.get("motor", "")):
+        avisos.append(
+            "Leitura em MODO BRUTAL (qualquer linha aceita como tubo) — "
+            "alto risco de invenção de rede"
+        )
 
     for t in trechos:
         pi, pf = t.get("pv_ini"), t.get("pv_fim")
