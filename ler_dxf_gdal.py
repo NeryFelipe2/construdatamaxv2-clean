@@ -28,8 +28,12 @@ from pathlib import Path
 from datetime import datetime
 from collections import Counter, defaultdict
 
-import geopandas as gpd
 from scipy.cluster.hierarchy import fclusterdata
+
+try:
+    import geopandas as gpd
+except Exception:
+    gpd = None
 
 # ─── CONFIG ──────────────────────────────────────────────────────────────────
 MIN_EXT_TUBO    = 2.0       # metros — tubos < 2m são detalhes
@@ -252,6 +256,33 @@ def _dedup_trechos(trechos):
     return tubos
 
 
+def _layer_tubo_valido(layer, brutal=False):
+    """Filtro unico de layers de tubo; evita topografia/perfil virarem rede."""
+    layer_upper = str(layer or "").upper().strip()
+    if not layer_upper:
+        return False
+
+    ruins = [
+        "PERFIL", "DETALHE", "CORTE", "BIFILAR", "TXT", "TEXTO",
+        "COTA", "DIMENS", "HACHURA", "MOBILI", "RUAS", "QUADRAS",
+        "PONTOS", "CAIXAS", "IDENTIFICACAO", "IND_", "INDICACAO",
+        "MOLDURA", "CARIMBO", "LEGENDA", "FORMATO", "QUADRA",
+        "TERRENO", "CONTOUR", "CONTORNO", "CURVA", "LAYER1",
+    ]
+    if any(p in layer_upper for p in ruins):
+        return False
+
+    if brutal:
+        return True
+
+    bons = [
+        "TUBO", "PROLONG", "CONDUTO", "PIPE", "COLETORA", "COLETOR",
+        "RECALQUE", "REDE", "ESGOTO", "EMISSARIO", "EMISS?RIO",
+        "INTERCEPTOR", "RAMAL", "AGUA_REDE", "?GUA_REDE",
+    ]
+    return any(p in layer_upper for p in bons)
+
+
 def _extrair_tubos_conservador(gdf):
     """
     Extrai tubos de layers que claramente representam tubulação.
@@ -288,7 +319,7 @@ def _extrair_tubos_conservador(gdf):
             "PONTOS", "CAIXAS", "IDENTIFICACAO", "IND_", "INDICACAO"
         ])
 
-        if inclui and not exclui:
+        if _layer_tubo_valido(layer):
             layers_tubo.append(layer)
 
     if not layers_tubo:
@@ -326,13 +357,12 @@ def _extrair_tubos_brutal(gdf):
     # Filtro de comprimento mínimo para evitar pegar pedaços de símbolos/detalhes
     tubos = tubos[tubos['ext_m'] > MIN_EXT_TUBO].copy()
     
-    # Excluir layers que sabemos que NUNCA são tubos (ex: Molduras)
-    layers_nuncas = ["MOLDURA", "LEGENDA", "CARIMBO", "LINHA_CHAMADA",
-                     "CURVA", "CONTORNO", "CONTOUR", "LOTE", "TERRENO",
-                     "QUADRA", "LIMITE", "HATCH", "VIA", "RUA", "CALC"]
-    mask_bad = tubos['Layer'].astype(str).str.upper().apply(
-        lambda s: any(b in s for b in layers_nuncas)
-    )
+    # Exclui o MESMO conjunto do conservador (lista 'ruins' de _layer_tubo_valido):
+    # PONTOS, CAIXAS, IDENTIFICACAO, IND_, QUADRA(S), TEXTO, PERFIL, etc.
+    # Antes o brutal usava uma lista mais curta e deixava passar pontos/caixas/
+    # quadro/identificacao -> contaminava a rede ("tubos fantasmas") em DXF com
+    # a rede no layer '0'. brutal=True mantém o aceite amplo, só barra o lixo.
+    mask_bad = tubos['Layer'].apply(lambda L: not _layer_tubo_valido(L, brutal=True))
     tubos = tubos[~mask_bad].copy()
 
     return tubos
@@ -471,6 +501,293 @@ def _detectar_tipo_rede(dxf_path, layers):
     return "esgoto"  # Default para ProSaneamento
 
 
+def _dxf_float(v):
+    try:
+        return float(str(v).replace(",", "."))
+    except Exception:
+        return None
+
+
+def _ler_entidades_dxf_puro(dxf_path):
+    """Parser DXF ASCII minimo: ENTITIES, layer/texto/coordenadas."""
+    raw = Path(dxf_path).read_text(encoding="latin-1", errors="ignore").splitlines()
+    pares = []
+    for i in range(0, len(raw) - 1, 2):
+        try:
+            pares.append((int(raw[i].strip()), raw[i + 1].strip()))
+        except Exception:
+            continue
+
+    entidades, atual, in_entities = [], None, False
+    for code, val in pares:
+        if code == 2 and val == "ENTITIES":
+            in_entities = True
+            continue
+        if in_entities and code == 0 and val == "ENDSEC":
+            if atual:
+                entidades.append(atual)
+            break
+        if not in_entities:
+            continue
+        if code == 0:
+            if atual:
+                entidades.append(atual)
+            atual = {"type": val, "tags": []}
+        elif atual is not None:
+            atual["tags"].append((code, val))
+    return entidades
+
+
+def _tag_primeiro(tags, code, default=None):
+    for c, v in tags:
+        if c == code:
+            return v
+    return default
+
+
+def _dxf_layer(ent):
+    return _tag_primeiro(ent.get("tags", []), 8, "")
+
+
+def _dxf_texto(ent):
+    txt = " ".join(v for c, v in ent.get("tags", []) if c in (1, 3))
+    return txt.replace("\\P", " ").strip()
+
+
+def _dxf_ponto(tags, x_code=10, y_code=20):
+    x = _dxf_float(_tag_primeiro(tags, x_code))
+    y = _dxf_float(_tag_primeiro(tags, y_code))
+    if x is None or y is None:
+        return None
+    return (x, y)
+
+
+def _dxf_lwpoints(tags):
+    pts, x = [], None
+    for c, v in tags:
+        if c == 10:
+            x = _dxf_float(v)
+        elif c == 20 and x is not None:
+            y = _dxf_float(v)
+            if y is not None:
+                pts.append((x, y))
+            x = None
+    return pts
+
+
+def _dist2d(a, b):
+    return math.hypot(a[0] - b[0], a[1] - b[1])
+
+
+def _media2d(a, b):
+    return ((a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0)
+
+
+def _segmentos_centro_tubo(coords):
+    """
+    Normaliza geometrias CAD de tubo.
+    - linha simples: mantem.
+    - retangulo estreito fechado: vira eixo central.
+    - polyline aberta: explode por segmento real.
+    """
+    if len(coords) < 2:
+        return []
+
+    segs = []
+    for i in range(len(coords) - 1):
+        p0, p1 = coords[i], coords[i + 1]
+        ext = _dist2d(p0, p1)
+        if ext >= MIN_EXT_TUBO:
+            segs.append((p0, p1, ext))
+
+    if not segs:
+        return []
+
+    fechado_estreito = len(coords) >= 5 and _dist2d(coords[0], coords[-1]) <= 1.0
+    if fechado_estreito and len(segs) >= 2:
+        longos = sorted(segs, key=lambda s: s[2], reverse=True)[:2]
+        a0, a1, la = longos[0]
+        b0, b1, lb = longos[1]
+        if min(la, lb) / max(la, lb) >= 0.75:
+            direto = _dist2d(a0, b0) + _dist2d(a1, b1)
+            cruzado = _dist2d(a0, b1) + _dist2d(a1, b0)
+            if min(direto, cruzado) <= 4.0:
+                if direto <= cruzado:
+                    c0, c1 = _media2d(a0, b0), _media2d(a1, b1)
+                else:
+                    c0, c1 = _media2d(a0, b1), _media2d(a1, b0)
+                ext = _dist2d(c0, c1)
+                if ext >= MIN_EXT_TUBO:
+                    return [(c0, c1, round(ext, 2))]
+
+    return [(p0, p1, round(ext, 2)) for p0, p1, ext in segs]
+
+
+def _extrair_geometrias_dxf_puro(entidades, brutal=False):
+    tubos, textos, layers = [], [], []
+    seen_layers = set()
+
+    def add_layer(layer):
+        if layer and layer not in seen_layers:
+            seen_layers.add(layer)
+            layers.append(layer)
+
+    i = 0
+    while i < len(entidades):
+        ent = entidades[i]
+        tipo = ent.get("type")
+        layer = _dxf_layer(ent)
+        add_layer(layer)
+
+        if tipo in ("TEXT", "MTEXT"):
+            pt = _dxf_ponto(ent.get("tags", []))
+            txt = _dxf_texto(ent)
+            if pt and txt:
+                textos.append({"layer": layer, "text": txt, "x": pt[0], "y": pt[1]})
+
+        if _layer_tubo_valido(layer, brutal=brutal):
+            coords = []
+            if tipo == "LINE":
+                p0 = _dxf_ponto(ent.get("tags", []), 10, 20)
+                p1 = _dxf_ponto(ent.get("tags", []), 11, 21)
+                coords = [p0, p1] if p0 and p1 else []
+            elif tipo == "LWPOLYLINE":
+                coords = _dxf_lwpoints(ent.get("tags", []))
+            elif tipo == "POLYLINE":
+                j = i + 1
+                while j < len(entidades) and entidades[j].get("type") != "SEQEND":
+                    if entidades[j].get("type") == "VERTEX":
+                        pt = _dxf_ponto(entidades[j].get("tags", []))
+                        if pt:
+                            coords.append(pt)
+                    j += 1
+                i = j
+
+            for p0, p1, ext in _segmentos_centro_tubo(coords):
+                if abs(p0[0]) < MIN_COORD_UTM or abs(p1[0]) < MIN_COORD_UTM:
+                    continue
+                tubos.append({
+                    "p0": np.array(p0),
+                    "p1": np.array(p1),
+                    "ext": ext,
+                    "layer": layer,
+                })
+        i += 1
+
+    return layers, textos, tubos
+
+
+def _texts_to_arrays(textos, pred_layer):
+    pts = [t for t in textos if pred_layer(str(t.get("layer", "")).upper())]
+    pts = [t for t in pts if abs(float(t["x"])) >= MIN_COORD_UTM]
+    if not pts:
+        return np.empty((0, 2)), np.array([])
+    return np.array([[t["x"], t["y"]] for t in pts]), np.array([t["text"] for t in pts])
+
+
+def _ler_dxf_puro(dxf_path, brutal=False):
+    """Fallback sem GeoPandas/GDAL para DXF ASCII do ProSaneamento."""
+    nome_arquivo = Path(dxf_path).name
+    _log(f"Lendo DXF via parser puro: {nome_arquivo}", "STEP")
+
+    entidades = _ler_entidades_dxf_puro(dxf_path)
+    layers, textos, tubo_data = _extrair_geometrias_dxf_puro(entidades, brutal=brutal)
+    tipo_rede = _detectar_tipo_rede(dxf_path, layers)
+
+    _log(f"  Entidades DXF: {len(entidades)}", "OK")
+    _log(f"  Tipo de rede: {tipo_rede.upper()}", "INFO")
+    _log(f"  Tubos normalizados: {len(tubo_data)}", "OK")
+
+    if not tubo_data:
+        _erro_importacao_nao_confiavel(dxf_path, "nenhum tubo valido no parser puro")
+
+    all_endpoints = []
+    for td in tubo_data:
+        all_endpoints.extend([td["p0"], td["p1"]])
+    ep_arr = np.array(all_endpoints)
+
+    try:
+        clusters = fclusterdata(ep_arr, t=TOL_CLUSTER, criterion="distance")
+    except Exception as e:
+        raise ValueError(f"Clustering falhou: {e}")
+
+    cluster_centers = {}
+    for c in set(clusters):
+        mask = clusters == c
+        cluster_centers[c] = ep_arr[mask].mean(axis=0)
+
+    _log(f"  PVs reais (clusters): {len(cluster_centers)}", "OK")
+
+    centers_arr = np.array(list(cluster_centers.values()))
+    pv_data = []
+    for t in textos:
+        layer_u = str(t.get("layer", "")).upper()
+        if "PS_PONTOS" not in layer_u:
+            continue
+        xy = np.array([t["x"], t["y"]])
+        if abs(xy[0]) < MIN_COORD_UTM:
+            continue
+        if len(centers_arr):
+            d_orig = _dist_min(centers_arr, xy)
+            xy_half = xy / 2.0
+            d_half = _dist_min(centers_arr, xy_half)
+            if d_orig > 80.0 and d_half <= 80.0:
+                xy = xy_half
+            elif d_orig > 80.0:
+                continue
+        pv_data.append((float(xy[0]), float(xy[1]), str(t["text"])))
+
+    pvs_txt = _agrupar_textos_pv(pv_data)
+    if pvs_txt:
+        _log(f"  PVs por texto: {len(pvs_txt)}", "OK")
+
+    pvs = _associar_clusters_textos_v5(cluster_centers, pvs_txt)
+    pv_generics = sum(1 for p in pvs.values() if p.get("_generico"))
+    if pv_generics:
+        _log(f"  PVs genericos criados: {pv_generics}", "INFO")
+    _log(f"  PVs finais: {len(pvs)}", "OK")
+
+    dn_xy, dn_txts = _texts_to_arrays(textos, lambda l: "DIAM" in l or "DN" in l)
+    incl_xy, incl_txts = _texts_to_arrays(textos, lambda l: "INCL" in l)
+    _log(f"  Textos: {len(dn_txts)} DN, {len(incl_txts)} inclinacao", "OK")
+
+    ruas = []
+    pref_rua = ("RUA ", "BECO ", "TRAV", "AV ", "ESTRADA", "VIELA", "ALAMEDA", "ACESSO")
+    for t in textos:
+        txt = str(t["text"]).strip()
+        if len(txt) > 2 and any(txt.upper().startswith(p) for p in pref_rua):
+            ruas.append({"x": t["x"], "y": t["y"], "text": txt})
+
+    trechos, sem_pv = _montar_trechos_v5(
+        tubo_data, clusters, pvs, dn_xy, dn_txts, incl_xy, incl_txts, tipo_rede
+    )
+    trechos_ok = _dedup_trechos(trechos)
+
+    for p in pvs.values():
+        p.pop("_cluster", None)
+        p.pop("x_txt", None)
+        p.pop("y_txt", None)
+        p.pop("text_points", None)
+
+    if not trechos_ok:
+        _erro_importacao_nao_confiavel(dxf_path, "rede topologica zerada no parser puro")
+
+    if sem_pv:
+        _log(f"  Ligacoes sem PV: {sem_pv}", "WARN")
+
+    meta = {
+        "arquivo": nome_arquivo,
+        "tipo_rede": "AGUA" if (tipo_rede == "agua") else "ESGOTO",
+        "n_pvs": len(pvs),
+        "n_trechos": len(trechos_ok),
+        "ext_total": sum(t["ext_m"] for t in trechos_ok),
+        "motor": "DXF puro v5.2",
+        "n_pvs_genericos": sum(1 for p in pvs.values() if p.get("_generico")),
+    }
+    _log(f"  Rede coletora: {len(trechos_ok)} trechos | {meta['ext_total']:.0f}m", "OK")
+    return pvs, trechos_ok, ruas, meta
+
+
 def ler_dxf_gdal(dxf_path, brutal=None):
     """
     Lê DXF via GDAL com topologia exata por clustering de endpoints.
@@ -486,6 +803,9 @@ def ler_dxf_gdal(dxf_path, brutal=None):
     if not Path(dxf_path).exists():
         raise FileNotFoundError(f"DXF não encontrado: {dxf_path}")
     
+    if gpd is None:
+        return _ler_dxf_puro(dxf_path, brutal=brutal)
+
     nome_arquivo = Path(dxf_path).name
     _log(f"Lendo DXF via GDAL v5: {nome_arquivo}", "STEP")
     
@@ -493,7 +813,8 @@ def ler_dxf_gdal(dxf_path, brutal=None):
     try:
         gdf = gpd.read_file(dxf_path, layer="entities")
     except Exception as e:
-        raise ValueError(f"Erro ao ler DXF: {e}")
+        _log(f"GDAL falhou ({e}); tentando parser puro", "WARN")
+        return _ler_dxf_puro(dxf_path, brutal=brutal)
     
     _log(f"  Entidades carregadas: {len(gdf)}", "OK")
     
