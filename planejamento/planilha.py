@@ -36,3 +36,28 @@ def escrever_planilha(linhas, colunas, caminho, titulo=None):
 
 def escrever_material_xlsx(material, caminho, titulo="LISTA DE MATERIAL"):
     return escrever_planilha(material, COLUNAS_MATERIAL, caminho, titulo)
+
+
+def escrever_workbook(abas, caminho):
+    """Escreve um .xlsx com VÁRIAS abas. `abas` = lista de
+    {nome, colunas, linhas, titulo?}. Cada aba usa o mesmo padrão template+mapa.
+    Retorna o nº de abas escritas."""
+    from openpyxl import Workbook
+    wb = Workbook()
+    primeiro = True
+    for aba in abas:
+        ws = wb.active if primeiro else wb.create_sheet()
+        ws.title = str(aba["nome"])[:31]
+        primeiro = False
+        colunas, linhas, titulo = aba["colunas"], aba["linhas"], aba.get("titulo")
+        r = 1
+        if titulo:
+            ws.cell(row=1, column=1, value=titulo)
+            r = 2
+        for ci, c in enumerate(colunas, 1):
+            ws.cell(row=r, column=ci, value=c["titulo"])
+        for i, linha in enumerate(linhas):
+            for ci, c in enumerate(colunas, 1):
+                ws.cell(row=r + 1 + i, column=ci, value=linha.get(c["campo"]))
+    wb.save(str(caminho))
+    return len(abas)
