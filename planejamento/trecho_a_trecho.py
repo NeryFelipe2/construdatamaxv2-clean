@@ -25,22 +25,41 @@ COLUNAS_TRECHO = [
 ]
 
 
+def _proximo_util(d):
+    while d.weekday() >= 5:          # 5=sáb, 6=dom
+        d += timedelta(days=1)
+    return d
+
+
+def _fim_util(inicio, dur):
+    """Data do dur-ésimo dia útil a partir de `inicio` (inclusive)."""
+    d = inicio
+    restantes = dur - 1
+    while restantes > 0:
+        d += timedelta(days=1)
+        if d.weekday() < 5:
+            restantes -= 1
+    return d
+
+
 def agendar_trechos(trechos, sistema, equipe, data_inicio, produt_min_md,
-                    lideranca=None, prof_med=1.5, vala="VCA", escoram="SIM"):
+                    lideranca=None, prof_med=1.5, vala="VCA", escoram="SIM",
+                    pular_fds=True):
     """Agenda os trechos em sequência (1 equipe por vez), a partir de `data_inicio`.
 
     produt_min_md = m/dia (pode vir por trecho em t['produt_min_md']).
-    Cada trecho: dur = ceil(comp / produt_min); datas reais (date) consecutivas.
+    dur = ceil(comp / produt_min); datas reais. pular_fds: pula sáb/dom.
     """
     linhas = []
-    dia = data_inicio
+    dia = _proximo_util(data_inicio) if pular_fds else data_inicio
     for i, t in enumerate(trechos, 1):
         comp = round(float(t.get("ext_m") or 0.0), 1)
         pmd = t.get("produt_min_md") or produt_min_md
         dur = max(1, int(math.ceil(comp / pmd))) if pmd else 1
         ini = dia
-        fim = dia + timedelta(days=dur - 1)
-        dia = fim + timedelta(days=1)
+        fim = _fim_util(ini, dur) if pular_fds else ini + timedelta(days=dur - 1)
+        dia = (_proximo_util(fim + timedelta(days=1)) if pular_fds
+               else fim + timedelta(days=1))
         linhas.append({
             "trecho": i, "equipe": equipe, "lideranca": lideranca or equipe,
             "sistema": sistema.upper(), "comp": comp, "prof": prof_med,

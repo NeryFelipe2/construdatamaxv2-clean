@@ -23,11 +23,12 @@ def test_gerar_master_abas_e_cabecalho(tmp_path):
     out = tmp_path / "master.xlsx"
     info = gerar_master(str(out), trechos_esgoto=trechos,
                         pvs_esgoto={"PV1": {}, "PV2": {}}, data_inicio=date(2026, 6, 20))
-    assert "TRECHO A TRECHO ESGOTO" in info["abas"] and "MATERIAIS" in info["abas"]
+    esperadas = {"TRECHO A TRECHO ESGOTO", "CRONOGRAMA", "MATERIAIS", "POR RUA", "ACOMPANHAMENTO"}
+    assert esperadas.issubset(set(info["abas"]))
 
     from openpyxl import load_workbook
     wb = load_workbook(str(out))
-    assert "TRECHO A TRECHO ESGOTO" in wb.sheetnames and "MATERIAIS" in wb.sheetnames
+    assert esperadas.issubset(set(wb.sheetnames))
     ws = wb["TRECHO A TRECHO ESGOTO"]
     assert ws.cell(2, 1).value == "Trecho"          # row1=título, row2=cabeçalho
     assert ws.cell(2, 5).value == "Comp (m)"
