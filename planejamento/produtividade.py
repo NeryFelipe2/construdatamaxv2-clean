@@ -39,3 +39,16 @@ def prever_produtividade(contexto, base):
     return {"produtividade": melhor["produtividade"], "fonte": "analogia",
             "referencia": melhor, "confianca": round(1.0 / (1.0 + d), 2),
             "confirmar": True}
+
+
+def produtividade_por_trecho(trechos, base, cidade=None,
+                             tipo_servico="assentamento_tubo"):
+    """Define t['produt_min_md'] de cada trecho via analogia (prever_produtividade),
+    usando DN do trecho + cidade como contexto. Trechos sem previsão ficam como estão.
+    Retorna a lista (mutada in-place)."""
+    for t in trechos:
+        ctx = {"tipo_servico": tipo_servico, "dn": t.get("dn_mm"), "cidade": cidade}
+        r = prever_produtividade(ctx, base)
+        if r.get("produtividade"):
+            t["produt_min_md"] = r["produtividade"]
+    return trechos

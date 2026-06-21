@@ -25,40 +25,45 @@ COLUNAS_TRECHO = [
 ]
 
 
-def _proximo_util(d):
-    while d.weekday() >= 5:          # 5=sáb, 6=dom
+def _e_util(d, feriados):
+    return d.weekday() < 5 and d not in feriados      # 5=sáb, 6=dom
+
+
+def _proximo_util(d, feriados=frozenset()):
+    while not _e_util(d, feriados):
         d += timedelta(days=1)
     return d
 
 
-def _fim_util(inicio, dur):
+def _fim_util(inicio, dur, feriados=frozenset()):
     """Data do dur-ésimo dia útil a partir de `inicio` (inclusive)."""
     d = inicio
     restantes = dur - 1
     while restantes > 0:
         d += timedelta(days=1)
-        if d.weekday() < 5:
+        if _e_util(d, feriados):
             restantes -= 1
     return d
 
 
 def agendar_trechos(trechos, sistema, equipe, data_inicio, produt_min_md,
                     lideranca=None, prof_med=1.5, vala="VCA", escoram="SIM",
-                    pular_fds=True):
+                    pular_fds=True, feriados=None):
     """Agenda os trechos em sequência (1 equipe por vez), a partir de `data_inicio`.
 
     produt_min_md = m/dia (pode vir por trecho em t['produt_min_md']).
-    dur = ceil(comp / produt_min); datas reais. pular_fds: pula sáb/dom.
+    dur = ceil(comp / produt_min); datas reais. pular_fds: pula sáb/dom e `feriados`.
     """
+    fer = frozenset(feriados or ())
     linhas = []
-    dia = _proximo_util(data_inicio) if pular_fds else data_inicio
+    dia = _proximo_util(data_inicio, fer) if pular_fds else data_inicio
     for i, t in enumerate(trechos, 1):
         comp = round(float(t.get("ext_m") or 0.0), 1)
         pmd = t.get("produt_min_md") or produt_min_md
         dur = max(1, int(math.ceil(comp / pmd))) if pmd else 1
         ini = dia
-        fim = _fim_util(ini, dur) if pular_fds else ini + timedelta(days=dur - 1)
-        dia = (_proximo_util(fim + timedelta(days=1)) if pular_fds
+        fim = _fim_util(ini, dur, fer) if pular_fds else ini + timedelta(days=dur - 1)
+        dia = (_proximo_util(fim + timedelta(days=1), fer) if pular_fds
                else fim + timedelta(days=1))
         linhas.append({
             "trecho": i, "equipe": equipe, "lideranca": lideranca or equipe,

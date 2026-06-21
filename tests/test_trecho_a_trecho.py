@@ -34,3 +34,10 @@ def test_produt_min_por_trecho_sobrepoe_default():
     L = agendar_trechos(trechos, "ESGOTO", "Robert", seg, produt_min_md=20.0)
     assert L[0]["fim"] == seg + timedelta(days=1)       # 100/50 = 2 dias úteis (seg, ter)
     assert L[0]["produt_min"] == "50 m/dia"
+
+
+def test_pula_feriado():
+    seg = _proxima(0)                                   # segunda-feira
+    trechos = [{"ext_m": 20.0}]                         # 20/20 = 1 dia
+    L = agendar_trechos(trechos, "ESGOTO", "R", seg, produt_min_md=20.0, feriados=[seg])
+    assert L[0]["inicio"] == seg + timedelta(days=1)    # pula o feriado -> terça
