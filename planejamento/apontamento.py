@@ -119,3 +119,63 @@ def por_dia(blocos, nucleo=None):
         })
     out.sort(key=lambda r: (r["data"] or "", r["equipe"] or ""))
     return out
+
+
+_EQUIPE_LIXO = {"", "?", "X", "______", "_____", "____"}
+
+
+def produtividade_real(blocos, nucleo=None):
+    """Produtividade REAL de assentamento de rede (m/dia) por equipe e geral,
+    a partir do apontamento. Água = PRA (m); Esgoto = PRE (m).
+    m/dia = metros somados / nº de dias distintos em que a equipe assentou rede."""
+    acc = {"agua": defaultdict(lambda: {"m": 0.0, "dias": set()}),
+           "esgoto": defaultdict(lambda: {"m": 0.0, "dias": set()})}
+    for b in blocos:
+        if nucleo and nucleo_norm(b.get("nucleo")) != nucleo:
+            continue
+        eq = (b.get("equipe") or "?").strip()
+        if eq in _EQUIPE_LIXO or len(eq) > 30:
+            eq = "?"
+        for sis, campo in (("agua", "pra_m"), ("esgoto", "pre_m")):
+            m = b[sis].get(campo)
+            if m:
+                acc[sis][eq]["m"] += m
+                acc[sis][eq]["dias"].add(b.get("data"))
+    out = {}
+    for sis, equipes in acc.items():
+        linhas, tot_m, tot_d = [], 0.0, 0
+        for eq, v in equipes.items():
+            dias = len(v["dias"]) or 1
+            linhas.append({"equipe": eq, "metros": round(v["m"], 1), "dias": dias,
+                           "m_dia": round(v["m"] / dias, 1)})
+            tot_m += v["m"]
+            tot_d += dias
+        linhas.sort(key=lambda r: -r["m_dia"])
+        out[sis] = {"por_equipe": linhas, "metros": round(tot_m, 1),
+                    "equipe_dias": tot_d, "geral_m_dia": round(tot_m / tot_d, 1) if tot_d else 0.0}
+    return out
+
+
+# --- Parser FORA DO MODELO (dias em formato livre: 11-13, 21) ---
+_LIVRE = [
+    ("agua_pra_m", r"(\d+(?:[.,]\d+)?)\s*m(?:trs|ts|etros)?\b[^\n]*?(?:pad|pead|de\s*63|rede\s*de?\s*[áa]gua|prolong)"),
+    ("esgoto_pre_m", r"(\d+(?:[.,]\d+)?)\s*m(?:trs|ts|etros)?\b[^\n]*?(?:rede\s*de?\s*esgoto|remaneja)"),
+    ("agua_la", r"(\d+)\s*liga[cç][õo]es?\s*de\s*[áa]gua|\bLA\b\s*[:\-]\s*(\d+)"),
+    ("esgoto_le", r"\bLE\b\s*[:\-]\s*(\d+)|(\d+)\s*LE\b"),
+    ("agua_ra", r"\bRA\b\s*[:\-]\s*(\d+)"),
+    ("agua_caixa_uma", r"(\d+)\s*caixas?\s*u\.?\s*m\.?\s*a|caixa[s]?\s*u\.?\s*m\.?\s*a\s*[:\-]\s*(\d+)"),
+    ("esgoto_caixa_insp", r"(\d+)\s*caixas?\s*de\s*inspe|caixa[s]?\s*de\s*inspe[cç][ãa]o\s*[:\-]\s*(\d+)"),
+    ("esgoto_pv", r"\bPV\b\s*[:\-]\s*(\d+)"),
+]
+
+
+def parse_livre(texto):
+    """Captura quantidades em apontamento de FORMATO LIVRE (sem MODELO).
+    Retorna um resumo {chave: total}. Aproximado — use só nos dias sem MODELO."""
+    t = defaultdict(float)
+    for chave, rx in _LIVRE:
+        for m in re.finditer(rx, texto, flags=re.IGNORECASE):
+            g = next((x for x in m.groups() if x), None)
+            if g:
+                t[chave] += float(g.replace(",", "."))
+    return {k: round(v, 1) for k, v in t.items()}

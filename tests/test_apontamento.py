@@ -105,3 +105,27 @@ def test_resumo_por_nucleo_e_por_dia():
 
     boi = por_dia(b, nucleo="BOI MALHADO")
     assert len(boi) == 1 and boi[0]["pre_m"] == 15.0 and boi[0]["nucleo"] == "BOI MALHADO"
+
+
+def test_produtividade_real():
+    from planejamento.apontamento import produtividade_real
+    blocos = [
+        {"data": "2026-06-15", "nucleo": "BOI MALHADO", "equipe": "Renan", "agua": {"pra_m": 100.0}, "esgoto": {}},
+        {"data": "2026-06-16", "nucleo": "BOI MALHADO", "equipe": "Renan", "agua": {"pra_m": 92.0}, "esgoto": {}},
+        {"data": "2026-06-15", "nucleo": "BOI MALHADO", "equipe": "Ze Glaudino", "agua": {}, "esgoto": {"pre_m": 35.0}},
+    ]
+    p = produtividade_real(blocos, nucleo="BOI MALHADO")
+    renan = [x for x in p["agua"]["por_equipe"] if x["equipe"] == "Renan"][0]
+    assert renan["metros"] == 192.0 and renan["dias"] == 2 and renan["m_dia"] == 96.0
+    assert p["esgoto"]["geral_m_dia"] == 35.0
+
+
+def test_parse_livre():
+    from planejamento.apontamento import parse_livre
+    txt = "80 mtrs de PAD de 63 / 10 ligacoes de agua / 4 LE / 11 caixas U.M.A / RA: 5"
+    r = parse_livre(txt)
+    assert r.get("agua_pra_m") == 80.0
+    assert r.get("agua_la") == 10.0
+    assert r.get("esgoto_le") == 4.0
+    assert r.get("agua_caixa_uma") == 11.0
+    assert r.get("agua_ra") == 5.0
