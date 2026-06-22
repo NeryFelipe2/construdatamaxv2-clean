@@ -169,6 +169,19 @@ _LIVRE = [
 ]
 
 
+def resumo_por_rua(blocos):
+    """Agrega os quantitativos do apontamento por rua (campo Endereço do bloco).
+    Chave = rua como veio no apontamento ('Rua 2', 'Rua 3 Bahia', 'RUA SANTA...')."""
+    agg = defaultdict(lambda: defaultdict(float))
+    for b in blocos:
+        rua = (b.get("rua") or "?").strip()
+        for sis in ("esgoto", "agua"):
+            for k, v in b[sis].items():
+                if v and k != "prof":
+                    agg[rua][sis + "_" + k] += v
+    return {r: {k: round(v, 1) for k, v in d.items()} for r, d in agg.items()}
+
+
 def parse_livre(texto):
     """Captura quantidades em apontamento de FORMATO LIVRE (sem MODELO).
     Retorna um resumo {chave: total}. Aproximado — use só nos dias sem MODELO."""

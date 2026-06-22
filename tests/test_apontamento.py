@@ -120,6 +120,20 @@ def test_produtividade_real():
     assert p["esgoto"]["geral_m_dia"] == 35.0
 
 
+def test_resumo_por_rua():
+    from planejamento.apontamento import resumo_por_rua
+    blocos = [
+        {"rua": "Rua 2", "esgoto": {"le": 5.0, "caixa_insp": 4.0}, "agua": {}},
+        {"rua": "Rua 2", "esgoto": {"le": 9.0}, "agua": {"ra": 3.0}},
+        {"rua": "Rua 3 Bahia", "esgoto": {}, "agua": {"caixa_uma": 16.0}},
+    ]
+    r = resumo_por_rua(blocos)
+    assert r["Rua 2"]["esgoto_le"] == 14.0          # 5 + 9
+    assert r["Rua 2"]["esgoto_caixa_insp"] == 4.0
+    assert r["Rua 2"]["agua_ra"] == 3.0
+    assert r["Rua 3 Bahia"]["agua_caixa_uma"] == 16.0
+
+
 def test_parse_livre():
     from planejamento.apontamento import parse_livre
     txt = "80 mtrs de PAD de 63 / 10 ligacoes de agua / 4 LE / 11 caixas U.M.A / RA: 5"
