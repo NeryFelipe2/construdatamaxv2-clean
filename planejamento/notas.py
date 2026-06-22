@@ -14,6 +14,41 @@ def _extremos(trechos, pvs):
     return None, None
 
 
+COLUNAS_NS = [
+    {"campo": "ns", "titulo": "NS"},
+    {"campo": "sistema", "titulo": "Sistema"},
+    {"campo": "nucleo", "titulo": "Núcleo"},
+    {"campo": "equipe", "titulo": "Equipe"},
+    {"campo": "servico", "titulo": "Serviço"},
+    {"campo": "rua", "titulo": "Rua"},
+    {"campo": "comp", "titulo": "Comp (m)"},
+    {"campo": "produt", "titulo": "Produt. mín."},
+    {"campo": "inicio", "titulo": "Início"},
+    {"campo": "fim", "titulo": "Fim"},
+    {"campo": "status", "titulo": "Status"},
+]
+
+
+def gerar_notas_continuidade(trechos, sistema, equipe, data_inicio, produt_min_md,
+                             nucleo="", n0=1, servico=None, feriados=None):
+    """Gera Notas de Serviço de CONTINUIDADE (1 por trecho a fazer), numeradas
+    (NS001, NS002…) e com datas sequenciais por equipe (pula fim de semana/feriado).
+    Retorna (linhas_ns, proximo_numero) para encadear sistemas/equipes."""
+    from .trecho_a_trecho import agendar_trechos
+    if servico is None:
+        servico = "Assentamento de rede de %s" % sistema.lower()
+    agendadas = agendar_trechos(trechos, sistema, equipe, data_inicio, produt_min_md,
+                                feriados=feriados)
+    ns = []
+    for i, l in enumerate(agendadas):
+        rua = (trechos[i].get("rua") if i < len(trechos) else None) or ""
+        ns.append({"ns": "NS%03d" % (n0 + i), "sistema": sistema.upper(), "nucleo": nucleo,
+                   "equipe": equipe, "servico": servico, "rua": rua,
+                   "comp": l["comp"], "produt": l["produt_min"],
+                   "inicio": l["inicio"], "fim": l["fim"], "status": "PLANEJADO"})
+    return ns, n0 + len(ns)
+
+
 def gerar_ns(trechos, pvs, nucleo, ns_id, tipo="esgoto",
              setor=None, coletor=None, descricao=None):
     """Monta uma NotaServico com atividades (assentamento de tubo + caixas)."""

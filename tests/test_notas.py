@@ -22,3 +22,19 @@ def test_titulo_usa_pvs_reais():
     pvs = {"PI22": {}, "PV11": {}}                          # reais (sem _generico)
     ns = gerar_ns(trechos, pvs, nucleo="SAO MANOEL", ns_id="NS011", tipo="esgoto")
     assert "PI22" in ns.descricao and "PV11" in ns.descricao
+
+
+def test_gerar_notas_continuidade():
+    from datetime import date, timedelta
+    from planejamento.notas import gerar_notas_continuidade
+    seg = date(2026, 6, 1)
+    while seg.weekday() != 0:                       # acha uma segunda
+        seg += timedelta(days=1)
+    trechos = [{"ext_m": 50.0, "rua": "Rua 2"}, {"ext_m": 25.0}]
+    ns, prox = gerar_notas_continuidade(trechos, "ESGOTO", "Robert", seg,
+                                        produt_min_md=25.0, nucleo="BOI MALHADO", n0=1)
+    assert [x["ns"] for x in ns] == ["NS001", "NS002"]
+    assert ns[0]["inicio"] == seg and ns[0]["rua"] == "Rua 2"  # 50/25 = 2 dias
+    assert ns[0]["fim"] == seg + timedelta(days=1)
+    assert ns[1]["inicio"] == seg + timedelta(days=2)          # continua
+    assert prox == 3                                           # próximo número
