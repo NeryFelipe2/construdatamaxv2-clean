@@ -17,24 +17,31 @@ def _coords(geom):
 def materiais_trecho(comp_m, sistema, dn_mm=None):
     """Materiais/serviços do trecho: BOM detalhada (enxertada do motor V5,
     gerar_ns.calcular_materiais) + volumes de terraplenagem (regras pro_sane).
+    Esgoto = PVC (anel/pasta + PV/ramal/caixa/junção). Água = PEAD (solda).
     Retorna [(item, quantidade, unidade)]."""
     sis = str(sistema).upper()
-    dn = int(dn_mm) if dn_mm else (200 if sis == "ESGOTO" else 100)
+    esgoto = (sis == "ESGOTO")
+    dn = int(dn_mm) if dn_mm else (200 if esgoto else 63)
+    material = "PVC" if esgoto else "PEAD"
     prof = PROF_PADRAO.get(sis, 1.5)
     q = medir_trecho(comp_m, prof_med=prof, dn_mm=dn_mm)
     n_barras = math.ceil(comp_m / 6) if comp_m > 0 else 1
     itens = [
-        ("Tubo PVC DN%d %s" % (dn, sistema.lower()), round(comp_m, 1), "m"),
+        ("Tubo %s DN%d %s" % (material, dn, sistema.lower()), round(comp_m, 1), "m"),
         ("  └ barras 6 m", n_barras, "barra"),
-        ("Luva correr PVC DN%d" % dn, max(n_barras - 1, 0), "pç"),
-        ("Anel borracha DN%d" % dn, n_barras + 1, "pç"),
-        ("Pasta lubrificante", round(n_barras * 0.04, 2), "kg"),
+    ]
+    if esgoto:
+        itens += [("Anel borracha DN%d" % dn, n_barras + 1, "pç"),
+                  ("Pasta lubrificante", round(n_barras * 0.04, 2), "kg")]
+    else:
+        itens += [("Solda/eletrofusão (TSi)", n_barras, "junta")]
+    itens += [
         ("Escavação", q["escav_m3"], "m³"),
         ("Reaterro", q["reaterro_m3"], "m³"),
         ("Lastro (areia)", q["lastro_m3"], "m³"),
         ("Brita", q["brita_m3"], "m³"),
     ]
-    if sis == "ESGOTO":
+    if esgoto:
         itens += [("Poço de visita DN1200", 1, "un"),
                   ("Ramal esgoto DN100", 1, "un"),
                   ("Caixa de inspeção", 1, "un"),
