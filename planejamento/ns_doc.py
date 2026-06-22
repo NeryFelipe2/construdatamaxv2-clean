@@ -116,6 +116,11 @@ def _pagina_ns(plt, FancyBboxPatch, Rectangle, ns, contexto, feriados, sink):
         axm.set_xlim(cx - mg, cx + mg); axm.set_ylim(cy - mg, cy + mg)
     axm.set_aspect("equal"); axm.set_xticks([]); axm.set_yticks([])
     axm.set_title("Desenho do trecho   (vermelho = a executar · ● início · ■ fim)", fontsize=9.5)
+    gl = ns.get("geom_len")
+    if gl and abs(gl - ns.get("comp", 0)) > 1.0:
+        axm.text(0.5, -0.04, "Traçado real ≈ %.1f m · comprimento de medição (regra 2/3) = %.1f m"
+                 % (gl, ns.get("comp", 0)), transform=axm.transAxes, ha="center",
+                 fontsize=7.5, color="#b71c1c", style="italic")
     axm.annotate("N", xy=(0.96, 0.92), xytext=(0.96, 0.78), xycoords="axes fraction",
                  ha="center", fontsize=11, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", lw=1.4))
