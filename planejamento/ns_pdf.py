@@ -2,6 +2,7 @@
 """Nota de Serviço em PDF — 1 página por NS: desenho do trecho + cronograma +
 materiais + equipe (composição). Usa matplotlib (Agg) -> PDF multipágina.
 """
+import math
 from .medicao import medir_trecho, PROF_PADRAO
 
 
@@ -14,13 +15,31 @@ def _coords(geom):
 
 
 def materiais_trecho(comp_m, sistema, dn_mm=None):
-    """Materiais/serviços do trecho a partir do comprimento (regras pro_sane)."""
-    prof = PROF_PADRAO.get(str(sistema).upper(), 1.5)
+    """Materiais/serviços do trecho: BOM detalhada (enxertada do motor V5,
+    gerar_ns.calcular_materiais) + volumes de terraplenagem (regras pro_sane).
+    Retorna [(item, quantidade, unidade)]."""
+    sis = str(sistema).upper()
+    dn = int(dn_mm) if dn_mm else (200 if sis == "ESGOTO" else 100)
+    prof = PROF_PADRAO.get(sis, 1.5)
     q = medir_trecho(comp_m, prof_med=prof, dn_mm=dn_mm)
-    tubo = "Tubo " + (("DN%d " % dn_mm) if dn_mm else "") + str(sistema).lower()
-    return [(tubo, round(comp_m, 1), "m"), ("Escavação", q["escav_m3"], "m³"),
-            ("Reaterro", q["reaterro_m3"], "m³"), ("Lastro (areia)", q["lastro_m3"], "m³"),
-            ("Brita", q["brita_m3"], "m³")]
+    n_barras = math.ceil(comp_m / 6) if comp_m > 0 else 1
+    itens = [
+        ("Tubo PVC DN%d %s" % (dn, sistema.lower()), round(comp_m, 1), "m"),
+        ("  └ barras 6 m", n_barras, "barra"),
+        ("Luva correr PVC DN%d" % dn, max(n_barras - 1, 0), "pç"),
+        ("Anel borracha DN%d" % dn, n_barras + 1, "pç"),
+        ("Pasta lubrificante", round(n_barras * 0.04, 2), "kg"),
+        ("Escavação", q["escav_m3"], "m³"),
+        ("Reaterro", q["reaterro_m3"], "m³"),
+        ("Lastro (areia)", q["lastro_m3"], "m³"),
+        ("Brita", q["brita_m3"], "m³"),
+    ]
+    if sis == "ESGOTO":
+        itens += [("Poço de visita DN1200", 1, "un"),
+                  ("Ramal esgoto DN100", 1, "un"),
+                  ("Caixa de inspeção", 1, "un"),
+                  ("Junção Y PVC DN%dx100" % dn, 1, "un")]
+    return itens
 
 
 def _fmt(d):
