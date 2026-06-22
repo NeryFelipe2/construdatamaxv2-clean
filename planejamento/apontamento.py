@@ -80,3 +80,42 @@ def resumo(blocos):
             if v:
                 t["agua_" + k] += v
     return {k: round(v, 1) for k, v in t.items()}
+
+
+def nucleo_norm(n):
+    if not n:
+        return "?"
+    u = n.upper()
+    if "BOI" in u:
+        return "BOI MALHADO"
+    if "CLETO" in u:
+        return "SÃO CLETO"
+    return n.strip()
+
+
+def resumo_por_nucleo(blocos):
+    """{nucleo: resumo(blocos do nucleo)}."""
+    grupos = defaultdict(list)
+    for b in blocos:
+        grupos[nucleo_norm(b.get("nucleo"))].append(b)
+    return {nuc: resumo(bs) for nuc, bs in grupos.items()}
+
+
+def por_dia(blocos, nucleo=None):
+    """Linhas de diário (1 por bloco): data, equipe, rua e quantidades-chave."""
+    out = []
+    for b in blocos:
+        if nucleo and nucleo_norm(b.get("nucleo")) != nucleo:
+            continue
+        esg, ag = b["esgoto"], b["agua"]
+        out.append({
+            "data": b.get("data"), "nucleo": nucleo_norm(b.get("nucleo")),
+            "equipe": b.get("equipe"), "rua": b.get("rua"),
+            "pre_m": esg.get("pre_m"), "le": esg.get("le"),
+            "cx_insp": esg.get("caixa_insp"), "pv": esg.get("pv"),
+            "pra_m": ag.get("pra_m"), "la": ag.get("la"), "ra": ag.get("ra"),
+            "cx_uma": ag.get("caixa_uma"), "hm": ag.get("hm"),
+            "ocorrencias": b.get("ocorrencias"), "obs": b.get("obs"),
+        })
+    out.sort(key=lambda r: (r["data"] or "", r["equipe"] or ""))
+    return out

@@ -72,3 +72,36 @@ def test_resumo_soma():
     assert r.get("esgoto_pre_m") == 15.0
     assert r.get("esgoto_caixa_insp") == 4.0
     assert "esgoto_le" not in r          # vazio não entra
+
+
+DOIS = EXEMPLO + """
+
+MODELO DE APONTAMENTO DIÁRIO
+
+Núcleo: SÃO CLETO
+
+Produção - DATA: 17/06/2026
+
+Equipe (toda c/ função): Robert
+
+— ÁGUA —
+
+PRA (m): 10 metros
+RA: 2
+Solda eletrofusão: 4
+"""
+
+
+def test_resumo_por_nucleo_e_por_dia():
+    from planejamento.apontamento import resumo_por_nucleo, por_dia, nucleo_norm
+    b = parse_blocos(DOIS)
+    assert len(b) == 2
+    assert nucleo_norm("São Cleto") == "SÃO CLETO"
+    assert nucleo_norm("Boi malhado x") == "BOI MALHADO"
+
+    rn = resumo_por_nucleo(b)
+    assert rn["BOI MALHADO"]["esgoto_pre_m"] == 15.0
+    assert rn["SÃO CLETO"]["agua_pra_m"] == 10.0
+
+    boi = por_dia(b, nucleo="BOI MALHADO")
+    assert len(boi) == 1 and boi[0]["pre_m"] == 15.0 and boi[0]["nucleo"] == "BOI MALHADO"
