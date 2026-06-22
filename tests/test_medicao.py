@@ -26,3 +26,13 @@ def test_pre_medicao_e_resumos():
 def test_prof_padrao_por_sistema():
     L = pre_medicao([{"ext_m": 100.0, "sistema": "AGUA"}])   # água -> prof 0.8
     assert L[0]["escav_m3"] == 48.0                          # 100*0.6*0.8
+
+
+def test_servicos_de_apontamento():
+    from planejamento.medicao import servicos_de_apontamento
+    resumo = {"agua_la": 125.0, "esgoto_le": 28.0, "esgoto_pv": 7.0, "agua_hm": 0}
+    itens = {r["item"]: r["qtd"] for r in servicos_de_apontamento(resumo)}
+    assert itens["Ligações de água (LA)"] == 125.0
+    assert itens["Ligações de esgoto (LE)"] == 28.0
+    assert itens["Poços de visita (PV)"] == 7.0
+    assert "Hidrômetros (HM)" not in itens                   # 0 não entra

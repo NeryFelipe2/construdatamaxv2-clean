@@ -61,6 +61,28 @@ def resumo_medicao(linhas):
     return {k: round(v, 2) for k, v in tot.items()}
 
 
+# Mapa: chave do resumo do apontamento -> (rótulo de medição, unidade)
+_MAP_SERVICOS = [
+    ("agua_la", "Ligações de água (LA)", "un"),
+    ("agua_ra", "Ramais de água (RA)", "un"),
+    ("agua_caixa_uma", "Caixas U.M.A", "un"),
+    ("agua_hm", "Hidrômetros (HM)", "un"),
+    ("agua_interligacao", "Interligações de água", "un"),
+    ("agua_solda", "Solda eletrofusão", "un"),
+    ("esgoto_le", "Ligações de esgoto (LE)", "un"),
+    ("esgoto_caixa_insp", "Caixas de inspeção", "un"),
+    ("esgoto_pv", "Poços de visita (PV)", "un"),
+    ("esgoto_pi", "Poços de inspeção (PI)", "un"),
+]
+
+
+def servicos_de_apontamento(resumo_apont):
+    """Converte o resumo do apontamento (ligações, ramais, caixas, PV — que o
+    GeoPackage não tem) em linhas de medição {item, qtd, und}."""
+    return [{"item": rot, "qtd": resumo_apont[k], "und": u}
+            for k, rot, u in _MAP_SERVICOS if resumo_apont.get(k)]
+
+
 def resumo_por_equipe(linhas):
     agg = defaultdict(lambda: defaultdict(float))
     for l in linhas:
