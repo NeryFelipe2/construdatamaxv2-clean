@@ -8,8 +8,40 @@ import json
 
 
 def carregar(caminho):
+    """Lê a lotação de .xlsx (planilha editável — preferida) OU .json."""
+    if str(caminho).lower().endswith((".xlsx", ".xlsm")):
+        return ler_xlsx(caminho)
     with open(caminho, encoding="utf-8") as f:
         return json.load(f)
+
+
+def ler_xlsx(caminho):
+    """Planilha = FONTE EDITÁVEL. Você edita o Excel (1 linha por pessoa: Nome,
+    Função, Equipe, Líder, Sistema, Tipo) e o motor lê daqui. Sistema/Tipo/Líder
+    são herdados da equipe (basta preencher numa linha)."""
+    import collections
+    from openpyxl import load_workbook
+    wb = load_workbook(caminho, data_only=True)
+    ws = wb["LOTAÇÃO"] if "LOTAÇÃO" in wb.sheetnames else wb.active
+    hdr = next((r for r in range(1, 6) if str(ws.cell(r, 1).value).strip().lower() == "nome"), 3)
+    eqs = collections.OrderedDict()
+    for r in range(hdr + 1, ws.max_row + 1):
+        nome = ws.cell(r, 1).value
+        if not nome or str(nome).startswith(("Efetivo", "Pessoas")):
+            continue
+        func, equipe, lider, sis, tipo = (ws.cell(r, c).value for c in range(2, 7))
+        if not equipe:
+            continue
+        e = eqs.setdefault(str(equipe), {"nome": str(equipe), "lider": "", "sistema": "",
+                                         "tipo": "", "pessoas": []})
+        e["pessoas"].append({"nome": str(nome), "funcao": str(func or "")})
+        if lider and not e["lider"]:
+            e["lider"] = str(lider)
+        if sis and not e["sistema"]:
+            e["sistema"] = str(sis)
+        if tipo and not e["tipo"]:
+            e["tipo"] = str(tipo)
+    return {"obra": "Boi Malhado", "equipes": list(eqs.values())}
 
 
 def pessoas_flat(lot):
