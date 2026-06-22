@@ -42,8 +42,9 @@ def _por_equipe(dia):
 
 
 # ----------------------------------------------------------------- PDF
-def gerar_rdo_pdf(dias, caminho, composicao_fn=None):
-    """1 página por dia + TEMPLATE em branco. composicao_fn(equipe)->[(nome,func)]."""
+def gerar_rdo_pdf(dias, caminho, composicao_fn=None, mapa=None):
+    """1 página por dia + TEMPLATE. composicao_fn(equipe)->[(nome,func)].
+    mapa = {'executado':[geoms], 'a_fazer':[geoms]} → desenha o mapa da rede no topo."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -52,9 +53,28 @@ def gerar_rdo_pdf(dias, caminho, composicao_fn=None):
 
     with PdfPages(str(caminho)) as pdf:
         for dia in dias:
-            _pagina_dia(plt, FancyBboxPatch, dia, composicao_fn, pdf)
+            _pagina_dia(plt, FancyBboxPatch, dia, composicao_fn, pdf, mapa)
         _pagina_template(plt, FancyBboxPatch, pdf)
     return str(caminho)
+
+
+def _coords(geom):
+    if geom is None:
+        return []
+    if geom.geom_type == "LineString":
+        return [list(geom.coords)]
+    return [list(p.coords) for p in geom.geoms]
+
+
+def _desenha_mapa(ax, mapa):
+    ax.set_title("Mapa — rede executada (verde) × a-fazer (cinza)", fontsize=9, color=AZUL)
+    for g in mapa.get("a_fazer", []):
+        for cc in _coords(g):
+            ax.plot([p[0] for p in cc], [p[1] for p in cc], color="0.78", lw=0.8)
+    for g in mapa.get("executado", []):
+        for cc in _coords(g):
+            ax.plot([p[0] for p in cc], [p[1] for p in cc], color="#2e7d32", lw=1.7)
+    ax.set_aspect("equal"); ax.set_xticks([]); ax.set_yticks([])
 
 
 def _cabecalho(plt, FancyBboxPatch, fig, data_txt, apontador):
@@ -68,10 +88,15 @@ def _cabecalho(plt, FancyBboxPatch, fig, data_txt, apontador):
             ha="center", va="center", fontsize=8, color="#bbdefb", transform=ax.transAxes)
 
 
-def _pagina_dia(plt, FancyBboxPatch, dia, composicao_fn, pdf):
+def _pagina_dia(plt, FancyBboxPatch, dia, composicao_fn, pdf, mapa=None):
     fig = plt.figure(figsize=(8.27, 11.69)); fig.patch.set_facecolor("white")
     _cabecalho(plt, FancyBboxPatch, fig, _data_br(dia.get("data")), dia.get("apontador", "Apontamento WCR"))
-    ax = fig.add_axes([0.06, 0.05, 0.88, 0.86]); ax.axis("off")
+    if mapa:
+        axm = fig.add_axes([0.06, 0.585, 0.88, 0.315])
+        _desenha_mapa(axm, mapa)
+        ax = fig.add_axes([0.06, 0.05, 0.88, 0.50]); ax.axis("off")
+    else:
+        ax = fig.add_axes([0.06, 0.05, 0.88, 0.86]); ax.axis("off")
     y = 1.0
     grupos = _por_equipe(dia)
     for eq, servs in grupos.items():
