@@ -13,7 +13,7 @@ AZUL = "#1a237e"
 def _cab_padrao(cab):
     base = {"nucleo": "", "sistema": "", "pedido_n": "______",
             "data": "____/____/______", "solicitante": "________________________",
-            "destino": "Almoxarifado central"}
+            "destino": "Almoxarifado central", "encarregado": "________________________"}
     base.update(cab or {})
     return base
 
@@ -36,7 +36,8 @@ def gerar_pedido_xlsx(itens, cab, caminho):
     # bloco de identificação
     ident = [("Núcleo:", cab["nucleo"], "Sistema:", cab["sistema"]),
              ("Pedido nº:", cab["pedido_n"], "Data:", cab["data"]),
-             ("Solicitante:", cab["solicitante"], "Destino:", cab["destino"])]
+             ("Solicitante:", cab["solicitante"], "Destino:", cab["destino"]),
+             ("Encarregado geral:", cab["encarregado"], "", "")]
     r = 4
     for a, b, c, d in ident:
         ws.cell(r, 1, a).font = B; ws.cell(r, 2, b)
@@ -80,17 +81,19 @@ def _desenha_pagina(fig, plt, FancyBboxPatch, bloco, cab, total_itens, pi, npags
     axb.text(0.5, 0.22, "%s · Contrato %s" % (EMPRESA, CONTRATO), ha="center",
              va="center", fontsize=8.5, color="#bbdefb", transform=axb.transAxes)
     # identificação
-    axi = fig.add_axes([0.06, 0.85, 0.88, 0.07]); axi.axis("off")
+    axi = fig.add_axes([0.06, 0.805, 0.88, 0.115]); axi.axis("off")
     linhas = [("Núcleo: %s" % cab["nucleo"], "Sistema: %s" % cab["sistema"]),
               ("Pedido nº: %s" % cab["pedido_n"], "Data: %s" % cab["data"]),
-              ("Solicitante: %s" % cab["solicitante"], "Destino: %s" % cab["destino"])]
-    yy = 0.85
+              ("Solicitante: %s" % cab["solicitante"], "Destino: %s" % cab["destino"]),
+              ("Encarregado geral: %s" % cab["encarregado"], "")]
+    yy = 0.88
     for esq, dir_ in linhas:
         axi.text(0.0, yy, esq, fontsize=9.5, transform=axi.transAxes)
-        axi.text(0.52, yy, dir_, fontsize=9.5, transform=axi.transAxes)
-        yy -= 0.33
+        if dir_:
+            axi.text(0.52, yy, dir_, fontsize=9.5, transform=axi.transAxes)
+        yy -= 0.26
     # tabela
-    axt = fig.add_axes([0.05, 0.06, 0.90, 0.77]); axt.axis("off")
+    axt = fig.add_axes([0.05, 0.06, 0.90, 0.73]); axt.axis("off")
     col_x = [0.0, 0.08, 0.60, 0.73, 0.85, 1.0]   # bordas: Item|Descrição|Qtd|Und|Conferência
     headers = ["Item", "Descrição do material", "Qtd", "Und", "Conferência"]
     ytop = 1.0; rowh = min(0.034, 0.92 / (len(bloco) + 2))
