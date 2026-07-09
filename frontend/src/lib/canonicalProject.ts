@@ -24,6 +24,14 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number; state: string
   brasilia: { lat: -15.7939, lng: -47.8828, state: 'DF' },
 }
 
+// Coordenadas reais extraidas dos levantamentos GPS (GPKG/shapefile georreferenciados
+// SIRGAS 2000 / UTM 23S, EPSG:31983) de cada contrato WCR.
+const PROJECT_COORDINATES: Record<string, { lat: number; lng: number; state: string }> = {
+  '99e34e64-ff72-592f-9f15-24a81fe6cd91': { lat: -23.48016, lng: -46.669912, state: 'SP' }, // WCR - Boi Malhado (mapa.json, rede real)
+  '1c318114-c465-526f-a967-a1f02e34a7c7': { lat: -23.413887, lng: -46.581969, state: 'SP' }, // WCR - Comunidade do Retorno (centroide de 193 pontos, ACAD-PROJETO COMUNIDADE DO RETORNOrev0agua.gpkg)
+  'bf33d1fb-4716-5a9c-adce-97f1273615b2': { lat: -23.434092, lng: -46.590644, state: 'SP' }, // WCR - Sakura (centroide das areas, LRP SAKURA M2.gpkg)
+}
+
 function cityKey(cidade?: string | null): string {
   return String(cidade || '')
     .normalize('NFD')
@@ -32,7 +40,8 @@ function cityKey(cidade?: string | null): string {
     .toLowerCase()
 }
 
-function inferLocation(cidade?: string | null) {
+function inferLocation(cidade?: string | null, projetoId?: string | null) {
+  if (projetoId && PROJECT_COORDINATES[projetoId]) return PROJECT_COORDINATES[projetoId]
   const key = cityKey(cidade)
   return CITY_COORDINATES[key]
 }
@@ -180,7 +189,7 @@ export function mapDbProjetoToProject(
   },
 ): Project {
   const existing = options?.existing ?? null
-  const location = inferLocation(projeto.cidade)
+  const location = inferLocation(projeto.cidade, projeto.id)
 
   return {
     id: projeto.id,
@@ -286,7 +295,7 @@ export function mapDbProjetoToConstructionSite(
   },
 ): ConstructionSite {
   const existing = options?.existing ?? null
-  const location = inferLocation(projeto.cidade)
+  const location = inferLocation(projeto.cidade, projeto.id)
   const projectView = mapDbProjetoToProject(projeto, { existing: null, dashboard: options?.dashboard || null })
   const torre = options?.torre ?? null
   const riscos = mapRowsToConstructionRisks(

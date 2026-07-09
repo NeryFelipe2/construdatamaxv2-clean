@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  Menu, Settings, Bell, Search, Plus, Filter, RotateCw, UserCircle, MessageSquare, Briefcase, Play, Calendar, MoreHorizontal, Layers, Target, FileText, Cpu, Calculator, FolderKanban, Wrench
+  Menu, Settings, Bell, Search, Plus, Filter, RotateCw, UserCircle, MessageSquare, Briefcase, Play, Calendar, MoreHorizontal, Layers, Target, FileText, Cpu, Calculator, FolderKanban, Wrench,
+  BookOpen, FileSearch, Waves, FileSpreadsheet, CalendarClock, Users, CheckSquare, ClipboardList,
+  Brain, FileSearch as FileSearchIcon, UserCog, GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Modules grouped by top categories
+// Modules grouped by top categories — espelha a mesma organização do menu
+// Dark/Light (App.tsx navItems); manter as duas listas em sincronia.
 const MODULE_GROUPS = [
+  {
+    category: "Ajuda", id: "ajuda",
+    items: [
+      { label: "Guia — Como usar", to: "/app/guia", icon: BookOpen },
+    ]
+  },
   {
     category: "Gestão", id: "gestao",
     items: [
@@ -22,15 +31,36 @@ const MODULE_GROUPS = [
       { label: "Mapa / GIS", to: "/app/mapa-interativo", icon: Filter },
       { label: "BIM", to: "/app/bim", icon: Layers },
       { label: "Rede 360", to: "/app/rede-360", icon: Target },
+      { label: "Pré-Construção", to: "/app/pre-construcao", icon: FileSearch },
     ]
   },
   {
-    category: "Tarefas", id: "tarefas",
+    category: "Planejamento", id: "planejamento",
     items: [
-      { label: "RDO", to: "/app/rdo", icon: FileText },
-      { label: "Punch List", to: "/app/punch-list", icon: Target },
+      { label: "Plan. Mestre", to: "/app/planejamento-mestre", icon: CalendarClock },
+      { label: "Feito × A Fazer (NS)", to: "/app/ns-planejamento", icon: Waves },
+      { label: "Planilhas (Modelos)", to: "/app/planilhas", icon: FileSpreadsheet },
       { label: "Agenda", to: "/app/agenda", icon: Calendar },
-      { label: "Planejamento", to: "/app/planejamento", icon: Calculator },
+      { label: "LPS / Lean", to: "/app/lps-lean", icon: Target },
+      { label: "EVM / Curva S", to: "/app/evm", icon: Calculator },
+    ]
+  },
+  {
+    category: "Financeiro", id: "financeiro",
+    items: [
+      { label: "DRE & Resultado", to: "/app/dre-financeiro", icon: Calculator },
+      { label: "Medição (RDO)", to: "/app/medicao", icon: Calculator },
+    ]
+  },
+  {
+    category: "Operação de Campo", id: "operacao",
+    items: [
+      { label: "Kanban Equipes", to: "/app/equipes-kanban", icon: Users },
+      { label: "Diário de Obra", to: "/app/diario-obra", icon: FileText },
+      { label: "RDO", to: "/app/rdo", icon: FileText },
+      { label: "RDOs WhatsApp (Live)", to: "/app/rdo-lista", icon: FileText },
+      { label: "Relatório 360", to: "/app/relatorio360", icon: ClipboardList },
+      { label: "Punch List", to: "/app/punch-list", icon: CheckSquare },
     ]
   },
   {
@@ -39,16 +69,27 @@ const MODULE_GROUPS = [
       { label: "Suprimentos", to: "/app/suprimentos", icon: FolderKanban },
       { label: "Mão de Obra", to: "/app/mao-de-obra", icon: UserCircle },
       { label: "Equipamentos", to: "/app/gestao-equipamentos", icon: Wrench },
+      { label: "Quantitativos", to: "/app/quantitativos", icon: Calculator },
     ]
   },
   {
-    category: "Data-Driven", id: "data",
+    category: "IA & Inteligência", id: "ia",
     items: [
-      // { label: "IA Analytics", to: "/app/ia-analytics", icon: Cpu },
-      { label: "EVM", to: "/app/evm", icon: Calculator },
       { label: "Engine V5", to: "/app/engine-v5", icon: Cpu },
+      { label: "IA & Analytics", to: "/app/ia-analytics", icon: Brain },
+      { label: "Agente Chat", to: "/app/agent-chat", icon: MessageSquare },
+      { label: "Leitor PDF", to: "/app/leitor-pdf", icon: FileSearchIcon },
     ]
-  }
+  },
+  {
+    category: "Comunicação", id: "comunicacao",
+    items: [
+      { label: "Contatos", to: "/app/gestao-contatos", icon: UserCog },
+      { label: "Fluxo Oper.", to: "/app/fluxo-operacional", icon: GitBranch },
+      { label: "WhatsApp RDO", to: "/app/whatsapp-rdo", icon: MessageSquare },
+      { label: "Diário WCR", to: "/app/wcr-diario", icon: FileText },
+    ]
+  },
 ];
 
 export function AppLayout() {

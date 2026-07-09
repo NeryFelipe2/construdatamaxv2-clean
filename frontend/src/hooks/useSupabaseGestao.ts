@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { apiProjetoGestao360, type ApiProjetoGestao360Payload, type CanonicalIntegrationStatus } from '@/lib/api'
 import { supabase, type DbContato, type DbFrente, type DbProjeto } from '@/lib/supabase'
+import { useAppModeStore } from '@/store/appModeStore'
 
 export interface TarefaResumo {
   id: string
@@ -266,6 +267,55 @@ function mapApiPayload(payload: ApiProjetoGestao360Payload): Omit<SupabaseGestao
   }
 }
 
+// ─── Fallback local (wcr_db.json) — mesma base estática usada no modo demo ────
+
+interface LocalWcrDb {
+  projetos?: DbProjeto[]
+  frentes?: DbFrente[]
+  contatos?: DbContato[]
+  rdos?: DbRdoFallback[]
+  rdo_equipes?: Array<{ id: string; rdo_id: string }>
+  rdo_atividades?: Array<{ equipe_id: string; metragem?: number | null }>
+}
+
+let localDbPromise: Promise<LocalWcrDb | null> | null = null
+
+function fetchLocalWcrDb(): Promise<LocalWcrDb | null> {
+  if (!localDbPromise) {
+    localDbPromise = fetch('/wcr_db.json')
+      .then((res) => (res.ok ? (res.json() as Promise<LocalWcrDb>) : null))
+      .catch(() => null)
+  }
+  return localDbPromise
+}
+
+async function loadFromLocalDb(projetoId: string): Promise<Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> | null> {
+  const db = await fetchLocalWcrDb()
+  if (!db || !Array.isArray(db.projetos)) return null
+
+  // wcr_db.json usa os UUIDs reais do Supabase; o app usa slugs (ex: 'wcr-boi-malhado')
+  // como activeProjectId. Casa por id direto e, se não achar, por fragmento do nome.
+  let projeto = db.projetos.find((p) => p.id === projetoId) ?? null
+  if (!projeto) {
+    const nomeFragmento = projetoId.replace(/^wcr-/, '').replace(/-/g, ' ').toLowerCase()
+    projeto = db.projetos.find((p) => (p.nome || '').toLowerCase().includes(nomeFragmento)) ?? null
+  }
+  if (!projeto) return null
+
+  const dbProjetoId = projeto.id
+  const frentes = (db.frentes ?? []).filter((f) => f.projeto_id === dbProjetoId)
+  const contatos = (db.contatos ?? []).filter((c) => c.projeto_id === dbProjetoId && c.ativo !== false)
+  const rdos = (db.rdos ?? []).filter((r) => (r.projeto_id ?? r.project_id) === dbProjetoId)
+
+  const rdoIds = new Set(rdos.map((r) => r.id))
+  const equipeIds = new Set((db.rdo_equipes ?? []).filter((e) => rdoIds.has(e.rdo_id)).map((e) => e.id))
+  const extensaoExecutada = (db.rdo_atividades ?? [])
+    .filter((a) => equipeIds.has(a.equipe_id))
+    .reduce((sum, a) => sum + Number(a.metragem || 0), 0)
+
+  return buildFallbackData({ projeto, frentes, contatos, rdos, tarefas: [], extensaoExecutada })
+}
+
 async function loadFromSupabaseFallback(projetoId: string): Promise<Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> | null> {
   if (!supabase) return null
 
@@ -282,6 +332,26 @@ async function loadFromSupabaseFallback(projetoId: string): Promise<Omit<Supabas
   const contatos = (contatosRes.data || []) as DbContato[]
   const rdos = (rdosRes.data || []) as DbRdoFallback[]
   const tarefas = (tarefasRes.data || []) as Array<Record<string, unknown>>
+
+  return buildFallbackData({
+    projeto,
+    frentes,
+    contatos,
+    rdos,
+    tarefas,
+    extensaoExecutada: rdos.reduce((sum, rdo) => sum + Number(rdo.producao_m || 0), 0),
+  })
+}
+
+function buildFallbackData(args: {
+  projeto: DbProjeto | null
+  frentes: DbFrente[]
+  contatos: DbContato[]
+  rdos: DbRdoFallback[]
+  tarefas: Array<Record<string, unknown>>
+  extensaoExecutada: number
+}): Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> {
+  const { projeto, frentes, contatos, rdos, tarefas, extensaoExecutada } = args
 
   const frentesResumo: FrenteResumo[] = frentes.map((frente) => ({
     id: frente.id,
@@ -337,7 +407,7 @@ async function loadFromSupabaseFallback(projetoId: string): Promise<Omit<Supabas
       frentesPausadas: frentesResumo.filter((frente) => frente.status.toLowerCase() === 'pausada').length,
       totalFrentes: frentesResumo.length,
       extensaoTotal: frentesResumo.reduce((sum, frente) => sum + frente.extensaoTotal, 0),
-      extensaoExecutada: rdos.reduce((sum, rdo) => sum + Number(rdo.producao_m || 0), 0),
+      extensaoExecutada,
       pvsTotal: frentesResumo.reduce((sum, frente) => sum + frente.pvs, 0),
       pvsCadastrados: 0,
       equipeCampo: contatosResumo.length,
@@ -391,36 +461,54 @@ export function useSupabaseGestao(projetoId: string | null): SupabaseGestaoData 
     setLoading(true)
     setError(null)
 
+    const applyData = (data: Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'>) => {
+      setConnectionStatus(data.connectionStatus)
+      setKpi(data.kpi)
+      setFrentes(data.frentes)
+      setContatos(data.contatos)
+      setRdos(data.rdos)
+      setTarefas(data.tarefas)
+      setNotificacoes(data.notificacoes)
+      setProjetoNome(data.projetoNome)
+      setLoading(false)
+    }
+
+    // Modo demo: prioriza o Supabase (dados WCR ao vivo) quando configurado;
+    // se não houver Supabase, usa a base local (wcr_db.json).
+    if (useAppModeStore.getState().isDemoMode) {
+      if (supabase) {
+        const live = await loadFromSupabaseFallback(projetoId).catch(() => null)
+        if (live) {
+          applyData(live)
+          return
+        }
+      }
+      const local = await loadFromLocalDb(projetoId).catch(() => null)
+      if (local) {
+        applyData(local)
+        return
+      }
+    }
+
     try {
       const payload = await apiProjetoGestao360(projetoId)
-      const mapped = mapApiPayload(payload)
-      setConnectionStatus(mapped.connectionStatus)
-      setKpi(mapped.kpi)
-      setFrentes(mapped.frentes)
-      setContatos(mapped.contatos)
-      setRdos(mapped.rdos)
-      setTarefas(mapped.tarefas)
-      setNotificacoes(mapped.notificacoes)
-      setProjetoNome(mapped.projetoNome)
-      setLoading(false)
+      applyData(mapApiPayload(payload))
       return
     } catch (apiError) {
       try {
         const fallback = await loadFromSupabaseFallback(projetoId)
         if (fallback) {
-          setConnectionStatus(fallback.connectionStatus)
-          setKpi(fallback.kpi)
-          setFrentes(fallback.frentes)
-          setContatos(fallback.contatos)
-          setRdos(fallback.rdos)
-          setTarefas(fallback.tarefas)
-          setNotificacoes(fallback.notificacoes)
-          setProjetoNome(fallback.projetoNome)
-          setLoading(false)
+          applyData(fallback)
           return
         }
-      } catch (supabaseError) {
-        setError(supabaseError instanceof Error ? supabaseError.message : String(supabaseError))
+      } catch {
+        // segue para o fallback local
+      }
+
+      const local = await loadFromLocalDb(projetoId).catch(() => null)
+      if (local) {
+        applyData(local)
+        return
       }
 
       setConnectionStatus('local')

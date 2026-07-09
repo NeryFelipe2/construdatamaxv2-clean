@@ -15,6 +15,7 @@ import {
 import type {
   IntegrationStatus,
   LpsActivity,
+  LpsAlert,
   LpsRestriction,
   LpsRestrictionCategory,
   LpsRestrictionStatus,
@@ -268,6 +269,7 @@ interface LpsState {
   restrictions: LpsRestriction[]
   staffingDimensions: StaffingDimension[]
   integrationStatuses: IntegrationStatus[]
+  alerts: LpsAlert[]
 
   setActiveTab: (tab: LpsTab) => void
   loadFromProject: (projectId: string) => Promise<void>
@@ -288,6 +290,9 @@ interface LpsState {
   refreshIntegrationStatus: () => void
   autoClearRestrictions: () => void
 
+  addAlert: (a: Omit<LpsAlert, 'id'>) => void
+  acknowledgeAlert: (id: string) => void
+
   loadDemoData: () => void
   clearData: () => void
 }
@@ -302,6 +307,7 @@ export const useLpsStore = create<LpsState>((set, get) => ({
   restrictions: ALLOW_DEMO_DATA ? makeMockRestrictions() : [],
   staffingDimensions: ALLOW_DEMO_DATA ? computeStaffingFromActivities(makeMockActivities()) : [],
   integrationStatuses: buildIntegrationStatuses(ALLOW_DEMO_DATA ? makeMockRestrictions() : [], ALLOW_DEMO_DATA ? makeMockActivities() : [], null),
+  alerts: [],
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
@@ -492,6 +498,18 @@ export const useLpsStore = create<LpsState>((set, get) => ({
     })
   },
 
+  addAlert: (a) =>
+    set((s) => ({
+      alerts: [...s.alerts, { ...a, id: crypto.randomUUID() }],
+    })),
+
+  acknowledgeAlert: (id) =>
+    set((s) => ({
+      alerts: s.alerts.map((a) =>
+        a.id === id ? { ...a, acknowledged: true, acknowledgedAt: new Date().toISOString() } : a,
+      ),
+    })),
+
   loadDemoData: () => {
     const activities = makeMockActivities()
     const restrictions = makeMockRestrictions()
@@ -515,6 +533,7 @@ export const useLpsStore = create<LpsState>((set, get) => ({
       staffingDimensions: [],
       integrationStatuses: createBaseIntegrationStatuses(),
       connectionStatus: 'local',
+      alerts: [],
     }),
 }))
 

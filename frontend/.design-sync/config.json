@@ -1,0 +1,34 @@
+{
+  "projectId": "5272be4e-d933-424d-8aa4-49b9c3f2e5fe",
+  "shape": "package",
+  "name": "ConstrudaDataMax UI Primitives",
+  "componentSrcMap": {
+    "Button": "src/components/ui/button.tsx",
+    "Card": "src/components/ui/card.tsx",
+    "Input": "src/components/ui/input.tsx",
+    "Popover": "src/components/ui/popover.tsx",
+    "HoverCard": "src/components/ui/hover-card.tsx",
+    "InfoTooltip": "src/components/ui/InfoTooltip.tsx",
+    "InsightBanner": "src/components/ui/InsightBanner.tsx",
+    "StatCard": "src/components/shared/StatCard.tsx",
+    "GuidedTour": "src/components/ui/GuidedTour.tsx",
+    "FlowHoverButton": "src/components/ui/flow-hover-button.tsx",
+    "GlobeLive": "src/components/ui/globe-live.tsx",
+    "AppShell": "src/components/shared/AppShell.tsx",
+    "DemoBanner": "src/components/shared/DemoBanner.tsx",
+    "ErrorBoundary": "src/components/shared/ErrorBoundary.tsx",
+    "ModuleQuickLinks": "src/components/shared/ModuleQuickLinks.tsx",
+    "Sidebar": "src/components/shared/Sidebar.tsx",
+    "AppLayout": "src/components/layout/AppLayout.tsx"
+  },
+  "scope": [
+    "Button", "Card", "Input", "Popover", "HoverCard", "InfoTooltip", "InsightBanner", "StatCard",
+    "GuidedTour", "FlowHoverButton", "GlobeLive",
+    "AppShell", "DemoBanner", "ErrorBoundary", "ModuleQuickLinks", "Sidebar",
+    "AppLayout"
+  ],
+  "featuresScope": [
+    "ScenarioCompareModal", "ConfirmDialog", "EquipmentCard", "EquipmentDialog", "MapaCanvas",
+    "GanttBar", "GanttChart", "TaskEditDialog"
+  ]
+}

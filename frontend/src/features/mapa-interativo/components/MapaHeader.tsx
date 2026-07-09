@@ -53,9 +53,9 @@ export function MapaHeader({
   const undo      = useMapaInterativoStore((s) => s.undo)
   const clearAll  = useMapaInterativoStore((s) => s.clearAll)
   const setBasemap = useMapaInterativoStore((s) => s.setBasemap)
-  const loadDemoData = useMapaInterativoStore((s) => s.loadDemoData)
   const setActiveNetworkType = useMapaInterativoStore((s) => s.setActiveNetworkType)
   const setSelectedProjectId = useMapaInterativoStore((s) => s.setSelectedProjectId)
+  const requestFitBounds = useMapaInterativoStore((s) => s.requestFitBounds)
 
   const projects = useProjetosStore((s) => s.projects)
 
@@ -96,7 +96,7 @@ export function MapaHeader({
   function handleImportPlanejamento() {
     import('@/store/planejamentoStore').then(({ usePlanejamentoStore }) => {
       const state = usePlanejamentoStore.getState()
-      const trechos = state.scenarios[0]?.trechos ?? []
+      const trechos = state.trechos.length > 0 ? state.trechos : (state.scenarios[0]?.trechos ?? [])
       if (trechos.length === 0) { alert('Nenhum trecho encontrado no módulo Planejamento.'); return }
       const BASE_LAT = -12.9714, BASE_LNG = -38.5014
       const baseLen = useMapaInterativoStore.getState().nodes.length
@@ -169,7 +169,7 @@ export function MapaHeader({
         {/* Row 2: Tool buttons — horizontally scrollable on mobile */}
         <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-0.5">
           {/* View tools */}
-          <ToolBtn label="Ajustar" icon={<Maximize2 size={13} />} onClick={() => loadDemoData()} />
+          <ToolBtn label="Ajustar" icon={<Maximize2 size={13} />} onClick={() => requestFitBounds()} />
           <ToolBtn label="Desfazer" icon={<RotateCcw size={13} />} onClick={undo} disabled={history.length === 0} />
           <ToolBtn label="Limpar" icon={<Trash2 size={13} />} onClick={clearAll} danger />
           <ToolBtn label="Salvar" icon={<Save size={13} />} onClick={handleSave} />
@@ -189,7 +189,7 @@ export function MapaHeader({
             />
           ))}
 
-          <ToolBtn label="Mover em Massa" icon={<Move size={13} />} onClick={() => {}} />
+          <ToolBtn label="Mover em Massa (em breve)" icon={<Move size={13} />} onClick={() => {}} disabled />
 
           <div className="w-px h-5 bg-[#484848] mx-1" />
 

@@ -22,6 +22,14 @@ interface PlanejamentoMestreState {
   originalSCurve: MasterSCurvePoint[]
   simulatedSCurve: MasterSCurvePoint[]
   programacaoSemanal: Record<string, Record<string, ProgramacaoDiaria>>
+  /** Origem dos dados atualmente carregados em `activities`. */
+  dataSource: 'demo' | 'real' | 'empty'
+  /**
+   * Qualidade do matching item↔equipe do motor real (M5 transparência).
+   * Só é significativo quando `dataSource === 'real'` — em demo/empty fica
+   * zerado.
+   */
+  matchQuality: { totalItens: number; comMatch: number; semMatch: number }
 
   // Navigation
   setActiveTab: (tab: PlanejamentoMestreTab) => void
@@ -52,6 +60,10 @@ interface PlanejamentoMestreState {
 
   // Data
   loadDemoData: () => void
+  loadFromRealData: (
+    activities: MasterActivity[],
+    matchQuality?: { totalItens: number; comMatch: number; semMatch: number },
+  ) => void
   clearData: () => void
 }
 
@@ -66,6 +78,8 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
   originalSCurve: [],
   simulatedSCurve: [],
   programacaoSemanal: {},
+  dataSource: 'empty',
+  matchQuality: { totalItens: 0, comMatch: 0, semMatch: 0 },
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
@@ -181,7 +195,21 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
         originalSCurve: scurve,
         simulatedSCurve: [],
         whatIfAdjustments: [],
+        dataSource: 'demo',
+        matchQuality: { totalItens: 0, comMatch: 0, semMatch: 0 },
       })
+    })
+  },
+
+  loadFromRealData: (activities, matchQuality) => {
+    const { start, end } = getProjectDateRange(activities)
+    const scurve = computeMasterSCurve(activities, start, end)
+    set({
+      activities: structuredClone(activities),
+      originalSCurve: scurve,
+      simulatedSCurve: [],
+      dataSource: activities.length > 0 ? 'real' : 'empty',
+      matchQuality: matchQuality ?? { totalItens: 0, comMatch: 0, semMatch: 0 },
     })
   },
 
@@ -195,5 +223,7 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
       originalSCurve: [],
       simulatedSCurve: [],
       programacaoSemanal: {},
+      dataSource: 'empty',
+      matchQuality: { totalItens: 0, comMatch: 0, semMatch: 0 },
     }),
 }))

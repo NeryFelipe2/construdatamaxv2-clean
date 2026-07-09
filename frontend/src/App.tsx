@@ -1,9 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useState } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/store/projectContext";
+import type { DbProjeto } from "@/lib/supabase";
 import { useThemeStore, LayoutTheme } from "@/store/themeStore";
+import { useAppModeStore } from "@/store/appModeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { DemoBanner } from "@/components/shared/DemoBanner";
 import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
@@ -11,7 +15,8 @@ import {
   CalendarClock, Target, FileText, Calculator, Layers,
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
   FileSearch, Monitor, MessageSquare, Building2, UserCog,
-  GitBranch, CheckSquare, Sun, Moon, Brain, Palette,
+  GitBranch, CheckSquare, Sun, Moon, Brain, Palette, Waves,
+  FileSpreadsheet, FlaskConical, Pencil, BookOpen,
 } from "lucide-react";
 
 // ─── Lazy-loaded modules ────────────────────────────────────────────────────
@@ -41,15 +46,24 @@ const IaAnalyticsPage = lazy(() => import("@/features/ia-analytics/index").then(
 const GisEditorPage = lazy(() => import("@/features/gis-editor/index").then((m) => ({ default: m.GisEditorPage })));
 const EvmPage = lazy(() => import("@/features/evm/index").then((m) => ({ default: m.EvmPage })));
 const PlanejamentoMestrePage = lazy(() => import("@/features/planejamento-mestre/index").then((m) => ({ default: m.PlanejamentoMestrePage })));
+const NsPlanejamentoPage = lazy(() => import("@/features/ns-planejamento/index").then((m) => ({ default: m.NsPlanejamentoPage })));
 const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").then((m) => ({ default: m.OperacaoCampoPage })));
 const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m) => ({ default: m.MotorNsV5Page })));
 const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
 const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((m) => ({ default: m.default })));
 const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
+const MedicaoPage = lazy(() => import("@/features/medicao/index").then((m) => ({ default: m.MedicaoPage })));
 const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
+const WcrDiarioPage = lazy(() => import("@/features/wcr-diario/index").then((m) => ({ default: m.WcrDiarioPage })));
+const EquipesKanbanPage = lazy(() => import("@/features/equipes-kanban/index"));
+const DiarioObraPage = lazy(() => import("@/features/diario-obra/index").then((m) => ({ default: m.DiarioObraPage })));
+const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index").then((m) => ({ default: m.PlanilhasModeloPage })));
+const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 const navItems = [
+  { section: "Ajuda" },
+  { label: "Guia — Como usar", icon: BookOpen, to: "/app/guia" },
   { section: "Gestão" },
   { label: "Gestão 360", icon: LayoutDashboard, to: "/app/gestao-360" },
   { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
@@ -61,14 +75,18 @@ const navItems = [
   { label: "Rede 360", icon: Network, to: "/app/rede-360" },
   { label: "Pré-Construção", icon: FileSearch, to: "/app/pre-construcao" },
   { section: "Planejamento" },
-  { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
   { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
+  { label: "Feito × A Fazer (NS)", icon: Waves, to: "/app/ns-planejamento" },
+  { label: "Planilhas (Modelos)", icon: FileSpreadsheet, to: "/app/planilhas" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },
   { label: "LPS / Lean", icon: Target, to: "/app/lps-lean" },
   { label: "EVM / Curva S", icon: Calculator, to: "/app/evm" },
   { section: "Financeiro" },
   { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
+  { label: "Medição (RDO)", icon: Calculator, to: "/app/medicao" },
   { section: "Operação de Campo" },
+  { label: "Kanban Equipes", icon: Users, to: "/app/equipes-kanban" },
+  { label: "Diário de Obra", icon: FileText, to: "/app/diario-obra" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
   { label: "RDOs WhatsApp (Live)", icon: FileText, to: "/app/rdo-lista" },
   { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
@@ -87,6 +105,7 @@ const navItems = [
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
   { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
+  { label: "Diário WCR", icon: FileText, to: "/app/wcr-diario" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -100,8 +119,46 @@ function RouteFallback() {
     </div>
   );
 }
+// Isola crashes de página: sem isso, uma exceção em qualquer módulo desmonta a
+// árvore React inteira e o app vira tela em branco sem menu.
+class RouteErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("Erro no módulo da rota:", error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="flex items-center justify-center h-full p-8">
+          <div className="max-w-md w-full bg-red-50 border border-red-200 rounded-xl p-6 text-center space-y-3">
+            <div className="text-red-600 font-bold text-sm">Este módulo encontrou um erro</div>
+            <div className="text-red-500 text-xs font-mono break-all">{this.state.error.message}</div>
+            <button
+              onClick={() => this.setState({ error: null })}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function LazyRoute({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <RouteErrorBoundary>{children}</RouteErrorBoundary>
+    </Suspense>
+  );
 }
 
 // ─── Theme Switcher FAB (floating action button) ────────────────────────────
@@ -143,6 +200,8 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
     try { return localStorage.getItem(SIDEBAR_KEY) !== "false"; } catch { return true; }
   });
   const cycleTheme = useThemeStore((s) => s.cycleTheme);
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode);
+  const toggleDemoMode = useAppModeStore((s) => s.toggleDemoMode);
 
   function toggleSidebar() {
     setIsOpen((prev) => {
@@ -236,6 +295,17 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
             {isOpen ? <ChevronLeft size={20} className="shrink-0" /> : <ChevronRight size={20} className="shrink-0" />}
             {isOpen && <span className="text-xs font-medium whitespace-nowrap">Recolher</span>}
           </button>
+          <button
+            onClick={toggleDemoMode}
+            title={isDemoMode ? "Desativar Modo Demo" : "Ativar Modo Demo"}
+            className={cn(
+              "flex items-center gap-3 h-10 px-[10px] rounded-lg transition-colors",
+              isDemoMode ? "bg-[#2abfdc]/12 text-[#2abfdc]" : `${c.itemDefault} ${c.itemHover}`,
+            )}
+          >
+            <FlaskConical size={20} className="shrink-0" />
+            {isOpen && <span className="text-xs font-medium whitespace-nowrap">{isDemoMode ? "Modo Demo: ON" : "Modo Demo: OFF"}</span>}
+          </button>
         </div>
       </nav>
     </aside>
@@ -248,11 +318,13 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
   const activeProjectId = useProjectContext((s) => s.activeProjectId);
   const setActiveProject = useProjectContext((s) => s.setActiveProject);
   const addProjeto = useProjectContext((s) => s.addProjeto);
+  const updateProjeto = useProjectContext((s) => s.updateProjeto);
   const [open, setOpen] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [novoNome, setNovoNome] = useState("");
   const [novoCidade, setNovoCidade] = useState("");
   const [novoTipo, setNovoTipo] = useState<"agua" | "esgoto" | "misto">("esgoto");
+  const [editOpen, setEditOpen] = useState(false);
 
   const active = projetos.find((p) => p.id === activeProjectId);
 
@@ -272,7 +344,7 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
     : { btnBg: "bg-white", btnBorder: "border-gray-300", btnHover: "hover:border-blue-400", text: "text-gray-800", accent: "text-blue-600", dropBg: "bg-white", dropBorder: "border-gray-200", inputBg: "bg-gray-50", section: "text-gray-400", sub: "text-gray-500", hoverRow: "hover:bg-gray-50", activeRow: "bg-blue-50" };
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-1.5">
       <button
         onClick={() => setOpen(!open)}
         className={cn("flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors max-w-[280px]", c.btnBg, c.btnBorder, c.btnHover)}
@@ -281,6 +353,26 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
         <span className={cn("text-xs font-medium truncate", c.text)}>{active?.nome ?? "Selecionar Projeto"}</span>
         <ChevronDown size={12} className={cn("shrink-0 transition-transform", c.sub, open && "rotate-180")} />
       </button>
+
+      {active && (
+        <button
+          onClick={() => setEditOpen(true)}
+          title="Editar contrato do projeto"
+          aria-label="Editar contrato do projeto"
+          className={cn("flex items-center justify-center w-7 h-7 rounded-lg border transition-colors shrink-0", c.btnBg, c.btnBorder, c.btnHover)}
+        >
+          <Pencil size={12} className={cn("shrink-0", c.accent)} />
+        </button>
+      )}
+
+      {editOpen && active && (
+        <EditContratoModal
+          isDark={isDark}
+          projeto={active}
+          onClose={() => setEditOpen(false)}
+          onSave={updateProjeto}
+        />
+      )}
 
       {open && (
         <>
@@ -340,6 +432,119 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
   );
 }
 
+// ─── Edit Contrato Modal ────────────────────────────────────────────────────
+function EditContratoModal({
+  isDark, projeto, onClose, onSave,
+}: {
+  isDark: boolean;
+  projeto: DbProjeto;
+  onClose: () => void;
+  onSave: (id: string, patch: Partial<DbProjeto>) => Promise<boolean>;
+}) {
+  const [contrato, setContrato] = useState(projeto.contrato ?? "");
+  const [valor, setValor] = useState(String(projeto.orcamento_total ?? 0));
+  const [dataInicio, setDataInicio] = useState(projeto.data_inicio ?? "");
+  const [dataFim, setDataFim] = useState(projeto.data_fim ?? "");
+  const [cidade, setCidade] = useState(projeto.cidade ?? "");
+  const [responsavel, setResponsavel] = useState(projeto.responsavel_nome ?? "");
+  const [saving, setSaving] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  const c = isDark
+    ? { bg: "bg-[#0d2040]", border: "border-[#20406a]", text: "text-[#e4f2f8]", sub: "text-[#5a8caa]", inputBg: "bg-[#071422]", overlay: "rgba(4,10,20,0.72)" }
+    : { bg: "bg-white", border: "border-gray-200", text: "text-gray-800", sub: "text-gray-500", inputBg: "bg-gray-50", overlay: "rgba(15,23,42,0.5)" };
+
+  async function handleSave() {
+    setSaving(true);
+    setErro(null);
+    const valorNum = Number(valor.replace(/\./g, "").replace(",", "."));
+    const ok = await onSave(projeto.id, {
+      contrato,
+      orcamento_total: Number.isFinite(valorNum) ? valorNum : projeto.orcamento_total,
+      data_inicio: dataInicio,
+      data_fim: dataFim || null,
+      cidade,
+      responsavel_nome: responsavel,
+    });
+    setSaving(false);
+    if (!ok) {
+      setErro("Salvo só localmente — Supabase indisponível no momento.");
+      return;
+    }
+    onClose();
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      style={{ background: c.overlay }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className={cn("w-full max-w-md rounded-2xl border shadow-2xl", c.bg, c.border)} onClick={(e) => e.stopPropagation()}>
+        <div className={cn("flex items-center justify-between px-5 py-4 border-b", c.border)}>
+          <h2 className={cn("text-sm font-bold", c.text)}>Editar contrato — {projeto.nome}</h2>
+          <button onClick={onClose} className={cn("w-7 h-7 flex items-center justify-center rounded-lg transition-colors", c.sub, "hover:text-red-400")}>
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-3 px-5 py-4">
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Nº do Contrato</span>
+            <input value={contrato} onChange={(e) => setContrato(e.target.value)}
+              placeholder="13.546/25-00"
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Valor do Contrato (R$)</span>
+            <input value={valor} onChange={(e) => setValor(e.target.value)}
+              inputMode="decimal" placeholder="690000"
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <div className="grid grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1">
+              <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Data Início</span>
+              <input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)}
+                className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Data Fim</span>
+              <input type="date" value={dataFim ?? ""} onChange={(e) => setDataFim(e.target.value)}
+                className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+            </label>
+          </div>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Cidade</span>
+            <input value={cidade} onChange={(e) => setCidade(e.target.value)}
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Responsável</span>
+            <input value={responsavel} onChange={(e) => setResponsavel(e.target.value)}
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          {erro && <p className="text-[11px] text-amber-400">{erro}</p>}
+        </div>
+
+        <div className={cn("flex items-center justify-end gap-2 px-5 py-4 border-t", c.border)}>
+          <button onClick={onClose} className={cn("px-4 py-2 rounded-lg border text-xs transition-colors", c.border, c.sub)}>
+            Cancelar
+          </button>
+          <button onClick={handleSave} disabled={saving}
+            className="px-4 py-2 rounded-lg bg-cyan-500 text-white text-xs font-semibold hover:bg-cyan-600 disabled:opacity-50 transition-colors">
+            {saving ? "Salvando..." : "Salvar"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // SIDEBAR SHELL (used for Dark and Light themes)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -356,6 +561,7 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
+      <DemoBanner />
       <div className={cn("flex items-center gap-3 px-4 h-11 border-b shrink-0 z-20", headerBg, headerBorder)}>
         <button onClick={() => setMobileOpen(true)} className={cn("transition-colors md:hidden", mobileBtn)} aria-label="Abrir menu">
           <Menu size={20} />
@@ -411,6 +617,7 @@ export default function App() {
       <Routes>
         <Route path="/app" element={<AdaptiveShell />}>
           <Route index element={<Navigate to="/app/gestao-360" replace />} />
+          <Route path="guia" element={<LazyRoute><GuiaPage /></LazyRoute>} />
           <Route path="ns-v5" element={<NsV5Page />} />
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
@@ -434,6 +641,8 @@ export default function App() {
           <Route path="gis-editor" element={<LazyRoute><GisEditorPage /></LazyRoute>} />
           <Route path="evm" element={<LazyRoute><EvmPage /></LazyRoute>} />
           <Route path="planejamento-mestre" element={<LazyRoute><PlanejamentoMestrePage /></LazyRoute>} />
+          <Route path="ns-planejamento" element={<LazyRoute><NsPlanejamentoPage /></LazyRoute>} />
+          <Route path="planilhas" element={<LazyRoute><PlanilhasModeloPage /></LazyRoute>} />
           <Route path="operacao-campo" element={<LazyRoute><OperacaoCampoPage /></LazyRoute>} />
           <Route path="gestao-contatos" element={<LazyRoute><GestaoContatosPage /></LazyRoute>} />
           <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
@@ -442,7 +651,11 @@ export default function App() {
           <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
           <Route path="engine-v5" element={<LazyRoute><EngineV5Dashboard /></LazyRoute>} />
           <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
+          <Route path="medicao" element={<LazyRoute><MedicaoPage /></LazyRoute>} />
           <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
+          <Route path="wcr-diario" element={<LazyRoute><WcrDiarioPage /></LazyRoute>} />
+          <Route path="equipes-kanban" element={<LazyRoute><EquipesKanbanPage /></LazyRoute>} />
+          <Route path="diario-obra" element={<LazyRoute><DiarioObraPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />

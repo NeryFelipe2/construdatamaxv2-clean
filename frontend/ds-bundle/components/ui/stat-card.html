@@ -1,0 +1,58 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StatCard Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl">
+    <div class="flex flex-col gap-2 rounded-xl border border-[#20406a] bg-[#14294e] p-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">Receita</span>
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#22c55e]/15 text-[#22c55e]">$</div>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-2xl font-bold font-mono text-[#22c55e]">R$ 2.5M</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 rounded-xl border border-[#20406a] bg-[#14294e] p-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">Custo</span>
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#ef4444]/15 text-[#ef4444]">!</div>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-2xl font-bold font-mono text-[#ef4444]">R$ 1.8M</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 rounded-xl border border-[#20406a] bg-[#14294e] p-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">Margem</span>
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#2abfdc]/15 text-[#2abfdc]">%</div>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-2xl font-bold font-mono text-[#2abfdc]">28%</span>
+        <span class="text-xs text-[#a3a3a3]">acima da meta</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 rounded-xl border border-[#20406a] bg-[#14294e] p-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#a3a3a3]">PPC</span>
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#fbbf24]/15 text-[#fbbf24]">◎</div>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-2xl font-bold font-mono text-[#fbbf24]">85%</span>
+        <span class="text-xs text-[#a3a3a3]">semana atual</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

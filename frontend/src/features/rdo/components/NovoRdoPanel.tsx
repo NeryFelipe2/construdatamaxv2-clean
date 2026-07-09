@@ -19,7 +19,7 @@ import { rdoSchema } from '../schemas'
 import type { RdoFormData } from '../schemas'
 import type { RdoEquipmentEntry, RdoServiceEntry, RdoTrechoEntry, RdoPhoto, RdoTrechoStatus } from '@/types'
 import { TextParseModal } from './TextParseModal'
-import type { ParsedRdoData } from '../utils/parseRdoText'
+import { parseRdoText, type ParsedRdoData } from '../utils/parseRdoText'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -351,11 +351,15 @@ export function NovoRdoPanel() {
         alert('RDO enviado com sucesso!')
         setActiveTab('historico')
       } else {
-        setSubmitError('Erro ao enviar RDO para o servidor. Verifique sua conexão.')
+        addRdo(payload)
+        alert('Backend indisponível: RDO salvo localmente.')
+        setActiveTab('historico')
       }
     } catch (err: any) {
       console.error('Save error:', err)
-      setSubmitError(err.message || 'Falha crítica ao salvar RDO.')
+      addRdo(payload)
+      alert('Backend indisponível: RDO salvo localmente.')
+      setActiveTab('historico')
     }
   }
 
@@ -393,7 +397,37 @@ export function NovoRdoPanel() {
       alert('Texto processado: RDO, custos, planejamento e desvios gravados.')
       setActiveTab('historico')
     } else {
-      setSubmitError('Erro ao processar texto no servidor.')
+      const parsed = parseRdoText(text)
+      addRdo({
+        date: parsed.date || new Date().toISOString().slice(0, 10),
+        responsible: parsed.responsible || '',
+        weather: { morning: 'good', afternoon: 'good', night: 'good' },
+        manpower: { ...parsed.manpower, employeeNames: parsed.employeeNames },
+        equipment: parsed.equipment.map((e) => ({ ...e, id: crypto.randomUUID() })),
+        services: parsed.services.map((s) => ({ ...s, id: crypto.randomUUID() })),
+        trechos: parsed.trechos.map((t) => ({ ...t, id: crypto.randomUUID() })),
+        geolocation: null,
+        observations: parsed.observations,
+        incidents: parsed.ocorrencias !== 'Não informado' ? parsed.ocorrencias : '',
+        photos: [],
+        local: parsed.local !== 'Não informado' ? parsed.local : undefined,
+        gerenteContrato: parsed.gerenteContrato !== 'Não informado' ? parsed.gerenteContrato : undefined,
+        tecnicoSeguranca: parsed.tecnicoSeguranca !== 'Não informado' ? parsed.tecnicoSeguranca : undefined,
+        nomeEmpreiteira: parsed.nomeEmpreiteira !== 'Não informado' ? parsed.nomeEmpreiteira : undefined,
+        servicoExecutar: parsed.servicoExecutar !== 'Não informado' ? parsed.servicoExecutar : undefined,
+        ocorrencias: parsed.ocorrencias !== 'Não informado' ? parsed.ocorrencias : undefined,
+        funcionariosDiretos: parsed.funcionariosDiretos || undefined,
+        funcionariosIndiretos: parsed.funcionariosIndiretos || undefined,
+        qtdEquipamentosFerramentas: parsed.qtdEquipamentosFerramentas || undefined,
+        numeroOS: parsed.numeroOS !== 'Não informado' ? parsed.numeroOS : undefined,
+        numeroContrato: parsed.numeroContrato !== 'Não informado' ? parsed.numeroContrato : undefined,
+        climaManha: parsed.climaManha !== 'Não informado' ? parsed.climaManha : undefined,
+        climaTarde: parsed.climaTarde !== 'Não informado' ? parsed.climaTarde : undefined,
+        climaNoite: parsed.climaNoite !== 'Não informado' ? parsed.climaNoite : undefined,
+        origem: 'texto-local',
+      })
+      alert('Backend indisponível: RDO salvo localmente a partir do texto.')
+      setActiveTab('historico')
     }
   }
 

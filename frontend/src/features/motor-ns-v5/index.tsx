@@ -10,15 +10,39 @@
  * - Curva S, hidraulica, custos
  */
 import { useEffect, useState } from "react"
+import { useShallow } from "zustand/react/shallow"
 import {
   Cpu, Upload, FileText, Zap, RefreshCw, CheckCircle, AlertTriangle,
   Activity, Layers, DollarSign, TrendingUp, Map, Network, Database,
 } from "lucide-react"
-import { useProjectContext } from "@/store/projectContext"
+import { useProjectContext, selectFrentesDoProjetoAtivo } from "@/store/projectContext"
 import {
   apiDashboard, apiNsList, apiNucleos, apiCurvaS,
   apiProcessarImportar, apiProcessarUltimo, apiHealth,
 } from "@/lib/api"
+
+const DEMO_MODE = import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
+
+function gerarJobSimulado(fileName: string, nucleo: string, frentes: { pvs_total: number }[], seedExtra = 0) {
+  let seed = 0
+  for (let i = 0; i < fileName.length; i++) seed += fileName.charCodeAt(i)
+  seed += seedExtra
+  const pvsFrentes = frentes.reduce((acc, f) => acc + (f.pvs_total || 0), 0)
+  const n_pvs = pvsFrentes > 0 ? Math.max(3, Math.round(pvsFrentes / Math.max(1, frentes.length))) : 8 + (seed % 25)
+  const n_trechos = Math.round(n_pvs * 1.15)
+  const ns_geradas = Math.max(1, Math.round(n_trechos / 3))
+  const ns_erros = seed % 7 === 0 ? 1 : 0
+  return {
+    arquivo: fileName,
+    nucleo,
+    motor: "v5",
+    n_pvs,
+    n_trechos,
+    ns_geradas,
+    ns_erros,
+    simulado: true,
+  }
+}
 
 const TABS = [
   { id: "processar", label: "Processar Unico", icon: Upload },
@@ -35,6 +59,7 @@ export function MotorNsV5Page() {
   const activeProjectId = useProjectContext(s => s.activeProjectId)
   const projetos = useProjectContext(s => s.projetos)
   const activeProjeto = projetos.find(p => p.id === activeProjectId) ?? null
+  const frentesAtivo = useProjectContext(useShallow(selectFrentesDoProjetoAtivo))
 
   const [tab, setTab] = useState<TabId>("processar")
   const [health, setHealth] = useState<{ ok: boolean } | null>(null)
@@ -65,9 +90,30 @@ export function MotorNsV5Page() {
   async function handleUpload() {
     if (!uploadFile) { setUploadMsg({ type: "err", text: "Selecione um arquivo" }); return }
     setUploading(true); setUploadMsg(null)
+    const nucleo = uploadNucleo || activeProjeto?.nome || "PROJETO"
+
+    if (DEMO_MODE) {
+      const job = gerarJobSimulado(uploadFile.name, nucleo, frentesAtivo)
+      setLatestJob(job)
+      setNsList(prev => [
+        ...prev,
+        ...Array.from({ length: job.ns_geradas }, (_, i) => ({
+          codigo: prev.length + i + 1,
+          nucleo,
+          n_pvs: Math.round(job.n_pvs / job.ns_geradas),
+          n_trechos: Math.round(job.n_trechos / job.ns_geradas),
+          extensao_m: 0,
+          status: "PLANEJADA",
+        })),
+      ])
+      setUploadMsg({ type: "ok", text: `Processado (simulado): ${job.n_pvs} PVs, ${job.n_trechos} trechos, ${job.ns_geradas} NS geradas` })
+      setUploading(false)
+      return
+    }
+
     const fd = new FormData()
     fd.append("arquivo", uploadFile)
-    fd.append("nucleo", uploadNucleo || activeProjeto?.nome || "PROJETO")
+    fd.append("nucleo", nucleo)
     fd.append("motor", selectedMotor)
     if (cartoFile) fd.append("cartografia", cartoFile)
     try {
@@ -87,6 +133,32 @@ export function MotorNsV5Page() {
   async function handleBatchUpload() {
     if (batchFiles.length === 0) { setUploadMsg({ type: "err", text: "Selecione os arquivos do Batch" }); return }
     setUploading(true); setUploadMsg(null)
+
+    if (DEMO_MODE) {
+      let totalPvs = 0, totalTrechos = 0, totalNs = 0
+      const novosNs: any[] = []
+      batchFiles.forEach((file, idx) => {
+        const nucleo = file.name.split('.')[0].toUpperCase()
+        const job = gerarJobSimulado(file.name, nucleo, frentesAtivo, idx)
+        totalPvs += job.n_pvs; totalTrechos += job.n_trechos; totalNs += job.ns_geradas
+        setLatestJob(job)
+        for (let i = 0; i < job.ns_geradas; i++) {
+          novosNs.push({
+            codigo: nsList.length + novosNs.length + i + 1,
+            nucleo,
+            n_pvs: Math.round(job.n_pvs / job.ns_geradas),
+            n_trechos: Math.round(job.n_trechos / job.ns_geradas),
+            extensao_m: 0,
+            status: "PLANEJADA",
+          })
+        }
+      })
+      setNsList(prev => [...prev, ...novosNs])
+      setUploadMsg({ type: "ok", text: `Lote Processado (simulado): ${totalPvs} PVs, ${totalTrechos} trechos, ${totalNs} NS totais.` })
+      setUploading(false)
+      return
+    }
+
     try {
       // Simula uma chamada de lotes agrupando em um FormData ou chamadas assíncronas sequenciais
       let totalPvs = 0, totalTrechos = 0, totalNs = 0;

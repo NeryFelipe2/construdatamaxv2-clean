@@ -20,7 +20,7 @@ import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseGestao } from '@/hooks/useSupabaseGestao'
 import { ControleFinanceiroPanel } from './components/ControleFinanceiroPanel'
 
-type TabId = 'atividades' | 'produtividade' | 'performance' | 'financeiro'
+type TabId = 'dashboard' | 'financeiro'
 type ConnectionStatus = 'connected' | 'partial' | 'local'
 
 function MetricCard({
@@ -96,7 +96,7 @@ function ConnectionBadge({ status, loading }: { status: ConnectionStatus; loadin
 }
 
 export function Gestao360Page() {
-  const [tab, setTab] = useState<TabId>('atividades')
+  const [tab, setTab] = useState<TabId>('dashboard')
   const { activeProjectId } = useProjectContext()
   const activeProjeto = useProjectContext(selectActiveProjeto)
   const {
@@ -151,9 +151,7 @@ export function Gestao360Page() {
         </div>
         <div className="ml-auto flex">
           {[
-            { id: 'atividades' as TabId, label: 'Minhas atividades', sub: 'Executor' },
-            { id: 'produtividade' as TabId, label: 'Gestao de produtividade', sub: 'Equipe' },
-            { id: 'performance' as TabId, label: 'Gestao de performance', sub: 'Obra' },
+            { id: 'dashboard' as TabId, label: 'Dashboard', sub: 'Visao geral' },
             { id: 'financeiro' as TabId, label: 'Painel Financeiro', sub: 'EVM & Custos' },
           ].map((item) => (
             <button
@@ -180,6 +178,7 @@ export function Gestao360Page() {
         </div>
       )}
 
+      {tab === 'dashboard' && (
       <div className="flex-1 p-5 space-y-5">
         <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4">
           <MetricCard
@@ -395,6 +394,7 @@ export function Gestao360Page() {
           </div>
         </div>
       </div>
+      )}
 
       {tab === 'financeiro' && (
         <div className="flex-1 overflow-y-auto px-6 py-6 border-t border-gray-200">

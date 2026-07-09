@@ -43,11 +43,11 @@ async function parseShapefileToSegments(
   shp: ArrayBuffer,
   dbf: ArrayBuffer,
 ): Promise<BimSegment[]> {
-  const shpjs = await import('shpjs')
+  const { parseShp, parseDbf } = await import('shpjs')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const geometries: any[] = (shpjs as any).parseShp(shp)
+  const geometries: any[] = parseShp(shp) as any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const attributes: Record<string, string | number>[] = (shpjs as any).dbf.parseDbf(dbf)
+  const attributes: Record<string, string | number>[] = parseDbf(dbf) as any
 
   return geometries.map((geom, i) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

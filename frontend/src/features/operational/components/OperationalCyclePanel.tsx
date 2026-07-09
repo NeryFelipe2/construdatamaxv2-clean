@@ -66,6 +66,13 @@ export function OperationalCyclePanel({ compact = false, showPlanningActions = f
 
   async function load() {
     if (!activeProjectId) return
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+      setLogs([])
+      setPlans([])
+      setDeviations([])
+      setReplans([])
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -88,6 +95,10 @@ export function OperationalCyclePanel({ compact = false, showPlanningActions = f
 
   async function recalcMl() {
     if (!activeProjectId) return
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+      setError('ML indisponivel em modo demo.')
+      return
+    }
     setLoading(true)
     setError(null)
     try {

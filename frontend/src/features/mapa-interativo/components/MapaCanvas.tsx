@@ -59,6 +59,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
 function FitBoundsOnLoad({ nodes }: { nodes: MapNode[] }) {
   const map = useMap()
   const fitted = useRef(false)
+  const fitBoundsRequestId = useMapaInterativoStore((s) => s.fitBoundsRequestId)
 
   useEffect(() => {
     if (!fitted.current && nodes.length > 0) {
@@ -71,6 +72,16 @@ function FitBoundsOnLoad({ nodes }: { nodes: MapNode[] }) {
       )
     }
   }, [map, nodes])
+
+  useEffect(() => {
+    if (fitBoundsRequestId === 0 || nodes.length === 0) return
+    const lats = nodes.map((n) => n.lat)
+    const lngs = nodes.map((n) => n.lng)
+    map.fitBounds(
+      [[Math.min(...lats), Math.min(...lngs)], [Math.max(...lats), Math.max(...lngs)]],
+      { padding: [40, 40] }
+    )
+  }, [map, fitBoundsRequestId])
 
   return null
 }

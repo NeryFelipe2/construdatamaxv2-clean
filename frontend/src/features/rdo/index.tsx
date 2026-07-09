@@ -11,6 +11,7 @@ import { RdoAutomaticoPanel } from './components/RdoAutomaticoPanel'
 import { HistoricoPanel } from './components/HistoricoPanel'
 import { IntegracaoPanel } from './components/IntegracaoPanel'
 import { FinanceiroPanel } from './components/FinanceiroPanel'
+import { ProducaoPanel } from './components/ProducaoPanel'
 import { WhatsAppBotPanel } from './components/WhatsAppBotPanel'
 import { WhatsAppFluxoPanel } from './components/WhatsAppFluxoPanel'
 
@@ -34,6 +35,7 @@ export function RdoPage() {
       case 'historico':       return <HistoricoPanel />
       case 'integracao':      return <IntegracaoPanel />
       case 'financeiro':      return <FinanceiroPanel />
+      case 'producao':        return <ProducaoPanel />
       case 'whatsapp-bot':    return <WhatsAppBotPanel />
       case 'whatsapp-fluxo':  return <WhatsAppFluxoPanel />
       default:                return <DashboardPanel />

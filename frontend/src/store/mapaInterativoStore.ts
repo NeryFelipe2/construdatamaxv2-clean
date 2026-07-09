@@ -4,6 +4,7 @@
  */
 import { create } from 'zustand'
 import type { MapNode, MapSegment, MapLayer, MapTool, MapNetworkType } from '@/types'
+import wcrMapa from '@/data/wcr/mapa.json'  // rede REAL do Boi Malhado (planejamento.construdata_export)
 
 // ─── Snapshot type for undo ────────────────────────────────────────────────
 
@@ -25,6 +26,8 @@ const DEFAULT_LAYERS: MapLayer[] = [
 // ─── Demo data — rede de esgoto simulada em Salvador/BA ──────────────────
 
 function makeDemoData(): { nodes: MapNode[]; segments: MapSegment[] } {
+  // WCR: rede REAL do Boi Malhado (gerada pelo motor). Salvador abaixo = legado inativo.
+  return wcrMapa as unknown as { nodes: MapNode[]; segments: MapSegment[] }
   // Base coords: Porto de Salvador area
   const baseLat = -12.9714
   const baseLng = -38.5014
@@ -135,6 +138,7 @@ interface MapaInterativoState {
   mapMode: 'saneamento' | 'construcao' | null
   selectedProjectId: string | null
   activeNetworkType: MapNetworkType
+  fitBoundsRequestId: number
 
   // Actions
   addNode: (node: Omit<MapNode, 'id'>) => void
@@ -157,6 +161,7 @@ interface MapaInterativoState {
   setSelectedProjectId: (id: string | null) => void
   setActiveNetworkType: (t: MapNetworkType) => void
   loadFromPipeline: () => void
+  requestFitBounds: () => void
 }
 
 // ─── Helper: push undo snapshot ───────────────────────────────────────────
@@ -180,9 +185,10 @@ export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
   basemap: 'satellite',
   utmZone: '24S',
   measurePoint1: null,
-  mapMode: null,
+  mapMode: 'saneamento',  // WCR: já abre no mapa (rede real), sem seletor
   selectedProjectId: null,
   activeNetworkType: 'sewer',
+  fitBoundsRequestId: 0,
 
   addNode: (node) =>
     set((s) => ({
@@ -314,4 +320,6 @@ export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
       set({ nodes: mapped, segments: mappedSegs, history: [], mapMode: 'saneamento' })
     })
   },
+
+  requestFitBounds: () => set((s) => ({ fitBoundsRequestId: s.fitBoundsRequestId + 1 })),
 }))

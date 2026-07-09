@@ -6,9 +6,6 @@ const LAYERS = [
   { key: 'orders',           label: 'Ordens de Serviço',   color: '#eab308' },
   { key: 'outages',          label: 'Interrupções Ativas',  color: '#ef4444' },
   { key: 'assets',           label: 'Ativos',               color: '#f97316' },
-  { key: 'riskLayers',       label: 'Camadas de Risco',     color: '#f97316' },
-  { key: 'serviceDistricts', label: 'Distritos de Serviço', color: '#a78bfa' },
-  { key: 'landCover',        label: 'Cobertura do Solo',    color: '#4ade80' },
   { key: 'circuits',         label: 'Circuitos',            color: '#38bdf8' },
 ]
 

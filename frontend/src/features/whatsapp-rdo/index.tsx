@@ -19,6 +19,38 @@ import { useProjectContext } from "@/store/projectContext";
 type NumeroWA = { id: string; telefone: string; nome: string; funcao: string; ns_id: number };
 type RdoItem = Record<string, unknown>;
 
+const DEMO_NUMEROS: NumeroWA[] = [
+  { id: "demo-wa-1", telefone: "5561981846325", nome: "Zé Claudino", funcao: "encarregado", ns_id: 1 },
+  { id: "demo-wa-2", telefone: "5561981846325", nome: "Robert Vieira", funcao: "mestre", ns_id: 2 },
+  { id: "demo-wa-3", telefone: "5561981846325", nome: "Jailton", funcao: "apontador", ns_id: 3 },
+];
+
+function loadNumerosLocais(): NumeroWA[] {
+  try {
+    const raw = localStorage.getItem("cdata-whatsapp-numeros-local");
+    if (!raw) return DEMO_NUMEROS;
+    const extras = JSON.parse(raw) as NumeroWA[];
+    return [...DEMO_NUMEROS, ...extras];
+  } catch {
+    return DEMO_NUMEROS;
+  }
+}
+
+function saveNumeroLocal(n: NumeroWA) {
+  try {
+    const raw = localStorage.getItem("cdata-whatsapp-numeros-local");
+    const extras = raw ? (JSON.parse(raw) as NumeroWA[]) : [];
+    extras.push(n);
+    localStorage.setItem("cdata-whatsapp-numeros-local", JSON.stringify(extras));
+  } catch { /* ignore */ }
+}
+
+const DEMO_RDOS_LOCAIS: RdoItem[] = [
+  { id: "demo-rdo-1", numero: 1, data: "2026-07-02", nucleo: "Boi Malhado", status: "fechado", responsavel: "Zé Claudino", total_custo: 3210, apontamentos: [] },
+  { id: "demo-rdo-2", numero: 2, data: "2026-07-02", nucleo: "Sakura", status: "aberto", responsavel: "Robert Vieira", total_custo: 1880, apontamentos: [] },
+  { id: "demo-rdo-3", numero: 3, data: "2026-07-01", nucleo: "Comunidade do Retorno", status: "aberto", responsavel: "Jailton", total_custo: 2110, apontamentos: [] },
+];
+
 export function WhatsAppRdoPage() {
   const [numeros, setNumeros] = useState<NumeroWA[]>([]);
   const [rdos, setRdos] = useState<RdoItem[]>([]);
@@ -51,9 +83,22 @@ export function WhatsAppRdoPage() {
         }));
         setNumeros(items);
         setIntegrationStatus(activeProjectId ? "connected" : "local");
+      } else if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        setNumeros(loadNumerosLocais());
+        setIntegrationStatus("local");
       }
-      if (rR.status === "fulfilled") setRdos(((rR.value as any).items ?? []).slice(0, 20));
-    } catch { /* ignore */ }
+      if (rR.status === "fulfilled") {
+        setRdos(((rR.value as any).items ?? []).slice(0, 20));
+      } else if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        setRdos(DEMO_RDOS_LOCAIS);
+      }
+    } catch {
+      if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        setNumeros(loadNumerosLocais());
+        setRdos(DEMO_RDOS_LOCAIS);
+        setIntegrationStatus("local");
+      }
+    }
     setLoading(false);
   }
 
@@ -78,7 +123,23 @@ export function WhatsAppRdoPage() {
       setMsg(`Numero ${novoTel} cadastrado${activeProjectId ? " no projeto ativo" : ""}!`);
       setNovoTel(""); setNovoNome("");
       refresh();
-    } catch (e: any) { setMsg(e.message); }
+    } catch (e: any) {
+      if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+        const novo: NumeroWA = {
+          id: `local-${Date.now()}`,
+          telefone: novoTel,
+          nome: novoNome,
+          funcao: novoFuncao,
+          ns_id: Number(novoNsId) || 1,
+        };
+        saveNumeroLocal(novo);
+        setNumeros((prev) => [...prev, novo]);
+        setMsg(`Numero ${novoTel} cadastrado localmente (modo demo)!`);
+        setNovoTel(""); setNovoNome("");
+      } else {
+        setMsg(e.message);
+      }
+    }
   }
 
   async function handleDisparar(numero: NumeroWA) {

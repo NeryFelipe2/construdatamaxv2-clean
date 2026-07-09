@@ -162,6 +162,11 @@ export const useTorreStore = create<TorreState & TorreActions>((set, get) => ({
   },
 
   loadFromProjectContext: async () => {
+    // WCR demo mode: skip backend (uses static wcr_db.json data)
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+      set({ sites: MOCK_OBRAS, selectedId: MOCK_OBRAS[0]?.id ?? null })
+      return
+    }
     try {
       const [{ useProjectContext }] = await Promise.all([import('./projectContext')])
       const { projetos, activeProjectId } = useProjectContext.getState()

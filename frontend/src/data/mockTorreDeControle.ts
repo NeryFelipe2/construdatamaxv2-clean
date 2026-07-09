@@ -1,6 +1,62 @@
 import type { ConstructionSite } from '@/types'
 
+// WCR Saneamento — centro de Boi Malhado (SP Zona Norte) extraído de /src/data/wcr/mapa.json
+const WCR_BOIMALHADO = {
+  id: 'wcr-boi-malhado',
+  code: '13.546/25-00',
+  name: 'WCR — Boi Malhado',
+  company: 'WCR Saneamento',
+  owner: 'Sabesp',
+  manager: 'Felipe Nery',
+  description: 'Obra de água + esgoto — São Paulo (Zona Norte). Frente esgoto: Israel + Zé Claudino + Léo/Rodrigo. Frente água: Renan/Jesse + Ediel. Prazo: 30/09/2026.',
+  status: 'active' as const,
+  street: 'Boi Malhado',
+  number: 's/n',
+  district: 'Zona Norte',
+  city: 'São Paulo',
+  state: 'SP',
+  cep: '',
+  buildingType: 'saneamento',
+  totalArea: 690000,
+  floors: 1,
+  startDate: '2026-06-11',
+  expectedEnd: '2026-08-15',
+  lat: -23.48016,
+  lng: -46.669912,
+  risks: [],
+  budgetLines: [],
+  planningMilestones: [],
+  executionMilestones: [],
+}
+
+const WCR_SAKURA = {
+  ...WCR_BOIMALHADO,
+  id: 'wcr-sakura',
+  name: 'WCR — Sakura',
+  totalArea: 520000,
+  startDate: '2026-07-15',
+  expectedEnd: '2026-09-02',
+  status: 'planning' as const,
+  lat: -23.4808,
+  lng: -46.6705,
+}
+
+const WCR_RETORNO = {
+  ...WCR_BOIMALHADO,
+  id: 'wcr-comunidade-retorno',
+  name: 'WCR — Comunidade do Retorno',
+  totalArea: 4800000,
+  startDate: '2026-06-29',
+  expectedEnd: '2026-12-15',
+  status: 'planning' as const,
+  lat: -23.4810,
+  lng: -46.6680,
+}
+
 export const MOCK_OBRAS: ConstructionSite[] = [
+  WCR_BOIMALHADO,
+  WCR_SAKURA,
+  WCR_RETORNO,
   {
     id: 'pardinho-obra-1',
     code: 'PARD-2026',

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { X, Plus, Trash2 } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
 import { useMaoDeObraStore } from '@/store/maoDeObraStore'
 import { workerSchema, type WorkerFormData } from '../../schemas'
 import type { WorkerCertification } from '@/types'
@@ -37,7 +38,9 @@ function blankCert(): WorkerCertification {
 }
 
 export function WorkerDialog({ onClose }: Props) {
-  const { crews, addWorker } = useMaoDeObraStore((s) => ({ crews: s.crews, addWorker: s.addWorker }))
+  const { crews, addWorker } = useMaoDeObraStore(
+    useShallow((s) => ({ crews: s.crews, addWorker: s.addWorker }))
+  )
   const [form, setForm]     = useState<WorkerFormData>(emptyForm)
   const [errors, setErrors] = useState<Partial<Record<keyof WorkerFormData, string>>>({})
 

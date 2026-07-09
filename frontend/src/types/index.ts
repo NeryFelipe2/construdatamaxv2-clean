@@ -1198,7 +1198,7 @@ export interface PlanScenario {
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
 export type RdoReviewStatus = 'rascunho' | 'extraido' | 'em_revisao' | 'finalizado' | 'rejeitado'
-export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'integracao' | 'financeiro' | 'whatsapp-bot' | 'whatsapp-fluxo'
+export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
@@ -1669,7 +1669,7 @@ export interface HardeningPoint {
 
 // ── Planejamento Mestre ──────────────────────────────────────────────────────
 
-export type PlanejamentoMestreTab = 'macro' | 'derivacao' | 'whatif' | 'integrada' | 'semanal'
+export type PlanejamentoMestreTab = 'macro' | 'derivacao' | 'whatif' | 'integrada' | 'semanal' | 'por-equipe'
 
 export interface ProgramacaoDiaria {
   previsto:  number
@@ -1819,7 +1819,7 @@ export interface TrendPoint {
 
 // ── EVM (Earned Value Management) ──────────────────────────────────────────
 
-export type EvmTab = 'dashboard' | 'medicao' | 'plano-contas' | 'work-packages' | 'indices'
+export type EvmTab = 'dashboard' | 'medicao' | 'plano-contas' | 'work-packages' | 'indices' | 'curva-real'
 
 export type CostPillar = 'material' | 'equipamento' | 'mao_de_obra' | 'impostos_indiretos'
 

@@ -32,6 +32,8 @@ interface AgendaState {
   zoomIn: () => void
   zoomOut: () => void
   setViewMode: (mode: AgendaViewMode) => void
+  setViewStart: (d: string) => void
+  setVisibleWeeks: (n: number) => void
 
   selectTask: (id: string | null) => void
   setEditingTask: (id: string | null) => void
@@ -90,6 +92,8 @@ export const useAgendaStore = create<AgendaState>((set) => ({
     set((s) => ({ visibleWeeks: Math.min(26, s.visibleWeeks + 2) })),
 
   setViewMode: (mode) => set({ viewMode: mode }),
+  setViewStart: (d) => set({ viewStart: d }),
+  setVisibleWeeks: (n) => set({ visibleWeeks: Math.min(52, Math.max(1, n)) }),
 
   selectTask: (id) => set({ selectedTaskId: id }),
   setEditingTask: (id) => set({ editingTaskId: id }),

@@ -94,7 +94,8 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
                 {expanded ? 'Menos detalhes' : 'Mais detalhes'}
               </button>
             )}
-            {insight.action && (
+            {/* Só renderiza como botão clicável se houver onClick real — nunca um link morto (regra: sem botão que finge funcionar) */}
+            {insight.action && insight.action.onClick && (
               <button
                 onClick={insight.action.onClick}
                 className="flex items-center gap-1 text-[10px] font-medium text-[#2abfdc] hover:underline"
@@ -170,6 +171,9 @@ export function generateDreInsights(data: {
   margemLiquida: number
   lucroLiquido: number
   totalReceita: number
+  onVerCustoPorTrecho?: () => void
+  onVerEficiencia?: () => void
+  onVerComposicaoCustos?: () => void
 }): Insight[] {
   const insights: Insight[] = []
 
@@ -191,7 +195,7 @@ export function generateDreInsights(data: {
       message: `Margem bruta em ${data.margemBruta.toFixed(1)}% — abaixo dos 20% recomendados. Revise custos diretos.`,
       metric: { label: 'Margem', value: `${data.margemBruta.toFixed(1)}%`, trend: 'down' },
       detail: 'Verifique: (1) Produtividade por equipe no Planejamento, (2) Custo unitário por trecho, (3) Retrabalhos no RDO.',
-      action: { label: 'Ver Custo por Trecho' },
+      action: { label: 'Ver Custo por Trecho', onClick: data.onVerCustoPorTrecho },
     })
   }
 
@@ -214,7 +218,7 @@ export function generateDreInsights(data: {
     message: 'A plataforma economiza R$ 39.300/mês em processos manuais. ROI de 1.250%.',
     metric: { label: 'ROI', value: '1.250%', trend: 'up' },
     detail: 'Comparativo: Geração de NS cai de 4h para 5min. Conferência de medição cai de 40h para 2h. RDO em campo cai de 2,5h para 18min.',
-    action: { label: 'Ver detalhes de eficiência' },
+    action: { label: 'Ver detalhes de eficiência', onClick: data.onVerEficiencia },
   })
 
   // Guarantee insight
@@ -224,7 +228,7 @@ export function generateDreInsights(data: {
     title: 'Qual a garantia que o trecho custa tanto?',
     message: 'Cada custo é calculado pelo motor NS V5 com base em: profundidade, DN, tipo de solo e produtividade real.',
     detail: 'O algoritmo usa os dados reais da topografia (GSI), materiais aplicados (RDO) e produtividade medida (PPC). Não é estimativa — é rastreamento unitário.',
-    action: { label: 'Ver composição de custos' },
+    action: { label: 'Ver composição de custos', onClick: data.onVerComposicaoCustos },
   })
 
   return insights
@@ -235,6 +239,7 @@ export function generateFluxoCaixaInsights(data: {
   mesBreakeven: string
   totalRecebido: number
   totalGasto: number
+  onVerCronogramaFinanceiro?: () => void
 }): Insight[] {
   const insights: Insight[] = []
 
@@ -254,7 +259,7 @@ export function generateFluxoCaixaInsights(data: {
       message: `Saldo negativo — o projeto precisa de capital de giro até atingir o breakeven em ${data.mesBreakeven}.`,
       metric: { label: 'Déficit', value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(Math.abs(data.saldoAtual)), trend: 'down' },
       detail: 'Estratégia: Antecipe trechos de maior valor de medição para acelerar recebimentos.',
-      action: { label: 'Ver cronograma financeiro' },
+      action: { label: 'Ver cronograma financeiro', onClick: data.onVerCronogramaFinanceiro },
     })
   }
 

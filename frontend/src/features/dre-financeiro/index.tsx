@@ -3,17 +3,25 @@
  * Dados reais via Supabase (lancamentos_financeiros + trechos_custo)
  */
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   DollarSign, TrendingUp, TrendingDown, BarChart3, ArrowUpRight,
   ArrowDownRight, PieChart, Wallet, Receipt, Calculator,
   CheckCircle2, AlertTriangle, Target, Layers, Clock,
-  Users, Shield, RefreshCw,
+  Users, Shield, RefreshCw, Plus, Upload, Trash2, Wand2,
 } from 'lucide-react'
 import { InfoTooltip, TOOLTIPS } from '@/components/ui/InfoTooltip'
 import { InsightsPanel, generateDreInsights, generateFluxoCaixaInsights, generateCustoTrechoInsights } from '@/components/ui/InsightBanner'
 import { TourButton } from '@/components/ui/GuidedTour'
-import { useProjectContext } from '@/store/projectContext'
+import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseDre } from '@/lib/useSupabaseDre'
+import { useAppModeStore } from '@/store/appModeStore'
+import { LancamentoManualModal } from './components/LancamentoManualModal'
+import { ImportarCsvModal } from './components/ImportarCsvModal'
+import { ImportarCsvFluxoModal } from './components/ImportarCsvFluxoModal'
+import { computeFluxoCaixa, type OrigemMes } from './utils/computeFluxoCaixa'
+import { parseValorBR } from './utils/parseCsvLancamentos'
+import { useFluxoProjecao } from '@/hooks/useFluxoProjecao'
 
 type TabId = 'dre' | 'fluxo' | 'eficiencia' | 'custos'
 
@@ -26,6 +34,16 @@ const CONTRATOS: Record<string, { numero: string; empresa: string; cliente: stri
   'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8': { numero: 'RK-SUB-2026', empresa: 'RK Subempreita', cliente: 'RK', cidade: 'Santos-SP', valorContrato: 9_500_000, prazoMeses: 12 },
 }
 const DEFAULT_CONTRATO = CONTRATOS['abe7f66c-004b-4bb5-a245-6be67debd9f7']
+
+// Deriva o prazo (em meses) a partir de data_inicio/data_fim quando o contrato
+// não tem prazoMeses cadastrado explicitamente (ex: 24/06 → 15/08 ≈ 2 meses).
+function mesesEntre(inicio: string, fim: string): number {
+  const d1 = new Date(inicio)
+  const d2 = new Date(fim)
+  if (Number.isNaN(d1.getTime()) || Number.isNaN(d2.getTime())) return 0
+  const dias = (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)
+  return Math.max(0, Math.round(dias / 30))
+}
 
 // Fallbacks enquanto tabelas não têm dados reais
 const DRE_FALLBACK = {
@@ -141,23 +159,76 @@ function SectionTitle({ children, icon: Icon }: { children: string; icon: any })
 
 export function DreFinanceiroPage() {
   const [tab, setTab] = useState<TabId>('dre')
+  const [showLancamentoModal, setShowLancamentoModal] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showFluxoCsvModal, setShowFluxoCsvModal] = useState(false)
+  const navigate = useNavigate()
   const { activeProjectId } = useProjectContext()
-  const CONTRATO = (activeProjectId && CONTRATOS[activeProjectId]) || DEFAULT_CONTRATO
+  const projetoAtivo = useProjectContext(selectActiveProjeto)
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
 
   const { lancamentos, trechos, loading, connectionStatus, refresh } = useSupabaseDre(activeProjectId)
+  const { projecoes, gerarMesesAteFim, salvarProjecao, excluirProjecao, reload: reloadProjecoes } = useFluxoProjecao(activeProjectId)
+  const podeLancar = !!activeProjectId && !isDemoMode
+  const motivoBloqueio = isDemoMode
+    ? 'Desative o Modo Demonstração para lançar dados reais'
+    : !activeProjectId
+      ? 'Selecione um projeto ativo'
+      : undefined
+  const isRealData = lancamentos.length > 0 || trechos.length > 0
+  // Só mostra números de exemplo no Modo Demonstração. Fora dele, sem dado real = zerado + aviso honesto.
+  const usarFallback = isDemoMode
+  const semDadoReal = !isRealData && !usarFallback
 
-  // Dados reais ou fallback
+  // Cabeçalho: contrato mapeado (projetos demo antigos) ou o projeto REAL ativo — nunca o exemplo Santos/Osasco pro WCR.
+  const contratoMapeado = activeProjectId ? CONTRATOS[activeProjectId] : undefined
+  const CONTRATO = contratoMapeado || (projetoAtivo ? {
+    numero: projetoAtivo.contrato ? `CT ${projetoAtivo.contrato}` : '—',
+    empresa: 'WCR',
+    cliente: (projetoAtivo as any).cliente || 'SABESP',
+    cidade: projetoAtivo.cidade || '—',
+    valorContrato: Number((projetoAtivo as any).orcamento_total) || 0,
+    prazoMeses: projetoAtivo.data_inicio && projetoAtivo.data_fim
+      ? mesesEntre(projetoAtivo.data_inicio, projetoAtivo.data_fim)
+      : 0,
+  } : DEFAULT_CONTRATO)
+
+  // Dados reais ou fallback (fallback só no Modo Demo)
   const receitasDB = lancamentos.filter(x => x.tipo === 'RECEITA').map(x => ({ desc: x.descricao, valor: Number(x.valor) }))
   const despesasDB = lancamentos.filter(x => x.tipo === 'DESPESA').map(x => ({ desc: x.descricao, valor: Number(x.valor) }))
 
-  const receitasList = receitasDB.length > 0 ? receitasDB : DRE_FALLBACK.receitas
-  const despesasList = despesasDB.length > 0 ? despesasDB : DRE_FALLBACK.custosDiretos
-  const trechosView = trechos.length > 0 ? trechos : TRECHOS_FALLBACK
+  const receitasList = receitasDB.length > 0 ? receitasDB : (usarFallback ? DRE_FALLBACK.receitas : [])
+  const despesasList = despesasDB.length > 0 ? despesasDB : (usarFallback ? DRE_FALLBACK.custosDiretos : [])
+  const custosIndiretosList = usarFallback ? DRE_FALLBACK.custosIndiretos : []
+  const impostosList = usarFallback ? DRE_FALLBACK.impostos : []
+  const trechosView = trechos.length > 0 ? trechos : (usarFallback ? TRECHOS_FALLBACK : [])
+
+  // ── Fluxo de caixa ──
+  // Demo ON  → const antiga FLUXO_CAIXA (mock, intacto).
+  // Demo OFF → motor puro computeFluxoCaixa (realizado dos lançamentos + projeções).
+  const fluxoDataFim = (projetoAtivo as any)?.data_fim ?? null
+  const fluxoReal = usarFallback
+    ? null
+    : computeFluxoCaixa(
+        lancamentos.map((l) => ({ data: l.data, tipo: (l.tipo === 'RECEITA' ? 'RECEITA' : 'DESPESA') as 'RECEITA' | 'DESPESA', valor: Number(l.valor) })),
+        projecoes.map((p) => ({ mes: p.mes, recebimento_prev: Number(p.recebimento_prev), despesa_prev: Number(p.despesa_prev) })),
+        fluxoDataFim,
+      )
+  const fluxoView: Array<{ mes: string; recebido: number; gasto: number; saldoAcumulado: number; origem?: OrigemMes }> = usarFallback
+    ? FLUXO_CAIXA.map((f) => ({ mes: f.mes, recebido: f.recebido, gasto: f.gasto, saldoAcumulado: f.saldo }))
+    : (fluxoReal?.serie ?? []).map((m) => ({ mes: m.mesLabel, recebido: m.recebido, gasto: m.gasto, saldoAcumulado: m.saldoAcumulado, origem: m.origem }))
+  // Breakeven: demo mantém o rótulo antigo; real é DERIVADO (nunca hardcoded).
+  const breakevenLabel = usarFallback
+    ? 'Fev/2026'
+    : fluxoReal?.breakevenMes
+      ? (fluxoReal.serie.find((m) => m.mes === fluxoReal.breakevenMes)?.mesLabel ?? '—')
+      : '—'
+  const semFluxoReal = !usarFallback && fluxoView.length === 0
 
   const totalReceita = receitasList.reduce((a, r) => a + r.valor, 0)
   const totalCustoDir = despesasList.reduce((a, c) => a + c.valor, 0)
-  const totalCustoInd = DRE_FALLBACK.custosIndiretos.reduce((a, c) => a + c.valor, 0)
-  const totalImpostos = DRE_FALLBACK.impostos.reduce((a, i) => a + i.valor, 0)
+  const totalCustoInd = custosIndiretosList.reduce((a, c) => a + c.valor, 0)
+  const totalImpostos = impostosList.reduce((a, i) => a + i.valor, 0)
   const lucroBruto = totalReceita - totalCustoDir
   const lucroOperacional = lucroBruto - totalCustoInd
   const lucroLiquido = lucroOperacional - totalImpostos
@@ -165,8 +236,6 @@ export function DreFinanceiroPage() {
   const margemLiquida = totalReceita > 0 ? (lucroLiquido / totalReceita) * 100 : 0
   const totalTrechosCusto = trechosView.reduce((a, t) => a + Number(t.custo_total), 0)
   const totalExt = trechosView.reduce((a, t) => a + Number(t.extensao), 0)
-
-  const isRealData = lancamentos.length > 0 || trechos.length > 0
 
   const TABS = [
     { id: 'dre' as TabId, label: 'DRE', icon: Receipt },
@@ -187,17 +256,33 @@ export function DreFinanceiroPage() {
           <p className="text-xs text-[#5a8caa]">{CONTRATO.numero} — {CONTRATO.cliente} — {CONTRATO.cidade}</p>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setShowLancamentoModal(true)}
+            disabled={!podeLancar}
+            title={motivoBloqueio}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg text-xs font-semibold hover:bg-emerald-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-500/10"
+          >
+            <Plus size={12} /> Lançamento
+          </button>
+          <button
+            onClick={() => setShowImportModal(true)}
+            disabled={!podeLancar}
+            title={motivoBloqueio}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg text-xs font-semibold hover:bg-cyan-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-cyan-500/10"
+          >
+            <Upload size={12} /> Importar CSV
+          </button>
           <button onClick={refresh} className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg text-xs hover:bg-cyan-500/20 transition-colors">
             <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
             {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : isRealData ? 'Dados Locais' : 'Local'}
           </button>
           <div className="text-right">
             <div className="text-[10px] text-[#5a8caa] uppercase">Valor Contrato</div>
-            <div className="text-sm font-bold text-emerald-400">{fmt(CONTRATO.valorContrato)}</div>
+            <div className="text-sm font-bold text-emerald-400">{CONTRATO.valorContrato > 0 ? fmt(CONTRATO.valorContrato) : '—'}</div>
           </div>
           <div className="text-right">
             <div className="text-[10px] text-[#5a8caa] uppercase">Prazo</div>
-            <div className="text-sm font-bold text-[#e4f2f8]">{CONTRATO.prazoMeses} meses</div>
+            <div className="text-sm font-bold text-[#e4f2f8]">{CONTRATO.prazoMeses > 0 ? `${CONTRATO.prazoMeses} meses` : '—'}</div>
           </div>
         </div>
       </header>
@@ -216,10 +301,24 @@ export function DreFinanceiroPage() {
 
       <main className="flex-1 overflow-y-auto p-6 space-y-5">
 
+        {semDadoReal && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+            <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+            <span className="text-xs text-amber-200/90 leading-relaxed">
+              <b className="text-amber-300">Sem lançamentos financeiros cadastrados para esta obra.</b> Os valores de receita, custo e resultado só aparecem quando houver medições e custos reais lançados no sistema. Nada aqui é estimado ou de exemplo. (Ative o <b>Modo Demonstração</b> na barra lateral se quiser ver um exemplo ilustrativo.)
+            </span>
+          </div>
+        )}
+
         {/* ═══ DRE ═══ */}
         {tab === 'dre' && (
           <>
-            <InsightsPanel insights={generateDreInsights({ margemBruta, margemLiquida, lucroLiquido, totalReceita })} title="Insights — O que os dados dizem?" />
+            {!semDadoReal && <InsightsPanel insights={generateDreInsights({
+              margemBruta, margemLiquida, lucroLiquido, totalReceita,
+              onVerCustoPorTrecho: () => setTab('custos'),
+              onVerEficiencia: () => setTab('eficiencia'),
+              onVerComposicaoCustos: () => setTab('custos'),
+            })} title="Insights — O que os dados dizem?" />}
             <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
               <KpiCard label="Receita Bruta" value={fmt(totalReceita)} icon={TrendingUp} color="text-emerald-400" trend="up" sub="Acumulado" tooltip={TOOLTIPS.receitaBruta} dataTour="receita-bruta" />
               <KpiCard label="Custo Direto" value={fmt(totalCustoDir)} icon={TrendingDown} color="text-rose-400" trend="down" tooltip={TOOLTIPS.custoDirecto} dataTour="custo-direto" />
@@ -277,7 +376,7 @@ export function DreFinanceiroPage() {
                   </tr>
 
                   <tr className="bg-yellow-500/5"><td className="px-5 py-2 font-bold text-yellow-400 pt-4" colSpan={3}>(-) CUSTOS INDIRETOS</td></tr>
-                  {DRE_FALLBACK.custosIndiretos.map((c, i) => (
+                  {custosIndiretosList.map((c, i) => (
                     <tr key={`ci-${i}`} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
                       <td className="px-5 py-2 text-[#e4f2f8] pl-8">{c.desc}</td>
                       <td className="px-5 py-2 text-right text-yellow-400 font-mono">({fmt(c.valor)})</td>
@@ -292,7 +391,7 @@ export function DreFinanceiroPage() {
                   </tr>
 
                   <tr className="bg-orange-500/5"><td className="px-5 py-2 font-bold text-orange-400 pt-4" colSpan={3}>(-) IMPOSTOS E TRIBUTOS</td></tr>
-                  {DRE_FALLBACK.impostos.map((imp, i) => (
+                  {impostosList.map((imp, i) => (
                     <tr key={`imp-${i}`} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
                       <td className="px-5 py-2 text-[#e4f2f8] pl-8">{imp.desc}</td>
                       <td className="px-5 py-2 text-right text-orange-400 font-mono">({fmt(imp.valor)})</td>
@@ -314,34 +413,50 @@ export function DreFinanceiroPage() {
         {/* ═══ FLUXO DE CAIXA ═══ */}
         {tab === 'fluxo' && (
           <>
-            <InsightsPanel
-              insights={generateFluxoCaixaInsights({ saldoAtual: FLUXO_CAIXA[FLUXO_CAIXA.length-1].saldo, mesBreakeven: 'Fev/2026', totalRecebido: FLUXO_CAIXA.reduce((a,f)=>a+f.recebido,0), totalGasto: FLUXO_CAIXA.reduce((a,f)=>a+f.gasto,0) })}
+            {fluxoView.length > 0 && <InsightsPanel
+              insights={generateFluxoCaixaInsights({
+                saldoAtual: fluxoView[fluxoView.length-1].saldoAcumulado, mesBreakeven: breakevenLabel,
+                totalRecebido: fluxoView.reduce((a,f)=>a+f.recebido,0), totalGasto: fluxoView.reduce((a,f)=>a+f.gasto,0),
+                onVerCronogramaFinanceiro: () => navigate('/app/planejamento-mestre'),
+              })}
               title="Insights — Fluxo de Caixa"
-            />
+            />}
+
+            {semFluxoReal && (
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                <span className="text-xs text-amber-200/90 leading-relaxed">
+                  <b className="text-amber-300">Sem fluxo de caixa para esta obra.</b> A série mensal aparece quando houver lançamentos financeiros (meses passados/corrente) ou projeções cadastradas (meses futuros). Use <b>Gerar meses até o fim da obra</b> ou <b>Importar CSV</b> abaixo para começar a projeção — nada aqui é estimado ou de exemplo.
+                </span>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <KpiCard label="Total Recebido" value={fmt(FLUXO_CAIXA.reduce((a, f) => a + f.recebido, 0))} icon={TrendingUp} color="text-emerald-400" trend="up" tooltip={TOOLTIPS.fluxoCaixa} />
-              <KpiCard label="Total Gasto" value={fmt(FLUXO_CAIXA.reduce((a, f) => a + f.gasto, 0))} icon={TrendingDown} color="text-rose-400" trend="down" />
-              <KpiCard label="Saldo Atual" value={fmt(FLUXO_CAIXA[FLUXO_CAIXA.length - 1].saldo)} icon={Wallet} color="text-cyan-400" trend="up" sub="Acumulado" />
-              <KpiCard label="Breakeven" value="Fev/2026" icon={Target} color="text-yellow-400" sub="Mês 6 — projeto vira positivo" tooltip={TOOLTIPS.breakeven} dataTour="breakeven" />
+              <KpiCard label="Total Recebido" value={fmt(fluxoView.reduce((a, f) => a + f.recebido, 0))} icon={TrendingUp} color="text-emerald-400" trend="up" tooltip={TOOLTIPS.fluxoCaixa} />
+              <KpiCard label="Total Gasto" value={fmt(fluxoView.reduce((a, f) => a + f.gasto, 0))} icon={TrendingDown} color="text-rose-400" trend="down" />
+              <KpiCard label="Saldo Atual" value={fmt(fluxoView.length ? fluxoView[fluxoView.length - 1].saldoAcumulado : 0)} icon={Wallet} color="text-cyan-400" trend="up" sub="Acumulado" />
+              <KpiCard label="Breakeven" value={fluxoView.length ? breakevenLabel : '—'} icon={Target} color="text-yellow-400" sub={fluxoView.length ? (breakevenLabel !== '—' ? `Saldo acumulado vira positivo em ${breakevenLabel}` : 'Não vira positivo no horizonte projetado') : 'sem dados de fluxo'} tooltip={TOOLTIPS.breakeven} dataTour="breakeven" />
             </div>
 
+            {fluxoView.length > 0 && (
             <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-[#20406a]"><SectionTitle icon={Wallet}>Fluxo de Caixa Mensal</SectionTitle></div>
               <div className="px-5 py-4 border-b border-[#20406a]">
                 <div className="flex items-end gap-2 h-40">
-                  {FLUXO_CAIXA.map((f, i) => {
-                    const maxVal = Math.max(...FLUXO_CAIXA.map(x => Math.max(x.recebido, x.gasto)))
+                  {fluxoView.map((f, i) => {
+                    const maxVal = Math.max(1, ...fluxoView.map(x => Math.max(x.recebido, x.gasto)))
                     const hReceita = (f.recebido / maxVal) * 100
                     const hGasto = (f.gasto / maxVal) * 100
+                    const projetado = f.origem === 'projetado' || f.origem === 'misto'
                     return (
                       <div key={i} className="flex-1 flex flex-col items-center gap-1">
                         <div className="flex gap-0.5 items-end h-32 w-full justify-center">
-                          <div className="w-[45%] bg-emerald-500/60 rounded-t-sm transition-all" style={{ height: `${hReceita}%` }} />
-                          <div className="w-[45%] bg-rose-500/60 rounded-t-sm transition-all" style={{ height: `${hGasto}%` }} />
+                          <div className={`w-[45%] rounded-t-sm transition-all ${projetado ? 'bg-emerald-500/30 border border-dashed border-emerald-400/50' : 'bg-emerald-500/60'}`} style={{ height: `${hReceita}%` }} />
+                          <div className={`w-[45%] rounded-t-sm transition-all ${projetado ? 'bg-rose-500/30 border border-dashed border-rose-400/50' : 'bg-rose-500/60'}`} style={{ height: `${hGasto}%` }} />
                         </div>
-                        <span className="text-[9px] text-[#5a8caa]">{f.mes}</span>
-                        <span className={`text-[9px] font-bold ${f.saldo >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {f.saldo >= 0 ? '+' : ''}{(f.saldo / 1000).toFixed(0)}k
+                        <span className="text-[9px] text-[#5a8caa]">{f.mes}{projetado ? '*' : ''}</span>
+                        <span className={`text-[9px] font-bold ${f.saldoAcumulado >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {f.saldoAcumulado >= 0 ? '+' : ''}{(f.saldoAcumulado / 1000).toFixed(0)}k
                         </span>
                       </div>
                     )
@@ -350,44 +465,164 @@ export function DreFinanceiroPage() {
                 <div className="flex gap-4 mt-3 justify-center text-[10px] text-[#5a8caa]">
                   <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-emerald-500/60" /> Recebido</span>
                   <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-rose-500/60" /> Gasto</span>
+                  {!usarFallback && <span className="flex items-center gap-1"><span className="w-3 h-3 rounded border border-dashed border-[#5a8caa]" /> * = mês projetado</span>}
                 </div>
               </div>
               <table className="w-full text-xs">
                 <thead className="bg-[#0d2040] text-[#5a8caa] uppercase tracking-wider">
                   <tr>
                     <th className="text-left px-5 py-2.5">Mês</th>
+                    {!usarFallback && <th className="text-left px-5 py-2.5">Origem</th>}
                     <th className="text-right px-5 py-2.5">Recebido</th>
                     <th className="text-right px-5 py-2.5">Gasto</th>
                     <th className="text-right px-5 py-2.5">Saldo Acumulado</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {FLUXO_CAIXA.map((f, i) => (
+                  {fluxoView.map((f, i) => (
                     <tr key={i} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
                       <td className="px-5 py-2 font-medium text-[#e4f2f8]">{f.mes}</td>
+                      {!usarFallback && (
+                        <td className="px-5 py-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                            f.origem === 'real' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+                            : f.origem === 'misto' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          }`}>
+                            {f.origem === 'real' ? 'REALIZADO' : f.origem === 'misto' ? 'REAL+PROJ' : 'PROJEÇÃO'}
+                          </span>
+                        </td>
+                      )}
                       <td className="px-5 py-2 text-right text-emerald-400 font-mono">{fmt(f.recebido)}</td>
                       <td className="px-5 py-2 text-right text-rose-400 font-mono">({fmt(f.gasto)})</td>
-                      <td className={`px-5 py-2 text-right font-bold font-mono ${f.saldo >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>{fmt(f.saldo)}</td>
+                      <td className={`px-5 py-2 text-right font-bold font-mono ${f.saldoAcumulado >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>{fmt(f.saldoAcumulado)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            )}
+
+            {/* Editor de projeções — só fora do Modo Demo, com projeto ativo */}
+            {!usarFallback && activeProjectId && (
+              <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
+                <div className="px-5 py-3 border-b border-[#20406a] flex items-center justify-between flex-wrap gap-2">
+                  <SectionTitle icon={Wand2}>Projeção dos meses futuros</SectionTitle>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={async () => { if (fluxoDataFim) await gerarMesesAteFim(fluxoDataFim) }}
+                      disabled={!fluxoDataFim}
+                      title={fluxoDataFim ? `Gera meses zerados até ${fluxoDataFim}` : 'Projeto sem data de fim cadastrada'}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg text-xs font-semibold hover:bg-cyan-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <Wand2 size={12} /> Gerar meses até o fim da obra
+                    </button>
+                    <button
+                      onClick={() => setShowFluxoCsvModal(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg text-xs font-semibold hover:bg-cyan-500/20 transition-colors"
+                    >
+                      <Upload size={12} /> Importar CSV
+                    </button>
+                  </div>
+                </div>
+                {projecoes.length === 0 ? (
+                  <div className="px-5 py-6 text-center text-xs text-[#5a8caa]">
+                    Nenhuma projeção cadastrada. Clique em <b className="text-cyan-400">Gerar meses até o fim da obra</b> para criar as linhas dos meses futuros e depois preencha os valores previstos, ou <b className="text-cyan-400">Importar CSV</b>.
+                  </div>
+                ) : (
+                  <table className="w-full text-xs">
+                    <thead className="bg-[#0d2040] text-[#5a8caa] uppercase tracking-wider">
+                      <tr>
+                        <th className="text-left px-5 py-2.5">Mês</th>
+                        <th className="text-right px-5 py-2.5">Recebimento Prev. (R$)</th>
+                        <th className="text-right px-5 py-2.5">Despesa Prev. (R$)</th>
+                        <th className="text-left px-5 py-2.5">Obs</th>
+                        <th className="px-3 py-2.5" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {projecoes.map((p) => {
+                        const [y, m] = p.mes.split('-')
+                        const mesLabel = `${m}/${y}`
+                        return (
+                          <tr key={p.id} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
+                            <td className="px-5 py-2 font-medium text-[#e4f2f8] whitespace-nowrap">{mesLabel}</td>
+                            <td className="px-5 py-1.5 text-right">
+                              <input
+                                key={`r-${p.id}-${p.recebimento_prev}`}
+                                type="text"
+                                inputMode="decimal"
+                                defaultValue={p.recebimento_prev || ''}
+                                placeholder="0"
+                                onBlur={(e) => {
+                                  const v = parseValorBR(e.target.value) ?? 0
+                                  if (v !== p.recebimento_prev) void salvarProjecao(p.mes, { recebimento_prev: v })
+                                }}
+                                className="w-32 rounded-lg px-2 py-1 text-xs text-right bg-[#0d2040] border border-[#20406a] text-emerald-300 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
+                              />
+                            </td>
+                            <td className="px-5 py-1.5 text-right">
+                              <input
+                                key={`d-${p.id}-${p.despesa_prev}`}
+                                type="text"
+                                inputMode="decimal"
+                                defaultValue={p.despesa_prev || ''}
+                                placeholder="0"
+                                onBlur={(e) => {
+                                  const v = parseValorBR(e.target.value) ?? 0
+                                  if (v !== p.despesa_prev) void salvarProjecao(p.mes, { despesa_prev: v })
+                                }}
+                                className="w-32 rounded-lg px-2 py-1 text-xs text-right bg-[#0d2040] border border-[#20406a] text-rose-300 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
+                              />
+                            </td>
+                            <td className="px-5 py-1.5">
+                              <input
+                                key={`o-${p.id}-${p.obs ?? ''}`}
+                                type="text"
+                                defaultValue={p.obs ?? ''}
+                                placeholder="—"
+                                onBlur={(e) => {
+                                  const v = e.target.value.trim() || null
+                                  if (v !== (p.obs ?? null)) void salvarProjecao(p.mes, { obs: v })
+                                }}
+                                className="w-full rounded-lg px-2 py-1 text-xs bg-[#0d2040] border border-[#20406a] text-[#e4f2f8] outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
+                              />
+                            </td>
+                            <td className="px-3 py-1.5 text-center">
+                              <button
+                                onClick={() => void excluirProjecao(p.id)}
+                                title="Excluir mês da projeção"
+                                className="text-[#5a8caa] hover:text-rose-400 transition-colors"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                )}
+                <div className="px-5 py-2.5 border-t border-[#20406a] text-[10px] text-[#5a8caa]">
+                  Meses passados e o mês corrente usam sempre o <b>realizado</b> dos lançamentos — a projeção vale só para meses futuros. Editar um campo salva automaticamente ao sair.
+                </div>
+              </div>
+            )}
           </>
         )}
 
         {/* ═══ CUSTO POR TRECHO ═══ */}
         {tab === 'custos' && (
           <>
-            <InsightsPanel
+            {trechosView.length > 0 && <InsightsPanel
               insights={generateCustoTrechoInsights({ variacaoMedia: -0.8, totalTrechos: trechosView.length, trechosAbaixo: trechosView.filter(t => t.variacao < 0).length })}
               title="Insights — Custo por Trecho"
-            />
+            />}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <KpiCard label="Total Trechos" value={String(trechosView.length)} icon={Layers} color="text-cyan-400" />
               <KpiCard label="Custo Total" value={fmt(totalTrechosCusto)} icon={DollarSign} color="text-emerald-400" />
               <KpiCard label="Custo Médio/m" value={fmt(totalExt > 0 ? totalTrechosCusto / totalExt : 0)} icon={Calculator} color="text-purple-400" sub="Média ponderada" tooltip={TOOLTIPS.custoUnitario} dataTour="custo-unitario" />
-              <KpiCard label="Variação Média" value="-0.8%" icon={Shield} color="text-green-400" sub="Abaixo do orçamento" trend="up" tooltip={TOOLTIPS.variacaoCusto} dataTour="variacao" />
+              <KpiCard label="Variação Média" value={trechosView.length ? '-0.8%' : '—'} icon={Shield} color="text-green-400" sub={trechosView.length ? 'Abaixo do orçamento' : 'sem trechos custeados'} trend="up" tooltip={TOOLTIPS.variacaoCusto} dataTour="variacao" />
             </div>
 
             <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
@@ -533,6 +768,28 @@ export function DreFinanceiroPage() {
           </>
         )}
       </main>
+
+      {showLancamentoModal && activeProjectId && (
+        <LancamentoManualModal
+          projectId={activeProjectId}
+          onClose={() => setShowLancamentoModal(false)}
+          onSaved={refresh}
+        />
+      )}
+      {showImportModal && activeProjectId && (
+        <ImportarCsvModal
+          projectId={activeProjectId}
+          onClose={() => setShowImportModal(false)}
+          onSaved={refresh}
+        />
+      )}
+      {showFluxoCsvModal && activeProjectId && (
+        <ImportarCsvFluxoModal
+          projectId={activeProjectId}
+          onClose={() => setShowFluxoCsvModal(false)}
+          onSaved={reloadProjecoes}
+        />
+      )}
     </div>
   )
 }

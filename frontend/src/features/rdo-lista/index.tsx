@@ -27,6 +27,70 @@ interface ProjetoRow {
 const fmtBR = (n: number | null | undefined) =>
   n == null ? '-' : `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
+const ID_BOI = 'wcr-boi-malhado'
+const ID_SAKURA = 'wcr-sakura'
+const ID_RETORNO = 'wcr-retorno'
+
+const DEMO_PROJETOS: ProjetoRow[] = [
+  { id: ID_BOI, nome: 'WCR — Boi Malhado' },
+  { id: ID_SAKURA, nome: 'WCR — Sakura' },
+  { id: ID_RETORNO, nome: 'WCR — Comunidade do Retorno' },
+]
+
+const DEMO_RDOS: RdoRow[] = [
+  {
+    id: 'demo-rdo-1',
+    projeto_id: ID_BOI,
+    data: '2026-07-02',
+    clima: 'ensolarado',
+    producao_m: 32,
+    equipe_number: 7,
+    observacoes: 'Escavação e assentamento de rede de esgoto na Rua Israel. Sem pendências.',
+    apontador: 'Zé Claudino',
+    custo_diesel: 320,
+    custo_alimentacao: 140,
+    custo_mao_obra: 1800,
+    custo_materiais: 950,
+    fotos: [],
+    status: 'fechado',
+    created_at: '2026-07-02T18:30:00Z',
+  },
+  {
+    id: 'demo-rdo-2',
+    projeto_id: ID_SAKURA,
+    data: '2026-07-02',
+    clima: 'nublado',
+    producao_m: 24,
+    equipe_number: 5,
+    observacoes: 'Assentamento de rede de água na frente Jesse. Aguardando liberação de material.',
+    apontador: 'Robert Vieira',
+    custo_diesel: 260,
+    custo_alimentacao: 120,
+    custo_mao_obra: 1500,
+    custo_materiais: 0,
+    fotos: [],
+    status: 'aberto',
+    created_at: '2026-07-02T17:10:00Z',
+  },
+  {
+    id: 'demo-rdo-3',
+    projeto_id: ID_RETORNO,
+    data: '2026-07-01',
+    clima: 'chuvoso',
+    producao_m: 12,
+    equipe_number: 6,
+    observacoes: 'Trabalho parcial na EEE devido à chuva à tarde.',
+    apontador: 'Jailton',
+    custo_diesel: 180,
+    custo_alimentacao: 130,
+    custo_mao_obra: 1400,
+    custo_materiais: 400,
+    fotos: [],
+    status: 'aberto',
+    created_at: '2026-07-01T19:00:00Z',
+  },
+]
+
 export function RdoListaPage() {
   const [rdos, setRdos] = useState<RdoRow[]>([])
   const [projetos, setProjetos] = useState<Record<string, string>>({})
@@ -34,10 +98,18 @@ export function RdoListaPage() {
   const [err, setErr] = useState<string | null>(null)
   const [filtroProj, setFiltroProj] = useState<string>('')
 
+  const carregarDemo = () => {
+    setRdos(DEMO_RDOS)
+    const map: Record<string, string> = {}
+    for (const p of DEMO_PROJETOS) map[p.id] = p.nome
+    setProjetos(map)
+    setErr(null)
+    setLoading(false)
+  }
+
   const carregar = async () => {
     if (!supabase) {
-      setErr('Supabase não configurado (VITE_SUPABASE_URL/KEY ausentes).')
-      setLoading(false)
+      carregarDemo()
       return
     }
     setLoading(true)
@@ -57,8 +129,8 @@ export function RdoListaPage() {
       const map: Record<string, string> = {}
       for (const p of (projRes.data || []) as ProjetoRow[]) map[p.id] = p.nome
       setProjetos(map)
-    } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : String(e))
+    } catch {
+      carregarDemo()
     } finally {
       setLoading(false)
     }

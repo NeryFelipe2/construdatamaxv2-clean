@@ -13,6 +13,7 @@ const TABS: { key: EvmTab; label: string }[] = [
   { key: 'plano-contas',  label: 'Plano de Contas' },
   { key: 'work-packages', label: 'Work Packages' },
   { key: 'indices',       label: 'Índices' },
+  { key: 'curva-real',    label: 'Curva S Real' },
 ]
 
 function KpiCard({

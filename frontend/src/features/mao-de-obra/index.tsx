@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AlertTriangle } from 'lucide-react'
 import { MaoDeObraHeader }       from './components/MaoDeObraHeader'
 import type { MaoDeObraTab }     from './components/MaoDeObraHeader'
 import { DashboardPanel }        from './components/DashboardPanel'
@@ -39,6 +40,13 @@ export function MaoDeObraPage() {
 
   return (
     <div className="flex flex-col h-full">
+      {/* Ainda sem fonte real (Supabase) — mockWorkers/mockMaoDeObra estão vazios.
+          Dado real existe nas planilhas CONTROLE-WCR SANEAMENTO.xlsx (RH) e
+          CONTROLE DE FROTA (locação), ainda não carregadas aqui. */}
+      <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-900/20 border-b border-amber-700/30 text-[10px] text-amber-300 shrink-0">
+        <AlertTriangle size={11} className="shrink-0" />
+        <span>DADOS DE DEMONSTRAÇÃO — sem fonte real conectada ainda (planilhas de referência: CONTROLE-WCR SANEAMENTO.xlsx, CONTROLE DE FROTA).</span>
+      </div>
       <MaoDeObraHeader activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex-1 overflow-y-auto px-6 py-5">

@@ -54,7 +54,11 @@ export function AgendaToolbar({ searchTerm, onSearchChange, onAddTask }: AgendaT
         </div>
 
         {/* Filter */}
-        <button className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#525252] text-[#6b6b6b] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors">
+        <button
+          disabled
+          title="Filtros indisponíveis nesta versão"
+          className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#525252] text-[#3f3f3f] cursor-not-allowed"
+        >
           <SlidersHorizontal size={14} />
         </button>
 

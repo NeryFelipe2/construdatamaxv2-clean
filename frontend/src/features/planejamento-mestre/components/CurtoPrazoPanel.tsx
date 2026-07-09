@@ -6,6 +6,7 @@
 import { useEffect } from 'react'
 import { ChevronLeft, ChevronRight, TrendingUp, AlertTriangle, Activity } from 'lucide-react'
 import { useOperacaoCampoStore } from '@/store/operacaoCampoStore'
+import { useAppModeStore } from '@/store/appModeStore'
 import { useShallow } from 'zustand/react/shallow'
 import type { TrendPoint, NotableServiceCurve } from '@/types'
 import { cn } from '@/lib/utils'
@@ -216,9 +217,10 @@ export function CurtoPrazoPanel() {
       loadDemoData:         s.loadDemoData,
     }))
   )
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
 
   useEffect(() => {
-    if (activities.length === 0) loadDemoData()
+    if (activities.length === 0 && isDemoMode) loadDemoData()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const today = new Date().toISOString().slice(0, 10)

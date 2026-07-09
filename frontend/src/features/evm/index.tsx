@@ -8,6 +8,7 @@ import { MedicaoPonderadaPanel } from './components/MedicaoPonderadaPanel'
 import { PlanoContasPanel } from './components/PlanoContasPanel'
 import { WorkPackagesPanel } from './components/WorkPackagesPanel'
 import { IndicesPanel } from './components/IndicesPanel'
+import { CurvaSRealPanel } from './components/CurvaSRealPanel'
 import { useEvmStore } from '@/store/evmStore'
 import type { EvmTab } from '@/types'
 
@@ -17,6 +18,7 @@ const panels: Record<EvmTab, () => React.ReactNode> = {
   'plano-contas':   PlanoContasPanel,
   'work-packages':  WorkPackagesPanel,
   'indices':        IndicesPanel,
+  'curva-real':     CurvaSRealPanel,
 }
 
 export function EvmPage() {

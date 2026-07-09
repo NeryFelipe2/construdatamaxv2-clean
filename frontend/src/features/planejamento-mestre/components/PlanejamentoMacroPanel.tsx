@@ -3,10 +3,13 @@
  * baseline management, activity CRUD, and export (PDF / Excel / PNG).
  */
 import { useRef, useState, useMemo } from 'react'
-import { Plus, Save, Download, X, Check, FileDown, Image, FileSpreadsheet, Search, SlidersHorizontal } from 'lucide-react'
+import { Plus, Save, Download, X, Check, FileDown, Image, FileSpreadsheet, Search, SlidersHorizontal, BarChart3, Activity, Users } from 'lucide-react'
 import * as XLSX from 'xlsx'
 import { usePlanejamentoMestreStore } from '@/store/planejamentoMestreStore'
+import { useProjectContext } from '@/store/projectContext'
+import { useCronogramaEquipe } from '@/hooks/useCronogramaEquipe'
 import { getProjectDateRange, daysBetween } from '../utils/masterEngine'
+import { computeAbcCurve, computeHistogram, type MasterAbcZone } from '../utils/masterAnalysisEngine'
 import type { MasterActivity, MasterActivityStatus } from '@/types'
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
@@ -239,6 +242,222 @@ function GanttChart({ activities, collapsed, onToggle, svgRef }: GanttChartProps
   )
 }
 
+// ─── ABC Curve Panel ─────────────────────────────────────────────────────────
+
+const ABC_ZONE_COLOR: Record<MasterAbcZone, string> = {
+  A: '#22c55e',
+  B: '#f97316',
+  C: '#ef4444',
+}
+
+function MasterAbcPanel({ activities }: { activities: MasterActivity[] }) {
+  const abcItems = useMemo(() => computeAbcCurve(activities), [activities])
+
+  if (abcItems.length === 0) {
+    return <p className="text-[#6b6b6b] text-xs text-center py-8">Sem atividades com peso definido para calcular a curva ABC</p>
+  }
+
+  const W = 900
+  const H = 260
+  const PAD_L = 40
+  const PAD_B = 24
+  const barAreaW = W - PAD_L - 10
+  const barW = Math.max(2, barAreaW / abcItems.length - 2)
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="overflow-x-auto">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ background: '#0d1626', minWidth: 480 }}>
+          {/* Y axis gridlines (0/25/50/75/100%) */}
+          {[0, 25, 50, 75, 100].map((pct) => {
+            const y = H - PAD_B - (pct / 100) * (H - PAD_B - 20)
+            return (
+              <g key={pct}>
+                <line x1={PAD_L} y1={y} x2={W - 10} y2={y} stroke="#1e3a5f" strokeWidth={0.5} />
+                <text x={PAD_L - 6} y={y + 3} fontSize={8} fill="#4a7fa0" textAnchor="end">{pct}%</text>
+              </g>
+            )
+          })}
+
+          {/* Bars (individual share) */}
+          {abcItems.map((item, i) => {
+            const x = PAD_L + i * (barW + 2)
+            const barH = (item.sharePct / 100) * (H - PAD_B - 20)
+            const color = ABC_ZONE_COLOR[item.zone]
+            return (
+              <g key={item.activity.id}>
+                <title>{`${item.activity.wbsCode} ${item.activity.name}\nPeso: ${item.weight}\nParticipação: ${item.sharePct}%\nAcumulado: ${item.cumulativePct}%\nZona: ${item.zone}`}</title>
+                <rect x={x} y={H - PAD_B - barH} width={barW} height={barH} fill={color} opacity={0.8} rx={1} />
+              </g>
+            )
+          })}
+
+          {/* Cumulative line */}
+          <polyline
+            fill="none"
+            stroke="#2abfdc"
+            strokeWidth={1.5}
+            points={abcItems.map((item, i) => {
+              const x = PAD_L + i * (barW + 2) + barW / 2
+              const y = H - PAD_B - (item.cumulativePct / 100) * (H - PAD_B - 20)
+              return `${x},${y}`
+            }).join(' ')}
+          />
+
+          {/* 75% / 95% threshold lines */}
+          {[75, 95].map((pct) => {
+            const y = H - PAD_B - (pct / 100) * (H - PAD_B - 20)
+            return <line key={pct} x1={PAD_L} y1={y} x2={W - 10} y2={y} stroke="#6b6b6b" strokeWidth={0.5} strokeDasharray="4,3" />
+          })}
+        </svg>
+      </div>
+
+      {/* Legend + zone counts */}
+      <div className="flex items-center gap-4 flex-wrap text-[10px]">
+        {(['A', 'B', 'C'] as MasterAbcZone[]).map((zone) => {
+          const count = abcItems.filter((i) => i.zone === zone).length
+          return (
+            <div key={zone} className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: ABC_ZONE_COLOR[zone] }} />
+              <span className="text-[#a3a3a3]">Zona {zone}</span>
+              <span className="text-[#6b6b6b]">({count})</span>
+            </div>
+          )
+        })}
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5" style={{ backgroundColor: '#2abfdc' }} />
+          <span className="text-[#a3a3a3]">Acumulado</span>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto max-h-64 overflow-y-auto rounded-lg border border-[#525252]">
+        <table className="w-full text-xs">
+          <thead className="sticky top-0">
+            <tr className="border-b border-[#525252] bg-[#2c2c2c]">
+              <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">WBS</th>
+              <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Atividade</th>
+              <th className="px-3 py-2 text-right text-[#6b6b6b] font-medium">Peso</th>
+              <th className="px-3 py-2 text-right text-[#6b6b6b] font-medium">%</th>
+              <th className="px-3 py-2 text-right text-[#6b6b6b] font-medium">Acum. %</th>
+              <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Zona</th>
+            </tr>
+          </thead>
+          <tbody>
+            {abcItems.map((item) => (
+              <tr key={item.activity.id} className="border-b border-[#525252]/50 hover:bg-[#484848]">
+                <td className="px-3 py-1.5 font-mono text-[#6b6b6b]">{item.activity.wbsCode}</td>
+                <td className="px-3 py-1.5 text-[#f5f5f5]">{item.activity.name}</td>
+                <td className="px-3 py-1.5 text-right text-[#a3a3a3] font-mono">{item.weight}</td>
+                <td className="px-3 py-1.5 text-right text-[#a3a3a3] font-mono">{item.sharePct}%</td>
+                <td className="px-3 py-1.5 text-right text-[#a3a3a3] font-mono">{item.cumulativePct}%</td>
+                <td className="px-3 py-1.5 text-center">
+                  <span
+                    className="px-2 py-0.5 rounded text-[10px] font-semibold"
+                    style={{ backgroundColor: ABC_ZONE_COLOR[item.zone] + '20', color: ABC_ZONE_COLOR[item.zone] }}
+                  >
+                    {item.zone}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// ─── Resource Histogram Panel ────────────────────────────────────────────────
+
+function MasterHistogramPanel({ activities }: { activities: MasterActivity[] }) {
+  const { start, end } = useMemo(() => getProjectDateRange(activities), [activities])
+  const points = useMemo(() => computeHistogram(activities, start, end), [activities, start, end])
+
+  if (points.length === 0) {
+    return <p className="text-[#6b6b6b] text-xs text-center py-8">Sem atividades no período para calcular o histograma</p>
+  }
+
+  const W = 900
+  const H = 220
+  const PAD_L = 34
+  const PAD_B = 20
+  const maxActivities = Math.max(1, ...points.map((p) => p.activeActivities))
+  const barAreaW = W - PAD_L - 10
+  const barW = Math.max(1, barAreaW / points.length - 1)
+
+  // Sample month labels for x axis (avoid overcrowding)
+  const monthTicks: { i: number; label: string }[] = []
+  let lastMonth = ''
+  points.forEach((p, i) => {
+    const month = p.date.slice(0, 7)
+    if (month !== lastMonth) {
+      monthTicks.push({ i, label: new Date(p.date + 'T00:00:00').toLocaleDateString('pt-BR', { month: 'short' }) })
+      lastMonth = month
+    }
+  })
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="overflow-x-auto">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ background: '#0d1626', minWidth: 480 }}>
+          {/* Y gridlines */}
+          {Array.from({ length: 4 }, (_, i) => Math.round((maxActivities / 3) * i)).map((val) => {
+            const y = H - PAD_B - (val / maxActivities) * (H - PAD_B - 16)
+            return (
+              <g key={val}>
+                <line x1={PAD_L} y1={y} x2={W - 10} y2={y} stroke="#1e3a5f" strokeWidth={0.5} />
+                <text x={PAD_L - 6} y={y + 3} fontSize={8} fill="#4a7fa0" textAnchor="end">{val}</text>
+              </g>
+            )
+          })}
+
+          {/* Month ticks */}
+          {monthTicks.map((m) => {
+            const x = PAD_L + m.i * (barW + 1)
+            return <text key={m.i} x={x} y={H - 6} fontSize={8} fill="#4a7fa0">{m.label}</text>
+          })}
+
+          {/* Bars: active activities (bar), overlaid line: active teams */}
+          {points.map((p, i) => {
+            const x = PAD_L + i * (barW + 1)
+            const barH = (p.activeActivities / maxActivities) * (H - PAD_B - 16)
+            return (
+              <g key={p.date}>
+                <title>{`${p.date}\nAtividades ativas: ${p.activeActivities}\nEquipes ativas: ${p.activeTeams}\nPeso em execução: ${p.totalWeight}`}</title>
+                <rect x={x} y={H - PAD_B - barH} width={barW} height={barH} fill="#f97316" opacity={0.55} rx={1} />
+              </g>
+            )
+          })}
+
+          {/* Active teams line */}
+          <polyline
+            fill="none"
+            stroke="#2abfdc"
+            strokeWidth={1.5}
+            points={points.map((p, i) => {
+              const x = PAD_L + i * (barW + 1) + barW / 2
+              const y = H - PAD_B - (p.activeTeams / maxActivities) * (H - PAD_B - 16)
+              return `${x},${y}`
+            }).join(' ')}
+          />
+        </svg>
+      </div>
+
+      <div className="flex items-center gap-4 flex-wrap text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: '#f97316', opacity: 0.7 }} />
+          <span className="text-[#a3a3a3]">Atividades ativas / dia</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5" style={{ backgroundColor: '#2abfdc' }} />
+          <span className="text-[#a3a3a3]">Equipes distintas ativas / dia</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── New Activity Form ───────────────────────────────────────────────────────
 
 function NewActivityForm({ onClose }: { onClose: () => void }) {
@@ -404,6 +623,21 @@ export function PlanejamentoMacroPanel() {
   const saveBaseline  = usePlanejamentoMestreStore((s) => s.saveBaseline)
   const loadBaseline  = usePlanejamentoMestreStore((s) => s.loadBaseline)
 
+  // M6 — "tudo conversa": em vez de reescrever o motor macro (risco alto,
+  // não priorizado), mostramos lado a lado a projeção do motor atual (por
+  // velocidade histórica, já no ar) e o fim projetado pelo cronograma que o
+  // Felipe monta por equipe (aba "Por Equipe"), quando existir. Puramente
+  // aditivo/informativo — não altera o Gantt nem os cálculos existentes.
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const cron = useCronogramaEquipe(activeProjectId)
+  const dataFimPelasEquipes = useMemo(() => {
+    const fins = cron.cronogramasPorEquipe
+      .map((c) => c.dataFim)
+      .filter((d): d is string => !!d)
+    if (fins.length === 0) return null
+    return fins.sort().at(-1)!
+  }, [cron.cronogramasPorEquipe])
+
   const [showNewForm, setShowNewForm]   = useState(false)
   const [blName, setBlName]             = useState('')
   const [showBlSave, setShowBlSave]     = useState(false)
@@ -413,6 +647,7 @@ export function PlanejamentoMacroPanel() {
   const [filterNetwork, setFilterNetwork] = useState<string>('')
   const [filterService, setFilterService] = useState<string>('')
   const [showFilters, setShowFilters]   = useState(false)
+  const [view, setView] = useState<'gantt' | 'analise'>('gantt')
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   const filtered = useMemo(() =>
@@ -424,6 +659,11 @@ export function PlanejamentoMacroPanel() {
     ),
     [activities, search, filterStatus, filterNetwork, filterService],
   )
+
+  // Fim projetado pelo motor macro atual (velocidade histórica / RDO) — o
+  // mesmo cálculo já usado no header ("Dias p/ fim"), só reaproveitado aqui
+  // para comparar lado a lado com o fim projetado pelas equipes.
+  const motorEnd = useMemo(() => getProjectDateRange(activities).end, [activities])
 
   const activeFilterCount = [search, filterStatus, filterNetwork, filterService].filter(Boolean).length
 
@@ -454,6 +694,20 @@ export function PlanejamentoMacroPanel() {
 
   return (
     <div className="flex flex-col gap-4 print:gap-2">
+      {/* ── Resumo: motor macro × cronograma por equipe (M6, "tudo conversa") ── */}
+      <div className="flex items-center gap-2 flex-wrap text-xs bg-[#2c2c2c] border border-[#525252] rounded-lg px-4 py-2.5 print:hidden">
+        <Users size={13} className="text-[#a78bfa] shrink-0" />
+        <span className="text-[#6b6b6b]">Fim previsto (motor macro, por velocidade):</span>
+        <span className="text-[#f5f5f5] font-semibold tabular-nums">{activities.length > 0 ? fmtDate(motorEnd) : '—'}</span>
+        <span className="text-[#525252] hidden sm:inline">·</span>
+        <span className="text-[#6b6b6b]">Fim previsto pelas equipes (cronograma por equipe):</span>
+        {dataFimPelasEquipes ? (
+          <span className="text-[#a78bfa] font-semibold tabular-nums">{fmtDate(dataFimPelasEquipes)}</span>
+        ) : (
+          <span className="text-[#6b6b6b] italic">nenhum trabalho atribuído ainda na aba "Por Equipe"</span>
+        )}
+      </div>
+
       {/* ── Toolbar ── */}
       <div className="flex items-center gap-3 flex-wrap print:hidden">
         {/* Baseline */}
@@ -490,6 +744,26 @@ export function PlanejamentoMacroPanel() {
             <Download size={12} />Salvar Baseline
           </button>
         )}
+
+        {/* View toggle: Gantt vs Análise (ABC / Histograma) */}
+        <div className="flex items-center gap-0.5 p-0.5 rounded-lg border border-[#525252] bg-[#2c2c2c]">
+          <button
+            onClick={() => setView('gantt')}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              view === 'gantt' ? 'bg-[#f97316] text-white' : 'text-[#6b6b6b] hover:text-[#f5f5f5]'
+            }`}
+          >
+            Gantt
+          </button>
+          <button
+            onClick={() => setView('analise')}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              view === 'analise' ? 'bg-[#f97316] text-white' : 'text-[#6b6b6b] hover:text-[#f5f5f5]'
+            }`}
+          >
+            <BarChart3 size={12} />Análise ABC/Histograma
+          </button>
+        </div>
 
         {/* Export buttons */}
         <div className="flex items-center gap-1 ml-auto">
@@ -614,88 +888,129 @@ export function PlanejamentoMacroPanel() {
         )}
       </div>
 
-      {/* ── Gantt Chart ── */}
-      <div className="bg-[#0d1626] border border-[#525252] rounded-xl overflow-hidden print:border-0">
-        <div className="px-4 py-3 border-b border-[#525252] flex items-center justify-between print:hidden">
-          <div>
-            <h3 className="text-[#f5f5f5] text-sm font-semibold">Cronograma Macro — Previsto vs Tendência</h3>
-            <p className="text-[#6b6b6b] text-xs mt-0.5">
-              {filtered.length} atividade{filtered.length !== 1 ? 's' : ''}
-              {activeFilterCount > 0 ? ` (filtrado de ${activities.length})` : ''}
-              {' '}· Clique em ▶/▼ para expandir/recolher
-            </p>
+      {view === 'gantt' && (
+        <>
+          {/* ── Gantt Chart ── */}
+          <div className="bg-[#0d1626] border border-[#525252] rounded-xl overflow-hidden print:border-0">
+            <div className="px-4 py-3 border-b border-[#525252] flex items-center justify-between print:hidden">
+              <div>
+                <h3 className="text-[#f5f5f5] text-sm font-semibold">Cronograma Macro — Previsto vs Tendência</h3>
+                <p className="text-[#6b6b6b] text-xs mt-0.5">
+                  {filtered.length} atividade{filtered.length !== 1 ? 's' : ''}
+                  {activeFilterCount > 0 ? ` (filtrado de ${activities.length})` : ''}
+                  {' '}· Clique em ▶/▼ para expandir/recolher
+                </p>
+              </div>
+            </div>
+            <div className="p-3">
+              <GanttChart
+                activities={filtered}
+                collapsed={collapsed}
+                onToggle={toggleCollapse}
+                svgRef={svgRef}
+              />
+            </div>
           </div>
-        </div>
-        <div className="p-3">
-          <GanttChart
-            activities={filtered}
-            collapsed={collapsed}
-            onToggle={toggleCollapse}
-            svgRef={svgRef}
-          />
-        </div>
-      </div>
 
-      {/* ── Activity list table ── */}
-      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-[#525252] bg-[#2c2c2c]">
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">WBS</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Atividade</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Tipo</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Início</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Fim</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Tendência</th>
-                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">%</th>
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.filter((a) => a.level >= 1).map((act) => {
-                const color  = STATUS_COLOR[act.status]
-                const nColor = networkColor(act.networkType)
-                const delta  = daysBetween(act.plannedEnd, act.trendEnd)
-                return (
-                  <tr key={act.id} className="border-b border-[#525252]/50 hover:bg-[#484848]">
-                    <td
-                      className="px-3 py-2 font-mono text-[#6b6b6b]"
-                      style={{ paddingLeft: `${10 + act.level * 14}px` }}
-                    >
-                      {act.isMilestone ? '◆ ' : ''}{act.wbsCode}
-                    </td>
-                    <td className="px-3 py-2 text-[#f5f5f5]">{act.name}</td>
-                    <td className="px-3 py-2">
-                      {act.networkType ? (
-                        <span
-                          className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase"
-                          style={{ backgroundColor: nColor + '20', color: nColor }}
-                        >
-                          {act.networkType}
-                        </span>
-                      ) : <span className="text-[#525252]">—</span>}
-                    </td>
-                    <td className="px-3 py-2 text-[#a3a3a3] font-mono">{fmtDate(act.plannedStart)}</td>
-                    <td className="px-3 py-2 text-[#a3a3a3] font-mono">{fmtDate(act.plannedEnd)}</td>
-                    <td className="px-3 py-2 font-mono">
-                      <span className={delta > 0 ? 'text-[#ef4444]' : delta < 0 ? 'text-[#22c55e]' : 'text-[#6b6b6b]'}>
-                        {fmtDate(act.trendEnd)}{delta > 0 ? ` (+${delta}d)` : delta < 0 ? ` (${delta}d)` : ''}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 text-center font-mono" style={{ color }}>{act.percentComplete}%</td>
-                    <td className="px-3 py-2">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold" style={{ backgroundColor: color + '18', color }}>
-                        {STATUS_LABEL[act.status]}
-                      </span>
-                    </td>
+          {/* ── Activity list table ── */}
+          <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-[#525252] bg-[#2c2c2c]">
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">WBS</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Atividade</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Tipo</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Início</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Fim</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Tendência</th>
+                    <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">%</th>
+                    <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Status</th>
                   </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                </thead>
+                <tbody>
+                  {filtered.filter((a) => a.level >= 1).map((act) => {
+                    const color  = STATUS_COLOR[act.status]
+                    const nColor = networkColor(act.networkType)
+                    const delta  = daysBetween(act.plannedEnd, act.trendEnd)
+                    return (
+                      <tr key={act.id} className="border-b border-[#525252]/50 hover:bg-[#484848]">
+                        <td
+                          className="px-3 py-2 font-mono text-[#6b6b6b]"
+                          style={{ paddingLeft: `${10 + act.level * 14}px` }}
+                        >
+                          {act.isMilestone ? '◆ ' : ''}{act.wbsCode}
+                        </td>
+                        <td className="px-3 py-2 text-[#f5f5f5]">{act.name}</td>
+                        <td className="px-3 py-2">
+                          {act.networkType ? (
+                            <span
+                              className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase"
+                              style={{ backgroundColor: nColor + '20', color: nColor }}
+                            >
+                              {act.networkType}
+                            </span>
+                          ) : <span className="text-[#525252]">—</span>}
+                        </td>
+                        <td className="px-3 py-2 text-[#a3a3a3] font-mono">{fmtDate(act.plannedStart)}</td>
+                        <td className="px-3 py-2 text-[#a3a3a3] font-mono">{fmtDate(act.plannedEnd)}</td>
+                        <td className="px-3 py-2 font-mono">
+                          <span className={delta > 0 ? 'text-[#ef4444]' : delta < 0 ? 'text-[#22c55e]' : 'text-[#6b6b6b]'}>
+                            {fmtDate(act.trendEnd)}{delta > 0 ? ` (+${delta}d)` : delta < 0 ? ` (${delta}d)` : ''}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-center font-mono" style={{ color }}>{act.percentComplete}%</td>
+                        <td className="px-3 py-2">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-semibold" style={{ backgroundColor: color + '18', color }}>
+                            {STATUS_LABEL[act.status]}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {view === 'analise' && (
+        <>
+          {/* ── Curva ABC (Pareto) ── */}
+          <div className="bg-[#0d1626] border border-[#525252] rounded-xl overflow-hidden">
+            <div className="px-4 py-3 border-b border-[#525252] flex items-center gap-2">
+              <BarChart3 size={14} className="text-[#f97316]" />
+              <div>
+                <h3 className="text-[#f5f5f5] text-sm font-semibold">Curva ABC — Peso das Atividades</h3>
+                <p className="text-[#6b6b6b] text-xs mt-0.5">
+                  Atividades ordenadas por peso decrescente · Zona A (≤75% acumulado) concentra o esforço crítico
+                  {activeFilterCount > 0 ? ` · filtrado de ${activities.length}` : ''}
+                </p>
+              </div>
+            </div>
+            <div className="p-3">
+              <MasterAbcPanel activities={filtered} />
+            </div>
+          </div>
+
+          {/* ── Histograma de Recursos ── */}
+          <div className="bg-[#0d1626] border border-[#525252] rounded-xl overflow-hidden">
+            <div className="px-4 py-3 border-b border-[#525252] flex items-center gap-2">
+              <Activity size={14} className="text-[#2abfdc]" />
+              <div>
+                <h3 className="text-[#f5f5f5] text-sm font-semibold">Histograma de Recursos</h3>
+                <p className="text-[#6b6b6b] text-xs mt-0.5">
+                  Atividades e equipes ativas por dia, ao longo do cronograma de tendência
+                </p>
+              </div>
+            </div>
+            <div className="p-3">
+              <MasterHistogramPanel activities={filtered} />
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Print styles */}
       <style>{`
