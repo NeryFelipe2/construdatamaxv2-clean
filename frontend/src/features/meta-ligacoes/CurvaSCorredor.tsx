@@ -13,7 +13,7 @@
  * `meta_corredor`, realizado vem de `producao_diaria`.
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { AlertTriangle, Route, Move } from 'lucide-react'
+import { AlertTriangle, Route, Move, RotateCcw, Gauge } from 'lucide-react'
 import type { DiaMetaLigacoes } from '@/hooks/useMetaLigacoes'
 import type { SemanaCorredor } from '@/hooks/useMetaCorredor'
 
@@ -160,6 +160,21 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
   const corReal = status === 'abaixo' ? '#f43f5e' : status === 'acima' ? '#22d3ee' : '#10b981'
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(yMax * f))
 
+  // Presets pra recomeçar rápido: aplica min/ideal em todas as semanas de uma vez.
+  // 'padrao' = rampa linear até a meta pelo nº de semanas; 'ritmo' = 75/dia × 6 dias
+  // úteis (seg-sáb) = 450/semana acumulado, com teto na meta. Mínimo = 80% do ideal.
+  const aplicarPreset = (tipo: 'padrao' | 'ritmo') => {
+    const n = semanas.length
+    const round5 = (v: number) => Math.round(v / 5) * 5
+    semanas.forEach((s, i) => {
+      const ideal = tipo === 'padrao'
+        ? round5((meta * (i + 1)) / n)
+        : Math.min(meta, 75 * 6 * (i + 1))
+      const mn = Math.min(ideal, round5(ideal * 0.8))
+      onSalvar(s.semana_inicio, { acum_min: mn, acum_ideal: ideal })
+    })
+  }
+
   const iniciarDrag = (serie: Serie, idx: number) => (e: React.PointerEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -171,10 +186,24 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
   return (
     <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
       <div className="px-5 py-3 border-b border-[#20406a] flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Route size={16} className="text-cyan-400" />
           <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider">Curva S — Corredor da Meta</h3>
           <span className="hidden sm:flex items-center gap-1 text-[10px] text-[#5a8caa]"><Move size={11} /> arraste os pontos</span>
+          <button
+            onClick={() => aplicarPreset('ritmo')}
+            title="Preenche o corredor com o ritmo contratado (75/dia · seg-sáb), teto 1.500"
+            className="flex items-center gap-1 px-2.5 py-1 bg-cyan-500/10 text-cyan-300 rounded-lg text-[11px] font-semibold hover:bg-cyan-500/20 transition-colors"
+          >
+            <Gauge size={12} /> Puxar ritmo 75/dia
+          </button>
+          <button
+            onClick={() => aplicarPreset('padrao')}
+            title="Volta o corredor pro padrão (rampa linear até 1.500 no fim do ciclo)"
+            className="flex items-center gap-1 px-2.5 py-1 bg-[#0d2040] text-[#8fb3c8] border border-[#20406a] rounded-lg text-[11px] font-semibold hover:bg-[#14294e] transition-colors"
+          >
+            <RotateCcw size={12} /> Resetar padrão
+          </button>
         </div>
         {status && (
           <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${
