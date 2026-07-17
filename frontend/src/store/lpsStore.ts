@@ -4,6 +4,11 @@
  * Phase 1 rule:
  * - restrictions come from the canonical API whenever possible
  * - lookahead / takt / semaforo remain local UI state until their canonical domains are implemented
+ *
+ * Fase 5 (10/07/2026): as ATIVIDADES (semáforo/PPC — a "meta verdinho")
+ * passaram a persistir em `lps_tasks` no Supabase (useLpsTasks.ts): leitura no
+ * loadFromProject, escrita fire-and-forget nos CRUDs, gated por
+ * currentProjectId (que vira null em demo/clear pra mock nunca ir pro banco).
  */
 import { create } from 'zustand'
 import {
@@ -12,6 +17,7 @@ import {
   apiProjetoLpsRestricoes,
   apiProjetoRemoverLpsRestricao,
 } from '@/lib/api'
+import { carregarLpsTasks, salvarLpsTask, removerLpsTask } from '@/hooks/useLpsTasks'
 import type {
   IntegrationStatus,
   LpsActivity,
@@ -313,10 +319,15 @@ export const useLpsStore = create<LpsState>((set, get) => ({
 
   loadFromProject: async (projectId) => {
     if (!projectId) return
+    // Atividades reais vêm do Supabase (lps_tasks) — fonte independente das
+    // restrições (API Render). null = leitura falhou (mantém comportamento
+    // antigo); [] = banco vazio de verdade (seta vazio, sem vazar mock/projeto
+    // anterior — mesma lição do Planejamento na Fase 2).
+    const tasksDb = await carregarLpsTasks(projectId)
     try {
       const payload = await apiProjetoLpsRestricoes(projectId)
       const restrictions = (payload.items ?? []).map((row) => mapRestriction(row))
-      const nextActivities = get().activities.length > 0 ? get().activities : (ALLOW_DEMO_DATA ? makeMockActivities() : [])
+      const nextActivities = tasksDb ?? (get().activities.length > 0 ? get().activities : (ALLOW_DEMO_DATA ? makeMockActivities() : []))
       set({
         currentProjectId: projectId,
         restrictions,
@@ -328,31 +339,36 @@ export const useLpsStore = create<LpsState>((set, get) => ({
       })
       return
     } catch {
-      const nextActivities = ALLOW_DEMO_DATA ? makeMockActivities() : []
+      const fallbackActivities = get().activities.length > 0 ? get().activities : (ALLOW_DEMO_DATA ? makeMockActivities() : [])
+      const nextActivities = tasksDb ?? fallbackActivities
       const nextRestrictions = ALLOW_DEMO_DATA ? makeMockRestrictions() : []
       set({
         currentProjectId: projectId,
         restrictions: nextRestrictions,
-        activities: get().activities.length > 0 ? get().activities : nextActivities,
+        activities: nextActivities,
         taktZones: get().taktZones.length > 0 ? get().taktZones : (ALLOW_DEMO_DATA ? makeMockTaktZones() : []),
-        staffingDimensions: computeStaffingFromActivities(get().activities.length > 0 ? get().activities : nextActivities),
-        integrationStatuses: buildIntegrationStatuses(nextRestrictions, get().activities.length > 0 ? get().activities : nextActivities, null),
-        connectionStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
+        staffingDimensions: computeStaffingFromActivities(nextActivities),
+        integrationStatuses: buildIntegrationStatuses(nextRestrictions, nextActivities, null),
+        connectionStatus: tasksDb ? 'partial' : (ALLOW_DEMO_DATA ? 'local' : 'partial'),
       })
     }
   },
 
-  addActivity: (a) =>
+  addActivity: (a) => {
+    const nova: LpsActivity = { ...a, id: crypto.randomUUID() }
     set((s) => {
-      const activities = [...s.activities, { ...a, id: crypto.randomUUID() }]
+      const activities = [...s.activities, nova]
       return {
         activities,
         staffingDimensions: computeStaffingFromActivities(activities),
         integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
       }
-    }),
+    })
+    const { currentProjectId } = get()
+    if (currentProjectId) salvarLpsTask(currentProjectId, nova)
+  },
 
-  updateActivity: (id, updates) =>
+  updateActivity: (id, updates) => {
     set((s) => {
       const activities = s.activities.map((a) => (a.id === id ? { ...a, ...updates } : a))
       return {
@@ -360,9 +376,13 @@ export const useLpsStore = create<LpsState>((set, get) => ({
         staffingDimensions: computeStaffingFromActivities(activities),
         integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
       }
-    }),
+    })
+    const { currentProjectId, activities } = get()
+    const atualizada = activities.find((a) => a.id === id)
+    if (currentProjectId && atualizada) salvarLpsTask(currentProjectId, atualizada)
+  },
 
-  removeActivity: (id) =>
+  removeActivity: (id) => {
     set((s) => {
       const activities = s.activities.filter((a) => a.id !== id)
       return {
@@ -370,7 +390,10 @@ export const useLpsStore = create<LpsState>((set, get) => ({
         staffingDimensions: computeStaffingFromActivities(activities),
         integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
       }
-    }),
+    })
+    const { currentProjectId } = get()
+    if (currentProjectId) removerLpsTask(id)
+  },
 
   updateTaktZone: (id, updates) =>
     set((s) => ({
@@ -514,6 +537,9 @@ export const useLpsStore = create<LpsState>((set, get) => ({
     const activities = makeMockActivities()
     const restrictions = makeMockRestrictions()
     set({
+      // currentProjectId null: em demo, os CRUDs nunca persistem mock no
+      // Supabase (lps_tasks) — loadFromProject re-seta ao voltar pro real.
+      currentProjectId: null,
       activities,
       taktZones: makeMockTaktZones(),
       taktTotalDays: 48,
@@ -526,6 +552,7 @@ export const useLpsStore = create<LpsState>((set, get) => ({
 
   clearData: () =>
     set({
+      currentProjectId: null,
       activities: [],
       taktZones: [],
       taktTotalDays: 48,

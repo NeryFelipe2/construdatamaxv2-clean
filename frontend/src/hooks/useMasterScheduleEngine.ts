@@ -61,16 +61,18 @@ export function useMasterScheduleEngine(projetoId: string | null) {
         nucleoPadrao = undefined
       }
 
-      const { data: plano, error: e1 } = await supabase
+      // Um projeto pode ter VÁRIOS planejamentos_semanais (import QGIS, "A
+      // Fazer" manual, Planejamento Mestre criado na UI, etc.) — soma os itens
+      // de todos, em vez de só o mais recente. Pegar só o mais recente escondia
+      // os 69/84 itens reais do import assim que qualquer container novo
+      // (mesmo vazio) era criado depois — bug real encontrado 09/07/2026.
+      const { data: planos, error: e1 } = await supabase
         .from('planejamentos_semanais')
         .select('id')
         .eq('projeto_id', projetoId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
       if (e1) throw e1
 
-      if (!plano) {
+      if (!planos || planos.length === 0) {
         setActivities([])
         setAggregates([])
         setTeamVelocities([])
@@ -81,7 +83,7 @@ export function useMasterScheduleEngine(projetoId: string | null) {
       const { data: itensData, error: e2 } = await supabase
         .from('planejamento_itens')
         .select('id, atividade, descricao, quantidade_planejada, data_inicio, status, payload')
-        .eq('planejamento_id', plano.id)
+        .in('planejamento_id', planos.map((p) => p.id))
       if (e2) throw e2
 
       // Baseline oficial por núcleo (CRONOGRAMA_MACRO). Best-effort: falha ou

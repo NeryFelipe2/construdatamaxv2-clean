@@ -15,7 +15,9 @@ import {
 import { useProjectContext } from '@/store/projectContext'
 import { useMasterScheduleEngine } from '@/hooks/useMasterScheduleEngine'
 import { useCronogramaEquipe } from '@/hooks/useCronogramaEquipe'
+import { useNsPorEquipe } from '@/hooks/useNsPorEquipe'
 import { useEquipes, type NovaEquipeInput } from '@/hooks/useEquipes'
+import { useFrota } from '@/hooks/useFrota'
 import { usePlanejamentoMestreStore } from '@/store/planejamentoMestreStore'
 import type { MasterAggregate } from '@/lib/matching/masterScheduleCompute'
 import type { EquipeCronograma } from '@/lib/matching/cronogramaEquipeCompute'
@@ -163,11 +165,12 @@ function EquipChip({ eq }: { eq: EquipamentoState }) {
 
 // ─── Card da equipe ──────────────────────────────────────────────────────────
 
-function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, onDragStartCard, onDropInto, onEditTarefa, onEditFuncao, onEditLocal, onEditFoco, onEditEquipe }: {
+function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas, onDragStartCard, onDropInto, onEditTarefa, onEditFuncao, onEditLocal, onEditFoco, onEditEquipe }: {
   equipe: EquipeState
   pessoas: PessoaState[]
   equipamentos: EquipamentoState[]
   prazoBadge?: PrazoBadgeInfo | null
+  nsAtribuidas?: number
   onDragStartCard: (id: string) => void
   onDropInto: (equipeId: string, payload: string) => void
   onEditTarefa: (p: PessoaState) => void
@@ -215,6 +218,14 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, onDragStartC
               <span className="text-[9px] font-bold uppercase text-[#a78bfa] bg-[#a78bfa]/10 border border-[#a78bfa]/40 rounded px-1.5 py-0.5">a contratar</span>
             )}
             {prazoBadge && <PrazoBadge info={prazoBadge} />}
+            {!!nsAtribuidas && (
+              <span
+                className="text-[9px] font-bold text-[#38bdf8] bg-[#38bdf8]/10 border border-[#38bdf8]/40 rounded px-1.5 py-0.5"
+                title="Notas de Serviço atribuídas a esta equipe (não concluídas)"
+              >
+                📋 {nsAtribuidas} NS
+              </span>
+            )}
             <button
               onClick={(e) => { e.stopPropagation(); onEditEquipe(equipe) }}
               className="ml-auto shrink-0 text-[#6b6b6b] hover:text-[#38bdf8]"
@@ -479,7 +490,7 @@ function compilarResumo(date: string, equipes: EquipeState[], pessoas: PessoaSta
 // ─── Página ──────────────────────────────────────────────────────────────────
 
 export default function EquipesKanbanPage() {
-  const { date, equipes, pessoas, equipamentos, moveEquipe, updateEquipe, movePessoa, updatePessoa, moveEquipamento, novoDia, resetOrganograma, setDefinicoes } = useEquipesKanbanStore()
+  const { date, equipes, pessoas, equipamentos, moveEquipe, updateEquipe, movePessoa, updatePessoa, moveEquipamento, novoDia, resetOrganograma, setDefinicoes, setEquipamentosDef, carregarStatusDoDia } = useEquipesKanbanStore()
   const [draggingCard, setDraggingCard] = useState<string | null>(null)
   const [overCol, setOverCol] = useState<EquipeStatus | 'banco' | null>(null)
   const [copiado, setCopiado] = useState(false)
@@ -496,6 +507,22 @@ export default function EquipesKanbanPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [equipesHook.equipes])
 
+  // Mesma lógica pra frota: lista de equipamentos vem do Supabase
+  // (wcr_veiculos) via useFrota, com fallback gracioso em WCR_FROTA.
+  const frotaHook = useFrota()
+  useEffect(() => {
+    setEquipamentosDef(frotaHook.frota)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frotaHook.frota])
+
+  // Status diário (coluna/tarefa/local) agora persiste em `wcr_kanban_dia`
+  // (Fase 2) — busca uma vez no mount pra sobreviver a F5 em qualquer
+  // navegador; até resolver, a tela já mostra o cache local (nunca vazia).
+  useEffect(() => {
+    carregarStatusDoDia()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Motor de cronograma (badge de prazo) — puramente aditivo: se os hooks
   // falharem/carregarem/vierem vazios (Modo Demo, Supabase fora, projeto sem
   // dados), o kanban continua 100% funcional e só deixa de mostrar o badge.
@@ -505,6 +532,7 @@ export default function EquipesKanbanPage() {
   const { activeProjectId } = useProjectContext()
   const engine = useMasterScheduleEngine(activeProjectId)
   const cron = useCronogramaEquipe(activeProjectId)
+  const nsPorEquipe = useNsPorEquipe(activeProjectId)
   const navigate = useNavigate()
 
   const prazoPorEquipe = useMemo(() => {
@@ -723,6 +751,7 @@ export default function EquipesKanbanPage() {
                         pessoas={pessoas.filter((p) => p.equipeId === equipe.id)}
                         equipamentos={equipamentos.filter((x) => x.equipeId === equipe.id)}
                         prazoBadge={prazoPorEquipe.get(equipe.id)}
+                        nsAtribuidas={nsPorEquipe.porEquipe.get(equipe.id) ?? 0}
                         onDragStartCard={setDraggingCard}
                         onDropInto={dropIntoEquipe}
                         onEditTarefa={editTarefa}

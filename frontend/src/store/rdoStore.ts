@@ -489,8 +489,15 @@ export const useRdoStore = create<RdoState>((set, get) => ({
       if (projectId) {
         try {
           const apiRows = await apiProjetoRdos(projectId)
-          rows = (apiRows.items ?? []) as Record<string, unknown>[]
-          set({ integrationStatus: 'connected' })
+          const items = (apiRows.items ?? []) as Record<string, unknown>[]
+          // só aceita a API se ela trouxe RDOs de verdade — um array vazio (`[]`)
+          // é truthy em JS, então `rows = []` passava direto pelo `if (!rows)`
+          // abaixo e NUNCA caía no fallback do Supabase (que tem os 37 RDOs
+          // reais). Bug real: API respondendo 200 vazio zerava o Dashboard.
+          if (items.length > 0) {
+            rows = items
+            set({ integrationStatus: 'connected' })
+          }
         } catch {
           rows = null
         }

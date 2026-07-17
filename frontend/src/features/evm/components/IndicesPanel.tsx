@@ -4,8 +4,11 @@
  * trends, and summary row.
  */
 import { useEvmStore } from '@/store/evmStore'
+import { useAppModeStore } from '@/store/appModeStore'
+import { useProjectContext } from '@/store/projectContext'
+import { useEvmReal } from '@/hooks/useEvmReal'
 import { formatCurrency } from '@/lib/utils'
-import { TrendingUp, TrendingDown, Minus, Layers } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Layers, AlertTriangle, Info } from 'lucide-react'
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
 
@@ -113,7 +116,20 @@ function TrendIcon({ value }: { value: number }) {
 
 /* ─── Component ───────────────────────────────────────────────────── */
 
+/**
+ * IndicesPanel — decide entre a tabela mock (Modo Demo ligado) e a tabela com
+ * CPI/SPI reais por núcleo×sistema (Modo Demo desligado), mesmo padrão de
+ * `DashboardPanel`/`CurvaSRealPanel`.
+ */
 export function IndicesPanel() {
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+
+  if (isDemoMode) return <IndicesPanelMock />
+  return <IndicesPanelReal activeProjectId={activeProjectId} />
+}
+
+function IndicesPanelMock() {
   const { measurements, evmMetrics } = useEvmStore()
   const { CPI: overallCPI, SPI: overallSPI, pillarDeviations } = evmMetrics
 
@@ -437,6 +453,197 @@ export function IndicesPanel() {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+/* ─── Índices com dado real ───────────────────────────────────────────
+ * CPI/SPI por segmento (núcleo × sistema), calculados de verdade a partir de
+ * `useEvmReal` — nada de fórmula sintética (`0.7 + score*1.1`) nem sparkline
+ * aleatória. O sparkline usa o CPI/SPI acumulado mês a mês daquele segmento.
+ * AC é rateado proporcionalmente ao peso do segmento (não existe despesa
+ * lançada por núcleo/sistema hoje) — deixado explícito na tela.
+ * A tabela de "Desagregação de Custo por Pilar" fica de fora (mesma
+ * dependência de orçamento por pilar do Dashboard/Plano de Contas real). */
+
+function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null }) {
+  const { porSegmento, metrics, bac, baselineCount, temDadosReais, loading, error } = useEvmReal(activeProjectId)
+
+  const overallSemaphore = healthSemaphore(metrics.CPI, metrics.SPI)
+  const overallInterp = interpretation(metrics.CPI, metrics.SPI)
+
+  return (
+    <div className="p-6 space-y-6 bg-[#2c2c2c] min-h-full">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-start gap-3">
+        <Info size={18} className="text-sky-400 shrink-0 mt-0.5" />
+        <p className="text-[#a3a3a3] text-sm leading-relaxed">
+          Índices de Desempenho com <b className="text-[#f5f5f5]">dado real</b>, um por núcleo × sistema
+          (água/esgoto). <b className="text-amber-300">AC é estimado por rateio</b> proporcional ao peso do
+          segmento sobre o peso total planejado — despesas reais não são lançadas por núcleo/sistema hoje,
+          então o CPI de cada linha usa um custo real aproximado, não uma despesa desagregada de verdade.
+        </p>
+      </div>
+
+      {!activeProjectId && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">Selecione um projeto ativo.</span>
+        </div>
+      )}
+
+      {activeProjectId && !loading && baselineCount === 0 && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">
+            <b className="text-amber-300">Sem baseline de cronograma para este projeto.</b> Cadastre o
+            planejamento em Cronograma / Planejamento Mestre.
+          </span>
+        </div>
+      )}
+
+      {activeProjectId && !loading && baselineCount > 0 && !bac && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">
+            <b className="text-amber-300">Projeto sem orçamento total cadastrado.</b> Sem `orcamento_total`
+            (BAC) não é possível calcular os índices reais.
+          </span>
+        </div>
+      )}
+
+      {activeProjectId && !loading && baselineCount > 0 && bac > 0 && !temDadosReais && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">
+            <b className="text-amber-300">Sem dados de execução suficientes para esta obra.</b> Nada aqui é
+            estimado ou de exemplo. Lance produção diária e/ou despesas para este projeto, ou ative o{' '}
+            <b className="text-amber-300">Modo Demonstração</b> para ver um exemplo ilustrativo.
+          </span>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-300 text-xs">
+          {error}
+        </div>
+      )}
+
+      {temDadosReais && porSegmento.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-[#f5f5f5] text-sm font-semibold">
+            Índices de Desempenho por Núcleo × Sistema — IDC (CPI) / IDP (SPI)
+          </h2>
+
+          <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#525252]">
+                    <th className="text-left text-[#a3a3a3] text-xs font-medium px-4 py-3">Segmento</th>
+                    <th className="text-center text-[#a3a3a3] text-xs font-medium px-4 py-3 w-16">Saúde</th>
+                    <th className="text-center text-[#a3a3a3] text-xs font-medium px-4 py-3 w-24">IDC (CPI)</th>
+                    <th className="text-center text-[#a3a3a3] text-xs font-medium px-4 py-3 w-20">Trend CPI</th>
+                    <th className="text-center text-[#a3a3a3] text-xs font-medium px-4 py-3 w-24">IDP (SPI)</th>
+                    <th className="text-center text-[#a3a3a3] text-xs font-medium px-4 py-3 w-20">Trend SPI</th>
+                    <th className="text-left text-[#a3a3a3] text-xs font-medium px-4 py-3">Interpretação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {porSegmento.map((seg) => {
+                    const cpi = seg.metrics.CPI
+                    const spi = seg.metrics.SPI
+                    const interp = interpretation(cpi, spi)
+                    const cpiColor = indexColor(cpi)
+                    const spiColor = indexColor(spi)
+                    const semaphore = healthSemaphore(cpi, spi)
+                    const cpiTrend = seg.serie.map((m) => (m.acAcum > 0 ? m.evAcum / m.acAcum : 0)).slice(-6)
+                    const spiTrend = seg.serie.map((m) => (m.pvAcum > 0 ? m.evAcum / m.pvAcum : 0)).slice(-6)
+                    return (
+                      <tr key={seg.key} className="border-b border-[#525252]/50 hover:bg-[#484848]/30 transition-colors">
+                        <td className="px-4 py-3">
+                          <p className="text-[#f5f5f5] text-sm">{seg.label}</p>
+                          <p className="text-[#6b6b6b] text-[10px] font-mono">peso {seg.weight.toLocaleString('pt-BR')}</p>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center" title={semaphore.label}>
+                            <span className="w-4 h-4 rounded-full inline-block" style={{ backgroundColor: semaphore.color, boxShadow: `0 0 8px ${semaphore.color}44` }} />
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <TrendIcon value={cpi} />
+                            <span className="font-mono text-sm font-semibold" style={{ color: cpiColor }}>{cpi.toFixed(2)}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <Sparkline data={cpiTrend} color={cpiColor} />
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <TrendIcon value={spi} />
+                            <span className="font-mono text-sm font-semibold" style={{ color: spiColor }}>{spi.toFixed(2)}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <Sparkline data={spiTrend} color={spiColor} />
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className="text-xs font-medium" style={{ color: interp.color }}>{interp.text}</span>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-[#2c2c2c]/70 border-t-2 border-[#525252]">
+                    <td className="px-4 py-3">
+                      <span className="text-[#f5f5f5] text-sm font-semibold">Geral do Projeto</span>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex items-center justify-center" title={overallSemaphore.label}>
+                        <span className="w-5 h-5 rounded-full inline-block" style={{ backgroundColor: overallSemaphore.color, boxShadow: `0 0 10px ${overallSemaphore.color}55` }} />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <TrendIcon value={metrics.CPI} />
+                        <span className="font-mono text-sm font-bold" style={{ color: indexColor(metrics.CPI) }}>{metrics.CPI.toFixed(2)}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center" />
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <TrendIcon value={metrics.SPI} />
+                        <span className="font-mono text-sm font-bold" style={{ color: indexColor(metrics.SPI) }}>{metrics.SPI.toFixed(2)}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center" />
+                    <td className="px-4 py-3">
+                      <span className="text-xs font-semibold" style={{ color: overallInterp.color }}>{overallInterp.text}</span>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-6 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full inline-block bg-[#22c55e]" />
+              <span className="text-[#a3a3a3] text-xs">&ge; 1.00 — Dentro do esperado</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full inline-block bg-[#eab308]" />
+              <span className="text-[#a3a3a3] text-xs">0.90 – 0.99 — Atenção</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full inline-block bg-[#ef4444]" />
+              <span className="text-[#a3a3a3] text-xs">&lt; 0.90 — Crítico</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

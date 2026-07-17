@@ -4,14 +4,14 @@ import {
   AlertTriangle, RotateCcw, MapPin, CalendarDays,
 } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
-import { useSupabaseDiarioObra, type DiarioObraDia, type DiarioEquipe } from '@/hooks/useSupabaseDiarioObra'
+import { useSupabaseDiarioObra, type DiarioObraDia, type DiarioEquipe, type NsOption } from '@/hooks/useSupabaseDiarioObra'
 
 function fmtData(iso: string) {
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
 }
 
-function EquipeCard({ eq }: { eq: DiarioEquipe }) {
+function EquipeCard({ eq, nsOptions, onAtribuirNs }: { eq: DiarioEquipe; nsOptions: NsOption[]; onAtribuirNs: (atividadeId: string, nsId: number | null) => void }) {
   return (
     <div className="rounded-lg border border-[#3f3f3f] bg-[#2f2f2f] p-3">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -27,9 +27,24 @@ function EquipeCard({ eq }: { eq: DiarioEquipe }) {
       {eq.servicos?.length > 0 && (
         <div className="mt-2 flex items-start gap-1.5">
           <ListChecks size={12} className="mt-0.5 shrink-0 text-[#22c55e]" />
-          <ul className="text-[11px] text-[#d4d4d4] list-disc list-inside space-y-0.5">
+          <ul className="text-[11px] text-[#d4d4d4] space-y-1 flex-1">
             {eq.servicos.map((s, i) => (
-              <li key={i}>{s}</li>
+              <li key={i} className="flex items-center gap-1.5 flex-wrap">
+                <span>• {s.label}</span>
+                {s.atividadeId && (
+                  <select
+                    value={s.nsId ?? ''}
+                    onChange={(e) => onAtribuirNs(s.atividadeId!, e.target.value ? Number(e.target.value) : null)}
+                    className="bg-[#2c2c2c] border border-[#3f3f3f] rounded px-1 py-0.5 text-[9px] text-[#8a8a8a] focus:outline-none focus:border-[#38bdf8]/60"
+                    title="Ligar esta atividade a uma NS real"
+                  >
+                    <option value="">sem NS</option>
+                    {nsOptions.map((ns) => (
+                      <option key={ns.id} value={ns.id}>{ns.label}</option>
+                    ))}
+                  </select>
+                )}
+              </li>
             ))}
           </ul>
         </div>
@@ -52,7 +67,7 @@ function EquipeCard({ eq }: { eq: DiarioEquipe }) {
   )
 }
 
-function DiaCard({ dia }: { dia: DiarioObraDia }) {
+function DiaCard({ dia, nsOptions, onAtribuirNs }: { dia: DiarioObraDia; nsOptions: NsOption[]; onAtribuirNs: (atividadeId: string, nsId: number | null) => void }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -95,7 +110,7 @@ function DiaCard({ dia }: { dia: DiarioObraDia }) {
               )}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
                 {diario.equipes.map((eq, i) => (
-                  <EquipeCard key={i} eq={eq} />
+                  <EquipeCard key={i} eq={eq} nsOptions={nsOptions} onAtribuirNs={onAtribuirNs} />
                 ))}
               </div>
               {diario.ocorrencias && diario.ocorrencias.length > 0 && (
@@ -125,7 +140,7 @@ function DiaCard({ dia }: { dia: DiarioObraDia }) {
 
 export function DiarioObraPage() {
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
-  const { dias, loading, error, reload } = useSupabaseDiarioObra(activeProjectId)
+  const { dias, nsOptions, loading, error, reload, atribuirNs } = useSupabaseDiarioObra(activeProjectId)
   const [filtroNucleo, setFiltroNucleo] = useState<string>('todos')
 
   const nucleos = useMemo(() => {
@@ -202,7 +217,7 @@ export function DiarioObraPage() {
           </div>
         )}
         {diasFiltrados.map((dia) => (
-          <DiaCard key={dia.rdoId} dia={dia} />
+          <DiaCard key={dia.rdoId} dia={dia} nsOptions={nsOptions} onAtribuirNs={atribuirNs} />
         ))}
       </div>
     </div>

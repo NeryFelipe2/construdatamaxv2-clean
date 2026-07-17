@@ -34,13 +34,21 @@ function persist(items: FrotaItem[]) {
 
 interface FrotaKanbanState {
   items: FrotaItem[]
+  // última definição canônica conhecida (do useFrota/Supabase, ou WCR_FROTA
+  // como fallback) — usada por reset().
+  frotaDef: FrotaItem[]
   moveItem: (id: string, status: FrotaStatus) => void
   setEquipe: (id: string, equipe: string) => void
   reset: () => void
+  // troca a base pela definição canônica do banco (chamado pela página quando
+  // `useFrota()` resolve/atualiza) — preserva o que ainda não foi persistido
+  // localmente só na primeira carga; depois disso o banco manda.
+  setDefinicoes: (veiculosData: FrotaItem[]) => void
 }
 
 export const useFrotaKanbanStore = create<FrotaKanbanState>((set) => ({
   items: hydrate(),
+  frotaDef: WCR_FROTA,
 
   moveItem: (id, status) =>
     set((state) => {
@@ -57,8 +65,14 @@ export const useFrotaKanbanStore = create<FrotaKanbanState>((set) => ({
     }),
 
   reset: () =>
+    set((state) => {
+      persist(state.frotaDef)
+      return { items: state.frotaDef }
+    }),
+
+  setDefinicoes: (veiculosData) =>
     set(() => {
-      persist(WCR_FROTA)
-      return { items: WCR_FROTA }
+      persist(veiculosData)
+      return { items: veiculosData, frotaDef: veiculosData }
     }),
 }))

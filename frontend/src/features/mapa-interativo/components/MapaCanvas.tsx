@@ -135,6 +135,7 @@ export function MapaCanvas() {
   const removeSegments      = useMapaInterativoStore((s) => s.removeSegments)
   const setPendingConnectNodeId = useMapaInterativoStore((s) => s.setPendingConnectNodeId)
   const activeNetworkType   = useMapaInterativoStore((s) => s.activeNetworkType)
+  const showPlanejado       = useMapaInterativoStore((s) => s.showPlanejado)
 
   const layerVisible = (nt: MapNetworkType) =>
     layers.find((l) => l.id === nt)?.visible ?? true
@@ -189,11 +190,13 @@ export function MapaCanvas() {
         {/* Segments */}
         {segments
           .filter((s) => layerVisible(s.networkType))
+          .filter((s) => s.origem !== 'planejado' || showPlanejado)
           .map((seg) => {
             const from = nodes.find((n) => n.id === seg.fromNodeId)
             const to   = nodes.find((n) => n.id === seg.toNodeId)
             if (!from || !to) return null
             const color = NETWORK_COLORS[seg.networkType] ?? '#a78bfa'
+            const planejado = seg.origem === 'planejado'
             return (
               <Polyline
                 key={seg.id}
@@ -201,7 +204,8 @@ export function MapaCanvas() {
                 pathOptions={{
                   color,
                   weight: activeTool === 'deleteSegment' ? 6 : 3,
-                  opacity: 0.85,
+                  opacity: planejado ? 0.6 : 0.85,
+                  dashArray: planejado ? '6,6' : undefined,
                 }}
                 eventHandlers={{
                   click: () => {

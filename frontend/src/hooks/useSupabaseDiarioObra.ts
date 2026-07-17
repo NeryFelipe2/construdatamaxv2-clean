@@ -2,11 +2,20 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
 // ─── Shape do "diário rico" (fonte: DIARIOS_DE_OBRA/diarios_data.json) ──────
+export interface DiarioServico {
+  label: string
+  /** Só existe quando o serviço veio de uma linha real de rdo_atividades
+   *  (fonte 'rdo_equipes') — permite ligar a uma NS real. Serviços vindos do
+   *  diario_rico (texto livre extraído do WhatsApp) não têm linha endereçável. */
+  atividadeId?: string
+  nsId?: number | null
+}
+
 export interface DiarioEquipe {
   nome: string
   lider: string
   composicao: string
-  servicos: string[]
+  servicos: DiarioServico[]
   frota: string
   equip: string
 }
@@ -18,6 +27,35 @@ export interface DiarioRico {
   contrato: string
   equipes: DiarioEquipe[]
   ocorrencias?: string[]
+}
+
+// Shape bruto do JSON original (DIARIOS_DE_OBRA/diarios_data.json) — servicos
+// como texto livre, sem linha endereçável de rdo_atividades.
+interface DiarioEquipeRaw {
+  nome: string
+  lider: string
+  composicao: string
+  servicos: string[]
+  frota: string
+  equip: string
+}
+interface DiarioRicoRaw {
+  data: string
+  nucleo: string
+  apontador: string
+  contrato: string
+  equipes: DiarioEquipeRaw[]
+  ocorrencias?: string[]
+}
+
+function mapDiarioRicoRaw(raw: DiarioRicoRaw): DiarioRico {
+  return {
+    ...raw,
+    equipes: (raw.equipes ?? []).map((eq) => ({
+      ...eq,
+      servicos: (eq.servicos ?? []).map((label) => ({ label })),
+    })),
+  }
 }
 
 // ─── Item final consumido pela tela (um por dia de RDO) ─────────────────────
@@ -36,13 +74,14 @@ export interface DiarioObraDia {
 
 function montarEquipesFallback(
   equipesRows: { id: string; tipo: string | null; lider_nome: string | null; membros: unknown }[],
-  atividadesRows: { equipe_id: string; rua: string | null; servico: string | null; tubo: string | null; metragem: number | null; pecas: string[] | null; casas: string | null; observacao: string | null }[],
+  atividadesRows: { id: string; equipe_id: string; rua: string | null; servico: string | null; tubo: string | null; metragem: number | null; pecas: string[] | null; casas: string | null; observacao: string | null; ns_id: number | null }[],
 ): DiarioEquipe[] {
   return equipesRows.map((eq) => {
     const atividades = atividadesRows.filter((a) => a.equipe_id === eq.id)
-    const servicos = atividades.map((a) => {
+    const servicos: DiarioServico[] = atividades.map((a) => {
       const partes = [a.servico, a.rua ? `(${a.rua})` : null, a.metragem ? `${a.metragem}m` : null].filter(Boolean)
-      return partes.join(' ') || a.observacao || 'Serviço sem descrição'
+      const label = partes.join(' ') || a.observacao || 'Serviço sem descrição'
+      return { label, atividadeId: a.id, nsId: a.ns_id }
     })
     const membros = Array.isArray(eq.membros) ? (eq.membros as unknown[]) : []
     const composicao = membros
@@ -53,15 +92,21 @@ function montarEquipesFallback(
       nome: eq.tipo ? `Equipe ${eq.tipo}` : 'Equipe',
       lider: eq.lider_nome ?? '—',
       composicao: composicao || '—',
-      servicos: servicos.length > 0 ? servicos : ['Sem atividades registradas'],
+      servicos: servicos.length > 0 ? servicos : [{ label: 'Sem atividades registradas' }],
       frota: '',
       equip: '',
     }
   })
 }
 
+export interface NsOption {
+  id: number
+  label: string
+}
+
 export function useSupabaseDiarioObra(projetoId: string | null) {
   const [dias, setDias] = useState<DiarioObraDia[]>([])
+  const [nsOptions, setNsOptions] = useState<NsOption[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -86,7 +131,7 @@ export function useSupabaseDiarioObra(projetoId: string | null) {
       // Só busca as tabelas de fallback se houver algum RDO sem diario_rico
       const precisaFallback = rdos.some((r) => !(r.payload as Record<string, unknown> | null)?.diario_rico)
       let equipesPorRdo = new Map<string, { id: string; rdo_id: string; tipo: string | null; lider_nome: string | null; membros: unknown }[]>()
-      let atividadesPorEquipe: { equipe_id: string; rua: string | null; servico: string | null; tubo: string | null; metragem: number | null; pecas: string[] | null; casas: string | null; observacao: string | null }[] = []
+      let atividadesPorEquipe: { id: string; equipe_id: string; rua: string | null; servico: string | null; tubo: string | null; metragem: number | null; pecas: string[] | null; casas: string | null; observacao: string | null; ns_id: number | null }[] = []
 
       if (precisaFallback && rdoIds.length > 0) {
         const { data: equipesData } = await supabase
@@ -102,7 +147,7 @@ export function useSupabaseDiarioObra(projetoId: string | null) {
         if (equipeIds.length > 0) {
           const { data: atividadesData } = await supabase
             .from('rdo_atividades')
-            .select('equipe_id, rua, servico, tubo, metragem, pecas, casas, observacao')
+            .select('id, equipe_id, rua, servico, tubo, metragem, pecas, casas, observacao, ns_id')
             .in('equipe_id', equipeIds)
           atividadesPorEquipe = atividadesData ?? []
         }
@@ -112,9 +157,9 @@ export function useSupabaseDiarioObra(projetoId: string | null) {
         const payload = (r.payload as Record<string, unknown> | null) ?? {}
         const diarioRicoRaw = payload.diario_rico
         const diarios: DiarioRico[] = Array.isArray(diarioRicoRaw)
-          ? (diarioRicoRaw as DiarioRico[])
+          ? (diarioRicoRaw as DiarioRicoRaw[]).map(mapDiarioRicoRaw)
           : diarioRicoRaw && typeof diarioRicoRaw === 'object'
-          ? [diarioRicoRaw as DiarioRico]
+          ? [mapDiarioRicoRaw(diarioRicoRaw as DiarioRicoRaw)]
           : []
 
         if (diarios.length > 0) {
@@ -158,6 +203,15 @@ export function useSupabaseDiarioObra(projetoId: string | null) {
       // Mais recente primeiro (já vem ordenado por data desc, mas garante estabilidade)
       mapeado.sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0))
       setDias(mapeado)
+
+      // Fase 4: NS reais do projeto, pra ligar atividades de RDO a uma NS.
+      const { data: nsData } = await supabase
+        .from('ns')
+        .select('id, seq, pv_ini, pv_fim')
+        .eq('projeto_id', projetoId)
+        .like('origem_dados', 'croqui_motor_ns_%')
+        .order('seq')
+      setNsOptions((nsData ?? []).map((n) => ({ id: n.id, label: `NS ${n.seq} — ${n.pv_ini} → ${n.pv_fim}` })))
     } catch (err: any) {
       setError(err?.message ?? 'Erro ao carregar diário de obra')
     } finally {
@@ -169,5 +223,25 @@ export function useSupabaseDiarioObra(projetoId: string | null) {
     load()
   }, [load])
 
-  return { dias, loading, error, reload: load }
+  const atribuirNs = useCallback(async (atividadeId: string, nsId: number | null) => {
+    if (!supabase) return
+    setDias((prev) => prev.map((dia) => ({
+      ...dia,
+      diarios: dia.diarios.map((diario) => ({
+        ...diario,
+        equipes: diario.equipes.map((eq) => ({
+          ...eq,
+          servicos: eq.servicos.map((s) => (s.atividadeId === atividadeId ? { ...s, nsId } : s)),
+        })),
+      })),
+    })))
+    try {
+      const { error } = await supabase.from('rdo_atividades').update({ ns_id: nsId }).eq('id', atividadeId)
+      if (error) throw error
+    } catch {
+      load() // reverte via reload em caso de erro
+    }
+  }, [load])
+
+  return { dias, nsOptions, loading, error, reload: load, atribuirNs }
 }

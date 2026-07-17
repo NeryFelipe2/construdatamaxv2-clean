@@ -4,10 +4,16 @@
  * - PESSOAS movem entre equipes (e pro Banco), com função e tarefa editáveis
  * - EQUIPAMENTOS (frota ativa) movem entre equipes (e pro Pátio)
  * Composição persiste entre dias; status/tarefas resetam no "Novo dia".
+ *
+ * Fase 2 (09/07/2026): status diário passou a persistir também em
+ * `wcr_kanban_dia` (Supabase), não só localStorage — mesmo formato, só que
+ * agora sobrevive a F5 em qualquer navegador/dispositivo. localStorage
+ * continua como cache instantâneo (evita tela vazia antes do fetch resolver).
  */
 import { create } from 'zustand'
+import { supabase } from '@/lib/supabase'
 import { WCR_EQUIPES, type EquipeCard, type EquipeStatus, type FrenteId } from '@/data/wcrEquipes'
-import { WCR_FROTA } from '@/data/wcrFrota'
+import { WCR_FROTA, type FrotaItem } from '@/data/wcrFrota'
 
 const STORAGE_KEY = 'wcr-equipes-kanban-v3'
 
@@ -92,8 +98,12 @@ function mergePessoasState(fresh: PessoaState[], saved: Map<string, Partial<Pess
   })
 }
 
-function baseEquipamentos(): EquipamentoState[] {
-  return WCR_FROTA.filter((f) => f.status !== 'devolvido').map((f) => ({
+// Base vem, por padrão, da constante estática WCR_FROTA (garante que o
+// Kanban nunca abre vazio). Quando `useFrota()` (Supabase) resolve, a página
+// chama `setEquipamentosDef(frota)` pra trocar a base pela frota real do
+// banco (`wcr_veiculos`) — mesmo padrão já usado pra equipes (setDefinicoes).
+function baseEquipamentos(frotaData: FrotaItem[] = WCR_FROTA): EquipamentoState[] {
+  return frotaData.filter((f) => f.status !== 'devolvido').map((f) => ({
     id: f.id,
     nome: f.placa !== '—' ? `${f.tipo.split(' ').slice(0, 2).join(' ')} ${f.placa}` : f.tipo,
     equipeId: null,
@@ -137,17 +147,28 @@ function hydrate(): { date: string; equipes: EquipeState[]; pessoas: PessoaState
   }
 }
 
+function snapshot(state: { date: string; equipes: EquipeState[]; pessoas: PessoaState[]; equipamentos: EquipamentoState[] }) {
+  return {
+    equipes: state.equipes.map((e) => ({ id: e.id, status: e.status, motivoDesvio: e.motivoDesvio, local: e.local })),
+    pessoas: state.pessoas.map((p) => ({ id: p.id, funcao: p.funcao, equipeId: p.equipeId, tarefa: p.tarefa })),
+    equipamentos: state.equipamentos.map((e) => ({ id: e.id, equipeId: e.equipeId })),
+  }
+}
+
 function persist(state: { date: string; equipes: EquipeState[]; pessoas: PessoaState[]; equipamentos: EquipamentoState[] }) {
+  const snap = snapshot(state)
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      date: state.date,
-      equipes: state.equipes.map((e) => ({ id: e.id, status: e.status, motivoDesvio: e.motivoDesvio, local: e.local })),
-      pessoas: state.pessoas.map((p) => ({ id: p.id, funcao: p.funcao, equipeId: p.equipeId, tarefa: p.tarefa })),
-      equipamentos: state.equipamentos.map((e) => ({ id: e.id, equipeId: e.equipeId })),
-    }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: state.date, ...snap }))
   } catch {
     // segue em memória
   }
+  if (!supabase) return
+  supabase
+    .from('wcr_kanban_dia')
+    .upsert({ data: state.date, ...snap, updated_at: new Date().toISOString() }, { onConflict: 'data' })
+    .then(({ error }) => {
+      if (error) console.error('Erro ao salvar status do Kanban no banco:', error.message)
+    })
 }
 
 interface EquipesKanbanState {
@@ -158,6 +179,9 @@ interface EquipesKanbanState {
   // última definição canônica conhecida (do useEquipes/Supabase, ou WCR_EQUIPES
   // como fallback) — usada por setDefinicoes/resetOrganograma.
   equipesDef: EquipeCard[]
+  // última frota canônica conhecida (do useFrota/Supabase, ou WCR_FROTA como
+  // fallback) — usada por setEquipamentosDef/resetOrganograma.
+  frotaDef: FrotaItem[]
 
   moveEquipe: (id: string, status: EquipeStatus, motivoDesvio?: string) => void
   // só `local` (rua/trecho do dia) — `foco` virou campo de definição (ver
@@ -175,6 +199,15 @@ interface EquipesKanbanState {
   // perder status/posição do dia nem remanejamentos — chamado pela página
   // quando `useEquipes()` (Supabase) resolve/atualiza.
   setDefinicoes: (equipesData: EquipeCard[]) => void
+  // troca a lista base de equipamentos/frota (nome/placa/status ativo↔devolvido)
+  // sem perder a alocação por equipe já feita no dia — chamado pela página
+  // quando `useFrota()` (Supabase) resolve/atualiza.
+  setEquipamentosDef: (frotaData: FrotaItem[]) => void
+  // busca o status de hoje em `wcr_kanban_dia` (Supabase) e faz merge por cima
+  // do estado atual (mesma regra de sempre: local/composição sempre repõe,
+  // status/tarefa do dia repõe porque já é o dia de hoje) — chamado uma vez
+  // no mount da página, pra sobreviver a F5 em qualquer navegador.
+  carregarStatusDoDia: () => Promise<void>
 }
 
 const initial = hydrate()
@@ -186,6 +219,7 @@ export const useEquipesKanbanStore = create<EquipesKanbanState>((set) => {
     pessoas: initial.pessoas,
     equipamentos: initial.equipamentos,
     equipesDef: WCR_EQUIPES,
+    frotaDef: WCR_FROTA,
 
     moveEquipe: (id, status, motivoDesvio) =>
       set((s) => {
@@ -245,10 +279,10 @@ export const useEquipesKanbanStore = create<EquipesKanbanState>((set) => {
           date: today(),
           equipes: baseEquipes(s.equipesDef),
           pessoas: basePessoas(s.equipesDef),
-          equipamentos: baseEquipamentos(),
+          equipamentos: baseEquipamentos(s.frotaDef),
         }
         persist(fresh)
-        return { ...fresh, equipesDef: s.equipesDef }
+        return { ...fresh, equipesDef: s.equipesDef, frotaDef: s.frotaDef }
       }),
 
     setDefinicoes: (equipesData) =>
@@ -262,5 +296,46 @@ export const useEquipesKanbanStore = create<EquipesKanbanState>((set) => {
         persist(next)
         return next
       }),
+
+    setEquipamentosDef: (frotaData) =>
+      set((s) => {
+        const fresh = baseEquipamentos(frotaData)
+        const eqpById = new Map(s.equipamentos.map((e) => [e.id, e]))
+        // preserva a alocação (equipeId) já feita no dia pra equipamentos que
+        // continuam existindo; equipamentos novos entram sem equipe (Pátio).
+        const equipamentos = fresh.map((e) => {
+          const s2 = eqpById.get(e.id)
+          return s2 ? { ...e, equipeId: s2.equipeId } : e
+        })
+        const next = { date: s.date, equipes: s.equipes, pessoas: s.pessoas, equipamentos, frotaDef: frotaData }
+        persist(next)
+        return next
+      }),
+
+    carregarStatusDoDia: async () => {
+      if (!supabase) return
+      try {
+        const { data: row, error } = await supabase
+          .from('wcr_kanban_dia')
+          .select('data, equipes, pessoas, equipamentos')
+          .eq('data', today())
+          .maybeSingle()
+        if (error || !row) return
+        set((s) => {
+          const eqById = new Map((row.equipes as Partial<EquipeState>[]).map((e) => [e.id, e]))
+          const pById = new Map((row.pessoas as Partial<PessoaState>[]).map((p) => [p.id, p]))
+          const eqpById = new Map((row.equipamentos as Partial<EquipamentoState>[]).map((e) => [e.id, e]))
+          const equipes = mergeEquipesState(s.equipes, eqById, true)
+          const pessoas = mergePessoasState(s.pessoas, pById, true)
+          const equipamentos = s.equipamentos.map((e) => {
+            const saved = eqpById.get(e.id)
+            return saved ? { ...e, equipeId: saved.equipeId !== undefined ? saved.equipeId : e.equipeId } : e
+          })
+          return { equipes, pessoas, equipamentos }
+        })
+      } catch {
+        // mantém o que já tem localmente (cache/fallback) — não quebra a tela
+      }
+    },
   }
 })

@@ -1,6 +1,7 @@
 /**
  * EvmPage — root of the EVM (Earned Value Management) module.
- * Routes between 5 tabs via the store's activeTab state.
+ * Routes between 6 tabs via the store's activeTab state (5 with mock/real
+ * dual mode + Curva S Real, que já era só real).
  */
 import { EvmHeader } from './components/EvmHeader'
 import { DashboardPanel } from './components/DashboardPanel'

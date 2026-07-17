@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { MOCK_OBRAS } from '@/data/mockTorreDeControle'
 import { apiProjetoDashboard, apiProjetoTorre } from '@/lib/api'
-import { mapDbProjetoToConstructionSite } from '@/lib/canonicalProject'
+import { mapDbProjetoToConstructionSite, custoRealMedicao } from '@/lib/canonicalProject'
 import type { DbProjeto } from '@/lib/supabase'
 import type { ConstructionRisk, ConstructionSite } from '@/types'
 
@@ -177,13 +177,25 @@ export const useTorreStore = create<TorreState & TorreActions>((set, get) => ({
 
       const dashboard = activeProjectId ? await apiProjetoDashboard(activeProjectId).catch(() => null) : null
       const torre = activeProjectId ? await apiProjetoTorre(activeProjectId).catch(() => null) : null
+      // custo real (medicao_itens) — mesma lógica do projetosStore: troca o
+      // custo_total_dia da API (geralmente fora do ar) pela soma real já
+      // gravada no banco, sem inventar número.
+      const custosReais = await Promise.all(
+        projetos.map((p) => custoRealMedicao(p.id).catch(() => null)),
+      )
 
-      const nextSites = projetos.map((projeto) => {
+      const nextSites = projetos.map((projeto, i) => {
         const existing = get().sites.find((site) => site.id === projeto.id)
         const isActive = projeto.id === activeProjectId
+        const custoReal = custosReais[i]
+        const dashboardBase = isActive ? dashboard : null
+        const dashboardComCustoReal =
+          custoReal != null
+            ? { ...dashboardBase, kpis: { ...dashboardBase?.kpis, custo_total_dia: custoReal } }
+            : dashboardBase
         const mapped = mapDbProjetoToConstructionSite(projeto as DbProjeto, {
           existing,
-          dashboard: isActive ? dashboard : null,
+          dashboard: dashboardComCustoReal as any,
           torre: isActive ? torre : null,
         })
         return mergeSite(existing, mapped)

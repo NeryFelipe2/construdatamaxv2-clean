@@ -6,13 +6,14 @@ import { useState } from 'react'
 import {
   Map, ZoomIn, ZoomOut, RotateCcw, Trash2, Save, FolderOpen,
   Plus, Link, MousePointer, Scissors, Move, Building2,
-  ArrowRightLeft, Upload, Download, Maximize2, BarChart2,
+  ArrowRightLeft, Upload, Download, Maximize2, BarChart2, ClipboardList,
 } from 'lucide-react'
 import { useMapaInterativoStore } from '@/store/mapaInterativoStore'
 import { useProjetosStore }       from '@/store/projetosStore'
 import { MapaImportModal }        from './MapaImportModal'
 import { MapaExportModal }        from './MapaExportModal'
 import { MapaTransformCrsModal }  from './MapaTransformCrsModal'
+import { AFazerManualModal }      from './AFazerManualModal'
 import type { MapTool, MapNetworkType } from '@/types'
 
 const NETWORK_TYPE_OPTIONS: { id: MapNetworkType; label: string; color: string }[] = [
@@ -62,6 +63,7 @@ export function MapaHeader({
   const [showImport, setShowImport]     = useState(false)
   const [showExport, setShowExport]     = useState(false)
   const [showTransform, setShowTransform] = useState(false)
+  const [showAFazer, setShowAFazer]     = useState(false)
 
   function handleImportBim() {
     import('@/store/bimStore').then(({ useBimStore }) => {
@@ -229,6 +231,7 @@ export function MapaHeader({
           {/* Import / Export */}
           <ToolBtn label="Importar" icon={<Upload size={13} />}   onClick={() => setShowImport(true)} />
           <ToolBtn label="Exportar" icon={<Download size={13} />} onClick={() => setShowExport(true)} />
+          <ToolBtn label="A Fazer (manual)" icon={<ClipboardList size={13} />} onClick={() => setShowAFazer(true)} />
 
           <div className="w-px h-5 bg-[#484848] mx-1" />
 
@@ -279,6 +282,7 @@ export function MapaHeader({
       {showImport    && <MapaImportModal    onClose={() => setShowImport(false)} />}
       {showExport    && <MapaExportModal    onClose={() => setShowExport(false)} />}
       {showTransform && <MapaTransformCrsModal onClose={() => setShowTransform(false)} defaultZone={useMapaInterativoStore.getState().utmZone} />}
+      {showAFazer    && <AFazerManualModal  onClose={() => setShowAFazer(false)} />}
     </>
   )
 }

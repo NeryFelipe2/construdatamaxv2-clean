@@ -19,6 +19,9 @@ export function PlanejamentoMestrePage() {
   const activities = usePlanejamentoMestreStore((s) => s.activities)
   const loadDemoData = usePlanejamentoMestreStore((s) => s.loadDemoData)
   const loadFromRealData = usePlanejamentoMestreStore((s) => s.loadFromRealData)
+  const setReloadRealData = usePlanejamentoMestreStore((s) => s.setReloadRealData)
+  const setProjetoAtivoId = usePlanejamentoMestreStore((s) => s.setProjetoAtivoId)
+  const hidratarProgramacaoSemanal = usePlanejamentoMestreStore((s) => s.hidratarProgramacaoSemanal)
   const isDemoMode = useAppModeStore((s) => s.isDemoMode)
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
 
@@ -33,6 +36,25 @@ export function PlanejamentoMestrePage() {
     if (engine.loading) return
     loadFromRealData(engine.activities, engine.matchQuality)
   }, [isDemoMode, engine.loading, engine.activities, engine.matchQuality, loadFromRealData])
+
+  // Painéis filhos (ex. NewActivityForm) chamam reloadRealData() depois de
+  // escrever em planejamento_itens, pra puxar o agregado atualizado sem F5.
+  useEffect(() => {
+    setReloadRealData(isDemoMode ? null : engine.reload)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDemoMode, engine.reload])
+
+  // Programação Semanal (Previsto/Realizado) agora persiste em
+  // `planejamento_mestre_programacao` — carrega tudo do projeto ativo uma vez
+  // (e de novo se o projeto mudar), pra sobreviver a F5.
+  useEffect(() => {
+    setProjetoAtivoId(isDemoMode ? null : activeProjectId)
+    if (isDemoMode || !activeProjectId) return
+    import('@/hooks/useMasterActivities').then(({ carregarProgramacaoSemanal }) => {
+      carregarProgramacaoSemanal(activeProjectId).then(hidratarProgramacaoSemanal)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDemoMode, activeProjectId])
 
   return (
     <div className="flex flex-col h-full overflow-hidden">

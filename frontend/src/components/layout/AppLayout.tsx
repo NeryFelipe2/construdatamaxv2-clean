@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   Menu, Settings, Bell, Search, Plus, Filter, RotateCw, UserCircle, MessageSquare, Briefcase, Play, Calendar, MoreHorizontal, Layers, Target, FileText, Cpu, Calculator, FolderKanban, Wrench,
-  BookOpen, FileSearch, Waves, FileSpreadsheet, CalendarClock, Users, CheckSquare, ClipboardList,
+  BookOpen, FileSearch, Waves, FileSpreadsheet, CalendarClock, Users, CheckSquare, ClipboardList, Droplets,
   Brain, FileSearch as FileSearchIcon, UserCog, GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -38,6 +38,8 @@ const MODULE_GROUPS = [
     category: "Planejamento", id: "planejamento",
     items: [
       { label: "Plan. Mestre", to: "/app/planejamento-mestre", icon: CalendarClock },
+      { label: "Programação Semana", to: "/app/programacao-semana", icon: ClipboardList },
+      { label: "Meta 1500 Ligações", to: "/app/meta-ligacoes", icon: Droplets },
       { label: "Feito × A Fazer (NS)", to: "/app/ns-planejamento", icon: Waves },
       { label: "Planilhas (Modelos)", to: "/app/planilhas", icon: FileSpreadsheet },
       { label: "Agenda", to: "/app/agenda", icon: Calendar },
@@ -56,9 +58,8 @@ const MODULE_GROUPS = [
     category: "Operação de Campo", id: "operacao",
     items: [
       { label: "Kanban Equipes", to: "/app/equipes-kanban", icon: Users },
-      { label: "Diário de Obra", to: "/app/diario-obra", icon: FileText },
       { label: "RDO", to: "/app/rdo", icon: FileText },
-      { label: "RDOs WhatsApp (Live)", to: "/app/rdo-lista", icon: FileText },
+      { label: "Campo WhatsApp", to: "/app/campo-whatsapp", icon: MessageSquare },
       { label: "Relatório 360", to: "/app/relatorio360", icon: ClipboardList },
       { label: "Punch List", to: "/app/punch-list", icon: CheckSquare },
     ]

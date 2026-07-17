@@ -17,6 +17,7 @@ const TABS: { key: RdoTab; label: string; icon?: React.ReactNode }[] = [
   { key: 'novo',            label: '+ Novo RDO'         },
   { key: 'automatico',      label: 'RDO Automatico'    },
   { key: 'historico',       label: 'Histórico de RDOs'  },
+  { key: 'diario',          label: 'Diário / Equipes'   },
   { key: 'integracao',      label: 'RDO × Planejamento' },
   { key: 'financeiro',      label: 'Financeiro'         },
   { key: 'producao',        label: 'Produção'           },

@@ -12,9 +12,18 @@ export interface ProjecaoMes {
   /** ISO YYYY-MM-DD, sempre dia 01 do mês. */
   mes: string
   recebimento_prev: number
+  /** Soma das 4 categorias abaixo — mantida em sincronia pelo hook, não editável direto. */
   despesa_prev: number
+  despesa_mao_obra: number
+  despesa_material: number
+  despesa_locacao_frota: number
+  despesa_outros: number
   obs: string | null
   updated_at: string
+}
+
+function somaCategorias(p: Partial<ProjecaoMes>): number {
+  return (p.despesa_mao_obra ?? 0) + (p.despesa_material ?? 0) + (p.despesa_locacao_frota ?? 0) + (p.despesa_outros ?? 0)
 }
 
 function monthKeyFromIso(iso: string): string | null {
@@ -50,7 +59,7 @@ export function useFluxoProjecao(projetoId: string | null) {
     try {
       const { data, error: e1 } = await supabase
         .from('fluxo_projecao')
-        .select('id, projeto_id, mes, recebimento_prev, despesa_prev, obs, updated_at')
+        .select('id, projeto_id, mes, recebimento_prev, despesa_prev, despesa_mao_obra, despesa_material, despesa_locacao_frota, despesa_outros, obs, updated_at')
         .eq('projeto_id', projetoId)
         .order('mes', { ascending: true })
       if (e1) throw e1
@@ -70,7 +79,14 @@ export function useFluxoProjecao(projetoId: string | null) {
    */
   const salvarProjecao = useCallback(async (
     mes: string,
-    patch: Partial<{ recebimento_prev: number; despesa_prev: number; obs: string | null }>,
+    patch: Partial<{
+      recebimento_prev: number
+      despesa_mao_obra: number
+      despesa_material: number
+      despesa_locacao_frota: number
+      despesa_outros: number
+      obs: string | null
+    }>,
   ) => {
     if (!supabase || !projetoId) return
     const key = monthKeyFromIso(mes)
@@ -78,17 +94,22 @@ export function useFluxoProjecao(projetoId: string | null) {
     const mesIso = firstDayOfMonth(key)
 
     const existente = projecoes.find((p) => monthKeyFromIso(p.mes) === key)
-    const otimista: ProjecaoMes = existente
+    const base: ProjecaoMes = existente
       ? { ...existente, ...patch }
       : {
           id: crypto.randomUUID(),
           projeto_id: projetoId,
           mes: mesIso,
           recebimento_prev: patch.recebimento_prev ?? 0,
-          despesa_prev: patch.despesa_prev ?? 0,
+          despesa_prev: 0,
+          despesa_mao_obra: patch.despesa_mao_obra ?? 0,
+          despesa_material: patch.despesa_material ?? 0,
+          despesa_locacao_frota: patch.despesa_locacao_frota ?? 0,
+          despesa_outros: patch.despesa_outros ?? 0,
           obs: patch.obs ?? null,
           updated_at: new Date().toISOString(),
         }
+    const otimista: ProjecaoMes = { ...base, despesa_prev: somaCategorias(base) }
 
     setProjecoes((prev) => {
       if (existente) return prev.map((p) => (p.id === existente.id ? otimista : p))
@@ -105,6 +126,10 @@ export function useFluxoProjecao(projetoId: string | null) {
             mes: mesIso,
             recebimento_prev: otimista.recebimento_prev,
             despesa_prev: otimista.despesa_prev,
+            despesa_mao_obra: otimista.despesa_mao_obra,
+            despesa_material: otimista.despesa_material,
+            despesa_locacao_frota: otimista.despesa_locacao_frota,
+            despesa_outros: otimista.despesa_outros,
             obs: otimista.obs,
             updated_at: new Date().toISOString(),
           },
@@ -161,6 +186,10 @@ export function useFluxoProjecao(projetoId: string | null) {
       mes: firstDayOfMonth(key),
       recebimento_prev: 0,
       despesa_prev: 0,
+      despesa_mao_obra: 0,
+      despesa_material: 0,
+      despesa_locacao_frota: 0,
+      despesa_outros: 0,
       obs: null,
       updated_at: new Date().toISOString(),
     }))
@@ -175,6 +204,10 @@ export function useFluxoProjecao(projetoId: string | null) {
           mes: l.mes,
           recebimento_prev: 0,
           despesa_prev: 0,
+          despesa_mao_obra: 0,
+          despesa_material: 0,
+          despesa_locacao_frota: 0,
+          despesa_outros: 0,
           obs: null,
         })),
       )

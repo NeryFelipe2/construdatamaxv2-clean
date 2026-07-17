@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Droplets, Waves, AlertTriangle, CheckCircle2, RotateCcw, ExternalLink, ChevronDown, ClipboardList } from 'lucide-react'
+import { Droplets, Waves, AlertTriangle, CheckCircle2, RotateCcw, ExternalLink, ChevronDown, ClipboardList, Users } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
 import { useAppModeStore } from '@/store/appModeStore'
 import { useSupabaseNsPlanejamento, type NsItem } from '@/hooks/useSupabaseNsPlanejamento'
+import { useEquipes } from '@/hooks/useEquipes'
 import { LigacoesOsTab } from './components/LigacoesOsTab'
 
 const brl = (n: number) => n.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
@@ -22,7 +23,14 @@ function ProgressBar({ pct, cor }: { pct: number; cor: string }) {
   )
 }
 
-function NsRow({ item, onConcluir }: { item: NsItem; onConcluir: (i: NsItem) => void }) {
+function NsRow({
+  item, onConcluir, equipes, onAtribuirEquipe,
+}: {
+  item: NsItem
+  onConcluir: (i: NsItem) => void
+  equipes: Array<{ id: string; equipe: string }>
+  onAtribuirEquipe: (i: NsItem, equipeId: string | null) => void
+}) {
   const concluida = item.status === 'concluida'
   const dv = item.desvio
   return (
@@ -44,8 +52,21 @@ function NsRow({ item, onConcluir }: { item: NsItem; onConcluir: (i: NsItem) => 
           )}
         </div>
         <div className="text-[11px] text-[#a3a3a3] mt-0.5">{item.descricao}</div>
-        <div className="text-[10px] text-[#7a7a7a] mt-0.5">
-          {brl(item.quantidade_planejada)} m · equipe {item.equipe_original} · previsto {item.data_inicio?.split('-').reverse().join('/')}
+        <div className="text-[10px] text-[#7a7a7a] mt-0.5 flex items-center gap-2 flex-wrap">
+          <span>{brl(item.quantidade_planejada)} m · previsto {item.data_inicio?.split('-').reverse().join('/') ?? '—'}</span>
+          <span className="flex items-center gap-1">
+            <Users size={11} className="text-[#6b6b6b]" />
+            <select
+              value={item.equipe_id ?? ''}
+              onChange={(e) => onAtribuirEquipe(item, e.target.value || null)}
+              className="bg-[#2c2c2c] border border-[#3f3f3f] rounded px-1.5 py-0.5 text-[10px] text-[#f5f5f5] focus:outline-none focus:border-[#38bdf8]/60"
+            >
+              <option value="">sem equipe</option>
+              {equipes.map((eq) => (
+                <option key={eq.id} value={eq.id}>{eq.equipe}</option>
+              ))}
+            </select>
+          </span>
         </div>
         {item.materiais && (() => {
           const m = item.materiais
@@ -73,7 +94,8 @@ function NsRow({ item, onConcluir }: { item: NsItem; onConcluir: (i: NsItem) => 
 export function NsPlanejamentoPage() {
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const isDemoMode = useAppModeStore((s) => s.isDemoMode)
-  const { resumo, itens, loading, error, reload, marcarConcluido } = useSupabaseNsPlanejamento(activeProjectId)
+  const { resumo, itens, loading, error, reload, marcarConcluido, atribuirEquipe } = useSupabaseNsPlanejamento(activeProjectId)
+  const { equipes } = useEquipes()
   const [pagina, setPagina] = useState<'feito-afazer' | 'ligacoes-os'>('feito-afazer')
   const [aba, setAba] = useState<'AGUA' | 'ESGOTO'>('AGUA')
   const [filtro, setFiltro] = useState<'todos' | 'desvio' | 'concluidas'>('desvio')
@@ -111,7 +133,11 @@ export function NsPlanejamentoPage() {
           </div>
           <div>
             <h1 className="text-[#f5f5f5] font-bold text-base leading-tight">Feito × A Fazer — Notas de Serviço</h1>
-            <p className="text-[#6b6b6b] text-xs">Fonte: QGIS (shapefiles executado/a-fazer, Boi Malhado) · atualizado {resumo?.atualizado_em?.split('-').reverse().join('/') ?? '—'}</p>
+            <p className="text-[#6b6b6b] text-xs">
+              {resumo?.fonte_data
+                ? <>% feito: levantamento de campo (GPKG) de {resumo.fonte_data.split('-').reverse().join('/')} · foto, não é tempo real</>
+                : <>Fonte: Notas de Serviço reais (ns/trecho) · atualizado {resumo?.atualizado_em?.split('-').reverse().join('/') ?? '—'}</>}
+            </p>
           </div>
         </div>
         <button onClick={reload} className="flex items-center gap-1.5 text-[11px] text-[#8a8a8a] hover:text-[#f5f5f5] px-3 py-2 rounded-md border border-[#3f3f3f] hover:border-[#525252]">
@@ -250,7 +276,7 @@ export function NsPlanejamentoPage() {
           </div>
         )}
         {itensAba.map((item) => (
-          <NsRow key={item.id} item={item} onConcluir={marcarConcluido} />
+          <NsRow key={item.id} item={item} onConcluir={marcarConcluido} equipes={equipes} onAtribuirEquipe={atribuirEquipe} />
         ))}
       </div>
 

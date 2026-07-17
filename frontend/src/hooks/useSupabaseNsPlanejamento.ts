@@ -1,3 +1,28 @@
+/**
+ * useSupabaseNsPlanejamento — Feito × A Fazer.
+ *
+ * Fase 3 (10/07/2026): reapontado do pipeline antigo (planejamento_itens/
+ * planejamentos_semanais/desvios_planejamento, vindo de um ETL QGIS de
+ * 06/07) pra ler direto de `ns` (+ `pv` só pra saber água/esgoto) — a fonte
+ * real e única de Notas de Serviço por trecho a partir de agora (162 NS
+ * importadas dos croquis do Motor NS, Fase 3). Mantém a MESMA forma de
+ * retorno (ResumoPlano/NsItem) pra não precisar mexer na tela.
+ *
+ * 13/07/2026 — o RESUMO (% feito dos cards do topo) passou a vir de
+ * `rede_status_campo`: 592 trechos com status FEITO/A_FAZER real, importados
+ * do levantamento de campo em QGIS/GPKG do Felipe (não é RDO nem NS —
+ * é o "as-built" verificado em campo, mais granular que as 162 NS). A lista
+ * de NS abaixo (`itens`, com o botão "marcar concluído") continua vindo de
+ * `ns` — é o registro administrativo (Nota de Serviço oficial), um conceito
+ * complementar, não a mesma fonte. O GPKG é uma FOTO de campo (não é live):
+ * `fonte_data` carrega a data do levantamento pra tela avisar honestamente
+ * que não é tempo real.
+ *
+ * Honestidade: campos sem equivalente na nova fonte (equipe_original,
+ * ligacoes_ou_ramais, desvio, materiais, por_rua, as duas *_baixas) voltam
+ * zerados/null — nada é estimado ou inventado. `desvio` fica sempre null até
+ * existir rastreamento de atraso por NS (fora do escopo desta fase).
+ */
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
@@ -15,6 +40,8 @@ export interface ResumoPlano {
   agua_baixas: { informado_felipe: number; ligacoes_pendentes_gis: number; estimativa_pct: number }
   atualizado_em: string
   por_rua?: Array<{ rua: string; esgoto_exec_m: number; esgoto_afazer_m: number; agua_exec_m: number; agua_afazer_m: number }> | undefined
+  /** data do levantamento de campo (GPKG) que alimenta o % feito — snapshot, não tempo real */
+  fonte_data: string | null
 }
 
 export interface NsItem {
@@ -26,6 +53,7 @@ export interface NsItem {
   status: string
   sistema: 'AGUA' | 'ESGOTO'
   equipe_original: string
+  equipe_id: string | null
   ligacoes_ou_ramais: number
   desvio: {
     id: string
@@ -47,6 +75,15 @@ export interface NsItem {
   } | null
 }
 
+const CONCLUIDOS = new Set(['CONCLUIDA', 'MEDIDA'])
+
+function vazioBaixas() {
+  return {
+    esgoto_baixas: { registros: 0, ids_distintos: 0, periodo_fonte: '', ramais_pendentes_gis: 0, estimativa_pct: 0 },
+    agua_baixas: { informado_felipe: 0, ligacoes_pendentes_gis: 0, estimativa_pct: 0 },
+  }
+}
+
 export function useSupabaseNsPlanejamento(projetoId: string | null) {
   const [resumo, setResumo] = useState<ResumoPlano | null>(null)
   const [itens, setItens] = useState<NsItem[]>([])
@@ -59,70 +96,85 @@ export function useSupabaseNsPlanejamento(projetoId: string | null) {
     setLoading(true)
     setError(null)
     try {
-      const { data: plano, error: e1 } = await supabase
-        .from('planejamentos_semanais')
-        .select('id, payload')
+      // Só a fonte confirmada como produção real (162 NS dos croquis do Motor
+      // NS, Fase 3) — exclui rascunhos/teste de import (ex.: 'import_geo_browser'
+      // da Fase 1, 'PVS_TRECHOS' de teste) pra não inflar o total com dado não
+      // confirmado como oficial.
+      const { data: nsData, error: e1 } = await supabase
+        .from('ns')
+        .select('id, seq, pv_ini, pv_fim, ext_m, dn_mm, material, rua, status, data_inicio, equipe_id')
         .eq('projeto_id', projetoId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+        .like('origem_dados', 'croqui_motor_ns_%')
+        .order('seq')
       if (e1) throw e1
-      if (!plano) { setItens([]); setResumo(null); setPlanoId(null); return }
 
-      setPlanoId(plano.id)
-      const resumoBase = (plano.payload as any)?.resumo_feito_afazer ?? null
-      setResumo(resumoBase ? { ...resumoBase, por_rua: (plano.payload as any)?.por_rua } : null)
-
-      const { data: itensData, error: e2 } = await supabase
-        .from('planejamento_itens')
-        .select('id, atividade, descricao, quantidade_planejada, data_inicio, status, payload')
-        .eq('planejamento_id', plano.id)
-        .order('atividade')
+      const { data: pvData, error: e2 } = await supabase
+        .from('pv')
+        .select('nome, is_agua')
+        .eq('projeto_id', projetoId)
       if (e2) throw e2
+      const isAguaPorNome = new Map((pvData ?? []).map((p) => [p.nome, p.is_agua]))
 
-      const { data: desviosData, error: e3 } = await supabase
-        .from('desvios_planejamento')
-        .select('id, planejamento_item_id, severidade, acao_recomendada, payload')
-        .eq('planejamento_id', plano.id)
-      if (e3) throw e3
-
-      const desviosPorItem = new Map((desviosData ?? []).map((d) => [d.planejamento_item_id, d]))
-
-      const mapeado: NsItem[] = (itensData ?? []).map((it) => {
-        const pl = (it.payload as any) ?? {}
-        const dv = desviosPorItem.get(it.id)
+      const mapeado: NsItem[] = (nsData ?? []).map((ns) => {
+        const isAgua = isAguaPorNome.get(ns.pv_ini) ?? isAguaPorNome.get(ns.pv_fim) ?? true
+        const concluida = CONCLUIDOS.has(ns.status)
         return {
-          id: it.id,
-          atividade: it.atividade,
-          descricao: it.descricao ?? '',
-          quantidade_planejada: Number(it.quantidade_planejada),
-          data_inicio: it.data_inicio,
-          status: it.status,
-          sistema: pl.sistema === 'ESGOTO' ? 'ESGOTO' : 'AGUA',
-          equipe_original: pl.equipe_original ?? '',
-          ligacoes_ou_ramais: pl.ligacoes_ou_ramais ?? 0,
-          desvio: dv
-            ? { id: dv.id, severidade: dv.severidade, dias_atraso: (dv.payload as any)?.dias_atraso ?? 0, acao_recomendada: dv.acao_recomendada ?? '' }
-            : null,
-          materiais: pl.brita_m3 !== undefined
-            ? {
-                brita_m3: pl.brita_m3 ?? 0,
-                areia_m3: pl.areia_m3,
-                lastro_m3: pl.lastro_m3,
-                reaterro_m3: pl.reaterro_m3,
-                bgs_m3: pl.bgs_m3,
-                escavacao_m3: pl.escavacao_m3,
-                dias_vca: pl.dias_vca,
-                dias_mnd: pl.dias_mnd,
-                prof_med_m: pl.prof_med_m,
-                material: pl.material,
-              }
-            : null,
+          id: String(ns.id),
+          atividade: `NS ${ns.seq} — ${ns.pv_ini} → ${ns.pv_fim}`,
+          descricao: [ns.dn_mm ? `DN${ns.dn_mm}mm` : null, ns.material, ns.rua].filter(Boolean).join(' · '),
+          quantidade_planejada: Number(ns.ext_m) || 0,
+          data_inicio: ns.data_inicio,
+          status: concluida ? 'concluida' : ns.status.toLowerCase(),
+          sistema: isAgua ? 'AGUA' : 'ESGOTO',
+          equipe_original: '',
+          equipe_id: ns.equipe_id,
+          ligacoes_ou_ramais: 0,
+          desvio: null,
+          materiais: null,
         }
       })
       setItens(mapeado)
+      setPlanoId(projetoId)
+
+      // % feito real: levantamento de campo (rede_status_campo, do GPKG) —
+      // mais granular e mais confiável que ns.status (162 NS nunca marcadas
+      // manualmente). Se a tabela estiver vazia (projeto sem levantamento
+      // ainda), cai pro cálculo antigo por ns.status — nunca fica sem número.
+      const { data: campoData, error: e3 } = await supabase
+        .from('rede_status_campo')
+        .select('sistema, status, ext_m, data_levantamento')
+        .eq('projeto_id', projetoId)
+      if (e3) throw e3
+
+      const resumoSistemaNs = (sis: 'AGUA' | 'ESGOTO'): ResumoSistema => {
+        const doSistema = mapeado.filter((i) => i.sistema === sis)
+        const feito_m = doSistema.filter((i) => i.status === 'concluida').reduce((s, i) => s + i.quantidade_planejada, 0)
+        const total_m = doSistema.reduce((s, i) => s + i.quantidade_planejada, 0)
+        const a_fazer_m = Math.max(0, total_m - feito_m)
+        return { feito_m, a_fazer_m, total_m, pct_feito: total_m > 0 ? (feito_m / total_m) * 100 : 0 }
+      }
+
+      const resumoSistemaCampo = (sis: 'AGUA' | 'ESGOTO'): ResumoSistema | null => {
+        const doSistema = (campoData ?? []).filter((r) => r.sistema === sis)
+        if (doSistema.length === 0) return null
+        const feito_m = doSistema.filter((r) => r.status === 'FEITO').reduce((s, r) => s + Number(r.ext_m || 0), 0)
+        const total_m = doSistema.reduce((s, r) => s + Number(r.ext_m || 0), 0)
+        const a_fazer_m = Math.max(0, total_m - feito_m)
+        return { feito_m, a_fazer_m, total_m, pct_feito: total_m > 0 ? (feito_m / total_m) * 100 : 0 }
+      }
+
+      const fonteData = (campoData ?? [])[0]?.data_levantamento ?? null
+
+      setResumo({
+        agua: resumoSistemaCampo('AGUA') ?? resumoSistemaNs('AGUA'),
+        esgoto: resumoSistemaCampo('ESGOTO') ?? resumoSistemaNs('ESGOTO'),
+        ...vazioBaixas(),
+        atualizado_em: new Date().toISOString().slice(0, 10),
+        por_rua: undefined,
+        fonte_data: fonteData,
+      })
     } catch (err: any) {
-      setError(err?.message ?? 'Erro ao carregar planejamento NS')
+      setError(err?.message ?? 'Erro ao carregar Notas de Serviço')
     } finally {
       setLoading(false)
     }
@@ -134,14 +186,22 @@ export function useSupabaseNsPlanejamento(projetoId: string | null) {
     if (!supabase) return
     setItens((prev) => prev.map((i) => (i.id === item.id ? { ...i, status: 'concluida', desvio: null } : i)))
     try {
-      await supabase.from('planejamento_itens').update({ status: 'concluida', updated_at: new Date().toISOString() }).eq('id', item.id)
-      if (item.desvio) {
-        await supabase.from('desvios_planejamento').delete().eq('id', item.desvio.id)
-      }
+      await supabase.from('ns').update({ status: 'CONCLUIDA' }).eq('id', Number(item.id))
     } catch {
       load() // reverte via reload em caso de erro
     }
   }, [load])
 
-  return { resumo, itens, planoId, loading, error, reload: load, marcarConcluido }
+  const atribuirEquipe = useCallback(async (item: NsItem, equipeId: string | null) => {
+    if (!supabase) return
+    setItens((prev) => prev.map((i) => (i.id === item.id ? { ...i, equipe_id: equipeId } : i)))
+    try {
+      const { error } = await supabase.from('ns').update({ equipe_id: equipeId }).eq('id', Number(item.id))
+      if (error) throw error
+    } catch {
+      load() // reverte via reload em caso de erro
+    }
+  }, [load])
+
+  return { resumo, itens, planoId, loading, error, reload: load, marcarConcluido, atribuirEquipe }
 }

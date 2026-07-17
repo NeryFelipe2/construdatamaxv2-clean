@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAgendaStore } from '@/store/agendaStore'
+import { carregarAgendaTasks, carregarAgendaResources } from '@/hooks/useAgendaSupabase'
 import { AgendaHeader } from './components/AgendaHeader'
 import { AgendaToolbar } from './components/AgendaToolbar'
 import { GanttChart } from './components/GanttChart'
@@ -8,8 +9,20 @@ import { AgendaBottomBar } from './components/AgendaBottomBar'
 import { TaskEditDialog } from './components/TaskEditDialog'
 
 export function AgendaPage() {
-  const { resources, editingTaskId, setEditingTask, displayView } = useAgendaStore()
+  const { resources, editingTaskId, setEditingTask, displayView, hidratarTasks, hidratarResources } =
+    useAgendaStore()
   const [searchTerm, setSearchTerm] = useState('')
+
+  // Carrega tarefas/recursos reais de agenda_tasks + wcr_equipes/wcr_veiculos
+  // uma vez no mount — mesmo padrão de PlanejamentoPage (carregarPlanTrechosTeams
+  // + hidratarTrechos/hidratarTeams). Incondicional: se o Supabase não estiver
+  // configurado, os hooks retornam listas vazias/só as frentes agregadas e a
+  // tela fica honestamente vazia, sem inventar dado.
+  useEffect(() => {
+    carregarAgendaResources().then(hidratarResources)
+    carregarAgendaTasks().then(hidratarTasks)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filteredResourceIds = useMemo(() => {
     const term = searchTerm.trim().toLowerCase()

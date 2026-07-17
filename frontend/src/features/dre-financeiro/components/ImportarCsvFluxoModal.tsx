@@ -86,7 +86,9 @@ export function ImportarCsvFluxoModal({ projectId, onClose, onSaved }: Props) {
         projeto_id: projectId,
         mes: r.mes,
         recebimento_prev: r.recebimento_prev ?? 0,
+        // CSV não distingue categoria — cai em "Outros"; refine manualmente na tela depois se quiser detalhar.
         despesa_prev: r.despesa_prev ?? 0,
+        despesa_outros: r.despesa_prev ?? 0,
         obs: r.obs || null,
         updated_at: new Date().toISOString(),
       }))

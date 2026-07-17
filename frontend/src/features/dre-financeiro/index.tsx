@@ -535,7 +535,11 @@ export function DreFinanceiroPage() {
                       <tr>
                         <th className="text-left px-5 py-2.5">Mês</th>
                         <th className="text-right px-5 py-2.5">Recebimento Prev. (R$)</th>
-                        <th className="text-right px-5 py-2.5">Despesa Prev. (R$)</th>
+                        <th className="text-right px-5 py-2.5">Mão de Obra (R$)</th>
+                        <th className="text-right px-5 py-2.5">Material (R$)</th>
+                        <th className="text-right px-5 py-2.5">Locação/Frota (R$)</th>
+                        <th className="text-right px-5 py-2.5">Outros (R$)</th>
+                        <th className="text-right px-5 py-2.5">Despesa Total (R$)</th>
                         <th className="text-left px-5 py-2.5">Obs</th>
                         <th className="px-3 py-2.5" />
                       </tr>
@@ -544,6 +548,22 @@ export function DreFinanceiroPage() {
                       {projecoes.map((p) => {
                         const [y, m] = p.mes.split('-')
                         const mesLabel = `${m}/${y}`
+                        const inputCategoria = (
+                          campo: 'despesa_mao_obra' | 'despesa_material' | 'despesa_locacao_frota' | 'despesa_outros',
+                        ) => (
+                          <input
+                            key={`${campo}-${p.id}-${p[campo]}`}
+                            type="text"
+                            inputMode="decimal"
+                            defaultValue={p[campo] || ''}
+                            placeholder="0"
+                            onBlur={(e) => {
+                              const v = parseValorBR(e.target.value) ?? 0
+                              if (v !== p[campo]) void salvarProjecao(p.mes, { [campo]: v })
+                            }}
+                            className="w-24 rounded-lg px-2 py-1 text-xs text-right bg-[#0d2040] border border-[#20406a] text-rose-300 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
+                          />
+                        )
                         return (
                           <tr key={p.id} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
                             <td className="px-5 py-2 font-medium text-[#e4f2f8] whitespace-nowrap">{mesLabel}</td>
@@ -561,20 +581,11 @@ export function DreFinanceiroPage() {
                                 className="w-32 rounded-lg px-2 py-1 text-xs text-right bg-[#0d2040] border border-[#20406a] text-emerald-300 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
                               />
                             </td>
-                            <td className="px-5 py-1.5 text-right">
-                              <input
-                                key={`d-${p.id}-${p.despesa_prev}`}
-                                type="text"
-                                inputMode="decimal"
-                                defaultValue={p.despesa_prev || ''}
-                                placeholder="0"
-                                onBlur={(e) => {
-                                  const v = parseValorBR(e.target.value) ?? 0
-                                  if (v !== p.despesa_prev) void salvarProjecao(p.mes, { despesa_prev: v })
-                                }}
-                                className="w-32 rounded-lg px-2 py-1 text-xs text-right bg-[#0d2040] border border-[#20406a] text-rose-300 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40"
-                              />
-                            </td>
+                            <td className="px-5 py-1.5 text-right">{inputCategoria('despesa_mao_obra')}</td>
+                            <td className="px-5 py-1.5 text-right">{inputCategoria('despesa_material')}</td>
+                            <td className="px-5 py-1.5 text-right">{inputCategoria('despesa_locacao_frota')}</td>
+                            <td className="px-5 py-1.5 text-right">{inputCategoria('despesa_outros')}</td>
+                            <td className="px-5 py-1.5 text-right text-rose-400 font-mono font-bold">{fmt(p.despesa_prev)}</td>
                             <td className="px-5 py-1.5">
                               <input
                                 key={`o-${p.id}-${p.obs ?? ''}`}

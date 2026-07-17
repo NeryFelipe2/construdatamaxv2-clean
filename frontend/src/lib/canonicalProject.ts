@@ -13,8 +13,28 @@ import type {
   RiskLevel,
   RiskStatus,
 } from '@/types'
-import type { DbProjeto } from '@/lib/supabase'
+import { supabase, type DbProjeto } from '@/lib/supabase'
 import type { ApiProjetoDashboardPayload, ApiProjetoTorrePayload } from '@/lib/api'
+
+/**
+ * Custo REAL do projeto até hoje: soma de `medicao_itens.valor` (medição a
+ * 60%, já precificada — Fase 5). Usada como override de `dashboard.kpis.
+ * custo_total_dia` quando a API externa (FastAPI, dashboard) não responde —
+ * substitui o "gasto" fictício por dado que já existe no banco, nunca
+ * inventa nada: se a query falhar ou não houver itens, devolve null e o
+ * chamador mantém o valor da API (ou fica vazio, honestamente).
+ */
+export async function custoRealMedicao(projetoId: string): Promise<number | null> {
+  if (!supabase) return null
+  const { data, error } = await supabase
+    .from('medicao_itens')
+    .select('valor')
+    .eq('projeto_id', projetoId)
+    .is('deleted_at', null)
+  if (error || !data) return null
+  const total = data.reduce((sum, row) => sum + Number((row as { valor: number | null }).valor || 0), 0)
+  return total > 0 ? total : null
+}
 
 const CITY_COORDINATES: Record<string, { lat: number; lng: number; state: string }> = {
   tatui: { lat: -23.3506, lng: -47.8569, state: 'SP' },

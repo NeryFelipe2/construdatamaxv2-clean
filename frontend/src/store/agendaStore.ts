@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { addDays, format, parseISO } from 'date-fns'
 import type { AgendaTask, AgendaResource, AgendaViewMode, AgendaDisplayView } from '@/types'
 import { mockTasks, mockResources, INITIAL_VIEW_START, INITIAL_VISIBLE_WEEKS } from '@/data/mockAgenda'
+import { salvarAgendaTask, removerAgendaTask } from '@/hooks/useAgendaSupabase'
 
 const PAN_DAYS: Record<AgendaViewMode, number> = {
   day:      7,
@@ -27,6 +28,13 @@ interface AgendaState {
   deleteTask: (id: string) => void
   moveTask: (id: string, newStart: string, newEnd: string) => void
 
+  // Hidratação a partir do Supabase (agenda_tasks + wcr_equipes/wcr_veiculos)
+  // — chamada pela AgendaPage no mount, mesmo padrão de
+  // planejamentoStore.hidratarTrechos/hidratarTeams. Sempre incondicional
+  // (mesmo com array vazio) pra nunca deixar dado antigo na tela.
+  hidratarTasks: (tasks: AgendaTask[]) => void
+  hidratarResources: (resources: AgendaResource[]) => void
+
   panLeft: () => void
   panRight: () => void
   zoomIn: () => void
@@ -42,7 +50,7 @@ interface AgendaState {
   clearData: () => void
 }
 
-export const useAgendaStore = create<AgendaState>((set) => ({
+export const useAgendaStore = create<AgendaState>((set, get) => ({
   tasks: mockTasks,
   resources: mockResources,
   viewStart: INITIAL_VIEW_START,
@@ -52,28 +60,37 @@ export const useAgendaStore = create<AgendaState>((set) => ({
   editingTaskId: null,
   displayView: 'gantt',
 
-  addTask: (task) =>
-    set((s) => ({
-      tasks: [...s.tasks, { ...task, id: crypto.randomUUID() }],
-    })),
+  addTask: (task) => {
+    const newTask: AgendaTask = { ...task, id: crypto.randomUUID() }
+    set((s) => ({ tasks: [...s.tasks, newTask] }))
+    salvarAgendaTask(newTask)
+  },
 
-  updateTask: (id, updates) =>
+  updateTask: (id, updates) => {
     set((s) => ({
       tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
-    })),
+    }))
+    const updated = get().tasks.find((t) => t.id === id)
+    if (updated) salvarAgendaTask(updated)
+  },
 
-  deleteTask: (id) =>
+  deleteTask: (id) => {
     set((s) => ({
       tasks: s.tasks.filter((t) => t.id !== id),
       editingTaskId: s.editingTaskId === id ? null : s.editingTaskId,
-    })),
+    }))
+    removerAgendaTask(id)
+  },
 
-  moveTask: (id, newStart, newEnd) =>
+  moveTask: (id, newStart, newEnd) => {
     set((s) => ({
       tasks: s.tasks.map((t) =>
         t.id === id ? { ...t, startDate: newStart, endDate: newEnd } : t
       ),
-    })),
+    }))
+    const moved = get().tasks.find((t) => t.id === id)
+    if (moved) salvarAgendaTask(moved)
+  },
 
   panLeft: () =>
     set((s) => ({
@@ -104,6 +121,9 @@ export const useAgendaStore = create<AgendaState>((set) => ({
 
   clearData: () =>
     set({ tasks: [], resources: [] }),
+
+  hidratarTasks: (tasks) => set({ tasks }),
+  hidratarResources: (resources) => set({ resources }),
 }))
 
 // Derived selectors

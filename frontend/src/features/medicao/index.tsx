@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
-import { Calculator, RotateCcw, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Calculator, RotateCcw, CheckCircle2, AlertTriangle, BookOpen, X, Search, ClipboardPaste } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
 import { useSupabaseMedicao, type MedicaoItem, type MedicaoRdoGrupo } from '@/hooks/useSupabaseMedicao'
+import { buscarPrecosContrato, type PrecoContrato } from '@/hooks/usePrecosContrato'
+import { ApontamentoModal } from '@/features/rdo/components/ApontamentoModal'
 
 const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 const num = (n: number) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -24,17 +26,113 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
+/**
+ * Modal de busca na tabela oficial de preços do contrato. Selecionar um item
+ * aplica automaticamente o preço WCR (60% do valor cheio — regra do contrato,
+ * ver usePrecosContrato.ts) no item de medição alvo.
+ */
+function PrecoContratoModal({
+  item,
+  onAplicar,
+  onClose,
+}: {
+  item: MedicaoItem
+  onAplicar: (preco: number) => void
+  onClose: () => void
+}) {
+  const [termo, setTermo] = useState('')
+  const [resultados, setResultados] = useState<PrecoContrato[]>([])
+  const [buscando, setBuscando] = useState(false)
+  const [buscou, setBuscou] = useState(false)
+  const anoCorrente = String(new Date().getFullYear())
+
+  async function buscar() {
+    setBuscando(true)
+    setBuscou(true)
+    try {
+      setResultados(await buscarPrecosContrato(termo))
+    } finally {
+      setBuscando(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-2xl shadow-2xl max-h-[85vh] flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#525252]">
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <BookOpen size={15} className="text-[#38bdf8]" /> Tabela de preços do contrato ({anoCorrente})
+            </h3>
+            <p className="text-[11px] text-[#a3a3a3] mt-0.5">
+              Aplicando em: <span className="text-[#f5f5f5]">{item.servico}</span> — o valor gravado é <span className="text-[#22c55e] font-semibold">60% do contrato</span> (parte WCR)
+            </p>
+          </div>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
+        </div>
+
+        <div className="px-5 py-3 flex items-center gap-2 border-b border-[#3f3f3f]">
+          <input
+            autoFocus
+            value={termo}
+            onChange={(e) => setTermo(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') buscar() }}
+            placeholder="Buscar por descrição (ex: caixa uma, ramal, PEAD) ou código…"
+            className="flex-1 bg-[#3d3d3d] border border-[#525252] rounded-md px-3 py-2 text-[13px] text-[#f5f5f5] focus:outline-none focus:border-[#38bdf8]"
+          />
+          <button
+            onClick={buscar}
+            disabled={buscando || termo.trim().length < 2}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-[#38bdf8]/15 border border-[#38bdf8]/40 text-[#38bdf8] text-[12px] font-semibold hover:bg-[#38bdf8]/25 disabled:opacity-40"
+          >
+            <Search size={13} /> {buscando ? 'Buscando…' : 'Buscar'}
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-3 flex flex-col gap-1.5">
+          {buscou && !buscando && resultados.length === 0 && (
+            <div className="text-[12px] text-[#6b6b6b] text-center py-6">Nada encontrado na tabela {anoCorrente} — tente outro termo.</div>
+          )}
+          {resultados.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => onAplicar(p.valor_wcr)}
+              className="flex items-center gap-3 text-left rounded-lg border border-[#3f3f3f] bg-[#333333] hover:border-[#22c55e]/50 hover:bg-[#22c55e]/5 px-3 py-2 transition-colors"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-[12px] font-semibold text-[#f5f5f5]">{p.descricao}</div>
+                <div className="text-[10px] text-[#8a8a8a] mt-0.5">cód. {p.codigo} · {p.unidade ?? '—'}</div>
+              </div>
+              <div className="text-right shrink-0">
+                <div className="text-[13px] font-bold text-[#22c55e]">{brl(p.valor_wcr)}</div>
+                <div className="text-[9px] text-[#7a7a7a]">contrato {brl(p.valor_unitario)} × 60%</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function MedicaoRow({
   item,
   onAtualizarPreco,
   onAprovar,
+  onBuscarPreco,
 }: {
   item: MedicaoItem
   onAtualizarPreco: (itemId: string, preco: number | null) => void
   onAprovar: (itemId: string) => void
+  onBuscarPreco: (item: MedicaoItem) => void
 }) {
   const [precoInput, setPrecoInput] = useState<string>(item.preco_unitario !== null ? String(item.preco_unitario) : '')
   const aprovado = item.status === 'aprovado'
+
+  // preço pode mudar por fora (modal da tabela de contrato) — sincroniza o input
+  useEffect(() => {
+    setPrecoInput(item.preco_unitario !== null ? String(item.preco_unitario) : '')
+  }, [item.preco_unitario])
 
   function handleBlur() {
     const trimmed = precoInput.trim()
@@ -79,6 +177,15 @@ function MedicaoRow({
           className="w-24 bg-[#2a2a2a] border border-[#3f3f3f] rounded-md px-2 py-1 text-[12px] text-[#f5f5f5] text-right disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#38bdf8]"
         />
         <span className="text-[10px] text-[#7a7a7a]">/{item.unidade}</span>
+        {!aprovado && (
+          <button
+            onClick={() => onBuscarPreco(item)}
+            title="Buscar preço na tabela do contrato (aplica 60%)"
+            className="flex items-center gap-1 text-[10px] font-semibold text-[#38bdf8] border border-[#38bdf8]/40 hover:bg-[#38bdf8]/10 rounded-md px-2 py-1 transition-colors"
+          >
+            <BookOpen size={11} /> tabela
+          </button>
+        )}
       </div>
 
       <div className="w-28 text-right shrink-0">
@@ -109,10 +216,12 @@ function GrupoRdo({
   grupo,
   onAtualizarPreco,
   onAprovar,
+  onBuscarPreco,
 }: {
   grupo: MedicaoRdoGrupo
   onAtualizarPreco: (itemId: string, preco: number | null) => void
   onAprovar: (itemId: string) => void
+  onBuscarPreco: (item: MedicaoItem) => void
 }) {
   const dataFormatada = grupo.data ? grupo.data.split('-').reverse().join('/') : 'sem data'
   return (
@@ -121,7 +230,7 @@ function GrupoRdo({
         RDO {dataFormatada} · {grupo.itens.length} {grupo.itens.length === 1 ? 'item' : 'itens'}
       </div>
       {grupo.itens.map((item) => (
-        <MedicaoRow key={item.id} item={item} onAtualizarPreco={onAtualizarPreco} onAprovar={onAprovar} />
+        <MedicaoRow key={item.id} item={item} onAtualizarPreco={onAtualizarPreco} onAprovar={onAprovar} onBuscarPreco={onBuscarPreco} />
       ))}
     </div>
   )
@@ -130,6 +239,8 @@ function GrupoRdo({
 export function MedicaoPage() {
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const { grupos, loading, error, reload, atualizarPreco, aprovarItem } = useSupabaseMedicao(activeProjectId)
+  const [precoModalItem, setPrecoModalItem] = useState<MedicaoItem | null>(null)
+  const [showApontamento, setShowApontamento] = useState(false)
 
   const todosItens = useMemo(() => grupos.flatMap((g) => g.itens), [grupos])
   const totalMedido = useMemo(
@@ -153,9 +264,17 @@ export function MedicaoPage() {
             <p className="text-[#6b6b6b] text-xs">Itens gerados automaticamente a partir dos serviços registrados em RDOs fechados</p>
           </div>
         </div>
-        <button onClick={reload} className="flex items-center gap-1.5 text-[11px] text-[#8a8a8a] hover:text-[#f5f5f5] px-3 py-2 rounded-md border border-[#3f3f3f] hover:border-[#525252]">
-          <RotateCcw size={12} /> Atualizar
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowApontamento(true)}
+            className="flex items-center gap-1.5 text-[11px] font-semibold text-[#38bdf8] border border-[#38bdf8]/40 hover:bg-[#38bdf8]/10 px-3 py-2 rounded-md transition-colors"
+          >
+            <ClipboardPaste size={12} /> Colar apontamento
+          </button>
+          <button onClick={reload} className="flex items-center gap-1.5 text-[11px] text-[#8a8a8a] hover:text-[#f5f5f5] px-3 py-2 rounded-md border border-[#3f3f3f] hover:border-[#525252]">
+            <RotateCcw size={12} /> Atualizar
+          </button>
+        </div>
       </div>
 
       {/* KPIs */}
@@ -187,9 +306,24 @@ export function MedicaoPage() {
           </div>
         )}
         {grupos.map((grupo) => (
-          <GrupoRdo key={grupo.rdo_id} grupo={grupo} onAtualizarPreco={atualizarPreco} onAprovar={aprovarItem} />
+          <GrupoRdo key={grupo.rdo_id} grupo={grupo} onAtualizarPreco={atualizarPreco} onAprovar={aprovarItem} onBuscarPreco={setPrecoModalItem} />
         ))}
       </div>
+
+      {showApontamento && (
+        <ApontamentoModal onClose={() => setShowApontamento(false)} onSaved={reload} />
+      )}
+
+      {precoModalItem && (
+        <PrecoContratoModal
+          item={precoModalItem}
+          onAplicar={(preco) => {
+            atualizarPreco(precoModalItem.id, preco)
+            setPrecoModalItem(null)
+          }}
+          onClose={() => setPrecoModalItem(null)}
+        />
+      )}
     </div>
   )
 }

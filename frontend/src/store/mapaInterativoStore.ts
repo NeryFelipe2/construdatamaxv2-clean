@@ -4,7 +4,8 @@
  */
 import { create } from 'zustand'
 import type { MapNode, MapSegment, MapLayer, MapTool, MapNetworkType } from '@/types'
-import wcrMapa from '@/data/wcr/mapa.json'  // rede REAL do Boi Malhado (planejamento.construdata_export)
+import { supabase } from '@/lib/supabase'
+import wcrMapa from '@/data/wcr/mapa.json'  // fallback: snapshot congelado (usado só se o fetch ao vivo falhar/vier vazio)
 
 // ─── Snapshot type for undo ────────────────────────────────────────────────
 
@@ -23,104 +24,10 @@ const DEFAULT_LAYERS: MapLayer[] = [
   { id: 'generic', name: 'Genérico',  color: '#a78bfa', visible: true },
 ]
 
-// ─── Demo data — rede de esgoto simulada em Salvador/BA ──────────────────
+// ─── Demo data — snapshot congelado (WCR Boi Malhado, gerado pelo motor) ──
 
 function makeDemoData(): { nodes: MapNode[]; segments: MapSegment[] } {
-  // WCR: rede REAL do Boi Malhado (gerada pelo motor). Salvador abaixo = legado inativo.
   return wcrMapa as unknown as { nodes: MapNode[]; segments: MapSegment[] }
-  // Base coords: Porto de Salvador area
-  const baseLat = -12.9714
-  const baseLng = -38.5014
-
-  const nodes: MapNode[] = [
-    { id: 'n01', lat: baseLat + 0.0000, lng: baseLng + 0.0000, label: 'PV-01', nodeType: 'junction' },
-    { id: 'n02', lat: baseLat + 0.0012, lng: baseLng + 0.0010, label: 'PV-02', nodeType: 'junction' },
-    { id: 'n03', lat: baseLat + 0.0024, lng: baseLng + 0.0020, label: 'PV-03', nodeType: 'junction' },
-    { id: 'n04', lat: baseLat + 0.0036, lng: baseLng + 0.0010, label: 'PV-04', nodeType: 'junction' },
-    { id: 'n05', lat: baseLat + 0.0048, lng: baseLng + 0.0000, label: 'PV-05', nodeType: 'junction' },
-    { id: 'n06', lat: baseLat + 0.0060, lng: baseLng + 0.0015, label: 'PV-06', nodeType: 'junction' },
-    { id: 'n07', lat: baseLat + 0.0036, lng: baseLng + 0.0030, label: 'PV-07', nodeType: 'junction' },
-    { id: 'n08', lat: baseLat + 0.0012, lng: baseLng - 0.0010, label: 'PV-08', nodeType: 'junction' },
-    { id: 'n09', lat: baseLat + 0.0024, lng: baseLng - 0.0020, label: 'PV-09', nodeType: 'junction' },
-    { id: 'n10', lat: baseLat + 0.0000, lng: baseLng - 0.0015, label: 'EP-01', nodeType: 'endpoint' },
-    { id: 'n11', lat: baseLat + 0.0072, lng: baseLng + 0.0025, label: 'PV-11', nodeType: 'junction' },
-    { id: 'n12', lat: baseLat + 0.0060, lng: baseLng - 0.0010, label: 'PV-12', nodeType: 'junction' },
-    { id: 'n13', lat: baseLat + 0.0048, lng: baseLng - 0.0020, label: 'PV-13', nodeType: 'junction' },
-    { id: 'n14', lat: baseLat + 0.0024, lng: baseLng + 0.0040, label: 'PV-14', nodeType: 'junction' },
-    { id: 'n15', lat: baseLat + 0.0048, lng: baseLng + 0.0045, label: 'PV-15', nodeType: 'junction' },
-    { id: 'n16', lat: baseLat - 0.0012, lng: baseLng + 0.0010, label: 'PV-16', nodeType: 'junction' },
-    { id: 'n17', lat: baseLat - 0.0024, lng: baseLng + 0.0020, label: 'EE-01', nodeType: 'structure', elevation: 5.2 },
-    { id: 'n18', lat: baseLat + 0.0084, lng: baseLng + 0.0010, label: 'EP-02', nodeType: 'endpoint' },
-    { id: 'n19', lat: baseLat + 0.0036, lng: baseLng - 0.0035, label: 'EP-03', nodeType: 'endpoint' },
-    { id: 'n20', lat: baseLat + 0.0000, lng: baseLng + 0.0030, label: 'PV-20', nodeType: 'junction' },
-    { id: 'n21', lat: baseLat - 0.0012, lng: baseLng + 0.0040, label: 'PV-21', nodeType: 'junction' },
-    { id: 'n22', lat: baseLat + 0.0012, lng: baseLng + 0.0055, label: 'PV-22', nodeType: 'junction' },
-    { id: 'n23', lat: baseLat + 0.0024, lng: baseLng - 0.0040, label: 'PV-23', nodeType: 'junction' },
-    { id: 'n24', lat: baseLat + 0.0060, lng: baseLng + 0.0055, label: 'PV-24', nodeType: 'junction' },
-    { id: 'n25', lat: baseLat + 0.0072, lng: baseLng - 0.0005, label: 'PV-25', nodeType: 'junction' },
-    { id: 'n26', lat: baseLat + 0.0084, lng: baseLng + 0.0030, label: 'PV-26', nodeType: 'junction' },
-    { id: 'n27', lat: baseLat - 0.0036, lng: baseLng + 0.0010, label: 'EP-04', nodeType: 'endpoint' },
-    { id: 'n28', lat: baseLat + 0.0036, lng: baseLng + 0.0060, label: 'PV-28', nodeType: 'junction' },
-    { id: 'n29', lat: baseLat + 0.0012, lng: baseLng + 0.0070, label: 'PV-29', nodeType: 'junction' },
-    { id: 'n30', lat: baseLat + 0.0048, lng: baseLng + 0.0070, label: 'EP-05', nodeType: 'endpoint' },
-    { id: 'n31', lat: baseLat - 0.0012, lng: baseLng - 0.0020, label: 'PV-31', nodeType: 'junction' },
-    { id: 'n32', lat: baseLat - 0.0024, lng: baseLng - 0.0030, label: 'EP-06', nodeType: 'endpoint' },
-    { id: 'n33', lat: baseLat + 0.0096, lng: baseLng + 0.0020, label: 'EP-07', nodeType: 'endpoint' },
-    { id: 'n34', lat: baseLat + 0.0000, lng: baseLng + 0.0055, label: 'PV-34', nodeType: 'junction' },
-    { id: 'n35', lat: baseLat + 0.0072, lng: baseLng + 0.0050, label: 'PV-35', nodeType: 'junction' },
-    { id: 'n36', lat: baseLat + 0.0084, lng: baseLng + 0.0060, label: 'EP-08', nodeType: 'endpoint' },
-    { id: 'n37', lat: baseLat - 0.0012, lng: baseLng + 0.0060, label: 'PV-37', nodeType: 'junction' },
-    { id: 'n38', lat: baseLat - 0.0024, lng: baseLng + 0.0050, label: 'EE-02', nodeType: 'structure', elevation: 3.8 },
-    { id: 'n39', lat: baseLat + 0.0060, lng: baseLng + 0.0080, label: 'EP-09', nodeType: 'endpoint' },
-  ]
-
-  const seg = (
-    id: string, from: string, to: string,
-    nt: MapNetworkType = 'sewer', diam = 200, mat = 'PVC'
-  ): MapSegment => ({ id, fromNodeId: from, toNodeId: to, networkType: nt, diameter: diam, material: mat })
-
-  const segments: MapSegment[] = [
-    seg('s01', 'n01', 'n02'),
-    seg('s02', 'n02', 'n03'),
-    seg('s03', 'n03', 'n04'),
-    seg('s04', 'n04', 'n05'),
-    seg('s05', 'n05', 'n06'),
-    seg('s06', 'n06', 'n11'),
-    seg('s07', 'n04', 'n07'),
-    seg('s08', 'n07', 'n14'),
-    seg('s09', 'n14', 'n15'),
-    seg('s10', 'n15', 'n24'),
-    seg('s11', 'n01', 'n08'),
-    seg('s12', 'n08', 'n09'),
-    seg('s13', 'n09', 'n10'),
-    seg('s14', 'n09', 'n13'),
-    seg('s15', 'n13', 'n19'),
-    seg('s16', 'n13', 'n12'),
-    seg('s17', 'n12', 'n25'),
-    seg('s18', 'n11', 'n18'),
-    seg('s19', 'n11', 'n26'),
-    seg('s20', 'n26', 'n33'),
-    seg('s21', 'n01', 'n16'),
-    seg('s22', 'n16', 'n17'),
-    seg('s23', 'n17', 'n27'),
-    seg('s24', 'n02', 'n20'),
-    seg('s25', 'n20', 'n21'),
-    seg('s26', 'n20', 'n22'),
-    seg('s27', 'n22', 'n29'),
-    seg('s28', 'n29', 'n34'),
-    seg('s29', 'n29', 'n28'),
-    seg('s30', 'n28', 'n35'),
-    seg('s31', 'n35', 'n36'),
-    seg('s32', 'n24', 'n35'),
-    seg('s33', 'n35', 'n39'),
-    seg('s34', 'n23', 'n09', 'drainage', 300, 'Concreto'),
-    seg('s35', 'n31', 'n10', 'water', 150, 'PEAD'),
-    seg('s36', 'n31', 'n32'),
-    seg('s37', 'n21', 'n37'),
-    seg('s38', 'n37', 'n38'),
-  ]
-
-  return { nodes, segments }
 }
 
 // ─── State interface ──────────────────────────────────────────────────────
@@ -139,6 +46,12 @@ interface MapaInterativoState {
   selectedProjectId: string | null
   activeNetworkType: MapNetworkType
   fitBoundsRequestId: number
+  /** true = nodes/segments vieram de leitura ao vivo do Supabase; false = snapshot congelado (mapa.json). */
+  isLive: boolean
+  /** mensagem de erro da última tentativa de leitura ao vivo (null = sem erro). */
+  loadError: string | null
+  /** mostrar/ocultar a camada de rede planejada (tracejada, sem status de execução confirmado). */
+  showPlanejado: boolean
 
   // Actions
   addNode: (node: Omit<MapNode, 'id'>) => void
@@ -162,6 +75,8 @@ interface MapaInterativoState {
   setActiveNetworkType: (t: MapNetworkType) => void
   loadFromPipeline: () => void
   requestFitBounds: () => void
+  loadFromSupabase: () => Promise<void>
+  setShowPlanejado: (v: boolean) => void
 }
 
 // ─── Helper: push undo snapshot ───────────────────────────────────────────
@@ -175,7 +90,7 @@ function pushHistory(history: MapSnapshot[], nodes: MapNode[], segments: MapSegm
 
 const { nodes: demoNodes, segments: demoSegments } = makeDemoData()
 
-export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
+export const useMapaInterativoStore = create<MapaInterativoState>((set, get) => ({
   nodes: demoNodes,
   segments: demoSegments,
   activeTool: 'idle',
@@ -189,6 +104,9 @@ export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
   selectedProjectId: null,
   activeNetworkType: 'sewer',
   fitBoundsRequestId: 0,
+  isLive: false,
+  loadError: null,
+  showPlanejado: true,
 
   addNode: (node) =>
     set((s) => ({
@@ -322,4 +240,105 @@ export const useMapaInterativoStore = create<MapaInterativoState>((set) => ({
   },
 
   requestFitBounds: () => set((s) => ({ fitBoundsRequestId: s.fitBoundsRequestId + 1 })),
+
+  setShowPlanejado: (v) => set({ showPlanejado: v }),
+
+  /**
+   * Substitui o snapshot estático (mapa.json, exportado uma vez em algum
+   * momento passado) por uma leitura AO VIVO de `pv`+`trecho` (rede
+   * executada) + `rede_planejada` (Retorno, sem status de execução
+   * confirmado — vira segmentos com origem:'planejado', renderizados
+   * tracejados). Respeita `selectedProjectId` quando setado. Se o Supabase
+   * não estiver disponível ou não houver linhas com coordenada, mantém o
+   * snapshot já carregado (nunca esvazia o mapa em silêncio) e grava
+   * `loadError` pra tela poder avisar o usuário.
+   */
+  loadFromSupabase: async () => {
+    if (!supabase) return
+    const projetoId = get().selectedProjectId
+
+    let pvQuery = supabase
+      .from('pv')
+      .select('id, nome, lat, lon, tipo, is_agua, projeto_id')
+      .not('lat', 'is', null)
+      .not('lon', 'is', null)
+    if (projetoId) pvQuery = pvQuery.eq('projeto_id', projetoId)
+    const { data: pvRows, error: e1 } = await pvQuery
+
+    let trechoQuery = supabase
+      .from('trecho')
+      .select('id, ns_id, pv_ini, pv_fim, ext_m, dn_mm, material, projeto_id')
+    if (projetoId) trechoQuery = trechoQuery.eq('projeto_id', projetoId)
+    const { data: trechoRows, error: e2 } = await trechoQuery
+
+    let planejadoQuery = supabase
+      .from('rede_planejada')
+      .select('id, sistema, dn, material, ns_numero, status_campo, lat_ini, lon_ini, lat_fim, lon_fim, projeto_id')
+      .not('lat_ini', 'is', null)
+    if (projetoId) planejadoQuery = planejadoQuery.eq('projeto_id', projetoId)
+    // erro em rede_planejada não é fatal — só significa que essa camada extra fica vazia
+    const { data: planejadoRows } = await planejadoQuery
+
+    if (e1 || e2) {
+      set({ loadError: e1?.message ?? e2?.message ?? 'Erro ao carregar rede do Supabase' })
+      return
+    }
+    if ((!pvRows || pvRows.length === 0) && (!planejadoRows || planejadoRows.length === 0)) {
+      set({ loadError: null }) // sem dado real pra este projeto — mantém snapshot, sem marcar como erro
+      return
+    }
+
+    const pvPorChave = new Map<string, NonNullable<typeof pvRows>[number]>()
+    for (const p of pvRows ?? []) pvPorChave.set(`${p.projeto_id ?? ''}|${p.nome}`, p)
+
+    const nodesExecutado: MapNode[] = (pvRows ?? []).map((p) => ({
+      id: `pv-${p.id}`,
+      lat: p.lat as number,
+      lng: p.lon as number,
+      label: p.nome,
+      nodeType: p.tipo === 'endpoint' ? 'endpoint' : 'junction',
+    }))
+
+    const segmentsExecutado: MapSegment[] = (trechoRows ?? [])
+      .map((t) => {
+        const ini = pvPorChave.get(`${t.projeto_id ?? ''}|${t.pv_ini}`)
+        const fim = pvPorChave.get(`${t.projeto_id ?? ''}|${t.pv_fim}`)
+        if (!ini || !fim) return null
+        return {
+          id: `trecho-${t.id}`,
+          fromNodeId: `pv-${ini.id}`,
+          toNodeId: `pv-${fim.id}`,
+          networkType: (ini.is_agua ? 'water' : 'sewer') as MapNetworkType,
+          diameter: t.dn_mm ?? 200,
+          material: t.material ?? 'PVC',
+        } satisfies MapSegment
+      })
+      .filter((s): s is MapSegment => s !== null)
+
+    // rede_planejada não compartilha PV com `pv`/`trecho` — cria nós sintéticos
+    // por trecho direto das coordenadas do próprio registro.
+    const nodesPlanejado: MapNode[] = []
+    const segmentsPlanejado: MapSegment[] = []
+    for (const r of planejadoRows ?? []) {
+      if (r.lat_ini == null || r.lon_ini == null || r.lat_fim == null || r.lon_fim == null) continue
+      const idIni = `rp-ini-${r.id}`
+      const idFim = `rp-fim-${r.id}`
+      nodesPlanejado.push({ id: idIni, lat: r.lat_ini as number, lng: r.lon_ini as number, nodeType: 'junction' })
+      nodesPlanejado.push({ id: idFim, lat: r.lat_fim as number, lng: r.lon_fim as number, nodeType: 'endpoint' })
+      segmentsPlanejado.push({
+        id: `rede-planejada-${r.id}`,
+        fromNodeId: idIni,
+        toNodeId: idFim,
+        networkType: (r.sistema === 'AGUA' ? 'water' : 'sewer') as MapNetworkType,
+        material: r.material ?? undefined,
+        label: r.ns_numero ?? undefined,
+        origem: 'planejado',
+      })
+    }
+
+    const nodes = [...nodesExecutado, ...nodesPlanejado]
+    const segments = [...segmentsExecutado, ...segmentsPlanejado]
+    if (nodes.length === 0) return
+    set({ nodes, segments, history: [], mapMode: 'saneamento', isLive: true, loadError: null })
+  },
 }))

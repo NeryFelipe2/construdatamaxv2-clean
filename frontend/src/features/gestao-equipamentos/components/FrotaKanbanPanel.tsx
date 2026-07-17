@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { Truck, AlertTriangle, TrendingDown, RotateCcw, GripVertical } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Truck, AlertTriangle, TrendingDown, RotateCcw, GripVertical, Plus } from 'lucide-react'
 import { useFrotaKanbanStore } from '@/store/frotaKanbanStore'
+import { useFrota } from '@/hooks/useFrota'
+import { VeiculoModal } from './VeiculoModal'
 import { STATUS_ORDER, STATUS_LABEL, type FrotaStatus, type FrotaItem } from '@/data/wcrFrota'
 
 const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
@@ -12,19 +14,20 @@ const COL_ACCENT: Record<FrotaStatus, string> = {
   devolvido: '#737373',
 }
 
-function CardFrota({ item, onDragStart }: { item: FrotaItem; onDragStart: (id: string) => void }) {
+function CardFrota({ item, onDragStart, onClick }: { item: FrotaItem; onDragStart: (id: string) => void; onClick: () => void }) {
   const isSaida = item.status === 'pedir_saida'
   const isDevolvido = item.status === 'devolvido'
   return (
     <div
       draggable
       onDragStart={(e) => { e.dataTransfer.setData('text/plain', item.id); e.dataTransfer.effectAllowed = 'move'; onDragStart(item.id) }}
+      onClick={onClick}
       className={[
         'group rounded-lg border p-3 cursor-grab active:cursor-grabbing transition-colors',
         isSaida ? 'bg-[#3a2523] border-[#ef4444]/50' : 'bg-[#3f3f3f] border-[#525252] hover:border-[#f97316]/60',
         isDevolvido ? 'opacity-70' : '',
       ].join(' ')}
-      title="Arraste para outra coluna"
+      title="Arraste para outra coluna · clique para editar"
     >
       <div className="flex items-start gap-2">
         <GripVertical size={14} className="text-[#6b6b6b] mt-0.5 shrink-0 group-hover:text-[#a3a3a3]" />
@@ -60,9 +63,21 @@ export function FrotaKanbanPanel() {
   const items = useFrotaKanbanStore((s) => s.items)
   const moveItem = useFrotaKanbanStore((s) => s.moveItem)
   const reset = useFrotaKanbanStore((s) => s.reset)
+  const setDefinicoes = useFrotaKanbanStore((s) => s.setDefinicoes)
+
+  const { frota, loading: frotaLoading, atualizarVeiculo, criarVeiculo, removerVeiculo } = useFrota()
+
+  // Quando o useFrota() (Supabase) resolve, troca a base do Kanban pela
+  // definição canônica do banco — mesmo padrão do Kanban de Equipes.
+  useEffect(() => {
+    if (!frotaLoading) setDefinicoes(frota)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frota, frotaLoading])
 
   const [draggingId, setDraggingId] = useState<string | null>(null)
   const [overCol, setOverCol] = useState<FrotaStatus | null>(null)
+  const [modalItem, setModalItem] = useState<FrotaItem | null>(null)
+  const [showNovo, setShowNovo] = useState(false)
 
   const sum = (list: FrotaItem[]) => list.reduce((acc, i) => acc + i.custoMensal, 0)
   const ativoMensal = sum(items.filter((i) => i.status === 'operacao' || i.status === 'manutencao'))
@@ -70,7 +85,10 @@ export function FrotaKanbanPanel() {
   const cortado = items.filter((i) => i.status === 'devolvido').reduce((acc, i) => acc + (i.custoOriginal ?? 0), 0)
 
   const handleDrop = (status: FrotaStatus) => {
-    if (draggingId) moveItem(draggingId, status)
+    if (draggingId) {
+      moveItem(draggingId, status)
+      void atualizarVeiculo(draggingId, { status })
+    }
     setDraggingId(null)
     setOverCol(null)
   }
@@ -82,7 +100,13 @@ export function FrotaKanbanPanel() {
         <Kpi icon={<Truck size={15} />} label="Frota ativa" value={brl.format(ativoMensal)} sub={`${items.filter(i => i.status !== 'devolvido').length} veículos · /mês`} accent="#f97316" />
         <Kpi icon={<AlertTriangle size={15} />} label="Parado / a cortar" value={brl.format(ociosoMensal)} sub="dinheiro ocioso /mês" accent="#ef4444" highlight={ociosoMensal > 0} />
         <Kpi icon={<TrendingDown size={15} />} label="Já cortado" value={brl.format(cortado)} sub="devoluções /mês" accent="#22c55e" />
-        <div className="ml-auto flex items-center">
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={() => setShowNovo(true)}
+            className="flex items-center gap-1.5 text-[11px] font-semibold text-[#1a1a1a] bg-[#f97316] hover:bg-[#fb923c] px-3 py-2 rounded-md transition-colors"
+          >
+            <Plus size={12} /> Adicionar veículo
+          </button>
           <button
             onClick={() => { if (confirm('Restaurar o quadro ao estado original da planilha?')) reset() }}
             className="flex items-center gap-1.5 text-[11px] text-[#8a8a8a] hover:text-[#f5f5f5] px-3 py-2 rounded-md border border-[#3f3f3f] hover:border-[#525252] transition-colors"
@@ -133,7 +157,9 @@ export function FrotaKanbanPanel() {
                       {isOver ? 'Solte aqui' : 'vazio'}
                     </div>
                   ) : (
-                    colItems.map((item) => <CardFrota key={item.id} item={item} onDragStart={setDraggingId} />)
+                    colItems.map((item) => (
+                      <CardFrota key={item.id} item={item} onDragStart={setDraggingId} onClick={() => setModalItem(item)} />
+                    ))
                   )}
                 </div>
               </div>
@@ -141,6 +167,21 @@ export function FrotaKanbanPanel() {
           })}
         </div>
       </div>
+
+      {modalItem && (
+        <VeiculoModal
+          veiculo={modalItem}
+          onClose={() => setModalItem(null)}
+          onSave={(input) => atualizarVeiculo(modalItem.id, input)}
+          onDelete={() => removerVeiculo(modalItem.id)}
+        />
+      )}
+      {showNovo && (
+        <VeiculoModal
+          onClose={() => setShowNovo(false)}
+          onSave={(input) => criarVeiculo(input)}
+        />
+      )}
     </div>
   )
 }

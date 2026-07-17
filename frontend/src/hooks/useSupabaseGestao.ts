@@ -316,20 +316,65 @@ async function loadFromLocalDb(projetoId: string): Promise<Omit<SupabaseGestaoDa
   return buildFallbackData({ projeto, frentes, contatos, rdos, tarefas: [], extensaoExecutada })
 }
 
+/**
+ * `frentes` e `contatos` (tabelas legadas) estão vazias pro WCR — as frentes
+ * reais da operação vivem em `programacao_semana` (Boi Malhado/Ilha Bela/
+ * Retorno) e as pessoas reais em `equipe_membros`+`wcr_equipes`. Derivamos
+ * FrenteResumo/ContatoResumo dessas fontes reais em vez de usar as tabelas
+ * legadas vazias — nunca inventa número, só reagrupa dado que já existe.
+ */
+async function loadFrentesReais(): Promise<DbFrente[]> {
+  if (!supabase) return []
+  const { data } = await supabase.from('programacao_semana').select('frente, equipe, meta_qtd')
+  if (!data || data.length === 0) return []
+  const porFrente = new Map<string, { equipes: Set<string>; metas: number }>()
+  for (const row of data as Array<{ frente: string; equipe: string; meta_qtd: number | null }>) {
+    const g = porFrente.get(row.frente) ?? { equipes: new Set<string>(), metas: 0 }
+    g.equipes.add(row.equipe)
+    if (row.meta_qtd != null) g.metas += 1
+    porFrente.set(row.frente, g)
+  }
+  return Array.from(porFrente.entries()).map(([nome, g], i) => ({
+    id: `frente-${i}-${nome}`,
+    nome,
+    setor: `${g.equipes.size} equipe(s)`,
+    extensao_total: 0,
+    pvs_total: 0,
+    status: 'ativa',
+  })) as unknown as DbFrente[]
+}
+
+async function loadContatosReais(): Promise<DbContato[]> {
+  if (!supabase) return []
+  const { data: equipes } = await supabase.from('wcr_equipes').select('id').eq('ativo', true)
+  const ids = (equipes ?? []).map((e) => (e as { id: string }).id)
+  if (ids.length === 0) return []
+  const { data: membros } = await supabase
+    .from('equipe_membros')
+    .select('id, equipe_id, nome, funcao')
+    .in('equipe_id', ids)
+  return ((membros ?? []) as Array<{ id: string; equipe_id: string; nome: string; funcao: string | null }>).map((m) => ({
+    id: m.id,
+    nome: m.nome,
+    cargo: m.funcao || 'Equipe de campo',
+    telefone_whatsapp: '',
+    projeto_id: '',
+    ativo: true,
+  })) as unknown as DbContato[]
+}
+
 async function loadFromSupabaseFallback(projetoId: string): Promise<Omit<SupabaseGestaoData, 'loading' | 'error' | 'refresh'> | null> {
   if (!supabase) return null
 
-  const [projRes, frentesRes, contatosRes, rdosRes, tarefasRes] = await Promise.all([
+  const [projRes, frentes, contatos, rdosRes, tarefasRes] = await Promise.all([
     supabase.from('projetos').select('*').eq('id', projetoId).single(),
-    supabase.from('frentes').select('*').eq('projeto_id', projetoId),
-    supabase.from('contatos').select('*').eq('projeto_id', projetoId).eq('ativo', true),
+    loadFrentesReais(),
+    loadContatosReais(),
     supabase.from('rdos').select('*').or(`projeto_id.eq.${projetoId},project_id.eq.${projetoId}`).order('data', { ascending: false }).limit(50),
     supabase.from('tarefas').select('*').or(`projeto_id.eq.${projetoId},project_id.eq.${projetoId}`).order('created_at', { ascending: false }).limit(50),
   ])
 
   const projeto = (projRes.data || null) as DbProjeto | null
-  const frentes = (frentesRes.data || []) as DbFrente[]
-  const contatos = (contatosRes.data || []) as DbContato[]
   const rdos = (rdosRes.data || []) as DbRdoFallback[]
   const tarefas = (tarefasRes.data || []) as Array<Record<string, unknown>>
 

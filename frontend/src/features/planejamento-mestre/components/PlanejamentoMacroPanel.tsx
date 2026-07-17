@@ -460,9 +460,113 @@ function MasterHistogramPanel({ activities }: { activities: MasterActivity[] }) 
 
 // ─── New Activity Form ───────────────────────────────────────────────────────
 
+/**
+ * Em modo real, o motor (`useMasterScheduleEngine`) AGREGA os itens de
+ * `planejamento_itens` por núcleo×sistema — não existe uma atividade solta
+ * por WBS. Então "criar atividade" aqui vira "lançar uma quantidade real"
+ * (sistema + metros), que grava em `planejamento_itens` e entra na soma do
+ * grupo certo assim que a engine recarrega (reloadRealData).
+ */
+function NewRealItemForm({ onClose }: { onClose: () => void }) {
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const projetos = useProjectContext((s) => s.projetos)
+  const reloadRealData = usePlanejamentoMestreStore((s) => s.reloadRealData)
+  const projetoAtivo = projetos.find((p) => p.id === activeProjectId) ?? null
+
+  const [form, setForm] = useState({
+    sistema: 'AGUA' as 'AGUA' | 'ESGOTO',
+    descricao: '',
+    quantidadeM: '',
+    equipeOriginal: '',
+    rua: '',
+    dataInicio: new Date().toISOString().slice(0, 10),
+  })
+  const [salvando, setSalvando] = useState(false)
+  const [erro, setErro] = useState<string | null>(null)
+
+  const inputCls = 'w-full bg-[#2c2c2c] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/60'
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!activeProjectId || !projetoAtivo) { setErro('Selecione um projeto ativo no topo do site.'); return }
+    const qtd = Number(form.quantidadeM)
+    if (!form.descricao.trim() || !Number.isFinite(qtd) || qtd <= 0) { setErro('Preencha descrição e uma quantidade maior que zero.'); return }
+    setSalvando(true)
+    setErro(null)
+    try {
+      const { criarItemPlanejamentoMestre } = await import('@/hooks/useMasterActivities')
+      await criarItemPlanejamentoMestre({
+        projetoId: activeProjectId,
+        nucleo: projetoAtivo.nome,
+        sistema: form.sistema,
+        quantidadeM: qtd,
+        descricao: form.descricao.trim(),
+        equipeOriginal: form.equipeOriginal.trim() || undefined,
+        rua: form.rua.trim() || undefined,
+        dataInicio: form.dataInicio || undefined,
+      })
+      reloadRealData?.()
+      onClose()
+    } catch (err) {
+      setErro(err instanceof Error ? err.message : 'Erro ao gravar item.')
+    } finally {
+      setSalvando(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <p className="text-[#f5f5f5] text-sm font-semibold">Nova Quantidade — {projetoAtivo?.nome ?? 'selecione um projeto'}</p>
+        <button type="button" onClick={onClose} className="text-[#6b6b6b] hover:text-[#a3a3a3]"><X size={16} /></button>
+      </div>
+      <p className="text-[10px] text-[#a3a3a3]">
+        Dado real: entra na soma da Visão Geral do núcleo/sistema assim que salvar. Não cria WBS solto — o motor agrega por núcleo×sistema×equipe.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Sistema *</label>
+          <select className={inputCls} value={form.sistema} onChange={(e) => setForm((f) => ({ ...f, sistema: e.target.value as 'AGUA' | 'ESGOTO' }))}>
+            <option value="AGUA">Água</option>
+            <option value="ESGOTO">Esgoto</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Metros (m) *</label>
+          <input type="number" min={0} step="0.01" className={inputCls} value={form.quantidadeM} onChange={(e) => setForm((f) => ({ ...f, quantidadeM: e.target.value }))} required />
+        </div>
+        <div className="col-span-2">
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Descrição *</label>
+          <input className={inputCls} value={form.descricao} onChange={(e) => setForm((f) => ({ ...f, descricao: e.target.value }))} placeholder="Ex: Rede de água — Rua 4" required />
+        </div>
+        <div>
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Equipe (líder)</label>
+          <input className={inputCls} value={form.equipeOriginal} onChange={(e) => setForm((f) => ({ ...f, equipeOriginal: e.target.value }))} placeholder="opcional" />
+        </div>
+        <div>
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Rua / local</label>
+          <input className={inputCls} value={form.rua} onChange={(e) => setForm((f) => ({ ...f, rua: e.target.value }))} placeholder="opcional" />
+        </div>
+        <div>
+          <label className="text-[#6b6b6b] text-[10px] block mb-1">Início previsto</label>
+          <input type="date" className={inputCls} value={form.dataInicio} onChange={(e) => setForm((f) => ({ ...f, dataInicio: e.target.value }))} />
+        </div>
+      </div>
+      {erro && <p className="text-[11px] text-red-400">{erro}</p>}
+      <div className="flex gap-2 justify-end">
+        <button type="button" onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#a3a3a3]">Cancelar</button>
+        <button type="submit" disabled={salvando} className="px-4 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] disabled:opacity-50">
+          <Check size={12} className="inline mr-1" />{salvando ? 'Gravando…' : 'Gravar'}
+        </button>
+      </div>
+    </form>
+  )
+}
+
 function NewActivityForm({ onClose }: { onClose: () => void }) {
   const addActivity = usePlanejamentoMestreStore((s) => s.addActivity)
   const activities  = usePlanejamentoMestreStore((s) => s.activities)
+  const dataSource  = usePlanejamentoMestreStore((s) => s.dataSource)
 
   const [form, setForm] = useState({
     wbsCode: '', name: '',
@@ -475,6 +579,10 @@ function NewActivityForm({ onClose }: { onClose: () => void }) {
 
   const parentActivity = activities.find((a) => a.id === form.parentId) ?? null
   const derivedLevel   = parentActivity ? parentActivity.level + 1 : 0
+
+  // Modo dado real: WBS manual não se aplica (motor agrega por núcleo×sistema
+  // a partir de planejamento_itens) — usa o formulário de lançamento real.
+  if (dataSource === 'real') return <NewRealItemForm onClose={onClose} />
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

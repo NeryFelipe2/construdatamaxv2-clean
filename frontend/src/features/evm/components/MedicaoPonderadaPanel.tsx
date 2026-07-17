@@ -3,8 +3,9 @@
  * Displays a table of weighted measurements with editable cells and colored bars.
  */
 import { useState } from 'react'
-import { Plus, Trash2, Pencil, Check, X } from 'lucide-react'
+import { Plus, Trash2, Pencil, Check, X, Info } from 'lucide-react'
 import { useEvmStore } from '@/store/evmStore'
+import { useAppModeStore } from '@/store/appModeStore'
 import type { WeightedMeasurement } from '@/types'
 
 type EditingCell = {
@@ -29,7 +30,38 @@ function WeightBar({ value, color }: { value: number; color: string }) {
   )
 }
 
+/**
+ * MedicaoPonderadaPanel — a metodologia de 4 pesos ponderados (financeiro /
+ * duração / econômico / específico) não existe em nenhuma fonte real do app
+ * hoje (só no mock) — não é algo que dá pra "religar" sem antes decidir com o
+ * Felipe se essa metodologia deve virar tabela real ou se a aba deve ser
+ * redefinida em cima de `medicao_itens` (já real, usado em outra tela). Até
+ * essa decisão, o CRUD mock só fica disponível dentro do Modo Demo — fora
+ * dele mostra aviso honesto em vez de deixar editável como se fosse real.
+ */
 export function MedicaoPonderadaPanel() {
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
+
+  if (!isDemoMode) {
+    return (
+      <div className="p-6">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-start gap-3">
+          <Info size={18} className="text-sky-400 shrink-0 mt-0.5" />
+          <p className="text-[#a3a3a3] text-sm leading-relaxed">
+            A <b className="text-[#f5f5f5]">Matriz de Medição Ponderada</b> (pesos financeiro / duração /
+            econômico / específico) ainda não está conectada a dado real — não existe essa metodologia em
+            nenhuma tabela do banco hoje, só neste protótipo. Ative o{' '}
+            <b className="text-[#f5f5f5]">Modo Demonstração</b> para ver o conceito ilustrado.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return <MedicaoPonderadaPanelMock />
+}
+
+function MedicaoPonderadaPanelMock() {
   const { measurements, addMeasurement, updateMeasurement, removeMeasurement } = useEvmStore()
   const [editingCell, setEditingCell] = useState<EditingCell>(null)
   const [editValue, setEditValue] = useState('')

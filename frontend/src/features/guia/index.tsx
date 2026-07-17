@@ -43,21 +43,13 @@ const MODULOS: Modulo[] = [
     label: 'RDO / Produção',
     rota: '/app/rdo',
     icon: FileText,
-    resumo: 'Diário de obra e produção diária por equipe/rua: ligações, metros de rede, caixas, PV/PI etc.',
+    resumo: 'Tudo do RDO numa tela só: dashboard, histórico, os RDOs que chegam do WhatsApp da obra (aba Histórico), diário de obra por equipe (aba Diário/Equipes), financeiro e produção diária (ligações, metros de rede, caixas, PV/PI etc.).',
     passos: [
       { titulo: 'Lançar o dia', texto: 'Abra a aba Produção, escolha a data, o núcleo e a equipe, e preencha as colunas (LA, LE, metros de rede água/esgoto, caixas, PV, PI...).' },
+      { titulo: 'Conferir os RDOs do WhatsApp', texto: 'A aba Histórico de RDOs atualiza sozinha conforme mensagens chegam do grupo de WhatsApp da obra.' },
+      { titulo: 'Ver o diário por equipe', texto: 'A aba Diário/Equipes mostra o dia detalhado por equipe (composição, serviços, ocorrências) e deixa vincular cada atividade a uma Nota de Serviço real.' },
       { titulo: 'Conferir o resumo', texto: 'O Relatório 360 soma esses lançamentos por período e mostra a produtividade média de cada equipe.' },
       { titulo: 'Importar em lote', texto: 'Se tiver uma planilha do dia, use "Importar CSV" — o sistema mostra uma prévia antes de gravar, marcando linhas inválidas em vermelho.' },
-    ],
-  },
-  {
-    id: 'rdo-lista',
-    label: 'RDOs WhatsApp (Live)',
-    rota: '/app/rdo-lista',
-    icon: FileText,
-    resumo: 'RDOs que chegam direto do WhatsApp da obra, já organizados por dia.',
-    passos: [
-      { titulo: 'Conferir os RDOs do dia', texto: 'A lista atualiza sozinha conforme mensagens chegam do grupo de WhatsApp da obra.' },
     ],
   },
   {

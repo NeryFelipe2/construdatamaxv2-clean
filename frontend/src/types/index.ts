@@ -265,6 +265,16 @@ export interface AgendaTask {
   completionPct?: number     // 0-100
   linkedProjectId?: string
   notes?: string
+  /**
+   * true quando `endDate` é só um placeholder técnico pro Gantt (sem essa
+   * data o GanttBar não consegue desenhar a barra — ver getBarStyle em
+   * features/agenda/utils.ts) e NÃO representa um prazo real projetado.
+   * Setado pelo hook de hidratação (useAgendaSupabase.ts) quando a tarefa
+   * vem do banco com data_fim = NULL ("sem ritmo real suficiente pra
+   * projetar prazo"). Tarefas criadas/editadas pelo TaskEditDialog nunca
+   * têm esse campo (o form sempre exige uma data de fim real).
+   */
+  endDateUnknown?: boolean
 }
 
 export interface AgendaResource {
@@ -1198,7 +1208,7 @@ export interface PlanScenario {
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
 export type RdoReviewStatus = 'rascunho' | 'extraido' | 'em_revisao' | 'finalizado' | 'rejeitado'
-export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo'
+export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'diario' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
@@ -1495,6 +1505,8 @@ export interface MapSegment {
   depth?: number
   label?: string
   color?: string
+  /** 'planejado' = ainda sem status de execução confirmado em campo (ex. rede_planejada do Retorno); omitido = executado/real. */
+  origem?: 'planejado'
 }
 
 export interface MapLayer {

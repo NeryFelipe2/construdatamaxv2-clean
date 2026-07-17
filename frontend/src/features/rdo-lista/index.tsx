@@ -97,6 +97,7 @@ export function RdoListaPage() {
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState<string | null>(null)
   const [filtroProj, setFiltroProj] = useState<string>('')
+  const [isDemo, setIsDemo] = useState(false)
 
   const carregarDemo = () => {
     setRdos(DEMO_RDOS)
@@ -104,6 +105,7 @@ export function RdoListaPage() {
     for (const p of DEMO_PROJETOS) map[p.id] = p.nome
     setProjetos(map)
     setErr(null)
+    setIsDemo(true)
     setLoading(false)
   }
 
@@ -129,6 +131,7 @@ export function RdoListaPage() {
       const map: Record<string, string> = {}
       for (const p of (projRes.data || []) as ProjetoRow[]) map[p.id] = p.nome
       setProjetos(map)
+      setIsDemo(false)
     } catch {
       carregarDemo()
     } finally {
@@ -194,6 +197,11 @@ export function RdoListaPage() {
       {err && (
         <div className="p-4 bg-red-900/40 border border-red-700 rounded text-sm mb-4">
           ❌ {err}
+        </div>
+      )}
+      {isDemo && (
+        <div className="p-3 bg-yellow-900/40 border border-yellow-700 rounded text-sm mb-4 font-semibold">
+          ⚠️ Sem conexão com o banco agora — mostrando dados de exemplo (fictícios), não são RDOs reais.
         </div>
       )}
 

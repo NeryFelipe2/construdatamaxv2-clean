@@ -53,6 +53,23 @@ export interface EvmRealMes {
   pvAcum: number
   evAcum: number
   acAcum: number
+  /** % acumulado de PV sobre o BAC (0-100) — para curva percentual (Dashboard). */
+  pvPct: number
+  /** % acumulado de EV sobre o BAC (0-100). */
+  evPct: number
+  /** % acumulado de AC sobre o BAC (0-100). */
+  acPct: number
+  /** % acumulado de metros executados sobre o total de metros planejados (0-100) —
+   * físico realizado, calculado independente do preço/metro (hoje coincide com
+   * `evPct` porque o preço/metro é constante no fallback, mas fica calculado à
+   * parte para não depender dessa premissa se o preço variar no futuro). */
+  physicalPct: number
+}
+
+export interface EacScenariosReal {
+  optimistic: number
+  trend: number
+  pessimistic: number
 }
 
 export interface EvmRealMetrics {
@@ -68,6 +85,7 @@ export interface EvmRealMetrics {
   ETC: number
   VAC: number
   TCPI: number
+  eacScenarios: EacScenariosReal
 }
 
 export interface ComputeEvmRealResult {
@@ -79,6 +97,20 @@ const MESES_ABREV = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Se
 
 const EMPTY_METRICS: EvmRealMetrics = {
   BAC: 0, PV: 0, EV: 0, AC: 0, CPI: 0, SPI: 0, CV: 0, SV: 0, EAC: 0, ETC: 0, VAC: 0, TCPI: 0,
+  eacScenarios: { optimistic: 0, trend: 0, pessimistic: 0 },
+}
+
+/**
+ * computeHealthStatus — mesma regra usada pelo `evmStore` (mock), extraída pura
+ * pra ser compartilhada com o motor real e não divergir:
+ *  - blue:   CPI >= 1 e SPI >= 1 (eficiente)
+ *  - yellow: CPI >= 1 e SPI < 1  (gastando conforme o plano, mas atrasado)
+ *  - red:    CPI < 1             (estourando orçamento, com ou sem atraso)
+ */
+export function computeHealthStatus(cpi: number, spi: number): 'blue' | 'yellow' | 'red' {
+  if (cpi >= 1 && spi >= 1) return 'blue'
+  if (cpi >= 1 && spi < 1) return 'yellow'
+  return 'red'
 }
 
 function monthKeyFromIso(iso: string): string | null {
@@ -172,16 +204,27 @@ export function computeEvmReal(
   let pvAcum = 0
   let evAcum = 0
   let acAcum = 0
+  let metrosAcum = 0
   const mesAtual = monthKeyFromDate(hoje)
 
   const serie: EvmRealMes[] = meses.map((mk) => {
     const pv = ((pvWeightPorMes.get(mk) ?? 0) / totalWeight) * bac
-    const ev = (metrosPorMes.get(mk) ?? 0) * precoPorMetro
+    const metros = metrosPorMes.get(mk) ?? 0
+    const ev = metros * precoPorMetro
     const ac = acPorMes.get(mk) ?? 0
     pvAcum += pv
     evAcum += ev
     acAcum += ac
-    return { mes: mk, mesLabel: monthLabel(mk), pv, ev, ac, pvAcum, evAcum, acAcum }
+    metrosAcum += metros
+    return {
+      mes: mk,
+      mesLabel: monthLabel(mk),
+      pv, ev, ac, pvAcum, evAcum, acAcum,
+      pvPct: bac > 0 ? (pvAcum / bac) * 100 : 0,
+      evPct: bac > 0 ? (evAcum / bac) * 100 : 0,
+      acPct: bac > 0 ? (acAcum / bac) * 100 : 0,
+      physicalPct: totalWeight > 0 ? (metrosAcum / totalWeight) * 100 : 0,
+    }
   })
 
   // Métricas "no ponto de controle" = acumulado até o mês mais recente da
@@ -203,8 +246,80 @@ export function computeEvmReal(
   const VAC = BAC - EAC
   const TCPI = (BAC - AC) !== 0 ? (BAC - EV) / (BAC - AC) : 0
 
+  // Cenários de EAC — mesma fórmula usada no `evmStore` (mock), pra manter
+  // consistência entre os dois motores: otimista = volta ao BAC original,
+  // tendência = projeção pelo CPI atual, pessimista = tendência + 15%.
+  const eacScenarios: EacScenariosReal = {
+    optimistic: BAC,
+    trend: EAC,
+    pessimistic: CPI !== 0 ? EAC * 1.15 : 0,
+  }
+
   return {
     serie,
-    metrics: { BAC, PV, EV, AC, CPI, SPI, CV, SV, EAC, ETC, VAC, TCPI },
+    metrics: { BAC, PV, EV, AC, CPI, SPI, CV, SV, EAC, ETC, VAC, TCPI, eacScenarios },
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// computeEvmRealPorSegmento — mesmo motor (`computeEvmReal`), rodado uma vez
+// por segmento (núcleo × sistema), reaproveitando 100% da lógica de PV/EV já
+// validada — só troca o baseline/BAC/produção de entrada por segmento.
+//
+// AC (despesas) NÃO existe desagregado por núcleo/sistema em
+// `lancamentos_financeiros` hoje — é rateado proporcionalmente ao peso do
+// segmento sobre o peso total (mesma lógica de rateio já usada pro preço/metro
+// no motor agregado). Isso é uma ESTIMATIVA, não AC real por segmento — o
+// consumidor (IndicesPanel) precisa deixar isso explícito na UI.
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface SegmentoBaselineInput {
+  /** Chave estável do segmento, ex: "Boi Malhado|agua". */
+  key: string
+  /** Rótulo pra exibição, ex: "Boi Malhado — Água". */
+  label: string
+  plannedStart: string
+  plannedEnd: string
+  weight: number
+}
+
+export interface EvmRealSegmento {
+  key: string
+  label: string
+  weight: number
+  serie: EvmRealMes[]
+  metrics: EvmRealMetrics
+  /** Sempre `true` — AC deste segmento é rateio proporcional, não lançamento real por segmento. */
+  acEstimadoPorRateio: true
+}
+
+export function computeEvmRealPorSegmento(
+  segmentos: SegmentoBaselineInput[],
+  producaoPorSegmento: Map<string, ProducaoRealInput[]>,
+  despesas: DespesaRealInput[],
+  bacTotal: number,
+  hoje: Date = new Date(),
+): EvmRealSegmento[] {
+  const totalWeight = (segmentos ?? []).reduce((s, seg) => s + (Number(seg.weight) || 0), 0)
+  if (totalWeight <= 0 || !bacTotal || bacTotal <= 0) return []
+
+  return segmentos
+    .filter((seg) => (Number(seg.weight) || 0) > 0)
+    .map((seg) => {
+      const share = (Number(seg.weight) || 0) / totalWeight
+      const bacSeg = bacTotal * share
+      const despesasRateadas: DespesaRealInput[] = (despesas ?? []).map((d) => ({
+        data: d.data,
+        valor: (Number(d.valor) || 0) * share,
+      }))
+      const producaoSeg = producaoPorSegmento.get(seg.key) ?? []
+      const { serie, metrics } = computeEvmReal(
+        [{ plannedStart: seg.plannedStart, plannedEnd: seg.plannedEnd, weight: seg.weight }],
+        producaoSeg,
+        despesasRateadas,
+        bacSeg,
+        hoje,
+      )
+      return { key: seg.key, label: seg.label, weight: seg.weight, serie, metrics, acEstimadoPorRateio: true as const }
+    })
 }

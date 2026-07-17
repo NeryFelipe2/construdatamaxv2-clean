@@ -10,6 +10,7 @@ import {
   computeMasterSCurve, applyWhatIfAdjustments, deriveLookahead,
   getProjectDateRange, type MasterSCurvePoint,
 } from '@/features/planejamento-mestre/utils/masterEngine'
+import { salvarProgramacaoDiaria, type ProgramacaoDiariaRow } from '@/hooks/useMasterActivities'
 
 interface PlanejamentoMestreState {
   activeTab: PlanejamentoMestreTab
@@ -30,9 +31,20 @@ interface PlanejamentoMestreState {
    * zerado.
    */
   matchQuality: { totalItens: number; comMatch: number; semMatch: number }
+  /** `engine.reload` de useMasterScheduleEngine — setado pela page (index.tsx)
+   *  pra que qualquer painel filho consiga forçar um refetch do dado real
+   *  depois de escrever em `planejamento_itens` (ex.: NewActivityForm). */
+  reloadRealData: (() => void) | null
+  /** Projeto ativo — setado pela page, usado só pra saber onde persistir a
+   *  programação diária (setProgramacaoDiaria) quando dataSource === 'real'. */
+  projetoAtivoId: string | null
 
   // Navigation
   setActiveTab: (tab: PlanejamentoMestreTab) => void
+  setReloadRealData: (fn: (() => void) | null) => void
+  setProjetoAtivoId: (id: string | null) => void
+  /** Popula programacaoSemanal com linhas vindas do banco (merge, não substitui). */
+  hidratarProgramacaoSemanal: (rows: ProgramacaoDiariaRow[]) => void
 
   // Activity CRUD
   addActivity: (activity: Omit<MasterActivity, 'id'>) => void
@@ -80,8 +92,24 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
   programacaoSemanal: {},
   dataSource: 'empty',
   matchQuality: { totalItens: 0, comMatch: 0, semMatch: 0 },
+  reloadRealData: null,
+  projetoAtivoId: null,
 
   setActiveTab: (tab) => set({ activeTab: tab }),
+  setReloadRealData: (fn) => set({ reloadRealData: fn }),
+  setProjetoAtivoId: (id) => set({ projetoAtivoId: id }),
+
+  hidratarProgramacaoSemanal: (rows) =>
+    set((s) => {
+      const next = { ...s.programacaoSemanal }
+      for (const r of rows) {
+        next[r.activity_id] = {
+          ...(next[r.activity_id] ?? {}),
+          [r.data]: { previsto: Number(r.previsto), realizado: Number(r.realizado) },
+        }
+      }
+      return { programacaoSemanal: next }
+    }),
 
   addActivity: (activity) =>
     set((s) => ({
@@ -154,7 +182,7 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
 
   clearWhatIfAdjustments: () => set({ whatIfAdjustments: [], simulatedSCurve: [] }),
 
-  setProgramacaoDiaria: (activityId, date, data) =>
+  setProgramacaoDiaria: (activityId, date, data) => {
     set((s) => ({
       programacaoSemanal: {
         ...s.programacaoSemanal,
@@ -163,7 +191,12 @@ export const usePlanejamentoMestreStore = create<PlanejamentoMestreState>((set, 
           [date]: data,
         },
       },
-    })),
+    }))
+    const { dataSource, projetoAtivoId } = get()
+    if (dataSource === 'real' && projetoAtivoId) {
+      salvarProgramacaoDiaria(projetoAtivoId, activityId, date, data.previsto, data.realizado)
+    }
+  },
 
   runWhatIfSimulation: () => {
     const { activities, whatIfAdjustments } = get()

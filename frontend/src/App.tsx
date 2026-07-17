@@ -16,7 +16,7 @@ import {
   Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
   FileSearch, Monitor, MessageSquare, Building2, UserCog,
   GitBranch, CheckSquare, Sun, Moon, Brain, Palette, Waves,
-  FileSpreadsheet, FlaskConical, Pencil, BookOpen,
+  FileSpreadsheet, FlaskConical, Pencil, BookOpen, Droplets,
 } from "lucide-react";
 
 // ─── Lazy-loaded modules ────────────────────────────────────────────────────
@@ -29,7 +29,6 @@ const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
 const PlanejamentoPage = lazy(() => import("@/features/planejamento/index").then((m) => ({ default: m.PlanejamentoPage })));
 const Relatorio360Page = lazy(() => import("@/features/relatorio360/index").then((m) => ({ default: m.Relatorio360Page })));
-const RdoListaPage = lazy(() => import("@/features/rdo-lista/index").then((m) => ({ default: m.RdoListaPage })));
 const Rede360Page = lazy(() => import("@/features/rede-360/index").then((m) => ({ default: m.Rede360Page })));
 const LpsPage = lazy(() => import("@/features/lps-lean/index").then((m) => ({ default: m.LpsPage })));
 const BimPage = lazy(() => import("@/features/bim/index").then((m) => ({ default: m.BimPage })));
@@ -54,11 +53,12 @@ const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((
 const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
 const MedicaoPage = lazy(() => import("@/features/medicao/index").then((m) => ({ default: m.MedicaoPage })));
 const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
-const WcrDiarioPage = lazy(() => import("@/features/wcr-diario/index").then((m) => ({ default: m.WcrDiarioPage })));
+const CampoWhatsappPage = lazy(() => import("@/features/campo-whatsapp/index").then((m) => ({ default: m.CampoWhatsappPage })));
 const EquipesKanbanPage = lazy(() => import("@/features/equipes-kanban/index"));
-const DiarioObraPage = lazy(() => import("@/features/diario-obra/index").then((m) => ({ default: m.DiarioObraPage })));
+const ProgramacaoSemanaPage = lazy(() => import("@/features/programacao-semana/index").then((m) => ({ default: m.ProgramacaoSemanaPage })));
 const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index").then((m) => ({ default: m.PlanilhasModeloPage })));
 const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
+const MetaLigacoesPage = lazy(() => import("@/features/meta-ligacoes/index").then((m) => ({ default: m.MetaLigacoesPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 const navItems = [
@@ -76,6 +76,8 @@ const navItems = [
   { label: "Pré-Construção", icon: FileSearch, to: "/app/pre-construcao" },
   { section: "Planejamento" },
   { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
+  { label: "Programação Semana", icon: ClipboardList, to: "/app/programacao-semana" },
+  { label: "Meta 1500 Ligações", icon: Droplets, to: "/app/meta-ligacoes" },
   { label: "Feito × A Fazer (NS)", icon: Waves, to: "/app/ns-planejamento" },
   { label: "Planilhas (Modelos)", icon: FileSpreadsheet, to: "/app/planilhas" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },
@@ -86,9 +88,8 @@ const navItems = [
   { label: "Medição (RDO)", icon: Calculator, to: "/app/medicao" },
   { section: "Operação de Campo" },
   { label: "Kanban Equipes", icon: Users, to: "/app/equipes-kanban" },
-  { label: "Diário de Obra", icon: FileText, to: "/app/diario-obra" },
   { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "RDOs WhatsApp (Live)", icon: FileText, to: "/app/rdo-lista" },
+  { label: "Campo WhatsApp", icon: MessageSquare, to: "/app/campo-whatsapp" },
   { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
   { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
   { section: "Recursos" },
@@ -105,7 +106,6 @@ const navItems = [
   { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
   { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
   { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
-  { label: "Diário WCR", icon: FileText, to: "/app/wcr-diario" },
 ] as const;
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
@@ -622,7 +622,8 @@ export default function App() {
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
           <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
-          <Route path="rdo-lista" element={<LazyRoute><RdoListaPage /></LazyRoute>} />
+          {/* 13/07/2026: unificado dentro de RDO (a query sem filtro de projeto virou redundante depois do fix do bug que zerava o Dashboard de /app/rdo) */}
+          <Route path="rdo-lista" element={<Navigate to="/app/rdo" replace />} />
           <Route path="projetos" element={<LazyRoute><ProjetosPage /></LazyRoute>} />
           <Route path="planejamento" element={<LazyRoute><PlanejamentoPage /></LazyRoute>} />
           <Route path="agenda" element={<LazyRoute><AgendaPage /></LazyRoute>} />
@@ -653,9 +654,14 @@ export default function App() {
           <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
           <Route path="medicao" element={<LazyRoute><MedicaoPage /></LazyRoute>} />
           <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
-          <Route path="wcr-diario" element={<LazyRoute><WcrDiarioPage /></LazyRoute>} />
+          {/* Aposentado 10/07/2026: dado 100% congelado (extração pontual de 28/06), sem indicação forte de obsolescência — RDO já mostra dado real/atual */}
+          <Route path="wcr-diario" element={<Navigate to="/app/rdo" replace />} />
           <Route path="equipes-kanban" element={<LazyRoute><EquipesKanbanPage /></LazyRoute>} />
-          <Route path="diario-obra" element={<LazyRoute><DiarioObraPage /></LazyRoute>} />
+          <Route path="programacao-semana" element={<LazyRoute><ProgramacaoSemanaPage /></LazyRoute>} />
+          <Route path="meta-ligacoes" element={<LazyRoute><MetaLigacoesPage /></LazyRoute>} />
+          {/* 13/07/2026: virou a aba "Diário / Equipes" dentro de RDO — uma tela só, tudo no mesmo lugar */}
+          <Route path="diario-obra" element={<Navigate to="/app/rdo" replace />} />
+          <Route path="campo-whatsapp" element={<LazyRoute><CampoWhatsappPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />

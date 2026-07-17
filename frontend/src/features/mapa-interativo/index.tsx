@@ -3,7 +3,7 @@
  * Full Leaflet-based editor for sewer/water/civil networks.
  * Shows a mode selector (Saneamento vs Construção) on first open.
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Droplets, HardHat, ArrowLeftRight } from 'lucide-react'
 import { MapaHeader }        from './components/MapaHeader'
 import { MapaCanvas }        from './components/MapaCanvas'
@@ -71,6 +71,15 @@ function ModeSelectorOverlay() {
 export function MapaInterativoPage() {
   const [showAnalytics, setShowAnalytics] = useState(false)
   const mapMode = useMapaInterativoStore((s) => s.mapMode)
+  const selectedProjectId = useMapaInterativoStore((s) => s.selectedProjectId)
+  const loadError = useMapaInterativoStore((s) => s.loadError)
+  const isLive = useMapaInterativoStore((s) => s.isLive)
+
+  useEffect(() => {
+    // Recarrega sempre que o projeto selecionado no dropdown do header muda —
+    // antes só rodava uma vez no mount e o filtro de projeto nunca era aplicado.
+    useMapaInterativoStore.getState().loadFromSupabase()
+  }, [selectedProjectId])
 
   return (
     <div className="flex flex-col h-full bg-gray-950 overflow-hidden">
@@ -83,6 +92,16 @@ export function MapaInterativoPage() {
         <ModeSelectorOverlay />
       ) : (
         <>
+          {loadError && (
+            <div className="px-4 py-1.5 bg-rose-500/10 border-b border-rose-500/30 text-[11px] text-rose-300 shrink-0">
+              Erro ao carregar rede ao vivo do Supabase ({loadError}) — mostrando último snapshot salvo.
+            </div>
+          )}
+          {!loadError && !isLive && (
+            <div className="px-4 py-1.5 bg-amber-500/10 border-b border-amber-500/30 text-[11px] text-amber-300 shrink-0">
+              Sem rede real cadastrada (pv/trecho/rede_planejada) para este projeto — mostrando snapshot congelado (Boi Malhado).
+            </div>
+          )}
           {/* Mode indicator strip */}
           <div className="flex items-center gap-2 px-4 py-1.5 bg-[#071422] border-b border-[#525252] shrink-0">
             {mapMode === 'saneamento'
