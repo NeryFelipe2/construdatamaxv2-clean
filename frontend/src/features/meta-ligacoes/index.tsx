@@ -18,6 +18,8 @@ import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import {
   useMetaLigacoes, META_ALVO, META_RITMO_DIA, META_RITMO_SEMANA, META_JANELA_FIM,
 } from '@/hooks/useMetaLigacoes'
+import { useMetaCorredor } from '@/hooks/useMetaCorredor'
+import { CurvaSCorredor } from './CurvaSCorredor'
 
 const META = META_ALVO
 const RITMO_DIA = META_RITMO_DIA
@@ -143,6 +145,7 @@ export function MetaLigacoesPage() {
   const { activeProjectId } = useProjectContext()
   const projetoAtivo = useProjectContext(selectActiveProjeto)
   const { dias, semanas, totais, loading, error, reload } = useMetaLigacoes(activeProjectId)
+  const corredor = useMetaCorredor(activeProjectId)
 
   const temDado = dias.length > 0
   const semDadoReal = !temDado && !loading
@@ -250,6 +253,16 @@ export function MetaLigacoesPage() {
                 Contagem a partir de {JANELA_LABEL} (início do ciclo — produção anterior não conta). Sem caixa U.M.A não instala hidrômetro; sem hidrômetro não faz a ligação. "Baixa" = registro da ligação concluída no app ZN da Sabesp.
               </p>
             </div>
+
+            {/* ═══ Curva S — corredor editável (mín ↔ ideal) ═══ */}
+            {corredor.semanas.length > 0 && (
+              <CurvaSCorredor
+                semanas={corredor.semanas}
+                dias={dias}
+                meta={META}
+                onSalvar={corredor.salvarSemana}
+              />
+            )}
 
             {/* ═══ Controle semanal (forma principal de acompanhamento) ═══ */}
             <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
