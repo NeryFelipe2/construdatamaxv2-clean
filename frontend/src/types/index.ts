@@ -1342,7 +1342,7 @@ export interface RDO {
 
 // ─── Quantitativos e Orçamento ────────────────────────────────────────────────
 
-export type CostBaseSource = 'sinapi' | 'seinfra' | 'custom' | 'manual'
+export type CostBaseSource = 'sinapi' | 'seinfra' | 'custom' | 'manual' | 'contrato'
 export type QuantTab = 'composicao' | 'resumo' | 'banco' | 'historico'
 
 export interface OrcamentoItem {

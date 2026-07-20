@@ -11,13 +11,9 @@ import { DemoBanner } from "@/components/shared/DemoBanner";
 import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
-  Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
-  CalendarClock, Target, FileText, Calculator, Layers,
-  Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
-  FileSearch, Monitor, MessageSquare, Building2, UserCog,
-  GitBranch, CheckSquare, Sun, Moon, Brain, Palette, Waves,
-  FileSpreadsheet, FlaskConical, Pencil, BookOpen, Droplets,
+  Building2, Palette, FlaskConical, Pencil,
 } from "lucide-react";
+import { NAV_GROUPS, type NavItem } from "@/config/navigation";
 
 // ─── Lazy-loaded modules ────────────────────────────────────────────────────
 const TorreDeControlePage = lazy(() => import("@/features/torre-de-controle/index").then((m) => ({ default: m.TorreDeControlePage })));
@@ -61,52 +57,13 @@ const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ defau
 const MetaLigacoesPage = lazy(() => import("@/features/meta-ligacoes/index").then((m) => ({ default: m.MetaLigacoesPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
-const navItems = [
-  { section: "Ajuda" },
-  { label: "Guia — Como usar", icon: BookOpen, to: "/app/guia" },
-  { section: "Gestão" },
-  { label: "Gestão 360", icon: LayoutDashboard, to: "/app/gestao-360" },
-  { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
-  { label: "Projetos", icon: FolderKanban, to: "/app/projetos" },
-  { section: "Engenharia" },
-  { label: "Motor NS V5", icon: Monitor, to: "/app/ns-v5" },
-  { label: "Mapa / GIS", icon: Map, to: "/app/mapa-interativo" },
-  { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
-  { label: "Rede 360", icon: Network, to: "/app/rede-360" },
-  { label: "Pré-Construção", icon: FileSearch, to: "/app/pre-construcao" },
-  { section: "Planejamento" },
-  { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
-  { label: "Programação Semana", icon: ClipboardList, to: "/app/programacao-semana" },
-  { label: "Metas", icon: Droplets, to: "/app/meta-ligacoes" },
-  { label: "Feito × A Fazer (NS)", icon: Waves, to: "/app/ns-planejamento" },
-  { label: "Planilhas (Modelos)", icon: FileSpreadsheet, to: "/app/planilhas" },
-  { label: "Agenda", icon: Calendar, to: "/app/agenda" },
-  { label: "LPS / Lean", icon: Target, to: "/app/lps-lean" },
-  { label: "EVM / Curva S", icon: Calculator, to: "/app/evm" },
-  { section: "Financeiro" },
-  { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
-  { label: "Medição (RDO)", icon: Calculator, to: "/app/medicao" },
-  { section: "Operação de Campo" },
-  { label: "Kanban Equipes", icon: Users, to: "/app/equipes-kanban" },
-  { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "Campo WhatsApp", icon: MessageSquare, to: "/app/campo-whatsapp" },
-  { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
-  { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
-  { section: "Recursos" },
-  { label: "Suprimentos", icon: PackageSearch, to: "/app/suprimentos" },
-  { label: "Mão de Obra", icon: Users, to: "/app/mao-de-obra" },
-  { label: "Equipamentos", icon: Wrench, to: "/app/gestao-equipamentos" },
-  { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
-  { section: "IA & Inteligência" },
-  { label: "Engine V5", icon: Cpu, to: "/app/engine-v5" },
-  { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
-  { label: "Agente Chat", icon: MessageSquare, to: "/app/agent-chat" },
-  { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
-  { section: "Comunicação" },
-  { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
-  { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
-  { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
-] as const;
+// Derived from the shared NAV_GROUPS config (src/config/navigation.ts) — the
+// same source AppLayout.tsx (eKyte theme) reads from, so the two menus can
+// never drift apart again (see 20/07/2026 fix).
+const navItems: ({ section: string } | NavItem)[] = NAV_GROUPS.flatMap((g) => [
+  { section: g.category },
+  ...g.items,
+]);
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
 function RouteFallback() {
@@ -257,7 +214,7 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
             );
           }
           if (!("to" in item)) return null;
-          const nav = item as { label: string; icon: typeof Monitor; to: string };
+          const nav = item as NavItem;
           return (
             <NavLink
               key={nav.to}

@@ -22,6 +22,17 @@
  * ligacoes_ou_ramais, desvio, materiais, por_rua, as duas *_baixas) voltam
  * zerados/null — nada é estimado ou inventado. `desvio` fica sempre null até
  * existir rastreamento de atraso por NS (fora do escopo desta fase).
+ *
+ * 20/07/2026 — `desviosHistoricos`: a tabela `desvios_planejamento` (pipeline
+ * antigo, ETL QGIS de 06/07, mesmo lote descrito acima) tem 32 registros
+ * reais nunca resolvidos (`resolvido_em` null, `planejamento_itens.status`
+ * = 'pendente' nos 32) e não aparecia em NENHUMA tela. A nomenclatura das NS
+ * desse lote antigo ("NS ÁGUA JESSE 01") não bate com a numeração atual
+ * (162 NS dos croquis Motor NS, "NS 25 — PV1 → PV2") — são universos
+ * diferentes, sem chave de junção confiável — por isso entram como seção
+ * histórica separada (somaria errado se fossem mescladas item a item com
+ * `itens`). `sistema` é derivado do texto de `atividade` (100% dos 32 têm
+ * ÁGUA/AGUA ou ESGOTO no nome, conferido em produção).
  */
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -75,6 +86,17 @@ export interface NsItem {
   } | null
 }
 
+export interface DesvioHistorico {
+  id: string
+  data: string
+  atividade: string
+  sistema: 'AGUA' | 'ESGOTO'
+  quantidade_planejada: number
+  severidade: string
+  acao_recomendada: string | null
+  dias_sem_confirmacao: number
+}
+
 const CONCLUIDOS = new Set(['CONCLUIDA', 'MEDIDA'])
 
 function vazioBaixas() {
@@ -87,6 +109,7 @@ function vazioBaixas() {
 export function useSupabaseNsPlanejamento(projetoId: string | null) {
   const [resumo, setResumo] = useState<ResumoPlano | null>(null)
   const [itens, setItens] = useState<NsItem[]>([])
+  const [desviosHistoricos, setDesviosHistoricos] = useState<DesvioHistorico[]>([])
   const [planoId, setPlanoId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -165,6 +188,28 @@ export function useSupabaseNsPlanejamento(projetoId: string | null) {
 
       const fonteData = (campoData ?? [])[0]?.data_levantamento ?? null
 
+      // Histórico de desvios do pipeline antigo (ver comentário no topo do
+      // arquivo) — só os nunca resolvidos (resolvido_em null).
+      const { data: desviosData, error: e4 } = await supabase
+        .from('desvios_planejamento')
+        .select('id, data, atividade, quantidade_planejada, severidade, acao_recomendada')
+        .eq('projeto_id', projetoId)
+        .is('resolvido_em', null)
+        .order('data', { ascending: false })
+      if (e4) throw e4
+
+      const hojeMs = Date.now()
+      setDesviosHistoricos((desviosData ?? []).map((d) => ({
+        id: String(d.id),
+        data: d.data,
+        atividade: d.atividade,
+        sistema: /esgoto/i.test(d.atividade) ? 'ESGOTO' : 'AGUA',
+        quantidade_planejada: Number(d.quantidade_planejada) || 0,
+        severidade: d.severidade,
+        acao_recomendada: d.acao_recomendada,
+        dias_sem_confirmacao: Math.max(0, Math.floor((hojeMs - new Date(d.data).getTime()) / 86400000)),
+      })))
+
       setResumo({
         agua: resumoSistemaCampo('AGUA') ?? resumoSistemaNs('AGUA'),
         esgoto: resumoSistemaCampo('ESGOTO') ?? resumoSistemaNs('ESGOTO'),
@@ -203,5 +248,5 @@ export function useSupabaseNsPlanejamento(projetoId: string | null) {
     }
   }, [load])
 
-  return { resumo, itens, planoId, loading, error, reload: load, marcarConcluido, atribuirEquipe }
+  return { resumo, itens, desviosHistoricos, planoId, loading, error, reload: load, marcarConcluido, atribuirEquipe }
 }

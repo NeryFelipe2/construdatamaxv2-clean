@@ -105,6 +105,56 @@ export function useCampoWhatsapp() {
 
   useEffect(() => { load() }, [load])
 
+  /** Cria uma ocorrência manualmente (ex.: lançada pela tela Punch List) — otimista + revert. */
+  const criarOcorrencia = useCallback(async (input: {
+    descricao: string
+    tipo: string
+    nucleo: string | null
+    rua: string | null
+    reportado_por: string | null
+    projeto_id: string | null
+  }): Promise<boolean> => {
+    const hoje = new Date().toISOString().slice(0, 10)
+    const nova: OcorrenciaObra = {
+      id: crypto.randomUUID(),
+      projeto_id: input.projeto_id,
+      nucleo: input.nucleo,
+      rua: input.rua,
+      data: hoje,
+      tipo: input.tipo,
+      descricao: input.descricao,
+      reportado_por: input.reportado_por,
+      resolvida: false,
+      resolvido_em: null,
+      origem: 'manual',
+      origem_fonte: 'Lançada manualmente (Punch List)',
+      updated_at: new Date().toISOString(),
+    }
+    setOcorrencias((prev) => [nova, ...prev])
+    if (!supabase) return true
+    try {
+      const { error: e1 } = await supabase.from('ocorrencias_obra').insert({
+        id: nova.id,
+        projeto_id: nova.projeto_id,
+        nucleo: nova.nucleo,
+        rua: nova.rua,
+        data: nova.data,
+        tipo: nova.tipo,
+        descricao: nova.descricao,
+        reportado_por: nova.reportado_por,
+        resolvida: false,
+        origem: nova.origem,
+        origem_fonte: nova.origem_fonte,
+      })
+      if (e1) throw e1
+      return true
+    } catch (err: any) {
+      setError(err?.message ?? 'Erro ao criar ocorrência')
+      load() // reverte via reload
+      return false
+    }
+  }, [load])
+
   /** Marca/desmarca uma ocorrência como resolvida (update otimista + revert). */
   const marcarOcorrencia = useCallback(async (id: string, resolvida: boolean) => {
     if (!supabase) return
@@ -150,5 +200,6 @@ export function useCampoWhatsapp() {
     reload: load,
     marcarOcorrencia,
     marcarCadastro,
+    criarOcorrencia,
   }
 }

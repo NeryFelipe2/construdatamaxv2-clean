@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MessageSquare, Phone, Send, Trash2, Plus, RefreshCw,
   CheckCircle, Clock, AlertTriangle, Users,
+  Activity, ArrowDownLeft, ArrowUpRight, Search,
 } from "lucide-react";
 import {
   apiWhatsappNumeros,
@@ -15,9 +16,54 @@ import {
   type CanonicalIntegrationStatus,
 } from "@/lib/api";
 import { useProjectContext } from "@/store/projectContext";
+import { useWhatsappLogs } from "@/hooks/useWhatsappLogs";
+import type { WhatsappLogItem } from "@/hooks/useWhatsappLogs";
 
 type NumeroWA = { id: string; telefone: string; nome: string; funcao: string; ns_id: number };
 type RdoItem = Record<string, unknown>;
+
+function fmtDataLog(iso: string | null): string {
+  if (!iso) return "—";
+  const [y, m, d] = iso.split("-");
+  if (!y || !m || !d) return iso;
+  return `${d}/${m}/${y}`;
+}
+
+/** Gráfico de barras inline (SVG puro) — volume de eventos do gateway por dia. */
+function LogsDiaChart({ pontos }: { pontos: [string, number][] }) {
+  const W = 700;
+  const H = 160;
+  const PAD = { left: 28, right: 12, top: 10, bottom: 26 };
+  const innerW = W - PAD.left - PAD.right;
+  const innerH = H - PAD.top - PAD.bottom;
+  const max = Math.max(...pontos.map(([, c]) => c), 1);
+  const n = pontos.length;
+  const barGap = 3;
+  const barW = Math.max(2, innerW / n - barGap);
+  const labelStep = Math.max(1, Math.ceil(n / 10));
+
+  function x(i: number) { return PAD.left + i * (innerW / n); }
+  function barH(c: number) { return (c / max) * innerH; }
+  function y(c: number) { return PAD.top + innerH - barH(c); }
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
+      <line x1={PAD.left} y1={PAD.top + innerH} x2={W - PAD.right} y2={PAD.top + innerH} stroke="#20406a" strokeWidth="1" />
+      {pontos.map(([dia, count], i) => (
+        <g key={dia}>
+          <rect x={x(i)} y={y(count)} width={barW} height={barH(count)} fill="#2abfdc" opacity="0.85" rx="1">
+            <title>{fmtDataLog(dia)}: {count} evento{count === 1 ? "" : "s"}</title>
+          </rect>
+          {i % labelStep === 0 && (
+            <text x={x(i) + barW / 2} y={H - 8} textAnchor="middle" fontSize="9" fill="#5a8caa">
+              {dia.slice(8, 10)}/{dia.slice(5, 7)}
+            </text>
+          )}
+        </g>
+      ))}
+    </svg>
+  );
+}
 
 const DEMO_NUMEROS: NumeroWA[] = [
   { id: "demo-wa-1", telefone: "5561981846325", nome: "Zé Claudino", funcao: "encarregado", ns_id: 1 },
@@ -56,15 +102,17 @@ export function WhatsAppRdoPage() {
   const [rdos, setRdos] = useState<RdoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
-  const [tab, setTab] = useState<"numeros" | "rdos" | "config">("numeros");
+  const [tab, setTab] = useState<"numeros" | "rdos" | "config" | "atividade">("numeros");
   const activeProjectId = useProjectContext((s) => s.activeProjectId);
   const [integrationStatus, setIntegrationStatus] = useState<CanonicalIntegrationStatus>(activeProjectId ? "partial" : "local");
+  const { logs, loading: logsLoading, error: logsError, reload: reloadLogs } = useWhatsappLogs();
 
   // Form state
   const [novoTel, setNovoTel] = useState("");
   const [novoNome, setNovoNome] = useState("");
   const [novoFuncao, setNovoFuncao] = useState("apontador");
   const [novoNsId, setNovoNsId] = useState("1");
+  const [buscaLog, setBuscaLog] = useState("");
 
   async function refresh() {
     setLoading(true);
@@ -163,6 +211,45 @@ export function WhatsAppRdoPage() {
   });
   const rdosPendentes = rdos.filter((r: any) => (r.status || "").toString().toLowerCase().includes("aberto"));
 
+  // ── Atividade do gateway (whatsapp_logs) — agregados ──
+  const logsPorDia = useMemo(() => {
+    const map = new Map<string, number>();
+    logs.forEach((l) => {
+      const d = l.created_at.slice(0, 10);
+      map.set(d, (map.get(d) ?? 0) + 1);
+    });
+    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [logs]);
+
+  const logsPorTipo = useMemo(() => {
+    const map = new Map<string, number>();
+    logs.forEach((l) => {
+      const t = l.tipo ?? "desconhecido";
+      map.set(t, (map.get(t) ?? 0) + 1);
+    });
+    return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
+  }, [logs]);
+
+  const logsIn = useMemo(() => logs.filter((l) => l.direction === "in").length, [logs]);
+  const logsOut = logs.length - logsIn;
+  const logsErro = useMemo(
+    () => logs.filter((l) => (l.status ?? "").toLowerCase().startsWith("error")).length,
+    [logs],
+  );
+  const periodoLogInicio = logsPorDia[0]?.[0] ?? null;
+  const periodoLogFim = logsPorDia[logsPorDia.length - 1]?.[0] ?? null;
+
+  const logsFiltrados = useMemo(() => {
+    const termo = buscaLog.trim().toLowerCase();
+    if (!termo) return logs;
+    return logs.filter((l) =>
+      `${l.mensagem ?? ""} ${l.telefone ?? ""} ${l.tipo ?? ""}`.toLowerCase().includes(termo),
+    );
+  }, [logs, buscaLog]);
+
+  const LOG_LIMITE = 100;
+  const logsExibidos = logsFiltrados.slice(0, LOG_LIMITE);
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       {/* Header */}
@@ -183,8 +270,11 @@ export function WhatsAppRdoPage() {
         }`}>
           {integrationStatus === "connected" ? "Canonico" : integrationStatus === "partial" ? "Parcial" : "Local"}
         </span>
-        <button onClick={refresh} className="ml-auto p-2 rounded-lg hover:bg-[#14294e] text-[#6b6b6b] hover:text-[#2abfdc] transition-colors">
-          <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+        <button
+          onClick={() => { refresh(); reloadLogs(); }}
+          className="ml-auto p-2 rounded-lg hover:bg-[#14294e] text-[#6b6b6b] hover:text-[#2abfdc] transition-colors"
+        >
+          <RefreshCw size={18} className={loading || logsLoading ? "animate-spin" : ""} />
         </button>
       </div>
 
@@ -217,11 +307,11 @@ export function WhatsAppRdoPage() {
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-[#20406a] pb-1">
-        {(["numeros", "rdos", "config"] as const).map(t => (
+        {(["numeros", "rdos", "atividade", "config"] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 text-sm rounded-t-lg transition-colors ${
             tab === t ? "bg-[#14294e] text-[#2abfdc] border border-[#20406a] border-b-transparent" : "text-[#6b6b6b] hover:text-[#8fb3c8]"
           }`}>
-            {t === "numeros" ? "Numeros WhatsApp" : t === "rdos" ? "RDOs Recebidos" : "Configuracoes"}
+            {t === "numeros" ? "Numeros WhatsApp" : t === "rdos" ? "RDOs Recebidos" : t === "atividade" ? "Atividade (gateway)" : "Configuracoes"}
           </button>
         ))}
       </div>
@@ -305,6 +395,109 @@ export function WhatsAppRdoPage() {
           )) : (
             <div className="text-center py-8 text-[#5a8caa]">Nenhum RDO disponivel.</div>
           )}
+        </div>
+      )}
+
+      {tab === "atividade" && (
+        <div className="space-y-4">
+          {/* Aviso honesto — este log não é conteúdo dos grupos WCR */}
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 text-xs text-amber-200 flex items-start gap-2">
+            <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
+            <span>
+              {logs.length} eventos brutos do webhook Evolution API (tabela <code className="text-amber-100">whatsapp_logs</code>),
+              período real {fmtDataLog(periodoLogInicio)}–{fmtDataLog(periodoLogFim)}. Esse recorte é de um teste de
+              configuração do gateway (abril/maio), meses antes da operação WCR — mensagens de grupos aleatórios, não
+              os grupos da obra. A tabela não guarda nome de grupo, só telefone/JID; por isso este painel é
+              diagnóstico técnico do bot, não "atividade da obra".
+            </span>
+          </div>
+
+          {logsError && (
+            <p className="text-xs text-red-400 flex items-center gap-1.5">
+              <AlertTriangle size={13} /> {logsError}
+            </p>
+          )}
+
+          {/* KPI strip */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Eventos totais", value: logs.length, icon: Activity, color: "text-[#2abfdc]" },
+              { label: "Recebidos (in)", value: logsIn, icon: ArrowDownLeft, color: "text-green-400" },
+              { label: "Enviados (out)", value: logsOut, icon: ArrowUpRight, color: "text-yellow-400" },
+              { label: "Falhas de envio", value: logsErro, icon: AlertTriangle, color: "text-red-400" },
+            ].map((k, i) => (
+              <div key={i} className="bg-[#112645] border border-[#20406a] rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <k.icon size={16} className={k.color} />
+                  <span className="text-xs text-[#5a8caa]">{k.label}</span>
+                </div>
+                <span className={`text-2xl font-bold ${k.color}`}>{k.value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Volume por dia */}
+          <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4">
+            <h3 className="text-sm font-semibold text-[#2abfdc] mb-3">Eventos por dia</h3>
+            {logsPorDia.length > 0 ? (
+              <LogsDiaChart pontos={logsPorDia} />
+            ) : (
+              <p className="text-xs text-[#5a8caa]">Sem eventos para plotar.</p>
+            )}
+          </div>
+
+          {/* Breakdown por tipo */}
+          <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4">
+            <h3 className="text-sm font-semibold text-[#2abfdc] mb-3">Eventos por tipo</h3>
+            <div className="flex flex-wrap gap-2">
+              {logsPorTipo.map(([tipoLog, count]) => (
+                <span key={tipoLog} className="px-2.5 py-1 rounded-full text-[11px] bg-[#0d2040] border border-[#20406a] text-[#8fb3c8]">
+                  {tipoLog} <span className="text-[#5a8caa]">({count})</span>
+                </span>
+              ))}
+              {logsPorTipo.length === 0 && <span className="text-xs text-[#5a8caa]">Nenhum evento.</span>}
+            </div>
+          </div>
+
+          {/* Busca + lista bruta */}
+          <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4 space-y-3">
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5a8caa]" />
+              <input
+                value={buscaLog}
+                onChange={(e) => setBuscaLog(e.target.value)}
+                placeholder="Buscar por telefone/JID ou palavra-chave na mensagem..."
+                className="w-full bg-[#0d2040] border border-[#20406a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e4f2f8] placeholder-[#5a8caa]"
+              />
+            </div>
+            <p className="text-[11px] text-[#5a8caa]">
+              Mostrando {logsExibidos.length} de {logsFiltrados.length} eventos
+              {logsFiltrados.length > LOG_LIMITE && " (refine a busca para ver mais)"}
+            </p>
+            <div className="space-y-1.5 max-h-[420px] overflow-y-auto">
+              {logsExibidos.map((l: WhatsappLogItem) => (
+                <div key={l.id} className="flex items-start gap-2 text-xs bg-[#0d2040] border border-[#20406a] rounded-lg px-3 py-2">
+                  {l.direction === "in" ? (
+                    <ArrowDownLeft size={13} className="text-green-400 mt-0.5 shrink-0" />
+                  ) : (
+                    <ArrowUpRight size={13} className="text-yellow-400 mt-0.5 shrink-0" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 text-[10px] text-[#5a8caa]">
+                      <span className="font-mono">{new Date(l.created_at).toLocaleString("pt-BR")}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-[#20406a] text-[#8fb3c8]">{l.tipo}</span>
+                      {l.status && <span>{l.status}</span>}
+                      {l.telefone && <span className="font-mono truncate">{l.telefone}</span>}
+                    </div>
+                    {l.mensagem && <p className="text-[#c9dcea] mt-1 break-words">{l.mensagem}</p>}
+                  </div>
+                </div>
+              ))}
+              {logsExibidos.length === 0 && (
+                <div className="text-center py-8 text-[#5a8caa] text-xs">Nenhum evento com esse filtro.</div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

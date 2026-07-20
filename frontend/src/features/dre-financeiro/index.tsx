@@ -25,15 +25,8 @@ import { useFluxoProjecao } from '@/hooks/useFluxoProjecao'
 
 type TabId = 'dre' | 'fluxo' | 'eficiencia' | 'custos'
 
-const CONTRATOS: Record<string, { numero: string; empresa: string; cliente: string; cidade: string; valorContrato: number; prazoMeses: number }> = {
-    'abe7f66c-004b-4bb5-a245-6be67debd9f7': { numero: 'CT 11481051', empresa: 'ConstruDataMax Engenharia', cliente: 'SABESP', cidade: 'Santos / Osasco', valorContrato: 18_750_000, prazoMeses: 18 },
-  'ec112c9a-1669-4287-8079-526d6940ce82': { numero: 'CT-PARDINHO-2026', empresa: 'Consórcio Itapetininga', cliente: 'Prefeitura Pardinho', cidade: 'Pardinho-SP', valorContrato: 32_000_000, prazoMeses: 21 },
-  'f3c6645b-347f-4382-b9c5-d103c27ec511': { numero: 'CT-CLU-OSC-2026', empresa: 'Consórcio CLU Osasco', cliente: 'SABESP / Prefeitura Osasco', cidade: 'Osasco-SP', valorContrato: 28_000_000, prazoMeses: 24 },
-  'c2bf8fda-b2e0-4bc1-9535-4891d596ea10': { numero: 'CT-TATUI-2026', empresa: 'RK', cliente: 'RK', cidade: 'Tatui-SP', valorContrato: 18_000_000, prazoMeses: 18 },
-  '2a28beec-b1f8-4b0c-8416-d0710bb35d9d': { numero: 'CT-11481051', empresa: 'ConstruData Brasilia', cliente: 'ConstruData', cidade: 'Brasilia-DF', valorContrato: 12_000_000, prazoMeses: 12 },
-  'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8': { numero: 'RK-SUB-2026', empresa: 'RK Subempreita', cliente: 'RK', cidade: 'Santos-SP', valorContrato: 9_500_000, prazoMeses: 12 },
-}
-const DEFAULT_CONTRATO = CONTRATOS['abe7f66c-004b-4bb5-a245-6be67debd9f7']
+// Sem projeto ativo: cabeçalho honesto (nunca um contrato fabricado).
+const CONTRATO_VAZIO = { numero: '—', empresa: '—', cliente: '—', cidade: '—', valorContrato: 0, prazoMeses: 0 }
 
 // Deriva o prazo (em meses) a partir de data_inicio/data_fim quando o contrato
 // não tem prazoMeses cadastrado explicitamente (ex: 24/06 → 15/08 ≈ 2 meses).
@@ -180,9 +173,8 @@ export function DreFinanceiroPage() {
   const usarFallback = isDemoMode
   const semDadoReal = !isRealData && !usarFallback
 
-  // Cabeçalho: contrato mapeado (projetos demo antigos) ou o projeto REAL ativo — nunca o exemplo Santos/Osasco pro WCR.
-  const contratoMapeado = activeProjectId ? CONTRATOS[activeProjectId] : undefined
-  const CONTRATO = contratoMapeado || (projetoAtivo ? {
+  // Cabeçalho: sempre o projeto REAL ativo (Boi Malhado/Sakura/Retorno) — sem projeto, aviso honesto.
+  const CONTRATO = projetoAtivo ? {
     numero: projetoAtivo.contrato ? `CT ${projetoAtivo.contrato}` : '—',
     empresa: 'WCR',
     cliente: (projetoAtivo as any).cliente || 'SABESP',
@@ -191,7 +183,7 @@ export function DreFinanceiroPage() {
     prazoMeses: projetoAtivo.data_inicio && projetoAtivo.data_fim
       ? mesesEntre(projetoAtivo.data_inicio, projetoAtivo.data_fim)
       : 0,
-  } : DEFAULT_CONTRATO)
+  } : CONTRATO_VAZIO
 
   // Dados reais ou fallback (fallback só no Modo Demo)
   const receitasDB = lancamentos.filter(x => x.tipo === 'RECEITA').map(x => ({ desc: x.descricao, valor: Number(x.valor) }))
@@ -236,6 +228,13 @@ export function DreFinanceiroPage() {
   const margemLiquida = totalReceita > 0 ? (lucroLiquido / totalReceita) * 100 : 0
   const totalTrechosCusto = trechosView.reduce((a, t) => a + Number(t.custo_total), 0)
   const totalExt = trechosView.reduce((a, t) => a + Number(t.extensao), 0)
+  // variacao=0 significa "sem variação apurada" (trecho ainda planejado) — exclui do cálculo da média,
+  // senão trechos não-executados puxariam a média pra perto de zero de forma artificial.
+  const trechosComVariacao = trechosView.filter((t) => Number(t.variacao) !== 0)
+  const temVariacaoReal = trechosComVariacao.length > 0
+  const variacaoMedia = temVariacaoReal
+    ? trechosComVariacao.reduce((a, t) => a + Number(t.variacao), 0) / trechosComVariacao.length
+    : 0
 
   const TABS = [
     { id: 'dre' as TabId, label: 'DRE', icon: Receipt },
@@ -626,14 +625,23 @@ export function DreFinanceiroPage() {
         {tab === 'custos' && (
           <>
             {trechosView.length > 0 && <InsightsPanel
-              insights={generateCustoTrechoInsights({ variacaoMedia: -0.8, totalTrechos: trechosView.length, trechosAbaixo: trechosView.filter(t => t.variacao < 0).length })}
+              insights={generateCustoTrechoInsights({ variacaoMedia, totalTrechos: trechosView.length, trechosAbaixo: trechosView.filter(t => t.variacao < 0).length })}
               title="Insights — Custo por Trecho"
             />}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <KpiCard label="Total Trechos" value={String(trechosView.length)} icon={Layers} color="text-cyan-400" />
               <KpiCard label="Custo Total" value={fmt(totalTrechosCusto)} icon={DollarSign} color="text-emerald-400" />
               <KpiCard label="Custo Médio/m" value={fmt(totalExt > 0 ? totalTrechosCusto / totalExt : 0)} icon={Calculator} color="text-purple-400" sub="Média ponderada" tooltip={TOOLTIPS.custoUnitario} dataTour="custo-unitario" />
-              <KpiCard label="Variação Média" value={trechosView.length ? '-0.8%' : '—'} icon={Shield} color="text-green-400" sub={trechosView.length ? 'Abaixo do orçamento' : 'sem trechos custeados'} trend="up" tooltip={TOOLTIPS.variacaoCusto} dataTour="variacao" />
+              <KpiCard
+                label="Variação Média"
+                value={temVariacaoReal ? fmtPct(variacaoMedia) : '—'}
+                icon={Shield}
+                color={!temVariacaoReal ? 'text-gray-400' : variacaoMedia > 0 ? 'text-orange-400' : 'text-green-400'}
+                sub={temVariacaoReal ? (variacaoMedia < 0 ? 'Abaixo do orçamento' : variacaoMedia > 0 ? 'Acima do orçamento' : 'Dentro do orçamento') : 'sem trechos executados com variação apurada'}
+                trend={temVariacaoReal ? (variacaoMedia > 0 ? 'down' : 'up') : 'neutral'}
+                tooltip={TOOLTIPS.variacaoCusto}
+                dataTour="variacao"
+              />
             </div>
 
             <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
@@ -697,7 +705,19 @@ export function DreFinanceiroPage() {
         )}
 
         {/* ═══ EFICIÊNCIA ═══ */}
-        {tab === 'eficiencia' && (
+        {/* Comparativo manual × ConstruDataMax é uma estimativa de mercado (argumento comercial),
+            não uma medição feita nesta obra — nenhuma tabela do banco rastreia "horas economizadas
+            por usar a plataforma" por projeto. Por isso só aparece no Modo Demonstração; fora dele
+            mostramos o aviso honesto em vez de fingir que é dado real do WCR. */}
+        {tab === 'eficiencia' && !usarFallback && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+            <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+            <span className="text-xs text-amber-200/90 leading-relaxed">
+              <b className="text-amber-300">Este comparativo é uma estimativa de mercado, não uma medição desta obra.</b> Nenhuma tabela do sistema (lançamentos, medição, fluxo de caixa) registra quantas horas a equipe economiza por usar a plataforma — não existe hoje como calcular esse número real por projeto. Ative o <b>Modo Demonstração</b> na barra lateral para ver o exemplo ilustrativo completo.
+            </span>
+          </div>
+        )}
+        {tab === 'eficiencia' && usarFallback && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <KpiCard label="Economia Mensal" value={fmt(EFICIENCIA.impactoFinanceiro.economiaMensal)} icon={DollarSign} color="text-emerald-400" trend="up" sub="vs. processo manual" tooltip={TOOLTIPS.eficiencia} dataTour="economia-mensal" />

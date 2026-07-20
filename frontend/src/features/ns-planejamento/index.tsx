@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Droplets, Waves, AlertTriangle, CheckCircle2, RotateCcw, ExternalLink, ChevronDown, ClipboardList, Users } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
 import { useAppModeStore } from '@/store/appModeStore'
-import { useSupabaseNsPlanejamento, type NsItem } from '@/hooks/useSupabaseNsPlanejamento'
+import { useSupabaseNsPlanejamento, type NsItem, type DesvioHistorico } from '@/hooks/useSupabaseNsPlanejamento'
 import { useEquipes } from '@/hooks/useEquipes'
 import { LigacoesOsTab } from './components/LigacoesOsTab'
 
@@ -91,10 +91,45 @@ function NsRow({
   )
 }
 
+function DesviosHistoricosSection({ desvios }: { desvios: DesvioHistorico[] }) {
+  if (desvios.length === 0) return null
+  return (
+    <div className="px-6 pb-3">
+      <details className="rounded-lg border border-[#f97316]/30 bg-[#2f2f2f] group">
+        <summary className="list-none cursor-pointer select-none px-4 py-2.5 flex items-center gap-2 text-[11px] font-semibold text-[#f5f5f5]">
+          <ChevronDown size={13} className="text-[#8a8a8a] transition-transform group-open:rotate-180" />
+          <AlertTriangle size={13} className="text-[#f97316]" />
+          Desvios registrados sem confirmação em campo ({desvios.length})
+        </summary>
+        <div className="px-4 pb-1 pt-0.5 text-[10px] text-[#8a8a8a] leading-relaxed">
+          Levantamento antigo (24/06–04/07), pipeline ETL substituído em 10/07 pela fonte atual de NS. Nunca foram marcados
+          como resolvidos — não têm correspondência de numeração com as NS abaixo, por isso aparecem à parte.
+        </div>
+        <div className="px-4 pb-3 pt-2 flex flex-col gap-1 max-h-64 overflow-y-auto">
+          {desvios.map((d) => (
+            <div key={d.id} className="text-[11px] text-[#a3a3a3] flex flex-wrap items-center gap-x-3 gap-y-0.5 py-1.5 border-b border-[#3f3f3f] last:border-0">
+              <span className="font-semibold text-[#f5f5f5] min-w-[160px]">{d.atividade}</span>
+              <span
+                className="text-[9px] font-bold uppercase rounded px-1.5 py-0.5 border shrink-0"
+                style={{ color: SEV_META[d.severidade]?.cor, background: SEV_META[d.severidade]?.bg, borderColor: (SEV_META[d.severidade]?.cor ?? '#a3a3a3') + '4d' }}
+              >
+                {SEV_META[d.severidade]?.label ?? d.severidade}
+              </span>
+              <span>{brl(d.quantidade_planejada)}m planejado</span>
+              <span>registrado {d.data.split('-').reverse().join('/')} · {d.dias_sem_confirmacao}d sem confirmação</span>
+              {d.acao_recomendada && <span className="text-[#7a7a7a] basis-full">{d.acao_recomendada}</span>}
+            </div>
+          ))}
+        </div>
+      </details>
+    </div>
+  )
+}
+
 export function NsPlanejamentoPage() {
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const isDemoMode = useAppModeStore((s) => s.isDemoMode)
-  const { resumo, itens, loading, error, reload, marcarConcluido, atribuirEquipe } = useSupabaseNsPlanejamento(activeProjectId)
+  const { resumo, itens, desviosHistoricos, loading, error, reload, marcarConcluido, atribuirEquipe } = useSupabaseNsPlanejamento(activeProjectId)
   const { equipes } = useEquipes()
   const [pagina, setPagina] = useState<'feito-afazer' | 'ligacoes-os'>('feito-afazer')
   const [aba, setAba] = useState<'AGUA' | 'ESGOTO'>('AGUA')
@@ -118,6 +153,11 @@ export function NsPlanejamentoPage() {
       return av - bv
     })
   }, [itens, aba, filtro])
+
+  const desviosHistoricosAba = useMemo(
+    () => desviosHistoricos.filter((d) => d.sistema === aba),
+    [desviosHistoricos, aba],
+  )
 
   const resumoAba = resumo?.[aba === 'AGUA' ? 'agua' : 'esgoto']
   const desviosAbertos = itens.filter((i) => i.sistema === aba && i.desvio && i.status !== 'concluida').length
@@ -242,6 +282,9 @@ export function NsPlanejamentoPage() {
           </details>
         </div>
       )}
+
+      {/* desvios do pipeline antigo, nunca resolvidos */}
+      <DesviosHistoricosSection desvios={desviosHistoricosAba} />
 
       {/* filtros + lista */}
       <div className="flex items-center gap-2 px-6 pb-3 flex-wrap">
