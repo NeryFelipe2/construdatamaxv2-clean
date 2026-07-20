@@ -39,7 +39,7 @@ const MODULE_GROUPS = [
     items: [
       { label: "Plan. Mestre", to: "/app/planejamento-mestre", icon: CalendarClock },
       { label: "Programação Semana", to: "/app/programacao-semana", icon: ClipboardList },
-      { label: "Meta 1500 Ligações", to: "/app/meta-ligacoes", icon: Droplets },
+      { label: "Metas", to: "/app/meta-ligacoes", icon: Droplets },
       { label: "Feito × A Fazer (NS)", to: "/app/ns-planejamento", icon: Waves },
       { label: "Planilhas (Modelos)", to: "/app/planilhas", icon: FileSpreadsheet },
       { label: "Agenda", to: "/app/agenda", icon: Calendar },

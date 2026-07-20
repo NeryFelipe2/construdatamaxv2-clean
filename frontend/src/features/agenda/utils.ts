@@ -13,7 +13,7 @@ import {
   getQuarter,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import type { AgendaTask, AgendaViewMode } from '@/types'
+import type { AgendaTask, AgendaViewMode, AgendaSnapUnit } from '@/types'
 
 export const COLUMN_WIDTH = 140  // px per week (legacy constant, kept for drag math)
 export const ROW_HEIGHT   = 72   // px per resource row
@@ -117,11 +117,14 @@ export function getBarStyle(
   task: AgendaTask,
   viewStart: string,
   visibleWeeks: number,
-  previewOffsetWeeks: number = 0,
-  pixelsPerDay: number = COLUMN_WIDTH / 7
+  previewOffsetUnits: number = 0,
+  pixelsPerDay: number = COLUMN_WIDTH / 7,
+  unit: AgendaSnapUnit = 'week'
 ): BarStyle {
   const start        = parseISO(viewStart)
-  const taskStart    = addWeeks(parseISO(task.startDate), previewOffsetWeeks)
+  const taskStart    = unit === 'day'
+    ? addDays(parseISO(task.startDate), previewOffsetUnits)
+    : addWeeks(parseISO(task.startDate), previewOffsetUnits)
   const taskEnd      = parseISO(task.endDate)
 
   const dayOffset       = differenceInDays(taskStart, start)
@@ -207,34 +210,85 @@ export function getWeekLabel(date: Date): string {
   return String(getISOWeek(date))
 }
 
-// ─── Task move/resize calculation (week-snap) ─────────────────────────────────
+// ─── Task move/resize calculation (snap semanal ou diário) ───────────────────
 
-export function applyDragDelta(task: AgendaTask, deltaWeeks: number): { newStart: string; newEnd: string } {
-  const newStart   = format(addWeeks(parseISO(task.startDate), deltaWeeks), 'yyyy-MM-dd')
+/** Soma `delta` unidades de snap (semanas ou dias) a uma data. */
+function addSnapUnits(date: Date, delta: number, unit: AgendaSnapUnit): Date {
+  return unit === 'day' ? addDays(date, delta) : addWeeks(date, delta)
+}
+
+export function applyDragDelta(
+  task: AgendaTask,
+  deltaUnits: number,
+  unit: AgendaSnapUnit = 'week'
+): { newStart: string; newEnd: string } {
+  const newStart   = format(addSnapUnits(parseISO(task.startDate), deltaUnits, unit), 'yyyy-MM-dd')
   const duration   = differenceInDays(parseISO(task.endDate), parseISO(task.startDate))
   const newEnd     = format(addDays(parseISO(newStart), duration), 'yyyy-MM-dd')
   return { newStart, newEnd }
 }
 
-export function applyResizeLeft(task: AgendaTask, deltaWeeks: number): string {
-  const newStart = format(addWeeks(parseISO(task.startDate), deltaWeeks), 'yyyy-MM-dd')
+export function applyResizeLeft(task: AgendaTask, deltaUnits: number, unit: AgendaSnapUnit = 'week'): string {
+  const newStart = format(addSnapUnits(parseISO(task.startDate), deltaUnits, unit), 'yyyy-MM-dd')
   if (!isBefore(parseISO(newStart), parseISO(task.endDate))) {
-    return format(addDays(parseISO(task.endDate), -7), 'yyyy-MM-dd')
+    return format(addDays(parseISO(task.endDate), unit === 'day' ? -1 : -7), 'yyyy-MM-dd')
   }
   return newStart
 }
 
-export function applyResizeRight(task: AgendaTask, deltaWeeks: number): string {
-  const newEnd = format(addWeeks(parseISO(task.endDate), deltaWeeks), 'yyyy-MM-dd')
+export function applyResizeRight(task: AgendaTask, deltaUnits: number, unit: AgendaSnapUnit = 'week'): string {
+  const newEnd = format(addSnapUnits(parseISO(task.endDate), deltaUnits, unit), 'yyyy-MM-dd')
   if (!isAfter(parseISO(newEnd), parseISO(task.startDate))) {
-    return format(addDays(parseISO(task.startDate), 7), 'yyyy-MM-dd')
+    return format(addDays(parseISO(task.startDate), unit === 'day' ? 1 : 7), 'yyyy-MM-dd')
   }
   return newEnd
 }
 
-// ─── Week-snap column width for drag calculation ──────────────────────────────
+// ─── Snap pixel width for drag calculation ────────────────────────────────────
 
 /** Returns 1 week's pixel width for the given pixelsPerDay */
 export function weekPx(pixelsPerDay: number): number {
   return pixelsPerDay * 7
+}
+
+/** Largura em px de 1 passo de snap (1 dia ou 1 semana). */
+export function snapPx(pixelsPerDay: number, unit: AgendaSnapUnit): number {
+  return pixelsPerDay * (unit === 'day' ? 1 : 7)
+}
+
+/**
+ * Snap efetivo: abaixo de 6 px/dia (mês pra cima, ver getViewParams) um passo
+ * de 1 dia teria < 6px e o drag viraria jitter — força 'week' nesses zooms.
+ */
+export function effectiveSnapUnit(pixelsPerDay: number, unit: AgendaSnapUnit): AgendaSnapUnit {
+  return pixelsPerDay < 6 ? 'week' : unit
+}
+
+// ─── Dependências (fim→início) ────────────────────────────────────────────────
+
+/**
+ * true se adicionar `depId` em `taskId`.dependsOn criaria ciclo — i.e. se
+ * `taskId` já é alcançável a partir de `depId` seguindo as arestas dependsOn.
+ * DFS iterativa simples; `visited` protege contra ciclos pré-existentes no
+ * dado (nunca deveria acontecer, mas não pode travar a UI se acontecer).
+ */
+export function criariaCiclo(tasks: AgendaTask[], taskId: string, depId: string): boolean {
+  if (taskId === depId) return true
+  const byId = new Map(tasks.map((t) => [t.id, t]))
+  const visited = new Set<string>()
+  const stack = [depId]
+  while (stack.length > 0) {
+    const currentId = stack.pop()!
+    if (currentId === taskId) return true
+    if (visited.has(currentId)) continue
+    visited.add(currentId)
+    const current = byId.get(currentId)
+    for (const next of current?.dependsOn ?? []) stack.push(next)
+  }
+  return false
+}
+
+/** Violação fim→início: dependência termina DEPOIS da task começar. */
+export function dependencyViolated(dep: AgendaTask, task: AgendaTask): boolean {
+  return isAfter(parseISO(dep.endDate), parseISO(task.startDate))
 }

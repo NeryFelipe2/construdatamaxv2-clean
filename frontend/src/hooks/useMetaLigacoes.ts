@@ -1,13 +1,16 @@
 /**
- * useMetaLigacoes — leitura da `producao_diaria` para a tela Meta 1500 Ligações.
+ * useMetaLigacoes — leitura da `producao_diaria` para a tela Metas (campanha).
  * Lê c_uma (caixa U.M.A), ihm (cavalete/hidrômetro) e la (ligação de água)
  * do projeto ativo, agregadas por dia + totais acumulados.
  *
- * IMPORTANTE — janela da meta: a contagem começa em 06/07/2026 (início do
- * ciclo de 32 dias corridos da meta de 1500 ligações, prazo 07/08/2026), NÃO
- * desde o início da obra. Produção de junho (antes do ciclo) é excluída — por
- * isso o hook filtra `data >= META_JANELA_INICIO`. Controle é SEMANAL
+ * IMPORTANTE — janela da meta: a contagem obedece a JANELA DA CAMPANHA
+ * (`campanha.data_inicio` → `campanha.data_fim`, tabela `metas_campanha`), NÃO
+ * o início da obra. Produção fora da janela é excluída. Sem campanha ativa →
+ * dias/semanas/totais vazios (nenhum número inventado). Controle é SEMANAL
  * (semana seg-sáb, padrão da obra), então além dos dias exponho `semanas`.
+ *
+ * As antigas constantes hardcoded (META_ALVO, META_JANELA_x, META_RITMO_x) foram
+ * REMOVIDAS — alvo, janela e ritmo agora vêm da campanha (useMetaCampanha).
  *
  * Padrão de hook seguido de useFluxoProjecao.ts / useProducaoDiaria.ts:
  * useState/useCallback/useEffect, load() com try/catch e reload exposto.
@@ -15,16 +18,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-
-/** Início do ciclo da meta 1500 (contagem começa aqui, não no início da obra). */
-export const META_JANELA_INICIO = '2026-07-06'
-/** Fim do ciclo da meta 1500 (32 dias corridos após 06/07). */
-export const META_JANELA_FIM = '2026-08-07'
-/** Meta por etapa da cadeia caixa UMA → hidrômetro → ligação. */
-export const META_ALVO = 1500
-/** Ritmo alvo diário e semanal (contrato: 75/dia, semana seg-sáb = 6 dias). */
-export const META_RITMO_DIA = 75
-export const META_RITMO_SEMANA = 375
+import type { CampanhaMeta } from './useMetaCampanha'
 
 export interface DiaMetaLigacoes {
   /** ISO yyyy-mm-dd */
@@ -91,14 +85,17 @@ function resumoOutros(o: { le: number; ci: number; pv: number; pi: number }): st
   return partes.join(' · ')
 }
 
-export function useMetaLigacoes(projetoId: string | null) {
+export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta | null) {
   const [dias, setDias] = useState<DiaMetaLigacoes[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const janelaInicio = campanha?.data_inicio ?? null
+  const janelaFim = campanha?.data_fim ?? null
+
   const load = useCallback(async () => {
-    if (!supabase || !projetoId) {
-      setDias([])
+    if (!supabase || !projetoId || !janelaInicio || !janelaFim) {
+      setDias([]) // sem campanha → vazio honesto, nunca número inventado
       return
     }
     setLoading(true)
@@ -108,7 +105,8 @@ export function useMetaLigacoes(projetoId: string | null) {
         .from('producao_diaria')
         .select('data, c_uma, ihm, la, le, c_insp, pv, pi')
         .eq('projeto_id', projetoId)
-        .gte('data', META_JANELA_INICIO) // só o ciclo da meta (a partir de 06/07)
+        .gte('data', janelaInicio) // só a janela da campanha
+        .lte('data', janelaFim)
         .order('data', { ascending: true })
       if (e1) throw e1
 
@@ -137,7 +135,7 @@ export function useMetaLigacoes(projetoId: string | null) {
     } finally {
       setLoading(false)
     }
-  }, [projetoId])
+  }, [projetoId, janelaInicio, janelaFim])
 
   useEffect(() => { load() }, [load])
 

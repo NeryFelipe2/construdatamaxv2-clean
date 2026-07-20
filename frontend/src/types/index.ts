@@ -248,6 +248,8 @@ export type TaskColor    = 'blue' | 'orange' | 'green' | 'red' | 'purple'
 export type AgendaPriority = 'low' | 'medium' | 'high' | 'critical'
 export type AgendaViewMode = 'day' | 'week' | 'month' | 'quarter' | 'semester' | 'year'
 export type AgendaDisplayView = 'gantt' | 'calendar'
+/** Granularidade do snap de drag/resize no Gantt (toggle na toolbar). */
+export type AgendaSnapUnit = 'week' | 'day'
 
 export interface AgendaTask {
   id: string
@@ -265,6 +267,13 @@ export interface AgendaTask {
   completionPct?: number     // 0-100
   linkedProjectId?: string
   notes?: string
+  /**
+   * ids de outras AgendaTask das quais esta depende (fim→início). Persistido
+   * em agenda_tasks.depends_on (text[] not null default '{}'). Violação
+   * (endDate da dependência > startDate desta) é SÓ alerta visual no Gantt
+   * (seta vermelha em DependencyArrows) — nunca reposiciona nada.
+   */
+  dependsOn?: string[]
   /**
    * true quando `endDate` é só um placeholder técnico pro Gantt (sem essa
    * data o GanttBar não consegue desenhar a barra — ver getBarStyle em

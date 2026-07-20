@@ -1,7 +1,10 @@
 /**
- * useMetaCorredor — CRUD do "corredor de meta" (banda mín↔ideal) da Curva S das
- * 1500 ligações, tabela `meta_corredor`. Uma linha por semana (seg-sáb) × projeto,
- * guardando a LIGAÇÃO acumulada mínima aceitável e ideal ao fim daquela semana.
+ * useMetaCorredor — CRUD do "corredor de meta" (banda mín↔ideal) da Curva S da
+ * campanha de meta, tabela `meta_corredor`. Uma linha por semana (seg-sáb) ×
+ * campanha, guardando a unidade acumulada mínima aceitável e ideal ao fim da semana.
+ *
+ * Desde a Campanha de Meta genérica, o corredor é POR CAMPANHA (`campanha_id`):
+ * o select filtra por ele e o upsert grava junto. Sem campanha → lista vazia.
  *
  * Padrão de hook: mesmo de useFluxoProjecao.ts — update otimista + upsert por
  * (projeto_id, semana_inicio); reverte via reload em erro. Nada é inventado: o que
@@ -16,9 +19,9 @@ export interface SemanaCorredor {
   projeto_id: string
   /** ISO yyyy-mm-dd — segunda-feira da semana. */
   semana_inicio: string
-  /** Ligação acumulada MÍNIMA aceitável ao fim da semana. */
+  /** Acumulado MÍNIMO aceitável ao fim da semana. */
   acum_min: number
-  /** Ligação acumulada IDEAL ao fim da semana. */
+  /** Acumulado IDEAL ao fim da semana. */
   acum_ideal: number
   updated_at: string
 }
@@ -32,13 +35,13 @@ interface DbRow {
   updated_at: string
 }
 
-export function useMetaCorredor(projetoId: string | null) {
+export function useMetaCorredor(projetoId: string | null, campanhaId: string | null) {
   const [semanas, setSemanas] = useState<SemanaCorredor[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    if (!supabase || !projetoId) { setSemanas([]); return }
+    if (!supabase || !projetoId || !campanhaId) { setSemanas([]); return }
     setLoading(true)
     setError(null)
     try {
@@ -46,6 +49,7 @@ export function useMetaCorredor(projetoId: string | null) {
         .from('meta_corredor')
         .select('id, projeto_id, semana_inicio, acum_min, acum_ideal, updated_at')
         .eq('projeto_id', projetoId)
+        .eq('campanha_id', campanhaId)
         .order('semana_inicio', { ascending: true })
       if (e1) throw e1
       setSemanas(
@@ -63,16 +67,16 @@ export function useMetaCorredor(projetoId: string | null) {
     } finally {
       setLoading(false)
     }
-  }, [projetoId])
+  }, [projetoId, campanhaId])
 
   useEffect(() => { load() }, [load])
 
-  /** Atualiza min/ideal de uma semana (upsert por projeto_id+semana_inicio). */
+  /** Atualiza min/ideal de uma semana (upsert por projeto_id+semana_inicio, gravando campanha_id). */
   const salvarSemana = useCallback(async (
     semanaInicio: string,
     patch: Partial<{ acum_min: number; acum_ideal: number }>,
   ) => {
-    if (!supabase || !projetoId) return
+    if (!supabase || !projetoId || !campanhaId) return
     const existente = semanas.find((s) => s.semana_inicio === semanaInicio)
     const otimista: SemanaCorredor = existente
       ? { ...existente, ...patch }
@@ -97,6 +101,7 @@ export function useMetaCorredor(projetoId: string | null) {
           {
             id: otimista.id,
             projeto_id: projetoId,
+            campanha_id: campanhaId,
             semana_inicio: semanaInicio,
             acum_min: otimista.acum_min,
             acum_ideal: otimista.acum_ideal,
@@ -109,7 +114,7 @@ export function useMetaCorredor(projetoId: string | null) {
     } catch {
       load() // reverte via reload em caso de erro
     }
-  }, [projetoId, semanas, load])
+  }, [projetoId, campanhaId, semanas, load])
 
   const temCorredor = useMemo(() => semanas.length > 0, [semanas])
 

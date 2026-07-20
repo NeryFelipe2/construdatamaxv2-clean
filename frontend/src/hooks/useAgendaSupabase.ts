@@ -36,11 +36,12 @@ interface DbAgendaTask {
   responsavel: string | null
   encarregado: string | null
   observacao: string | null
+  depends_on: string[] | null
 }
 
 const TASK_COLUMNS =
   'id, projeto_id, equipe_id, resource_type, sistema, titulo, descricao, data_inicio, data_fim, ' +
-  'status, prioridade, cor, origem, metros_alvo, ritmo_diario_m, responsavel, encarregado, observacao'
+  'status, prioridade, cor, origem, metros_alvo, ritmo_diario_m, responsavel, encarregado, observacao, depends_on'
 
 /**
  * Duas frentes agregadas (não são equipes de `wcr_equipes`) — ver comentário
@@ -76,6 +77,7 @@ function dbTaskToAgendaTask(row: DbAgendaTask): AgendaTask {
     location: row.sistema === 'AGUA' ? 'Água' : row.sistema === 'ESGOTO' ? 'Esgoto' : undefined,
     linkedProjectId: row.projeto_id ?? undefined,
     notes: notes.length > 0 ? notes : undefined,
+    dependsOn: row.depends_on ?? [],
   }
 }
 
@@ -157,6 +159,7 @@ export function salvarAgendaTask(task: AgendaTask): void {
         responsavel: task.assignedTo ?? null,
         encarregado: task.teamLeadName ?? null,
         observacao: task.notes ?? null,
+        depends_on: task.dependsOn ?? [],
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'id' },

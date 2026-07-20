@@ -1,8 +1,21 @@
 import { create } from 'zustand'
 import { addDays, format, parseISO } from 'date-fns'
-import type { AgendaTask, AgendaResource, AgendaViewMode, AgendaDisplayView } from '@/types'
+import type { AgendaTask, AgendaResource, AgendaViewMode, AgendaDisplayView, AgendaSnapUnit } from '@/types'
 import { mockTasks, mockResources, INITIAL_VIEW_START, INITIAL_VISIBLE_WEEKS } from '@/data/mockAgenda'
 import { salvarAgendaTask, removerAgendaTask } from '@/hooks/useAgendaSupabase'
+
+// Preferência de snap do drag/resize do Gantt — persiste em localStorage
+// (só um enum de UI, sem dado sensível), mesmo padrão do themeStore.
+const SNAP_UNIT_KEY = 'agenda-snap-unit'
+
+function loadSnapUnit(): AgendaSnapUnit {
+  try {
+    const raw = localStorage.getItem(SNAP_UNIT_KEY)
+    return raw === 'day' || raw === 'week' ? raw : 'week'
+  } catch {
+    return 'week'
+  }
+}
 
 const PAN_DAYS: Record<AgendaViewMode, number> = {
   day:      7,
@@ -19,6 +32,7 @@ interface AgendaState {
   viewStart: string         // 'yyyy-MM-dd', always a Monday
   visibleWeeks: number
   viewMode: AgendaViewMode
+  snapUnit: AgendaSnapUnit  // granularidade do drag/resize ('week' | 'day')
   selectedTaskId: string | null
   editingTaskId: string | null   // 'new' | task.id | null
   displayView: AgendaDisplayView
@@ -42,6 +56,7 @@ interface AgendaState {
   setViewMode: (mode: AgendaViewMode) => void
   setViewStart: (d: string) => void
   setVisibleWeeks: (n: number) => void
+  setSnapUnit: (unit: AgendaSnapUnit) => void
 
   selectTask: (id: string | null) => void
   setEditingTask: (id: string | null) => void
@@ -56,6 +71,7 @@ export const useAgendaStore = create<AgendaState>((set, get) => ({
   viewStart: INITIAL_VIEW_START,
   visibleWeeks: INITIAL_VISIBLE_WEEKS,
   viewMode: 'week',
+  snapUnit: loadSnapUnit(),
   selectedTaskId: null,
   editingTaskId: null,
   displayView: 'gantt',
@@ -111,6 +127,11 @@ export const useAgendaStore = create<AgendaState>((set, get) => ({
   setViewMode: (mode) => set({ viewMode: mode }),
   setViewStart: (d) => set({ viewStart: d }),
   setVisibleWeeks: (n) => set({ visibleWeeks: Math.min(52, Math.max(1, n)) }),
+
+  setSnapUnit: (unit) => {
+    try { localStorage.setItem(SNAP_UNIT_KEY, unit) } catch { /* noop */ }
+    set({ snapUnit: unit })
+  },
 
   selectTask: (id) => set({ selectedTaskId: id }),
   setEditingTask: (id) => set({ editingTaskId: id }),

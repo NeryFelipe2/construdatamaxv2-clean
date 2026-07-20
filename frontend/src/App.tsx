@@ -77,7 +77,7 @@ const navItems = [
   { section: "Planejamento" },
   { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
   { label: "Programação Semana", icon: ClipboardList, to: "/app/programacao-semana" },
-  { label: "Meta 1500 Ligações", icon: Droplets, to: "/app/meta-ligacoes" },
+  { label: "Metas", icon: Droplets, to: "/app/meta-ligacoes" },
   { label: "Feito × A Fazer (NS)", icon: Waves, to: "/app/ns-planejamento" },
   { label: "Planilhas (Modelos)", icon: FileSpreadsheet, to: "/app/planilhas" },
   { label: "Agenda", icon: Calendar, to: "/app/agenda" },

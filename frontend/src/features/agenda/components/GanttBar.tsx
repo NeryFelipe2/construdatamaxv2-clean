@@ -7,7 +7,8 @@ import {
   applyDragDelta,
   applyResizeLeft,
   applyResizeRight,
-  weekPx,
+  snapPx,
+  effectiveSnapUnit,
 } from '../utils'
 
 // ─── Color map ─────────────────────────────────────────────────────────────────
@@ -36,9 +37,9 @@ interface GanttBarProps {
 }
 
 export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_WIDTH / 7 }: GanttBarProps) {
-  const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask } = useAgendaStore()
+  const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask, snapUnit } = useAgendaStore()
 
-  const [previewOffsetWeeks, setPreviewOffsetWeeks] = useState(0)
+  const [previewOffsetUnits, setPreviewOffsetUnits] = useState(0)
   const [resizeStartDelta, setResizeStartDelta]     = useState(0)
   const [resizeEndDelta, setResizeEndDelta]         = useState(0)
   const [isDragging, setIsDragging]                 = useState(false)
@@ -46,23 +47,25 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
 
   const hasMoved    = useRef(false)
   const cleanupRef  = useRef<(() => void) | null>(null)
-  const onePxWeek   = weekPx(pixelsPerDay)   // px per 7-day snap
+  // Snap efetivo: abaixo de 6 px/dia o snap diário viraria jitter — força semana
+  const snapUnitEff = effectiveSnapUnit(pixelsPerDay, snapUnit)
+  const onePxSnap   = snapPx(pixelsPerDay, snapUnitEff)   // px per snap step
 
   useEffect(() => {
     return () => { if (cleanupRef.current) cleanupRef.current() }
   }, [])
 
   // Compute bar style
-  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetWeeks, pixelsPerDay)
+  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetUnits, pixelsPerDay, snapUnitEff)
 
   if (isResizing && resizeStartDelta !== 0) {
     barStyle = getBarStyle(
-      { ...task, startDate: applyResizeLeft(task, Math.round(resizeStartDelta / onePxWeek)) },
+      { ...task, startDate: applyResizeLeft(task, Math.round(resizeStartDelta / onePxSnap), snapUnitEff) },
       viewStart, visibleWeeks, 0, pixelsPerDay
     )
   } else if (isResizing && resizeEndDelta !== 0) {
     barStyle = getBarStyle(
-      { ...task, endDate: applyResizeRight(task, Math.round(resizeEndDelta / onePxWeek)) },
+      { ...task, endDate: applyResizeRight(task, Math.round(resizeEndDelta / onePxSnap), snapUnitEff) },
       viewStart, visibleWeeks, 0, pixelsPerDay
     )
   }
@@ -89,7 +92,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
       function onMove(ev: PointerEvent) {
         const deltaX = ev.clientX - startX
         if (Math.abs(deltaX) > 4) hasMoved.current = true
-        setPreviewOffsetWeeks(Math.round(deltaX / onePxWeek))
+        setPreviewOffsetUnits(Math.round(deltaX / onePxSnap))
       }
 
       function onUp(ev: PointerEvent) {
@@ -97,11 +100,11 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         cleanupRef.current = null
         setIsDragging(false)
 
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
-        setPreviewOffsetWeeks(0)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
+        setPreviewOffsetUnits(0)
 
-        if (hasMoved.current && deltaWeeks !== 0) {
-          const { newStart, newEnd } = applyDragDelta(task, deltaWeeks)
+        if (hasMoved.current && deltaUnits !== 0) {
+          const { newStart, newEnd } = applyDragDelta(task, deltaUnits, snapUnitEff)
           moveTask(task.id, newStart, newEnd)
         } else if (!hasMoved.current) {
           selectTask(task.id)
@@ -116,7 +119,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, moveTask, setEditingTask, selectTask, onePxWeek]
+    [task, moveTask, setEditingTask, selectTask, onePxSnap, snapUnitEff]
   )
 
   // ── Left resize handler ────────────────────────────────────────────────────
@@ -143,10 +146,10 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointermove', onMove)
         cleanupRef.current = null
         setIsResizing(false)
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
         setResizeStartDelta(0)
-        if (hasMoved.current && deltaWeeks !== 0) {
-          updateTask(task.id, { startDate: applyResizeLeft(task, deltaWeeks) })
+        if (hasMoved.current && deltaUnits !== 0) {
+          updateTask(task.id, { startDate: applyResizeLeft(task, deltaUnits, snapUnitEff) })
         }
       }
 
@@ -157,7 +160,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, updateTask, onePxWeek]
+    [task, updateTask, onePxSnap, snapUnitEff]
   )
 
   // ── Right resize handler ───────────────────────────────────────────────────
@@ -184,10 +187,10 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointermove', onMove)
         cleanupRef.current = null
         setIsResizing(false)
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
         setResizeEndDelta(0)
-        if (hasMoved.current && deltaWeeks !== 0) {
-          updateTask(task.id, { endDate: applyResizeRight(task, deltaWeeks) })
+        if (hasMoved.current && deltaUnits !== 0) {
+          updateTask(task.id, { endDate: applyResizeRight(task, deltaUnits, snapUnitEff) })
         }
       }
 
@@ -198,7 +201,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, updateTask, onePxWeek]
+    [task, updateTask, onePxSnap, snapUnitEff]
   )
 
   const bg     = COLOR_BG[task.color]

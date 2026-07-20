@@ -1,26 +1,44 @@
 /**
- * CurvaSCorredor — Curva S da meta de 1500 ligações com CORREDOR editável
+ * CurvaSCorredor — Curva S da campanha de meta com CORREDOR editável
  * DIRETO NO GRÁFICO (arrastar os pontos).
  *
- * O usuário define, por semana (seg-sáb), a banda de ligação acumulada esperada
+ * O usuário define, por semana (seg-sáb), a banda acumulada esperada
  * (mínimo aceitável ↔ ideal) ARRASTANDO os pontos das duas linhas no próprio SVG
  * (ou digitando na tabela abaixo — os dois caminhos salvam). A área entre elas é
- * o "corredor" sombreado; a linha do REALIZADO (de useMetaLigacoes) é desenhada
- * por cima e muda de cor conforme está DENTRO, ABAIXO ou ACIMA do corredor.
- * Soltar o ponto salva no banco (useMetaCorredor) via onSalvar.
+ * o "corredor" sombreado.
+ *
+ * DUAS séries reais por cima (decisão do dono — as duas visíveis):
+ *  • REALIZADO = baixas OFICIAIS no app ZN (`meta_baixas`, acumulado no fim de
+ *    cada semana), linha grossa que muda de cor conforme DENTRO/ABAIXO/ACIMA.
+ *  • APONTAMENTO DE CAMPO = ligação acumulada de `producao_diaria`, linha fina
+ *    tracejada cinza de comparação.
+ *
+ * TOOLTIP hover estilo ApexCharts: rects transparentes por semana + div absoluto
+ * com Ideal, Mínimo, Realizado (ZN), Apontado e Desvios; linha-guia vertical no
+ * SVG. Hover fica DESLIGADO durante o drag do corredor (o drag tem prioridade).
  *
  * SVG à mão + pointer events (mouse e toque). Nada é inventado: banda vem de
- * `meta_corredor`, realizado vem de `producao_diaria`.
+ * `meta_corredor`, realizado de `meta_baixas`, apontado de `producao_diaria`.
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, Route, Move, RotateCcw, Gauge } from 'lucide-react'
 import type { DiaMetaLigacoes } from '@/hooks/useMetaLigacoes'
 import type { SemanaCorredor } from '@/hooks/useMetaCorredor'
 
+interface BaixaPonto {
+  /** ISO yyyy-mm-dd */
+  data: string
+  acumulado: number
+}
+
 interface Props {
   semanas: SemanaCorredor[]
   dias: DiaMetaLigacoes[]
+  /** Baixas OFICIAIS do app ZN (acumulado por data) — a série REALIZADO. */
+  baixas: BaixaPonto[]
   meta: number
+  /** Ritmo diário da campanha (preset "puxar ritmo"). Sem campanha informada → 75. */
+  ritmoDia?: number
   onSalvar: (semanaInicio: string, patch: Partial<{ acum_min: number; acum_ideal: number }>) => void
 }
 
@@ -47,21 +65,40 @@ function fmtInt(v: number): string {
   return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(v)
 }
 
-export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
+export function CurvaSCorredor({ semanas, dias, baixas, meta, ritmoDia, onSalvar }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const [drag, setDrag] = useState<Drag | null>(null)
   const dragRef = useRef<Drag | null>(null) // valor ao vivo sem depender do updater (evita setState-em-render)
+  const [hover, setHover] = useState<number | null>(null) // índice da semana sob o ponteiro
+  const ritmo = ritmoDia && ritmoDia > 0 ? ritmoDia : 75
 
-  // Cumulativo de ligação por dia real → "acumulado até <iso>".
+  // ── Apontamento de campo: cumulativo de ligação por dia real → "acumulado até <iso>".
   const cumLaAte = useMemo(() => {
     const ordenados = [...dias].sort((a, b) => a.data.localeCompare(b.data))
     return (iso: string) => ordenados.reduce((acc, d) => (d.data <= iso ? acc + d.la : acc), 0)
   }, [dias])
 
-  const ultimoReal = useMemo(
+  const ultimoApontado = useMemo(
     () => (dias.length ? dias.reduce((mx, d) => (d.data > mx ? d.data : mx), dias[0].data) : null),
     [dias],
   )
+
+  // ── Baixas ZN: acumulado oficial até <iso> (última baixa com data ≤ iso).
+  const baixasOrdenadas = useMemo(
+    () => [...baixas].sort((a, b) => a.data.localeCompare(b.data)),
+    [baixas],
+  )
+  const baixaAte = useMemo(() => {
+    return (iso: string): number | null => {
+      let val: number | null = null
+      for (const b of baixasOrdenadas) {
+        if (b.data <= iso) val = b.acumulado
+        else break
+      }
+      return val
+    }
+  }, [baixasOrdenadas])
+  const ultimaBaixaData = baixasOrdenadas.length ? baixasOrdenadas[baixasOrdenadas.length - 1].data : null
 
   const yMax = useMemo(() => {
     const topo = Math.max(meta, ...semanas.map((s) => s.acum_ideal), 1)
@@ -128,14 +165,25 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
   const idealPts = [{ x: PAD_L, y: 0 }, ...semanas.map((_, i) => ({ x: semanaX(i), y: idealVal(i) }))]
   const minPts = [{ x: PAD_L, y: 0 }, ...semanas.map((_, i) => ({ x: semanaX(i), y: minVal(i) }))]
 
-  // Realizado (ligação acumulada) no fim de cada semana passada; semana em
-  // andamento → até o último dia com dado; futuro → sem ponto.
+  // ── REALIZADO (baixas ZN) no fim de cada semana passada; semana em andamento
+  // → até a última baixa; futuro → sem ponto.
   const realPts: { x: number; y: number }[] = [{ x: PAD_L, y: 0 }]
-  if (ultimoReal) {
+  if (ultimaBaixaData) {
     for (let i = 0; i < semanas.length; i++) {
       const fim = addDias(semanas[i].semana_inicio, 5)
-      if (fim <= ultimoReal) realPts.push({ x: semanaX(i), y: cumLaAte(fim) })
-      else if (semanas[i].semana_inicio <= ultimoReal) { realPts.push({ x: semanaX(i), y: cumLaAte(ultimoReal) }); break }
+      if (fim <= ultimaBaixaData) realPts.push({ x: semanaX(i), y: baixaAte(fim) ?? 0 })
+      else if (semanas[i].semana_inicio <= ultimaBaixaData) { realPts.push({ x: semanaX(i), y: baixaAte(ultimaBaixaData) ?? 0 }); break }
+      else break
+    }
+  }
+
+  // ── APONTAMENTO de campo (ligação acumulada) — linha fina tracejada de comparação.
+  const apontadoPts: { x: number; y: number }[] = [{ x: PAD_L, y: 0 }]
+  if (ultimoApontado) {
+    for (let i = 0; i < semanas.length; i++) {
+      const fim = addDias(semanas[i].semana_inicio, 5)
+      if (fim <= ultimoApontado) apontadoPts.push({ x: semanaX(i), y: cumLaAte(fim) })
+      else if (semanas[i].semana_inicio <= ultimoApontado) { apontadoPts.push({ x: semanaX(i), y: cumLaAte(ultimoApontado) }); break }
       else break
     }
   }
@@ -147,10 +195,10 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
     linha(idealPts) + ' ' +
     [...minPts].reverse().map((p) => `L ${p.x.toFixed(1)} ${yScale(p.y).toFixed(1)}`).join(' ') + ' Z'
 
-  // Diagnóstico do último real vs corredor da semana em andamento.
+  // Diagnóstico da última baixa ZN vs corredor da semana em andamento.
   const ultimoRealPt = realPts.length > 1 ? realPts[realPts.length - 1] : null
-  const idxAtual = ultimoReal
-    ? semanas.findIndex((s) => s.semana_inicio <= ultimoReal && addDias(s.semana_inicio, 5) >= ultimoReal)
+  const idxAtual = ultimaBaixaData
+    ? semanas.findIndex((s) => s.semana_inicio <= ultimaBaixaData && addDias(s.semana_inicio, 5) >= ultimaBaixaData)
     : -1
   const corredorAtual = idxAtual >= 0 ? semanas[idxAtual] : null
   const status =
@@ -161,15 +209,15 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(yMax * f))
 
   // Presets pra recomeçar rápido: aplica min/ideal em todas as semanas de uma vez.
-  // 'padrao' = rampa linear até a meta pelo nº de semanas; 'ritmo' = 75/dia × 6 dias
-  // úteis (seg-sáb) = 450/semana acumulado, com teto na meta. Mínimo = 80% do ideal.
+  // 'padrao' = rampa linear até a meta pelo nº de semanas; 'ritmo' = ritmo_dia × 6
+  // dias úteis (seg-sáb) acumulado, com teto na meta. Mínimo = 80% do ideal.
   const aplicarPreset = (tipo: 'padrao' | 'ritmo') => {
     const n = semanas.length
     const round5 = (v: number) => Math.round(v / 5) * 5
     semanas.forEach((s, i) => {
       const ideal = tipo === 'padrao'
         ? round5((meta * (i + 1)) / n)
-        : Math.min(meta, 75 * 6 * (i + 1))
+        : Math.min(meta, ritmo * 6 * (i + 1))
       const mn = Math.min(ideal, round5(ideal * 0.8))
       onSalvar(s.semana_inicio, { acum_min: mn, acum_ideal: ideal })
     })
@@ -178,10 +226,40 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
   const iniciarDrag = (serie: Serie, idx: number) => (e: React.PointerEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    setHover(null) // drag tem prioridade — tooltip desliga
     const inicial = { serie, idx, value: serie === 'ideal' ? semanas[idx].acum_ideal : semanas[idx].acum_min }
     dragRef.current = inicial
     setDrag(inicial)
   }
+
+  // ── Valores do tooltip pra semana i (null = sem dado — mostrado como "—", nunca inventado).
+  const realNaSemana = (i: number): number | null => {
+    if (!ultimaBaixaData) return null
+    const s = semanas[i]
+    const fim = addDias(s.semana_inicio, 5)
+    if (fim <= ultimaBaixaData) return baixaAte(fim)
+    if (s.semana_inicio <= ultimaBaixaData) return baixaAte(ultimaBaixaData)
+    return null
+  }
+  const apontadoNaSemana = (i: number): number | null => {
+    if (!ultimoApontado) return null
+    const s = semanas[i]
+    const fim = addDias(s.semana_inicio, 5)
+    if (fim <= ultimoApontado) return cumLaAte(fim)
+    if (s.semana_inicio <= ultimoApontado) return cumLaAte(ultimoApontado)
+    return null
+  }
+
+  // Limites horizontais do "slot" de hover da semana i (meio-caminho entre vizinhas).
+  const slotHover = (i: number): { x0: number; x1: number } => {
+    const xAtual = semanaX(i)
+    const xAnt = i === 0 ? PAD_L : semanaX(i - 1)
+    const x0 = (xAnt + xAtual) / 2
+    const x1 = i === semanas.length - 1 ? W - PAD_R : (xAtual + semanaX(i + 1)) / 2
+    return { x0, x1 }
+  }
+
+  const hoverAtivo = hover !== null && !drag && hover < semanas.length
 
   return (
     <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
@@ -192,14 +270,14 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
           <span className="hidden sm:flex items-center gap-1 text-[10px] text-[#5a8caa]"><Move size={11} /> arraste os pontos</span>
           <button
             onClick={() => aplicarPreset('ritmo')}
-            title="Preenche o corredor com o ritmo contratado (75/dia · seg-sáb), teto 1.500"
+            title={`Preenche o corredor com o ritmo da campanha (${ritmo}/dia · seg-sáb), teto ${fmtInt(meta)}`}
             className="flex items-center gap-1 px-2.5 py-1 bg-cyan-500/10 text-cyan-300 rounded-lg text-[11px] font-semibold hover:bg-cyan-500/20 transition-colors"
           >
-            <Gauge size={12} /> Puxar ritmo 75/dia
+            <Gauge size={12} /> Puxar ritmo {ritmo}/dia
           </button>
           <button
             onClick={() => aplicarPreset('padrao')}
-            title="Volta o corredor pro padrão (rampa linear até 1.500 no fim do ciclo)"
+            title={`Volta o corredor pro padrão (rampa linear até ${fmtInt(meta)} no fim do ciclo)`}
             className="flex items-center gap-1 px-2.5 py-1 bg-[#0d2040] text-[#8fb3c8] border border-[#20406a] rounded-lg text-[11px] font-semibold hover:bg-[#14294e] transition-colors"
           >
             <RotateCcw size={12} /> Resetar padrão
@@ -217,63 +295,148 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
       </div>
 
       <div className="px-4 py-4">
-        <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="w-full select-none" style={{ maxHeight: 360, touchAction: 'none' }}
-             role="img" aria-label="Curva S com corredor de meta arrastável e realizado de ligações">
-          {yTicks.map((t) => (
-            <g key={t}>
-              <line x1={PAD_L} y1={yScale(t)} x2={W - PAD_R} y2={yScale(t)} stroke="#20406a" strokeWidth={0.5} />
-              <text x={PAD_L - 6} y={yScale(t) + 3} textAnchor="end" fontSize={9} fill="#5a8caa">{fmtInt(t)}</text>
-            </g>
-          ))}
-          <path d={areaPath} fill="#22d3ee" fillOpacity={0.1} stroke="none" />
-          <path d={linha(idealPts)} fill="none" stroke="#22d3ee" strokeWidth={1.5} strokeDasharray="5 4" opacity={0.8} />
-          <path d={linha(minPts)} fill="none" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="5 4" opacity={0.8} />
-          {realPts.length > 1 && <path d={linha(realPts)} fill="none" stroke={corReal} strokeWidth={2.5} />}
-          {realPts.slice(1).map((p, i) => (
-            <circle key={i} cx={p.x} cy={yScale(p.y)} r={i === realPts.length - 2 ? 4 : 2.5} fill={corReal} />
-          ))}
-          {ultimoRealPt && (
-            <text x={ultimoRealPt.x} y={yScale(ultimoRealPt.y) - 8} textAnchor="middle" fontSize={10} fontWeight={700} fill={corReal}>
-              {fmtInt(ultimoRealPt.y)}
-            </text>
-          )}
+        <div className="relative">
+          <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="w-full select-none" style={{ maxHeight: 360, touchAction: 'none' }}
+               role="img" aria-label="Curva S com corredor de meta arrastável, baixas ZN e apontamento de campo"
+               onPointerLeave={() => setHover(null)}>
+            {yTicks.map((t) => (
+              <g key={t}>
+                <line x1={PAD_L} y1={yScale(t)} x2={W - PAD_R} y2={yScale(t)} stroke="#20406a" strokeWidth={0.5} />
+                <text x={PAD_L - 6} y={yScale(t) + 3} textAnchor="end" fontSize={9} fill="#5a8caa">{fmtInt(t)}</text>
+              </g>
+            ))}
+            <path d={areaPath} fill="#22d3ee" fillOpacity={0.1} stroke="none" />
+            <path d={linha(idealPts)} fill="none" stroke="#22d3ee" strokeWidth={1.5} strokeDasharray="5 4" opacity={0.8} />
+            <path d={linha(minPts)} fill="none" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="5 4" opacity={0.8} />
 
-          {/* alças arrastáveis — mínimo (amber) e ideal (ciano) por semana */}
-          {semanas.map((s, i) => {
-            const arr: React.ReactNode[] = []
-            const mk = (serie: Serie, val: number, cor: string) => {
-              const ativo = !!drag && drag.serie === serie && drag.idx === i
+            {/* apontamento de campo — linha fina tracejada cinza de comparação */}
+            {apontadoPts.length > 1 && (
+              <path d={linha(apontadoPts)} fill="none" stroke="#64748b" strokeWidth={1} strokeDasharray="3 3" opacity={0.9} />
+            )}
+
+            {/* REALIZADO = baixas oficiais ZN */}
+            {realPts.length > 1 && <path d={linha(realPts)} fill="none" stroke={corReal} strokeWidth={2.5} />}
+            {realPts.slice(1).map((p, i) => (
+              <circle key={i} cx={p.x} cy={yScale(p.y)} r={i === realPts.length - 2 ? 4 : 2.5} fill={corReal} />
+            ))}
+            {ultimoRealPt && (
+              <text x={ultimoRealPt.x} y={yScale(ultimoRealPt.y) - 8} textAnchor="middle" fontSize={10} fontWeight={700} fill={corReal}>
+                {fmtInt(ultimoRealPt.y)}
+              </text>
+            )}
+
+            {/* linha-guia vertical do hover */}
+            {hoverAtivo && (
+              <line
+                x1={semanaX(hover!)} y1={PAD_T} x2={semanaX(hover!)} y2={PAD_T + PLOT_H}
+                stroke="#8fb3c8" strokeWidth={0.75} strokeDasharray="4 3" opacity={0.8} pointerEvents="none"
+              />
+            )}
+
+            {/* rects transparentes por semana (hover do tooltip) — ANTES das alças, pra alça vencer o clique */}
+            {semanas.map((_, i) => {
+              const { x0, x1 } = slotHover(i)
               return (
-                <g key={`${serie}-${i}`} style={{ cursor: 'ns-resize' }} onPointerDown={iniciarDrag(serie, i)}>
-                  {/* área de toque generosa (invisível) */}
-                  <circle cx={semanaX(i)} cy={yScale(val)} r={14} fill="transparent" />
-                  <circle cx={semanaX(i)} cy={yScale(val)} r={ativo ? 7 : 5} fill={cor} stroke="#0a1628" strokeWidth={1.5} />
-                  {ativo && (
-                    <text x={semanaX(i)} y={yScale(val) - 12} textAnchor="middle" fontSize={11} fontWeight={700} fill={cor}>
-                      {fmtInt(val)}
-                    </text>
-                  )}
-                </g>
+                <rect
+                  key={`hov-${i}`}
+                  x={x0} y={PAD_T} width={Math.max(0, x1 - x0)} height={PLOT_H}
+                  fill="transparent"
+                  onPointerMove={() => { if (!dragRef.current) setHover(i) }}
+                />
               )
-            }
-            arr.push(mk('min', minVal(i), '#f59e0b'))
-            arr.push(mk('ideal', idealVal(i), '#22d3ee'))
-            return <g key={i}>{arr}</g>
-          })}
+            })}
 
-          {semanas.map((s, i) => (
-            <text key={i} x={semanaX(i)} y={H - 10} textAnchor="middle" fontSize={9} fill="#5a8caa">
-              {fmtDdMM(addDias(s.semana_inicio, 5))}
-            </text>
-          ))}
-          <text x={PAD_L} y={H - 10} textAnchor="middle" fontSize={9} fill="#5a8caa">{fmtDdMM(semanas[0].semana_inicio)}</text>
-        </svg>
+            {/* alças arrastáveis — mínimo (amber) e ideal (ciano) por semana */}
+            {semanas.map((s, i) => {
+              const arr: React.ReactNode[] = []
+              const mk = (serie: Serie, val: number, cor: string) => {
+                const ativo = !!drag && drag.serie === serie && drag.idx === i
+                return (
+                  <g key={`${serie}-${i}`} style={{ cursor: 'ns-resize' }} onPointerDown={iniciarDrag(serie, i)}>
+                    {/* área de toque generosa (invisível) */}
+                    <circle cx={semanaX(i)} cy={yScale(val)} r={14} fill="transparent" />
+                    <circle cx={semanaX(i)} cy={yScale(val)} r={ativo ? 7 : 5} fill={cor} stroke="#0a1628" strokeWidth={1.5} />
+                    {ativo && (
+                      <text x={semanaX(i)} y={yScale(val) - 12} textAnchor="middle" fontSize={11} fontWeight={700} fill={cor}>
+                        {fmtInt(val)}
+                      </text>
+                    )}
+                  </g>
+                )
+              }
+              arr.push(mk('min', minVal(i), '#f59e0b'))
+              arr.push(mk('ideal', idealVal(i), '#22d3ee'))
+              return <g key={i}>{arr}</g>
+            })}
+
+            {semanas.map((s, i) => (
+              <text key={i} x={semanaX(i)} y={H - 10} textAnchor="middle" fontSize={9} fill="#5a8caa">
+                {fmtDdMM(addDias(s.semana_inicio, 5))}
+              </text>
+            ))}
+            <text x={PAD_L} y={H - 10} textAnchor="middle" fontSize={9} fill="#5a8caa">{fmtDdMM(semanas[0].semana_inicio)}</text>
+          </svg>
+
+          {/* tooltip flutuante estilo ApexCharts (desligado durante o drag) */}
+          {hoverAtivo && (() => {
+            const i = hover!
+            const s = semanas[i]
+            const fim = addDias(s.semana_inicio, 5)
+            const vIdeal = idealVal(i)
+            const vMin = minVal(i)
+            const vReal = realNaSemana(i)
+            const vApont = apontadoNaSemana(i)
+            const desvMin = vReal !== null ? vReal - vMin : null
+            const desvIdeal = vReal !== null ? vReal - vIdeal : null
+            const leftPct = (semanaX(i) / W) * 100
+            const inverter = leftPct > 62
+            return (
+              <div
+                className="absolute z-20 pointer-events-none bg-[#0d2040] border border-[#20406a] rounded-lg shadow-xl px-3 py-2 text-[10px] leading-relaxed min-w-[170px]"
+                style={{
+                  left: `${leftPct}%`,
+                  top: 10,
+                  transform: inverter ? 'translateX(calc(-100% - 10px))' : 'translateX(10px)',
+                }}
+              >
+                <div className="font-bold text-[#e4f2f8] mb-1">Semana {fmtDdMM(s.semana_inicio)}–{fmtDdMM(fim)}</div>
+                <div className="flex justify-between gap-4"><span className="text-cyan-300">Ideal</span><span className="font-mono text-[#e4f2f8]">{fmtInt(vIdeal)}</span></div>
+                <div className="flex justify-between gap-4"><span className="text-amber-300">Mínimo</span><span className="font-mono text-[#e4f2f8]">{fmtInt(vMin)}</span></div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-emerald-300">Realizado (ZN)</span>
+                  <span className="font-mono text-[#e4f2f8]">{vReal !== null ? fmtInt(vReal) : '—'}</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-[#8fb3c8]">Apontado</span>
+                  <span className="font-mono text-[#e4f2f8]">{vApont !== null ? fmtInt(vApont) : '—'}</span>
+                </div>
+                {vReal !== null && (
+                  <div className="border-t border-[#20406a] mt-1 pt-1">
+                    <div className="flex justify-between gap-4">
+                      <span className="text-[#5a8caa]">vs mínimo</span>
+                      <span className={`font-mono font-bold ${desvMin! >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {desvMin! >= 0 ? '+' : ''}{fmtInt(desvMin!)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <span className="text-[#5a8caa]">vs ideal</span>
+                      <span className={`font-mono font-bold ${desvIdeal! >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {desvIdeal! >= 0 ? '+' : ''}{fmtInt(desvIdeal!)}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+        </div>
 
         <div className="flex flex-wrap gap-4 mt-1 justify-center text-[10px] text-[#5a8caa]">
           <span className="flex items-center gap-1"><span className="w-3 h-2 rounded-full" style={{ background: '#22d3ee' }} /> Ideal (arraste)</span>
           <span className="flex items-center gap-1"><span className="w-3 h-2 rounded-full" style={{ background: '#f59e0b' }} /> Mínimo (arraste)</span>
           <span className="flex items-center gap-1"><span className="w-3 h-2 rounded-sm" style={{ background: 'rgba(34,211,238,.15)' }} /> Corredor</span>
-          <span className="flex items-center gap-1"><span className="w-3 h-0 border-t-2" style={{ borderColor: corReal }} /> Realizado (ligação acum.)</span>
+          <span className="flex items-center gap-1"><span className="w-3 h-0 border-t-2" style={{ borderColor: corReal }} /> Realizado (baixa ZN)</span>
+          <span className="flex items-center gap-1"><span className="w-3 h-0 border-t border-dashed" style={{ borderColor: '#64748b' }} /> apontamento de campo</span>
         </div>
       </div>
 
@@ -282,16 +445,17 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
         <thead className="bg-[#0d2040] text-[#5a8caa] uppercase tracking-wider">
           <tr>
             <th className="text-left px-5 py-2.5">Semana (fim sáb)</th>
-            <th className="text-right px-5 py-2.5">Mínimo acum. (lig.)</th>
-            <th className="text-right px-5 py-2.5">Ideal acum. (lig.)</th>
-            <th className="text-right px-5 py-2.5">Realizado no fim</th>
+            <th className="text-right px-5 py-2.5">Mínimo acum.</th>
+            <th className="text-right px-5 py-2.5">Ideal acum.</th>
+            <th className="text-right px-5 py-2.5">Baixa ZN no fim</th>
+            <th className="text-right px-5 py-2.5">Apontado no fim</th>
           </tr>
         </thead>
         <tbody>
-          {semanas.map((s) => {
+          {semanas.map((s, i) => {
             const fim = addDias(s.semana_inicio, 5)
-            const realFim = ultimoReal && fim <= ultimoReal ? cumLaAte(fim)
-              : ultimoReal && s.semana_inicio <= ultimoReal ? cumLaAte(ultimoReal) : null
+            const realFim = realNaSemana(i)
+            const apontFim = apontadoNaSemana(i)
             return (
               <tr key={s.id} className="border-t border-[#20406a]/50 hover:bg-[#14294e]">
                 <td className="px-5 py-2 font-medium text-[#e4f2f8] whitespace-nowrap">{fmtDdMM(s.semana_inicio)}–{fmtDdMM(fim)}</td>
@@ -324,6 +488,9 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
                 }`}>
                   {realFim == null ? '—' : fmtInt(realFim)}
                 </td>
+                <td className="px-5 py-2 text-right font-mono text-[#8fb3c8]">
+                  {apontFim == null ? '—' : fmtInt(apontFim)}
+                </td>
               </tr>
             )
           })}
@@ -331,7 +498,7 @@ export function CurvaSCorredor({ semanas, dias, meta, onSalvar }: Props) {
       </table>
       <div className="px-5 py-2.5 border-t border-[#20406a] text-[10px] text-[#5a8caa] flex items-start gap-2">
         <AlertTriangle size={12} className="text-amber-400 shrink-0 mt-0.5" />
-        <span><b>Arraste os pontos</b> (ciano = ideal, amarelo = mínimo) pra moldar o corredor direto no gráfico — solta e salva. Ou digite na tabela. Realizado fica <b>verde</b> dentro do corredor, <b>vermelho</b> abaixo do mínimo.</span>
+        <span><b>Arraste os pontos</b> (ciano = ideal, amarelo = mínimo) pra moldar o corredor direto no gráfico — solta e salva. Ou digite na tabela. A linha grossa é a <b>baixa oficial ZN</b> (verde dentro do corredor, vermelha abaixo do mínimo); a tracejada cinza é o <b>apontamento de campo</b> — as duas ficam visíveis de propósito.</span>
       </div>
     </div>
   )
