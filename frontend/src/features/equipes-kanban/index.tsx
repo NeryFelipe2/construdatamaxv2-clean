@@ -21,6 +21,9 @@ import { useFrota } from '@/hooks/useFrota'
 import { usePlanejamentoMestreStore } from '@/store/planejamentoMestreStore'
 import { useMetaCampanha, type EtapaCampanha } from '@/hooks/useMetaCampanha'
 import { useMetaRuas, etapaBloqueada, type RuaMeta, type StatusEtapaRua } from '@/hooks/useMetaRuas'
+import { useProgramacaoSemana, type ServicoProgramado } from '@/hooks/useProgramacaoSemana'
+import { useProducaoHoje } from '@/hooks/useProducaoHoje'
+import { useMetaBaixas } from '@/hooks/useMetaBaixas'
 import type { MasterAggregate } from '@/lib/matching/masterScheduleCompute'
 import type { EquipeCronograma } from '@/lib/matching/cronogramaEquipeCompute'
 
@@ -34,6 +37,17 @@ import type { EquipeCronograma } from '@/lib/matching/cronogramaEquipeCompute'
 // núcleo (`aggregates[].dataFimPlanejada`).
 
 type PrazoBadgeInfo = { label: string; color: string; bg: string; border: string }
+
+/**
+ * FRENTE_META cobre só os FrenteId históricos ('sul'/'norte_agua'/...), mas a
+ * reorganização de 22/07 gravou `frente` livre no banco (ex.: "Boi Malhado").
+ * Sem este fallback o card quebrava em runtime (`frente.cor` de undefined).
+ * O fallback é honesto: usa o próprio texto da frente como label, cor neutra.
+ */
+function getFrenteMeta(frente: string): { label: string; cor: string } {
+  const meta = (FRENTE_META as Record<string, { label: string; cor: string } | undefined>)[frente]
+  return meta ?? { label: frente || 'sem frente', cor: '#64748b' }
+}
 
 const PRAZO_SEM_CRONOGRAMA: PrazoBadgeInfo = { label: 'sem cronograma', color: '#8a8a8a', bg: '#8a8a8a1a', border: '#8a8a8a4d' }
 const PRAZO_NO_PRAZO: PrazoBadgeInfo = { label: 'no prazo', color: '#22c55e', bg: '#22c55e1a', border: '#22c55e4d' }
@@ -82,7 +96,8 @@ function computePrazoBadgeEquipe(
   const cronograma = cronogramasPorEquipe.find((c) => c.equipeId === equipe.id)
   if (!cronograma || !cronograma.dataFim) return PRAZO_SEM_CRONOGRAMA
 
-  const nucleoAlvo = FRENTE_TO_NUCLEO[equipe.frente]
+  // frente livre pós-22/07 (ex.: "Boi Malhado") já É o nome do núcleo — usa direto
+  const nucleoAlvo = FRENTE_TO_NUCLEO[equipe.frente] ?? equipe.frente
   const dataFimPlanejada = getDataFimPlanejadaNucleo(nucleoAlvo, aggregates)
   if (!dataFimPlanejada) {
     return { label: `fim: ${fmtDateBrCurto(cronograma.dataFim)}`, color: '#a3a3a3', bg: '#a3a3a31a', border: '#a3a3a34d' }
@@ -316,6 +331,256 @@ function RuaPicker({ equipe, anchor, campanhaNome, ruas, ruaAtualId, nomeEquipeC
   )
 }
 
+// ─── Frente C — meta da semana + produção de HOJE no card ────────────────────
+//
+// A META de cada equipe vem de `programacao_semana` (semana mais recente,
+// useProgramacaoSemana) casada por nome tolerante; a PRODUÇÃO do dia vem de
+// `producao_diaria` (useProducaoHoje) casada por equipe_nome livre × nome/
+// líder/encarregado da equipe. Match ambíguo (ex.: "Damião" casa Damião I e
+// II) NÃO é atribuído a ninguém — nada de número inventado; sem linha de meta
+// ou sem apontamento hoje → aviso âmbar honesto no card.
+
+/**
+ * Canônico p/ match tolerante: minúsculas, sem acento, sem parênteses, sem a
+ * palavra "equipe", sem números soltos, sem conectivos (e/de/do/da/+/&),
+ * espaços colapsados. Ex.: "HM — Jesse/Kely (Cristian + Renan)" → "hm jesse/kely".
+ */
+function canonTexto(raw: string): string {
+  return raw
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/[—–\-·+&,]/g, ' ')
+    .replace(/\bequipe\b/g, ' ')
+    .replace(/\b\d+\b/g, ' ')
+    .replace(/\b(e|de|do|da|dos|das)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/** Prefixo com fronteira de palavra: "damiao alves" casa "damiao", mas "damiao ii" NÃO casa "damiao i". */
+function prefixoComFronteira(longo: string, curto: string): boolean {
+  if (!longo.startsWith(curto)) return false
+  const prox = longo.charAt(curto.length)
+  return prox === '' || prox === ' '
+}
+
+/** Match tolerante entre dois textos já canônicos (igual OU prefixo com fronteira em qualquer direção). */
+function casaTexto(a: string, b: string): boolean {
+  if (!a || !b) return false
+  return a === b || prefixoComFronteira(a, b) || prefixoComFronteira(b, a)
+}
+
+// ─── Seções por encarregado (reorganização 22/07) ────────────────────────────
+
+/**
+ * Seção do card, derivada do banco (wcr_equipes.encarregado / nome):
+ *  - aContratar → "A CONTRATAR"
+ *  - encarregado com "/" (Jesse/Kely) → nome da equipe ("HM — JESSE/KELY")
+ *  - senão → primeiro nome do encarregado ("Damião Alves da Silva" → "DAMIÃO")
+ */
+function secaoDaEquipe(e: EquipeState): string {
+  if (e.aContratar) return 'A CONTRATAR'
+  const enc = (e.encarregado ?? '').trim()
+  if (enc.includes('/')) return e.nome.toUpperCase()
+  if (!enc) return 'SEM ENCARREGADO'
+  return enc.split(/\s+/)[0].toUpperCase()
+}
+
+const SECAO_ORDEM = ['DAMIÃO', 'JAILTON', 'GILVAN', 'HM — JESSE/KELY']
+
+const SECAO_COR: Record<string, string> = {
+  'DAMIÃO': '#38bdf8',
+  'JAILTON': '#f59e0b',
+  'GILVAN': '#22c55e',
+  'HM — JESSE/KELY': '#a78bfa',
+  'A CONTRATAR': '#64748b',
+}
+
+function ordemSecao(s: string): number {
+  const i = SECAO_ORDEM.indexOf(s)
+  if (i !== -1) return i
+  if (s === 'A CONTRATAR') return 90
+  return 50
+}
+
+interface SecaoEquipes { secao: string; cor: string; equipes: EquipeState[] }
+
+function agruparPorSecao(list: EquipeState[]): SecaoEquipes[] {
+  const map = new Map<string, EquipeState[]>()
+  for (const e of list) {
+    const s = secaoDaEquipe(e)
+    map.set(s, [...(map.get(s) ?? []), e])
+  }
+  return Array.from(map.entries())
+    .map(([secao, eqs]) => ({ secao, cor: SECAO_COR[secao] ?? '#64748b', equipes: eqs }))
+    .sort((a, b) => ordemSecao(a.secao) - ordemSecao(b.secao) || a.secao.localeCompare(b.secao))
+}
+
+// ─── Produção do dia agregada por equipe ─────────────────────────────────────
+
+type ProdCampo = 'la' | 'le' | 'praM' | 'cUma' | 'preM' | 'cInsp' | 'pv' | 'pi' | 'lie' | 'lia' | 'ihm'
+
+const PROD_CAMPOS: ProdCampo[] = ['la', 'le', 'praM', 'cUma', 'preM', 'cInsp', 'pv', 'pi', 'lie', 'lia', 'ihm']
+
+const PROD_LABEL: Record<ProdCampo, string> = {
+  la: 'LA', le: 'LE', praM: 'PRA m', cUma: 'C.UMA', preM: 'PRE m',
+  cInsp: 'C.INSP', pv: 'PV', pi: 'PI', lie: 'LIE', lia: 'LIA', ihm: 'IHM',
+}
+
+type ProdDiaAgg = Record<ProdCampo, number> & { linhas: number }
+
+/**
+ * De-para serviço da programação → colunas de `producao_diaria` que contam
+ * pra barra. Serviço de "baixa" retorna null (a fonte é `meta_baixas`, não o
+ * apontamento de campo). Serviço sem de-para conhecido → null (sem barra —
+ * nunca chuta coluna errada).
+ */
+function colunasDoServico(servico: string): ProdCampo[] | null {
+  const s = canonTexto(servico)
+  if (/\bbaixas?\b/.test(s)) return null
+  if (/\bpvs?\b|\bpis?\b/.test(s)) return ['pv', 'pi']
+  if (/\bpre\b/.test(s) || (/\brede\b/.test(s) && /\besgoto\b/.test(s))) return ['preM']
+  if (/\bpra\b/.test(s) || (/\brede\b/.test(s) && /\bagua\b/.test(s))) return ['praM']
+  if (/u\.?m\.?a\b|\buma\b/.test(s) || /\bcaixa/.test(s)) return ['cUma']
+  if (/\bhidrometro\b|\bcavalete\b/.test(s)) return ['ihm']
+  if (/\bligacao|\bligacoes/.test(s)) return /\besgoto\b/.test(s) ? ['le'] : ['la']
+  return null
+}
+
+interface MetaEquipeInfo {
+  /** Linhas da programação da semana que casam (match único) com a equipe. */
+  servicos: ServicoProgramado[]
+  /** Produção apontada HOJE atribuída (match único) à equipe — null = nenhum apontamento hoje. */
+  prod: ProdDiaAgg | null
+  semanaIni: string | null
+  semanaFim: string | null
+  /** Há programação carregada? (diferencia "sem linha p/ esta equipe" de "sem programação nenhuma") */
+  temProgramacao: boolean
+  /** Última posição oficial de baixas (app ZN) — mostrada só p/ equipe com serviço de baixa. */
+  baixas: { acumulado: number; data: string } | null
+}
+
+function fmtQtd(n: number): string {
+  return Number.isInteger(n) ? String(n) : n.toLocaleString('pt-BR', { maximumFractionDigits: 1 })
+}
+
+/** Quadradinho de status (verde ok / âmbar atenção / vermelho crítico) — linguagem Foundry. */
+function StatusSq({ cor }: { cor: string }) {
+  return <span className="inline-block w-1.5 h-1.5 shrink-0" style={{ backgroundColor: cor }} />
+}
+
+function AvisoAmbar({ texto }: { texto: string }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <StatusSq cor="#f59e0b" />
+      <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#f59e0b]">{texto}</span>
+    </div>
+  )
+}
+
+/** Uma linha de serviço programado no card: label caps + meta mono + barra real×meta quando a meta é diária. */
+function MetaServicoLinha({ sv, prod, semanaFim }: { sv: ServicoProgramado; prod: ProdDiaAgg | null; semanaFim: string | null }) {
+  const cols = colunasDoServico(sv.servico)
+  const unidade = (sv.metaUnidade ?? '').trim()
+  const metaDiaria = sv.metaQtd !== null && /\/\s*dia/i.test(unidade) ? sv.metaQtd : null
+  const realHoje = cols && prod ? cols.reduce((acc, c) => acc + prod[c], 0) : null
+
+  let corBar = '#64748b'
+  if (metaDiaria !== null && realHoje !== null && metaDiaria > 0) {
+    const pct = realHoje / metaDiaria
+    corBar = pct >= 1 ? '#22c55e' : pct >= 0.5 ? '#f59e0b' : '#ef4444'
+  }
+
+  return (
+    <div className="flex flex-col gap-0.5" title={sv.obs ?? undefined}>
+      <div className="flex items-baseline gap-2">
+        <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8] truncate">{sv.servico}</span>
+        {sv.metaQtd === null ? (
+          <span className="ml-auto flex items-center gap-1 shrink-0">
+            <StatusSq cor="#f59e0b" />
+            <span className="text-[9px] uppercase tracking-[0.06em] text-[#f59e0b]">sem meta numérica</span>
+          </span>
+        ) : (
+          <span className="ml-auto font-mono tabular-nums text-[10px] text-[#e2e8f0] shrink-0">
+            {fmtQtd(sv.metaQtd)} {unidade.toUpperCase()}
+            {metaDiaria === null && semanaFim ? <span className="text-[#64748b]"> ATÉ {fmtDateBrCurto(semanaFim)}</span> : null}
+          </span>
+        )}
+      </div>
+      {metaDiaria !== null && cols !== null && (
+        <div className="flex items-center gap-1.5">
+          <div className="flex-1 h-1 bg-[#1e293b] overflow-hidden">
+            <div
+              className="h-full transition-all"
+              style={{
+                width: realHoje === null || metaDiaria <= 0 ? '0%' : `${Math.min(100, (realHoje / metaDiaria) * 100)}%`,
+                backgroundColor: corBar,
+              }}
+            />
+          </div>
+          <span className="font-mono tabular-nums text-[10px] shrink-0" style={{ color: realHoje === null ? '#64748b' : corBar }}>
+            {realHoje === null ? '—' : fmtQtd(realHoje)}/{fmtQtd(metaDiaria)}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Resumo mono dos números reais apontados hoje (só campos ≠ 0). */
+function resumoProdDia(prod: ProdDiaAgg): { label: string; valor: number }[] {
+  return PROD_CAMPOS.filter((c) => prod[c] > 0).map((c) => ({ label: PROD_LABEL[c], valor: prod[c] }))
+}
+
+/** Bloco META da equipe no card: programação da semana + barra do dia + baixas — tudo real, avisos honestos. */
+function MetaEquipeBlock({ info }: { info: MetaEquipeInfo }) {
+  const semanaTxt = info.semanaIni && info.semanaFim
+    ? `${fmtDateBrCurto(info.semanaIni)}–${fmtDateBrCurto(info.semanaFim)}`
+    : null
+  const temServicoBaixa = info.servicos.some((sv) => /\bbaixas?\b/i.test(sv.servico))
+  const naoZero = info.prod ? resumoProdDia(info.prod) : []
+  return (
+    <div className="mt-2 border-t border-[#1e293b] pt-1.5 flex flex-col gap-1">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#64748b]">Meta · Semana</span>
+        {semanaTxt && <span className="ml-auto font-mono tabular-nums text-[9px] text-[#64748b]">{semanaTxt}</span>}
+      </div>
+      {info.servicos.length === 0 ? (
+        <AvisoAmbar texto={info.temProgramacao ? 'sem linha de meta na programação da semana' : 'sem programação da semana no banco'} />
+      ) : (
+        info.servicos.map((sv, i) => (
+          <MetaServicoLinha key={`${sv.servico}-${i}`} sv={sv} prod={info.prod} semanaFim={info.semanaFim} />
+        ))
+      )}
+      {temServicoBaixa && info.baixas && (
+        <div className="flex items-baseline gap-2">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8]">Baixas app ZN</span>
+          <span className="ml-auto font-mono tabular-nums text-[10px] text-[#e2e8f0]">
+            {info.baixas.acumulado} <span className="text-[#64748b]">· {fmtDateBrCurto(info.baixas.data)}</span>
+          </span>
+        </div>
+      )}
+      {info.prod ? (
+        naoZero.length > 0 ? (
+          <div className="font-mono tabular-nums text-[9px] text-[#94a3b8] flex flex-wrap gap-x-2 gap-y-0.5">
+            {naoZero.map((m) => (
+              <span key={m.label}>
+                <span className="text-[#64748b]">{m.label}</span> {fmtQtd(m.valor)}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <div className="font-mono tabular-nums text-[9px] text-[#64748b]">0 HOJE · {info.prod.linhas} linha{info.prod.linhas !== 1 ? 's' : ''}</div>
+        )
+      ) : (
+        <AvisoAmbar texto="sem apontamento hoje" />
+      )}
+    </div>
+  )
+}
+
 const COL_META: Record<EquipeStatus, { accent: string; icon: React.ReactNode; hint: string }> = {
   planejado: { accent: '#38bdf8', icon: <Sunrise size={13} />, hint: 'o que você definiu de manhã' },
   em_campo:  { accent: '#f97316', icon: <HardHat size={13} />, hint: 'executando agora' },
@@ -334,14 +599,14 @@ function PessoaChip({ p, onEditTarefa, onEditFuncao }: {
     <div
       draggable
       onDragStart={(e) => { e.stopPropagation(); e.dataTransfer.setData('text/plain', `pessoa:${p.id}`); e.dataTransfer.effectAllowed = 'move' }}
-      className="group/p flex flex-col gap-0.5 rounded-md border border-[#525252]/70 bg-[#333333] px-2 py-1.5 cursor-grab active:cursor-grabbing hover:border-[#38bdf8]/60"
+      className="group/p flex flex-col gap-0.5 rounded-sm border border-[#1e293b] bg-[#0d1420] px-2 py-1.5 cursor-grab active:cursor-grabbing hover:border-[#38bdf8]/60"
       title="Arraste para outra equipe ou para o Banco"
     >
       <div className="flex items-center gap-1.5 min-w-0">
-        <span className="text-[11px] text-[#e5e5e5] font-medium truncate">{p.nome}</span>
+        <span className="text-[11px] text-[#e2e8f0] font-medium truncate">{p.nome}</span>
         <button
           onClick={(e) => { e.stopPropagation(); onEditFuncao(p) }}
-          className="ml-auto shrink-0 text-[9px] uppercase tracking-wide text-[#8a8a8a] bg-[#2a2a2a] border border-[#3f3f3f] rounded px-1.5 py-0.5 hover:text-[#f5f5f5] hover:border-[#f97316]/60"
+          className="ml-auto shrink-0 text-[9px] uppercase tracking-[0.06em] text-[#94a3b8] bg-[#0a0f1a] border border-[#1e293b] rounded-sm px-1.5 py-0.5 hover:text-[#f5f5f5] hover:border-[#f97316]/60"
           title="Clique para editar a função"
         >
           {p.funcao}
@@ -378,7 +643,7 @@ function EquipChip({ eq }: { eq: EquipamentoState }) {
 
 // ─── Card da equipe ──────────────────────────────────────────────────────────
 
-function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas, ruaChip, onDragStartCard, onDropInto, onEditTarefa, onEditFuncao, onEditLocal, onEditFoco, onEditEquipe }: {
+function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas, ruaChip, metaInfo, onDragStartCard, onDropInto, onEditTarefa, onEditFuncao, onEditLocal, onEditFoco, onEditEquipe }: {
   equipe: EquipeState
   pessoas: PessoaState[]
   equipamentos: EquipamentoState[]
@@ -386,6 +651,8 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
   nsAtribuidas?: number
   /** Etapa corrente da rua da campanha que casa com o local — undefined/null = sem match (sem chip). */
   ruaChip?: RuaEtapaChipInfo | null
+  /** Meta da semana + produção de hoje (Frente C) — undefined = não renderiza o bloco. */
+  metaInfo?: MetaEquipeInfo | null
   onDragStartCard: (id: string) => void
   onDropInto: (equipeId: string, payload: string) => void
   onEditTarefa: (p: PessoaState) => void
@@ -397,7 +664,7 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
   const [expandido, setExpandido] = useState(true)
   const [isOver, setIsOver] = useState(false)
   const isDesvio = equipe.status === 'desvio'
-  const frente = FRENTE_META[equipe.frente]
+  const frente = getFrenteMeta(equipe.frente)
 
   return (
     <div
@@ -417,9 +684,9 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
         setIsOver(false)
       }}
       className={[
-        'rounded-lg border p-3 cursor-grab active:cursor-grabbing transition-colors',
-        isDesvio ? 'bg-[#3a2523] border-[#ef4444]/50' : 'bg-[#3f3f3f] border-[#525252]',
-        isOver ? 'border-[#38bdf8] bg-[#31383d]' : '',
+        'rounded-sm border p-3 cursor-grab active:cursor-grabbing transition-colors',
+        isDesvio ? 'bg-[#2a1215] border-[#ef4444]/50' : 'bg-[#111a2e] border-[#1e293b]',
+        isOver ? 'border-[#38bdf8] bg-[#0f2233]' : '',
       ].join(' ')}
       style={{ borderLeftWidth: 3, borderLeftColor: frente.cor }}
     >
@@ -449,7 +716,7 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
               <Pencil size={12} />
             </button>
           </div>
-          <div className="text-[10px] mt-0.5" style={{ color: frente.cor }}>{frente.label} · enc. {equipe.encarregado}</div>
+          <div className="text-[9px] mt-0.5 font-semibold uppercase tracking-[0.08em]" style={{ color: frente.cor }}>{frente.label} · enc. {equipe.encarregado}</div>
 
           <button onClick={(e) => { e.stopPropagation(); onEditFoco(equipe) }} className="block text-left text-xs text-[#d4d4d4] mt-1.5 leading-snug hover:text-[#f5f5f5]" title="Clique para editar o serviço da equipe">
             🛠️ {equipe.foco}
@@ -464,6 +731,9 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
             </button>
             {ruaChip && <RuaEtapaChip info={ruaChip} />}
           </div>
+
+          {/* Frente C: meta da semana + produção de hoje (dados reais, avisos honestos) */}
+          {metaInfo && <MetaEquipeBlock info={metaInfo} />}
 
           {isDesvio && equipe.motivoDesvio && (
             <div className="mt-2 text-[11px] text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/30 rounded px-2 py-1 leading-snug">
@@ -489,7 +759,7 @@ function EquipeCardBox({ equipe, pessoas, equipamentos, prazoBadge, nsAtribuidas
           {expandido && (
             <div className="mt-1.5 flex flex-col gap-1">
               {pessoas.length === 0 ? (
-                <div className="text-[10px] text-[#6b6b6b] italic border border-dashed border-[#525252] rounded px-2 py-1.5 text-center">
+                <div className="text-[10px] text-[#64748b] italic border border-dashed border-[#1e293b] rounded-sm px-2 py-1.5 text-center">
                   solte pessoas aqui
                 </div>
               ) : (
@@ -592,6 +862,8 @@ function EquipeModal({
         <label className="flex flex-col gap-1 text-[11px] text-[#8a8a8a]">
           Frente
           <select value={frente} onChange={(e) => setFrente(e.target.value as FrenteId)} className={inputCls}>
+            {/* frente livre gravada no banco (ex.: "Boi Malhado", pós-22/07) — mantém como opção pra não perder o valor ao salvar */}
+            {!(frente in FRENTE_META) && <option value={frente}>{getFrenteMeta(frente).label}</option>}
             {(Object.keys(FRENTE_META) as FrenteId[]).map((f) => (
               <option key={f} value={f}>{FRENTE_META[f].label}</option>
             ))}
@@ -765,6 +1037,83 @@ export default function EquipesKanbanPage() {
   const metaRuas = useMetaRuas(campanhaAtiva)
   const [ruaPicker, setRuaPicker] = useState<{ equipeId: string; anchor: { left: number; bottom: number } } | null>(null)
 
+  // Frente C — meta da semana (programacao_semana), produção de hoje
+  // (producao_diaria) e posição oficial de baixas (meta_baixas). Tudo leitura;
+  // sem dado → o card mostra aviso âmbar honesto, nunca número inventado.
+  const programacao = useProgramacaoSemana()
+  const producaoHoje = useProducaoHoje(activeProjectId)
+  const metaBaixas = useMetaBaixas(campanhaAtiva?.id ?? null)
+
+  // Textos canônicos por equipe (nome/líder/encarregado) pro match tolerante.
+  const equipesCanon = useMemo(
+    () => equipes.map((e) => ({
+      id: e.id,
+      candNome: canonTexto(e.nome),
+      cands: [canonTexto(e.nome), canonTexto(e.lider), canonTexto(e.encarregado)].filter(Boolean),
+    })),
+    [equipes],
+  )
+
+  // programacao_semana.equipe (texto livre) → equipe do quadro. Match precisa
+  // ser ÚNICO ("Damião I" não vaza pra "Damião II" — fronteira de palavra).
+  const metasPorEquipe = useMemo(() => {
+    const map = new Map<string, ServicoProgramado[]>()
+    for (const frenteProg of programacao.frentes) {
+      for (const ent of frenteProg.equipes) {
+        const alvo = canonTexto(ent.equipe)
+        if (!alvo) continue
+        const matches = equipesCanon.filter((ec) => casaTexto(ec.candNome, alvo))
+        if (matches.length !== 1) continue // ambíguo ou sem dono — nada atribuído
+        const id = matches[0].id
+        map.set(id, [...(map.get(id) ?? []), ...ent.servicos])
+      }
+    }
+    return map
+  }, [programacao.frentes, equipesCanon])
+
+  // producao_diaria de HOJE → equipe do quadro: equipe_id direto quando houver;
+  // senão equipe_nome livre × nome/líder/encarregado. Linha que casa com MAIS
+  // de uma equipe (ex.: "Damião") não é atribuída a ninguém — sem chute.
+  const producaoPorEquipe = useMemo(() => {
+    const map = new Map<string, ProdDiaAgg>()
+    for (const r of producaoHoje.rows) {
+      let alvo: string | null = null
+      if (r.equipeId && equipes.some((e) => e.id === r.equipeId)) {
+        alvo = r.equipeId
+      } else {
+        const rc = canonTexto(r.equipeNome ?? '')
+        const matches = rc ? equipesCanon.filter((ec) => ec.cands.some((c) => casaTexto(c, rc))) : []
+        if (matches.length === 1) alvo = matches[0].id
+      }
+      if (!alvo) continue
+      const agg: ProdDiaAgg = map.get(alvo) ?? {
+        la: 0, le: 0, praM: 0, cUma: 0, preM: 0, cInsp: 0, pv: 0, pi: 0, lie: 0, lia: 0, ihm: 0, linhas: 0,
+      }
+      for (const campo of PROD_CAMPOS) agg[campo] += r[campo]
+      agg.linhas += 1
+      map.set(alvo, agg)
+    }
+    return map
+  }, [producaoHoje.rows, equipes, equipesCanon])
+
+  const metaInfoPorEquipe = useMemo(() => {
+    const map = new Map<string, MetaEquipeInfo>()
+    const baixasUltima = metaBaixas.ultima
+      ? { acumulado: metaBaixas.ultima.acumulado, data: metaBaixas.ultima.data }
+      : null
+    for (const e of equipes) {
+      map.set(e.id, {
+        servicos: metasPorEquipe.get(e.id) ?? [],
+        prod: producaoPorEquipe.get(e.id) ?? null,
+        semanaIni: programacao.semanaIni,
+        semanaFim: programacao.semanaFim,
+        temProgramacao: programacao.semanaIni !== null,
+        baixas: baixasUltima,
+      })
+    }
+    return map
+  }, [equipes, metasPorEquipe, producaoPorEquipe, programacao.semanaIni, programacao.semanaFim, metaBaixas.ultima])
+
   // Nome curto da equipe atribuída à rua (chip no RuaPicker) — tira o prefixo "Equipe".
   const nomeEquipeCurto = (id: string | null): string | null => {
     if (!id) return null
@@ -866,10 +1215,13 @@ export default function EquipesKanbanPage() {
 
   const dataBr = date.split('-').reverse().join('/')
 
+  const hoje = new Date().toISOString().slice(0, 10)
+  const programacaoVencida = programacao.semanaFim !== null && hoje > programacao.semanaFim
+
   return (
-    <div className="h-full flex flex-col bg-[#2a2a2a]">
+    <div className="h-full flex flex-col bg-[#0a0f1a]">
       {/* header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#525252] bg-[#333333] shrink-0 flex-wrap gap-3">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e293b] bg-[#0d1420] shrink-0 flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#38bdf8]/15">
             <Users size={18} className="text-[#38bdf8]" />
@@ -885,7 +1237,9 @@ export default function EquipesKanbanPage() {
               ⚠️ {desvios} desvio{desvios > 1 ? 's' : ''} hoje
             </span>
           )}
-          <span className="text-[11px] text-[#8a8a8a]">{concluidas}/{equipes.length} concluídas</span>
+          <span className="text-[11px] text-[#94a3b8]">
+            <span className="font-mono tabular-nums text-[#e2e8f0]">{concluidas}/{equipes.length}</span> concluídas
+          </span>
           <button
             onClick={irParaCronograma}
             className="flex items-center gap-1.5 text-[11px] text-[#a78bfa] hover:text-[#c4b5fd] px-3 py-2 rounded-md border border-[#a78bfa]/40 hover:border-[#a78bfa]/70 bg-[#a78bfa]/5 hover:bg-[#a78bfa]/10 transition-colors"
@@ -926,6 +1280,52 @@ export default function EquipesKanbanPage() {
         </div>
       </div>
 
+      {/* ticker de contexto — só dado real (programação/campanha/baixas/apontamento de hoje) */}
+      <div className="flex items-center gap-x-5 gap-y-1 flex-wrap px-6 py-1.5 border-b border-[#1e293b] bg-[#0d1420] shrink-0">
+        {programacao.semanaIni && programacao.semanaFim ? (
+          <span className="flex items-center gap-1.5">
+            <StatusSq cor={programacaoVencida ? '#f59e0b' : '#22c55e'} />
+            <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#64748b]">Programação</span>
+            <span className="font-mono tabular-nums text-[10px] text-[#e2e8f0]">
+              {fmtDateBrCurto(programacao.semanaIni)}→{fmtDateBrCurto(programacao.semanaFim)}
+            </span>
+            {programacaoVencida && (
+              <span className="text-[9px] font-semibold uppercase tracking-[0.06em] text-[#f59e0b]">vencida</span>
+            )}
+          </span>
+        ) : (
+          <AvisoAmbar texto="sem programação da semana no banco" />
+        )}
+        {campanhaAtiva && (
+          <span className="flex items-center gap-1.5">
+            <StatusSq cor="#38bdf8" />
+            <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#64748b]">Campanha</span>
+            <span className="font-mono tabular-nums text-[10px] text-[#e2e8f0]">
+              {campanhaAtiva.alvo} {campanhaAtiva.unidade.toUpperCase()}
+              <span className="text-[#64748b]"> ATÉ {fmtDateBrCurto(campanhaAtiva.data_fim)}</span>
+            </span>
+          </span>
+        )}
+        {campanhaAtiva && metaBaixas.ultima && (
+          <span className="flex items-center gap-1.5" title="Posição oficial de baixas no app ZN (meta_baixas)">
+            <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#64748b]">Baixas ZN</span>
+            <span className="font-mono tabular-nums text-[10px] text-[#e2e8f0]">
+              {metaBaixas.ultima.acumulado}/{campanhaAtiva.alvo}
+              <span className="text-[#64748b]"> · {fmtDateBrCurto(metaBaixas.ultima.data)}</span>
+            </span>
+          </span>
+        )}
+        {producaoHoje.rows.length > 0 ? (
+          <span className="flex items-center gap-1.5">
+            <StatusSq cor="#22c55e" />
+            <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#64748b]">Apontamento hoje</span>
+            <span className="font-mono tabular-nums text-[10px] text-[#e2e8f0]">{producaoHoje.rows.length} linha{producaoHoje.rows.length !== 1 ? 's' : ''}</span>
+          </span>
+        ) : (
+          <AvisoAmbar texto="sem apontamento hoje" />
+        )}
+      </div>
+
       {/* corpo: banco/pátio + colunas */}
       <div className="flex-1 overflow-x-auto overflow-y-hidden px-6 py-4">
         <div className="flex gap-4 h-full min-h-0">
@@ -936,28 +1336,28 @@ export default function EquipesKanbanPage() {
             onDragLeave={() => setOverCol((c) => (c === 'banco' ? null : c))}
             onDrop={(e) => { e.preventDefault(); dropIntoBanco(e.dataTransfer.getData('text/plain')) }}
             className={[
-              'flex-shrink-0 w-[210px] flex flex-col rounded-xl border bg-[#2f2f2f] transition-colors',
-              overCol === 'banco' ? 'border-[#a78bfa]' : 'border-[#3f3f3f] border-dashed',
+              'flex-shrink-0 w-[210px] flex flex-col rounded-sm border bg-[#0d1420] transition-colors',
+              overCol === 'banco' ? 'border-[#a78bfa]' : 'border-[#1e293b] border-dashed',
             ].join(' ')}
           >
-            <div className="px-3 py-3 border-b border-[#3f3f3f]">
+            <div className="px-3 py-3 border-b border-[#1e293b]">
               <div className="flex items-center gap-2">
                 <UserX size={13} className="text-[#a78bfa]" />
-                <span className="text-xs font-bold uppercase tracking-wide text-[#a78bfa]">Banco / Pátio</span>
+                <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#a78bfa]">Banco / Pátio</span>
               </div>
-              <div className="text-[10px] text-[#6b6b6b] mt-1">faltou, remanejando, máquina parada — solte aqui</div>
+              <div className="text-[10px] text-[#64748b] mt-1">faltou, remanejando, máquina parada — solte aqui</div>
             </div>
             <div className="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2">
               {patio.length > 0 && (
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-wide text-[#6b6b6b] flex items-center gap-1"><Truck size={10} /> máquinas ({patio.length})</span>
+                  <span className="text-[9px] uppercase tracking-[0.1em] text-[#64748b] flex items-center gap-1"><Truck size={10} /> máquinas (<span className="font-mono tabular-nums">{patio.length}</span>)</span>
                   <div className="flex flex-wrap gap-1">{patio.map((eq) => <EquipChip key={eq.id} eq={eq} />)}</div>
                 </div>
               )}
               <div className="flex flex-col gap-1 mt-1">
-                <span className="text-[9px] uppercase tracking-wide text-[#6b6b6b]">pessoas ({banco.length})</span>
+                <span className="text-[9px] uppercase tracking-[0.1em] text-[#64748b]">pessoas (<span className="font-mono tabular-nums">{banco.length}</span>)</span>
                 {banco.length === 0 ? (
-                  <div className="text-[10px] text-[#6b6b6b] italic text-center py-3 border border-dashed border-[#3f3f3f] rounded">ninguém no banco</div>
+                  <div className="text-[10px] text-[#64748b] italic text-center py-3 border border-dashed border-[#1e293b] rounded-sm">ninguém no banco</div>
                 ) : (
                   banco.map((p) => <PessoaChip key={p.id} p={p} onEditTarefa={editTarefa} onEditFuncao={editFuncao} />)
                 )}
@@ -969,6 +1369,7 @@ export default function EquipesKanbanPage() {
           {EQUIPE_STATUS_ORDER.map((status) => {
             const meta = COL_META[status]
             const colEquipes = equipes.filter((e) => e.status === status)
+            const secoes = agruparPorSecao(colEquipes)
             const isOver = overCol === status
             return (
               <div
@@ -977,41 +1378,53 @@ export default function EquipesKanbanPage() {
                 onDragLeave={() => setOverCol((c) => (c === status ? null : c))}
                 onDrop={(e) => { e.preventDefault(); dropIntoColuna(status, e.dataTransfer.getData('text/plain')) }}
                 className={[
-                  'flex-shrink-0 w-[320px] flex flex-col rounded-xl border bg-[#333333] transition-colors',
-                  isOver && draggingCard ? 'border-[#f97316] bg-[#3a3632]' : 'border-[#3f3f3f]',
+                  'flex-shrink-0 w-[320px] flex flex-col rounded-sm border bg-[#0d1420] transition-colors',
+                  isOver && draggingCard ? 'border-[#f97316] bg-[#131a2b]' : 'border-[#1e293b]',
                 ].join(' ')}
               >
-                <div className="px-3 py-3 border-b border-[#3f3f3f]">
+                <div className="px-3 py-3 border-b border-[#1e293b]">
                   <div className="flex items-center gap-2">
                     <span style={{ color: meta.accent }}>{meta.icon}</span>
-                    <span className="text-xs font-bold uppercase tracking-wide" style={{ color: meta.accent }}>{EQUIPE_STATUS_LABEL[status]}</span>
-                    <span className="ml-auto text-[10px] text-[#8a8a8a] bg-[#2a2a2a] border border-[#3f3f3f] rounded-full px-2 py-0.5">{colEquipes.length}</span>
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.1em]" style={{ color: meta.accent }}>{EQUIPE_STATUS_LABEL[status]}</span>
+                    <span className="ml-auto font-mono tabular-nums text-[10px] text-[#94a3b8] bg-[#0a0f1a] border border-[#1e293b] rounded-sm px-2 py-0.5">{colEquipes.length}</span>
                   </div>
-                  <div className="text-[10px] text-[#6b6b6b] mt-1">{meta.hint}</div>
+                  <div className="text-[10px] text-[#64748b] mt-1">{meta.hint}</div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2.5 min-h-[120px]">
                   {colEquipes.length === 0 ? (
-                    <div className="text-[11px] text-[#6b6b6b] text-center py-6 border border-dashed border-[#3f3f3f] rounded-lg">
+                    <div className="text-[11px] text-[#64748b] text-center py-6 border border-dashed border-[#1e293b] rounded-sm">
                       {isOver ? 'Solte aqui' : 'vazio'}
                     </div>
                   ) : (
-                    colEquipes.map((equipe) => (
-                      <EquipeCardBox
-                        key={equipe.id}
-                        equipe={equipe}
-                        pessoas={pessoas.filter((p) => p.equipeId === equipe.id)}
-                        equipamentos={equipamentos.filter((x) => x.equipeId === equipe.id)}
-                        prazoBadge={prazoPorEquipe.get(equipe.id)}
-                        nsAtribuidas={nsPorEquipe.porEquipe.get(equipe.id) ?? 0}
-                        ruaChip={ruaChipPorEquipe.get(equipe.id)}
-                        onDragStartCard={setDraggingCard}
-                        onDropInto={dropIntoEquipe}
-                        onEditTarefa={editTarefa}
-                        onEditFuncao={editFuncao}
-                        onEditLocal={editLocal}
-                        onEditFoco={editFoco}
-                        onEditEquipe={editEquipe}
-                      />
+                    secoes.map((sec) => (
+                      <div key={sec.secao} className="flex flex-col gap-2">
+                        {/* seção por encarregado (reorganização 22/07) */}
+                        <div className="flex items-center gap-1.5 px-0.5 pt-0.5">
+                          <StatusSq cor={sec.cor} />
+                          <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8] shrink-0">{sec.secao}</span>
+                          <div className="flex-1 h-px bg-[#1e293b]" />
+                          <span className="font-mono tabular-nums text-[9px] text-[#64748b]">{sec.equipes.length}</span>
+                        </div>
+                        {sec.equipes.map((equipe) => (
+                          <EquipeCardBox
+                            key={equipe.id}
+                            equipe={equipe}
+                            pessoas={pessoas.filter((p) => p.equipeId === equipe.id)}
+                            equipamentos={equipamentos.filter((x) => x.equipeId === equipe.id)}
+                            prazoBadge={prazoPorEquipe.get(equipe.id)}
+                            nsAtribuidas={nsPorEquipe.porEquipe.get(equipe.id) ?? 0}
+                            ruaChip={ruaChipPorEquipe.get(equipe.id)}
+                            metaInfo={metaInfoPorEquipe.get(equipe.id)}
+                            onDragStartCard={setDraggingCard}
+                            onDropInto={dropIntoEquipe}
+                            onEditTarefa={editTarefa}
+                            onEditFuncao={editFuncao}
+                            onEditLocal={editLocal}
+                            onEditFoco={editFoco}
+                            onEditEquipe={editEquipe}
+                          />
+                        ))}
+                      </div>
                     ))
                   )}
                 </div>

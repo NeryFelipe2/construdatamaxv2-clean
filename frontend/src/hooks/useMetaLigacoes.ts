@@ -51,6 +51,27 @@ export interface TotaisMetaLigacoes {
   la: number
 }
 
+/**
+ * Linha CRUA de producao_diaria (1 por dia × equipe × rua) dentro da janela da
+ * campanha — alimenta o leaderboard por equipe e o heatmap rua × dia da tela
+ * Metas. `equipe` e `rua` são texto LIVRE do apontamento (grafias variam);
+ * quem consome normaliza. Nada é inventado: é a linha do banco como está.
+ */
+export interface RegistroProducaoMeta {
+  /** ISO yyyy-mm-dd */
+  data: string
+  rua: string | null
+  equipe: string | null
+  cUma: number
+  hm: number
+  la: number
+  le: number
+  ci: number
+  pv: number
+  pi: number
+  intercept: number
+}
+
 /** Segunda-feira (yyyy-mm-dd) da semana que contém `iso`. */
 function segundaDaSemana(iso: string): string {
   const d = new Date(`${iso}T00:00:00`)
@@ -66,6 +87,8 @@ function fmtDdMM(iso: string): string {
 
 interface DbRow {
   data: string
+  rua: string | null
+  equipe_nome: string | null
   c_uma: number | null
   ihm: number | null
   la: number | null
@@ -73,6 +96,7 @@ interface DbRow {
   c_insp: number | null
   pv: number | null
   pi: number | null
+  intercept: number | null
 }
 
 /** Monta o resumo textual dos serviços secundários do dia (só os > 0). */
@@ -87,6 +111,7 @@ function resumoOutros(o: { le: number; ci: number; pv: number; pi: number }): st
 
 export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta | null) {
   const [dias, setDias] = useState<DiaMetaLigacoes[]>([])
+  const [registros, setRegistros] = useState<RegistroProducaoMeta[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -96,6 +121,7 @@ export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta
   const load = useCallback(async () => {
     if (!supabase || !projetoId || !janelaInicio || !janelaFim) {
       setDias([]) // sem campanha → vazio honesto, nunca número inventado
+      setRegistros([])
       return
     }
     setLoading(true)
@@ -103,7 +129,7 @@ export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta
     try {
       const { data, error: e1 } = await supabase
         .from('producao_diaria')
-        .select('data, c_uma, ihm, la, le, c_insp, pv, pi')
+        .select('data, rua, equipe_nome, c_uma, ihm, la, le, c_insp, pv, pi, intercept')
         .eq('projeto_id', projetoId)
         .gte('data', janelaInicio) // só a janela da campanha
         .lte('data', janelaFim)
@@ -112,8 +138,10 @@ export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta
 
       // Agrega por dia (a tabela tem 1 linha por dia×equipe×rua). Os secundários
       // (LE/CI/PV/PI) somam num acumulador à parte e viram o texto `outros`.
+      // As linhas cruas também são guardadas (leaderboard/heatmap da tela Metas).
       const porDia = new Map<string, DiaMetaLigacoes>()
       const secPorDia = new Map<string, { le: number; ci: number; pv: number; pi: number }>()
+      const regs: RegistroProducaoMeta[] = []
       for (const row of (data ?? []) as DbRow[]) {
         const key = String(row.data).slice(0, 10)
         const acc = porDia.get(key) ?? { data: key, cUma: 0, hm: 0, la: 0, outros: '' }
@@ -127,9 +155,23 @@ export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta
         sec.pv += Number(row.pv) || 0
         sec.pi += Number(row.pi) || 0
         secPorDia.set(key, sec)
+        regs.push({
+          data: key,
+          rua: row.rua,
+          equipe: row.equipe_nome,
+          cUma: Number(row.c_uma) || 0,
+          hm: Number(row.ihm) || 0,
+          la: Number(row.la) || 0,
+          le: Number(row.le) || 0,
+          ci: Number(row.c_insp) || 0,
+          pv: Number(row.pv) || 0,
+          pi: Number(row.pi) || 0,
+          intercept: Number(row.intercept) || 0,
+        })
       }
       for (const [key, acc] of porDia) acc.outros = resumoOutros(secPorDia.get(key)!)
       setDias(Array.from(porDia.values()).sort((a, b) => a.data.localeCompare(b.data)))
+      setRegistros(regs)
     } catch (err: any) {
       setError(err?.message ?? 'Erro ao carregar produção diária da meta de ligações')
     } finally {
@@ -172,5 +214,5 @@ export function useMetaLigacoes(projetoId: string | null, campanha: CampanhaMeta
     return Array.from(porSemana.values()).sort((a, b) => a.inicio.localeCompare(b.inicio))
   }, [dias])
 
-  return { dias, semanas, totais, loading, error, reload: load }
+  return { dias, semanas, totais, registros, loading, error, reload: load }
 }

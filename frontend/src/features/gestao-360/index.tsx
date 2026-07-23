@@ -19,6 +19,7 @@ import {
 import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseGestao } from '@/hooks/useSupabaseGestao'
 import { ControleFinanceiroPanel } from './components/ControleFinanceiroPanel'
+import { TimelineOperacaoPanel } from './components/TimelineOperacaoPanel'
 
 type TabId = 'dashboard' | 'financeiro'
 type ConnectionStatus = 'connected' | 'partial' | 'local'
@@ -393,6 +394,8 @@ export function Gestao360Page() {
             )}
           </div>
         </div>
+
+        <TimelineOperacaoPanel projetoId={activeProjectId} />
       </div>
       )}
 

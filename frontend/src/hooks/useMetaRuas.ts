@@ -49,8 +49,9 @@ export function etapaBloqueada(rua: RuaMeta, etapaKey: string, etapas: EtapaCamp
   return (rua.statusEtapa[anterior.key]?.status ?? 'pendente') !== 'concluido'
 }
 
-/** Normaliza nome de rua p/ match: minúsculas, sem acento, espaços colapsados. */
-function normalizarRua(nome: string): string {
+/** Normaliza nome de rua p/ match: minúsculas, sem acento, espaços colapsados.
+ *  Exportada — o heatmap rua × dia da tela Metas reusa a MESMA normalização. */
+export function normalizarRua(nome: string): string {
   return nome
     .toLowerCase()
     .normalize('NFD')
