@@ -4,6 +4,7 @@ import { useProjectContext } from "@/store/projectContext"
 import { supabase } from "@/lib/supabase"
 import { useCampoWhatsapp } from "@/hooks/useCampoWhatsapp"
 import type { OcorrenciaObra } from "@/hooks/useCampoWhatsapp"
+import { CronogramaPvsPanel } from "./components/CronogramaPvsPanel"
 
 // Punch List formal (com foto antes/depois e prazo dedicado) ainda não existe:
 // a tabela `punch_list_items` está no banco mas com 0 registros e nenhuma tela
@@ -76,6 +77,14 @@ export function PunchListPage() {
   const abertos = ocorrencias.filter((o) => !o.resolvida).length
   const resolvidos = ocorrencias.length - abertos
 
+  // Cruza o cronograma de PVs com o punch list: a ocorrência da SAÍDA CLANDESTINA
+  // (PV nº 108, Rua Vanessa Atalanta) é o mesmo item que aparece em vermelho no
+  // cronograma. `null` = não achei a ocorrência, e aí o painel não afirma nada.
+  const clandestinaResolvida = useMemo(() => {
+    const oc = ocorrencias.find((o) => (o.descricao ?? "").toUpperCase().includes("CLANDESTINA"))
+    return oc ? oc.resolvida : null
+  }, [ocorrencias])
+
   async function addItem() {
     if (!form.descricao.trim() || saving) return
     setSaving(true)
@@ -134,7 +143,15 @@ export function PunchListPage() {
         <p className="text-xs text-amber-400 flex items-center gap-1.5"><AlertTriangle size={14} /> Sem conexão Supabase configurada — nada para mostrar.</p>
       )}
 
-      {/* KPIs */}
+      {/* Cronograma real dos PVs do pente fino (tabela pente_fino_cronograma) */}
+      <CronogramaPvsPanel ocorrenciaClandestinaResolvida={clandestinaResolvida} />
+
+      {/* KPIs das ocorrências */}
+      <div className="flex items-center gap-2 pt-1">
+        <span className="text-[11px] font-semibold tracking-[0.15em] text-slate-400 uppercase">Ocorrências de campo</span>
+        <span className="flex-1 h-px bg-[#1e293b]" />
+        <span className="text-[9px] text-slate-600 font-mono">TABELA ocorrencias_obra</span>
+      </div>
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-[#112645] border border-[#20406a] rounded-xl p-4">
           <div className="text-[10px] text-[#5a8caa] uppercase tracking-wider mb-1">Abertos</div>

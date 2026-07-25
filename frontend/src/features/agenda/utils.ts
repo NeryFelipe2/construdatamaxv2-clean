@@ -179,6 +179,81 @@ export function getResizeRightStyle(
   return getBarStyle(modifiedTask, viewStart, visibleWeeks, 0, pixelsPerDay)
 }
 
+// ─── Faixas (lanes) dentro de uma linha ───────────────────────────────────────
+
+/** Padding vertical da linha quando há mais de uma faixa. */
+export const LANE_PAD_Y = 6
+/** Espaço entre duas faixas. */
+export const LANE_GAP = 2
+/** Geometria da barra quando a linha tem 1 faixa só (comportamento original). */
+export const BAR_TOP_SINGLE    = 10
+export const BAR_HEIGHT_SINGLE = 48
+
+export interface LaneLayout {
+  /** faixa (0-based) de cada tarefa, por task.id */
+  laneByTask: Map<string, number>
+  /** quantas faixas a linha precisa (>= 1) */
+  laneCount: number
+}
+
+/**
+ * Distribui as tarefas de UMA linha (mesmo recurso) em faixas horizontais pra
+ * que barras com datas sobrepostas não fiquem literalmente uma em cima da
+ * outra — o caso real hoje é a linha `eq-pente-fino`, que acumula as 4 fases
+ * macro do pente fino (F1..F4, semanas inteiras) MAIS as tarefas diárias por
+ * PV do cronograma: sem faixas, as diárias cobrem a barra da fase e some tudo
+ * que está atrás.
+ *
+ * Algoritmo guloso clássico de interval partitioning: ordena por início e
+ * coloca cada tarefa na primeira faixa já livre. Determinístico (não depende
+ * da ordem de chegada do array) e O(n · faixas).
+ */
+export function computeLanes(tasks: AgendaTask[]): LaneLayout {
+  const laneByTask = new Map<string, number>()
+  if (tasks.length === 0) return { laneByTask, laneCount: 1 }
+
+  const ordered = [...tasks].sort((a, b) => {
+    const byStart = a.startDate.localeCompare(b.startDate)
+    return byStart !== 0 ? byStart : a.endDate.localeCompare(b.endDate)
+  })
+
+  // fim (exclusivo, em ms) já ocupado em cada faixa
+  const laneEnds: number[] = []
+
+  for (const task of ordered) {
+    const startDate = parseISO(task.startDate)
+    const start = startDate.getTime()
+    // getBarStyle desenha no mínimo 1 dia (Math.max(1, …)), então uma tarefa
+    // com data_fim = data_inicio ocupa o dia inteiro — o fim efetivo é o dia
+    // seguinte, senão duas tarefas do MESMO dia cairiam na mesma faixa.
+    const end = Math.max(parseISO(task.endDate).getTime(), addDays(startDate, 1).getTime())
+
+    let lane = laneEnds.findIndex((laneEnd) => laneEnd <= start)
+    if (lane === -1) {
+      lane = laneEnds.length
+      laneEnds.push(end)
+    } else {
+      laneEnds[lane] = end
+    }
+    laneByTask.set(task.id, lane)
+  }
+
+  return { laneByTask, laneCount: Math.max(1, laneEnds.length) }
+}
+
+/**
+ * Retângulo vertical (top/height, relativo ao topo da linha) de uma faixa.
+ * Com 1 faixa devolve exatamente a geometria antiga (top 10 / height 48), pra
+ * não mexer no visual das linhas que não têm sobreposição.
+ */
+export function getLaneRect(laneIndex: number, laneCount: number): { top: number; height: number } {
+  if (laneCount <= 1) return { top: BAR_TOP_SINGLE, height: BAR_HEIGHT_SINGLE }
+  const area   = ROW_HEIGHT - LANE_PAD_Y * 2
+  const height = Math.max(6, (area - (laneCount - 1) * LANE_GAP) / laneCount)
+  const top    = LANE_PAD_Y + laneIndex * (height + LANE_GAP)
+  return { top, height }
+}
+
 // ─── Today indicator ──────────────────────────────────────────────────────────
 
 export function getTodayOffset(

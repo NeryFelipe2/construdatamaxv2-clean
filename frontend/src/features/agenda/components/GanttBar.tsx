@@ -4,6 +4,7 @@ import { useAgendaStore } from '@/store/agendaStore'
 import {
   COLUMN_WIDTH,
   getBarStyle,
+  getLaneRect,
   applyDragDelta,
   applyResizeLeft,
   applyResizeRight,
@@ -34,9 +35,20 @@ interface GanttBarProps {
   viewStart: string
   visibleWeeks: number
   pixelsPerDay?: number   // defaults to COLUMN_WIDTH / 7 (week mode)
+  /** faixa horizontal da barra dentro da linha (ver computeLanes em utils.ts) */
+  laneIndex?: number
+  /** total de faixas da linha — 1 mantém a geometria original (top 10/h 48) */
+  laneCount?: number
 }
 
-export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_WIDTH / 7 }: GanttBarProps) {
+export function GanttBar({
+  task,
+  viewStart,
+  visibleWeeks,
+  pixelsPerDay = COLUMN_WIDTH / 7,
+  laneIndex = 0,
+  laneCount = 1,
+}: GanttBarProps) {
   const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask, snapUnit } = useAgendaStore()
 
   const [previewOffsetUnits, setPreviewOffsetUnits] = useState(0)
@@ -207,15 +219,22 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
   const bg     = COLOR_BG[task.color]
   const border = COLOR_BORDER[task.color]
 
+  // Faixa vertical: com laneCount = 1 devolve o top/height de sempre; com
+  // várias, divide a altura da linha pra nenhuma barra cobrir a outra.
+  const lane = getLaneRect(laneIndex, laneCount)
+  // Barra fina não comporta 11px — cai pra 9px e, abaixo de 14px, some o texto
+  // (o título continua no `title` do elemento, então o hover ainda informa).
+  const labelPx = lane.height >= 26 ? 11 : lane.height >= 14 ? 9 : 0
+
   return (
     <div
       onPointerDown={handleBarPointerDown}
       style={{
         position: 'absolute',
-        top: 10,
+        top: lane.top,
         left: barStyle.left,
         width: barStyle.width,
-        height: 48,
+        height: lane.height,
         background: bg,
         borderRadius: 6,
         border: `1.5px solid ${isSelected ? '#fff' : border}`,
@@ -240,14 +259,19 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
       />
 
       {/* Label */}
-      <div
-        className="flex items-center h-full overflow-hidden pointer-events-none"
-        style={{ paddingLeft: 12, paddingRight: 12 }}
-      >
-        <span className="text-white text-[11px] font-semibold truncate leading-none">
-          {task.title}
-        </span>
-      </div>
+      {labelPx > 0 && (
+        <div
+          className="flex items-center h-full overflow-hidden pointer-events-none"
+          style={{ paddingLeft: labelPx >= 11 ? 12 : 8, paddingRight: labelPx >= 11 ? 12 : 8 }}
+        >
+          <span
+            className="text-white font-semibold truncate leading-none"
+            style={{ fontSize: labelPx }}
+          >
+            {task.title}
+          </span>
+        </div>
+      )}
 
       {/* Right resize handle */}
       <div

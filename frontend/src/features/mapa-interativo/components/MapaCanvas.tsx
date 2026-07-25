@@ -2,10 +2,13 @@
  * MapaCanvas — Leaflet map with full network editing capabilities.
  * Supports: addNode, connect, deleteNode, deleteSegment, measure, structure tools.
  */
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Polyline, useMapEvents, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useMapaInterativoStore } from '@/store/mapaInterativoStore'
+import { usePenteFinoPvs } from '@/hooks/usePenteFinoPvs'
+import { PenteFinoPvsLayer } from './PenteFinoPvsLayer'
+import { PenteFinoPvsPanel } from './PenteFinoPvsPanel'
 import type { MapNode, MapNetworkType } from '@/types'
 
 // ─── Color maps ───────────────────────────────────────────────────────────────
@@ -136,6 +139,13 @@ export function MapaCanvas() {
   const setPendingConnectNodeId = useMapaInterativoStore((s) => s.setPendingConnectNodeId)
   const activeNetworkType   = useMapaInterativoStore((s) => s.activeNetworkType)
   const showPlanejado       = useMapaInterativoStore((s) => s.showPlanejado)
+  const selectedProjectId   = useMapaInterativoStore((s) => s.selectedProjectId)
+
+  // Camada do pente fino: cronograma real (`pente_fino_cronograma`) cruzado com
+  // `pv` pra pegar lat/lon. Só entra no mapa o que casou por nome; o resto vira
+  // aviso âmbar no painel (posição não se inventa).
+  const penteFino = usePenteFinoPvs(selectedProjectId)
+  const [showPenteFino, setShowPenteFino] = useState(true)
 
   const layerVisible = (nt: MapNetworkType) =>
     layers.find((l) => l.id === nt)?.visible ?? true
@@ -239,6 +249,9 @@ export function MapaCanvas() {
           )
         })}
 
+        {/* PVs do pente fino (cronograma × cadastro) — por cima dos nós da rede */}
+        {showPenteFino && <PenteFinoPvsLayer pontos={penteFino.pontos} />}
+
         {/* Measure first point */}
         {measurePoint1 && (
           <CircleMarker
@@ -248,6 +261,15 @@ export function MapaCanvas() {
           />
         )}
       </MapContainer>
+
+      <PenteFinoPvsPanel
+        resumo={penteFino.resumo}
+        semCoordenada={penteFino.semCoordenada}
+        ativo={showPenteFino}
+        onToggle={setShowPenteFino}
+        loading={penteFino.loading}
+        error={penteFino.error}
+      />
     </div>
   )
 }
