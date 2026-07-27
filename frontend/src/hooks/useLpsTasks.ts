@@ -29,6 +29,19 @@ interface DbLpsTask {
 }
 
 /**
+ * Normaliza o `ready_status` cru do banco pro enum da UI. Além de
+ * green/yellow/red, o wizard COMPROMETER SEMANA (27/07) grava 'pronta' como
+ * valor canônico do compromisso recém-criado — na UI isso é verde.
+ */
+function normalizarReadyStatus(raw: string | null): LpsReadyStatus {
+  const v = String(raw ?? '').toLowerCase().trim()
+  if (v === 'red') return 'red'
+  if (v === 'yellow') return 'yellow'
+  // 'green' | 'pronta' | vazio (carga histórica de 14/07)
+  return 'green'
+}
+
+/**
  * Carrega as atividades LPS do projeto. Retorna `null` quando a leitura FALHA
  * (Supabase indisponível/erro — o chamador mantém o fallback atual) e `[]`
  * quando o banco está genuinamente vazio (o chamador deve mostrar vazio, sem
@@ -49,7 +62,7 @@ export async function carregarLpsTasks(projectId: string): Promise<LpsActivity[]
     description: r.task_name,
     planned: r.comprometida ?? true,
     completed: r.concluida ?? false,
-    readyStatus: (r.ready_status as LpsReadyStatus) ?? 'green',
+    readyStatus: normalizarReadyStatus(r.ready_status),
     cncCategory: (r.cnc_categoria as LpsCncCategory) ?? undefined,
     cncDescription: r.motivo_nao_conclusao ?? undefined,
     responsibleTeam: r.responsavel ?? undefined,

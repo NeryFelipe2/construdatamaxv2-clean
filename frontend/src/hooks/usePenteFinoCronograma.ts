@@ -4,7 +4,12 @@
  *
  * Origem do dado: BOI_MALHADO_ESGOTO.gpkg atualizado em 25/07 — o campo passou a
  * preencher duas colunas novas no GPKG ("Arrumado" e "data de execução"), que
- * viraram `arrumado` e `data_execucao` aqui. São 16 PVs com data programada.
+ * viraram `arrumado` e `data_execucao` aqui. 16 PVs têm data marcada PELO CAMPO;
+ * em 27/07 os outros 74 ganharam data PROPOSTA (`proposta=true`, 2 frentes ×
+ * 4 PVs/dia agrupadas por rua, prazo 09/08) — proposta é rotulada como proposta,
+ * o campo confirma pelo mesmo fluxo do GPKG. Cada PV também carrega as frentes
+ * (`equipe_principal`/`equipe_apoio`: eq-pv Michael Douglas / eq-esgoto Juan
+ * Carlos — o pedido "reparo dos PVs com o pessoal de esgoto").
  *
  * Honestidade do status (`arrumado`):
  *  - 'feito'    → o campo confirmou o reparo;
@@ -41,6 +46,12 @@ export interface PenteFinoPv {
   arrumado: PenteFinoArrumado
   /** ISO YYYY-MM-DD — data programada de execução do reparo. */
   data_execucao: string
+  /** Frente principal do reparo (id de wcr_equipes, ex.: 'eq-pv', 'eq-esgoto'). */
+  equipe_principal: string | null
+  /** Frente de apoio (pedido do Felipe: pessoal de esgoto junto nos PVs). */
+  equipe_apoio: string | null
+  /** true = data PROPOSTA (27/07, 2 frentes × 4/dia por rua) — o campo confirma; false = data marcada pelo campo no GPKG. */
+  proposta: boolean
   fonte: string | null
   updated_at: string | null
 }
@@ -54,6 +65,10 @@ export interface PenteFinoDia {
 export interface PenteFinoKpis {
   /** PVs com data programada na tabela. */
   programados: number
+  /** PVs cuja data foi marcada PELO CAMPO no GPKG (proposta=false). */
+  doCampo: number
+  /** PVs com data PROPOSTA (proposta=true) aguardando confirmação do campo. */
+  propostos: number
   feitos: number
   aFazer: number
   /** `arrumado` null — sem confirmação de campo. */
@@ -85,6 +100,9 @@ interface DbRow {
   folhas: string | null
   arrumado: string | null
   data_execucao: string
+  equipe_principal: string | null
+  equipe_apoio: string | null
+  proposta: boolean | null
   fonte: string | null
   updated_at: string | null
 }
@@ -109,7 +127,7 @@ export function usePenteFinoCronograma() {
     try {
       const { data, error: e1 } = await supabase
         .from('pente_fino_cronograma')
-        .select('id, projeto_id, pv, tipo, situacao, profundidade_m, rua, casa_frente, folhas, arrumado, data_execucao, fonte, updated_at')
+        .select('id, projeto_id, pv, tipo, situacao, profundidade_m, rua, casa_frente, folhas, arrumado, data_execucao, equipe_principal, equipe_apoio, proposta, fonte, updated_at')
         .order('data_execucao', { ascending: true })
         .order('pv', { ascending: true })
       if (e1) throw e1
@@ -126,6 +144,9 @@ export function usePenteFinoCronograma() {
           folhas: r.folhas,
           arrumado: normalizaArrumado(r.arrumado),
           data_execucao: String(r.data_execucao).slice(0, 10),
+          equipe_principal: r.equipe_principal,
+          equipe_apoio: r.equipe_apoio,
+          proposta: r.proposta === true,
           fonte: r.fonte,
           updated_at: r.updated_at,
         })),
@@ -177,10 +198,13 @@ export function usePenteFinoCronograma() {
 
   const kpis = useMemo<PenteFinoKpis>(() => {
     const programados = pvs.length
+    const propostos = pvs.filter((p) => p.proposta).length
     const feitos = pvs.filter((p) => p.arrumado === 'feito').length
     const aFazer = pvs.filter((p) => p.arrumado === 'a fazer').length
     return {
       programados,
+      doCampo: programados - propostos,
+      propostos,
       feitos,
       aFazer,
       semConfirmacao: programados - feitos - aFazer,

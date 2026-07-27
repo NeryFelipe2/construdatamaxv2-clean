@@ -1456,6 +1456,12 @@ export interface LpsRestriction {
   linkedMasterActivityIds?: string[]
   alertSentAt?: string
   alertMessage?: string
+  /** Coluna `origem` de lps_restricoes — rastreia a fonte da restrição (ex.: "seed ocorrencias_obra 27/07 (id=…)"). Base do dedup das sugestões do RestricoesPanel. */
+  origem?: string
+  /** FK opcional lps_restricoes.frente_id → wcr_equipes.id (restrição ligada a uma equipe/frente). */
+  frenteId?: string
+  /** Valor CRU de lps_restricoes.tipo (taxonomia CNC: 'mao de obra'|'material'|'equipamento'|'clima'|'projeto/sabesp'|'interferencia/moradores'|'retrabalho'|'planejamento'|'seguranca'|'outro') — preservado pra não perder granularidade (ex.: 'seguranca') no round-trip com LpsRestrictionCategory. */
+  tipoDb?: string
 }
 
 export interface LpsActivity {

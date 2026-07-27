@@ -5,20 +5,20 @@
  * única que tem lat/lon — pra conseguir plotar no Mapa Interativo os PVs que
  * precisam ser arrumados.
  *
- * O cronograma NÃO traz coordenada (utm_e/utm_n vêm nulos no import), então a
- * posição de um PV só existe quando o NOME casa com um PV do cadastro. O
- * casamento é por `projeto_id` + nome normalizado: maiúsculas, sem pontuação,
- * zeros à esquerda do número removidos ("PV-19" == "PV-019"). Prefixo diferente
- * NÃO casa de propósito — "PI-107" não vira "PVE_107", isso seria inventar
- * posição. Nome que casa com mais de uma linha de `pv` também é descartado
- * (ambíguo). Tudo que não casou sai em `semCoordenada` pra tela avisar em
- * âmbar, com o motivo.
+ * Desde 27/07 o cronograma traz `utm_e`/`utm_n` (EPSG:31983, extraídos da
+ * geometria do GPKG) para os 90 PVs — a posição vem DIRETO da linha, convertida
+ * com utmToWgs84 (zona 23 S). O casamento por nome contra `pv` ficou como
+ * FALLBACK para linhas futuras sem UTM: `projeto_id` + nome normalizado
+ * (maiúsculas, sem pontuação, zeros à esquerda removidos; prefixo diferente NÃO
+ * casa — "PI-107" não vira "PVE_107"; ambíguo é descartado). O que não tiver
+ * posição por nenhum caminho sai em `semCoordenada` pra tela avisar em âmbar.
  *
  * Padrão de hook: useState/useCallback/useEffect + try/catch, igual
  * useMetaCorredor.ts. Nada é inventado — sem casamento, sem marcador.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { utmToWgs84 } from '@/utils/utmToWgs84'
 
 export type PenteFinoStatus = 'feito' | 'a fazer' | 'sem confirmacao'
 
@@ -36,10 +36,15 @@ export interface PenteFinoPonto {
   dataExecucao: string | null
   lat: number
   lon: number
-  /** nome exato da linha de `pv` que casou — deixa o cruzamento auditável. */
+  /** origem da posição: nome da linha de `pv` que casou, ou 'utm do GPKG' — auditável. */
   pvCasado: string
   /** programado pra antes de hoje e ainda sem 'feito' confirmado. */
   atrasado: boolean
+  /** data PROPOSTA (27/07, 2 frentes × 4/dia) — o campo confirma; false = data do campo. */
+  proposta: boolean
+  /** frentes de reparo (ids de wcr_equipes: eq-pv / eq-esgoto). */
+  equipePrincipal: string | null
+  equipeApoio: string | null
 }
 
 /** Linha do cronograma que ficou SEM posição — nunca é plotada. */
@@ -63,6 +68,11 @@ interface CronogramaRow {
   arrumado: string | null
   data_execucao: string | null
   projeto_id: string | null
+  utm_e: number | string | null
+  utm_n: number | string | null
+  equipe_principal: string | null
+  equipe_apoio: string | null
+  proposta: boolean | null
 }
 
 interface PvRow {
@@ -114,7 +124,7 @@ export function usePenteFinoPvs(projetoId: string | null) {
     try {
       let cronoQuery = supabase
         .from('pente_fino_cronograma')
-        .select('id, pv, tipo, situacao, profundidade_m, rua, casa_frente, arrumado, data_execucao, projeto_id')
+        .select('id, pv, tipo, situacao, profundidade_m, rua, casa_frente, arrumado, data_execucao, projeto_id, utm_e, utm_n, equipe_principal, equipe_apoio, proposta')
         .order('data_execucao', { ascending: true })
       if (projetoId) cronoQuery = cronoQuery.eq('projeto_id', projetoId)
       const { data: cronoData, error: e1 } = await cronoQuery
@@ -154,8 +164,34 @@ export function usePenteFinoPvs(projetoId: string | null) {
         if (!nome) continue
         const status = normalizaStatus(c.arrumado)
         const dataExecucao = c.data_execucao ? String(c.data_execucao).slice(0, 10) : null
-        const candidatos = indice.get(`${c.projeto_id ?? ''}#${chaveNome(nome)}`) ?? []
+        const prof = c.profundidade_m == null ? null : Number(c.profundidade_m)
+        const base = {
+          id: c.id,
+          pv: nome,
+          tipo: c.tipo,
+          situacao: c.situacao,
+          profundidadeM: prof != null && Number.isFinite(prof) ? prof : null,
+          rua: c.rua,
+          casaFrente: c.casa_frente,
+          status,
+          dataExecucao,
+          atrasado: dataExecucao != null && dataExecucao < hoje && status !== 'feito',
+          proposta: c.proposta === true,
+          equipePrincipal: c.equipe_principal,
+          equipeApoio: c.equipe_apoio,
+        }
 
+        // caminho 1 (preferido): UTM da própria linha, extraído da geometria do GPKG
+        const utmE = c.utm_e == null ? null : Number(c.utm_e)
+        const utmN = c.utm_n == null ? null : Number(c.utm_n)
+        if (utmE != null && utmN != null && Number.isFinite(utmE) && Number.isFinite(utmN)) {
+          const { lat, lng } = utmToWgs84(utmE, utmN, 23, 'S') // EPSG:31983
+          comCoord.push({ ...base, lat, lon: lng, pvCasado: 'utm do GPKG' })
+          continue
+        }
+
+        // caminho 2 (fallback): casamento por nome contra `pv`
+        const candidatos = indice.get(`${c.projeto_id ?? ''}#${chaveNome(nome)}`) ?? []
         if (candidatos.length !== 1) {
           sem.push({
             id: c.id,
@@ -167,23 +203,12 @@ export function usePenteFinoPvs(projetoId: string | null) {
           })
           continue
         }
-
         const casado = candidatos[0]
-        const prof = c.profundidade_m == null ? null : Number(c.profundidade_m)
         comCoord.push({
-          id: c.id,
-          pv: nome,
-          tipo: c.tipo,
-          situacao: c.situacao,
-          profundidadeM: prof != null && Number.isFinite(prof) ? prof : null,
-          rua: c.rua,
-          casaFrente: c.casa_frente,
-          status,
-          dataExecucao,
+          ...base,
           lat: casado.lat as number,
           lon: casado.lon as number,
           pvCasado: casado.nome as string,
-          atrasado: dataExecucao != null && dataExecucao < hoje && status !== 'feito',
         })
       }
 

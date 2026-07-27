@@ -8,6 +8,7 @@ import { useThemeStore, LayoutTheme } from "@/store/themeStore";
 import { useAppModeStore } from "@/store/appModeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { DemoBanner } from "@/components/shared/DemoBanner";
+import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
@@ -531,6 +532,9 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
           <ProjectSelector isDark={isDark} />
         </div>
       </div>
+
+      {/* Trilho guiado da semana (P1..P5) — barra fina, colapsável via guiaStore */}
+      <GuiaTrilhoBar />
 
       <div className="flex flex-1 overflow-hidden">
         {mobileOpen && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={() => setMobileOpen(false)} />}

@@ -467,10 +467,19 @@ function IndicesPanelMock() {
  * dependência de orçamento por pilar do Dashboard/Plano de Contas real). */
 
 function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null }) {
-  const { porSegmento, metrics, bac, baselineCount, temDadosReais, loading, error } = useEvmReal(activeProjectId)
+  const { porSegmento, metrics, bac, baselineCount, temDadosReais, temDespesaReal, loading, error } = useEvmReal(activeProjectId)
 
-  const overallSemaphore = healthSemaphore(metrics.CPI, metrics.SPI)
-  const overallInterp = interpretation(metrics.CPI, metrics.SPI)
+  // Fase 5 — sem despesa lançada não existe AC, logo não existe CPI: as células
+  // de CPI mostram "—" (cinza) em vez de 0.00 vermelho falso, e o semáforo/
+  // interpretação avaliam só o SPI.
+  const overallSemaphore = temDespesaReal
+    ? healthSemaphore(metrics.CPI, metrics.SPI)
+    : { color: '#6b6b6b', label: 'CPI indisponível — sem custo real lançado' }
+  const overallInterp = temDespesaReal
+    ? interpretation(metrics.CPI, metrics.SPI)
+    : metrics.SPI >= 1
+      ? { text: 'Prazo em dia — custo sem dado (0 despesas lançadas)', color: '#a3a3a3' }
+      : { text: 'Prazo atrasado — custo sem dado (0 despesas lançadas)', color: '#eab308' }
 
   return (
     <div className="p-6 space-y-6 bg-[#2c2c2c] min-h-full">
@@ -505,8 +514,9 @@ function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null 
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
           <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
           <span className="text-amber-200/90 text-xs leading-relaxed">
-            <b className="text-amber-300">Projeto sem orçamento total cadastrado.</b> Sem `orcamento_total`
-            (BAC) não é possível calcular os índices reais.
+            <b className="text-amber-300">Sem BAC pra este projeto.</b> Tentados 3 caminhos, todos vazios:
+            `orcamento_total`, soma de `planejamento_itens.custo_previsto` e campanha × preços do de-para
+            (`servico_codigo_map`). Sem BAC não é possível calcular os índices reais.
           </span>
         </div>
       )}
@@ -552,10 +562,16 @@ function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null 
                   {porSegmento.map((seg) => {
                     const cpi = seg.metrics.CPI
                     const spi = seg.metrics.SPI
-                    const interp = interpretation(cpi, spi)
+                    const interp = temDespesaReal
+                      ? interpretation(cpi, spi)
+                      : spi >= 1
+                        ? { text: 'Prazo em dia — custo sem dado', color: '#a3a3a3' }
+                        : { text: 'Prazo atrasado — custo sem dado', color: '#eab308' }
                     const cpiColor = indexColor(cpi)
                     const spiColor = indexColor(spi)
-                    const semaphore = healthSemaphore(cpi, spi)
+                    const semaphore = temDespesaReal
+                      ? healthSemaphore(cpi, spi)
+                      : { color: '#6b6b6b', label: 'CPI indisponível — sem custo real lançado' }
                     const cpiTrend = seg.serie.map((m) => (m.acAcum > 0 ? m.evAcum / m.acAcum : 0)).slice(-6)
                     const spiTrend = seg.serie.map((m) => (m.pvAcum > 0 ? m.evAcum / m.pvAcum : 0)).slice(-6)
                     return (
@@ -570,13 +586,17 @@ function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null 
                           </div>
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <TrendIcon value={cpi} />
-                            <span className="font-mono text-sm font-semibold" style={{ color: cpiColor }}>{cpi.toFixed(2)}</span>
-                          </div>
+                          {temDespesaReal ? (
+                            <div className="flex items-center justify-center gap-1.5">
+                              <TrendIcon value={cpi} />
+                              <span className="font-mono text-sm font-semibold" style={{ color: cpiColor }}>{cpi.toFixed(2)}</span>
+                            </div>
+                          ) : (
+                            <span className="font-mono text-sm text-[#6b6b6b]" title="sem custo real lançado (0 despesas)">—</span>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Sparkline data={cpiTrend} color={cpiColor} />
+                          {temDespesaReal && <Sparkline data={cpiTrend} color={cpiColor} />}
                         </td>
                         <td className="px-4 py-3 text-center">
                           <div className="flex items-center justify-center gap-1.5">
@@ -605,10 +625,14 @@ function IndicesPanelReal({ activeProjectId }: { activeProjectId: string | null 
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <TrendIcon value={metrics.CPI} />
-                        <span className="font-mono text-sm font-bold" style={{ color: indexColor(metrics.CPI) }}>{metrics.CPI.toFixed(2)}</span>
-                      </div>
+                      {temDespesaReal ? (
+                        <div className="flex items-center justify-center gap-1.5">
+                          <TrendIcon value={metrics.CPI} />
+                          <span className="font-mono text-sm font-bold" style={{ color: indexColor(metrics.CPI) }}>{metrics.CPI.toFixed(2)}</span>
+                        </div>
+                      ) : (
+                        <span className="font-mono text-sm text-[#6b6b6b]" title="sem custo real lançado (0 despesas)">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center" />
                     <td className="px-4 py-3 text-center">

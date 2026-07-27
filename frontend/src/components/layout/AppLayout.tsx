@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_GROUPS as MODULE_GROUPS } from "@/config/navigation";
+import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 
 export function AppLayout() {
   const location = useLocation();
@@ -97,6 +98,9 @@ export function AppLayout() {
           </button>
         </div>
       </header>
+
+      {/* Trilho guiado da semana (P1..P5) — barra fina, colapsável via guiaStore */}
+      <GuiaTrilhoBar />
 
       {/* 2. SUB NAV BAR (Context Area) */}
       <div className="h-12 bg-[#0c40cf] text-white flex items-center px-4 shrink-0 shadow-sm z-40 text-sm">

@@ -1,7 +1,14 @@
 /**
  * PlanejamentoMestrePage — main page for the Planejamento Mestre module.
+ *
+ * Deep-links do trilho guiado (Fase 3): ?tab=X troca a aba do store e ?guia=pN
+ * mostra o GuiaRibbon no topo (P1 — planejar a semana chega aqui via
+ * /app/planejamento-mestre?guia=p1).
  */
 import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { GuiaRibbon } from '@/components/shared/GuiaRibbon'
+import type { PlanejamentoMestreTab } from '@/types'
 import { usePlanejamentoMestreStore } from '@/store/planejamentoMestreStore'
 import { useAppModeStore } from '@/store/appModeStore'
 import { useProjectContext } from '@/store/projectContext'
@@ -14,8 +21,14 @@ import { VisaoIntegradaPanel } from './components/VisaoIntegradaPanel'
 import { ProgramacaoSemanalPanel } from './components/ProgramacaoSemanalPanel'
 import { CronogramaPorEquipePanel } from './components/CronogramaPorEquipePanel'
 
+/** Abas válidas pro deep-link ?tab= (mesma união de PlanejamentoMestreTab). */
+const PM_TABS_VALIDAS: PlanejamentoMestreTab[] = [
+  'macro', 'derivacao', 'whatif', 'integrada', 'semanal', 'por-equipe',
+]
+
 export function PlanejamentoMestrePage() {
   const activeTab = usePlanejamentoMestreStore((s) => s.activeTab)
+  const setActiveTab = usePlanejamentoMestreStore((s) => s.setActiveTab)
   const activities = usePlanejamentoMestreStore((s) => s.activities)
   const loadDemoData = usePlanejamentoMestreStore((s) => s.loadDemoData)
   const loadFromRealData = usePlanejamentoMestreStore((s) => s.loadFromRealData)
@@ -24,8 +37,15 @@ export function PlanejamentoMestrePage() {
   const hidratarProgramacaoSemanal = usePlanejamentoMestreStore((s) => s.hidratarProgramacaoSemanal)
   const isDemoMode = useAppModeStore((s) => s.isDemoMode)
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const [searchParams] = useSearchParams()
 
   const engine = useMasterScheduleEngine(isDemoMode ? null : activeProjectId)
+
+  // Deep-link do trilho: ?tab=macro|semanal|... abre direto a aba.
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab && (PM_TABS_VALIDAS as string[]).includes(tab)) setActiveTab(tab as PlanejamentoMestreTab)
+  }, [searchParams, setActiveTab])
 
   useEffect(() => {
     if (activities.length === 0 && isDemoMode) loadDemoData()
@@ -58,6 +78,7 @@ export function PlanejamentoMestrePage() {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
+      <GuiaRibbon />
       <PlanejamentoMestreHeader />
       <div className="flex-1 overflow-y-auto p-6">
         {activeTab === 'macro'     && <PlanejamentoMacroPanel />}

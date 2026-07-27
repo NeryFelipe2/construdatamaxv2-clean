@@ -1,8 +1,15 @@
 /**
  * RdoPage — root of the RDO module.
+ *
+ * Deep-links do trilho guiado (Fase 3): ?tab=X troca a aba do rdoStore e
+ * ?guia=pN mostra o GuiaRibbon no topo (P4 — apontar o dia chega aqui via
+ * /app/rdo?guia=p4).
  */
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ClipboardPaste } from 'lucide-react'
+import { GuiaRibbon } from '@/components/shared/GuiaRibbon'
+import type { RdoTab } from '@/types'
 import { useRdoStore } from '@/store/rdoStore'
 import { useProjectContext } from '@/store/projectContext'
 import { RdoHeader }      from './components/RdoHeader'
@@ -18,11 +25,19 @@ import { ProducaoPanel } from './components/ProducaoPanel'
 import { WhatsAppBotPanel } from './components/WhatsAppBotPanel'
 import { WhatsAppFluxoPanel } from './components/WhatsAppFluxoPanel'
 
+/** Abas válidas pro deep-link ?tab= (mesma união de RdoTab em types). */
+const RDO_TABS_VALIDAS: RdoTab[] = [
+  'dashboard', 'novo', 'automatico', 'historico', 'diario',
+  'integracao', 'financeiro', 'producao', 'whatsapp-bot', 'whatsapp-fluxo',
+]
+
 export function RdoPage() {
   const activeTab = useRdoStore((s) => s.activeTab)
+  const setActiveTab = useRdoStore((s) => s.setActiveTab)
   const loadFromSupabase = useRdoStore((s) => s.loadFromSupabase)
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const [showApontamento, setShowApontamento] = useState(false)
+  const [searchParams] = useSearchParams()
 
   // Carrega RDOs do Supabase (gravados pelo Router WhatsApp) + refresh 30s
   useEffect(() => {
@@ -30,6 +45,12 @@ export function RdoPage() {
     const t = setInterval(() => loadFromSupabase(activeProjectId), 30000)
     return () => clearInterval(t)
   }, [loadFromSupabase, activeProjectId])
+
+  // Deep-link do trilho: ?tab=producao|historico|... abre direto a aba.
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab && (RDO_TABS_VALIDAS as string[]).includes(tab)) setActiveTab(tab as RdoTab)
+  }, [searchParams, setActiveTab])
 
   function renderPanel() {
     switch (activeTab) {
@@ -49,6 +70,7 @@ export function RdoPage() {
 
   return (
     <div className="flex flex-col h-full bg-gray-950">
+      <GuiaRibbon />
       <RdoHeader />
       {/* Apontamento por tags (WhatsApp → RDO → Medição) — fora do NovoRdoPanel, sem backend Render */}
       <div className="flex items-center justify-end px-4 py-1.5 border-b border-[#3f3f3f] bg-gray-950">

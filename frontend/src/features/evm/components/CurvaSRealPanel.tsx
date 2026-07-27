@@ -19,10 +19,17 @@ const PAD = { left: 70, right: 30, top: 20, bottom: 40 }
 const PLOT_W = W - PAD.left - PAD.right
 const PLOT_H = H - PAD.top - PAD.bottom
 
+/** Rótulo da fonte do BAC (Fase 5) — declarado na tela, nunca implícito. */
+const BAC_FONTE_LABEL: Record<string, string> = {
+  orcamento_total: 'projetos.orcamento_total',
+  planejamento_custo_previsto: 'Σ planejamento_itens.custo_previsto',
+  campanha_x_mapa: 'metas_producao × servico_codigo_map',
+}
+
 export function CurvaSRealPanel() {
   const { activeProjectId } = useProjectContext()
   const isDemoMode = useAppModeStore((s) => s.isDemoMode)
-  const { serie, metrics, temProducaoReal, temDespesaReal, temDadosReais, baselineCount, bac, loading, error } =
+  const { serie, metrics, temProducaoReal, temDespesaReal, temDadosReais, baselineCount, bac, bacFonte, loading, error } =
     useEvmReal(isDemoMode ? null : activeProjectId)
 
   if (isDemoMode) {
@@ -64,7 +71,10 @@ export function CurvaSRealPanel() {
         </div>
         <p className="text-[#6b6b6b] text-xs">
           PV = baseline do cronograma mensalizado &middot; EV = produção real (`producao_diaria`) × preço/metro
-          derivado do orçamento &middot; AC = despesas reais lançadas. BAC = {bac > 0 ? formatCurrency(bac) : '—'}.
+          derivado do orçamento &middot; AC = despesas reais lançadas. BAC ={' '}
+          {bac > 0
+            ? `${formatCurrency(bac)} (fonte: ${BAC_FONTE_LABEL[bacFonte ?? ''] ?? '—'})`
+            : '— (orcamento_total, planejamento valorado e campanha × preços do de-para vazios)'}.
         </p>
       </div>
 
@@ -90,8 +100,9 @@ export function CurvaSRealPanel() {
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
           <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
           <span className="text-amber-200/90 text-xs leading-relaxed">
-            <b className="text-amber-300">Projeto sem orçamento total cadastrado.</b> Sem `orcamento_total`
-            (BAC) não é possível calcular PV/EV/AC em R$. Cadastre o orçamento do contrato.
+            <b className="text-amber-300">Sem BAC pra este projeto.</b> Tentados 3 caminhos, todos vazios:
+            `orcamento_total`, soma de `planejamento_itens.custo_previsto` (valorada via de-para de preços)
+            e campanha × preços do de-para (`servico_codigo_map`). Sem BAC não dá pra montar a curva em R$.
           </span>
         </div>
       )}
@@ -115,11 +126,13 @@ export function CurvaSRealPanel() {
 
       {temDadosReais && n > 0 && (
         <>
+          {/* Fase 5 — CPI/AC só existem com despesa lançada; sem AC os cards
+              mostram "—" com a razão (nunca 0.00 fingindo índice calculado). */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <KpiCard label="CPI" value={metrics.CPI} isIndex />
+            <KpiCard label="CPI" value={temDespesaReal ? metrics.CPI : null} isIndex note="sem custo real lançado (0 despesas)" />
             <KpiCard label="SPI" value={metrics.SPI} isIndex />
             <KpiCard label="BAC (R$)" value={metrics.BAC} isCurrency />
-            <KpiCard label="AC (R$)" value={metrics.AC} isCurrency />
+            <KpiCard label="AC (R$)" value={temDespesaReal ? metrics.AC : null} isCurrency note="sem custo real lançado (0 despesas)" />
           </div>
 
           <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5">
@@ -202,13 +215,15 @@ export function CurvaSRealPanel() {
   )
 }
 
-function KpiCard({ label, value, isCurrency = false, isIndex = false }: { label: string; value: number; isCurrency?: boolean; isIndex?: boolean }) {
-  const formatted = isCurrency ? formatCurrency(value) : value.toFixed(2)
-  const color = isIndex ? (value >= 1 ? '#22c55e' : '#ef4444') : '#f5f5f5'
+/** `value: null` = insumo real ausente — mostra "—" cinza com a razão em `note`. */
+function KpiCard({ label, value, isCurrency = false, isIndex = false, note }: { label: string; value: number | null; isCurrency?: boolean; isIndex?: boolean; note?: string }) {
+  const formatted = value == null ? '—' : isCurrency ? formatCurrency(value) : value.toFixed(2)
+  const color = value == null ? '#6b6b6b' : isIndex ? (value >= 1 ? '#22c55e' : '#ef4444') : '#f5f5f5'
   return (
-    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 min-w-[140px]">
+    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 min-w-[140px]" title={value == null ? note : undefined}>
       <p className="text-[#a3a3a3] text-xs mb-1">{label}</p>
       <p className="font-mono text-lg font-semibold" style={{ color }}>{formatted}</p>
+      {value == null && note && <p className="text-[#6b6b6b] text-[9px] mt-0.5 leading-tight">{note}</p>}
     </div>
   )
 }

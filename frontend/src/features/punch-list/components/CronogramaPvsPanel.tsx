@@ -93,6 +93,17 @@ function fmtProf(m: number | null): string {
   return `${m.toFixed(2).replace('.', ',')} m`
 }
 
+/** Rótulo curto das frentes de reparo (ids de wcr_equipes). */
+const EQUIPE_LABEL: Record<string, string> = {
+  'eq-pv': 'EQ PV · Michael',
+  'eq-esgoto': 'EQ ESGOTO · Juan',
+  'eq-pente-fino': 'EQ PENTE FINO',
+}
+function labelEquipe(id: string | null): string | null {
+  if (!id) return null
+  return EQUIPE_LABEL[id] ?? id.replace(/^eq-/, 'EQ ').toUpperCase()
+}
+
 /** Faixa SVG do cronograma: uma coluna por dia, um quadrado por PV. */
 function FaixaSvg({
   dias,
@@ -220,12 +231,33 @@ export function CronogramaPvsPanel({
 
       <div className="px-4 py-3 space-y-3">
         {/* KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <Kpi label="Programados" valor={kpis.programados} cor="#e2e8f0" nota="com data no cronograma" />
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <Kpi
+            label="Programados"
+            valor={kpis.programados}
+            cor="#e2e8f0"
+            nota={`${kpis.doCampo} do campo + ${kpis.propostos} propostos`}
+          />
+          <Kpi label="Propostos" valor={kpis.propostos} cor="#38bdf8" nota="data sugerida — campo confirma" />
           <Kpi label="Feitos" valor={kpis.feitos} cor="#22c55e" nota="confirmados pelo campo" />
           <Kpi label="A fazer" valor={kpis.aFazer} cor="#f59e0b" nota="pendência confirmada" />
           <Kpi label="Sem confirmação" valor={kpis.semConfirmacao} cor="#64748b" nota="campo não marcou nada" />
         </div>
+
+        {/* aviso honesto: parte do cronograma é PROPOSTA, não marcação de campo */}
+        {kpis.propostos > 0 && (
+          <div className="px-3 py-2 border border-[#38bdf8]/40 bg-[#38bdf8]/10 text-[10px] text-[#38bdf8] flex items-start gap-2">
+            <AlertTriangle size={12} className="shrink-0 mt-px" />
+            <span className="leading-relaxed">
+              <strong className="font-mono [font-variant-numeric:tabular-nums]">{kpis.propostos}</strong> dos{' '}
+              <strong className="font-mono [font-variant-numeric:tabular-nums]">{kpis.cadastroTotal}</strong> PVs têm
+              data <strong>PROPOSTA</strong> (27/07 · 2 frentes × 4 PVs/dia agrupadas por rua · prazo 09/08) — o campo
+              confirma ou ajusta pelo mesmo fluxo do GPKG. Frentes: <strong>EQ PV (Michael Douglas)</strong> +{' '}
+              <strong>EQ ESGOTO (Juan Carlos)</strong>, com o MND do escadão (61,4 m) junto dos 6 PVs colineares em
+              29–31/07.
+            </span>
+          </div>
+        )}
 
         {/* aviso honesto: o cadastro é maior que o cronograma */}
         {kpis.semDataProgramada > 0 && (
@@ -346,6 +378,22 @@ export function CronogramaPvsPanel({
                             <span className="font-mono [font-variant-numeric:tabular-nums] text-[10px] px-1.5 py-px border border-[#1e293b] bg-[#0a0f1a] text-slate-300">
                               <span className="text-slate-600">PROF</span> {fmtProf(p.profundidade_m)}
                             </span>
+                            {p.proposta && (
+                              <span
+                                className="text-[9px] font-bold tracking-[0.08em] px-1.5 py-px border border-[#38bdf8]/50 bg-[#38bdf8]/10 text-[#38bdf8]"
+                                title="Data PROPOSTA (27/07, 2 frentes × 4/dia por rua) — o campo confirma ou ajusta pelo GPKG"
+                              >
+                                PROPOSTA
+                              </span>
+                            )}
+                            {labelEquipe(p.equipe_principal) && (
+                              <span
+                                className="text-[9px] font-semibold tracking-[0.06em] px-1.5 py-px border border-[#1e293b] bg-[#0a0f1a] text-slate-400"
+                                title={`Frente principal: ${p.equipe_principal}${p.equipe_apoio ? ` · apoio: ${p.equipe_apoio}` : ''}`}
+                              >
+                                {labelEquipe(p.equipe_principal)}
+                              </span>
+                            )}
 
                             {/* status + ações */}
                             <div className="ml-auto flex items-center gap-2">
@@ -438,6 +486,9 @@ export function CronogramaPvsPanel({
           </span>
           <span className="flex items-center gap-1.5 text-[9px] tracking-[0.08em] uppercase text-slate-500">
             <span className="w-2 h-2 bg-[#ef4444]" /> crítico
+          </span>
+          <span className="flex items-center gap-1.5 text-[9px] tracking-[0.08em] uppercase text-slate-500">
+            <span className="w-2 h-2 border border-[#38bdf8] bg-[#38bdf8]/20" /> proposta (campo confirma)
           </span>
           <span className="ml-auto text-[9px] text-slate-600 font-mono">
             TABELA pente_fino_cronograma{fonte ? ` · ${fonte}` : ''} · colunas arrumado / data_execucao preenchidas em campo

@@ -1,441 +1,334 @@
 /**
- * CurtoPrazoPanel — Curto Prazo: 15-day production board.
- * Consumes useOperacaoCampoStore for calendar data, PPC, and S-curve.
- * Layout: calendar grid (top) + weekly PPC strip + impact section (S-curve + delay table).
+ * CurtoPrazoPanel — Curto Prazo do Planejamento Mestre com dado REAL.
+ *
+ * Re-fonte de 27/07: este painel consumia o operacaoCampoStore (mock de
+ * calendário/PPC/curva S). Agora tudo vem do Supabase via useCurtoPrazoSemana:
+ *  - COMPROMISSOS  → programacao_semana (semana corrente, inclui a semana do
+ *                    pente fino 27/07–01/08: Equipe PV + Equipe Esgoto, 24 PVs)
+ *                    cruzada com a produção casada por equipe+etapa;
+ *  - PRODUÇÃO      → vw_producao_longa (producao_diaria em formato longo, com
+ *                    equipe_id resolvido pelos aliases de 27/07);
+ *  - PPC           → vw_ppc_semana_equipe (LPS formal; a view já ignora semanas
+ *                    sem evidência de produção — carga histórica de 14/07).
+ *
+ * REGRA: sem dado → estado vazio honesto declarando a fonte; número nunca é
+ * inventado. Linguagem visual Palantir (padrão torre-de-controle/meta-ligacoes):
+ * dark #0a0f1a/#0d1420, bordas 1px #1e293b, números monoespaçados tabulares,
+ * labels em caixa alta, quadrados de status, fonte declarada em cada bloco.
  */
-import { useEffect } from 'react'
-import { ChevronLeft, ChevronRight, TrendingUp, AlertTriangle, Activity } from 'lucide-react'
-import { useOperacaoCampoStore } from '@/store/operacaoCampoStore'
-import { useAppModeStore } from '@/store/appModeStore'
-import { useShallow } from 'zustand/react/shallow'
-import type { TrendPoint, NotableServiceCurve } from '@/types'
-import { cn } from '@/lib/utils'
+import {
+  useCurtoPrazoSemana,
+  ETAPA_LABEL,
+  type CpCompromisso,
+  type CpPpcSemana,
+  type CpProducaoEquipe,
+} from '@/hooks/useCurtoPrazoSemana'
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Constantes visuais (linguagem oficial dark/mono/caps) ──────────────────
 
-function fmtShortDate(iso: string): string {
-  const [, m, d] = iso.split('-')
+const C = {
+  bg: '#0a0f1a',
+  panel: '#0d1420',
+  border: '#1e293b',
+  text: '#e2e8f0',
+  muted: '#64748b',
+  faint: '#475569',
+  green: '#22c55e',
+  amber: '#f59e0b',
+  red: '#ef4444',
+  cyan: '#38bdf8',
+} as const
+
+const MONO = 'font-mono [font-variant-numeric:tabular-nums]'
+
+function ddmm(isoDate: string): string {
+  if (!isoDate) return '--/--'
+  const [, m, d] = isoDate.split('-')
   return `${d}/${m}`
 }
 
-function getDayName(iso: string): string {
-  const d = new Date(iso + 'T00:00:00')
-  return d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')
+// ─── Blocos básicos ─────────────────────────────────────────────────────────
+
+function StatusSquare({ color }: { color: string }) {
+  return <span className="inline-block w-2 h-2 shrink-0" style={{ background: color }} />
 }
 
-function ppcColor(v: number): string {
-  if (v >= 80) return 'text-[#22c55e]'
-  if (v >= 60) return 'text-[#fbbf24]'
-  return 'text-[#ef4444]'
-}
-
-function ppcBadgeColor(v: number): string {
-  if (v >= 80) return 'bg-[#22c55e]/15 text-[#22c55e] border-[#22c55e]/30'
-  if (v >= 60) return 'bg-[#fbbf24]/15 text-[#fbbf24] border-[#fbbf24]/30'
-  return 'bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30'
-}
-
-// ─── S-Curve chart ────────────────────────────────────────────────────────────
-
-function SCurve({ points }: { points: TrendPoint[] }) {
-  const valid = points.filter((p) => p.plannedCumulativePct > 0 || p.actualCumulativePct > 0)
-  if (valid.length < 2) {
-    return (
-      <div className="flex items-center justify-center h-32 text-[#6b6b6b] text-xs">
-        Sem dados suficientes
-      </div>
-    )
-  }
-
-  const W = 400, H = 140, PAD_L = 36, PAD_B = 20, PAD_T = 8
-
-  function px(i: number, total: number) { return PAD_L + (i / Math.max(1, total - 1)) * (W - PAD_L - 8) }
-  function py(v: number) { return H - PAD_B - ((v / 100) * (H - PAD_B - PAD_T)) }
-
-  const plannedPath = valid.map((p, i) =>
-    `${i === 0 ? 'M' : 'L'}${px(i, valid.length).toFixed(1)},${py(p.plannedCumulativePct).toFixed(1)}`
-  ).join(' ')
-
-  const actualPoints = valid.filter((p) => p.actualCumulativePct > 0)
-  const actualPath = actualPoints.map((p) => {
-    const i = valid.indexOf(p)
-    return `${i === actualPoints.indexOf(p) && i === 0 ? 'M' : 'L'}${px(i, valid.length).toFixed(1)},${py(p.actualCumulativePct).toFixed(1)}`
-  }).join(' ')
-
-  const lastActual  = actualPoints[actualPoints.length - 1]
-  const matchedPlan = valid.find((p) => p.date === lastActual?.date)
-  const isDelayed   = lastActual && matchedPlan && lastActual.actualCumulativePct < matchedPlan.plannedCumulativePct - 2
-
-  const step = Math.max(1, Math.floor(valid.length / 5))
-  const xLabels = valid.filter((_, i) => i % step === 0 || i === valid.length - 1)
-
+function Label({ children }: { children: React.ReactNode }) {
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
-      {/* Grid */}
-      {[0, 25, 50, 75, 100].map((v) => (
-        <g key={v}>
-          <line x1={PAD_L} y1={py(v)} x2={W - 8} y2={py(v)} stroke="#525252" strokeWidth={0.5} strokeDasharray="4,3" />
-          <text x={PAD_L - 3} y={py(v) + 3} textAnchor="end" fontSize={8} fill="#6b6b6b" fontFamily="monospace">{v}%</text>
-        </g>
-      ))}
-
-      {/* Red zone if delayed */}
-      {isDelayed && actualPoints.length > 1 && (() => {
-        const areaPath = actualPoints.map((p, i) => {
-          const vi = valid.indexOf(p)
-          return `${i === 0 ? 'M' : 'L'}${px(vi, valid.length).toFixed(1)},${py(p.actualCumulativePct).toFixed(1)}`
-        }).join(' ')
-        const closePath = [...actualPoints].reverse().map((p) => {
-          const vi = valid.indexOf(p)
-          const plan = valid[vi]
-          return `L${px(vi, valid.length).toFixed(1)},${py(plan?.plannedCumulativePct ?? 0).toFixed(1)}`
-        }).join(' ')
-        return <path d={`${areaPath} ${closePath} Z`} fill="#ef4444" opacity={0.1} />
-      })()}
-
-      {/* Planned — dashed */}
-      <path d={plannedPath} fill="none" stroke="#6b7280" strokeWidth={2} strokeDasharray="6,3" />
-      {/* Actual — solid */}
-      {actualPath && <path d={actualPath} fill="none" stroke="#f97316" strokeWidth={2.5} />}
-
-      {/* X labels */}
-      {xLabels.map((p) => {
-        const i = valid.indexOf(p)
-        return (
-          <text key={p.date} x={px(i, valid.length)} y={H - 4} textAnchor="middle" fontSize={7} fill="#6b6b6b" fontFamily="monospace">
-            {p.date.slice(5).replace('-', '/')}
-          </text>
-        )
-      })}
-
-      {/* Legend */}
-      <line x1={W - 140} y1={PAD_T + 4} x2={W - 122} y2={PAD_T + 4} stroke="#6b7280" strokeWidth={2} strokeDasharray="6,3" />
-      <text x={W - 119} y={PAD_T + 7} fontSize={8} fill="#9ca3af">Previsto</text>
-      <line x1={W - 70} y1={PAD_T + 4} x2={W - 52} y2={PAD_T + 4} stroke="#f97316" strokeWidth={2.5} />
-      <text x={W - 49} y={PAD_T + 7} fontSize={8} fill="#9ca3af">Realizado</text>
-
-      {isDelayed && (
-        <text x={PAD_L + 4} y={PAD_T + 12} fontSize={8} fill="#ef4444">▲ Atraso detectado</text>
-      )}
-    </svg>
-  )
-}
-
-// ─── Notable Service bars ─────────────────────────────────────────────────────
-
-function ServiceBar({ curve }: { curve: NotableServiceCurve }) {
-  const last = [...curve.dataPoints].reverse().find((p) => p.planned > 0 || p.actual > 0)
-  if (!last) return null
-  const planPct = Math.min(100, Math.round((last.planned / Math.max(1, last.planned)) * 100))
-  const actPct  = last.planned > 0 ? Math.min(100, Math.round((last.actual / last.planned) * 100)) : 0
-  const color   = actPct >= 80 ? '#22c55e' : actPct >= 60 ? '#fbbf24' : '#ef4444'
-
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between">
-        <span className="text-[11px] text-[#a3a3a3] truncate max-w-[160px]">{curve.serviceName}</span>
-        <span className="text-[10px] font-mono" style={{ color }}>{actPct}%</span>
-      </div>
-      <div className="relative h-2 rounded-full bg-[#484848] overflow-hidden">
-        {/* Planned bar */}
-        <div className="absolute inset-0 bg-[#3a4a6b] rounded-full" style={{ width: `${planPct}%` }} />
-        {/* Actual bar */}
-        <div className="absolute inset-0 rounded-full transition-all" style={{ width: `${actPct}%`, backgroundColor: color }} />
-      </div>
-      <div className="flex justify-between text-[9px] text-[#6b6b6b]">
-        <span>Plan: {last.planned} {curve.unit}</span>
-        <span>Real: {last.actual} {curve.unit}</span>
-      </div>
+    <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#64748b] leading-none">
+      {children}
     </div>
   )
 }
 
-// ─── Delay impact table ───────────────────────────────────────────────────────
+function Fonte({ children }: { children: React.ReactNode }) {
+  return <div className={`text-[9px] text-[#475569] ${MONO} pt-1.5`}>{children}</div>
+}
 
-function DelayImpactTable() {
-  const { activities, calendarDays } = useOperacaoCampoStore(
-    useShallow((s) => ({ activities: s.activities, calendarDays: s.calendarDays }))
+/** Aviso âmbar honesto — usado sempre que falta dado real. */
+function AvisoSemDado({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-2 border border-[#f59e0b]/40 bg-[#f59e0b]/5 px-2.5 py-2">
+      <StatusSquare color={C.amber} />
+      <span className="text-[10px] leading-snug text-[#f59e0b]">{children}</span>
+    </div>
   )
+}
 
-  const today = new Date().toISOString().slice(0, 10)
-  const pastDays = calendarDays.filter((d) => d.date <= today)
+function corPct(pct: number | null): string {
+  if (pct === null) return C.faint
+  if (pct >= 100) return C.green
+  if (pct > 0) return C.amber
+  return C.red
+}
 
-  const impacts = activities.map((act) => {
-    const days = pastDays.filter((d) => d.activityId === act.id)
-    const totalPlanned = days.reduce((s, d) => s + (d.plannedQty ?? 0), 0)
-    const totalActual  = days.reduce((s, d) => s + (d.actualQty ?? 0), 0)
-    const rate = totalPlanned > 0 ? totalActual / totalPlanned : 1
-    const deltaQty = totalPlanned - totalActual
-    return { act, totalPlanned, totalActual, rate, deltaQty }
-  }).filter((r) => r.rate < 0.85 && r.totalPlanned > 0)
-    .sort((a, b) => a.rate - b.rate)
+function corPpc(v: number): string {
+  if (v >= 80) return C.green
+  if (v >= 60) return C.amber
+  return C.red
+}
 
-  if (impacts.length === 0) {
-    return (
-      <div className="flex items-center gap-2 text-[#22c55e] text-xs py-3">
-        <span>✓</span>
-        <span>Todas as atividades estão dentro do ritmo planejado.</span>
-      </div>
-    )
-  }
+// ─── Compromissos da semana ─────────────────────────────────────────────────
+
+function LinhaCompromisso({ c }: { c: CpCompromisso }) {
+  const pct =
+    c.realizado === null || c.metaQtd == null || c.metaQtd <= 0
+      ? null
+      : Math.round((c.realizado / c.metaQtd) * 100)
+  const cor = corPct(pct)
 
   return (
-    <div className="flex flex-col gap-1">
-      {impacts.map(({ act, totalPlanned, totalActual, rate }) => (
-        <div key={act.id} className="flex items-center gap-3 py-1.5 border-b border-[#525252]/30">
-          <AlertTriangle size={12} className="text-[#ef4444] shrink-0" />
-          <div className="flex-1 min-w-0">
-            <p className="text-[11px] text-[#f5f5f5] truncate">{act.name}</p>
-            <p className="text-[9px] text-[#6b6b6b]">Plan: {totalPlanned} · Real: {totalActual}</p>
+    <div className="border border-[#1e293b] bg-[#0d1420] px-3 py-2.5 flex flex-col gap-2">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-2 min-w-0">
+          <div className="pt-0.5"><StatusSquare color={cor} /></div>
+          <div className="min-w-0">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#e2e8f0] truncate">
+              {c.equipe}
+            </div>
+            <div className="text-[10px] text-[#64748b] leading-snug mt-0.5">{c.servico}</div>
+            {c.obs && <div className="text-[9px] text-[#475569] leading-snug mt-0.5">{c.obs}</div>}
           </div>
-          <span className={cn('text-[10px] font-bold tabular-nums px-2 py-0.5 rounded border', ppcBadgeColor(Math.round(rate * 100)))}>
-            {Math.round(rate * 100)}%
-          </span>
         </div>
-      ))}
+        <div className="text-right shrink-0">
+          <div className={`text-lg leading-none text-[#e2e8f0] ${MONO}`}>
+            {c.realizado === null ? '—' : c.realizado}
+            <span className="text-[#64748b] text-xs">
+              {' '}/ {c.metaQtd ?? '—'} {c.metaUnidade ?? ''}
+            </span>
+          </div>
+          <div className={`text-[10px] mt-0.5 ${MONO}`} style={{ color: cor }}>
+            {pct === null ? 'sem etapa mensurável' : `${pct}%`}
+          </div>
+        </div>
+      </div>
+
+      {/* barra meta × realizado */}
+      <div className="h-1 bg-[#1e293b] overflow-hidden">
+        {pct !== null && (
+          <div className="h-full" style={{ width: `${Math.min(100, pct)}%`, background: cor }} />
+        )}
+      </div>
+
+      <div className={`text-[9px] text-[#475569] ${MONO}`}>
+        {c.frente.toUpperCase()} · {ddmm(c.semanaIni)}–{ddmm(c.semanaFim)} ·{' '}
+        {c.realizado === null
+          ? 'serviço sem contraparte em producao_diaria (progresso é confirmado no cronograma do pente fino)'
+          : c.linhasCasadas === 0
+            ? `0 apontamentos casados (etapa ${c.etapas.map((e) => ETAPA_LABEL[e] ?? e).join('/')})`
+            : `${c.linhasCasadas} apontamento(s) casado(s) por equipe+etapa (${c.etapas.map((e) => ETAPA_LABEL[e] ?? e).join('/')})`}
+      </div>
     </div>
   )
 }
 
-// ─── Main Panel ──────────────────────────────────────────────────────────────
+// ─── PPC ────────────────────────────────────────────────────────────────────
+
+function BlocoPpc({
+  atual,
+  historico,
+  semanaIso,
+}: {
+  atual: CpPpcSemana[]
+  historico: CpPpcSemana[]
+  semanaIso: string
+}) {
+  return (
+    <div className="border border-[#1e293b] bg-[#0d1420] px-3 py-2.5 flex flex-col gap-2.5">
+      <Label>PPC — Compromissos Formais (LPS)</Label>
+
+      {atual.length === 0 ? (
+        <AvisoSemDado>
+          Nenhum compromisso formal gravado pra semana {semanaIso} em lps_tasks — use o Semáforo do
+          LPS pra comprometer a semana.
+        </AvisoSemDado>
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          {atual.map((p, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <StatusSquare color={corPpc(p.ppc)} />
+              <span className="text-[10px] uppercase tracking-[0.1em] text-[#e2e8f0] flex-1 truncate">
+                {p.responsavel ?? 'Geral (sem responsável)'}
+              </span>
+              <span className={`text-[10px] text-[#64748b] ${MONO}`}>
+                {p.concluidas}/{p.planejadas}
+              </span>
+              <span className={`text-sm ${MONO}`} style={{ color: corPpc(p.ppc) }}>
+                {Math.round(p.ppc)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {historico.length > 0 && (
+        <div className="flex flex-col gap-1 pt-1 border-t border-[#1e293b]">
+          <Label>Semanas anteriores</Label>
+          {historico.map((p, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className={`text-[9px] text-[#64748b] w-16 shrink-0 ${MONO}`}>{p.semanaIso}</span>
+              <div className="flex-1 h-1 bg-[#1e293b] overflow-hidden">
+                <div
+                  className="h-full"
+                  style={{ width: `${Math.min(100, p.ppc)}%`, background: corPpc(p.ppc) }}
+                />
+              </div>
+              <span className={`text-[10px] w-9 text-right ${MONO}`} style={{ color: corPpc(p.ppc) }}>
+                {Math.round(p.ppc)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Fonte>fonte: vw_ppc_semana_equipe (lps_tasks; semanas sem evidência de produção já filtradas)</Fonte>
+    </div>
+  )
+}
+
+// ─── Produção da semana por equipe ──────────────────────────────────────────
+
+function BlocoProducao({
+  porEquipe,
+  semanaIni,
+  semanaFim,
+}: {
+  porEquipe: CpProducaoEquipe[]
+  semanaIni: string
+  semanaFim: string
+}) {
+  return (
+    <div className="border border-[#1e293b] bg-[#0d1420] px-3 py-2.5 flex flex-col gap-2.5">
+      <Label>Produção apontada na semana</Label>
+
+      {porEquipe.length === 0 ? (
+        <AvisoSemDado>
+          0 registros em producao_diaria entre {ddmm(semanaIni)} e {ddmm(semanaFim)} — o apontamento
+          entra pelo grupo APONTAMENTO WCR (RDO) ao fim do dia.
+        </AvisoSemDado>
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          {porEquipe.map((e) => (
+            <div key={e.equipe} className="flex items-start gap-2">
+              <div className="pt-1"><StatusSquare color={C.cyan} /></div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[10px] uppercase tracking-[0.1em] text-[#e2e8f0] truncate">
+                  {e.equipe}
+                </div>
+                <div className={`text-[10px] text-[#64748b] ${MONO}`}>
+                  {e.porEtapa.map((x) => `${x.qtd} ${ETAPA_LABEL[x.etapa] ?? x.etapa}`).join(' · ')}
+                </div>
+              </div>
+              <span className={`text-[9px] text-[#475569] shrink-0 ${MONO}`}>
+                {e.totalLinhas} apont.
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Fonte>fonte: vw_producao_longa (producao_diaria; equipe resolvida por equipe_aliases 27/07)</Fonte>
+    </div>
+  )
+}
+
+// ─── Painel principal ───────────────────────────────────────────────────────
 
 export function CurtoPrazoPanel() {
   const {
-    activities, calendarDays, selectedDate, weeklyPpcResults,
-    trendPoints, notableServiceCurves,
-    setSelectedDate, updateCalendarDay, loadDemoData,
-  } = useOperacaoCampoStore(
-    useShallow((s) => ({
-      activities:           s.activities,
-      calendarDays:         s.calendarDays,
-      selectedDate:         s.selectedDate,
-      weeklyPpcResults:     s.weeklyPpcResults,
-      trendPoints:          s.trendPoints,
-      notableServiceCurves: s.notableServiceCurves,
-      setSelectedDate:      s.setSelectedDate,
-      updateCalendarDay:    s.updateCalendarDay,
-      loadDemoData:         s.loadDemoData,
-    }))
-  )
-  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
-
-  useEffect(() => {
-    if (activities.length === 0 && isDemoMode) loadDemoData()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const today = new Date().toISOString().slice(0, 10)
-
-  // Build 15 workdays from selectedDate
-  const visibleDates: string[] = []
-  const iter = new Date(selectedDate + 'T00:00:00')
-  while (visibleDates.length < 15) {
-    const dow = iter.getDay()
-    if (dow !== 0 && dow !== 6) visibleDates.push(iter.toISOString().slice(0, 10))
-    iter.setDate(iter.getDate() + 1)
-  }
-
-  function shiftDate(days: number) {
-    const d = new Date(selectedDate + 'T00:00:00')
-    d.setDate(d.getDate() + days)
-    setSelectedDate(d.toISOString().slice(0, 10))
-  }
-
-  // Daily PPC: for each date, how many activities have actual >= planned?
-  function dailyPpc(date: string): number | null {
-    const entries = calendarDays.filter((d) => d.date === date && (d.plannedQty ?? 0) > 0)
-    if (entries.length === 0) return null
-    const met = entries.filter((d) => (d.actualQty ?? 0) >= (d.plannedQty ?? 0)).length
-    return Math.round((met / entries.length) * 100)
-  }
+    compromissos,
+    producaoPorEquipe,
+    ppcAtual,
+    ppcHistorico,
+    semanaIni,
+    semanaFim,
+    semanaIso,
+    loading,
+    error,
+  } = useCurtoPrazoSemana()
 
   return (
-    <div className="flex flex-col gap-5 overflow-y-auto">
-
-      {/* ── A: 15-Day Production Calendar ─────────────────────────────────── */}
-      <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
-        {/* Toolbar */}
-        <div className="flex items-center gap-3 flex-wrap px-4 py-3 border-b border-[#525252]">
-          <h3 className="text-[#f5f5f5] text-sm font-semibold flex-1">
-            Agenda de Produção — 15 Dias
-          </h3>
-          <div className="flex items-center gap-1">
-            <button onClick={() => shiftDate(-15)} className="p-1.5 rounded border border-[#525252] text-[#6b6b6b] hover:text-[#a3a3a3]">
-              <ChevronLeft size={14} />
-            </button>
-            <span className="text-xs text-[#a3a3a3] font-mono px-2">
-              {fmtShortDate(visibleDates[0] ?? today)} — {fmtShortDate(visibleDates[14] ?? today)}
-            </span>
-            <button onClick={() => shiftDate(15)} className="p-1.5 rounded border border-[#525252] text-[#6b6b6b] hover:text-[#a3a3a3]">
-              <ChevronRight size={14} />
-            </button>
-            <button onClick={() => setSelectedDate(today)} className="text-xs text-[#f97316] hover:underline ml-1">
-              Hoje
-            </button>
+    <div className="border border-[#1e293b] p-4 flex flex-col gap-4" style={{ background: C.bg }}>
+      {/* Cabeçalho */}
+      <div className="flex items-end justify-between gap-3 flex-wrap">
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
+            Curto Prazo — Semana Corrente
+          </div>
+          <div className={`text-lg leading-tight text-[#e2e8f0] ${MONO}`}>
+            {ddmm(semanaIni)} – {ddmm(semanaFim)}
+            <span className="text-[#64748b] text-xs ml-2">{semanaIso}</span>
           </div>
         </div>
-
-        <div className="overflow-x-auto">
-          <table
-            className="w-full text-[10px] border-collapse"
-            style={{ minWidth: `${160 + visibleDates.length * 52}px` }}
-          >
-            <thead>
-              <tr className="bg-[#2c2c2c]">
-                <th className="sticky left-0 z-10 bg-[#2c2c2c] px-3 py-2 text-left text-[#6b6b6b] font-medium w-32">Atividade</th>
-                <th className="sticky left-32 z-10 bg-[#2c2c2c] px-1 py-2 text-center text-[#6b6b6b] font-medium w-8 border-r border-[#525252]/50">P/R</th>
-                {visibleDates.map((date) => (
-                  <th
-                    key={date}
-                    className={cn(
-                      'px-1 py-2 text-center font-medium min-w-[48px]',
-                      date === today ? 'text-[#f97316] bg-[#f97316]/5' : 'text-[#6b6b6b]'
-                    )}
-                  >
-                    <div className="font-semibold">{fmtShortDate(date)}</div>
-                    <div className="text-[8px] uppercase opacity-60">{getDayName(date)}</div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {activities.map((act) => (
-                <>
-                  {/* Planejado row */}
-                  <tr key={`${act.id}-P`} className="border-t border-[#525252]/40">
-                    <td
-                      rowSpan={2}
-                      className="sticky left-0 z-10 bg-[#3d3d3d] px-3 py-1.5 text-[#f5f5f5] text-[11px] font-medium align-middle border-r border-[#525252]/50"
-                    >
-                      <div className="truncate max-w-[120px]">{act.name}</div>
-                      <div className="text-[#6b6b6b] text-[9px]">{act.trechoCode ?? ''}</div>
-                    </td>
-                    <td className="sticky left-32 z-10 bg-[#3d3d3d] px-1 py-0.5 text-center text-[#6b6b6b] text-[9px] font-semibold border-r border-[#525252]/50">P</td>
-                    {visibleDates.map((date) => {
-                      const entry = calendarDays.find((d) => d.date === date && d.activityId === act.id)
-                      return (
-                        <td key={date} className={cn('px-1 py-0.5 text-center font-mono bg-[#484848]/20', date === today && 'bg-[#f97316]/5')}>
-                          <span className="text-[#6b6b6b]">{entry?.plannedQty ?? '—'}</span>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                  {/* Realizado row */}
-                  <tr key={`${act.id}-R`} className="border-b border-[#525252]/30">
-                    <td className="sticky left-32 z-10 bg-[#3d3d3d] px-1 py-0.5 text-center text-[#f97316] text-[9px] font-semibold border-r border-[#525252]/50">R</td>
-                    {visibleDates.map((date) => {
-                      const entry = calendarDays.find((d) => d.date === date && d.activityId === act.id)
-                      const planned = entry?.plannedQty ?? 0
-                      const actual  = entry?.actualQty
-                      const isPast  = date <= today
-
-                      let bg = ''
-                      if (actual !== null && actual !== undefined) {
-                        bg = actual >= planned ? 'bg-[#22c55e]/8' : 'bg-[#ef4444]/8'
-                      }
-
-                      return (
-                        <td key={date} className={cn('px-0.5 py-0.5 text-center', bg, date === today && 'bg-[#f97316]/5')}>
-                          {isPast || date === today ? (
-                            <input
-                              type="number"
-                              min={0}
-                              value={actual ?? ''}
-                              onChange={(e) => {
-                                const val = e.target.value === '' ? null : Number(e.target.value)
-                                updateCalendarDay(date, act.id, { actualQty: val })
-                              }}
-                              className="w-full bg-transparent text-center text-[#f5f5f5] font-mono focus:outline-none focus:bg-[#f97316]/10 rounded px-0.5 py-0.5"
-                              placeholder="—"
-                            />
-                          ) : (
-                            <span className="text-[#525252]">—</span>
-                          )}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                </>
-              ))}
-
-              {/* Daily PPC footer row */}
-              <tr className="border-t-2 border-[#525252] bg-[#2c2c2c]">
-                <td className="sticky left-0 z-10 bg-[#2c2c2c] px-3 py-1.5 text-[#f97316] text-[10px] font-bold" colSpan={2}>
-                  PPC Diário
-                </td>
-                {visibleDates.map((date) => {
-                  const v = dailyPpc(date)
-                  return (
-                    <td key={date} className="px-1 py-1.5 text-center bg-[#2c2c2c]">
-                      {v !== null ? (
-                        <span className={cn('font-bold font-mono text-[10px]', ppcColor(v))}>{v}%</span>
-                      ) : (
-                        <span className="text-[#525252] text-[10px]">—</span>
-                      )}
-                    </td>
-                  )
-                })}
-              </tr>
-            </tbody>
-          </table>
+        <div className={`text-[9px] text-[#475569] ${MONO}`}>
+          programacao_semana · vw_producao_longa · vw_ppc_semana_equipe
         </div>
       </div>
 
-      {/* ── B: Weekly PPC Strip ───────────────────────────────────────────── */}
-      {weeklyPpcResults.length > 0 && (
-        <div>
-          <h3 className="text-[#f5f5f5] text-sm font-semibold mb-3">PPC Semanal</h3>
-          <div className="grid grid-cols-6 gap-2">
-            {weeklyPpcResults.slice(-6).map((w, i) => (
-              <div key={i} className="rounded-xl border border-[#525252] bg-[#3d3d3d] p-3 flex flex-col gap-1.5">
-                <p className="text-[#6b6b6b] text-[10px] font-semibold">S{i + 1}</p>
-                <p className={cn('text-xl font-bold tabular-nums', ppcColor(w.ppc))}>{w.ppc}%</p>
-                <div className="h-1 rounded-full bg-[#484848] overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{ width: `${w.ppc}%`, backgroundColor: w.ppc >= 80 ? '#22c55e' : w.ppc >= 60 ? '#fbbf24' : '#ef4444' }}
-                  />
-                </div>
-                <p className="text-[9px] text-[#6b6b6b]">{w.totalCompleted}/{w.totalPlanned} concl.</p>
-              </div>
-            ))}
-          </div>
+      {loading && (
+        <div className={`text-[10px] uppercase tracking-[0.14em] text-[#64748b] ${MONO}`}>
+          Carregando dados da semana…
         </div>
       )}
 
-      {/* ── C: Impact Visualization ───────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* S-Curve */}
-        <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp size={14} className="text-[#f97316]" />
-            <h3 className="text-[#f5f5f5] text-sm font-semibold">Curva S — Previsto vs Realizado</h3>
-          </div>
-          <SCurve points={trendPoints} />
+      {error && (
+        <div className="flex items-start gap-2 border border-[#ef4444]/40 bg-[#ef4444]/5 px-2.5 py-2">
+          <StatusSquare color={C.red} />
+          <span className="text-[10px] leading-snug text-[#ef4444]">{error}</span>
         </div>
+      )}
 
-        {/* Delay impact */}
-        <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <AlertTriangle size={14} className="text-[#ef4444]" />
-            <h3 className="text-[#f5f5f5] text-sm font-semibold">Impacto — Atividades em Atraso</h3>
+      {!loading && !error && (
+        <>
+          {/* Compromissos da semana (programacao_semana × produção casada) */}
+          <div className="flex flex-col gap-2">
+            <Label>Compromissos da semana (meta × realizado)</Label>
+            {compromissos.length === 0 ? (
+              <AvisoSemDado>
+                0 linhas em programacao_semana cobrindo hoje — grave a programação da semana na aba
+                Prog. Semanal (ou na tela Programação da Semana) pra este painel ter meta contra o
+                que medir.
+              </AvisoSemDado>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                {compromissos.map((c) => (
+                  <LinhaCompromisso key={c.id} c={c} />
+                ))}
+              </div>
+            )}
+            <Fonte>fonte: programacao_semana (semana_ini ≤ hoje ≤ semana_fim) × vw_producao_longa</Fonte>
           </div>
-          <DelayImpactTable />
-        </div>
-      </div>
 
-      {/* ── D: Notable Services ───────────────────────────────────────────── */}
-      {notableServiceCurves.length > 0 && (
-        <div className="rounded-xl border border-[#525252] bg-[#3d3d3d] p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Activity size={14} className="text-[#f97316]" />
-            <h3 className="text-[#f5f5f5] text-sm font-semibold">Serviços Notáveis — Planejado vs Realizado</h3>
+          {/* PPC + Produção lado a lado */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <BlocoPpc atual={ppcAtual} historico={ppcHistorico} semanaIso={semanaIso} />
+            <BlocoProducao
+              porEquipe={producaoPorEquipe}
+              semanaIni={semanaIni}
+              semanaFim={semanaFim}
+            />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {notableServiceCurves.map((curve) => (
-              <ServiceBar key={curve.id} curve={curve} />
-            ))}
-          </div>
-        </div>
+        </>
       )}
     </div>
   )

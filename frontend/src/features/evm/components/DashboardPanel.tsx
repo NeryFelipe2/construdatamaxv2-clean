@@ -500,8 +500,171 @@ const SERIES_REAL: { key: 'pvPct' | 'physicalPct' | 'evPct' | 'acPct'; color: st
   { key: 'acPct', color: '#ef4444', label: 'AC — Custo Real (despesas)', dash: '6 3' },
 ]
 
+/* ─── Bloco "Custo no Circuito" (Fase 5) — linguagem visual Palantir ──────
+ * Preço de contrato entrando no circuito produção→medição→EVM. Cada quadro
+ * declara a tabela-fonte; valor ausente = estado vazio honesto com a razão
+ * (nunca zero inventado). Fontes: servico_codigo_map (de-para semeado só com
+ * matches inequívocos), precos_contrato (60% via fator_wcr), vw_producao_longa,
+ * lancamentos_financeiros, planejamento_itens/metas_producao (BAC). */
+
+const BAC_FONTE_LABEL: Record<string, string> = {
+  orcamento_total: 'projetos.orcamento_total',
+  planejamento_custo_previsto: 'Σ planejamento_itens.custo_previsto',
+  campanha_x_mapa: 'metas_producao × servico_codigo_map',
+}
+
+const ETAPA_LABEL: Record<string, string> = {
+  caixa_uma: 'CAIXA UMA',
+  caixa_inspecao: 'CAIXA INSPEÇÃO',
+  hm: 'HIDRÔMETRO',
+  lig_agua: 'LIG. ÁGUA',
+  lig_esgoto: 'LIG. ESGOTO',
+  interligacao_agua: 'INTERLIG. ÁGUA',
+  interligacao_esgoto: 'INTERLIG. ESGOTO',
+  rede_agua_m: 'REDE ÁGUA (M)',
+  rede_esgoto_m: 'REDE ESGOTO (M)',
+  pv: 'PV',
+  pi: 'PI',
+  interceptor: 'INTERCEPTOR',
+}
+
+function CustoCircuitoBlock({ custo }: { custo: import('@/hooks/useEvmReal').CustoCircuito }) {
+  const fmt = (v: number) => formatCurrency(v)
+  return (
+    <div className="bg-[#0a0f1a] border border-[#1e293b] rounded-xl p-5 space-y-4">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-[#94a3b8] font-semibold">
+          Custo no Circuito — Preço de Contrato
+        </p>
+        <p className="text-[9px] font-mono text-[#475569]">
+          de-para: servico_codigo_map ({custo.mapaServicos} serviço{custo.mapaServicos === 1 ? '' : 's'},{' '}
+          {custo.precosResolvidos} com preço único em precos_contrato)
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* BAC */}
+        <div className="bg-[#0d1420] border border-[#1e293b] rounded-lg p-3">
+          <p className="text-[9px] uppercase tracking-[0.14em] text-[#64748b]">BAC — Orçamento no Término</p>
+          {custo.bacValor != null ? (
+            <>
+              <p className="font-mono text-lg text-[#e2e8f0] [font-variant-numeric:tabular-nums] mt-1">{fmt(custo.bacValor)}</p>
+              <p className="text-[9px] text-[#475569] mt-1">fonte: {BAC_FONTE_LABEL[custo.bacFonte ?? ''] ?? '—'}</p>
+            </>
+          ) : (
+            <>
+              <p className="font-mono text-lg text-[#475569] mt-1">—</p>
+              <p className="text-[9px] text-[#64748b] mt-1 leading-snug">
+                0 em orcamento_total, 0 itens valorados em planejamento_itens.custo_previsto e nenhuma meta da
+                campanha com preço inequívoco no de-para
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* EV contrato */}
+        <div className="bg-[#0d1420] border border-[#1e293b] rounded-lg p-3">
+          <p className="text-[9px] uppercase tracking-[0.14em] text-[#64748b]">EV — Produção Valorada (60% contrato)</p>
+          {custo.evContratoTotal != null ? (
+            <p className="font-mono text-lg text-[#22c55e] [font-variant-numeric:tabular-nums] mt-1">{fmt(custo.evContratoTotal)}</p>
+          ) : (
+            <>
+              <p className="font-mono text-lg text-[#475569] mt-1">—</p>
+              <p className="text-[9px] text-[#64748b] mt-1 leading-snug">nenhuma etapa produzida tem preço inequívoco no de-para</p>
+            </>
+          )}
+          <p className="text-[9px] text-[#475569] mt-1">fonte: vw_producao_longa × precos_contrato</p>
+        </div>
+
+        {/* AC */}
+        <div className="bg-[#0d1420] border border-[#1e293b] rounded-lg p-3">
+          <p className="text-[9px] uppercase tracking-[0.14em] text-[#64748b]">AC — Custo Real</p>
+          {custo.acReal != null ? (
+            <p className="font-mono text-lg text-[#ef4444] [font-variant-numeric:tabular-nums] mt-1">{fmt(custo.acReal)}</p>
+          ) : (
+            <>
+              <p className="font-mono text-lg text-[#475569] mt-1">—</p>
+              <p className="text-[9px] text-[#64748b] mt-1 leading-snug">sem custo real lançado (0 despesas)</p>
+            </>
+          )}
+          <p className="text-[9px] text-[#475569] mt-1">fonte: lancamentos_financeiros (DESPESA)</p>
+        </div>
+
+        {/* CPI contrato */}
+        <div className="bg-[#0d1420] border border-[#1e293b] rounded-lg p-3">
+          <p className="text-[9px] uppercase tracking-[0.14em] text-[#64748b]">CPI — EV Contrato ÷ AC</p>
+          {custo.cpiContrato != null ? (
+            <p
+              className="font-mono text-lg [font-variant-numeric:tabular-nums] mt-1"
+              style={{ color: custo.cpiContrato >= 1 ? '#22c55e' : '#ef4444' }}
+            >
+              {custo.cpiContrato.toFixed(2)}
+            </p>
+          ) : (
+            <>
+              <p className="font-mono text-lg text-[#475569] mt-1">—</p>
+              <p className="text-[9px] text-[#64748b] mt-1 leading-snug">só calculado quando EV valorado E custo real existem</p>
+            </>
+          )}
+          <p className="text-[9px] text-[#475569] mt-1">insumos: os dois quadros ao lado</p>
+        </div>
+      </div>
+
+      {/* Detalhe por etapa — valoradas e sem preço, sempre transparente */}
+      {(custo.evContratoItens.length > 0 || custo.etapasSemPreco.length > 0) && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-[#1e293b]">
+                <th className="text-left text-[9px] uppercase tracking-[0.14em] text-[#64748b] py-1.5 pr-3">Etapa</th>
+                <th className="text-right text-[9px] uppercase tracking-[0.14em] text-[#64748b] py-1.5 px-3">Qtd</th>
+                <th className="text-right text-[9px] uppercase tracking-[0.14em] text-[#64748b] py-1.5 px-3">Preço WCR</th>
+                <th className="text-right text-[9px] uppercase tracking-[0.14em] text-[#64748b] py-1.5 pl-3">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {custo.evContratoItens.map((i) => (
+                <tr key={i.etapa} className="border-b border-[#1e293b]/60">
+                  <td className="py-1.5 pr-3">
+                    <span className="inline-block w-2 h-2 mr-2 align-middle" style={{ backgroundColor: '#22c55e' }} />
+                    <span className="text-[#e2e8f0]">{ETAPA_LABEL[i.etapa] ?? i.etapa.toUpperCase()}</span>
+                    <span className="text-[#475569] text-[9px] ml-2">{i.servico}</span>
+                  </td>
+                  <td className="py-1.5 px-3 text-right font-mono text-[#e2e8f0] [font-variant-numeric:tabular-nums]">
+                    {i.qtd.toLocaleString('pt-BR')}
+                  </td>
+                  <td className="py-1.5 px-3 text-right font-mono text-[#94a3b8] [font-variant-numeric:tabular-nums]">{fmt(i.precoUnit)}</td>
+                  <td className="py-1.5 pl-3 text-right font-mono text-[#22c55e] [font-variant-numeric:tabular-nums]">{fmt(i.valor)}</td>
+                </tr>
+              ))}
+              {custo.etapasSemPreco.map((i) => (
+                <tr key={i.etapa} className="border-b border-[#1e293b]/60">
+                  <td className="py-1.5 pr-3">
+                    <span className="inline-block w-2 h-2 mr-2 align-middle" style={{ backgroundColor: '#f59e0b' }} />
+                    <span className="text-[#94a3b8]">{ETAPA_LABEL[i.etapa] ?? i.etapa.toUpperCase()}</span>
+                  </td>
+                  <td className="py-1.5 px-3 text-right font-mono text-[#94a3b8] [font-variant-numeric:tabular-nums]">
+                    {i.qtd.toLocaleString('pt-BR')}
+                  </td>
+                  <td className="py-1.5 px-3 text-right font-mono text-[#64748b] text-[10px]" colSpan={2}>
+                    sem preço inequívoco no de-para — não valorado
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="text-[9px] text-[#475569] mt-2">
+            Produção sem preço fica listada e NÃO entra no EV — o valor mostrado é piso (só matches
+            inequívocos contrato↔serviço; ambíguo não é chutado).
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | null }) {
-  const { serie, metrics, bac, baselineCount, temDadosReais, loading, error } = useEvmReal(activeProjectId)
+  const { serie, metrics, bac, baselineCount, temDadosReais, temDespesaReal, custoCircuito, loading, error } = useEvmReal(activeProjectId)
 
   const n = serie.length
   function toX(i: number) {
@@ -549,11 +712,17 @@ function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | nul
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
           <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
           <span className="text-amber-200/90 text-xs leading-relaxed">
-            <b className="text-amber-300">Projeto sem orçamento total cadastrado.</b> Sem `orcamento_total`
-            (BAC) não é possível calcular o Dashboard real. Cadastre o orçamento do contrato.
+            <b className="text-amber-300">Sem BAC pra este projeto.</b> Foram tentados 3 caminhos, todos
+            vazios: `orcamento_total` do projeto, soma de `planejamento_itens.custo_previsto` (valorado via
+            de-para de preços) e quantidades da campanha × preços do contrato mapeados. Cadastre o orçamento
+            ou revise o de-para `servico_codigo_map` para valorar o planejamento.
           </span>
         </div>
       )}
+
+      {/* Fase 5 — preço de contrato no circuito: renderiza mesmo sem BAC/curva,
+          porque EV valorado e AC honesto existem (ou explicam-se) por si. */}
+      {activeProjectId && !loading && !error && <CustoCircuitoBlock custo={custoCircuito} />}
 
       {activeProjectId && !loading && baselineCount > 0 && bac > 0 && !temDadosReais && (
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
@@ -574,22 +743,38 @@ function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | nul
 
       {temDadosReais && n > 0 && (
         <>
-          {/* ── Health Semaphore ──────────────────────────────────────── */}
-          <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-center gap-5">
-            <div
-              className="w-16 h-16 rounded-full shrink-0 shadow-lg flex items-center justify-center"
-              style={{ backgroundColor: healthCfg.bgColor, boxShadow: `0 0 28px ${healthCfg.bgColor}55` }}
-            >
-              <HealthIcon size={28} className="text-[#1a1a1a]" />
+          {/* ── Health Semaphore — sem despesa lançada o CPI não existe (seria
+              0.00 = "vermelho" falso); o semáforo vira cinza e declara isso. ── */}
+          {temDespesaReal ? (
+            <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-center gap-5">
+              <div
+                className="w-16 h-16 rounded-full shrink-0 shadow-lg flex items-center justify-center"
+                style={{ backgroundColor: healthCfg.bgColor, boxShadow: `0 0 28px ${healthCfg.bgColor}55` }}
+              >
+                <HealthIcon size={28} className="text-[#1a1a1a]" />
+              </div>
+              <div>
+                <p className="text-[#f5f5f5] text-lg font-bold">{healthCfg.label}</p>
+                <p className="text-[#a3a3a3] text-sm mt-1">
+                  IDC (CPI) = {metrics.CPI.toFixed(2)} &nbsp;|&nbsp; IDP (SPI) = {metrics.SPI.toFixed(2)}
+                  &nbsp;|&nbsp; BAC = {formatCurrency(bac)}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-[#f5f5f5] text-lg font-bold">{healthCfg.label}</p>
-              <p className="text-[#a3a3a3] text-sm mt-1">
-                IDC (CPI) = {metrics.CPI.toFixed(2)} &nbsp;|&nbsp; IDP (SPI) = {metrics.SPI.toFixed(2)}
-                &nbsp;|&nbsp; BAC = {formatCurrency(bac)}
-              </p>
+          ) : (
+            <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-center gap-5">
+              <div className="w-16 h-16 rounded-full shrink-0 flex items-center justify-center bg-[#6b6b6b]">
+                <Info size={28} className="text-[#1a1a1a]" />
+              </div>
+              <div>
+                <p className="text-[#f5f5f5] text-lg font-bold">Saúde de custo indisponível — sem custo real lançado</p>
+                <p className="text-[#a3a3a3] text-sm mt-1">
+                  IDC (CPI) = — (0 despesas em lancamentos_financeiros) &nbsp;|&nbsp; IDP (SPI) ={' '}
+                  {metrics.SPI.toFixed(2)} &nbsp;|&nbsp; BAC = {formatCurrency(bac)}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* ── S-Curve Chart (4 lines, dado real) ───────────────────── */}
           <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5">
@@ -645,7 +830,17 @@ function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | nul
             </div>
           </div>
 
-          {/* ── EAC Scenarios (3 cards, dado real) ───────────────────── */}
+          {/* ── EAC Scenarios (3 cards, dado real) — dependem do CPI, que só
+              existe com despesa lançada; sem AC mostra aviso honesto. ─────── */}
+          {!temDespesaReal && (
+            <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4">
+              <p className="text-[#a3a3a3] text-xs leading-relaxed">
+                <b className="text-[#f5f5f5]">Cenários de EAC indisponíveis:</b> dependem do CPI e não há
+                custo real lançado (0 despesas em lancamentos_financeiros). Nada aqui é estimado.
+              </p>
+            </div>
+          )}
+          {temDespesaReal && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Target size={16} className="text-[#a3a3a3]" />
@@ -677,10 +872,12 @@ function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | nul
               </div>
             </div>
           </div>
+          )}
 
-          {/* ── Alert Cards ──────────────────────────────────────────── */}
+          {/* ── Alert Cards — alerta de custo só com despesa lançada (CPI real);
+              sem AC, CPI=0 dispararia "custo acima do planejado" falso. ────── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {metrics.CPI < 1 && (
+            {temDespesaReal && metrics.CPI < 1 && (
               <div className="bg-[#3d3d3d] border border-red-700/50 rounded-xl p-4 flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-red-900/40 flex items-center justify-center shrink-0">
                   <TrendingDown size={16} className="text-red-400" />
@@ -706,7 +903,7 @@ function DashboardPanelReal({ activeProjectId }: { activeProjectId: string | nul
                 </div>
               </div>
             )}
-            {metrics.CPI >= 1 && metrics.SPI >= 1 && (
+            {temDespesaReal && metrics.CPI >= 1 && metrics.SPI >= 1 && (
               <div className="bg-[#3d3d3d] border border-green-700/50 rounded-xl p-4 flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-green-900/40 flex items-center justify-center shrink-0">
                   <CheckCircle size={16} className="text-green-400" />
