@@ -95,6 +95,8 @@ function fmtProf(m: number | null): string {
 
 /** Rótulo curto das frentes de reparo (ids de wcr_equipes). */
 const EQUIPE_LABEL: Record<string, string> = {
+  'eq-wellington-esgoto': 'EQ 2 · Wellington',
+  // ids históricos (antes da reorganização de 28/07) — mantidos p/ dado antigo
   'eq-pv': 'EQ PV · Michael',
   'eq-esgoto': 'EQ ESGOTO · Juan',
   'eq-pente-fino': 'EQ PENTE FINO',
@@ -251,10 +253,10 @@ export function CronogramaPvsPanel({
             <span className="leading-relaxed">
               <strong className="font-mono [font-variant-numeric:tabular-nums]">{kpis.propostos}</strong> dos{' '}
               <strong className="font-mono [font-variant-numeric:tabular-nums]">{kpis.cadastroTotal}</strong> PVs têm
-              data <strong>PROPOSTA</strong> (27/07 · 2 frentes × 4 PVs/dia agrupadas por rua · prazo 09/08) — o campo
-              confirma ou ajusta pelo mesmo fluxo do GPKG. Frentes: <strong>EQ PV (Michael Douglas)</strong> +{' '}
-              <strong>EQ ESGOTO (Juan Carlos)</strong>, com o MND do escadão (61,4 m) junto dos 6 PVs colineares em
-              29–31/07.
+              data <strong>PROPOSTA</strong> (2 frentes × 4 PVs/dia agrupadas por rua · prazo 09/08) — o campo
+              confirma ou ajusta pelo mesmo fluxo do GPKG. Desde 28/07 os PVs são da{' '}
+              <strong>EQUIPE 2 — Wellington (esgoto/PVs/ramais)</strong>, sub-líderes Edson e João como 2 frentes
+              internas, com o MND do escadão (61,4 m) junto dos 6 PVs colineares em 29–31/07.
             </span>
           </div>
         )}
