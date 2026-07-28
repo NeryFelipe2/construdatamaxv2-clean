@@ -52,9 +52,14 @@ function slug(nome: string): string {
 // Kanban nunca abre vazio). Quando `useEquipes()` (Supabase) resolve, a
 // página chama `setDefinicoes(equipes)` para trocar a base pela definição
 // canônica do banco — preservando status/composição do dia via merge.
+// O id da pessoa carrega a EQUIPE DE ORIGEM (definição), não só o nome: a obra
+// tem homônimos em equipes diferentes (Leonardo na Equipe 4 e na 7 em 28/07) e,
+// com id só pelo nome, os dois colidiam — o merge jogava ambos na mesma equipe e
+// uma das pontas perdia a pessoa do card. `equipeId` continua sendo ONDE ela
+// está hoje (muda ao arrastar); o id é de onde ela veio, e por isso é estável.
 function basePessoas(equipesData: EquipeCard[] = WCR_EQUIPES): PessoaState[] {
   return equipesData.flatMap((eq) =>
-    eq.membros.map((m) => ({ id: slug(m.nome), nome: m.nome, funcao: m.funcao, equipeId: eq.id })),
+    eq.membros.map((m) => ({ id: `${eq.id}--${slug(m.nome)}`, nome: m.nome, funcao: m.funcao, equipeId: eq.id })),
   )
 }
 
@@ -85,14 +90,29 @@ function mergeEquipesState(fresh: EquipeState[], saved: Map<string, Partial<Equi
   })
 }
 
-function mergePessoasState(fresh: PessoaState[], saved: Map<string, Partial<PessoaState>>, sameDay: boolean): PessoaState[] {
+// O remanejamento do dia (equipeId salvo) manda sobre a definição — MENOS quando
+// a equipe salva não existe mais. Numa reorganização (equipe desativada ou
+// dissolvida) a pessoa ficava órfã apontando pra um id morto e SUMIA da tela:
+// não aparecia no card de nenhuma equipe nem no banco/pátio. Aconteceu de
+// verdade em 28/07 — 4 pessoas do pool "Jesse — a alocar" evaporaram do Kanban
+// depois que o pool foi dissolvido. Agora, id morto cai de volta pra definição
+// nova do banco. `null` continua válido: é a pessoa parada no banco/pátio.
+function mergePessoasState(
+  fresh: PessoaState[],
+  saved: Map<string, Partial<PessoaState>>,
+  sameDay: boolean,
+  equipesVivas?: Set<string>,
+): PessoaState[] {
   return fresh.map((p) => {
     const s = saved.get(p.id)
     if (!s) return p
+    const salvoValido =
+      s.equipeId !== undefined &&
+      (s.equipeId === null || !equipesVivas || equipesVivas.has(s.equipeId))
     return {
       ...p,
       funcao: s.funcao ?? p.funcao,
-      equipeId: s.equipeId !== undefined ? s.equipeId : p.equipeId,
+      equipeId: salvoValido ? (s.equipeId as string | null) : p.equipeId,
       tarefa: sameDay ? s.tarefa : undefined,
     }
   })
@@ -290,8 +310,9 @@ export const useEquipesKanbanStore = create<EquipesKanbanState>((set) => {
         const fresh = { equipes: baseEquipes(equipesData), pessoas: basePessoas(equipesData) }
         const eqById = new Map(s.equipes.map((e) => [e.id, e]))
         const pById = new Map(s.pessoas.map((p) => [p.id, p]))
+        const vivas = new Set(fresh.equipes.map((e) => e.id))
         const equipes = mergeEquipesState(fresh.equipes, eqById, true)
-        const pessoas = mergePessoasState(fresh.pessoas, pById, true)
+        const pessoas = mergePessoasState(fresh.pessoas, pById, true, vivas)
         const next = { date: s.date, equipes, pessoas, equipamentos: s.equipamentos, equipesDef: equipesData }
         persist(next)
         return next
@@ -325,8 +346,9 @@ export const useEquipesKanbanStore = create<EquipesKanbanState>((set) => {
           const eqById = new Map((row.equipes as Partial<EquipeState>[]).map((e) => [e.id, e]))
           const pById = new Map((row.pessoas as Partial<PessoaState>[]).map((p) => [p.id, p]))
           const eqpById = new Map((row.equipamentos as Partial<EquipamentoState>[]).map((e) => [e.id, e]))
+          const vivas = new Set(s.equipes.map((e) => e.id))
           const equipes = mergeEquipesState(s.equipes, eqById, true)
-          const pessoas = mergePessoasState(s.pessoas, pById, true)
+          const pessoas = mergePessoasState(s.pessoas, pById, true, vivas)
           const equipamentos = s.equipamentos.map((e) => {
             const saved = eqpById.get(e.id)
             return saved ? { ...e, equipeId: saved.equipeId !== undefined ? saved.equipeId : e.equipeId } : e
