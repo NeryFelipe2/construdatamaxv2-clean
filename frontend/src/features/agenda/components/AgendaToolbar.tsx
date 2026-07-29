@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, Plus, GanttChart, CalendarDays, Magnet } from 'lucide-react'
 import { useAgendaStore } from '@/store/agendaStore'
-import { formatViewRange } from '../utils'
+import { formatViewRange, getViewParams } from '../utils'
 import type { AgendaViewMode, AgendaSnapUnit } from '@/types'
 import { cn } from '@/lib/utils'
 import { format, startOfWeek, parseISO } from 'date-fns'
@@ -33,7 +33,7 @@ export function AgendaToolbar({ searchTerm, onSearchChange, onAddTask }: AgendaT
     setVisibleWeeks, setViewStart,
     snapUnit, setSnapUnit,
   } = useAgendaStore()
-  const range = formatViewRange(viewStart, visibleWeeks)
+  const range = formatViewRange(viewStart, visibleWeeks, getViewParams(viewMode).totalDays)
 
   function handleDateJump(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value

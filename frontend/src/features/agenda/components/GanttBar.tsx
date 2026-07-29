@@ -39,6 +39,8 @@ interface GanttBarProps {
   laneIndex?: number
   /** total de faixas da linha — 1 mantém a geometria original (top 10/h 48) */
   laneCount?: number
+  /** dias da janela real (getViewParams do viewMode) — sem isto a barra some, ver getBarStyle */
+  totalDays?: number
 }
 
 export function GanttBar({
@@ -48,6 +50,7 @@ export function GanttBar({
   pixelsPerDay = COLUMN_WIDTH / 7,
   laneIndex = 0,
   laneCount = 1,
+  totalDays,
 }: GanttBarProps) {
   const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask, snapUnit } = useAgendaStore()
 
@@ -67,18 +70,18 @@ export function GanttBar({
     return () => { if (cleanupRef.current) cleanupRef.current() }
   }, [])
 
-  // Compute bar style
-  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetUnits, pixelsPerDay, snapUnitEff)
+  // Compute bar style — totalDays vem da janela real do viewMode (ver getBarStyle)
+  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetUnits, pixelsPerDay, snapUnitEff, totalDays)
 
   if (isResizing && resizeStartDelta !== 0) {
     barStyle = getBarStyle(
       { ...task, startDate: applyResizeLeft(task, Math.round(resizeStartDelta / onePxSnap), snapUnitEff) },
-      viewStart, visibleWeeks, 0, pixelsPerDay
+      viewStart, visibleWeeks, 0, pixelsPerDay, 'week', totalDays
     )
   } else if (isResizing && resizeEndDelta !== 0) {
     barStyle = getBarStyle(
       { ...task, endDate: applyResizeRight(task, Math.round(resizeEndDelta / onePxSnap), snapUnitEff) },
-      viewStart, visibleWeeks, 0, pixelsPerDay
+      viewStart, visibleWeeks, 0, pixelsPerDay, 'week', totalDays
     )
   }
 

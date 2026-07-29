@@ -86,6 +86,7 @@ export function GanttRow({
             pixelsPerDay={viewParams.pixelsPerDay}
             laneIndex={laneByTask.get(task.id) ?? 0}
             laneCount={laneCount}
+            totalDays={viewParams.totalDays}
           />
         ))}
       </div>

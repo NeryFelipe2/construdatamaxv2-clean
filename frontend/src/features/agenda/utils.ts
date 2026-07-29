@@ -113,13 +113,25 @@ export interface BarStyle {
   visible: boolean
 }
 
+/**
+ * Geometria da barra no Gantt.
+ *
+ * `totalDaysOverride` existe porque a largura real da janela vem de
+ * getViewParams(viewMode) (70 dias no modo semana, 14 no dia…), NÃO de
+ * `visibleWeeks` — que no store nasce 0. Sem o override, `totalDays` dava 0 e
+ * a condição de visibilidade virava `dayOffset < 0`: só apareciam tarefas que
+ * COMEÇARAM ANTES do início da janela. Na prática o Gantt mostrava apenas as 2
+ * projeções agregadas (que começam lá atrás) e escondia todas as tarefas das
+ * equipes — a Agenda parecia vazia com 20+ tarefas reais no banco (28/07).
+ */
 export function getBarStyle(
   task: AgendaTask,
   viewStart: string,
   visibleWeeks: number,
   previewOffsetUnits: number = 0,
   pixelsPerDay: number = COLUMN_WIDTH / 7,
-  unit: AgendaSnapUnit = 'week'
+  unit: AgendaSnapUnit = 'week',
+  totalDaysOverride?: number
 ): BarStyle {
   const start        = parseISO(viewStart)
   const taskStart    = unit === 'day'
@@ -129,7 +141,7 @@ export function getBarStyle(
 
   const dayOffset       = differenceInDays(taskStart, start)
   const taskDurationDays = Math.max(1, differenceInDays(taskEnd, taskStart))
-  const totalDays       = visibleWeeks * 7
+  const totalDays       = totalDaysOverride ?? visibleWeeks * 7
 
   const left  = dayOffset * pixelsPerDay + 4
   const width = Math.max(20, taskDurationDays * pixelsPerDay - 8)
@@ -271,9 +283,14 @@ export function getTodayOffset(
 
 // ─── Date range display ───────────────────────────────────────────────────────
 
-export function formatViewRange(viewStart: string, visibleWeeks: number): string {
+/**
+ * Rótulo do período no topo da Agenda. `totalDays` (da janela real do viewMode)
+ * é o que manda; `visibleWeeks` sozinho nasce 0 no store e fazia o rótulo
+ * mostrar "20/07/2026 — 20/07/2026", como se a janela tivesse largura zero.
+ */
+export function formatViewRange(viewStart: string, visibleWeeks: number, totalDays?: number): string {
   const start = parseISO(viewStart)
-  const end   = addWeeks(start, visibleWeeks)
+  const end   = totalDays != null ? addDays(start, totalDays) : addWeeks(start, visibleWeeks)
   const startStr = format(start, 'dd/MM/yyyy', { locale: ptBR })
   const endStr   = format(end,   'dd/MM/yyyy', { locale: ptBR })
   return `${startStr} — ${endStr}`
