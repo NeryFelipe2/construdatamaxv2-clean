@@ -1,9 +1,21 @@
+/**
+ * Tela de Medição — DUAS abas na mesma rota /app/medicao:
+ *
+ *  1. "Em construção" (padrão, é a que o chefe abre): dashboard da medição sendo
+ *     construída dia a dia pelo apontamento de campo, com o confronto honesto
+ *     contra a medição oficial fechada. Ver ./MedicaoConstrucao.tsx.
+ *  2. "Itens do RDO": fluxo original de precificar/aprovar item a item os
+ *     serviços dos RDOs fechados (medicao_itens).
+ *
+ * Rota reaproveitada de propósito — nada de rota nova para o mesmo assunto.
+ */
 import { useEffect, useMemo, useState } from 'react'
-import { Calculator, RotateCcw, CheckCircle2, AlertTriangle, BookOpen, X, Search, ClipboardPaste } from 'lucide-react'
+import { Calculator, RotateCcw, CheckCircle2, AlertTriangle, BookOpen, X, Search, ClipboardPaste, TrendingUp, ListChecks } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
 import { useSupabaseMedicao, type MedicaoItem, type MedicaoRdoGrupo } from '@/hooks/useSupabaseMedicao'
 import { buscarPrecosContrato, type PrecoContrato } from '@/hooks/usePrecosContrato'
 import { ApontamentoModal } from '@/features/rdo/components/ApontamentoModal'
+import { MedicaoConstrucao } from './MedicaoConstrucao'
 
 const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 const num = (n: number) => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -236,7 +248,12 @@ function GrupoRdo({
   )
 }
 
-export function MedicaoPage() {
+/**
+ * Aba "Itens do RDO" — fluxo original de aprovação item a item da medição
+ * gerada pelos RDOs fechados (tabela `medicao_itens`, via useSupabaseMedicao).
+ * Continua intacto; passou a conviver com o dashboard MEDIÇÃO EM CONSTRUÇÃO.
+ */
+function MedicaoRdoView() {
   const activeProjectId = useProjectContext((s) => s.activeProjectId)
   const { grupos, loading, error, reload, atualizarPreco, aprovarItem } = useSupabaseMedicao(activeProjectId)
   const [precoModalItem, setPrecoModalItem] = useState<MedicaoItem | null>(null)
@@ -324,6 +341,44 @@ export function MedicaoPage() {
           onClose={() => setPrecoModalItem(null)}
         />
       )}
+    </div>
+  )
+}
+
+type AbaMedicao = 'construcao' | 'rdo'
+
+const ABAS: { id: AbaMedicao; label: string; icon: typeof TrendingUp }[] = [
+  { id: 'construcao', label: 'Em construção', icon: TrendingUp },
+  { id: 'rdo', label: 'Itens do RDO', icon: ListChecks },
+]
+
+export function MedicaoPage() {
+  const [aba, setAba] = useState<AbaMedicao>('construcao')
+
+  return (
+    <div className="h-full flex flex-col overflow-hidden bg-[#0a0f1a]">
+      <nav className="flex items-center gap-1 border-b border-[#1e293b] bg-[#0a0f1a] px-3 shrink-0">
+        {ABAS.map((a) => {
+          const ativa = a.id === aba
+          return (
+            <button
+              key={a.id}
+              onClick={() => setAba(a.id)}
+              className={[
+                'flex items-center gap-1.5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] border-b-2 transition-colors',
+                ativa
+                  ? 'border-[#38bdf8] text-[#38bdf8]'
+                  : 'border-transparent text-[#64748b] hover:text-[#e2e8f0]',
+              ].join(' ')}
+            >
+              <a.icon size={12} /> {a.label}
+            </button>
+          )
+        })}
+      </nav>
+      <div className="flex-1 min-h-0">
+        {aba === 'construcao' ? <MedicaoConstrucao /> : <MedicaoRdoView />}
+      </div>
     </div>
   )
 }

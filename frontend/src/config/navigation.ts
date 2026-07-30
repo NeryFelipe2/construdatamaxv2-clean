@@ -70,7 +70,7 @@ export const NAV_GROUPS: NavGroup[] = [
     id: 'financeiro', category: 'Financeiro',
     items: [
       { label: 'DRE & Resultado', to: '/app/dre-financeiro', icon: Calculator },
-      { label: 'Medição (RDO)', to: '/app/medicao', icon: Calculator },
+      { label: 'Medição', to: '/app/medicao', icon: Calculator },
     ],
   },
   {
