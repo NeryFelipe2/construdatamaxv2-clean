@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ConstruData BI Analytics</title>
+  <style>
+    :root {
+      --navy: #071a31;
+      --navy-2: #102a4d;
+      --blue: #2354cf;
+      --blue-2: #0b63ce;
+      --cyan: #1fd1ff;
+      --green: #00bd73;
+      --orange: #ff6f19;
+      --red: #e92c3a;
+      --amber: #f5a524;
+      --bg: #eef2f6;
+      --panel: #ffffff;
+      --line: #d8e0eb;
+      --muted: #69778d;
+      --text: #07111f;
+      --ink: #d8e7ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body { margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+    aside { background: var(--navy); color: var(--ink); border-right: 1px solid #24476b; }
+    .project { height: 38px; display: flex; align-items: center; padding: 0 14px; background: #0b2039; border-bottom: 1px solid #24476b; font-size: 13px; font-weight: 800; }
+    .brand { display: flex; gap: 12px; align-items: center; padding: 16px 14px 20px; }
+    .logo { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center; background: #001f36; color: var(--cyan); font-weight: 900; font-size: 18px; box-shadow: inset 0 0 0 1px #0f5f86; }
+    .brand strong { display: block; color: white; font-size: 15px; }
+    .brand span { display: block; margin-top: 2px; color: #35c9ef; letter-spacing: .12em; font-size: 10px; font-weight: 800; }
+    .nav-title { color: #5ea4d8; font-size: 10px; letter-spacing: .16em; font-weight: 900; padding: 14px 16px 7px; }
+    nav a { height: 28px; display: flex; align-items: center; gap: 9px; margin: 2px 12px; padding: 0 10px; color: #9eb3c8; border-radius: 7px; text-decoration: none; font-size: 13px; }
+    nav a.active { color: #18d5ff; background: #123f66; }
+    nav a::before { content: ""; width: 8px; height: 8px; border-radius: 2px; border: 1px solid currentColor; opacity: .9; }
+    main { min-width: 0; }
+    header { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--blue); color: white; padding: 0 22px; box-shadow: 0 1px 6px #0002; }
+    h1 { margin: 0; font-size: 17px; }
+    .subhead { margin-top: 5px; font-size: 12px; color: #d9e6ff; }
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn { height: 34px; border: 0; border-radius: 7px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; color: white; background: #153b8f; font-weight: 900; font-size: 12px; text-decoration: none; cursor: pointer; white-space: nowrap; }
+    .btn.orange { background: var(--orange); }
+    .btn.green { background: var(--green); }
+    .btn.dark { background: #0d2443; }
+    .content { padding: 18px 22px 26px; }
+    .topline { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; margin-bottom: 14px; }
+    .summary { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 5px #0001; }
+    .summary h2, .panel h2 { margin: 0; font-size: 14px; }
+    .summary ul { margin: 10px 0 0; padding: 0; display: grid; gap: 6px; list-style: none; color: #334155; font-size: 12px; line-height: 1.35; }
+    .summary li { display: grid; grid-template-columns: 9px 1fr; gap: 8px; align-items: start; }
+    .summary li::before { content: ""; width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; background: var(--blue-2); }
+    .health { background: #0c1f38; color: white; border-radius: 8px; padding: 14px; border: 1px solid #23456d; }
+    .health .label { color: #8fb5e2; }
+    .health-value { margin-top: 10px; font-size: 28px; font-weight: 950; }
+    .grid-kpi { display: grid; grid-template-columns: repeat(6, minmax(128px, 1fr)); gap: 12px; }
+    .card, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 5px #0001; }
+    .kpi { min-height: 116px; padding: 15px; }
+    .label { color: var(--muted); font-size: 11px; line-height: 1.1; text-transform: uppercase; letter-spacing: .08em; font-weight: 900; }
+    .value { margin-top: 9px; font-size: 29px; line-height: 1; font-weight: 950; color: #020817; }
+    .sub { margin-top: 8px; color: #7d8aa0; font-size: 12px; line-height: 1.25; }
+    .layout { margin-top: 14px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(360px, .85fr); gap: 14px; }
+    .panel { padding: 16px; min-width: 0; }
+    .panel-head { min-height: 34px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: 12px; }
+    .dot { width: 9px; height: 9px; border-radius: 99px; display: inline-block; margin-right: 5px; }
+    canvas { display: block; width: 100%; height: 270px; }
+    .side-grid { display: grid; gap: 14px; }
+    .responsaveis { display: grid; gap: 12px; }
+    .resp-card { border: 1px solid #e4eaf3; border-radius: 8px; padding: 12px; background: #fbfcfe; }
+    .resp-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-weight: 900; }
+    .mini { margin-top: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .mini div { background: #f1f5fa; border-radius: 7px; padding: 8px; min-height: 52px; }
+    .mini b { display: block; font-size: 16px; }
+    .mini span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; text-transform: uppercase; font-weight: 800; }
+    .bar-line { display: grid; grid-template-columns: 118px minmax(0, 1fr) 58px; gap: 9px; align-items: center; font-size: 12px; margin: 9px 0; }
+    .bar-bg { height: 9px; border-radius: 99px; background: #e7edf6; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--blue-2); border-radius: 99px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; color: #5d6d83; background: #f5f8fc; border-bottom: 1px solid var(--line); padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    td { border-bottom: 1px solid #edf1f7; padding: 10px; vertical-align: top; line-height: 1.35; }
+    .pill { display: inline-flex; align-items: center; min-width: 54px; justify-content: center; border-radius: 999px; padding: 4px 8px; font-size: 11px; font-weight: 950; }
+    .risk-ALTO { color: #b91c1c; background: #fee2e2; }
+    .risk-MEDIO { color: #b45309; background: #ffedd5; }
+    .risk-BAIXO { color: #15803d; background: #dcfce7; }
+    .wide { margin-top: 14px; }
+    .muted { color: var(--muted); }
+    @media (max-width: 1180px) {
+      .app { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .grid-kpi { grid-template-columns: repeat(3, minmax(128px, 1fr)); }
+      .layout, .topline { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      header { align-items: flex-start; flex-direction: column; padding: 14px; }
+      .content { padding: 14px; }
+      .grid-kpi, .mini { grid-template-columns: 1fr 1fr; }
+      .actions { justify-content: flex-start; }
+      table { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="project">Rua Reseda</div>
+      <div class="brand"><div class="logo">C</div><div><strong>ConstruData</strong><span>HYDRONETWORK</span></div></div>
+      <nav>
+        <div class="nav-title">GESTAO</div>
+        <a href="/manage">Gestao 360</a>
+        <a href="/manage">Torre Controle</a>
+        <a href="/projetos">Projetos</a>
+        <div class="nav-title">OPERACAO DE CAMPO</div>
+        <a href="/rdo">RDO</a>
+        <a href="/rdo">RDOs WhatsApp</a>
+        <a href="/controle">Controle / Fluxo</a>
+        <div class="nav-title">IA E INTELIGENCIA</div>
+        <a href="/ciclo-operacional">Ciclo Operacional</a>
+        <a href="/bi/analytics" class="active">BI Analytics</a>
+      </nav>
+    </aside>
+    <main>
+      <header>
+        <div>
+          <h1>BI Analytics Operacional</h1>
+          <div class="subhead" id="status">Carregando dados...</div>
+        </div>
+        <div class="actions">
+          <button class="btn dark" id="btnRecalc">Recalcular XGBoost</button>
+          <a class="btn orange" href="/api/bi/analytics/export/pdf">Exportar PDF</a>
+          <a class="btn green" href="/api/bi/analytics/export/excel">Exportar Excel</a>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="topline">
+          <div class="summary">
+            <h2>Leitura executiva</h2>
+            <ul id="executive"></ul>
+          </div>
+          <div class="health">
+            <div class="label">Status do BI</div>
+            <div class="health-value" id="healthValue">-</div>
+            <div class="sub" id="healthText">Aguardando modelo.</div>
+          </div>
+        </div>
+
+        <div class="grid-kpi">
+          <div class="card kpi"><div class="label">RDOs</div><div class="value" id="kpiRdos">0</div><div class="sub">Historico importado</div></div>
+          <div class="card kpi"><div class="label">Producao Equiv.</div><div class="value" id="kpiEquiv">0</div><div class="sub">m + un + etapas</div></div>
+          <div class="card kpi"><div class="label">Metros</div><div class="value" id="kpiM">0</div><div class="sub">Rede executada</div></div>
+          <div class="card kpi"><div class="label">Unidades</div><div class="value" id="kpiUn">0</div><div class="sub">PV / itens</div></div>
+          <div class="card kpi"><div class="label">Etapas</div><div class="value" id="kpiEtapas">0</div><div class="sub">RDO textual do Icaro</div></div>
+          <div class="card kpi"><div class="label">Prev. 7 dias</div><div class="value" id="kpiPrev">0</div><div class="sub">XGBoost agregado</div></div>
+        </div>
+
+        <div class="layout">
+          <div class="panel">
+            <div class="panel-head">
+              <div><h2>Tendencia diaria por responsavel</h2><div class="sub">Producao equivalente calculada a partir dos RDOs estruturados.</div></div>
+              <div class="legend"><span><i class="dot" style="background:#2354cf"></i>Icaro</span><span><i class="dot" style="background:#00bd73"></i>Igor</span></div>
+            </div>
+            <canvas id="lineChart"></canvas>
+          </div>
+
+          <div class="side-grid">
+            <div class="panel">
+              <div class="panel-head"><h2>Composicao da producao</h2></div>
+              <canvas id="stackChart"></canvas>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h2>Variaveis que movem o modelo</h2></div>
+              <div id="featureBars"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel wide">
+          <div class="panel-head"><h2>Responsaveis e previsao</h2></div>
+          <div class="responsaveis" id="responsaveis"></div>
+        </div>
+
+        <div class="panel wide">
+          <div class="panel-head"><h2>Comparativo BI</h2><span class="muted">Base, previsao, confianca e risco</span></div>
+          <table>
+            <thead><tr><th>Responsavel</th><th>Periodo</th><th>Base</th><th>Media</th><th>Prev. dia</th><th>Prev. 7d</th><th>Confianca</th><th>Risco</th><th>Leitura</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+
+        <div class="panel wide">
+          <div class="panel-head"><h2>Serie diaria recente</h2><span class="muted">Ultimos registros alimentando o XGBoost</span></div>
+          <table>
+            <thead><tr><th>Resp.</th><th>Data</th><th>Equiv.</th><th>m</th><th>un</th><th>etapas</th><th>Bloqueios</th><th>Atividade</th></tr></thead>
+            <tbody id="dailyRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const fmt = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 });
+    const pct = new Intl.NumberFormat('pt-BR', { style: 'percent', maximumFractionDigits: 0 });
+    const colors = { ICARO: '#2354cf', IGOR: '#00bd73' };
+
+    function setText(id, value) { document.getElementById(id).textContent = value; }
+    function n(value) { return fmt.format(Number(value || 0)); }
+    function riskScore(risk) { return risk === 'ALTO' ? 3 : risk === 'MEDIO' ? 2 : 1; }
+    function riskGlobal(items) {
+      const score = Math.max(0, ...items.map(x => riskScore(x.risco)));
+      return score === 3 ? 'ALTO' : score === 2 ? 'MEDIO' : 'BAIXO';
+    }
+
+    function prepareCanvas(canvas, height) {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(320, rect.width) * dpr;
+      canvas.height = height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, rect.width, height);
+      return { ctx, w: Math.max(320, rect.width), h: height };
+    }
+
+    function drawLineChart(series) {
+      const { ctx, w, h } = prepareCanvas(document.getElementById('lineChart'), 270);
+      const dates = [...new Set(Object.values(series || {}).flatMap(rows => rows.map(r => r.data)))].sort();
+      const max = Math.max(10, ...Object.values(series || {}).flat().map(r => Number(r.producao_equiv || 0)));
+      ctx.strokeStyle = '#d8e0eb';
+      ctx.lineWidth = 1;
+      ctx.font = '11px Segoe UI';
+      ctx.fillStyle = '#69778d';
+      for (let i = 0; i <= 4; i++) {
+        const y = 28 + i * ((h - 54) / 4);
+        ctx.beginPath(); ctx.moveTo(42, y); ctx.lineTo(w - 18, y); ctx.stroke();
+        ctx.fillText(n(max * (1 - i / 4)), 6, y + 4);
+      }
+      Object.entries(series || {}).forEach(([key, rows]) => {
+        if (!rows.length) return;
+        const map = new Map(rows.map(r => [r.data, Number(r.producao_equiv || 0)]));
+        ctx.strokeStyle = colors[key] || '#ff6f19';
+        ctx.lineWidth = 2.7;
+        ctx.beginPath();
+        dates.forEach((date, i) => {
+          const x = 48 + (i / Math.max(1, dates.length - 1)) * (w - 78);
+          const y = h - 28 - ((map.get(date) || 0) / max) * (h - 62);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      });
+      ctx.fillStyle = '#69778d';
+      if (dates.length) {
+        ctx.fillText(dates[0], 48, h - 8);
+        ctx.fillText(dates[dates.length - 1], w - 95, h - 8);
+      }
+    }
+
+    function drawStackChart(items) {
+      const { ctx, w, h } = prepareCanvas(document.getElementById('stackChart'), 270);
+      const max = Math.max(1, ...items.map(x => Number(x.total_equiv || 0)));
+      const parts = [
+        ['total_m', '#2354cf', 'm'],
+        ['total_un', '#00bd73', 'un'],
+        ['total_etapa', '#ff6f19', 'etapas'],
+      ];
+      ctx.font = '12px Segoe UI';
+      items.forEach((item, i) => {
+        const y = 42 + i * 82;
+        ctx.fillStyle = '#07111f';
+        ctx.font = '700 12px Segoe UI';
+        ctx.fillText(item.responsavel || item.chave, 6, y - 12);
+        let x = 6;
+        parts.forEach(([field, color]) => {
+          const width = (Number(item[field] || 0) / max) * (w - 42);
+          ctx.fillStyle = color;
+          ctx.fillRect(x, y, width, 24);
+          x += width;
+        });
+        ctx.strokeStyle = '#d8e0eb';
+        ctx.strokeRect(6, y, w - 42, 24);
+        ctx.fillStyle = '#69778d';
+        ctx.font = '12px Segoe UI';
+        ctx.fillText(`${n(item.total_equiv)} equiv.`, 6, y + 45);
+      });
+      parts.forEach(([field, color, label], i) => {
+        ctx.fillStyle = color; ctx.fillRect(8 + i * 72, h - 18, 10, 10);
+        ctx.fillStyle = '#69778d'; ctx.fillText(label, 24 + i * 72, h - 9);
+      });
+    }
+
+    function renderFeatures(items) {
+      const data = items.flatMap(x => (x.importancias || []).slice(0, 5).map(i => ({ ...i, resp: x.chave }))).slice(0, 10);
+      const max = Math.max(0.01, ...data.map(x => Number(x.peso || 0)));
+      document.getElementById('featureBars').innerHTML = data.map(x => `
+        <div class="bar-line">
+          <strong>${x.feature}</strong>
+          <div class="bar-bg"><div class="bar-fill" style="width:${(Number(x.peso || 0) / max) * 100}%;background:${colors[x.resp] || '#2354cf'}"></div></div>
+          <span>${n(x.peso)}</span>
+        </div>`).join('') || '<div class="sub">Sem importancias calculadas.</div>';
+    }
+
+    function renderResponsaveis(items) {
+      const max = Math.max(1, ...items.map(x => Number(x.total_equiv || 0)));
+      document.getElementById('responsaveis').innerHTML = items.map(x => `
+        <div class="resp-card">
+          <div class="resp-title">
+            <span>${x.responsavel}</span>
+            <span class="pill risk-${x.risco}">${x.risco}</span>
+          </div>
+          <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:${(Number(x.total_equiv || 0) / max) * 100}%;background:${colors[x.chave] || '#2354cf'}"></div></div>
+          <div class="mini">
+            <div><b>${n(x.rdos)}</b><span>RDOs</span></div>
+            <div><b>${n(x.total_equiv)}</b><span>Equiv.</span></div>
+            <div><b>${n(x.previsao_7_dias)}</b><span>Prev. 7d</span></div>
+            <div><b>${pct.format(Number(x.confianca || 0))}</b><span>Confianca</span></div>
+          </div>
+          <div class="sub">${x.observacao || ''}</div>
+        </div>`).join('');
+    }
+
+    function renderTables(payload) {
+      document.getElementById('rows').innerHTML = payload.comparativo.map(x => `
+        <tr>
+          <td><strong>${x.responsavel}</strong></td>
+          <td>${x.periodo || '-'}</td>
+          <td>${n(x.rdos)} RDOs<br>${n(x.total_m)} m / ${n(x.total_un)} un / ${n(x.total_etapa)} etapas<br>${n(x.total_equiv)} equiv.</td>
+          <td>${n(x.media_dia_equiv)}</td>
+          <td>${n(x.previsao_proximo_dia)}</td>
+          <td>${n(x.previsao_7_dias)}</td>
+          <td>${pct.format(Number(x.confianca || 0))}</td>
+          <td><span class="pill risk-${x.risco}">${x.risco}</span></td>
+          <td>${x.observacao || ''}</td>
+        </tr>`).join('');
+      const daily = Object.entries(payload.series || {}).flatMap(([key, rows]) => rows.map(r => ({ key, ...r })))
+        .sort((a, b) => `${a.data}-${a.key}`.localeCompare(`${b.data}-${b.key}`)).slice(-24).reverse();
+      document.getElementById('dailyRows').innerHTML = daily.map(r => `
+        <tr><td>${r.key}</td><td>${r.data}</td><td>${n(r.producao_equiv)}</td><td>${n(r.producao_m)}</td><td>${n(r.producao_un)}</td><td>${n(r.producao_etapa)}</td><td>${n(r.bloqueio_score)}</td><td>${n(r.atividade_score)}</td></tr>
+      `).join('');
+    }
+
+    function render(payload) {
+      setText('status', `Atualizado em ${payload.gerado_em}`);
+      setText('kpiRdos', n(payload.cards.rdos));
+      setText('kpiEquiv', n(payload.cards.total_equiv));
+      setText('kpiM', n(payload.cards.total_m));
+      setText('kpiUn', n(payload.cards.total_un));
+      setText('kpiEtapas', n(payload.cards.total_etapa));
+      setText('kpiPrev', n(payload.cards.previsao_7_dias));
+      const risk = riskGlobal(payload.comparativo || []);
+      setText('healthValue', risk);
+      document.getElementById('healthValue').className = `health-value`;
+      setText('healthText', `${payload.cards.responsaveis} responsaveis monitorados com ${n(payload.cards.previsao_7_dias)} equiv. previstos em 7 dias.`);
+      document.getElementById('executive').innerHTML = (payload.resumo_executivo || []).map(x => `<li>${x}</li>`).join('');
+      renderResponsaveis(payload.comparativo || []);
+      renderFeatures(payload.comparativo || []);
+      renderTables(payload);
+      drawLineChart(payload.series || {});
+      drawStackChart(payload.comparativo || []);
+    }
+
+    async function load(recalc) {
+      setText('status', recalc ? 'Recalculando XGBoost...' : 'Carregando dados...');
+      const res = await fetch(recalc ? '/api/bi/analytics/recalcular' : '/api/bi/analytics', { method: recalc ? 'POST' : 'GET' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      render(await res.json());
+    }
+
+    document.getElementById('btnRecalc').addEventListener('click', () => load(true).catch(e => setText('status', `Erro: ${e.message}`)));
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => load(false).catch(() => {}), 150);
+    });
+    load(false).catch(e => setText('status', `Erro: ${e.message}`));
+  </script>
+</body>
+</html>

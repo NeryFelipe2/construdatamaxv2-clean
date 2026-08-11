@@ -1,0 +1,32 @@
+Begin Part Validation | AeccStructTwoTierRectBase_Metric
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- Rectangular
+OK: Part Description parameter validated -- Rectangular Structure 2-Tier Circular Frame SI
+OK: Part Name parameter validated -- AeccStructTwoTierRectBase_Metric
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 69E31713-3BEA-4BB3-9BAF-3AD51780D5C5
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter LenB2 uses Context=Geometry_Distance3D
+OK: Calc Parameter LenB3 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter SBSL uses Context=StructLength
+OK: Calc Parameter SBSW uses Context=StructWidth
+OK: Calc Parameter SVPC uses Context=StructVertPipeClearance
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter WPOf2 uses Context=Geometry_WorkplaneOffset
+ 
+OK: Query validation successful
+
+OK: Part Validated | PV_Retangular\AeccStructTwoTierRectBase_Metric.xml

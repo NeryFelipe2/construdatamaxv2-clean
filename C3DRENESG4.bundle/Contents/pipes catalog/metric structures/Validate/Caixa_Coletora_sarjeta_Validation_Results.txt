@@ -1,0 +1,26 @@
+Begin Part Validation | Caixa_Coletora_sarjeta
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- CCS
+OK: Part Description parameter validated -- Caixa_Coletora_sarjeta
+OK: Part Name parameter validated -- Caixa_Coletora_sarjeta
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- B0865763-14D1-48E2-B94E-59BE3C9732FD
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter SBSL uses Context=StructLength
+OK: Calc Parameter SBSW uses Context=StructWidth
+ 
+OK: Query validation successful
+
+OK: Part Validated | Caixa_Coletora_sarjeta\Caixa_Coletora_sarjeta.xml

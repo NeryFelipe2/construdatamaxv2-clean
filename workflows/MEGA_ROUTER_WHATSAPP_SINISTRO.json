@@ -1,0 +1,52 @@
+{
+  "name": "MEGA_ROUTER_WHATSAPP_SINISTRO",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-master",
+        "options": {}
+      },
+      "id": "webhook-evolution-master",
+      "name": "Webhook Evolution",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SUPABASE_URL = 'https://vblfdikfobsirwpdnybw.supabase.co';\nconst SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4';\nconst EVOLUTION_URL = 'http://rk-evolution:8080/message/sendText/construdata-felipe';\nconst EVOLUTION_API_KEY = 'construdata2026';\n\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n    try {\n        const raw = item.json.body || item.json;\n        \n        // Ignorar eventos de status da mensagem\n        if (raw.event && (raw.event === 'messages.update' || raw.event === 'messages.delete' || raw.event === 'send.message')) {\n            continue;\n        }\n\n        const msg = raw.data || raw;\n        const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n        \n        // Ignorar grupos ou sem remetente\n        if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n        let phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n        const fromMe = msg.key?.fromMe || false;\n\n        let text = '';\n        if (msg.message?.conversation) text = msg.message.conversation;\n        else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n        else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n        // Prevenir Loop do próprio bot\n        if (fromMe && text.includes('Construdata - powered by')) continue;\n        if (!text && !msg.message?.imageMessage) continue;\n\n        // Função auxiliar para requests síncronos simulados via promises no n8n\n        const fetchApi = async (url, options) => {\n             const axios = require('axios');\n             try {\n                 const res = await axios(url, options);\n                 return res.data;\n             } catch (err) {\n                 console.error('Fetch error:', err.message);\n                 return null;\n             }\n        };\n\n        // 1. Lookup Contato Supabase\n        // Formatar telefone pra busca (DDI + DDD + 9? + NUM)\n        let altPhone = phone;\n        if (phone.length === 12 && phone.startsWith('55')) {\n             altPhone = phone.slice(0,4) + '9' + phone.slice(4);\n        }\n        \n        const contatoUrl = `${SUPABASE_URL}/rest/v1/contatos?select=*&or=(telefone_whatsapp.eq.${phone},telefone_whatsapp.eq.${altPhone})`;\n        const contatoData = await fetchApi(contatoUrl, {\n            method: 'GET',\n            headers: {\n                'apikey': SUPABASE_KEY,\n                'Authorization': `Bearer ${SUPABASE_KEY}`\n            }\n        });\n\n        if (!contatoData || contatoData.length === 0) {\n            // Usuário não cadastrado - IGNORAR SILENCIOSAMENTE PARA NÃO SPAMAR DESCONHECIDOS\n            continue;\n        }\n        const user = contatoData[0];\n\n        // 2. Roteamento Lógico e Preparação da Resposta\n        const tl = text.toLowerCase().trim();\n        let replyText = '';\n\n        if (tl === 'ajuda' || tl === 'menu' || tl === 'help') {\n            replyText = `🤖 *ConstruDataMax Gestão 360*\\nOlá ${user.nome}!\\n\\n📊 *Opções de Comando:*\\n1️⃣ Status RDO Hoje\\n2️⃣ Equipe e Contatos\\n3️⃣ Projetos Ativos\\n4️⃣ Dashboard Consolidado\\n5️⃣ Reenviar Cobrança (Alerta)\\n6️⃣ Falar com IA\\n7️⃣ Cobrar RDO\\n8️⃣ Meu RDO Diretor\\n9️⃣ Lembrar Tarefas\\n🔟 Criar Tarefas\\n1️⃣1️⃣ Plano de Custos\\n1️⃣2️⃣ Tarefas Consórcio\\n1️⃣3️⃣ Enviar Tarefa p/ Pessoa\\n1️⃣4️⃣ Enviar Tarefa à Diretoria\\n1️⃣5️⃣ Enviar Tarefa aos Engs\\n1️⃣6️⃣ Enviar Tarefa por Setor\\n\\n💡 *Atalhos:*\\n@tarefa | PROJETO | DESCRIÇÃO\\n@rdo | PROJETO | ATIVIDADE\\n@pagamento | PROJETO | DESC\\n\\n🔗 https://construdatamaxv2-clean.vercel.app\\n\\n_Construdata - powered by FCN_`;\n        } \n        else if (['1','2','3','4','5','7','8'].includes(tl) || tl.startsWith('@rdo') || tl.includes('#rdo')) {\n            replyText = `🏗️ *Módulo RDO - ${user.nome}*\\nEnvie seu Diário de Obra neste formato:\\n\\n*@rdo* | PROJETO | FRENTE | ATIVIDADE | QUANTIDADE | EQUIPE\\n\\n_Ex: @rdo | Pardinho | Terraplenagem | Escavação | 100m3 | 3 pessoas_\\n\\n⏳ (Em breve processamento automático de fotos)`;\n        }\n        else if (tl === '6' || tl.includes('#ia') || tl.includes('#ai') || tl.startsWith('@ia')) {\n            replyText = `🧠 *Módulo de IA Ativado*\\nOlá ${user.nome}, eu sou o assistente virtual da Engenharia RK. O que você precisa analisar ou consultar hoje na base de dados das obras?`;\n        }\n        else if (tl === '11' || tl.startsWith('@pagamento') || tl.includes('#financeiro') || msg.message?.imageMessage) {\n            replyText = `💰 *Módulo Financeiro - ${user.nome}*\\nRecebi sua solicitação financeira.\\n\\nSe enviou um comprovante, por favor responda marcando a imagem com:\\n*@pagamento* | OBRA | CATEGORIA | DESCRIÇÃO\\n\\nCategorias: MAT, MDO, DSL, LOC, REF, FRE.`;\n        }\n        else if (['9','10','12','13','14','15','16'].includes(tl) || tl.startsWith('@tarefa') || tl.includes('#tarefa')) {\n            replyText = `📋 *Módulo de Tarefas - ${user.nome}*\\nPara registrar uma tarefa no sistema, digite:\\n\\n*@tarefa* | PROJETO | RESPONSÁVEL | DESCRIÇÃO | PRAZO\\n\\n_Ex: @tarefa | Osasco | João | Conferir projeto drenagem | 25/04_`;\n        }\n        else {\n            // Fallback Inteligente baseado no Perfil / Cargo do usuário\n            const cargo = (user.cargo || '').toLowerCase();\n            \n            if (cargo.includes('diretor') || cargo.includes('master')) {\n                // Master/Diretores às vezes estão só batendo papo. Retorna menu curto.\n                replyText = `Olá Diretor ${user.nome}. Sou o bot do ConstruDataMax. Para comandos, digite *menu*.`;\n            } else if (cargo.includes('eng') || cargo.includes('coord')) {\n                replyText = `Fala Engenheiro ${user.nome}! Precisando lançar RDO, Tarefa ou Pagamento? Digite *menu* para ver as opções.`;\n            } else {\n                replyText = `Olá ${user.nome}! Sistema ConstruDataMax ativo. Digite *menu* para ver as opções disponíveis para o seu perfil.`;\n            }\n        }\n\n        // 3. Enviar a resposta via Evolution API\n        if (replyText !== '') {\n            await fetchApi(EVOLUTION_URL, {\n                method: 'POST',\n                headers: {\n                    'apikey': EVOLUTION_API_KEY,\n                    'Content-Type': 'application/json'\n                },\n                data: {\n                    number: phone,\n                    textMessage: {\n                        text: replyText\n                    }\n                }\n            });\n        }\n\n        results.push({ json: { phone, user: user.nome, command_detected: tl, response_sent: true } });\n\n    } catch (error) {\n        console.error('Workflow error:', error);\n        results.push({ json: { error: error.message } });\n    }\n}\n\nreturn results;"
+      },
+      "id": "mega-router-code",
+      "name": "Processador Monolitico",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        450,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Evolution": {
+      "main": [
+        [
+          {
+            "node": "Processador Monolitico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f768bca2-8db8-40ef-bc3b-554425da7268",
+  "id": "x1y2z3-router-sinistro"
+}

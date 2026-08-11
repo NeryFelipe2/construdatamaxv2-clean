@@ -1,0 +1,125 @@
+{
+  "gerado_em": "2026-04-26",
+  "resultados": {
+    "ICARO": {
+      "responsavel": "Icaro - Tatui / Cesario Lange / Porangaba / Sao Roque",
+      "nucleos": [
+        "CESARIO_LANGE",
+        "PORANGABA",
+        "SAO_ROQUE"
+      ],
+      "periodo": "2026-03-23 a 2026-04-23",
+      "rdos": 33,
+      "dias_com_rdo": 22,
+      "total_m": 18.0,
+      "total_un": 2.0,
+      "total_etapa": 47.0,
+      "total_equiv": 67.0,
+      "media_dia_equiv": 3.05,
+      "bloqueios": 13,
+      "atividade_score": 41,
+      "modelo": {
+        "ok": true,
+        "algoritmo": "XGBRegressor",
+        "amostras": 22,
+        "mae": 4.158,
+        "r2": -0.458,
+        "previsao_proximo_dia": 1.38,
+        "previsao_7_dias": 9.65,
+        "confianca": 0.42,
+        "importancias": [
+          {
+            "feature": "rolling3",
+            "peso": 0.2934
+          },
+          {
+            "feature": "atividade_score",
+            "peso": 0.1945
+          },
+          {
+            "feature": "rolling7",
+            "peso": 0.1658
+          },
+          {
+            "feature": "dia_mes",
+            "peso": 0.12
+          },
+          {
+            "feature": "dia_semana",
+            "peso": 0.0599
+          },
+          {
+            "feature": "rdo_count",
+            "peso": 0.0451
+          },
+          {
+            "feature": "equipe_qtd",
+            "peso": 0.0439
+          },
+          {
+            "feature": "prev1",
+            "peso": 0.0352
+          }
+        ]
+      },
+      "observacao": "Icaro foi enriquecido a partir dos textos dos RDOs: metros, tubos e etapas de caixa/abrigo foram estruturados para o BI."
+    },
+    "IGOR": {
+      "responsavel": "Igor - Morro do Teteu / RK_SUB",
+      "nucleos": [
+        "RK_SUB"
+      ],
+      "periodo": "2026-01-09 a 2026-04-23",
+      "rdos": 66,
+      "dias_com_rdo": 66,
+      "total_m": 2409.6,
+      "total_un": 831.0,
+      "total_etapa": 0.0,
+      "total_equiv": 3240.6,
+      "media_dia_equiv": 49.1,
+      "bloqueios": 0,
+      "atividade_score": 77,
+      "modelo": {
+        "ok": true,
+        "algoritmo": "XGBRegressor",
+        "amostras": 66,
+        "mae": 23.623,
+        "r2": -0.432,
+        "previsao_proximo_dia": 55.29,
+        "previsao_7_dias": 387.06,
+        "confianca": 0.84,
+        "importancias": [
+          {
+            "feature": "rolling3",
+            "peso": 0.2136
+          },
+          {
+            "feature": "rolling7",
+            "peso": 0.1964
+          },
+          {
+            "feature": "dia_mes",
+            "peso": 0.1534
+          },
+          {
+            "feature": "prev1",
+            "peso": 0.1375
+          },
+          {
+            "feature": "mes",
+            "peso": 0.1317
+          },
+          {
+            "feature": "dia_semana",
+            "peso": 0.095
+          },
+          {
+            "feature": "atividade_score",
+            "peso": 0.0724
+          }
+        ]
+      },
+      "observacao": "Igor/RK_SUB tem base quantitativa mais forte com metros e unidades estruturadas."
+    }
+  }
+}

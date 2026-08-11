@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ConstruData Ciclo Operacional</title>
+  <style>
+    :root { --navy:#071a31; --blue:#2354cf; --cyan:#1fd1ff; --green:#00bd73; --orange:#ff6f19; --red:#e92c3a; --bg:#eef2f6; --card:#fff; --line:#d8e0eb; --text:#07111f; --muted:#69778d; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}
+    .app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}.side{background:var(--navy);color:#d8e7ff}.project{height:38px;display:flex;align-items:center;padding:0 14px;background:#0b2039;border-bottom:1px solid #24476b;font-weight:800;font-size:13px}
+    .brand{display:flex;gap:12px;align-items:center;padding:16px 14px 20px}.logo{width:38px;height:38px;border-radius:8px;display:grid;place-items:center;background:#001f36;color:var(--cyan);font-weight:900}.brand strong{display:block;color:#fff}.brand span{font-size:10px;color:#35c9ef;letter-spacing:.12em;font-weight:800}
+    .nav-title{color:#5ea4d8;font-size:10px;letter-spacing:.16em;font-weight:900;padding:14px 16px 7px}nav a{height:28px;display:flex;align-items:center;margin:2px 12px;padding:0 10px;color:#9eb3c8;border-radius:7px;text-decoration:none;font-size:13px}nav a.active{color:#18d5ff;background:#123f66}
+    header{min-height:64px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:14px}h1{margin:0;font-size:17px}.status{font-size:12px;color:#d9e6ff;margin-top:5px}
+    .content{padding:18px 22px 28px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}select,.btn{height:34px;border-radius:7px;border:1px solid var(--line);padding:0 12px;background:#fff;font-weight:800}.btn{border:0;color:#fff;background:#153b8f;cursor:pointer}.btn.green{background:var(--green)}.btn.orange{background:var(--orange)}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 5px #0001}.kpi{padding:15px;min-height:105px}.label{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:900}.value{font-size:28px;font-weight:950;margin-top:9px}.sub{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.3}
+    .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:14px;margin-top:14px}.panel{padding:16px}.panel h2{font-size:14px;margin:0 0 12px}.steps{display:grid;gap:10px}.step{display:grid;grid-template-columns:36px 1fr 94px;gap:10px;align-items:center;border:1px solid #e4eaf3;background:#fbfcfe;border-radius:8px;padding:10px}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e7eefb;color:#2354cf;font-weight:950}.step strong{display:block;font-size:13px}.pill{justify-self:end;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:950}.OK{background:#dcfce7;color:#15803d}.PENDENTE{background:#ffedd5;color:#b45309}
+    table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f5f8fc;color:#5d6d83;text-align:left;text-transform:uppercase;font-size:11px;padding:10px;border-bottom:1px solid var(--line)}td{padding:10px;border-bottom:1px solid #edf1f7;vertical-align:top}
+    textarea{width:100%;height:180px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:12px;font-family:inherit;font-size:13px}.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:1080px){.app{grid-template-columns:1fr}.side{display:none}.grid,.kpis,.split{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column;padding:14px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="project">Rua Reseda</div>
+      <div class="brand"><div class="logo">C</div><div><strong>ConstruData</strong><span>HYDRONETWORK</span></div></div>
+      <nav>
+        <div class="nav-title">GESTAO</div><a href="/manage">Gestao 360</a><a href="/bi/analytics">BI Analytics</a>
+        <div class="nav-title">OPERACAO</div><a href="/ciclo-operacional" class="active">Ciclo Operacional</a><a href="/rdo">RDO</a><a href="/controle">Controle / Fluxo</a>
+      </nav>
+    </aside>
+    <main>
+      <header><div><h1>Ciclo Operacional 360</h1><div class="status" id="status">Carregando...</div></div><div><button class="btn orange" id="btnMl">Rodar ML/Fallback</button></div></header>
+      <section class="content">
+        <div class="toolbar"><select id="project"></select><button class="btn" id="reload">Atualizar</button><a class="btn green" href="/bi/analytics">Abrir BI</a></div>
+        <div class="kpis">
+          <div class="card kpi"><div class="label">RDOs</div><div class="value" id="kRdos">0</div><div class="sub">Campo diario</div></div>
+          <div class="card kpi"><div class="label">Desvios</div><div class="value" id="kDesvios">0</div><div class="sub">Planejado x realizado</div></div>
+          <div class="card kpi"><div class="label">Criticos</div><div class="value" id="kCriticos">0</div><div class="sub">Acao imediata</div></div>
+          <div class="card kpi"><div class="label">PPC medio</div><div class="value" id="kPpc">0</div><div class="sub">Percent plan complete</div></div>
+          <div class="card kpi"><div class="label">Rascunhos</div><div class="value" id="kReplan">0</div><div class="sub">Replanejamento</div></div>
+        </div>
+        <div class="grid">
+          <div class="card panel"><h2>Pipeline oficial</h2><div class="steps" id="steps"></div></div>
+          <div class="card panel">
+            <h2>Preencher planejamento por texto</h2>
+            <textarea id="planText" placeholder="Cole aqui o planejamento semanal do engenheiro..."></textarea>
+            <div class="split" style="margin-top:10px"><button class="btn green" id="sendPlan">Criar rascunho</button><button class="btn orange" id="validatePlan">Aprovar ultimo plano</button></div>
+            <div class="sub" id="planResult">O plano entra como RASCUNHO ate o diretor validar.</div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card panel"><h2>Desvios recentes</h2><table><thead><tr><th>Atividade</th><th>Meta</th><th>Realizado</th><th>PPC</th><th>Severidade</th></tr></thead><tbody id="desvios"></tbody></table></div>
+          <div class="card panel"><h2>Replanejamentos</h2><table><thead><tr><th>ID</th><th>Status</th><th>Nucleo</th><th>Acao</th></tr></thead><tbody id="replans"></tbody></table></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const fmt = new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}); let current=null, data=null;
+    const $=id=>document.getElementById(id); const n=v=>fmt.format(Number(v||0));
+    async function loadProjects(){const r=await fetch('/api/projetos'); const j=await r.json(); $('project').innerHTML=j.items.map(p=>`<option value="${p.id}">${p.nome}</option>`).join(''); current=$('project').value; await load();}
+    async function load(){current=$('project').value; $('status').textContent='Carregando ciclo...'; const r=await fetch(`/api/projetos/${current}/ciclo-operacional`); data=await r.json(); render(data);}
+    function render(j){$('status').textContent=`Projeto ${j.projeto.nome} - ${j.nucleos.join(', ')}`; $('kRdos').textContent=n(j.kpis.rdos_total); $('kDesvios').textContent=n(j.kpis.desvios_total); $('kCriticos').textContent=n(j.kpis.desvios_criticos); $('kPpc').textContent=n(j.kpis.ppc_medio); $('kReplan').textContent=n(j.kpis.replanejamentos_rascunho);
+      $('steps').innerHTML=j.steps.map(s=>`<div class="step"><div class="num">${s.ordem}</div><div><strong>${s.nome}</strong><div class="sub">${s.detalhe||''}</div></div><span class="pill ${s.status}">${s.status}</span></div>`).join('');
+      $('desvios').innerHTML=(j.desvios||[]).map(d=>`<tr><td>${d.atividade}</td><td>${n(d.meta)}</td><td>${n(d.realizado)}</td><td>${n(d.ppc)}%</td><td>${d.severidade}</td></tr>`).join('');
+      $('replans').innerHTML=(j.replanejamentos||[]).map(r=>`<tr><td>${r.id}</td><td>${r.status}</td><td>${r.nucleo}</td><td><button class="btn green" onclick="applyReplan(${r.id})">Aplicar</button></td></tr>`).join('');
+    }
+    async function sendPlan(){const texto=$('planText').value.trim(); if(!texto)return; const r=await fetch(`/api/projetos/${current}/planejamentos-semanais/preencher-texto`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texto})}); const j=await r.json(); $('planResult').textContent=r.ok?`Rascunho criado: plano #${j.planejamento.id}`:(j.detail||'Erro'); await load();}
+    async function validatePlan(){if(!data?.planejamento?.id)return; await fetch(`/api/projetos/${current}/planejamentos-semanais/${data.planejamento.id}/validar`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({aprovado:true,diretor:'Diretoria',observacao:'Aprovado pelo Ciclo Operacional 360'})}); await load();}
+    async function applyReplan(id){await fetch(`/api/projetos/${current}/replanejamentos/${id}/aplicar`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({diretor:'Diretoria',observacao:'Aplicado pelo Ciclo Operacional 360'})}); await load();}
+    $('reload').onclick=load; $('project').onchange=load; $('sendPlan').onclick=sendPlan; $('validatePlan').onclick=validatePlan; $('btnMl').onclick=async()=>{await fetch(`/api/projetos/${current}/ml/recalcular-desvios`,{method:'POST'}); await load();}; loadProjects().catch(e=>$('status').textContent=e.message);
+  </script>
+</body>
+</html>

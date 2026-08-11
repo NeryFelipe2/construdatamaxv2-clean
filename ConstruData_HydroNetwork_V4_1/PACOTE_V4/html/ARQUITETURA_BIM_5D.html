@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ConstruData — Arquitetura BIM 6D</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Manrope:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#06060f;--s1:#0c0c1a;--s2:#111128;--brd:#2a2a55;--acc:#00ff88;--agua:#00aaff;--red:#ff3355;--yel:#ffd000;--mag:#cc44ff;--ora:#ff8833;--txt:#d0d0e8;--dim:#556688;--wht:#f0f0ff}
+body{background:var(--bg);color:var(--txt);font-family:'Manrope',sans-serif;font-size:12px;padding:20px}
+.title{text-align:center;margin-bottom:24px}.title h1{font-size:22px;color:var(--acc);font-weight:800}.title p{color:var(--dim);font-size:11px;margin-top:4px}
+.section{margin-bottom:24px}.section h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid var(--brd)}
+.row{display:grid;gap:10px}.row3{grid-template-columns:repeat(3,1fr)}.row4{grid-template-columns:repeat(4,1fr)}.row5{grid-template-columns:repeat(5,1fr)}.row6{grid-template-columns:repeat(6,1fr)}.row7{grid-template-columns:repeat(7,1fr)}
+.box{background:var(--s1);border:1.5px solid var(--brd);border-radius:10px;padding:14px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.box:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.4)}.box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.box.green::before{background:var(--acc)}.box.blue::before{background:var(--agua)}.box.yellow::before{background:var(--yel)}.box.mag::before{background:var(--mag)}.box.ora::before{background:var(--ora)}.box.red::before{background:var(--red)}
+.box:hover.green{border-color:var(--acc)}.box:hover.blue{border-color:var(--agua)}.box:hover.yellow{border-color:var(--yel)}
+.box .ico{font-size:24px;margin-bottom:6px}.box .name{font-weight:700;font-size:12px;color:var(--wht);margin-bottom:4px}.box .file{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--acc);margin-bottom:4px}.box .desc{font-size:10px;color:var(--dim);line-height:1.5}.box .lines{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono';font-size:8px;color:var(--dim)}
+.arrow{text-align:center;font-size:20px;color:var(--brd);padding:6px 0}
+.center-box{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,170,255,.08));border:2px solid var(--acc);border-radius:12px;padding:16px;text-align:center;margin:10px auto;max-width:800px}
+.center-box h3{font-size:14px;color:var(--acc);margin-bottom:6px}.center-box code{font-family:'JetBrains Mono';font-size:10px;color:var(--agua);display:block;margin:4px 0}
+.stats{display:flex;justify-content:center;gap:30px;margin:16px 0;flex-wrap:wrap}.stat{text-align:center}.stat .val{font-size:28px;font-weight:800;font-family:'JetBrains Mono';color:var(--acc)}.stat .lbl{font-size:9px;color:var(--dim);text-transform:uppercase}
+.detail{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--s1);border:2px solid var(--acc);border-radius:12px;padding:24px;max-width:500px;width:90%;z-index:1000;max-height:80vh;overflow-y:auto}
+.detail h3{color:var(--acc);margin-bottom:10px}.detail pre{font-family:'JetBrains Mono';font-size:10px;color:var(--txt);background:var(--bg);padding:10px;border-radius:6px;overflow-x:auto;line-height:1.6}
+.detail .close{position:absolute;top:10px;right:14px;cursor:pointer;font-size:18px;color:var(--dim)}.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:999}
+.connector{text-align:center;color:var(--brd);font-size:14px;padding:4px;font-family:'JetBrains Mono'}
+</style></head><body>
+<div class="title"><h1>ConstruData — HydroNetwork</h1><p>Arquitetura BIM 6D · FCN Construções e Saneamento · V4</p></div>
+<div class="stats"><div class="stat"><div class="val">21</div><div class="lbl">Scripts Python</div></div><div class="stat"><div class="val">7</div><div class="lbl">HTML</div></div><div class="stat"><div class="val">1</div><div class="lbl">GUI Desktop</div></div><div class="stat"><div class="val">13.759</div><div class="lbl">Linhas</div></div><div class="stat"><div class="val">4</div><div class="lbl">LLMs</div></div><div class="stat"><div class="val">15+</div><div class="lbl">Formatos</div></div></div>
+<div class="section"><h2>Camada 1 — Entradas (7 formatos)</h2><div class="row row7">
+<div class="box green" onclick="showDetail('dxf')"><div class="ico">📁</div><div class="name">DXF</div><div class="file">ler_dxf_gdal.py</div><div class="desc">ProSaneamento</div><div class="lines">395L</div></div>
+<div class="box green"><div class="ico">📁</div><div class="name">DWG</div><div class="file">ler_dwg_aec.py</div><div class="desc">Civil 3D AEC</div><div class="lines">316L</div></div>
+<div class="box green"><div class="ico">📁</div><div class="name">LandXML</div><div class="file">ler_landxml.py</div><div class="desc">Export C3D</div><div class="lines">155L</div></div>
+<div class="box green"><div class="ico">📋</div><div class="name">JSON</div><div class="file">json.load()</div><div class="desc">Formato interno</div></div>
+<div class="box blue"><div class="ico">📄</div><div class="name">PDF</div><div class="file">motor_gemini.py</div><div class="desc">Gemini Vision</div><div class="lines">562L</div></div>
+<div class="box blue"><div class="ico">🖱️</div><div class="name">Mapa</div><div class="file">editor.html</div><div class="desc">EPANET Leaflet</div><div class="lines">1054L</div></div>
+<div class="box blue"><div class="ico">📸</div><div class="name">Foto</div><div class="file">motor_gemini.py</div><div class="desc">RDO Gemini</div></div>
+</div></div>
+<div class="arrow">▼ ▼ ▼ ▼ ▼ ▼ ▼</div>
+<div class="center-box"><h3>FORMATO INTERNO ÚNICO (pvs + trechos)</h3><code>pvs = {"PV01": {x, y, ct, cf, tipo, material_pv}}</code><code>trechos = [{pv_ini, pv_fim, dn_mm, ext_m, decl_mm, material, tipo}]</code><p style="font-size:10px;color:var(--dim);margin-top:6px">Todos os módulos lêem e geram esse formato. É sagrado.</p></div>
+<div class="arrow">▼ ▼ ▼ ▼ ▼ ▼</div>
+<div class="section"><h2>Camada 2 — Processamento (21 módulos)</h2>
+<div class="row row6" style="margin-bottom:10px">
+<div class="box yellow"><div class="ico">🔄</div><div class="name">Paramétrico</div><div class="file">motor_parametrico.py</div><div class="desc">PipeNetwork cascata</div><div class="lines">318L</div></div>
+<div class="box yellow"><div class="ico">📋</div><div class="name">Contratos</div><div class="file">motor_contratos.py</div><div class="desc">Multi-contrato 18 UFs</div><div class="lines">560L</div></div>
+<div class="box yellow"><div class="ico">🔧</div><div class="name">Pipeline</div><div class="file">construdata_pipeline.py</div><div class="desc">Orquestrador 6 etapas</div><div class="lines">203L</div></div>
+<div class="box mag"><div class="ico">🤖</div><div class="name">Multi-LLM</div><div class="file">motor_llm.py</div><div class="desc">Gemini+Groq+Mistral+Cohere</div><div class="lines">545L</div></div>
+<div class="box mag"><div class="ico">🔮</div><div class="name">Gemini</div><div class="file">motor_gemini.py</div><div class="desc">Foto+PDF+assistente</div><div class="lines">562L</div></div>
+<div class="box red"><div class="ico">📈</div><div class="name">ML</div><div class="file">motor_ml.py</div><div class="desc">XGBoost 5 cenários</div><div class="lines">247L</div></div>
+</div>
+<div class="connector">├── GERADORES ──────────────────────────── MOTORES ──┤</div>
+<div class="row row5" style="margin-top:10px">
+<div class="box green"><div class="ico">📋</div><div class="name">NS</div><div class="file">gerar_ns.py</div><div class="desc">PDF+JSON+HTML+GeoJSON</div><div class="lines">544L</div></div>
+<div class="box green"><div class="ico">📐</div><div class="name">Civil 3D</div><div class="file">gerar_civil3d.py</div><div class="desc">LandXML+DXF+Dynamo+SCR</div><div class="lines">803L</div></div>
+<div class="box green"><div class="ico">📐</div><div class="name">NTS 292</div><div class="file">gerar_cadastro_nts292.py</div><div class="desc">DXF SIRGAS 2000</div><div class="lines">458L</div></div>
+<div class="box green"><div class="ico">🏗️</div><div class="name">IFC LOD 500</div><div class="file">gerar_ifc_lod500.py</div><div class="desc">SweptDiskSolid+PSets</div><div class="lines">184L</div></div>
+<div class="box green"><div class="ico">📅</div><div class="name">Cronograma</div><div class="file">gerar_cronograma_macro.py</div><div class="desc">XML+P6+OpenProject</div><div class="lines">414L</div></div>
+</div>
+<div class="row row5" style="margin-top:10px">
+<div class="box blue"><div class="ico">💰</div><div class="name">Custo</div><div class="file">motor_custo.py</div><div class="desc">R$910/m BDI 25%</div><div class="lines">297L</div></div>
+<div class="box blue"><div class="ico">📊</div><div class="name">Medição</div><div class="file">motor_medicao.py</div><div class="desc">NS→BM Curva S</div><div class="lines">269L</div></div>
+<div class="box blue"><div class="ico">📐</div><div class="name">Lean+LPS</div><div class="file">motor_lean_lps.py</div><div class="desc">Takt PPC 6D CO2</div><div class="lines">475L</div></div>
+<div class="box blue"><div class="ico">🗺️</div><div class="name">Micro-Plan</div><div class="file">motor_microplanej.py</div><div class="desc">5 morfologias JIT</div><div class="lines">465L</div></div>
+<div class="box blue"><div class="ico">💧</div><div class="name">Perdas</div><div class="file">motor_perdas.py</div><div class="desc">IWA UARL ILI DMA</div><div class="lines">611L</div></div>
+</div></div>
+<div class="arrow">▼ ▼ ▼ ▼ ▼ ▼</div>
+<div class="section"><h2>Camada 3 — Interfaces (7 HTML + 1 GUI)</h2>
+<div class="row row4">
+<div class="box ora"><div class="ico">🖱️</div><div class="name">Editor EPANET</div><div class="file">construdata_editor.html</div><div class="desc">Leaflet toolbar 4 abas</div><div class="lines">1054L</div></div>
+<div class="box ora"><div class="ico">🌐</div><div class="name">Viewer 3D</div><div class="file">construdata_manage.html</div><div class="desc">Three.js 5 modos 4D</div><div class="lines">310L</div></div>
+<div class="box ora"><div class="ico">📊</div><div class="name">Controle</div><div class="file">construdata_controle.html</div><div class="desc">As-Built BM Curva S</div><div class="lines">576L</div></div>
+<div class="box ora"><div class="ico">📋</div><div class="name">RDO</div><div class="file">construdata_rdo.html</div><div class="desc">NS+custos+fotos</div><div class="lines">892L</div></div>
+</div><div class="row row4" style="margin-top:10px">
+<div class="box ora"><div class="ico">💧</div><div class="name">Perdas</div><div class="file">construdata_perdas.html</div><div class="desc">IWA Gauge Sankey</div><div class="lines">524L</div></div>
+<div class="box ora"><div class="ico">📐</div><div class="name">Fluxograma</div><div class="file">FLUXOGRAMA_BIM_5D.html</div><div class="desc">7 fases clicáveis</div><div class="lines">519L</div></div>
+<div class="box ora"><div class="ico">🏛️</div><div class="name">Arquitetura</div><div class="file">ARQUITETURA_BIM_5D.html</div><div class="desc">Este diagrama</div><div class="lines">482L</div></div>
+<div class="box yellow"><div class="ico">🖥️</div><div class="name">GUI Desktop</div><div class="file">construdata_gui.py</div><div class="desc">Tkinter 12 abas</div><div class="lines">1631L</div></div>
+</div></div>
+<div class="overlay" id="overlay" onclick="hideDetail()"></div>
+<div class="detail" id="detail"><span class="close" onclick="hideDetail()">✕</span><h3 id="det-title"></h3><pre id="det-content"></pre></div>
+<script>
+const D={dxf:{t:"ler_dxf_gdal.py",c:"GDAL + scipy clustering\nTOL_CLUSTER=2m TOL_LABEL=20m\n6 núcleos + 5 prolongamentos = 0 erros"},
+dwg:{t:"ler_dwg_aec.py",c:"libredwg → DXF → parse labels PV\nReconstrói topologia por nomes"},
+param:{t:"motor_parametrico.py",c:"PipeNetwork class\nmover_pv → recalcula ext→decl→Manning→custo\nGrafo de adjacência bidirecional"}};
+function showDetail(k){const d=D[k];if(!d)return;document.getElementById('det-title').textContent=d.t;document.getElementById('det-content').textContent=d.c;document.getElementById('detail').style.display='block';document.getElementById('overlay').style.display='block'}
+function hideDetail(){document.getElementById('detail').style.display='none';document.getElementById('overlay').style.display='none'}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideDetail()});
+</script></body></html>

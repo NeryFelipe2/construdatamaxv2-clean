@@ -1,0 +1,786 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0108)https://apps.autodesk.com/CIV3D/pt/Detail/HelpDoc?appId=4577325779540002143&appLang=pt&os=Win64&mode=preview -->
+<html lang="pt" class=" js canvas canvastext no-touch hashchange history draganddrop rgba multiplebgs borderimage boxshadow textshadow cssgradients csstransitions sessionstorage"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><script type="text/javascript" src="./Resources/a2c345a7d5"></script><script src="./Resources/nr-1198.min.js.download"></script><script type="text/javascript" async="" charset="utf-8" id="tealium-tag-7110" src="./Resources/analytics.js.download"></script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info = {"beacon":"bam-cell.nr-data.net","errorBeacon":"bam-cell.nr-data.net","licenseKey":"a2c345a7d5","applicationID":"226314546","transactionName":"ZFdRNRRYWEsABUwMXF0dfjclFnJdFQdRCXBcXEcTCVVaXRNJcABfQ3ZcAg==","queueTime":1,"applicationTime":103,"agent":"","atts":""}</script><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={licenseKey:"a2c345a7d5",applicationID:"226314546"};window.NREUM||(NREUM={}),__nr_require=function(e,t,n){function r(n){if(!t[n]){var i=t[n]={exports:{}};e[n][0].call(i.exports,function(t){var i=e[n][1][t];return r(i||t)},i,i.exports)}return t[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var i=0;i<n.length;i++)r(n[i]);return r}({1:[function(e,t,n){function r(){}function i(e,t,n){return function(){return o(e,[u.now()].concat(c(arguments)),t?null:this,n),t?void 0:this}}var o=e("handle"),a=e(6),c=e(7),f=e("ee").get("tracer"),u=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],p="api-",l=p+"ixn-";a(d,function(e,t){s[t]=i(p+t,!0,"api")}),s.addPageAction=i(p+"addPageAction",!0),s.setCurrentRouteName=i(p+"routeName",!0),t.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,t){var n={},r=this,i="function"==typeof t;return o(l+"tracer",[u.now(),e,n],r),function(){if(f.emit((i?"":"no-")+"fn-start",[u.now(),r,i],n),i)try{return t.apply(this,arguments)}catch(e){throw f.emit("fn-err",[arguments,this,e],n),e}finally{f.emit("fn-end",[u.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,t){m[t]=i(l+t)}),newrelic.noticeError=function(e,t){"string"==typeof e&&(e=new Error(e)),o("err",[e,u.now(),!1,t])}},{}],2:[function(e,t,n){function r(){return c.exists&&performance.now?Math.round(performance.now()):(o=Math.max((new Date).getTime(),o))-a}function i(){return o}var o=(new Date).getTime(),a=o,c=e(8);t.exports=r,t.exports.offset=a,t.exports.getLastTimestamp=i},{}],3:[function(e,t,n){function r(e,t){var n=e.getEntries();n.forEach(function(e){"first-paint"===e.name?d("timing",["fp",Math.floor(e.startTime)]):"first-contentful-paint"===e.name&&d("timing",["fcp",Math.floor(e.startTime)])})}function i(e,t){var n=e.getEntries();n.length>0&&d("lcp",[n[n.length-1]])}function o(e){e.getEntries().forEach(function(e){e.hadRecentInput||d("cls",[e])})}function a(e){if(e instanceof m&&!g){var t=Math.round(e.timeStamp),n={type:e.type};t<=p.now()?n.fid=p.now()-t:t>p.offset&&t<=Date.now()?(t-=p.offset,n.fid=p.now()-t):t=p.now(),g=!0,d("timing",["fi",t,n])}}function c(e){d("pageHide",[p.now(),e])}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var f,u,s,d=e("handle"),p=e("loader"),l=e(5),m=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){f=new PerformanceObserver(r);try{f.observe({entryTypes:["paint"]})}catch(v){}u=new PerformanceObserver(i);try{u.observe({entryTypes:["largest-contentful-paint"]})}catch(v){}s=new PerformanceObserver(o);try{s.observe({type:"layout-shift",buffered:!0})}catch(v){}}if("addEventListener"in document){var g=!1,w=["click","keydown","mousedown","pointerdown","touchstart"];w.forEach(function(e){document.addEventListener(e,a,!1)})}l(c)}},{}],4:[function(e,t,n){function r(e,t){if(!i)return!1;if(e!==i)return!1;if(!t)return!0;if(!o)return!1;for(var n=o.split("."),r=t.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var i=null,o=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var c=navigator.userAgent,f=c.match(a);f&&c.indexOf("Chrome")===-1&&c.indexOf("Chromium")===-1&&(i="Safari",o=f[1])}t.exports={agent:i,version:o,match:r}},{}],5:[function(e,t,n){function r(e){function t(){e(a&&document[a]?document[a]:document[i]?"hidden":"visible")}"addEventListener"in document&&o&&document.addEventListener(o,t,!1)}t.exports=r;var i,o,a;"undefined"!=typeof document.hidden?(i="hidden",o="visibilitychange",a="visibilityState"):"undefined"!=typeof document.msHidden?(i="msHidden",o="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(i="webkitHidden",o="webkitvisibilitychange",a="webkitVisibilityState")},{}],6:[function(e,t,n){function r(e,t){var n=[],r="",o=0;for(r in e)i.call(e,r)&&(n[o]=t(r,e[r]),o+=1);return n}var i=Object.prototype.hasOwnProperty;t.exports=r},{}],7:[function(e,t,n){function r(e,t,n){t||(t=0),"undefined"==typeof n&&(n=e?e.length:0);for(var r=-1,i=n-t||0,o=Array(i<0?0:i);++r<i;)o[r]=e[t+r];return o}t.exports=r},{}],8:[function(e,t,n){t.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,t,n){function r(){}function i(e){function t(e){return e&&e instanceof r?e:e?u(e,f,a):a()}function n(n,r,i,o,a){if(a!==!1&&(a=!0),!l.aborted||o){e&&a&&e(n,r,i);for(var c=t(i),f=v(n),u=f.length,s=0;s<u;s++)f[s].apply(c,r);var p=d[h[n]];return p&&p.push([b,n,r,c]),c}}function o(e,t){y[e]=v(e).concat(t)}function m(e,t){var n=y[e];if(n)for(var r=0;r<n.length;r++)n[r]===t&&n.splice(r,1)}function v(e){return y[e]||[]}function g(e){return p[e]=p[e]||i(n)}function w(e,t){s(e,function(e,n){t=t||"feature",h[n]=t,t in d||(d[t]=[])})}var y={},h={},b={on:o,addEventListener:o,removeEventListener:m,emit:n,get:g,listeners:v,context:t,buffer:w,abort:c,aborted:!1};return b}function o(e){return u(e,f,a)}function a(){return new r}function c(){(d.api||d.feature)&&(l.aborted=!0,d=l.backlog={})}var f="nr@context",u=e("gos"),s=e(6),d={},p={},l=t.exports=i();t.exports.getOrSetContext=o,l.backlog=d},{}],gos:[function(e,t,n){function r(e,t,n){if(i.call(e,t))return e[t];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,t,{value:r,writable:!0,enumerable:!1}),r}catch(o){}return e[t]=r,r}var i=Object.prototype.hasOwnProperty;t.exports=r},{}],handle:[function(e,t,n){function r(e,t,n,r){i.buffer([e],r),i.emit(e,t,n)}var i=e("ee").get("handle");t.exports=r,r.ee=i},{}],id:[function(e,t,n){function r(e){var t=typeof e;return!e||"object"!==t&&"function"!==t?-1:e===window?0:a(e,o,function(){return i++})}var i=1,o="nr@id",a=e("gos");t.exports=r},{}],loader:[function(e,t,n){function r(){if(!x++){var e=b.info=NREUM.info,t=p.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&t))return u.abort();f(y,function(t,n){e[t]||(e[t]=n)});var n=a();c("mark",["onload",n+b.offset],null,"api"),c("timing",["load",n]);var r=p.createElement("script");r.src="https://"+e.agent,t.parentNode.insertBefore(r,t)}}function i(){"complete"===p.readyState&&o()}function o(){c("mark",["domContent",a()+b.offset],null,"api")}var a=e(2),c=e("handle"),f=e(6),u=e("ee"),s=e(4),d=window,p=d.document,l="addEventListener",m="attachEvent",v=d.XMLHttpRequest,g=v&&v.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:v,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var w=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1198.min.js"},h=v&&g&&g[l]&&!/CriOS/.test(navigator.userAgent),b=t.exports={offset:a.getLastTimestamp(),now:a,origin:w,features:{},xhrWrappable:h,userAgent:s};e(1),e(3),p[l]?(p[l]("DOMContentLoaded",o,!1),d[l]("load",r,!1)):(p[m]("onreadystatechange",i),d[m]("onload",r)),c("mark",["firstbyte",a.getLastTimestamp()],null,"api");var x=0},{}],"wrap-function":[function(e,t,n){function r(e,t){function n(t,n,r,f,u){function nrWrapper(){var o,a,s,p;try{a=this,o=d(arguments),s="function"==typeof r?r(o,a):r||{}}catch(l){i([l,"",[o,a,f],s],e)}c(n+"start",[o,a,f],s,u);try{return p=t.apply(a,o)}catch(m){throw c(n+"err",[o,a,m],s,u),m}finally{c(n+"end",[o,a,p],s,u)}}return a(t)?t:(n||(n=""),nrWrapper[p]=t,o(t,nrWrapper,e),nrWrapper)}function r(e,t,r,i,o){r||(r="");var c,f,u,s="-"===r.charAt(0);for(u=0;u<t.length;u++)f=t[u],c=e[f],a(c)||(e[f]=n(c,s?f+r:r,i,f,o))}function c(n,r,o,a){if(!m||t){var c=m;m=!0;try{e.emit(n,r,o,t,a)}catch(f){i([f,n,r,o],e)}m=c}}return e||(e=s),n.inPlace=r,n.flag=p,n}function i(e,t){t||(t=s);try{t.emit("internal-error",e)}catch(n){}}function o(e,t,n){if(Object.defineProperty&&Object.keys)try{var r=Object.keys(e);return r.forEach(function(n){Object.defineProperty(t,n,{get:function(){return e[n]},set:function(t){return e[n]=t,t}})}),t}catch(o){i([o],n)}for(var a in e)l.call(e,a)&&(t[a]=e[a]);return t}function a(e){return!(e&&e instanceof Function&&e.apply&&!e[p])}function c(e,t){var n=t(e);return n[p]=e,o(e,n,s),n}function f(e,t,n){var r=e[t];e[t]=c(r,n)}function u(){for(var e=arguments.length,t=new Array(e),n=0;n<e;++n)t[n]=arguments[n];return t}var s=e("ee"),d=e(7),p="nr@original",l=Object.prototype.hasOwnProperty,m=!1;t.exports=r,t.exports.wrapFunction=c,t.exports.wrapInPlace=f,t.exports.argsToArray=u},{}]},{},["loader"]);</script>
+
+    <title>Autodesk App Store - C3DRENESG help file</title><link rel="stylesheet" href="./Resources/appstore-combined.min.css"></head>
+<body>
+<div id="main" class="detail-page helpdoc-page clearfix" style="min-height: 543px;">
+    <div id="content">
+        <div id="helpdoc-head">
+            <img id="helpdoc-head-icon" src="./Resources/resized_2ace84ac-7b2f-466c-b0ef-39d257661ce9_.png" alt="C3DRENESG">
+            <div id="helpdoc-head-description">
+                <h1 id="helpdoc-product-title">C3DRENESG</h1>
+                
+                <div class="clear"></div>
+                <hr>
+                <div class="seller">TBN2NET - plugins para Engenharia</div>
+                <div class="description">Plugin para dimensionamento de redes de drenagem e esgoto urbanos.</div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div id="helpdoc-tag"><a href="#description" class="helpdoc-breadcrumb">Description</a>
+                 
+                <a href="#generalinfo" class="helpdoc-breadcrumb">Instruções de uso geral</a>
+                <a href="#screensinfo" class="helpdoc-breadcrumb">Capturas de tela</a>
+                <a href="#commandinfo" class="helpdoc-breadcrumb">Comandos</a>
+                <a href="#inunininfo" class="helpdoc-breadcrumb">Instalação/Desinstalação</a>
+                <a href="#addinfo" class="helpdoc-breadcrumb">Informações adicionais</a>
+                <a href="#knownissueinfo" class="helpdoc-breadcrumb">Problemas conhecidos</a>
+                <a href="#contactinfo" class="helpdoc-breadcrumb">Contato</a>
+                <a href="#versionhistoryinfo" class="">Histórico de versões</a>
+            <div class="clear"></div>
+        </div><div class="helpdoc-element description">
+            <div class="clear"></div>
+            <h1 id="description">Description</h1>
+            <div class="helpdoc-text"> 
+
+<div class="description">
+<p>O<span>&nbsp;</span><strong>C3DRENESG</strong>&nbsp; é um programa de 
+dimensionamento de redes de drenagem e esgoto urbanos que roda dentro do 
+Autodesk® Civil3D®.</p>
+<p>Ele 
+usa o recurso de PipeNetworks, tornando o lançamento das redes e perfis muito 
+prático e rápido.</p>
+<p>Com 
+ele é possível dimensionar as redes, verificar a capacidade, calcular a 
+escavação de valas para a tubulação, obter notas de serviço e muito mais.</p>
+<p>O 
+processo de cálculo é iterativo e se pode verificar interferência com outras 
+redes ao mesmo tempo que se calcula a rede.</p></div>
+<h2>Trial 
+Description</h2>
+<div class="description">
+<p>Esta 
+é uma versão demonstrativa do programa.</p>
+<p>Ao 
+registrar a licença, você poderá testar o programa por 15 dias, sem limitação e 
+sem custo.</p>
+<p>Após 
+este período, o programa funcionará com limitações.</p></div></div></div>
+        
+        
+        <div class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="generalinfo">Instruções de uso geral</h1>
+            <div class="helpdoc-text"><p>Use o C3drenesg para lançar e dimensionar redes de drenagem e esgoto urbanos e também para calcular sarjetas e valas.</p>
+<p>Para mais informações siga: <a href="https://tbn2net.com/C3DRENESG4" target="_blank">https://tbn2net.com/C3DRENESG4</a>.</p></div>
+        </div>
+
+        
+        <div id="helpdoc-element-screenshot" class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="screensinfo">Capturas de tela</h1>
+            <div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_d9ab2649-8fad-450c-8818-f830e9de218b_.png" title="Análise de vazões" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_d9ab2649-8fad-450c-8818-f830e9de218b_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_a2b433eb-d3e0-411e-8f14-8581b6ce0efe_.png" title="Edição de seções de sarjetas" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_a2b433eb-d3e0-411e-8f14-8581b6ce0efe_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_ba0c2680-ee0e-48a9-9f7d-124b16192172_.png" title="Verificação de interferência" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_ba0c2680-ee0e-48a9-9f7d-124b16192172_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_0e6e8346-a48d-4116-a213-cf85661c6f7d_.png" title="Verificações na rede" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_0e6e8346-a48d-4116-a213-cf85661c6f7d_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_57af3fbe-83c7-43a8-aaa0-ad7172753702_.png" title="Verificação de cobrimento" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_57af3fbe-83c7-43a8-aaa0-ad7172753702_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_fe52fefe-5e41-4adb-8750-9a8a0a64e425_.png" title="Previews" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_fe52fefe-5e41-4adb-8750-9a8a0a64e425_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_17774bd7-603c-4a55-aec0-5e3df89e2769_.png" title="Novos dispositivos" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_17774bd7-603c-4a55-aec0-5e3df89e2769_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_cb7c4049-2a56-4b96-bfde-735bce29f3f0_.png" title="Novos dispositivos" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_cb7c4049-2a56-4b96-bfde-735bce29f3f0_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_c366de84-6364-42cb-8c1a-38a75a2b7139_.png" title="Novos dispositivos" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_c366de84-6364-42cb-8c1a-38a75a2b7139_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                        <div class="helpdoc-screenshot">
+                            <a href="./Resources/original_def9848a-af15-4bf4-8dc0-54aab8dc5a24_.png" title="Planilha principal" data-mime="Image" rel="gallery">
+                                <div class="helpdoc-img-container">
+                                    <span class="helper"></span>
+                                    <img class="helpdoc-screenshot-img" src="./Resources/original_def9848a-af15-4bf4-8dc0-54aab8dc5a24_.png">
+                                    <span class="helper"></span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        
+        <div class="helpdoc-command helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="commandinfo">Comandos</h1>
+            <div>
+                    <table class="helpdoc-table" id="helpdoc-table-command">
+                        <colgroup>
+                            <col style="width:150px">
+                            <col style="width:150px">
+                            <col style="width:530px">
+                        </colgroup>
+                        <tbody><tr>
+                            <th>Ícone da Faixa de opções/Barra de ferramentas</th>
+                            <th>Comando</th>
+                            <th>Descrição do comando</th>
+                        </tr>
+                        
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_d96cadf0-4797-4965-af87-bdd6a2dd0a8d_ccalcesconsidade.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CCalcEsconsidade
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Calcula a esconsidade dos tubos
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_bfc994bd-5b50-48ef-bf02-f7760ecc047d_creset.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Creset
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Reseta as regras, estilo ou seção de tubos e estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_b4cdcf14-957f-412c-84ea-1fcb4f2805bf_calin.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CALIN
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define o alinhamento de referência de tubos e estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_b3e834a6-2d60-45dd-81d3-189e1196df24_swappipe.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        SwapPipe
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Substitui múltiplos tubos
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_8bd31ad3-df99-43c3-ae24-4a9cb386fee7_updaterules.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Update Rules
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Atualiza as regras de C3drenesg da versão 2 para a versão 4
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_ad314ac4-45bd-48ab-b38f-36115bd3a3e5_cresumo.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Cresumo
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Calcula e mostra o resumo de materiais
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_cb15ddc3-19fa-4329-a188-8587d19ca704_c3dcalc.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        C3DCalc
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Roda a planilha de cálculo de drenagem e esgoto
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_3ae6ac7c-99ca-4fd8-a1b9-da35a17fd667_.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CSETPAR
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define o valor de propriedades de tubos e estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_eb9ccdba-a7bd-4ebd-9c32-387122361e0e_COffset.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Coffset
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define a distância das estruturas em relação ao eixo da pista
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_d9b94465-9ae4-4741-aefa-521ed2787d5d_SarjDelNo.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        SarjDelNo
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Remove uma entrada ou uma saída da sarjeta
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_ddf9ca20-bb27-4ff1-a941-4150b767a38b_cdrawparts.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CdrawParts
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Desenha as partes selecionadas no profileview
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_3a139a1a-9d5f-4e8b-9759-43f888929dd8_ceditsarj.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CEditSecaoSarj
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Cria e edita seções de sarjetas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_c4f2e374-cfbc-4c11-9006-0d9a81d7ad39_crot.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Crot
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define a rotação da estrutura em relação a pista
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_a5be1b6a-8a2e-4f67-9156-74577957cd3a_cdefsarj.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CDefSarj
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define um alinhamento como sarjeta
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_2ad8f250-7eed-4107-bf66-0b63d374ae54_cdela.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CDelA
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Remove a área de contribuição de uma estrutura
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_bc4ea5ac-cd9e-45c5-989b-19dbd95e160f_cnum.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Cnum
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Renumera uma pipenetwork
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_dd90e5a8-480e-4b41-b4e3-83c75afd9ef7_SarjAddNo.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        SarjAddNo
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Adiciona uma entrada ou uma saída a uma sarjeta
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_d15adbed-2327-4da9-81d6-7bc753857bc3_capagasarj.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CAPAGASARJ
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Remove a definição de sarjeta do alinhamento
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_61104bd1-1105-4dff-9d7e-9ab001a37ba3_SwapStruct.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        SwapStruct
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Substitui múltiplas estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_3b9e43e9-2c61-4f68-ae6b-76d84aeab533_sarjprops.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        SarjProps
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Mostra as propriedades de uma sarjeta
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_9c2f747e-33da-458e-b910-5ad755782e91_csarjeta.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Csarjeta
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Chama a planilha de cálculo de sarjetas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_d5d7b865-176f-4754-b736-ebb056b5f46d_ceditrules.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CEditRules
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Edita as regras do C3drenesg
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_e8043a0b-6f97-4b04-928e-09603907f5f2_editsarjstyles.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        EditSarjStyles
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Cria e edita estilos de sarjetas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_7978328a-e8b6-4545-9c40-7f1e536461b3_updatepartslist.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        UpdatePartsList
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Atualiza a parts list conforme novo catálogo
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_82978cb7-93d1-4b93-ac93-63bb541ec6e3_clist.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Clist
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Lista as propriedades de tubos e estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_0beb302d-b715-4ed0-9324-a3cc7660e207_crecon.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Crecon
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Força a reconexão de tubos e estruturas
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_4175a5f4-7a7e-44a7-97fa-21d4c5b24de7_carea.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        CAREA
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define a área de contribuição de uma estrutura
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="./Resources/original_36a31d3e-a053-42d3-bfbb-d561d5a6ce56_csurf.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p>
+                                        Csurf
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        Define a superfície de referência das estruturas e tubos
+                                    </p>
+                                </td>
+                            </tr>
+                    </tbody></table>
+            </div>
+        </div>
+
+        
+        <div class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="inunininfo">Instalação/Desinstalação</h1>
+            <div class="helpdoc-text"><p>O instalador que executou quando você baixou este aplicativo / plug-in da Autodesk App Store instala o aplicativo / plug-in. OU, basta clicar duas vezes no instalador baixado para instalar o aplicativo / plugin. Talvez seja necessário reiniciar o produto Autodesk para ativar o aplicativo / plug-in. Para desinstalar este plug-in, saia do produto Autodesk se você estiver executando no momento, basta reiniciar o instalador e selecione o botão "Desinstalar". OU, clique em Painel de controle&gt; Programas&gt; Programas e recursos (Windows 7/8.1/10) e desinstale como você faria com qualquer outro aplicativo do seu sistema.</p></div>
+        </div>
+
+        
+        <div class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="addinfo">Informações adicionais</h1>
+            <div class="helpdoc-text"><p>Recomendamos usar o catálogo de peças que acompanha o plugin para uma melhor experiencia</p></div>
+        </div>
+
+        
+        <div class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="knownissueinfo">Problemas conhecidos</h1>
+            <div class="helpdoc-text"><p>Pode ser que o Windows bloqueie as DLLs do programa. Para evitar isso, clique o botão direito do mouse sobre as DLLs, clique Propriedades e clique o botão Desbloquear. O mesmo deve ser feito com os arquivos de ajuda (*.chm)</p></div>
+        </div>
+
+        
+        <div class="helpdoc-element ">
+            <div class="clear"></div>
+            <h1 id="contactinfo">Contato</h1>
+            <div>
+                
+                <div>
+                    <div class="">Nome da empresa: TBN2NET - plugins para Engenharia</div>
+                    <div class="">URL da empresa: <a href="https://tbn2net.com/" target="_blank">https://tbn2net.com</a></div>
+                    <div class="">Contato de suporte: <a href="mailto:neyton@tbn2net.com">neyton@tbn2net.com</a></div>
+                </div>
+                
+                <div class="helpdoc-block ">
+                    <div class="clear"></div>
+                    <h4 id="authorinfo">Informações do Autor/Empresa</h4>
+                    <div class="helpdoc-text">TBN2NET - plugins para Engenharia</div>
+                </div>
+                
+                <div class="helpdoc-block ">
+                    <div class="clear"></div>
+                    <h4 id="supportinfo">Informações de suporte</h4>
+                    <div class="helpdoc-text"><p><a href="mailto:neyton@yahoo.com">neyton@yahoo.com</a></p>
+<p>whatsapp: +55 41 99827 5531</p>
+<p><a href="http://tbn2.blogspot.com"target="_blank">https://tbn2.blogspot.com</a></p>
+<p><a href="https://tbn2net.com/" target="_blank">https://tbn2net.com</a></p></div>
+                </div>
+            </div>
+        </div>
+
+        
+
+            <div class="helpdoc-version helpdoc-element">
+                <div class="clear"></div>
+                <h1 id="versionhistoryinfo">Histórico de versões</h1>
+                <div>
+                    <table class="helpdoc-table" id="helpdoc-table-version">
+                        <colgroup>
+                            <col style="width:150px">
+                            <col style="width:680px">
+                        </colgroup>
+                        <tbody><tr>
+                            <th>Número da versão</th>
+                            <th>Descrição da versão</th>
+                        </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        9125
+                                    </p>
+                                </td>
+                                <td style="white-space: pre-wrap;">Adicionado suporte ao Civil 3D 2022
+Revisão da ajuda</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        9050
+                                    </p>
+                                </td>
+                                <td style="white-space: pre-wrap;">Pequenas correções de bugs.
+Adicionadas as colunas X e Y
+Adicionado suporte ao Autodesk® Civil 3D® 2021</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        8970
+                                    </p>
+                                </td>
+                                <td style="white-space: pre-wrap;">Pequenas correções de bugs.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        8830
+                                    </p>
+                                </td>
+                                <td style="white-space: pre-wrap;">Adicionado suporte ao Autodesk® Civil 3D® 2019.
+Corrigido bug na edição de seções de sarjetas, que gravava a largura de forma incorreta em seções trapezoidais.</td>
+                            </tr>
+                    </tbody></table>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+</body></html>

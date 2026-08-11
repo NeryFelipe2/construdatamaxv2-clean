@@ -1,0 +1,130 @@
+{
+  "generator": "ConstruData LandXML Pipe Importer",
+  "generatedAtUtc": "2026-03-26T14:35:38.082525Z",
+  "drawingName": "sample.landxml",
+  "drawingPath": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_landxml_test\\sample.landxml",
+  "sourceFormat": "LandXML",
+  "landXmlUnits": {
+    "linearUnit": "meter",
+    "diameterUnit": "millimeter"
+  },
+  "summary": {
+    "networkCount": 1,
+    "pipeCount": 1,
+    "structureCount": 2
+  },
+  "networks": [
+    {
+      "handle": "N1",
+      "name": "Rede Principal",
+      "description": "Teste LandXML",
+      "partsListName": null,
+      "referenceAlignmentName": null,
+      "referenceSurfaceName": null,
+      "pipes": [
+        {
+          "handle": "P1",
+          "name": "T1",
+          "displayName": "T1",
+          "description": null,
+          "partDescription": "CircPipe",
+          "material": "PVC",
+          "partFamilyName": null,
+          "partSizeName": null,
+          "styleName": null,
+          "networkName": "Rede Principal",
+          "startStructureHandle": "S1",
+          "startStructureName": "PV1",
+          "endStructureHandle": "S2",
+          "endStructureName": "PV2",
+          "startPoint": {
+            "x": 359100.0,
+            "y": 7353000.0,
+            "z": 99.5
+          },
+          "endPoint": {
+            "x": 359110.0,
+            "y": 7353010.0,
+            "z": 98.9
+          },
+          "length2D": 14.142135623730951,
+          "length2DCenterToCenter": 14.142135623730951,
+          "length3D": 14.154857823376396,
+          "length3DCenterToCenter": 14.154857823376396,
+          "slope": 0.04242640687119245,
+          "innerDiameterOrWidth": 0.3,
+          "outerDiameterOrWidth": null,
+          "manningCoefficient": null,
+          "crossSectionalShape": "CircPipe"
+        }
+      ],
+      "structures": [
+        {
+          "handle": "S1",
+          "name": "PV1",
+          "displayName": "PV1",
+          "description": null,
+          "partDescription": "CircStruct",
+          "material": null,
+          "partFamilyName": null,
+          "partSizeName": null,
+          "styleName": null,
+          "networkName": "Rede Principal",
+          "location": {
+            "x": 359100.0,
+            "y": 7353000.0,
+            "z": 100.2
+          },
+          "easting": 359100.0,
+          "northing": 7353000.0,
+          "rimElevation": 101.0,
+          "sumpElevation": 99.5,
+          "sumpDepth": 1.5,
+          "connectedPipesCount": 1,
+          "diameterOrWidth": 1.2,
+          "innerDiameterOrWidth": 1.2,
+          "structureType": "CircStruct",
+          "connectedPipeNames": [
+            "T1"
+          ],
+          "connectedPipeHandles": [
+            "P1"
+          ]
+        },
+        {
+          "handle": "S2",
+          "name": "PV2",
+          "displayName": "PV2",
+          "description": null,
+          "partDescription": "CircStruct",
+          "material": null,
+          "partFamilyName": null,
+          "partSizeName": null,
+          "styleName": null,
+          "networkName": "Rede Principal",
+          "location": {
+            "x": 359110.0,
+            "y": 7353010.0,
+            "z": 99.7
+          },
+          "easting": 359110.0,
+          "northing": 7353010.0,
+          "rimElevation": 100.7,
+          "sumpElevation": 98.9,
+          "sumpDepth": 1.7999999999999972,
+          "connectedPipesCount": 1,
+          "diameterOrWidth": 1.2,
+          "innerDiameterOrWidth": 1.2,
+          "structureType": "CircStruct",
+          "connectedPipeNames": [
+            "T1"
+          ],
+          "connectedPipeHandles": [
+            "P1"
+          ]
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

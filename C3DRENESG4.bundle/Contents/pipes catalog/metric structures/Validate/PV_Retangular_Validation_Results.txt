@@ -1,0 +1,32 @@
+Begin Part Validation | PV_Retangular
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- PVQ
+OK: Part Description parameter validated -- PV_Retangular
+OK: Part Name parameter validated -- PV_Retangular
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 334F5352-E9BD-482A-A902-C14AB08A3E2B
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter LenB2 uses Context=Geometry_Distance3D
+OK: Calc Parameter SBSH uses Context=StructHeight
+OK: Calc Parameter SBSL uses Context=StructLength
+OK: Calc Parameter SBSW uses Context=StructWidth
+OK: Calc Parameter SFL uses Context=StructFrameLength
+OK: Calc Parameter SFW uses Context=StructFrameWidth
+OK: Calc Parameter SVPC uses Context=StructVertPipeClearance
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+ 
+OK: Query validation successful
+
+OK: Part Validated | PV_Retangular\PV_Retangular.xml

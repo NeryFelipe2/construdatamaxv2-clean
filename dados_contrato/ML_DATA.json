@@ -1,0 +1,702 @@
+{
+  "ML_INSIGHTS": [
+    [
+      "ANÁLISE ML — XGBoost + GridSearchCV | SLNR SANTOS",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "R²=0.271 | 124 amostras | Params: {'learning_rate'",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "DIAGNÓSTICO ATUAL",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Ligações/mês atual",
+      "366",
+      "Dados Jan-Mar/2026",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Meta 2X",
+      "733",
+      "Dobrar output",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Meta SABESP contrato",
+      "1.000+",
+      "28.031 lig em 600 dias = 1.402/mês",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Rede executada",
+      "5.250m em 70 dias",
+      "75m/dia todas as frentes",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Metros p/ ligação",
+      "6.1m/lig",
+      "5.250m ÷ 855 lig",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Equipes ativas",
+      "6 frentes",
+      "SM+JC, Israel, Tetéu, Criadores, Pantanal, (rotati",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Ciclo completo atual",
+      "~76 dias",
+      "Do cadastro à ligação concluída",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Caminho crítico",
+      "47 dias",
+      "Etapas não-paralelizáveis",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "XGBOOST — FEATURE IMPORTANCE (ligações)",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "lig_rolling_3",
+      "0.5",
+      "████████████████████",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "rede_rolling_3",
+      "0.1570000052452087",
+      "██████",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "pvs",
+      "0.1289999932050705",
+      "█████",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "mes",
+      "0.09300000220537186",
+      "███",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "dia_semana_num",
+      "0.08299999684095383",
+      "███",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "nucleo_enc",
+      "0.0390000008046627",
+      "█",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "equipe",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "INSIGHT PRINCIPAL",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "O momentum (lig_rolling_3 = 50%) é o fator #1. Equ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  ],
+  "PIPELINE_11_ETAPAS": [
+    [
+      "PIPELINE 11 ETAPAS — Micro-cronograma para 2X liga",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "#",
+      "ETAPA",
+      "EQUIPE",
+      "DIAS ATUAL",
+      "DIAS META 2X",
+      "PARALELO?",
+      "GARGALO",
+      "AÇÃO P/ 2X"
+    ],
+    [
+      "1",
+      "Cadastro Social",
+      "Social",
+      "5",
+      "3",
+      "SIM",
+      "🟢",
+      "2 equipes paralelas, tablets com form digital"
+    ],
+    [
+      "2",
+      "Cartografia",
+      "Topo",
+      "3",
+      "2",
+      "SIM",
+      "🟢",
+      "Drone + ortofoto automática"
+    ],
+    [
+      "3",
+      "Topografia",
+      "Topo",
+      "5",
+      "3",
+      "SIM",
+      "🟢",
+      "RTK + coleta automática → Civil 3D"
+    ],
+    [
+      "4",
+      "Projeto",
+      "Engenharia",
+      "10",
+      "5",
+      "NÃO",
+      "🔴 CRÍTICO",
+      "2 projetistas + template ProSaneamento"
+    ],
+    [
+      "5",
+      "Planejamento",
+      "Engenharia",
+      "3",
+      "2",
+      "SIM",
+      "🟢",
+      "ConstruData automação → GMS/Excel/QML"
+    ],
+    [
+      "6",
+      "Execução Rede",
+      "Campo",
+      "15",
+      "8",
+      "NÃO",
+      "🔴 CRÍTICO",
+      "+4 equipes MEC, frentes simultâneas AG+ESG"
+    ],
+    [
+      "7",
+      "Lavagem + Coliformes",
+      "Lab",
+      "7",
+      "3",
+      "NÃO",
+      "🔴 CRÍTICO",
+      "Lab express Santos, coleta 2x/semana"
+    ],
+    [
+      "8",
+      "Liberação SABESP",
+      "SABESP",
+      "15",
+      "7",
+      "NÃO",
+      "🔴 CRÍTICO",
+      "Lote de 50 lig/vez, reunião semanal fixa"
+    ],
+    [
+      "9",
+      "Ligação Intradomiciliar",
+      "Intra",
+      "2",
+      "1",
+      "SIM",
+      "🟡",
+      "3 equipes intra rodando em paralelo"
+    ],
+    [
+      "10",
+      "Gerar docs SABESP",
+      "Admin",
+      "10",
+      "5",
+      "SIM",
+      "🟡",
+      "Automação: GIS → PDF → SABESP automático"
+    ],
+    [
+      "11",
+      "Ligação Concluída",
+      "Final",
+      "1",
+      "1",
+      "SIM",
+      "🟢",
+      "Cadastro final + foto + assinatura digital"
+    ],
+    [
+      "",
+      "TOTAL CICLO",
+      "",
+      "76",
+      "40",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "CAMINHO CRÍTICO (não-paralelo)",
+      "",
+      "47",
+      "23",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "RESULTADO",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "Ciclo crítico: 47d → 23d (redução 51%) | Ligações:",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  ],
+  "CENARIOS_2X": [
+    [
+      "CENÁRIOS DE ACELERAÇÃO — Custo × Benefício",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "CENÁRIO",
+      "INVEST./MÊS",
+      "LIG/MÊS",
+      "Δ vs ATUAL",
+      "CUSTO/LIG",
+      "PAYBACK",
+      "ROI"
+    ],
+    [
+      "ATUAL (base)",
+      "",
+      "366",
+      "",
+      "",
+      "-",
+      "base"
+    ],
+    [
+      "A: +2 eq rede + lab express",
+      "R$ 95k",
+      "500",
+      "+134",
+      "710",
+      "2 meses",
+      "Moderado"
+    ],
+    [
+      "B: Pipeline otimizado (2X)",
+      "R$ 180k",
+      "733",
+      "+367",
+      "490",
+      "1.5 meses",
+      "Alto"
+    ],
+    [
+      "C: Full scale (meta SABESP)",
+      "R$ 450k",
+      "1000",
+      "+634",
+      "710",
+      "3 meses",
+      "Máximo"
+    ],
+    [
+      "D: Só automação (sem equipe)",
+      "R$ 25k",
+      "450",
+      "+84",
+      "298",
+      "1 mês",
+      "Excelente"
+    ]
+  ],
+  "MICRO_CRONOGRAMA": [
+    [
+      "MICRO-CRONOGRAMA SEMANAL — Abr a Set/2026 | Meta: ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "FRENTE",
+      "ATIVIDADE",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6"
+    ],
+    [
+      "SM+JC ESG",
+      "Rede ESG 4km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "SM+JC AG",
+      "Finalizar AG 251m",
+      "█",
+      "█",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "SM+JC",
+      "Lavagem+Lib+Intra",
+      "",
+      "",
+      "▓",
+      "▓",
+      "▓",
+      "▓"
+    ],
+    [
+      "TETEU ESG",
+      "Rede ESG 4km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "TETEU AG",
+      "Rede AG 4km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "TETEU",
+      "Lavagem+Lib+Intra",
+      "",
+      "",
+      "",
+      "",
+      "▓",
+      "▓"
+    ],
+    [
+      "CRIADORES ESG",
+      "Rede ESG 4.6km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "CRIADORES AG",
+      "AG restante",
+      "█",
+      "█",
+      "█",
+      "█",
+      "",
+      ""
+    ],
+    [
+      "CRIADORES",
+      "Lavagem+Lib+Intra",
+      "",
+      "",
+      "",
+      "",
+      "▓",
+      "▓"
+    ],
+    [
+      "PANTANAL ESG",
+      "Rede ESG 3.7km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "PANTANAL AG",
+      "Rede AG 3.7km",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "PANTANAL",
+      "Lavagem+Lib+Intra",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "COMPRAS",
+      "Pedidos materiais",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█",
+      "█"
+    ],
+    [
+      "SABESP",
+      "Liberações em lote",
+      "",
+      "",
+      "▓",
+      "▓",
+      "▓",
+      "▓"
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "META LIGAÇÕES",
+      "acumulado",
+      "45",
+      "135",
+      "270",
+      "453",
+      "636",
+      "819"
+    ]
+  ]
+}

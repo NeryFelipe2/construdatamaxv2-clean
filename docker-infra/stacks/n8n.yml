@@ -1,0 +1,125 @@
+# ============================================================
+# N8N — Motor de Automação (Modo Fila - Produção)
+# ============================================================
+# 3 containers: Editor + Webhook + Worker
+# Deploy via Portainer → Stacks → Add Stack
+# ============================================================
+
+version: "3.8"
+
+services:
+  # ---------- N8N EDITOR (Interface Web) ----------
+  n8n_editor:
+    image: n8nio/n8n:latest
+    command: start
+    environment:
+      # Banco
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-rk_main}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-rk_admin}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      # Redis (Queue Mode)
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD:-RkRedis2026!Pass}
+      # Config Geral
+      - N8N_HOST=${N8N_HOST:-n8n.localhost}
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-https}
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://n8n.localhost/}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-mude-esta-chave-unica-rk2026}
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+      - N8N_DEFAULT_LOCALE=pt-BR
+      # Segurança
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-RkN8n2026!Pass}
+    volumes:
+      - /opt/rk-infra/n8n_data:/home/node/.n8n
+    networks:
+      - rk_internal
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN:-localhost}`)
+        - traefik.http.routers.n8n.entrypoints=websecure
+        - traefik.http.routers.n8n.tls.certresolver=letsencrypt
+        - traefik.http.services.n8n.loadbalancer.server.port=5678
+      resources:
+        limits:
+          memory: 1G
+
+  # ---------- N8N WEBHOOK (Recebe webhooks externos) ----------
+  n8n_webhook:
+    image: n8nio/n8n:latest
+    command: webhook
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-rk_main}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-rk_admin}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD:-RkRedis2026!Pass}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-mude-esta-chave-unica-rk2026}
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://n8n.localhost/}
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+    volumes:
+      - /opt/rk-infra/n8n_data:/home/node/.n8n
+    networks:
+      - rk_internal
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.n8n-webhook.rule=Host(`n8n.${DOMAIN:-localhost}`) && PathPrefix(`/webhook`)
+        - traefik.http.routers.n8n-webhook.entrypoints=websecure
+        - traefik.http.routers.n8n-webhook.tls.certresolver=letsencrypt
+        - traefik.http.services.n8n-webhook.loadbalancer.server.port=5678
+
+  # ---------- N8N WORKER (Processa as automações) ----------
+  n8n_worker:
+    image: n8nio/n8n:latest
+    command: worker
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-rk_main}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-rk_admin}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD:-RkRedis2026!Pass}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-mude-esta-chave-unica-rk2026}
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+    volumes:
+      - /opt/rk-infra/n8n_data:/home/node/.n8n
+    networks:
+      - rk_internal
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+
+networks:
+  rk_internal:
+    external: true
+  traefik_public:
+    external: true

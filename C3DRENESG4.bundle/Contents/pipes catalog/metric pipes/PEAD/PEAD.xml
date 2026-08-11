@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<LandPart desc="Part Table" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink" fixColumn="C1">
+	<ColumnConstView desc="Parameter-driven Display" id="CCV1" viewKey="3d" viewName="AeccPartRecipe" pathsRelativeTo="Table">
+		<Images>
+			<Image>
+				<URL xlink:title="Part Reference Image" xlink:href="PEAD.bmp"/>
+			</Image>
+		</Images>
+		<Recipe>PEAD.dwg</Recipe>
+	</ColumnConstView>
+	<ColumnUnique desc="Primary Key" datatype="string" name="UUID" visible="0">
+		<RowUnique id="r0">2F3A269B-F7B5-4FAD-9799-39EE72C2D153</RowUnique>
+		<RowUnique id="r1">80797F1A-B025-433D-8ECC-C62D9F774FF3</RowUnique>
+		<RowUnique id="r2">E379ED8B-D45F-4F63-9166-A8A32E046B63</RowUnique>
+		<RowUnique id="r3">CB9DADB5-06D8-4A2B-B923-90FEFA0A3974</RowUnique>
+		<RowUnique id="r4">71378E6B-D15F-4255-A0E8-09FEFCAEEA44</RowUnique>
+		<RowUnique id="r5">55E2F068-D36B-44C0-8E01-7F0B5DD44C74</RowUnique>
+		<RowUnique id="r6">E42AAC91-2A78-4E9E-B5EA-40F6B48D9D49</RowUnique>
+		<RowUnique id="r7">9CE54802-9CED-439A-A3F3-1B79E2CCA72F</RowUnique>
+		<RowUnique id="r8">355350EC-6460-4781-ADA6-377F453192F8</RowUnique>
+	</ColumnUnique>
+	<Column desc="Inner Pipe Diameter" dataType="float" unit="mm" name="PID" id="C1" visible="1" context="PipeInnerDiameter" index="0">
+		<Row id="r0">303.0000</Row>
+		<Row id="r1">375.0000</Row>
+		<Row id="r2">451.0000</Row>
+		<Row id="r3">603.0000</Row>
+		<Row id="r4">772.0000</Row>
+		<Row id="r5">908.0000</Row>
+		<Row id="r6">1063.0000</Row>
+		<Row id="r7">1218.0000</Row>
+		<Row id="r8">1521.0000</Row>
+	</Column>
+	<Column desc="Wall Thickness" dataType="float" unit="mm" name="WTh" id="C2" visible="1" context="WallThickness" index="0">
+		<Row id="r0">56.0000</Row>
+		<Row id="r1">73.0000</Row>
+		<Row id="r2">94.0000</Row>
+		<Row id="r3">114.0000</Row>
+		<Row id="r4">129.0000</Row>
+		<Row id="r5">146.0000</Row>
+		<Row id="r6">153.0000</Row>
+		<Row id="r7">156.0000</Row>
+		<Row id="r8">178.0000</Row>
+	</Column>
+	<ColumnConstList desc="Tubo Existente" dataType="string" unit="" name="CTravBool" id="CCL1" visible="1" context="CTravBool_" index="0">
+		<Item id="i0">False</Item>
+		<Item id="i1">True</Item>
+	</ColumnConstList>
+	<ColumnConst desc="Part Domain" dataType="string" unit="" name="PDom" id="CC0" visible="0" context="Catalog_Domain" index="0">Pipe_Domain</ColumnConst>
+	<ColumnConst desc="Part Type" dataType="string" unit="" name="PTyp" id="CC1" visible="1" context="Catalog_PartType" index="0">Pipe</ColumnConst>
+	<ColumnConst desc="Part Subtype" dataType="string" unit="" name="PSTyp" id="CC2" visible="1" context="Catalog_SubType" index="0">Simples</ColumnConst>
+	<ColumnConst desc="Part Name" dataType="string" unit="" name="PrtNm" id="CC3" visible="0" context="Catalog_PartName" index="0">PEAD</ColumnConst>
+	<ColumnConst desc="Part Description" dataType="string" unit="" name="PrtD" id="CC4" visible="1" context="Catalog_PartDesc" index="0">PEAD</ColumnConst>
+	<ColumnConst desc="Part ID" dataType="string" unit="" name="PrtID" id="CC5" visible="0" context="Catalog_PartID" index="0">E2A2470B-6183-4ACE-8599-FCAD025DF010</ColumnConst>
+	<ColumnConst desc="Data Version" dataType="string" unit="" name="DVer" id="CC6" visible="0" context="DataVersion" index="0">2.0</ColumnConst>
+	<ColumnConst desc="Content Type" dataType="int" unit="" name="CntTy" id="CC7" visible="0" context="Content_Type" index="0">4</ColumnConst>
+	<ColumnConst desc="Hide Part Flag" dataType="bool" unit="" name="HPrtF" id="CC8" visible="0" context="Catalog_PartHide" index="0">0</ColumnConst>
+	<ColumnConst desc="Cross Sectional Shape" dataType="string" unit="" name="CSS" id="CC9" visible="1" context="SweptShape" index="0">SweptShape_Circular</ColumnConst>
+	<ColumnConst desc="Custom Sizing Flag" dataType="bool" unit="" name="CusSF" id="CC10" visible="0" context="CustomPartSizing_Flag" index="0">0</ColumnConst>
+	<ColumnConst desc="Espaçamento entre tubos" dataType="float" unit="mm" name="Espacamento" id="CC11" visible="1" context="Espacamento_" index="0">0.0000</ColumnConst>
+	<ColumnCalc desc="Part Size Name" dataType="string" unit="" name="PrtSN" id="CCA0" visible="1" context="Catalog_PartSizeName" index="0">"PEAD " + FormatNumber($PID,0) + " mm"</ColumnCalc>
+	<ColumnCalc desc="Body Diameter  1" dataType="float" unit="mm" name="BdyD1" id="CCA1" visible="0" context="BodyGeometry_Diameter" index="1">$PID</ColumnCalc>
+</LandPart>

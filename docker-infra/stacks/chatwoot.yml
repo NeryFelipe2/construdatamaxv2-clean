@@ -1,0 +1,109 @@
+# ============================================================
+# CHATWOOT — Plataforma de Atendimento Multi-Canal
+# ============================================================
+# Deploy via Portainer → Stacks → Add Stack
+# Inclui: Web, Sidekiq (processamento), + integra com SMTP
+# ============================================================
+
+version: "3.8"
+
+services:
+  chatwoot_web:
+    image: chatwoot/chatwoot:latest
+    environment:
+      # ---------- Rails ----------
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=${CHATWOOT_SECRET_KEY:-gere-com-openssl-rand-hex-64-aqui}
+      - FRONTEND_URL=https://chat.${DOMAIN:-localhost}
+      - DEFAULT_LOCALE=pt_BR
+      
+      # ---------- Banco de Dados ----------
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=chatwoot_production
+      - POSTGRES_USERNAME=${POSTGRES_USER:-rk_admin}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      
+      # ---------- Redis ----------
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-RkRedis2026!Pass}@redis:6379
+      
+      # ---------- SMTP (E-mail) ----------
+      - MAILER_SENDER_EMAIL=${SMTP_EMAIL:-rk@rkengenharia.com}
+      - SMTP_DOMAIN=${SMTP_DOMAIN:-gmail.com}
+      - SMTP_ADDRESS=${SMTP_ADDRESS:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USERNAME=${SMTP_EMAIL:-rk@rkengenharia.com}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-sua-senha-de-app}
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      
+      # ---------- Storage ----------
+      - ACTIVE_STORAGE_SERVICE=local
+      
+      # ---------- Misc ----------
+      - ENABLE_ACCOUNT_SIGNUP=false
+      - LOG_LEVEL=warn
+    
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - chatwoot_storage:/app/storage
+      - chatwoot_public:/app/public
+    networks:
+      - rk_internal
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.chatwoot.rule=Host(`chat.${DOMAIN:-localhost}`)
+        - traefik.http.routers.chatwoot.entrypoints=websecure
+        - traefik.http.routers.chatwoot.tls.certresolver=letsencrypt
+        - traefik.http.services.chatwoot.loadbalancer.server.port=3000
+      resources:
+        limits:
+          memory: 1G
+
+  chatwoot_sidekiq:
+    image: chatwoot/chatwoot:latest
+    environment:
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=${CHATWOOT_SECRET_KEY:-gere-com-openssl-rand-hex-64-aqui}
+      - FRONTEND_URL=https://chat.${DOMAIN:-localhost}
+      - DEFAULT_LOCALE=pt_BR
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=chatwoot_production
+      - POSTGRES_USERNAME=${POSTGRES_USER:-rk_admin}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-RkEng2026!SecurePass}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-RkRedis2026!Pass}@redis:6379
+      - MAILER_SENDER_EMAIL=${SMTP_EMAIL:-rk@rkengenharia.com}
+      - SMTP_DOMAIN=${SMTP_DOMAIN:-gmail.com}
+      - SMTP_ADDRESS=${SMTP_ADDRESS:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USERNAME=${SMTP_EMAIL:-rk@rkengenharia.com}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-sua-senha-de-app}
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      - ACTIVE_STORAGE_SERVICE=local
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - chatwoot_storage:/app/storage
+    networks:
+      - rk_internal
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+
+volumes:
+  chatwoot_storage:
+  chatwoot_public:
+
+networks:
+  rk_internal:
+    external: true
+  traefik_public:
+    external: true

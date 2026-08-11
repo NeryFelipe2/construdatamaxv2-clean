@@ -1,0 +1,3986 @@
+{
+  "structs": {
+    "StartNullStruct0": {
+      "name": "StartNullStruct0",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352946.863565362,
+      "x_este": 359722.98862263083
+    },
+    "EndNullStruct0": {
+      "name": "EndNullStruct0",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352867.374000207,
+      "x_este": 359737.18865459005
+    },
+    "StartNullStruct1": {
+      "name": "StartNullStruct1",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7353080.9452215005,
+      "x_este": 359296.34862009867
+    },
+    "StartNullStruct2": {
+      "name": "StartNullStruct2",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7353101.595217962,
+      "x_este": 359150.366865008
+    },
+    "EndNullStruct1": {
+      "name": "EndNullStruct1",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7353080.9452215005,
+      "x_este": 359296.34862009867
+    },
+    "EndNullStruct2": {
+      "name": "EndNullStruct2",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7353100.863635009,
+      "x_este": 359134.0273721939
+    },
+    "EndNullStruct3": {
+      "name": "EndNullStruct3",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352947.368925646,
+      "x_este": 359724.1597036043
+    },
+    "StartNullStruct3": {
+      "name": "StartNullStruct3",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352960.255673591,
+      "x_este": 359655.5174878711
+    },
+    "EndNullStruct4": {
+      "name": "EndNullStruct4",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352849.855521514,
+      "x_este": 359544.4068516849
+    },
+    "EndNullStruct5": {
+      "name": "EndNullStruct5",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352960.255673591,
+      "x_este": 359655.5174878711
+    },
+    "StartNullStruct4": {
+      "name": "StartNullStruct4",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352351.9127785005,
+      "x_este": 359294.1777048613
+    },
+    "EndNullStruct6": {
+      "name": "EndNullStruct6",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352250.962674949,
+      "x_este": 359377.5172961233
+    },
+    "StartNullStruct5": {
+      "name": "StartNullStruct5",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352849.855521514,
+      "x_este": 359544.4068516849
+    },
+    "EndNullStruct7": {
+      "name": "EndNullStruct7",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352881.955513734,
+      "x_este": 359305.3170899247
+    },
+    "StartNullStruct6": {
+      "name": "StartNullStruct6",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352881.955513734,
+      "x_este": 359305.3170899247
+    },
+    "EndNullStruct8": {
+      "name": "EndNullStruct8",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352813.584377619,
+      "x_este": 359292.4065615104
+    },
+    "StartNullStruct7": {
+      "name": "StartNullStruct7",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352813.584377619,
+      "x_este": 359292.4065615104
+    },
+    "EndNullStruct9": {
+      "name": "EndNullStruct9",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352351.9127785005,
+      "x_este": 359294.1777048613
+    },
+    "EndNullStruct10": {
+      "name": "EndNullStruct10",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352391.227636232,
+      "x_este": 359283.4449278674
+    },
+    "EndNullStruct11": {
+      "name": "EndNullStruct11",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352401.823514055,
+      "x_este": 359272.48012718983
+    },
+    "EndNullStruct12": {
+      "name": "EndNullStruct12",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352397.60236451,
+      "x_este": 359274.3754564709
+    },
+    "EndNullStruct13": {
+      "name": "EndNullStruct13",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352402.0383767765,
+      "x_este": 359282.33449641045
+    },
+    "EndNullStruct14": {
+      "name": "EndNullStruct14",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352412.216937329,
+      "x_este": 359282.8740872841
+    },
+    "StartNullStruct8": {
+      "name": "StartNullStruct8",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352706.145195179,
+      "x_este": 359202.4509494266
+    },
+    "EndNullStruct15": {
+      "name": "EndNullStruct15",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352714.11571495,
+      "x_este": 359273.5104816751
+    },
+    "EndNullStruct16": {
+      "name": "EndNullStruct16",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352627.789368841,
+      "x_este": 359271.86203173955
+    },
+    "EndNullStruct17": {
+      "name": "EndNullStruct17",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352646.754838775,
+      "x_este": 359281.56139024685
+    },
+    "EndNullStruct18": {
+      "name": "EndNullStruct18",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352594.369524012,
+      "x_este": 359237.7234229814
+    },
+    "EndNullStruct19": {
+      "name": "EndNullStruct19",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352634.455511237,
+      "x_este": 359272.179263272
+    },
+    "EndNullStruct20": {
+      "name": "EndNullStruct20",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352702.965984802,
+      "x_este": 359282.58829499886
+    },
+    "EndNullStruct21": {
+      "name": "EndNullStruct21",
+      "network": "1",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352735.0939344,
+      "x_este": 359283.5883605869
+    },
+    "18 (1)": {
+      "name": "18 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 3.601592398092,
+      "elevSump": 2.049,
+      "y_norte": 7352645.262957675,
+      "x_este": 359302.1108765306,
+      "prof_m": 1.553
+    },
+    "14  (1)": {
+      "name": "14  (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 3.441051473158,
+      "elevSump": 2.217,
+      "y_norte": 7352654.510843875,
+      "x_este": 359338.8018475844,
+      "prof_m": 1.224
+    },
+    "19 (1)": {
+      "name": "19 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 3.335515753746,
+      "elevSump": 2.360515753746,
+      "y_norte": 7352655.5446878215,
+      "x_este": 359302.5960329868,
+      "prof_m": 0.975
+    },
+    "13 (1)": {
+      "name": "13 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 3.252160280473,
+      "elevSump": 1.52,
+      "y_norte": 7352663.883132803,
+      "x_este": 359348.90278217517,
+      "prof_m": 1.732
+    },
+    "12 (1)": {
+      "name": "12 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.452635704392,
+      "elevSump": 1.24,
+      "y_norte": 7352690.444901435,
+      "x_este": 359318.30450092355,
+      "prof_m": 1.213
+    },
+    "15 (1)": {
+      "name": "15 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.422326466173,
+      "elevSump": 1.447326466173,
+      "y_norte": 7352649.323683811,
+      "x_este": 359363.37038335094,
+      "prof_m": 0.975
+    },
+    "17 (1)": {
+      "name": "17 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.3756,
+      "elevSump": 1.4006,
+      "y_norte": 7352649.506486038,
+      "x_este": 359384.5765121858,
+      "prof_m": 0.975
+    },
+    "PI-33 (1)": {
+      "name": "PI-33 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.338275023457,
+      "elevSump": 1.129,
+      "y_norte": 7352679.907375463,
+      "x_este": 359272.0977932322,
+      "prof_m": 1.209
+    },
+    "PV-934 (1)": {
+      "name": "PV-934 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.29999995232,
+      "elevSump": 1.25,
+      "y_norte": 7353131.855814993,
+      "x_este": 359332.01707344817,
+      "prof_m": 1.05
+    },
+    "PV-1081 (1)": {
+      "name": "PV-1081 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.29999995232,
+      "elevSump": 0.709999918938,
+      "y_norte": 7353114.624247441,
+      "x_este": 359498.0567462775,
+      "prof_m": 1.59
+    },
+    "PV-1249 (1)": {
+      "name": "PV-1249 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.28999996185,
+      "elevSump": 1.01999998093,
+      "y_norte": 7353125.6637207735,
+      "x_este": 359427.91718775104,
+      "prof_m": 1.27
+    },
+    "PV-1077 (1)": {
+      "name": "PV-1077 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.27999997139,
+      "elevSump": 1.31999999285,
+      "y_norte": 7353053.634704981,
+      "x_este": 359516.36730588146,
+      "prof_m": 0.96
+    },
+    "28 (1)": {
+      "name": "28 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.260175701523,
+      "elevSump": 1.135,
+      "y_norte": 7352720.3374453,
+      "x_este": 359224.42821932054,
+      "prof_m": 1.125
+    },
+    "16 (1)": {
+      "name": "16 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.2576,
+      "elevSump": 1.2826,
+      "y_norte": 7352654.0646092985,
+      "x_este": 359376.2692558172,
+      "prof_m": 0.975
+    },
+    "PV-939 (1)": {
+      "name": "PV-939 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.25,
+      "elevSump": 1.42000001669,
+      "y_norte": 7353135.374245037,
+      "x_este": 359357.1565761097,
+      "prof_m": 0.83
+    },
+    "35 (1)": {
+      "name": "35 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.243860463691,
+      "elevSump": 1.268860463691,
+      "y_norte": 7352761.914058675,
+      "x_este": 359210.40475290414,
+      "prof_m": 0.975
+    },
+    "27 (1)": {
+      "name": "27 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.1895,
+      "elevSump": 1.2145,
+      "y_norte": 7352691.350695922,
+      "x_este": 359205.12213321676,
+      "prof_m": 0.975
+    },
+    "25 (1)": {
+      "name": "25 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.133072605527,
+      "elevSump": 1.158072605527,
+      "y_norte": 7352710.993316764,
+      "x_este": 359207.3872176033,
+      "prof_m": 0.975
+    },
+    "PV-1045 (1)": {
+      "name": "PV-1045 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.13000011444,
+      "elevSump": 0.680000066757,
+      "y_norte": 7353067.513650024,
+      "x_este": 359418.3566613111,
+      "prof_m": 1.45
+    },
+    "34 (1)": {
+      "name": "34 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.1246,
+      "elevSump": 1.1496,
+      "y_norte": 7352733.061786968,
+      "x_este": 359191.35176619294,
+      "prof_m": 0.975
+    },
+    "26 (1)": {
+      "name": "26 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.10730675797,
+      "elevSump": 1.13230675797,
+      "y_norte": 7352706.22375982,
+      "x_este": 359206.49108475726,
+      "prof_m": 0.975
+    },
+    "PV-1084 (1)": {
+      "name": "PV-1084 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.09999990463,
+      "elevSump": 0.149999856949,
+      "y_norte": 7353058.3057579575,
+      "x_este": 359489.2567466961,
+      "prof_m": 1.95
+    },
+    "PV-1076 (1)": {
+      "name": "PV-1076 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.08999991417,
+      "elevSump": 1.22999989986,
+      "y_norte": 7353044.974179655,
+      "x_este": 359575.1384294855,
+      "prof_m": 0.86
+    },
+    "PV-1073 (1)": {
+      "name": "PV-1073 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.07999992371,
+      "elevSump": -0.75,
+      "y_norte": 7353079.663646241,
+      "x_este": 359323.4986523654,
+      "prof_m": 2.83
+    },
+    "32 (1)": {
+      "name": "32 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.063262452037,
+      "elevSump": 1.088262452037,
+      "y_norte": 7352749.13515369,
+      "x_este": 359231.8775342356,
+      "prof_m": 0.975
+    },
+    "PV-1083 (1)": {
+      "name": "PV-1083 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.05999994278,
+      "elevSump": 0.359999895096,
+      "y_norte": 7353077.474172987,
+      "x_este": 359339.27761876467,
+      "prof_m": 1.7
+    },
+    "24 (1)": {
+      "name": "24 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.045210528242,
+      "elevSump": 1.070210528242,
+      "y_norte": 7352679.481366279,
+      "x_este": 359224.0203901497,
+      "prof_m": 0.975
+    },
+    "11 (1)": {
+      "name": "11 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.0346,
+      "elevSump": 1.0596,
+      "y_norte": 7352710.310321903,
+      "x_este": 359320.64690252714,
+      "prof_m": 0.975
+    },
+    "PV-1068 (1)": {
+      "name": "PV-1068 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.02999997139,
+      "elevSump": -0.920000076294,
+      "y_norte": 7353084.713644628,
+      "x_este": 359283.8775520349,
+      "prof_m": 2.95
+    },
+    "PV-1087 (1)": {
+      "name": "PV-1087 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.02999997139,
+      "elevSump": -0.950000047684,
+      "y_norte": 7353081.334692214,
+      "x_este": 359278.4485989135,
+      "prof_m": 2.98
+    },
+    "PV-1041 (1)": {
+      "name": "PV-1041 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 2.00999999046,
+      "elevSump": 0.659999966621,
+      "y_norte": 7353005.695153954,
+      "x_este": 359409.17771497404,
+      "prof_m": 1.35
+    },
+    "PV-1069 (1)": {
+      "name": "PV-1069 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.99000000954,
+      "elevSump": -1.19000005722,
+      "y_norte": 7353088.9057426285,
+      "x_este": 359220.1274760405,
+      "prof_m": 3.18
+    },
+    "10 (1)": {
+      "name": "10 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.934668285779,
+      "elevSump": 0.959668285779,
+      "y_norte": 7352731.8407740155,
+      "x_este": 359300.5697829212,
+      "prof_m": 0.975
+    },
+    "08 (1)": {
+      "name": "08 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.9136,
+      "elevSump": 0.9386,
+      "y_norte": 7352415.615663865,
+      "x_este": 359320.6374832531,
+      "prof_m": 0.975
+    },
+    "PV-1056 (1)": {
+      "name": "PV-1056 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.89999997616,
+      "elevSump": -0.850000023842,
+      "y_norte": 7352983.095157139,
+      "x_este": 359565.6384301374,
+      "prof_m": 2.75
+    },
+    "PV-1063 (1)": {
+      "name": "PV-1063 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.89999997616,
+      "elevSump": -0.240000128746,
+      "y_norte": 7352986.055638099,
+      "x_este": 359310.60654986434,
+      "prof_m": 2.14
+    },
+    "PV-1082 (1)": {
+      "name": "PV-1082 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.89999997616,
+      "elevSump": -0.649999976158,
+      "y_norte": 7352994.263575176,
+      "x_este": 359480.77780160634,
+      "prof_m": 2.55
+    },
+    "21 (1)": {
+      "name": "21 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.899897063944,
+      "elevSump": 0.924897063944,
+      "y_norte": 7352625.787387872,
+      "x_este": 359236.2518862653,
+      "prof_m": 0.975
+    },
+    "PV-1060 (1)": {
+      "name": "PV-1060 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.86000001431,
+      "elevSump": -0.340000033379,
+      "y_norte": 7352923.563489647,
+      "x_este": 359471.62780436885,
+      "prof_m": 2.2
+    },
+    "29 (1)": {
+      "name": "29 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.858290025285,
+      "elevSump": 0.883290025285,
+      "y_norte": 7352734.779130225,
+      "x_este": 359225.5715942947,
+      "prof_m": 0.975
+    },
+    "33 (1)": {
+      "name": "33 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.852067750609,
+      "elevSump": 1.452,
+      "y_norte": 7352743.883694145,
+      "x_este": 359195.3416875233,
+      "prof_m": 0.4
+    },
+    "PV-1048 (1)": {
+      "name": "PV-1048 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.85000002384,
+      "elevSump": 0.930000007153,
+      "y_norte": 7353015.355677711,
+      "x_este": 359336.10657431436,
+      "prof_m": 0.92
+    },
+    "PV-1066 (1)": {
+      "name": "PV-1066 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.85000002384,
+      "elevSump": 0.519999980927,
+      "y_norte": 7352933.155592256,
+      "x_este": 359398.4487688675,
+      "prof_m": 1.33
+    },
+    "PV-1163 (1)": {
+      "name": "PV-1163 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.83000004292,
+      "elevSump": -0.330000042915,
+      "y_norte": 7352892.424016211,
+      "x_este": 359665.6780391569,
+      "prof_m": 2.16
+    },
+    "22 (1)": {
+      "name": "22 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.8266,
+      "elevSump": 0.8516,
+      "y_norte": 7352632.578999374,
+      "x_este": 359220.8664635359,
+      "prof_m": 0.975
+    },
+    "06 (1)": {
+      "name": "06 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.8186,
+      "elevSump": 0.8436,
+      "y_norte": 7352389.966067554,
+      "x_este": 359221.07291970716,
+      "prof_m": 0.975
+    },
+    "PV-1162 (1)": {
+      "name": "PV-1162 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.78999996185,
+      "elevSump": -0.730000019073,
+      "y_norte": 7352919.874063499,
+      "x_este": 359742.8675986071,
+      "prof_m": 2.52
+    },
+    "07 (1)": {
+      "name": "07 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.7736,
+      "elevSump": 0.7986,
+      "y_norte": 7352396.1629617745,
+      "x_este": 359218.71690955514,
+      "prof_m": 0.975
+    },
+    "PV-1149 (1)": {
+      "name": "PV-1149 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.75999999046,
+      "elevSump": 0.55999994278,
+      "y_norte": 7352923.474017622,
+      "x_este": 359480.8383415636,
+      "prof_m": 1.2
+    },
+    "05 (1)": {
+      "name": "05 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.7576,
+      "elevSump": 0.7826,
+      "y_norte": 7352392.622039016,
+      "x_este": 359301.69704996346,
+      "prof_m": 0.975
+    },
+    "PV-1220 (1)": {
+      "name": "PV-1220 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.73000001907,
+      "elevSump": 0.320000052452,
+      "y_norte": 7352915.595071185,
+      "x_este": 359534.45682735264,
+      "prof_m": 1.41
+    },
+    "31 (1)": {
+      "name": "31 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.720211086011,
+      "elevSump": 0.745211086011,
+      "y_norte": 7352743.984792347,
+      "x_este": 359230.0523425376,
+      "prof_m": 0.975
+    },
+    "30 (1)": {
+      "name": "30 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.705070890368,
+      "elevSump": 0.730070890368,
+      "y_norte": 7352743.578476386,
+      "x_este": 359228.4993709293,
+      "prof_m": 0.975
+    },
+    "PV-1080 (1)": {
+      "name": "PV-1080 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.69000005722,
+      "elevSump": 0.790000081062,
+      "y_norte": 7352942.863484664,
+      "x_este": 359326.29868192313,
+      "prof_m": 0.9
+    },
+    "PV-1223 (1)": {
+      "name": "PV-1223 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.64999997616,
+      "elevSump": 1.0,
+      "y_norte": 7352936.155659889,
+      "x_este": 359733.19916303863,
+      "prof_m": 0.65
+    },
+    "PV-1226 (1)": {
+      "name": "PV-1226 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.64999997616,
+      "elevSump": 0.939999997616,
+      "y_norte": 7352935.174082376,
+      "x_este": 359746.78865293483,
+      "prof_m": 0.71
+    },
+    "20 (1)": {
+      "name": "20 (1)",
+      "network": "1",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.647640939655,
+      "elevSump": 0.672640939655,
+      "y_norte": 7352593.4825618155,
+      "x_este": 359223.3803700385,
+      "prof_m": 0.975
+    },
+    "03 (1)": {
+      "name": "03 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.6206,
+      "elevSump": 0.6456,
+      "y_norte": 7352363.115610857,
+      "x_este": 359248.9985200731,
+      "prof_m": 0.975
+    },
+    "PV-1061 (1)": {
+      "name": "PV-1061 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.62000000477,
+      "elevSump": 0.169999957085,
+      "y_norte": 7352890.344995701,
+      "x_este": 359296.6670781153,
+      "prof_m": 1.45
+    },
+    "PV-1075 (1)": {
+      "name": "PV-1075 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.62000000477,
+      "elevSump": 0.399999976158,
+      "y_norte": 7352877.994999373,
+      "x_este": 359392.1487720199,
+      "prof_m": 1.22
+    },
+    "PV-1051 (1)": {
+      "name": "PV-1051 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.60000002384,
+      "elevSump": -0.489999890327,
+      "y_norte": 7353034.795234972,
+      "x_este": 359652.2069433797,
+      "prof_m": 2.09
+    },
+    "09 (1)": {
+      "name": "09 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.594093946184,
+      "elevSump": 0.619093946184,
+      "y_norte": 7352404.185190035,
+      "x_este": 359310.486667366,
+      "prof_m": 0.975
+    },
+    "PV-1126 (1)": {
+      "name": "PV-1126 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.58000004292,
+      "elevSump": 0.180000066757,
+      "y_norte": 7352843.434463507,
+      "x_este": 359556.0568666515,
+      "prof_m": 1.4
+    },
+    "PV-1164 (1)": {
+      "name": "PV-1164 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.58000004292,
+      "elevSump": 0.050000071526,
+      "y_norte": 7352855.384482708,
+      "x_este": 359582.4068954313,
+      "prof_m": 1.53
+    },
+    "04 (1)": {
+      "name": "04 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.5656,
+      "elevSump": 0.5906,
+      "y_norte": 7352375.276016717,
+      "x_este": 359240.9906446445,
+      "prof_m": 0.975
+    },
+    "PV-1049 (1)": {
+      "name": "PV-1049 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.55999994278,
+      "elevSump": 0.209999918938,
+      "y_norte": 7353028.234711248,
+      "x_este": 359706.40700855607,
+      "prof_m": 1.35
+    },
+    "PV-1052 (1)": {
+      "name": "PV-1052 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.55999994278,
+      "elevSump": -0.19000005722,
+      "y_norte": 7352868.795002271,
+      "x_este": 359464.1567534293,
+      "prof_m": 1.75
+    },
+    "PV-1070 (1)": {
+      "name": "PV-1070 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.55999994278,
+      "elevSump": 0.659999966621,
+      "y_norte": 7352889.234471325,
+      "x_este": 359313.6486772997,
+      "prof_m": 0.9
+    },
+    "PV-1074 (1)": {
+      "name": "PV-1074 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.54999995232,
+      "elevSump": 0.789999961853,
+      "y_norte": 7352831.923863562,
+      "x_este": 359243.03807872743,
+      "prof_m": 0.76
+    },
+    "PV-1148 (1)": {
+      "name": "PV-1148 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.53999996185,
+      "elevSump": 0.339999914169,
+      "y_norte": 7352859.073940525,
+      "x_este": 359476.6988753459,
+      "prof_m": 1.2
+    },
+    "PV-1059 (1)": {
+      "name": "PV-1059 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.52999997139,
+      "elevSump": 0.52999997139,
+      "y_norte": 7352826.073865498,
+      "x_este": 359289.26708172786,
+      "prof_m": 1.0
+    },
+    "PV-1136 (1)": {
+      "name": "PV-1136 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.52999997139,
+      "elevSump": 0.25,
+      "y_norte": 7352821.363377443,
+      "x_este": 359518.027878674,
+      "prof_m": 1.28
+    },
+    "PV-1079 (1)": {
+      "name": "PV-1079 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.51999998093,
+      "elevSump": 0.90999998093,
+      "y_norte": 7352895.984467484,
+      "x_este": 359251.92755059246,
+      "prof_m": 0.61
+    },
+    "02 (1)": {
+      "name": "02 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.510334450401,
+      "elevSump": 0.492079584959,
+      "y_norte": 7352366.892983534,
+      "x_este": 359258.5285608642,
+      "prof_m": 1.018
+    },
+    "PV-1043 (1)": {
+      "name": "PV-1043 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.47000002861,
+      "elevSump": 0.630000054836,
+      "y_norte": 7352824.984391421,
+      "x_este": 359293.9486664035,
+      "prof_m": 0.84
+    },
+    "PV-1072 (1)": {
+      "name": "PV-1072 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.47000002861,
+      "elevSump": -1.23000001907,
+      "y_norte": 7352972.663580989,
+      "x_este": 359644.8490518627,
+      "prof_m": 2.7
+    },
+    "PV-1054 (1)": {
+      "name": "PV-1054 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.46000003815,
+      "elevSump": 0.230000019073,
+      "y_norte": 7352805.184398929,
+      "x_este": 359455.4883343525,
+      "prof_m": 1.23
+    },
+    "01 (1)": {
+      "name": "01 (1)",
+      "network": "1",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.453610634165,
+      "elevSump": 0.3786,
+      "y_norte": 7352362.514973019,
+      "x_este": 359260.3700595118,
+      "prof_m": 1.075
+    },
+    "PV-1150 (1)": {
+      "name": "PV-1150 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.45000004768,
+      "elevSump": 0.25,
+      "y_norte": 7352778.134368774,
+      "x_este": 359465.3672985554,
+      "prof_m": 1.2
+    },
+    "PV-1067 (1)": {
+      "name": "PV-1067 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.42999994755,
+      "elevSump": -0.610000014305,
+      "y_norte": 7352908.2055980675,
+      "x_este": 359583.1489914497,
+      "prof_m": 2.04
+    },
+    "PV-1062 (1)": {
+      "name": "PV-1062 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.40999996662,
+      "elevSump": 0.52999997139,
+      "y_norte": 7352816.355449131,
+      "x_este": 359373.74876215076,
+      "prof_m": 0.88
+    },
+    "PV-1143 (1)": {
+      "name": "PV-1143 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.38999998569,
+      "elevSump": -0.180000066757,
+      "y_norte": 7352858.913425584,
+      "x_este": 359537.09894659405,
+      "prof_m": 1.57
+    },
+    "PV-1154 (1)": {
+      "name": "PV-1154 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.33000004292,
+      "elevSump": -1.51999986172,
+      "y_norte": 7352960.805687725,
+      "x_este": 359726.01757090545,
+      "prof_m": 2.85
+    },
+    "PV-1144 (1)": {
+      "name": "PV-1144 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.17999994755,
+      "elevSump": -0.629999995232,
+      "y_norte": 7352958.0741093075,
+      "x_este": 359745.7175946579,
+      "prof_m": 1.81
+    },
+    "PV-1058 (1)": {
+      "name": "PV-1058 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 1.12000000477,
+      "elevSump": 0.22000002861,
+      "y_norte": 7353020.674186357,
+      "x_este": 359760.7281266982,
+      "prof_m": 0.9
+    },
+    "PV-1312 (1)": {
+      "name": "PV-1312 (1)",
+      "network": "1",
+      "desc": "",
+      "elevRim": 0.725,
+      "elevSump": -0.61,
+      "y_norte": 7352951.713571329,
+      "x_este": 359724.1280967324,
+      "prof_m": 1.335
+    },
+    "EndNullStruct22": {
+      "name": "EndNullStruct22",
+      "network": "BECO 3D",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352704.069711436,
+      "x_este": 359273.07253149175
+    },
+    "PI-34 (BECO 3D)": {
+      "name": "PI-34 (BECO 3D)",
+      "network": "BECO 3D",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.33682230908,
+      "elevSump": 1.07955744641,
+      "y_norte": 7352714.11571495,
+      "x_este": 359273.5104816751,
+      "prof_m": 1.257
+    },
+    "EndNullStruct23": {
+      "name": "EndNullStruct23",
+      "network": "BECO 3E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352703.789480658,
+      "x_este": 359277.3033084329
+    },
+    "PI-35 (BECO 3E)": {
+      "name": "PI-35 (BECO 3E)",
+      "network": "BECO 3E",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.351308216154,
+      "elevSump": 1.048243530741,
+      "y_norte": 7352702.965984802,
+      "x_este": 359282.58829499886,
+      "prof_m": 1.303
+    },
+    "StartNullStruct9": {
+      "name": "StartNullStruct9",
+      "network": "BECO 4-5D",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352679.907375463,
+      "x_este": 359272.0977932322
+    },
+    "EndNullStruct24": {
+      "name": "EndNullStruct24",
+      "network": "BECO 4-5D",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352703.789480658,
+      "x_este": 359277.3033084328
+    },
+    "PV-32 (BECO 4-5D)": {
+      "name": "PV-32 (BECO 4-5D)",
+      "network": "BECO 4-5D",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.281018599493,
+      "elevSump": 1.044,
+      "y_norte": 7352704.069711436,
+      "x_este": 359273.07253149175,
+      "prof_m": 1.237
+    },
+    "PV-09 (CT SÃO MANOEL)": {
+      "name": "PV-09 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.484186641624,
+      "elevSump": 1.20177662616,
+      "y_norte": 7352646.402613986,
+      "x_este": 359275.42700712616,
+      "prof_m": 1.282
+    },
+    "EEE - SÃO MANOEL (CT SÃO MANOEL)": {
+      "name": "EEE - SÃO MANOEL (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1500mm INTERNO - TAMPA DE DN 1200mm",
+      "elevRim": 2.362598117794,
+      "elevSump": -0.004620347159,
+      "y_norte": 7352638.155317265,
+      "x_este": 359277.0525727496,
+      "prof_m": 2.367
+    },
+    "PV-08 (CT SÃO MANOEL)": {
+      "name": "PV-08 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.273135426247,
+      "elevSump": 1.100466585917,
+      "y_norte": 7352680.15104664,
+      "x_este": 359276.63410999265,
+      "prof_m": 1.173
+    },
+    "PV-07 (CT SÃO MANOEL)": {
+      "name": "PV-07 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.270865265748,
+      "elevSump": 1.02952287217,
+      "y_norte": 7352703.789480658,
+      "x_este": 359277.3033084328,
+      "prof_m": 1.241
+    },
+    "PV-04 (CT SÃO MANOEL)": {
+      "name": "PV-04 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.206837005878,
+      "elevSump": 0.856914189657,
+      "y_norte": 7352764.88570188,
+      "x_este": 359285.6083609769,
+      "prof_m": 1.35
+    },
+    "PV-06 (CT SÃO MANOEL)": {
+      "name": "PV-06 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.196819205102,
+      "elevSump": 0.93510483784,
+      "y_norte": 7352737.414023362,
+      "x_este": 359281.032564076,
+      "prof_m": 1.262
+    },
+    "PV-05 (CT SÃO MANOEL)": {
+      "name": "PV-05 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.152907526127,
+      "elevSump": 0.903380341282,
+      "y_norte": 7352748.57439835,
+      "x_este": 359282.7117500005,
+      "prof_m": 1.25
+    },
+    "PV-03 (CT SÃO MANOEL)": {
+      "name": "PV-03 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.145174890408,
+      "elevSump": 0.79665042275,
+      "y_norte": 7352786.157187351,
+      "x_este": 359287.9744788018,
+      "prof_m": 1.349
+    },
+    "PV-02 (CT SÃO MANOEL)": {
+      "name": "PV-02 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.100363050509,
+      "elevSump": 0.788727460474,
+      "y_norte": 7352787.683564198,
+      "x_este": 359285.6049536014,
+      "prof_m": 1.312
+    },
+    "PV-01 (CT SÃO MANOEL)": {
+      "name": "PV-01 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.709716203386,
+      "elevSump": 0.699407730439,
+      "y_norte": 7352817.66454537,
+      "x_este": 359286.5775402649,
+      "prof_m": 1.01
+    },
+    "EndNullStruct25": {
+      "name": "EndNullStruct25",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352638.155317265,
+      "x_este": 359277.0525727496
+    },
+    "StartNullStruct10": {
+      "name": "StartNullStruct10",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352501.710593922,
+      "x_este": 359276.03181396035
+    },
+    "EndNullStruct26": {
+      "name": "EndNullStruct26",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352519.376822131,
+      "x_este": 359275.51239182556
+    },
+    "PV-10 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-10 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.395927729968,
+      "elevSump": 0.007379652759,
+      "y_norte": 7352634.717718935,
+      "x_este": 359275.0073544931,
+      "prof_m": 2.389
+    },
+    "PV-11 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-11 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 2.079192377046,
+      "elevSump": 0.091500481603,
+      "y_norte": 7352606.677574421,
+      "x_este": 359275.09334619035,
+      "prof_m": 1.988
+    },
+    "PV-13 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-13 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.991467025144,
+      "elevSump": 0.222548024742,
+      "y_norte": 7352562.998331646,
+      "x_este": 359275.58893641003,
+      "prof_m": 1.769
+    },
+    "PV-12 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-12 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.912079107579,
+      "elevSump": 0.167087139761,
+      "y_norte": 7352581.484962043,
+      "x_este": 359275.4782648975,
+      "prof_m": 1.745
+    },
+    "PV-14 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-14 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.856599341407,
+      "elevSump": 0.261634558825,
+      "y_norte": 7352549.969664642,
+      "x_este": 359275.6569896021,
+      "prof_m": 1.595
+    },
+    "PV-15 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-15 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.838319426207,
+      "elevSump": 0.284245770996,
+      "y_norte": 7352542.43259461,
+      "x_este": 359275.66028502956,
+      "prof_m": 1.554
+    },
+    "PV-24 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-24 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.804915767807,
+      "elevSump": 0.716511778492,
+      "y_norte": 7352398.367373524,
+      "x_este": 359276.2477254842,
+      "prof_m": 1.088
+    },
+    "PV-16 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-16 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.792272853987,
+      "elevSump": 0.353414511321,
+      "y_norte": 7352519.376822131,
+      "x_este": 359275.51239182556,
+      "prof_m": 1.439
+    },
+    "PV-25 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-25 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.778607718717,
+      "elevSump": 0.762503650611,
+      "y_norte": 7352383.222597777,
+      "x_este": 359278.6275994888,
+      "prof_m": 1.016
+    },
+    "PV-27 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-27 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.745235798446,
+      "elevSump": 0.620235798446,
+      "y_norte": 7352359.0685816575,
+      "x_este": 359287.8951086431,
+      "prof_m": 1.125
+    },
+    "PV-26 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-26 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.673935025432,
+      "elevSump": 0.69882508346,
+      "y_norte": 7352370.969371387,
+      "x_este": 359282.55996854085,
+      "prof_m": 0.975
+    },
+    "PV-23 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-23 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.658358399173,
+      "elevSump": 0.645183056792,
+      "y_norte": 7352422.141949709,
+      "x_este": 359275.966393623,
+      "prof_m": 1.013
+    },
+    "PV-22 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-22 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.641542352062,
+      "elevSump": 0.602274335747,
+      "y_norte": 7352436.444841951,
+      "x_este": 359275.94580156053,
+      "prof_m": 1.039
+    },
+    "PV-17 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-17 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.608226903054,
+      "elevSump": 0.406436098939,
+      "y_norte": 7352501.710593922,
+      "x_este": 359276.03181396035,
+      "prof_m": 1.202
+    },
+    "PV-18 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-18 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.574971127994,
+      "elevSump": 0.430457061728,
+      "y_norte": 7352493.703762658,
+      "x_este": 359276.0818556363,
+      "prof_m": 1.145
+    },
+    "PV-20 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-20 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.548162588896,
+      "elevSump": 0.503236034898,
+      "y_norte": 7352469.447783268,
+      "x_este": 359276.4782136077,
+      "prof_m": 1.045
+    },
+    "PV-19 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-19 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.547091148833,
+      "elevSump": 0.468391156954,
+      "y_norte": 7352481.059770005,
+      "x_este": 359276.2154512186,
+      "prof_m": 1.079
+    },
+    "PV-21 (CT SÃO MANOEL - TR-02)": {
+      "name": "PV-21 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 900mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.542209322101,
+      "elevSump": 0.559748145392,
+      "y_norte": 7352450.610413625,
+      "x_este": 359276.4734884181,
+      "prof_m": 0.982
+    },
+    "EndNullStruct27": {
+      "name": "EndNullStruct27",
+      "network": "RCE BECO 8E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352634.717718935,
+      "x_este": 359275.0073544931
+    },
+    "PI-25 (RCE BECO 8E)": {
+      "name": "PI-25 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 2.212226632274,
+      "elevSump": 0.436539071615,
+      "y_norte": 7352630.414504334,
+      "x_este": 359299.9014898278,
+      "prof_m": 1.776
+    },
+    "PI-24 (RCE BECO 8E)": {
+      "name": "PI-24 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 2.19539013457,
+      "elevSump": 0.375553089301,
+      "y_norte": 7352630.840298571,
+      "x_este": 359279.577288785,
+      "prof_m": 1.82
+    },
+    "PI-26 (RCE BECO 8E)": {
+      "name": "PI-26 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.47231553803,
+      "elevSump": 0.49731553803,
+      "y_norte": 7352629.7245443165,
+      "x_este": 359334.19757406926,
+      "prof_m": 0.975
+    },
+    "PI-27 (RCE BECO 8E)": {
+      "name": "PI-27 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.470312041793,
+      "elevSump": 0.495312041793,
+      "y_norte": 7352629.51971386,
+      "x_este": 359359.0565943741,
+      "prof_m": 0.975
+    },
+    "EndNullStruct28": {
+      "name": "EndNullStruct28",
+      "network": "RCE BECO 9E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352606.677574422,
+      "x_este": 359275.0933461902
+    },
+    "PI-20 (RCE BECO 9E)": {
+      "name": "PI-20 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 2.04332577075,
+      "elevSump": 0.487580025682,
+      "y_norte": 7352603.940155283,
+      "x_este": 359279.28893086733,
+      "prof_m": 1.556
+    },
+    "PI-23 (RCE BECO 9E)": {
+      "name": "PI-23 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.796061516377,
+      "elevSump": 0.818822507384,
+      "y_norte": 7352606.647323212,
+      "x_este": 359390.6471096785,
+      "prof_m": 0.977
+    },
+    "PI-22 (RCE BECO 9E)": {
+      "name": "PI-22 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.610589406756,
+      "elevSump": 0.635589406756,
+      "y_norte": 7352604.898459325,
+      "x_este": 359341.4488736498,
+      "prof_m": 0.975
+    },
+    "PI-21 (RCE BECO 9E)": {
+      "name": "PI-21 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.594399076879,
+      "elevSump": 0.556622446113,
+      "y_norte": 7352605.54525223,
+      "x_este": 359302.24702988146,
+      "prof_m": 1.038
+    },
+    "EndNullStruct29": {
+      "name": "EndNullStruct29",
+      "network": "RCE BECO 11E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352581.484962042,
+      "x_este": 359275.47826489713
+    },
+    "PI-19 (RCE BECO 11E)": {
+      "name": "PI-19 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.902648401031,
+      "elevSump": 0.927648401031,
+      "y_norte": 7352580.7977782935,
+      "x_este": 359326.42307510786,
+      "prof_m": 0.975
+    },
+    "PI-17 (RCE BECO 11E)": {
+      "name": "PI-17 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.821025231436,
+      "elevSump": 0.846025231436,
+      "y_norte": 7352581.738143001,
+      "x_este": 359295.7167551522,
+      "prof_m": 0.975
+    },
+    "PI-18 (RCE BECO 11E)": {
+      "name": "PI-18 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.77338103648,
+      "elevSump": 0.79838103648,
+      "y_norte": 7352580.773790304,
+      "x_este": 359297.6769420481,
+      "prof_m": 0.975
+    },
+    "EndNullStruct30": {
+      "name": "EndNullStruct30",
+      "network": "RCE BECO 13D",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352606.677574422,
+      "x_este": 359275.0933461902
+    },
+    "PI-30 (RCE BECO 13D)": {
+      "name": "PI-30 (RCE BECO 13D)",
+      "network": "RCE BECO 13D",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 2.086309225065,
+      "elevSump": 0.620832811902,
+      "y_norte": 7352605.246393889,
+      "x_este": 359272.39770685695,
+      "prof_m": 1.465
+    },
+    "PI-31 (RCE BECO 13D)": {
+      "name": "PI-31 (RCE BECO 13D)",
+      "network": "RCE BECO 13D",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.780494272608,
+      "elevSump": 0.718179924339,
+      "y_norte": 7352602.292784832,
+      "x_este": 359240.0833721608,
+      "prof_m": 1.062
+    },
+    "EndNullStruct31": {
+      "name": "EndNullStruct31",
+      "network": "RCE BECO 13E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352562.998331646,
+      "x_este": 359275.58893641003
+    },
+    "PI-16 (RCE BECO 13E)": {
+      "name": "PI-16 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.923768615274,
+      "elevSump": 0.769734668656,
+      "y_norte": 7352557.32454735,
+      "x_este": 359334.18075346854,
+      "prof_m": 1.154
+    },
+    "PI-13 (RCE BECO 13E)": {
+      "name": "PI-13 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.835906773756,
+      "elevSump": 0.604363833518,
+      "y_norte": 7352560.9383078795,
+      "x_este": 359280.6075872574,
+      "prof_m": 1.232
+    },
+    "PI-14 (RCE BECO 13E)": {
+      "name": "PI-14 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.799744832011,
+      "elevSump": 0.715743963709,
+      "y_norte": 7352556.257142089,
+      "x_este": 359317.4379997854,
+      "prof_m": 1.084
+    },
+    "PI-15 (RCE BECO 13E)": {
+      "name": "PI-15 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.751228720428,
+      "elevSump": 0.723315000267,
+      "y_norte": 7352559.333165314,
+      "x_este": 359318.88000280084,
+      "prof_m": 1.028
+    },
+    "EndNullStruct32": {
+      "name": "EndNullStruct32",
+      "network": "RCE BECO 15D",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352581.484962043,
+      "x_este": 359275.4782648975
+    },
+    "PI-29 (RCE BECO 15D)": {
+      "name": "PI-29 (RCE BECO 15D)",
+      "network": "RCE BECO 15D",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 2.168720318855,
+      "elevSump": 0.908655446687,
+      "y_norte": 7352579.988726309,
+      "x_este": 359216.6766593233,
+      "prof_m": 1.26
+    },
+    "PI-28 (RCE BECO 15D)": {
+      "name": "PI-28 (RCE BECO 15D)",
+      "network": "RCE BECO 15D",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.838964584596,
+      "elevSump": 0.863964584596,
+      "y_norte": 7352579.989901692,
+      "x_este": 359231.6256113304,
+      "prof_m": 0.975
+    },
+    "EndNullStruct33": {
+      "name": "EndNullStruct33",
+      "network": "RCE BECO 15E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352542.43259461,
+      "x_este": 359275.66028502956
+    },
+    "PI-12 (RCE BECO 15E)": {
+      "name": "PI-12 (RCE BECO 15E)",
+      "network": "RCE BECO 15E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.949512725346,
+      "elevSump": 0.974512725346,
+      "y_norte": 7352538.253589254,
+      "x_este": 359324.87365901796,
+      "prof_m": 0.975
+    },
+    "PI-11 (RCE BECO 15E)": {
+      "name": "PI-11 (RCE BECO 15E)",
+      "network": "RCE BECO 15E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.851304191646,
+      "elevSump": 0.876304191646,
+      "y_norte": 7352540.8715086505,
+      "x_este": 359279.2952202512,
+      "prof_m": 0.975
+    },
+    "EndNullStruct34": {
+      "name": "EndNullStruct34",
+      "network": "RCE BECO 16E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352519.376822131,
+      "x_este": 359275.51239182556
+    },
+    "PI-08 (RCE BECO 16E)": {
+      "name": "PI-08 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.765044651711,
+      "elevSump": 0.419423731651,
+      "y_norte": 7352519.545628324,
+      "x_este": 359280.3350895252,
+      "prof_m": 1.346
+    },
+    "PI-10 (RCE BECO 16E)": {
+      "name": "PI-10 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.746060135677,
+      "elevSump": 0.616234708023,
+      "y_norte": 7352515.119536549,
+      "x_este": 359345.45791241573,
+      "prof_m": 1.13
+    },
+    "PI-09 (RCE BECO 16E)": {
+      "name": "PI-09 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.573005479268,
+      "elevSump": 0.529958591778,
+      "y_norte": 7352515.831522906,
+      "x_este": 359316.9923672504,
+      "prof_m": 1.043
+    },
+    "EndNullStruct35": {
+      "name": "EndNullStruct35",
+      "network": "RCE BECO 19E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352481.059770005,
+      "x_este": 359276.2154512186
+    },
+    "PI-01 (RCE BECO 19E)": {
+      "name": "PI-01 (RCE BECO 19E)",
+      "network": "RCE BECO 19E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.703288608975,
+      "elevSump": 0.656475022313,
+      "y_norte": 7352475.9877124885,
+      "x_este": 359279.6653134827,
+      "prof_m": 1.047
+    },
+    "PI-02 (RCE BECO 19E)": {
+      "name": "PI-02 (RCE BECO 19E)",
+      "network": "RCE BECO 19E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.384084654334,
+      "elevSump": 0.409084654334,
+      "y_norte": 7352477.813059401,
+      "x_este": 359322.1626744077,
+      "prof_m": 0.975
+    },
+    "EndNullStruct36": {
+      "name": "EndNullStruct36",
+      "network": "REDE BECO 18E",
+      "desc": "Dummy Null Structure for LandXML purposes",
+      "elevRim": 0.0,
+      "elevSump": null,
+      "y_norte": 7352493.703762658,
+      "x_este": 359276.08185563656
+    },
+    "PI-03 (REDE BECO 18E)": {
+      "name": "PI-03 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.603061221056,
+      "elevSump": 0.496786438938,
+      "y_norte": 7352490.028891299,
+      "x_este": 359280.198056987,
+      "prof_m": 1.106
+    },
+    "PI-07 (REDE BECO 18E)": {
+      "name": "PI-07 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.600068189134,
+      "elevSump": 0.625068189134,
+      "y_norte": 7352489.240285058,
+      "x_este": 359348.2879884797,
+      "prof_m": 0.975
+    },
+    "PI-04 (REDE BECO 18E)": {
+      "name": "PI-04 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.532261780683,
+      "elevSump": 0.557261780683,
+      "y_norte": 7352489.804057879,
+      "x_este": 359302.09723182814,
+      "prof_m": 0.975
+    },
+    "PI-06 (REDE BECO 18E)": {
+      "name": "PI-06 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.335346828458,
+      "elevSump": 0.360346828458,
+      "y_norte": 7352489.286197413,
+      "x_este": 359333.3519153702,
+      "prof_m": 0.975
+    },
+    "PI-05 (REDE BECO 18E)": {
+      "name": "PI-05 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "desc": "POÇO DE INSPEÇÃO EM TUBOS DE CONCRETO DN 600mm INTERNO - TAMPA DE DN 600mm",
+      "elevRim": 1.259339854908,
+      "elevSump": 0.284339854908,
+      "y_norte": 7352490.191724654,
+      "x_este": 359331.73021471687,
+      "prof_m": 0.975
+    },
+    "PV-05 (REDE SÃO MANOEL)": {
+      "name": "PV-05 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.966067814146,
+      "elevSump": -0.327469516434,
+      "y_norte": 7353001.230844399,
+      "x_este": 359394.5116905691,
+      "prof_m": 2.294
+    },
+    "PV-07 (REDE SÃO MANOEL)": {
+      "name": "PV-07 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.909894038976,
+      "elevSump": 0.001860349737,
+      "y_norte": 7353003.918789752,
+      "x_este": 359310.2721308619,
+      "prof_m": 1.908
+    },
+    "PV-04 (REDE SÃO MANOEL)": {
+      "name": "PV-04 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.904249252353,
+      "elevSump": -0.622952986769,
+      "y_norte": 7352991.577024629,
+      "x_este": 359471.5849171099,
+      "prof_m": 2.527
+    },
+    "PV-03 (REDE SÃO MANOEL)": {
+      "name": "PV-03 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.888458928029,
+      "elevSump": -0.9494863794,
+      "y_norte": 7352979.429048514,
+      "x_este": 359556.558706807,
+      "prof_m": 2.838
+    },
+    "PV-06 (REDE SÃO MANOEL)": {
+      "name": "PV-06 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.869439022537,
+      "elevSump": -0.07029306747,
+      "y_norte": 7353011.445255239,
+      "x_este": 359327.68230715673,
+      "prof_m": 1.94
+    },
+    "PV-08 (REDE SÃO MANOEL)": {
+      "name": "PV-08 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.848986735388,
+      "elevSump": 0.114762466326,
+      "y_norte": 7352974.480086416,
+      "x_este": 359306.5010451814,
+      "prof_m": 1.734
+    },
+    "PV-09 (REDE SÃO MANOEL)": {
+      "name": "PV-09 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.626883095252,
+      "elevSump": 0.318354739919,
+      "y_norte": 7352921.516745506,
+      "x_este": 359298.80415862054,
+      "prof_m": 1.309
+    },
+    "PV-10 (REDE SÃO MANOEL)": {
+      "name": "PV-10 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.596173706884,
+      "elevSump": 0.496058920883,
+      "y_norte": 7352875.159184046,
+      "x_este": 359293.0450977157,
+      "prof_m": 1.1
+    },
+    "PV-11 (REDE SÃO MANOEL)": {
+      "name": "PV-11 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.560347239425,
+      "elevSump": 0.651534978944,
+      "y_norte": 7352834.67283039,
+      "x_este": 359287.4517326751,
+      "prof_m": 0.909
+    },
+    "PV-02 (REDE SÃO MANOEL)": {
+      "name": "PV-02 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 1.540727768295,
+      "elevSump": -1.220567759573,
+      "y_norte": 7352970.143533703,
+      "x_este": 359627.2120192237,
+      "prof_m": 2.761
+    },
+    "PV-01 (REDE SÃO MANOEL)": {
+      "name": "PV-01 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 0.79827015799,
+      "elevSump": -1.572675026841,
+      "y_norte": 7352958.013104998,
+      "x_este": 359718.97408302594,
+      "prof_m": 2.371
+    },
+    "PV-EEE (REDE SÃO MANOEL)": {
+      "name": "PV-EEE (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "desc": "POÇO DE VISITA EM TUBOS DE CONCRETO DN 1200mm INTERNO - TAMPA DE DN 900mm",
+      "elevRim": 0.796618293294,
+      "elevSump": -1.6,
+      "y_norte": 7352957.137922347,
+      "x_este": 359725.5104382105,
+      "prof_m": 2.397
+    }
+  },
+  "pipes": [
+    {
+      "name": "TRECHO-01 (1)",
+      "network": "1",
+      "refStart": "PV-1136 (1)",
+      "refEnd": "PV-1126 (1)",
+      "desc": "",
+      "length": 43.969781289313,
+      "slope": 0.00159200296,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-02 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct0",
+      "refEnd": "PV-1312 (1)",
+      "desc": "",
+      "length": 4.982063739493,
+      "slope": 0.0,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-03 (1)",
+      "network": "1",
+      "refStart": "PV-1149 (1)",
+      "refEnd": "PV-1220 (1)",
+      "desc": "",
+      "length": 54.194809854893,
+      "slope": 0.004428509748,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-46 (1)",
+      "network": "1",
+      "refStart": "PV-1162 (1)",
+      "refEnd": "PV-1144 (1)",
+      "desc": "",
+      "length": 38.30634382507,
+      "slope": -0.002610543179,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-54 (1)",
+      "network": "1",
+      "refStart": "PV-1072 (1)",
+      "refEnd": "PV-1154 (1)",
+      "desc": "",
+      "length": 82.030617553315,
+      "slope": 0.003535285526,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-55 (1)",
+      "network": "1",
+      "refStart": "PV-1143 (1)",
+      "refEnd": "PV-1067 (1)",
+      "desc": "",
+      "length": 67.457466593925,
+      "slope": 0.006374515759,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-59 (1)",
+      "network": "1",
+      "refStart": "PV-1150 (1)",
+      "refEnd": "PV-1143 (1)",
+      "desc": "",
+      "length": 108.031802029026,
+      "slope": 0.003980341575,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-60 (1)",
+      "network": "1",
+      "refStart": "PV-1126 (1)",
+      "refEnd": "PV-1164 (1)",
+      "desc": "",
+      "length": 28.933438710319,
+      "slope": 0.004493116382,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-61 (1)",
+      "network": "1",
+      "refStart": "PV-1148 (1)",
+      "refEnd": "PV-1143 (1)",
+      "desc": "",
+      "length": 60.400888005235,
+      "slope": 0.004470177301,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-62 (1)",
+      "network": "1",
+      "refStart": "PV-1164 (1)",
+      "refEnd": "PV-1163 (1)",
+      "desc": "",
+      "length": 91.138108492572,
+      "slope": 0.004169533731,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-70 (1)",
+      "network": "1",
+      "refStart": "PV-1163 (1)",
+      "refEnd": "PV-1162 (1)",
+      "desc": "",
+      "length": 81.926144692735,
+      "slope": 0.00488250418,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-71 (1)",
+      "network": "1",
+      "refStart": "PV-1144 (1)",
+      "refEnd": "PV-1154 (1)",
+      "desc": "",
+      "length": 19.90840416153,
+      "slope": 0.044749470257,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-190 (1)",
+      "network": "1",
+      "refStart": "PV-1082 (1)",
+      "refEnd": "PV-1056 (1)",
+      "desc": "",
+      "length": 85.592638913364,
+      "slope": 0.002336656472,
+      "diameter_m": 250.0,
+      "diameter_mm": 250000
+    },
+    {
+      "name": "TRECHO-191 (1)",
+      "network": "1",
+      "refStart": "PV-1080 (1)",
+      "refEnd": "PV-1066 (1)",
+      "desc": "",
+      "length": 72.800763190623,
+      "slope": 0.003708779211,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-192 (1)",
+      "network": "1",
+      "refStart": "PV-1062 (1)",
+      "refEnd": "PV-1054 (1)",
+      "desc": "",
+      "length": 82.499939553387,
+      "slope": 0.003636389765,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-193 (1)",
+      "network": "1",
+      "refStart": "PV-1073 (1)",
+      "refEnd": "PV-1068 (1)",
+      "desc": "",
+      "length": 39.941995132199,
+      "slope": 0.004256212428,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-194 (1)",
+      "network": "1",
+      "refStart": "PV-1084 (1)",
+      "refEnd": "PV-1082 (1)",
+      "desc": "",
+      "length": 64.601285476544,
+      "slope": 0.002786330423,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-196 (1)",
+      "network": "1",
+      "refStart": "PV-1063 (1)",
+      "refEnd": "PV-1073 (1)",
+      "desc": "",
+      "length": 94.492992306361,
+      "slope": 0.005397302881,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-197 (1)",
+      "network": "1",
+      "refStart": "PV-1059 (1)",
+      "refEnd": "PV-1061 (1)",
+      "desc": "",
+      "length": 64.696736579445,
+      "slope": 0.005564509228,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-200 (1)",
+      "network": "1",
+      "refStart": "PV-1058 (1)",
+      "refEnd": "PV-1049 (1)",
+      "desc": "",
+      "length": 54.844740065391,
+      "slope": 0.000182334893,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-201 (1)",
+      "network": "1",
+      "refStart": "PV-1056 (1)",
+      "refEnd": "PV-1072 (1)",
+      "desc": "",
+      "length": 79.895461542374,
+      "slope": 0.00475626883,
+      "diameter_m": 250.0,
+      "diameter_mm": 250000
+    },
+    {
+      "name": "TRECHO-203 (1)",
+      "network": "1",
+      "refStart": "PV-1041 (1)",
+      "refEnd": "PV-1082 (1)",
+      "desc": "",
+      "length": 72.510902622373,
+      "slope": 0.010481758072,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-205 (1)",
+      "network": "1",
+      "refStart": "PV-1074 (1)",
+      "refEnd": "PV-1059 (1)",
+      "desc": "",
+      "length": 46.59839906853,
+      "slope": 0.005579677476,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-207 (1)",
+      "network": "1",
+      "refStart": "PV-1077 (1)",
+      "refEnd": "PV-1076 (1)",
+      "desc": "",
+      "length": 59.405873182828,
+      "slope": 0.001515005023,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-208 (1)",
+      "network": "1",
+      "refStart": "PV-1079 (1)",
+      "refEnd": "PV-1061 (1)",
+      "desc": "",
+      "length": 45.093668790247,
+      "slope": -0.002217612193,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-211 (1)",
+      "network": "1",
+      "refStart": "PV-1048 (1)",
+      "refEnd": "PV-1041 (1)",
+      "desc": "",
+      "length": 73.707463777945,
+      "slope": 0.003663154831,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-212 (1)",
+      "network": "1",
+      "refStart": "PV-1067 (1)",
+      "refEnd": "PV-1072 (1)",
+      "desc": "",
+      "length": 89.228768439941,
+      "slope": 0.002353506657,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-213 (1)",
+      "network": "1",
+      "refStart": "PV-1075 (1)",
+      "refEnd": "PV-1052 (1)",
+      "desc": "",
+      "length": 72.594648104299,
+      "slope": 0.006061164989,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-214 (1)",
+      "network": "1",
+      "refStart": "PV-1083 (1)",
+      "refEnd": "PV-1045 (1)",
+      "desc": "",
+      "length": 79.704362413056,
+      "slope": 0.003513001942,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-216 (1)",
+      "network": "1",
+      "refStart": "PV-1076 (1)",
+      "refEnd": "PV-1051 (1)",
+      "desc": "",
+      "length": 77.749878767897,
+      "slope": 0.017623340891,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-217 (1)",
+      "network": "1",
+      "refStart": "PV-1061 (1)",
+      "refEnd": "PV-1063 (1)",
+      "desc": "",
+      "length": 96.721269848029,
+      "slope": 0.004239023848,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-219 (1)",
+      "network": "1",
+      "refStart": "PV-1070 (1)",
+      "refEnd": "PV-1075 (1)",
+      "desc": "",
+      "length": 79.301060527758,
+      "slope": 0.003278662179,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-220 (1)",
+      "network": "1",
+      "refStart": "PV-1081 (1)",
+      "refEnd": "PV-1084 (1)",
+      "desc": "",
+      "length": 57.004612536285,
+      "slope": 0.009824241598,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-221 (1)",
+      "network": "1",
+      "refStart": "PV-1087 (1)",
+      "refEnd": "PV-1069 (1)",
+      "desc": "",
+      "length": 58.810983477195,
+      "slope": 0.004080904515,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-222 (1)",
+      "network": "1",
+      "refStart": "PV-1068 (1)",
+      "refEnd": "PV-1087 (1)",
+      "desc": "",
+      "length": 6.394665856307,
+      "slope": 0.004691457256,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-223 (1)",
+      "network": "1",
+      "refStart": "PV-1043 (1)",
+      "refEnd": "PV-1059 (1)",
+      "desc": "",
+      "length": 4.807721794873,
+      "slope": 0.020804390629,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-224 (1)",
+      "network": "1",
+      "refStart": "PV-1066 (1)",
+      "refEnd": "PV-1060 (1)",
+      "desc": "",
+      "length": 73.806095069156,
+      "slope": 0.005419685872,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-225 (1)",
+      "network": "1",
+      "refStart": "PV-1054 (1)",
+      "refEnd": "PV-1052 (1)",
+      "desc": "",
+      "length": 64.199896783298,
+      "slope": 0.006542207781,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-227 (1)",
+      "network": "1",
+      "refStart": "PV-1045 (1)",
+      "refEnd": "PV-1084 (1)",
+      "desc": "",
+      "length": 71.49747047365,
+      "slope": 0.007413056277,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-229 (1)",
+      "network": "1",
+      "refStart": "PV-1049 (1)",
+      "refEnd": "PV-1051 (1)",
+      "desc": "",
+      "length": 54.596077117409,
+      "slope": 0.003846457173,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-232 (1)",
+      "network": "1",
+      "refStart": "PV-1051 (1)",
+      "refEnd": "PV-1072 (1)",
+      "desc": "",
+      "length": 62.565864448183,
+      "slope": 0.001278654247,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-234 (1)",
+      "network": "1",
+      "refStart": "PV-934 (1)",
+      "refEnd": "PV-1073 (1)",
+      "desc": "",
+      "length": 52.884051253108,
+      "slope": 0.006996611858,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-249 (1)",
+      "network": "1",
+      "refStart": "PV-939 (1)",
+      "refEnd": "PV-1249 (1)",
+      "desc": "",
+      "length": 71.424914710222,
+      "slope": 0.005600375026,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-264 (1)",
+      "network": "1",
+      "refStart": "PV-1249 (1)",
+      "refEnd": "PV-1081 (1)",
+      "desc": "",
+      "length": 71.003688226617,
+      "slope": 0.00436601287,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-267 (1)",
+      "network": "1",
+      "refStart": "PV-1060 (1)",
+      "refEnd": "PV-1082 (1)",
+      "desc": "",
+      "length": 71.290396570901,
+      "slope": 0.004348452086,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-269 (1)",
+      "network": "1",
+      "refStart": "PV-1052 (1)",
+      "refEnd": "PV-1060 (1)",
+      "desc": "",
+      "length": 55.275910770466,
+      "slope": 0.002713669053,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-277 (1)",
+      "network": "1",
+      "refStart": "PV-1220 (1)",
+      "refEnd": "PV-1067 (1)",
+      "desc": "",
+      "length": 49.258461786146,
+      "slope": 0.01888337209,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-278 (1)",
+      "network": "1",
+      "refStart": "PV-1223 (1)",
+      "refEnd": "PV-1226 (1)",
+      "desc": "",
+      "length": 13.624952478973,
+      "slope": 0.002935804283,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-279 (1)",
+      "network": "1",
+      "refStart": "PV-1226 (1)",
+      "refEnd": "EndNullStruct0",
+      "desc": "",
+      "length": 68.477149549292,
+      "slope": 0.004819181545,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-282 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct1",
+      "refEnd": "PV-1083 (1)",
+      "desc": "",
+      "length": 43.070601390885,
+      "slope": -0.008358659024,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-284 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct2",
+      "refEnd": "EndNullStruct1",
+      "desc": "",
+      "length": 147.435054085514,
+      "slope": 0.0,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-293 (1)",
+      "network": "1",
+      "refStart": "PV-1069 (1)",
+      "refEnd": "EndNullStruct2",
+      "desc": "",
+      "length": 86.926966314099,
+      "slope": 0.003221111191,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-398 (1)",
+      "network": "1",
+      "refStart": "PV-1154 (1)",
+      "refEnd": "EndNullStruct3",
+      "desc": "",
+      "length": 13.649492505107,
+      "slope": -0.112056410559,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-399 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct3",
+      "refEnd": "EndNullStruct4",
+      "desc": "",
+      "length": 156.632586176442,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-400 (1)",
+      "network": "1",
+      "refStart": "PV-1312 (1)",
+      "refEnd": "EndNullStruct5",
+      "desc": "",
+      "length": 69.140315007826,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-401 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct4",
+      "refEnd": "EndNullStruct6",
+      "desc": "",
+      "length": 130.906114749132,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-402 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct5",
+      "refEnd": "EndNullStruct7",
+      "desc": "",
+      "length": 241.234996795848,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-403 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct6",
+      "refEnd": "EndNullStruct8",
+      "desc": "",
+      "length": 69.579407855939,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-404 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct7",
+      "refEnd": "EndNullStruct9",
+      "desc": "",
+      "length": 461.674996487612,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-03(0) (1)",
+      "network": "1",
+      "refStart": "03 (1)",
+      "refEnd": "02 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 10.253932017909,
+      "slope": 0.022436064592,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-04 (1)",
+      "network": "1",
+      "refStart": "02 (1)",
+      "refEnd": "01 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 4.749680235509,
+      "slope": 0.007790234473,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-06 (1)",
+      "network": "1",
+      "refStart": "04 (1)",
+      "refEnd": "PV-25 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 38.46788168719,
+      "slope": 0.007772952899,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-07 (1)",
+      "network": "1",
+      "refStart": "05 (1)",
+      "refEnd": "EndNullStruct10",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 18.3063472097,
+      "slope": 0.010653071566,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-08 (1)",
+      "network": "1",
+      "refStart": "07 (1)",
+      "refEnd": "EndNullStruct11",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 54.063391704194,
+      "slope": 0.010543764734,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-09 (1)",
+      "network": "1",
+      "refStart": "06 (1)",
+      "refEnd": "EndNullStruct12",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 53.850270952388,
+      "slope": 0.011421300209,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-10 (1)",
+      "network": "1",
+      "refStart": "09 (1)",
+      "refEnd": "EndNullStruct13",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 28.23642444924,
+      "slope": 0.013352739045,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-11 (1)",
+      "network": "1",
+      "refStart": "08 (1)",
+      "refEnd": "EndNullStruct14",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 37.922678138255,
+      "slope": 0.018725588589,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-12 (1)",
+      "network": "1",
+      "refStart": "01 (1)",
+      "refEnd": "PV-26 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 23.745974721518,
+      "slope": 0.002063512022,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-13 (1)",
+      "network": "1",
+      "refStart": "11 (1)",
+      "refEnd": "10 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 29.439694645972,
+      "slope": 0.007167377996,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-14 (1)",
+      "network": "1",
+      "refStart": "27 (1)",
+      "refEnd": "26 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 14.936344232299,
+      "slope": 0.00743174257,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-15 (1)",
+      "network": "1",
+      "refStart": "26 (1)",
+      "refEnd": "25 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 4.853607269056,
+      "slope": 0.015660376832,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-16 (1)",
+      "network": "1",
+      "refStart": "25 (1)",
+      "refEnd": "PV-32 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 66.050773707591,
+      "slope": 0.006903944371,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-17 (1)",
+      "network": "1",
+      "refStart": "17 (1)",
+      "refEnd": "16 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 9.476334736238,
+      "slope": 0.012453037228,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-18 (1)",
+      "network": "1",
+      "refStart": "16 (1)",
+      "refEnd": "15 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 13.74292914106,
+      "slope": 0.007567744618,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-19 (1)",
+      "network": "1",
+      "refStart": "15 (1)",
+      "refEnd": "13 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 20.525738445399,
+      "slope": 0.006333638509,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-20 (1)",
+      "network": "1",
+      "refStart": "14  (1)",
+      "refEnd": "13 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 13.77996547036,
+      "slope": 0.009942461142,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-21 (1)",
+      "network": "1",
+      "refStart": "StartNullStruct8",
+      "refEnd": "26 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 4.040899144087,
+      "slope": 0.0,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-22 (1)",
+      "network": "1",
+      "refStart": "34 (1)",
+      "refEnd": "33 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 11.535237672548,
+      "slope": 0.014652332722,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-23 (1)",
+      "network": "1",
+      "refStart": "33 (1)",
+      "refEnd": "29 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 31.571657995379,
+      "slope": 0.005416329681,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-25 (1)",
+      "network": "1",
+      "refStart": "35 (1)",
+      "refEnd": "32 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 24.98891517754,
+      "slope": 0.010213373941,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-26 (1)",
+      "network": "1",
+      "refStart": "32 (1)",
+      "refEnd": "31 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 5.465923133451,
+      "slope": 0.025072261399,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-27 (1)",
+      "network": "1",
+      "refStart": "31 (1)",
+      "refEnd": "30 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 1.605335627299,
+      "slope": 0.010590279686,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-28 (1)",
+      "network": "1",
+      "refStart": "30 (1)",
+      "refEnd": "29 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 9.273669440127,
+      "slope": 0.002587981007,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-29 (1)",
+      "network": "1",
+      "refStart": "29 (1)",
+      "refEnd": "28 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 14.487131041182,
+      "slope": 0.005936407637,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-30 (1)",
+      "network": "1",
+      "refStart": "28 (1)",
+      "refEnd": "EndNullStruct15",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 49.475058680064,
+      "slope": 0.00111167193,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-31 (1)",
+      "network": "1",
+      "refStart": "24 (1)",
+      "refEnd": "PI-33 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 48.080141087395,
+      "slope": 0.005948507086,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-32 (1)",
+      "network": "1",
+      "refStart": "21 (1)",
+      "refEnd": "EndNullStruct16",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 35.66637616155,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-33 (1)",
+      "network": "1",
+      "refStart": "19 (1)",
+      "refEnd": "18 (1)",
+      "desc": "DN 150 mm PVC-SN",
+      "length": 10.304969703266,
+      "slope": 0.047895837062,
+      "diameter_m": 150.0,
+      "diameter_mm": 150000
+    },
+    {
+      "name": "TRECHO-34 (1)",
+      "network": "1",
+      "refStart": "18 (1)",
+      "refEnd": "EndNullStruct17",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 20.667807712826,
+      "slope": 0.079027296184,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-35 (1)",
+      "network": "1",
+      "refStart": "20 (1)",
+      "refEnd": "EndNullStruct18",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 14.370451268524,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-36 (1)",
+      "network": "1",
+      "refStart": "22 (1)",
+      "refEnd": "EndNullStruct19",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 51.34710034196,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-37 (1)",
+      "network": "1",
+      "refStart": "13 (1)",
+      "refEnd": "12 (1)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 40.519881149674,
+      "slope": 0.006910353076,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-38 (1)",
+      "network": "1",
+      "refStart": "12 (1)",
+      "refEnd": "EndNullStruct20",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 37.847876536732,
+      "slope": 0.005073005097,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-39 (1)",
+      "network": "1",
+      "refStart": "10 (1)",
+      "refEnd": "EndNullStruct21",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 17.290221426633,
+      "slope": 0.0,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-596 (BECO 3D)",
+      "network": "BECO 3D",
+      "refStart": "PI-34 (BECO 3D)",
+      "refEnd": "EndNullStruct22",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 10.055606675488,
+      "slope": 0.0035,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-597 (BECO 3E)",
+      "network": "BECO 3E",
+      "refStart": "PI-35 (BECO 3E)",
+      "refEnd": "EndNullStruct23",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 5.348792283388,
+      "slope": 0.0035,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-594 (BECO 4-5D)",
+      "network": "BECO 4-5D",
+      "refStart": "StartNullStruct9",
+      "refEnd": "PV-32 (BECO 4-5D)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 24.182137162135,
+      "slope": 0.0035,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-595 (BECO 4-5D)",
+      "network": "BECO 4-5D",
+      "refStart": "PV-32 (BECO 4-5D)",
+      "refEnd": "EndNullStruct24",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 4.24007347154,
+      "slope": 0.0035,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-525 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-09 (CT SÃO MANOEL)",
+      "refEnd": "PV-08 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 33.770165348324,
+      "slope": 0.003,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-526 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-08 (CT SÃO MANOEL)",
+      "refEnd": "PV-07 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 23.648010960471,
+      "slope": 0.003000000005,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-527 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-07 (CT SÃO MANOEL)",
+      "refEnd": "PV-06 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 33.830845902235,
+      "slope": 0.002790896872,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-528 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-06 (CT SÃO MANOEL)",
+      "refEnd": "PV-05 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 11.286037465936,
+      "slope": 0.002810961951,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-529 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-05 (CT SÃO MANOEL)",
+      "refEnd": "PV-04 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 16.566566847001,
+      "slope": 0.002804825818,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-530 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-04 (CT SÃO MANOEL)",
+      "refEnd": "PV-03 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 21.402762425282,
+      "slope": 0.00281571157,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-531 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-03 (CT SÃO MANOEL)",
+      "refEnd": "PV-02 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 2.818605812901,
+      "slope": 0.002810961909,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-531 (1) (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-02 (CT SÃO MANOEL)",
+      "refEnd": "PV-01 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 29.996870948058,
+      "slope": 0.002810961964,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-531 (1) (1) (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "PV-01 (CT SÃO MANOEL)",
+      "refEnd": "PV-11 (CT SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 17.030803364773,
+      "slope": 0.00281082277,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-593 (CT SÃO MANOEL)",
+      "network": "CT SÃO MANOEL",
+      "refStart": "EEE - SÃO MANOEL (CT SÃO MANOEL)",
+      "refEnd": "PV-09 (CT SÃO MANOEL)",
+      "desc": "DN 110 mm PEAD - PE100 - SDR17",
+      "length": 8.405972092002,
+      "slope": 0.0,
+      "diameter_m": 110.0,
+      "diameter_mm": 110000
+    },
+    {
+      "name": "TRECHO-524 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-10 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "EndNullStruct25",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 4.000017999343,
+      "slope": 0.003,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-523 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-11 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-10 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 28.040402550891,
+      "slope": 0.002999999991,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-522 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-12 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-11 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 25.195666178501,
+      "slope": 0.002999999991,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-521 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-13 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-12 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 18.487044856485,
+      "slope": 0.002999999999,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-520 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-14 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-13 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 13.028903365806,
+      "slope": 0.00299999999,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-519 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-15 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-14 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 7.537104668448,
+      "slope": 0.002999999989,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-518 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-16 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-15 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 23.056350564359,
+      "slope": 0.002999999995,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-516 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-18 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-17 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 8.007023671011,
+      "slope": 0.002999999984,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-515 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-19 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-18 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 12.644755315436,
+      "slope": 0.002999999999,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-514 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-20 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-19 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 11.615011589038,
+      "slope": 0.002999999998,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-513 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-21 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-20 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 18.837455003763,
+      "slope": 0.002999999989,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-512 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-22 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-21 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 14.17546058304,
+      "slope": 0.002999999998,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-511 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-23 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-22 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 14.302971428819,
+      "slope": 0.002999999989,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-510 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-24 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-23 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 23.776347662071,
+      "slope": 0.002999999989,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-509 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-25 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-24 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 15.330693003478,
+      "slope": 0.003000000005,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-508 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-26 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-25 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 12.868821771021,
+      "slope": 0.002999999989,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-507 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "PV-27 (CT SÃO MANOEL - TR-02)",
+      "refEnd": "PV-26 (CT SÃO MANOEL - TR-02)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 13.042010846675,
+      "slope": 0.003,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-517 (CT SÃO MANOEL - TR-02)",
+      "network": "CT SÃO MANOEL - TR-02",
+      "refStart": "StartNullStruct10",
+      "refEnd": "EndNullStruct26",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 17.673942111606,
+      "slope": 0.002999999993,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-585 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "refStart": "PI-27 (RCE BECO 8E)",
+      "refEnd": "PI-26 (RCE BECO 8E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 24.859976028735,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-586 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "refStart": "PI-26 (RCE BECO 8E)",
+      "refEnd": "PI-25 (RCE BECO 8E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 34.303178123922,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-587 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "refStart": "PI-25 (RCE BECO 8E)",
+      "refEnd": "PI-24 (RCE BECO 8E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 20.328752250161,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-588 (RCE BECO 8E)",
+      "network": "RCE BECO 8E",
+      "refStart": "PI-24 (RCE BECO 8E)",
+      "refEnd": "EndNullStruct27",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 5.993247148216,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-581 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "refStart": "PI-23 (RCE BECO 9E)",
+      "refEnd": "PI-22 (RCE BECO 9E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 49.229532905589,
+      "slope": 0.003009965489,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-582 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "refStart": "PI-22 (RCE BECO 9E)",
+      "refEnd": "PI-21 (RCE BECO 9E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 39.20735556917,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-583 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "refStart": "PI-21 (RCE BECO 9E)",
+      "refEnd": "PI-20 (RCE BECO 9E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 23.014243707078,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-584 (RCE BECO 9E)",
+      "network": "RCE BECO 9E",
+      "refStart": "PI-20 (RCE BECO 9E)",
+      "refEnd": "EndNullStruct28",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 5.009652702192,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-578 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "refStart": "PI-19 (RCE BECO 11E)",
+      "refEnd": "PI-18 (RCE BECO 11E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 28.74627018777,
+      "slope": 0.00297393507,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-579 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "refStart": "PI-18 (RCE BECO 11E)",
+      "refEnd": "PI-17 (RCE BECO 11E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 2.184571294823,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-580 (RCE BECO 11E)",
+      "network": "RCE BECO 11E",
+      "refStart": "PI-17 (RCE BECO 11E)",
+      "refEnd": "EndNullStruct29",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 20.240164904172,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-591 (RCE BECO 13D)",
+      "network": "RCE BECO 13D",
+      "refStart": "PI-31 (RCE BECO 13D)",
+      "refEnd": "PI-30 (RCE BECO 13D)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 32.449183499372,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-592 (RCE BECO 13D)",
+      "network": "RCE BECO 13D",
+      "refStart": "PI-30 (RCE BECO 13D)",
+      "refEnd": "EndNullStruct30",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 3.052021127983,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-574 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "refStart": "PI-16 (RCE BECO 13E)",
+      "refEnd": "PI-15 (RCE BECO 13E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 15.43209875242,
+      "slope": 0.003008008122,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-575 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "refStart": "PI-15 (RCE BECO 13E)",
+      "refEnd": "PI-14 (RCE BECO 13E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 3.397262930031,
+      "slope": 0.002999544872,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-576 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "refStart": "PI-14 (RCE BECO 13E)",
+      "refEnd": "PI-13 (RCE BECO 13E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 37.126877133313,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-577 (RCE BECO 13E)",
+      "network": "RCE BECO 13E",
+      "refStart": "PI-13 (RCE BECO 13E)",
+      "refEnd": "EndNullStruct31",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 5.425017891507,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-589 (RCE BECO 15D)",
+      "network": "RCE BECO 15D",
+      "refStart": "PI-29 (RCE BECO 15D)",
+      "refEnd": "PI-28 (RCE BECO 15D)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 14.949018856282,
+      "slope": 0.002989564883,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-590 (RCE BECO 15D)",
+      "network": "RCE BECO 15D",
+      "refStart": "PI-28 (RCE BECO 15D)",
+      "refEnd": "EndNullStruct32",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 43.878329024074,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-572 (RCE BECO 15E)",
+      "network": "RCE BECO 15E",
+      "refStart": "PI-12 (RCE BECO 15E)",
+      "refEnd": "PI-11 (RCE BECO 15E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 45.653765897363,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-573 (RCE BECO 15E)",
+      "network": "RCE BECO 15E",
+      "refStart": "PI-11 (RCE BECO 15E)",
+      "refEnd": "EndNullStruct33",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 3.955993464019,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-569 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "refStart": "PI-10 (RCE BECO 16E)",
+      "refEnd": "PI-09 (RCE BECO 16E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 28.474578657146,
+      "slope": 0.003029948689,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-570 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "refStart": "PI-09 (RCE BECO 16E)",
+      "refEnd": "PI-08 (RCE BECO 16E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 36.845119177868,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-571 (RCE BECO 16E)",
+      "network": "RCE BECO 16E",
+      "refStart": "PI-08 (RCE BECO 16E)",
+      "refEnd": "EndNullStruct34",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 4.825672825144,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-559 (RCE BECO 19E)",
+      "network": "RCE BECO 19E",
+      "refStart": "PI-02 (RCE BECO 19E)",
+      "refEnd": "PI-01 (RCE BECO 19E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 42.536735431381,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-560 (RCE BECO 19E)",
+      "network": "RCE BECO 19E",
+      "refStart": "PI-01 (RCE BECO 19E)",
+      "refEnd": "EndNullStruct35",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 6.134138548801,
+      "slope": 0.003,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-561 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "refStart": "PI-07 (REDE BECO 18E)",
+      "refEnd": "PI-06 (REDE BECO 18E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 14.936235136154,
+      "slope": 0.003499572736,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-562 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "refStart": "PI-06 (REDE BECO 18E)",
+      "refEnd": "PI-05 (REDE BECO 18E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 1.857400010279,
+      "slope": 0.003497630772,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-563 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "refStart": "PI-05 (REDE BECO 18E)",
+      "refEnd": "PI-04 (REDE BECO 18E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 29.635700050839,
+      "slope": 0.003499732903,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-564 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "refStart": "PI-04 (REDE BECO 18E)",
+      "refEnd": "PI-03 (REDE BECO 18E)",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 21.900461577223,
+      "slope": 0.003480019007,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-565 (REDE BECO 18E)",
+      "network": "REDE BECO 18E",
+      "refStart": "PI-03 (REDE BECO 18E)",
+      "refEnd": "EndNullStruct36",
+      "desc": "DN 200 mm PVC-SN",
+      "length": 5.517985643495,
+      "slope": 0.003497716322,
+      "diameter_m": 200.0,
+      "diameter_mm": 200000
+    },
+    {
+      "name": "TRECHO-452 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-11 (REDE SÃO MANOEL)",
+      "refEnd": "PV-10 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 40.871196919875,
+      "slope": 0.003804077066,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-453 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-10 (REDE SÃO MANOEL)",
+      "refEnd": "PV-09 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 46.714257628454,
+      "slope": 0.003804094848,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-454 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-09 (REDE SÃO MANOEL)",
+      "refEnd": "PV-08 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 53.520080277498,
+      "slope": 0.003804062804,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-455 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-08 (REDE SÃO MANOEL)",
+      "refEnd": "PV-07 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 29.679472505283,
+      "slope": 0.003804074802,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-456 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-07 (REDE SÃO MANOEL)",
+      "refEnd": "PV-06 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 18.967528237928,
+      "slope": 0.003804077071,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-457 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-06 (REDE SÃO MANOEL)",
+      "refEnd": "PV-05 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 67.60596730914,
+      "slope": 0.003804077066,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-458 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-05 (REDE SÃO MANOEL)",
+      "refEnd": "PV-04 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 77.676031026549,
+      "slope": 0.003804077067,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-459 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-04 (REDE SÃO MANOEL)",
+      "refEnd": "PV-03 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 85.838364868126,
+      "slope": 0.003804077067,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-460 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-03 (REDE SÃO MANOEL)",
+      "refEnd": "PV-02 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 71.261383833599,
+      "slope": 0.00380407069,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-461 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-02 (REDE SÃO MANOEL)",
+      "refEnd": "PV-01 (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 92.561048143084,
+      "slope": 0.003804081976,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    },
+    {
+      "name": "TRECHO-462 (REDE SÃO MANOEL)",
+      "network": "REDE SÃO MANOEL",
+      "refStart": "PV-01 (REDE SÃO MANOEL)",
+      "refEnd": "PV-EEE (REDE SÃO MANOEL)",
+      "desc": "DN 300 mm PVC-SN",
+      "length": 6.594765247928,
+      "slope": 0.004901669797,
+      "diameter_m": 300.0,
+      "diameter_mm": 300000
+    }
+  ],
+  "networks": [
+    {
+      "name": "1",
+      "n_structs": 117,
+      "n_pipes": 94
+    },
+    {
+      "name": "BECO 3D",
+      "n_structs": 2,
+      "n_pipes": 1
+    },
+    {
+      "name": "BECO 3E",
+      "n_structs": 2,
+      "n_pipes": 1
+    },
+    {
+      "name": "BECO 4-5D",
+      "n_structs": 3,
+      "n_pipes": 2
+    },
+    {
+      "name": "CT SÃO MANOEL",
+      "n_structs": 10,
+      "n_pipes": 10
+    },
+    {
+      "name": "CT SÃO MANOEL - TR-02",
+      "n_structs": 21,
+      "n_pipes": 18
+    },
+    {
+      "name": "RCE BECO 8E",
+      "n_structs": 5,
+      "n_pipes": 4
+    },
+    {
+      "name": "RCE BECO 9E",
+      "n_structs": 5,
+      "n_pipes": 4
+    },
+    {
+      "name": "RCE BECO 11E",
+      "n_structs": 4,
+      "n_pipes": 3
+    },
+    {
+      "name": "RCE BECO 13D",
+      "n_structs": 3,
+      "n_pipes": 2
+    },
+    {
+      "name": "RCE BECO 13E",
+      "n_structs": 5,
+      "n_pipes": 4
+    },
+    {
+      "name": "RCE BECO 15D",
+      "n_structs": 3,
+      "n_pipes": 2
+    },
+    {
+      "name": "RCE BECO 15E",
+      "n_structs": 3,
+      "n_pipes": 2
+    },
+    {
+      "name": "RCE BECO 16E",
+      "n_structs": 4,
+      "n_pipes": 3
+    },
+    {
+      "name": "RCE BECO 19E",
+      "n_structs": 3,
+      "n_pipes": 2
+    },
+    {
+      "name": "REDE BECO 18E",
+      "n_structs": 6,
+      "n_pipes": 5
+    },
+    {
+      "name": "REDE SÃO MANOEL",
+      "n_structs": 12,
+      "n_pipes": 11
+    }
+  ],
+  "stats": {
+    "n_structs_total": 208,
+    "n_structs_reais": 160,
+    "n_pipes": 168,
+    "ext_total_m": 7078.0,
+    "dns": {
+      "150000": 50,
+      "300000": 45,
+      "250000": 2,
+      "200000": 70,
+      "110000": 1
+    }
+  }
+}

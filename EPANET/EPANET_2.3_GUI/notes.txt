@@ -1,0 +1,61 @@
+WELCOME TO EPANET 2.2
+=====================
+EPANET is a program for analyzing the hydraulic and water quality behavior of pressurized
+pipe networks. It was developed by the U.S. Environmental Protection Agency. EPANET 2.2 is open souce software that may be freely
+copied and distributed. A complete Users Manual as well as full source code and other updates
+can be accessed from https://www.epa.gov/water-research/epanet or from https://github.com/USEPA/EPANET2.2.
+
+FILES INSTALLED BY THE SETUP PROGRAM
+====================================
+The setup program for EPANET 2.2 places the following files into your EPANET 2.2 installation
+directory:
+  epanet2w.exe  -- the Windows version of EPANET 2.2
+  runepanet.exe -- the DOS command line version of EPANET 2.2
+  epanet2.dll   -- the numerical engine used by both epanet2w and runepanet
+  epanet2.chm   -- the EPANET 2.2 Help file
+  tutorial.chm  -- the on-line tutorial
+  notes.txt     -- this file
+
+EXAMPLE NETWORKS
+================
+EPANET 2.2 also comes with four example pipe networks to help one become familiar with the
+program. They are placed in a sub-folder named "EPANET Projects\Examples" in your Documents
+folder and consist of the following files:
+
+  net1.net     -- a simple pipe network modeling chlorine decay
+  net2.net     -- an example of a tracer study utilizing calibration data
+  net2-FL.dat  -- calibration data used with net2.net
+  net3.net     -- a larger network model illustrating source tracing
+  net4.net     -- a simple pipe network illustrating pressure driven analysis (steady state)
+
+When running any of these networks we recommend that you view the Project Summary first
+(select Project >> Summary from the main menu) to read any background notes about the
+example.
+
+NEW FEATURES IN VERSION 2.2
+===========================
+1. Pressure-dependent demands.
+2. More robust convergence criteria.
+3. Faster solution times for single period analyses.
+4. Improved handling of near-zero flows.
+5. Allowing tanks to overflow when full.
+6. Improved water quality mass balances.
+7. A comprehensive set of API functions that allows:
+   a. the engine to be run in a thread-safe manner
+   b. network elements to be created and deleted in code
+   c. all network data to be retrieved and modified in code.
+
+LICENSE
+=======
+Please see license at https://github.com/USEPA/EPANET2.2/blob/master/SRC_engines/LICENSE.  EPANET 2.2 is a collaboration with the EPANET open source community at https://github.com/OpenWaterAnalytics/EPANET. 
+
+DISCLAIMER
+==========
+The authors of this program and the U.S. Environmental Protection Agency are not responsible
+and assume no liability whatsoever for any results or any use made of the results obtained
+from this program, nor for any damages or litigation that result from the use of this program
+for any purpose.  Portions of the research associated with EPANET 2.2 were conducted by EPA.  
+EPANET 2.2 has been subjected to review by the Office of Research and Development and approved for release. 
+Approval does not signify that the EPANET 2.2 reflect the views of the Agency, nor does mention of trade names 
+or commercial products constitute endorsement or recommendation for use.
+  

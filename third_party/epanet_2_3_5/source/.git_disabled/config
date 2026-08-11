@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/OpenWaterAnalytics/EPANET.git
+	fetch = +refs/tags/v2.3.5:refs/tags/v2.3.5

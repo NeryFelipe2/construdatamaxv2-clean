@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ConstruDataMaxV2 — RDO · Relatório Diário de Obra</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Manrope:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#06060f;--s1:#0c0c1a;--s2:#111128;--s3:#181838;--s4:#202048;
+--brd:#2a2a55;--brd2:#353570;
+--acc:#00ff88;--red:#ff3355;--yel:#ffd000;--blu:#3399ff;--cyn:#00ddff;--mag:#cc44ff;--ora:#ff8833;
+--agua:#00aaff;--esg:#00ff88;
+--txt:#d0d0e8;--dim:#5566;--wht:#f0f0ff;
+--font:'Manrope',sans-serif;--mono:'JetBrains Mono',monospace;
+--rad:8px;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--txt);font-family:var(--font);font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--s1);border-bottom:1px solid var(--brd);height:48px;display:flex;align-items:center;padding:0 20px;gap:14px;position:sticky;top:0;z-index:100}
+.topbar .logo{font-weight:800;font-size:15px;color:var(--acc)}.topbar .logo span{color:var(--dim);font-weight:300;font-size:11px;margin-left:4px}
+.topbar .sep{width:1px;height:22px;background:var(--brd)}
+.topbar .badge{font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;font-family:var(--mono);background:rgba(255,136,51,.15);color:var(--ora)}
+.topbar .right{margin-left:auto;display:flex;gap:8px}
+
+/* ── LAYOUT ── */
+.main{max-width:1200px;margin:0 auto;padding:20px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--brd);margin-bottom:20px;position:sticky;top:48px;z-index:90;background:var(--bg);padding-top:10px}
+.tab{padding:10px 20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;transition:.2s;margin-bottom:-2px}
+.tab:hover{color:var(--txt)}.tab.active{color:var(--acc);border-color:var(--acc)}
+
+/* ── CARDS ── */
+.card{background:var(--s1);border:1px solid var(--brd);border-radius:10px;padding:18px;margin-bottom:16px}
+.card h3{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 .ico{font-size:18px}
+.card h3 .num{background:var(--acc);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:var(--mono)}
+
+/* ── FORM ── */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;font-family:var(--mono)}
+.field input,.field select,.field textarea{width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:6px;padding:8px 12px;color:var(--wht);font-family:var(--mono);font-size:12px;outline:none;transition:.2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--acc);box-shadow:0 0 0 2px rgba(0,255,136,.1)}
+.field textarea{resize:vertical;min-height:60px;font-family:var(--font)}
+.row{display:grid;gap:12px}.row2{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr 1fr}.row4{grid-template-columns:1fr 1fr 1fr 1fr}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 16px;border-radius:6px;font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.2s;text-transform:uppercase;letter-spacing:.5px;display:inline-flex;align-items:center;gap:6px}
+.btn-acc{background:var(--acc);color:#000;border-color:var(--acc)}.btn-acc:hover{background:#00dd77}
+.btn-out{background:transparent;color:var(--acc);border-color:var(--acc)}.btn-out:hover{background:rgba(0,255,136,.1)}
+.btn-red{background:transparent;color:var(--red);border-color:var(--red)}.btn-red:hover{background:rgba(255,51,85,.1)}
+.btn-blu{background:transparent;color:var(--blu);border-color:var(--blu)}.btn-blu:hover{background:rgba(51,153,255,.1)}
+.btn-ora{background:transparent;color:var(--ora);border-color:var(--ora)}.btn-ora:hover{background:rgba(255,136,51,.1)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── NS Selector ── */
+.ns-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:10px 0}
+.ns-chip{background:var(--s2);border:1.5px solid var(--brd);border-radius:8px;padding:10px;cursor:pointer;transition:.2s;position:relative}
+.ns-chip:hover{border-color:var(--blu)}
+.ns-chip.selected{border-color:var(--acc);background:rgba(0,255,136,.06)}
+.ns-chip.selected::after{content:'✓';position:absolute;top:6px;right:8px;color:var(--acc);font-weight:700}
+.ns-chip .id{font-family:var(--mono);font-weight:700;font-size:11px;color:var(--wht)}
+.ns-chip .det{font-size:9px;color:var(--dim);margin-top:3px;font-family:var(--mono)}
+.ns-chip .badge{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;font-family:var(--mono);margin-top:4px;display:inline-block}
+.ns-chip .badge.agua{background:rgba(0,170,255,.15);color:var(--agua)}
+.ns-chip .badge.esg{background:rgba(0,255,136,.15);color:var(--esg)}
+
+/* ── Service items (custos) ── */
+.svc-table{width:100%;border-collapse:collapse;margin:10px 0}
+.svc-table th{padding:6px 8px;text-align:left;font-size:9px;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--brd);font-family:var(--mono)}
+.svc-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.03)}
+.svc-table input{background:var(--bg);border:1px solid var(--brd);border-radius:4px;padding:4px 8px;color:var(--wht);font-family:var(--mono);font-size:11px;width:100%;outline:none}
+.svc-table input:focus{border-color:var(--acc)}
+.svc-total{text-align:right;font-family:var(--mono);font-weight:700;color:var(--acc);font-size:14px;padding:10px 0}
+
+/* ── Occurrence ── */
+.occ-item{background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:12px;margin:8px 0;position:relative}
+.occ-item .time{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.occ-item .tipo{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;font-family:var(--mono);margin-left:8px}
+.occ-item .tipo.parada{background:rgba(255,51,85,.15);color:var(--red)}
+.occ-item .tipo.chuva{background:rgba(51,153,255,.15);color:var(--blu)}
+.occ-item .tipo.acidente{background:rgba(255,208,0,.15);color:var(--yel)}
+.occ-item .tipo.material{background:rgba(204,68,255,.15);color:var(--mag)}
+.occ-item .tipo.outro{background:rgba(255,255,255,.08);color:var(--dim)}
+.occ-item .desc{font-size:12px;margin-top:6px;line-height:1.5}
+.occ-item .del{position:absolute;top:8px;right:10px;cursor:pointer;color:var(--dim);font-size:14px}
+.occ-item .del:hover{color:var(--red)}
+
+/* ── Photos ── */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:10px 0}
+.photo-card{background:var(--s2);border:1px solid var(--brd);border-radius:8px;overflow:hidden;position:relative}
+.photo-card img{width:100%;height:120px;object-fit:cover;display:block}
+.photo-card .info{padding:6px 8px;font-size:9px;color:var(--dim);font-family:var(--mono)}
+.photo-card .del{position:absolute;top:4px;right:6px;cursor:pointer;background:rgba(0,0,0,.7);color:var(--red);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+.photo-drop{border:2px dashed var(--brd);border-radius:8px;padding:30px;text-align:center;cursor:pointer;transition:.3s}
+.photo-drop:hover{border-color:var(--acc);background:rgba(0,255,136,.03)}
+.photo-drop .ico{font-size:32px;margin-bottom:6px;opacity:.4}
+.photo-drop p{font-size:10px;color:var(--dim)}
+
+/* ── Weather ── */
+.weather-grid{display:flex;gap:8px;flex-wrap:wrap}
+.weather-opt{padding:8px 14px;border-radius:6px;border:1.5px solid var(--brd);cursor:pointer;font-size:11px;transition:.2s;display:flex;align-items:center;gap:6px}
+.weather-opt:hover{border-color:var(--blu)}
+.weather-opt.selected{border-color:var(--acc);background:rgba(0,255,136,.08);color:var(--acc)}
+
+/* ── Team ── */
+.team-row{display:grid;grid-template-columns:1fr 60px 40px;gap:8px;align-items:end;margin-bottom:6px}
+
+/* ── RDO List ── */
+.rdo-item{background:var(--s1);border:1px solid var(--brd);border-radius:8px;padding:14px;margin:8px 0;cursor:pointer;transition:.2s;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.rdo-item:hover{border-color:var(--blu)}
+.rdo-item .date{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--acc);text-align:center;line-height:1.2}
+.rdo-item .date small{font-size:9px;color:var(--dim);font-weight:400}
+.rdo-item .summary{font-size:11px;line-height:1.6}
+.rdo-item .summary b{color:var(--wht)}
+.rdo-item .value{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--yel);text-align:right}
+
+/* ── Dashboard ── */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:15px 0}
+.dash-card{background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:14px;text-align:center}
+.dash-card .val{font-family:var(--mono);font-size:24px;font-weight:700;margin:6px 0}
+.dash-card .lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+.dash-card.green .val{color:var(--acc)}
+.dash-card.yellow .val{color:var(--yel)}
+.dash-card.red .val{color:var(--red)}
+.dash-card.blue .val{color:var(--blu)}
+
+/* ── Tab content ── */
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ── Misc ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--acc);border-radius:8px;padding:10px 20px;font-size:12px;color:var(--acc);z-index:9999;animation:fadeup .3s;font-family:var(--mono)}
+@keyframes fadeup{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+.hidden{display:none!important}
+.divider{height:1px;background:var(--brd);margin:20px 0}
+.help{font-size:10px;color:var(--dim);margin-top:4px;line-height:1.5}
+.review-grid{display:grid;grid-template-columns:minmax(240px,1fr) minmax(320px,1.2fr);gap:14px}
+.evidence-box{background:var(--s2);border:1px solid var(--brd);border-radius:8px;min-height:260px;padding:12px;overflow:auto}
+.confidence-badge{display:inline-block;margin:2px 4px 2px 0;padding:3px 7px;border-radius:999px;background:rgba(51,153,255,.12);color:var(--blu);font:10px var(--mono)}
+.pending-badge{display:inline-block;margin:2px 4px 2px 0;padding:3px 7px;border-radius:999px;background:rgba(255,136,51,.14);color:var(--ora);font:10px var(--mono)}
+@media(max-width:780px){.review-grid{grid-template-columns:1fr}.row3,.row4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">ConstruDataMaxV2<span>NS</span></div>
+  <div class="sep"></div>
+  <div class="badge">RDO — Relatório Diário de Obra</div>
+  <div class="sep"></div>
+  <span style="font-size:10px;color:var(--dim);font-family:var(--mono)">FCN Construções e Saneamento · CT 11481051</span>
+  <div class="right">
+    <button class="btn btn-out btn-sm" onclick="importarRDOs()">📂 Importar</button>
+    <button class="btn btn-acc btn-sm" onclick="exportarTudo()">💾 Exportar Tudo</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('novo')">+ Novo RDO</div>
+    <div class="tab" onclick="setTab('automatico')">RDO Automatico</div>
+    <div class="tab" onclick="setTab('historico')">📅 Histórico</div>
+    <div class="tab" onclick="setTab('dashboard')">📊 Dashboard</div>
+    <div class="tab" onclick="setTab('importar')">📁 Importar Projeto</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TAB: NOVO RDO -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-novo">
+
+    <!-- CABEÇALHO -->
+    <div class="card">
+      <h3><span class="ico">📋</span> Cabeçalho do RDO</h3>
+      <div class="row row3">
+        <div class="field"><label>Data</label><input type="date" id="rdo-data" onchange="updateRdoNum()"></div>
+        <div class="field"><label>RDO Nº</label><input id="rdo-num" value="001" readonly></div>
+        <div class="field"><label>Núcleo</label>
+          <select id="rdo-nucleo" onchange="updateRdoNum()">
+            <option>Verde e Teteu</option><option>Pantanal</option><option>Criadores</option>
+            <option>São Manoel</option><option>Israel</option><option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="row row2">
+        <div class="field"><label>Responsável Técnico</label><input id="rdo-rt" placeholder="Eng. Felipe Nery"></div>
+        <div class="field"><label>Contrato</label><input value="CT 11481051 — SLNR Santos" readonly></div>
+      </div>
+    </div>
+
+    <!-- CLIMA -->
+    <div class="card">
+      <h3><span class="ico">🌤️</span> Condições Climáticas</h3>
+      <div class="row row2">
+        <div>
+          <label style="font-size:9px;color:var(--dim);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;display:block">MANHÃ</label>
+          <div class="weather-grid" id="weather-manha">
+            <div class="weather-opt" onclick="selWeather(this,'manha')">☀️ Sol</div>
+            <div class="weather-opt" onclick="selWeather(this,'manha')">⛅ Nublado</div>
+            <div class="weather-opt" onclick="selWeather(this,'manha')">🌧️ Chuva</div>
+            <div class="weather-opt" onclick="selWeather(this,'manha')">⛈️ Temporal</div>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:9px;color:var(--dim);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;display:block">TARDE</label>
+          <div class="weather-grid" id="weather-tarde">
+            <div class="weather-opt" onclick="selWeather(this,'tarde')">☀️ Sol</div>
+            <div class="weather-opt" onclick="selWeather(this,'tarde')">⛅ Nublado</div>
+            <div class="weather-opt" onclick="selWeather(this,'tarde')">🌧️ Chuva</div>
+            <div class="weather-opt" onclick="selWeather(this,'tarde')">⛈️ Temporal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPE -->
+    <div class="card">
+      <h3><span class="ico">👷</span> Equipe</h3>
+      <div id="equipe-list">
+        <div class="team-row">
+          <div class="field"><label>Função</label><input value="Encanador" placeholder="Função"></div>
+          <div class="field"><label>Qtd</label><input type="number" value="2" min="0"></div>
+          <div style="padding-bottom:10px"><span onclick="removeTeam(this)" style="cursor:pointer;color:var(--red)">✕</span></div>
+        </div>
+        <div class="team-row">
+          <div class="field"><label>Função</label><input value="Ajudante" placeholder="Função"></div>
+          <div class="field"><label>Qtd</label><input type="number" value="4" min="0"></div>
+          <div style="padding-bottom:10px"><span onclick="removeTeam(this)" style="cursor:pointer;color:var(--red)">✕</span></div>
+        </div>
+        <div class="team-row">
+          <div class="field"><label>Função</label><input value="Operador Retroescavadeira" placeholder="Função"></div>
+          <div class="field"><label>Qtd</label><input type="number" value="1" min="0"></div>
+          <div style="padding-bottom:10px"><span onclick="removeTeam(this)" style="cursor:pointer;color:var(--red)">✕</span></div>
+        </div>
+      </div>
+      <button class="btn btn-out btn-sm" onclick="addTeam()">+ Adicionar</button>
+    </div>
+
+    <!-- NS TRABALHADAS (vincula ao projeto) -->
+    <div class="card">
+      <h3><span class="ico">🔗</span> Notas de Serviço Trabalhadas Hoje</h3>
+      <p class="help">Selecione as NS que tiveram atividade neste dia. Se não importou projeto, adicione manualmente.</p>
+      <div class="row row2" style="margin:10px 0">
+        <div class="field"><label>Filtrar</label><input id="ns-filter" placeholder="Buscar PV, NS, DN..." oninput="filterNS()"></div>
+        <div class="field"><label>Tipo</label>
+          <select id="ns-tipo-filter" onchange="filterNS()"><option value="">Todos</option><option value="esgoto">Esgoto</option><option value="agua">Água</option></select>
+        </div>
+      </div>
+      <div class="ns-grid" id="ns-grid">
+        <div style="text-align:center;padding:20px;color:var(--dim);grid-column:1/-1">
+          Nenhuma NS carregada. <a href="#" onclick="setTab('importar');return false" style="color:var(--acc)">Importar projeto</a> ou <button class="btn btn-out btn-sm" onclick="addNSManual()">+ Adicionar NS manual</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVIÇOS EXECUTADOS + CUSTOS -->
+    <div class="card" id="card-servicos">
+      <h3><span class="ico">💰</span> Serviços Executados e Custos</h3>
+      <p class="help">Para cada NS selecionada, informe os serviços executados e quantidades.</p>
+      <div id="servicos-container">
+        <p style="color:var(--dim);font-size:11px;text-align:center;padding:20px">Selecione NS acima para registrar serviços</p>
+      </div>
+      <div class="divider"></div>
+      <div class="svc-total">TOTAL DO DIA: R$ <span id="total-dia">0,00</span></div>
+    </div>
+
+    <!-- OCORRÊNCIAS -->
+    <div class="card">
+      <h3><span class="ico">⚠️</span> Ocorrências</h3>
+      <div id="occ-list"></div>
+      <div class="row row3" style="margin-top:10px">
+        <div class="field"><label>Hora</label><input type="time" id="occ-hora"></div>
+        <div class="field"><label>Tipo</label>
+          <select id="occ-tipo">
+            <option value="parada">Parada</option><option value="chuva">Chuva</option>
+            <option value="acidente">Acidente</option><option value="material">Falta Material</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div class="field"><label>NS Relacionada</label><input id="occ-ns" placeholder="NS_001 (opcional)"></div>
+      </div>
+      <div class="field"><label>Descrição</label><textarea id="occ-desc" placeholder="Descreva a ocorrência..."></textarea></div>
+      <button class="btn btn-ora btn-sm" onclick="addOccurrence()">+ Registrar Ocorrência</button>
+    </div>
+
+    <!-- FOTOS -->
+    <div class="card">
+      <h3><span class="ico">📸</span> Registro Fotográfico</h3>
+      <div class="photo-grid" id="photo-grid"></div>
+      <div class="photo-drop" onclick="document.getElementById('photo-input').click()">
+        <div class="ico">📷</div>
+        <p>Clique ou arraste fotos aqui<br>JPG, PNG · Vincule à NS</p>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotos(event)">
+    </div>
+
+    <!-- OBSERVAÇÕES -->
+    <div class="card">
+      <h3><span class="ico">📝</span> Observações Gerais</h3>
+      <div class="field"><textarea id="rdo-obs" rows="4" placeholder="Observações adicionais do dia..."></textarea></div>
+    </div>
+
+    <!-- AÇÕES -->
+    <div class="btn-row" style="justify-content:center;padding:20px 0">
+      <button class="btn btn-acc" onclick="salvarRDO()">💾 Salvar RDO</button>
+      <button class="btn btn-blu" onclick="exportarPDF()">📄 Exportar PDF</button>
+      <button class="btn btn-out" onclick="limparRDO()">🗑️ Limpar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TAB: HISTÓRICO -->
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TAB: RDO AUTOMATICO -->
+  <div class="tab-content" id="tab-automatico">
+    <div class="card">
+      <h3><span class="ico">AI</span> RDO Automatico por foto/PDF/texto</h3>
+      <div class="row row4">
+        <div class="field"><label>Nucleo</label><input id="auto-nucleo" placeholder="RK_SUB, TATUI, CRIADORES"></div>
+        <div class="field"><label>Responsavel</label><input id="auto-responsavel" placeholder="Engenheiro/apontador"></div>
+        <div class="field"><label>Empreiteira</label><input id="auto-empreiteira" placeholder="RK, Chira, Avant"></div>
+        <div class="field"><label>Encarregado</label><input id="auto-encarregado" placeholder="Nome do encarregado"></div>
+      </div>
+      <div class="row row2">
+        <div class="field"><label>Local / trecho</label><input id="auto-local" placeholder="Rua, beco, PV inicial/final"></div>
+        <div class="field"><label>OS / contrato</label><input id="auto-os" placeholder="Ordem de servico"></div>
+      </div>
+      <div class="row row2">
+        <div class="field"><label>Documento original</label><input type="file" id="auto-file" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp"></div>
+        <div class="field"><label>Assinatura presente</label><select id="auto-assinatura"><option value="">Detectar</option><option value="true">Sim</option><option value="false">Nao</option></select></div>
+      </div>
+      <div class="field"><label>Texto colado do RDO/WhatsApp</label><textarea id="auto-texto" style="min-height:150px" placeholder="Cole aqui a mensagem inteira do engenheiro: data, producao, equipe, custo, desvios, ocorrencias..."></textarea></div>
+      <div class="btn-row">
+        <button class="btn btn-acc" onclick="uploadRdoAutomatico()">Extrair e criar RDO</button>
+        <button class="btn btn-blu" onclick="finalizarRdoAutomatico()">Finalizar</button>
+        <button class="btn btn-red" onclick="rejeitarRdoAutomatico()">Rejeitar</button>
+      </div>
+    </div>
+
+    <div class="review-grid">
+      <div class="card">
+        <h3><span class="ico">DOC</span> Evidencia original</h3>
+        <div class="evidence-box" id="auto-evidencia">Nenhum upload processado.</div>
+      </div>
+      <div class="card">
+        <h3><span class="ico">REV</span> Revisao humana</h3>
+        <div id="auto-status" class="help">Aguardando upload.</div>
+        <div class="field"><label>JSON de revisao</label><textarea id="auto-review-json" style="min-height:260px;font-family:var(--mono)"></textarea></div>
+        <div class="btn-row">
+          <button class="btn btn-out" onclick="salvarRevisaoRdoAutomatico()">Salvar revisao</button>
+          <button class="btn btn-out" onclick="abrirRelatorio360Automatico()">Relatorio 360</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-historico">
+    <div class="card">
+      <h3><span class="ico">📅</span> RDOs Registrados</h3>
+      <div class="row row3" style="margin-bottom:10px">
+        <div class="field"><label>De</label><input type="date" id="hist-de"></div>
+        <div class="field"><label>Até</label><input type="date" id="hist-ate"></div>
+        <div class="field"><label>Núcleo</label>
+          <select id="hist-nucleo"><option value="">Todos</option></select>
+        </div>
+      </div>
+      <div id="rdo-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TAB: DASHBOARD -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="tab-content" id="tab-dashboard">
+    <div class="dash-grid">
+      <div class="dash-card green"><div class="lbl">RDOs</div><div class="val" id="d-rdos">0</div></div>
+      <div class="dash-card yellow"><div class="lbl">Custo Acumulado</div><div class="val" id="d-custo">R$ 0</div></div>
+      <div class="dash-card blue"><div class="lbl">NS Executadas</div><div class="val" id="d-ns">0</div></div>
+      <div class="dash-card red"><div class="lbl">Ocorrências</div><div class="val" id="d-occ">0</div></div>
+      <div class="dash-card green"><div class="lbl">Extensão Exec.</div><div class="val" id="d-ext">0m</div></div>
+      <div class="dash-card blue"><div class="lbl">Fotos</div><div class="val" id="d-fotos">0</div></div>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📊</span> Custo Diário Acumulado</h3>
+      <canvas id="chart-custo" height="200"></canvas>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📋</span> NS Mais Trabalhadas</h3>
+      <div id="ns-ranking"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TAB: IMPORTAR PROJETO -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="tab-content" id="tab-importar">
+    <div class="card">
+      <h3><span class="ico">📁</span> Importar Dados do Projeto</h3>
+      <p class="help" style="margin-bottom:15px">Importe o JSON do projeto (exportado do Editor ou do Pipeline) para vincular as NS ao RDO. Também aceita JSON de NS exportadas.</p>
+      
+      <div class="photo-drop" onclick="document.getElementById('project-input').click()" style="margin-bottom:15px">
+        <div class="ico">📂</div>
+        <p>Clique para importar JSON do projeto<br>(rede.json, ns.json, ou export do editor)</p>
+      </div>
+      <input type="file" id="project-input" accept=".json,.geojson" style="display:none" onchange="handleProjectImport(event)">
+      
+      <div class="divider"></div>
+      <h3><span class="ico">💰</span> Importar Tabela de Preços</h3>
+      <p class="help" style="margin-bottom:15px">Importe CSV/JSON com os preços unitários do seu contrato. Formato: código;serviço;unidade;preco_unit</p>
+      <div class="photo-drop" onclick="document.getElementById('preco-input').click()">
+        <div class="ico">💰</div>
+        <p>Clique para importar Tabela de Preços<br>(CSV ou JSON)</p>
+      </div>
+      <input type="file" id="preco-input" accept=".json,.csv" style="display:none" onchange="handlePriceImport(event)">
+      
+      <div id="import-status" style="margin-top:15px"></div>
+    </div>
+    
+    <div class="card">
+      <h3><span class="ico">📋</span> Serviços Cadastrados</h3>
+      <table class="svc-table" id="svc-catalog-table">
+        <thead><tr><th>Código</th><th>Serviço</th><th>Unidade</th><th>Preço Unit.</th></tr></thead>
+        <tbody id="svc-catalog-body"></tbody>
+      </table>
+      <button class="btn btn-out btn-sm" style="margin-top:8px" onclick="addSvcCatalog()">+ Adicionar Serviço</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="rdo-import-input" accept=".json" style="display:none" onchange="handleRDOImport(event)">
+
+<script>
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+const state = {
+  ns_list: [],          // NS do projeto [{id,pv_ini,pv_fim,dn_mm,ext_m,tipo,material}]
+  selected_ns: new Set(),
+  rdos: [],             // RDOs salvos
+  current_rdo: {},
+  current_rdo_id: null,
+  auto_rdo_id: null,
+  api_ready: false,
+  occurrences: [],
+  photos: [],           // [{dataUrl, ns, legenda, timestamp}]
+  weather: {manha:'',tarde:''},
+  svc_catalog: [
+    {codigo:'ESG-001',servico:'Tubo PVC DN200',unidade:'m',preco:0},
+    {codigo:'ESG-002',servico:'Tubo PVC DN300',unidade:'m',preco:0},
+    {codigo:'ESG-003',servico:'Tubo PVC DN400',unidade:'m',preco:0},
+    {codigo:'AGU-001',servico:'Tubo PEAD DN63',unidade:'m',preco:0},
+    {codigo:'AGU-002',servico:'Tubo PEAD DN110',unidade:'m',preco:0},
+    {codigo:'GER-001',servico:'PV concreto Ø1200',unidade:'un',preco:0},
+    {codigo:'GER-002',servico:'Escavação mecânica',unidade:'m³',preco:0},
+    {codigo:'GER-003',servico:'Reaterro compactado',unidade:'m³',preco:0},
+    {codigo:'GER-004',servico:'Reposição asfáltica CBUQ',unidade:'m²',preco:0},
+    {codigo:'GER-005',servico:'Escoramento',unidade:'m²',preco:0},
+    {codigo:'GER-006',servico:'Ligação predial',unidade:'un',preco:0},
+  ],
+  svc_entries: {},      // ns_id → [{svc_idx, qtd, valor}]
+};
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(path, {
+    headers: {'Content-Type': 'application/json', ...(options.headers || {})},
+    ...options,
+  });
+  if(!response.ok) {
+    const text = await response.text();
+    throw new Error(text || `HTTP ${response.status}`);
+  }
+  const contentType = response.headers.get('content-type') || '';
+  if(contentType.includes('application/json')) return response.json();
+  return response.text();
+}
+
+function mapNsFromApi(ns) {
+  return {
+    raw_id: ns.id,
+    id: ns.codigo || ('NS_' + String(ns.seq || ns.id).padStart(3,'0')),
+    pv_ini: ns.pv_ini,
+    pv_fim: ns.pv_fim,
+    dn_mm: ns.dn_mm,
+    ext_m: ns.ext_m,
+    tipo: ns.is_agua ? 'agua' : 'esgoto',
+    material: ns.material || 'PVC',
+    status: ns.status,
+  };
+}
+
+function mapRdoFromApi(rdo) {
+  const apontamentos = rdo.apontamentos || [];
+  return {
+    ...rdo,
+    rt: rdo.responsavel,
+    clima: {manha: rdo.clima_manha, tarde: rdo.clima_tarde},
+    ns_trabalhadas: [...new Set(apontamentos.filter(a=>a.ns_id).map(a=>{
+      const ns = state.ns_list.find(item => item.raw_id === a.ns_id);
+      return ns ? ns.id : `NS_${String(a.ns_id).padStart(3,'0')}`;
+    }))],
+  };
+}
+
+async function carregarBackend() {
+  const [nsResp, rdoResp] = await Promise.all([
+    apiRequest('/api/ns'),
+    apiRequest('/api/rdo'),
+  ]);
+  state.ns_list = (nsResp.items || []).map(mapNsFromApi);
+  state.rdos = (rdoResp.items || []).map(mapRdoFromApi);
+  state.api_ready = true;
+  updateRdoNum();
+  renderNSGrid();
+  renderHistory();
+}
+
+// ════════════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════════════
+function setTab(name) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+  if(name==='historico') renderHistory();
+  if(name==='dashboard') renderDashboard();
+  if(name==='importar') renderCatalog();
+}
+
+// ════════════════════════════════════════════════════════
+// WEATHER
+// ════════════════════════════════════════════════════════
+function selWeather(el,periodo) {
+  const parent = document.getElementById('weather-'+periodo);
+  parent.querySelectorAll('.weather-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.weather[periodo] = el.textContent.trim();
+}
+
+// ════════════════════════════════════════════════════════
+// TEAM
+// ════════════════════════════════════════════════════════
+function addTeam() {
+  const list = document.getElementById('equipe-list');
+  const div = document.createElement('div');
+  div.className='team-row';
+  div.innerHTML=`<div class="field"><label>Função</label><input placeholder="Função"></div>
+    <div class="field"><label>Qtd</label><input type="number" value="1" min="0"></div>
+    <div style="padding-bottom:10px"><span onclick="removeTeam(this)" style="cursor:pointer;color:var(--red)">✕</span></div>`;
+  list.appendChild(div);
+}
+function removeTeam(el){el.closest('.team-row').remove()}
+
+// ════════════════════════════════════════════════════════
+// NS MANAGEMENT
+// ════════════════════════════════════════════════════════
+function renderNSGrid() {
+  const grid = document.getElementById('ns-grid');
+  if(!state.ns_list.length) {
+    grid.innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);grid-column:1/-1">Nenhuma NS. <a href="#" onclick="setTab(\'importar\');return false" style="color:var(--acc)">Importar projeto</a> ou <button class="btn btn-out btn-sm" onclick="addNSManual()">+ NS manual</button></div>';
+    return;
+  }
+  grid.innerHTML = state.ns_list.map((ns,i) => `
+    <div class="ns-chip ${state.selected_ns.has(ns.id)?'selected':''}" onclick="toggleNS('${ns.id}')">
+      <div class="id">${ns.id}</div>
+      <div class="det">${ns.pv_ini||'?'}→${ns.pv_fim||'?'} · DN${ns.dn_mm||'?'} · ${ns.ext_m||0}m</div>
+      <span class="badge ${ns.tipo==='agua'?'agua':'esg'}">${ns.tipo==='agua'?'ÁGUA':'ESG'}</span>
+    </div>
+  `).join('');
+}
+
+function filterNS() {
+  const q = document.getElementById('ns-filter').value.toUpperCase();
+  const tipo = document.getElementById('ns-tipo-filter').value;
+  document.querySelectorAll('.ns-chip').forEach((chip,i) => {
+    const ns = state.ns_list[i]; if(!ns) return;
+    const matchQ = !q || ns.id.toUpperCase().includes(q) || (ns.pv_ini||'').toUpperCase().includes(q) || (ns.pv_fim||'').toUpperCase().includes(q);
+    const matchT = !tipo || ns.tipo === tipo;
+    chip.style.display = matchQ && matchT ? '' : 'none';
+  });
+}
+
+function toggleNS(id) {
+  if(state.selected_ns.has(id)) state.selected_ns.delete(id);
+  else state.selected_ns.add(id);
+  renderNSGrid();
+  renderServicos();
+}
+
+function addNSManual() {
+  const id = 'NS_' + String(state.ns_list.length+1).padStart(3,'0');
+  state.ns_list.push({id, pv_ini:'PV_?', pv_fim:'PV_?', dn_mm:200, ext_m:0, tipo:'esgoto', material:'PVC'});
+  renderNSGrid();
+  toast('NS manual adicionada');
+}
+
+// ════════════════════════════════════════════════════════
+// SERVIÇOS + CUSTOS
+// ════════════════════════════════════════════════════════
+function renderServicos() {
+  const container = document.getElementById('servicos-container');
+  if(!state.selected_ns.size) {
+    container.innerHTML='<p style="color:var(--dim);font-size:11px;text-align:center;padding:20px">Selecione NS acima para registrar serviços</p>';
+    return;
+  }
+  let html = '';
+  state.selected_ns.forEach(nsId => {
+    const ns = state.ns_list.find(n=>n.id===nsId);
+    if(!ns) return;
+    if(!state.svc_entries[nsId]) state.svc_entries[nsId] = [];
+    html += `<div style="margin-bottom:15px">
+      <div style="font-family:var(--mono);font-weight:700;font-size:12px;color:var(--wht);margin-bottom:8px">
+        ${nsId} — ${ns.pv_ini}→${ns.pv_fim} · DN${ns.dn_mm} ${ns.material} · ${ns.ext_m}m
+        <span class="badge ${ns.tipo==='agua'?'agua':'esg'}" style="font-size:8px;padding:1px 5px;border-radius:3px">${ns.tipo==='agua'?'ÁGUA':'ESG'}</span>
+      </div>
+      <table class="svc-table">
+        <thead><tr><th>Serviço</th><th style="width:80px">Qtd</th><th style="width:100px">Valor</th><th style="width:30px"></th></tr></thead>
+        <tbody id="svc-body-${nsId}">
+          ${state.svc_entries[nsId].map((entry,j) => `<tr>
+            <td><select onchange="updateSvcEntry('${nsId}',${j},'svc_idx',this.selectedIndex)">
+              ${state.svc_catalog.map((s,k)=>`<option value="${k}" ${k===entry.svc_idx?'selected':''}>${s.codigo} — ${s.servico} (${s.unidade})</option>`).join('')}
+            </select></td>
+            <td><input type="number" step="0.01" value="${entry.qtd}" onchange="updateSvcEntry('${nsId}',${j},'qtd',parseFloat(this.value))"></td>
+            <td style="font-family:var(--mono);color:var(--yel)">R$ ${(entry.qtd * (state.svc_catalog[entry.svc_idx]?.preco||0)).toFixed(2)}</td>
+            <td><span onclick="removeSvcEntry('${nsId}',${j})" style="cursor:pointer;color:var(--red)">✕</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <button class="btn btn-out btn-sm" onclick="addSvcEntry('${nsId}')">+ Serviço</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+  calcTotal();
+}
+
+function addSvcEntry(nsId) {
+  if(!state.svc_entries[nsId]) state.svc_entries[nsId]=[];
+  state.svc_entries[nsId].push({svc_idx:0, qtd:0});
+  renderServicos();
+}
+function removeSvcEntry(nsId,idx) {
+  state.svc_entries[nsId].splice(idx,1);
+  renderServicos();
+}
+function updateSvcEntry(nsId,idx,field,val) {
+  state.svc_entries[nsId][idx][field]=val;
+  calcTotal();
+  renderServicos();
+}
+function calcTotal() {
+  let total=0;
+  Object.values(state.svc_entries).forEach(entries=>{
+    entries.forEach(e=>{ total += e.qtd * (state.svc_catalog[e.svc_idx]?.preco||0); });
+  });
+  document.getElementById('total-dia').textContent = total.toLocaleString('pt-BR',{minimumFractionDigits:2});
+}
+
+// ════════════════════════════════════════════════════════
+// OCORRÊNCIAS
+// ════════════════════════════════════════════════════════
+function addOccurrence() {
+  const hora=document.getElementById('occ-hora').value;
+  const tipo=document.getElementById('occ-tipo').value;
+  const desc=document.getElementById('occ-desc').value;
+  const ns=document.getElementById('occ-ns').value;
+  if(!desc){toast('Preencha a descrição');return}
+  state.occurrences.push({hora,tipo,desc,ns,timestamp:Date.now()});
+  document.getElementById('occ-desc').value='';
+  renderOccurrences();
+}
+function renderOccurrences() {
+  const list=document.getElementById('occ-list');
+  list.innerHTML=state.occurrences.map((o,i)=>`
+    <div class="occ-item">
+      <span class="time">${o.hora||'--:--'}</span>
+      <span class="tipo ${o.tipo}">${o.tipo.toUpperCase()}</span>
+      ${o.ns?`<span style="font-size:9px;color:var(--dim);margin-left:6px">${o.ns}</span>`:''}
+      <div class="desc">${o.desc}</div>
+      <span class="del" onclick="state.occurrences.splice(${i},1);renderOccurrences()">✕</span>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// FOTOS
+// ════════════════════════════════════════════════════════
+function handlePhotos(event) {
+  Array.from(event.target.files).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      state.photos.push({
+        dataUrl:e.target.result, name:file.name,
+        ns:'', legenda:'', timestamp:Date.now()
+      });
+      renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value='';
+}
+function renderPhotos() {
+  const grid=document.getElementById('photo-grid');
+  grid.innerHTML=state.photos.map((p,i)=>`
+    <div class="photo-card">
+      <img src="${p.dataUrl}" alt="${p.name}">
+      <div class="info">
+        <input placeholder="NS vinculada" value="${p.ns}" onchange="state.photos[${i}].ns=this.value" style="background:transparent;border:none;color:var(--acc);width:100%;font-size:9px;padding:0;font-family:var(--mono)">
+        <input placeholder="Legenda" value="${p.legenda}" onchange="state.photos[${i}].legenda=this.value" style="background:transparent;border:none;color:var(--txt);width:100%;font-size:9px;padding:2px 0;font-family:var(--font)">
+      </div>
+      <span class="del" onclick="state.photos.splice(${i},1);renderPhotos()">✕</span>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// SAVE / EXPORT
+// ════════════════════════════════════════════════════════
+function collectRDO() {
+  const equipe=[];
+  document.querySelectorAll('.team-row').forEach(row=>{
+    const inputs=row.querySelectorAll('input');
+    if(inputs[0]?.value) equipe.push({funcao:inputs[0].value,qtd:parseInt(inputs[1]?.value)||0});
+  });
+  
+  let total=0;
+  const servicos={};
+  Object.entries(state.svc_entries).forEach(([nsId,entries])=>{
+    servicos[nsId]=entries.map(e=>{
+      const cat=state.svc_catalog[e.svc_idx];
+      const val=e.qtd*(cat?.preco||0);
+      total+=val;
+      return{codigo:cat?.codigo,servico:cat?.servico,unidade:cat?.unidade,preco_unit:cat?.preco,qtd:e.qtd,valor:Math.round(val*100)/100};
+    });
+  });
+  
+  return {
+    data: document.getElementById('rdo-data').value,
+    numero: document.getElementById('rdo-num').value,
+    nucleo: document.getElementById('rdo-nucleo').value,
+    rt: document.getElementById('rdo-rt').value,
+    contrato: 'CT 11481051 — SLNR Santos',
+    empresa: 'FCN Construções e Saneamento',
+    clima: state.weather,
+    equipe,
+    ns_trabalhadas: Array.from(state.selected_ns),
+    servicos,
+    custo_total: Math.round(total*100)/100,
+    ocorrencias: state.occurrences,
+    fotos: state.photos.map(p=>({name:p.name,ns:p.ns,legenda:p.legenda})),
+    observacoes: document.getElementById('rdo-obs').value,
+    timestamp: new Date().toISOString(),
+  };
+}
+
+async function salvarRDO() {
+  const rdo=collectRDO();
+  if(!rdo.data){toast('Preencha a data');return}
+  try{
+    const salvo = await apiRequest('/api/rdo', {
+      method:'POST',
+      body: JSON.stringify(rdo),
+    });
+    state.current_rdo_id = salvo.id;
+    await carregarBackend();
+    toast(`RDO ${salvo.numero} salvo — ${salvo.data}`);
+  }catch(err){
+    state.rdos.push(rdo);
+    localStorage.setItem('construdata_rdos',JSON.stringify(state.rdos));
+    toast(`Falha no backend, salvo localmente: ${err.message}`);
+  }
+}
+
+function exportarTudo() {
+  const data={rdos:state.rdos,ns_list:state.ns_list,svc_catalog:state.svc_catalog,
+    meta:{plataforma:'ConstruData - HydroNetwork',modulo:'RDO',versao:'7.0',
+      empresa:'FCN Construções e Saneamento',data:new Date().toISOString()}};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`RDO_EXPORT_${new Date().toISOString().slice(0,10)}.json`;a.click();
+  toast('RDOs exportados');
+}
+
+async function exportarPDF() {
+  if(state.current_rdo_id){
+    try{
+      window.open(`/api/rdo/${state.current_rdo_id}/pdf`, '_blank');
+      return;
+    }catch(err){}
+  }
+  const rdo=collectRDO();
+  // Generate printable HTML
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>RDO ${rdo.numero} — ${rdo.data}</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-size:11px}
+    body{padding:20px}h1{font-size:16px;margin-bottom:4px}h2{font-size:13px;margin:12px 0 6px;border-bottom:1px solid #ccc;padding-bottom:3px}
+    table{width:100%;border-collapse:collapse;margin:6px 0}th,td{border:1px solid #ccc;padding:4px 6px;text-align:left}th{background:#f0f0f0;font-weight:700}
+    .header{display:flex;justify-content:space-between;border:2px solid #000;padding:10px;margin-bottom:10px}
+    .total{font-size:14px;font-weight:700;text-align:right;margin-top:8px}
+    @media print{body{padding:10px}}</style></head><body>
+    <div class="header"><div><h1>RELATÓRIO DIÁRIO DE OBRA — RDO Nº ${rdo.numero}</h1>
+    <p>${rdo.empresa} · ${rdo.contrato}</p></div>
+    <div style="text-align:right"><b>Data:</b> ${rdo.data}<br><b>Núcleo:</b> ${rdo.nucleo}<br><b>RT:</b> ${rdo.rt}</div></div>
+    <h2>Clima</h2><p>Manhã: ${rdo.clima.manha||'—'} · Tarde: ${rdo.clima.tarde||'—'}</p>
+    <h2>Equipe</h2><table><tr><th>Função</th><th>Qtd</th></tr>${rdo.equipe.map(e=>`<tr><td>${e.funcao}</td><td>${e.qtd}</td></tr>`).join('')}</table>
+    <h2>NS Trabalhadas</h2><p>${rdo.ns_trabalhadas.join(', ')||'Nenhuma'}</p>
+    <h2>Serviços Executados</h2>
+    ${Object.entries(rdo.servicos).map(([ns,svcs])=>`<h3 style="font-size:11px;margin-top:6px">${ns}</h3>
+      <table><tr><th>Código</th><th>Serviço</th><th>Qtd</th><th>Un</th><th>Preço</th><th>Valor</th></tr>
+      ${svcs.map(s=>`<tr><td>${s.codigo}</td><td>${s.servico}</td><td>${s.qtd}</td><td>${s.unidade}</td><td>R$ ${(s.preco_unit||0).toFixed(2)}</td><td>R$ ${(s.valor||0).toFixed(2)}</td></tr>`).join('')}</table>`).join('')}
+    <div class="total">TOTAL: R$ ${(rdo.custo_total||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+    <h2>Ocorrências</h2>
+    ${rdo.ocorrencias.length?rdo.ocorrencias.map(o=>`<p><b>${o.hora||'--:--'}</b> [${o.tipo.toUpperCase()}] ${o.ns?'('+o.ns+') ':''}${o.desc}</p>`).join(''):'<p>Nenhuma</p>'}
+    <h2>Observações</h2><p>${rdo.observacoes||'—'}</p>
+    <div style="margin-top:30px;display:flex;justify-content:space-between">
+      <div style="border-top:1px solid #000;width:200px;text-align:center;padding-top:4px">Responsável Técnico</div>
+      <div style="border-top:1px solid #000;width:200px;text-align:center;padding-top:4px">Fiscalização</div>
+    </div>
+    <script>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+  w.document.close();
+}
+
+// ════════════════════════════════════════════════════════
+// IMPORT
+// ════════════════════════════════════════════════════════
+function handleProjectImport(event) {
+  const file=event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      // Detect format
+      if(Array.isArray(data)&&data[0]?.ns_id) {
+        // NS export format
+        state.ns_list=data.map((ns,i)=>({
+          id:'NS_'+String(ns.ns_id||i+1).padStart(3,'0'),
+          pv_ini:ns.pv_ini,pv_fim:ns.pv_fim,dn_mm:ns.dn_mm,ext_m:ns.ext_m,
+          tipo:ns.tipo||'esgoto',material:ns.material||'PVC'
+        }));
+      } else if(data.pvs&&data.trechos) {
+        // Editor/pipeline format
+        const trechos=data.trechos||[];
+        state.ns_list=trechos.map((t,i)=>({
+          id:'NS_'+String(i+1).padStart(3,'0'),
+          pv_ini:t.pv_ini,pv_fim:t.pv_fim,dn_mm:t.dn_mm,ext_m:t.ext_m,
+          tipo:t.tipo||'esgoto',material:t.material||'PVC'
+        }));
+      }
+      renderNSGrid();
+      document.getElementById('import-status').innerHTML=
+        `<p style="color:var(--acc)">✅ ${state.ns_list.length} NS importadas do projeto</p>`;
+      toast(`${state.ns_list.length} NS importadas`);
+    }catch(err){toast('Erro: '+err.message)}
+  };
+  reader.readAsText(file);event.target.value='';
+}
+
+function handlePriceImport(event) {
+  const file=event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const text=e.target.result;
+      if(file.name.endsWith('.json')) {
+        const data=JSON.parse(text);
+        if(Array.isArray(data)) state.svc_catalog=data;
+        else if(data.servicos) state.svc_catalog=data.servicos;
+      } else {
+        // CSV: codigo;servico;unidade;preco
+        const lines=text.split('\n').filter(l=>l.trim());
+        const header=lines[0].toLowerCase();
+        const sep=header.includes(';')?';':',';
+        state.svc_catalog=lines.slice(1).map(l=>{
+          const cols=l.split(sep);
+          return{codigo:cols[0]?.trim(),servico:cols[1]?.trim(),unidade:cols[2]?.trim(),preco:parseFloat(cols[3]?.replace(',','.'))||0};
+        }).filter(s=>s.codigo);
+      }
+      renderCatalog();
+      toast(`${state.svc_catalog.length} serviços importados`);
+    }catch(err){toast('Erro: '+err.message)}
+  };
+  reader.readAsText(file);event.target.value='';
+}
+
+function renderCatalog() {
+  const body=document.getElementById('svc-catalog-body');
+  body.innerHTML=state.svc_catalog.map((s,i)=>`<tr>
+    <td><input value="${s.codigo}" onchange="state.svc_catalog[${i}].codigo=this.value" style="background:var(--bg);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;color:var(--cyn);font-family:var(--mono);font-size:10px;width:80px"></td>
+    <td><input value="${s.servico}" onchange="state.svc_catalog[${i}].servico=this.value" style="background:var(--bg);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;color:var(--txt);font-size:11px;width:100%"></td>
+    <td><input value="${s.unidade}" onchange="state.svc_catalog[${i}].unidade=this.value" style="background:var(--bg);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;color:var(--dim);font-size:10px;width:40px;text-align:center"></td>
+    <td><input type="number" step="0.01" value="${s.preco}" onchange="state.svc_catalog[${i}].preco=parseFloat(this.value)||0" style="background:var(--bg);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;color:var(--yel);font-family:var(--mono);font-size:11px;width:100px"></td>
+  </tr>`).join('');
+}
+
+function addSvcCatalog() {
+  state.svc_catalog.push({codigo:'NEW-'+String(state.svc_catalog.length+1).padStart(3,'0'),servico:'Novo serviço',unidade:'un',preco:0});
+  renderCatalog();
+}
+
+// ════════════════════════════════════════════════════════
+// HISTORY
+// ════════════════════════════════════════════════════════
+async function uploadRdoAutomatico(){
+  const file=document.getElementById('auto-file').files[0];
+  const texto=document.getElementById('auto-texto').value.trim();
+  if(!file && !texto){toast('Envie arquivo ou cole o texto do RDO');return}
+  let content_base64='';
+  let nome_arquivo='rdo_texto.txt';
+  let mime_type='text/plain';
+  if(file){
+    const dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+    content_base64=String(dataUrl).split(',')[1]||'';
+    nome_arquivo=file.name;
+    mime_type=file.type||'application/octet-stream';
+  }else{
+    content_base64=btoa(unescape(encodeURIComponent(texto)));
+  }
+  const payload={
+    content_base64,nome_arquivo,mime_type,texto,
+    nucleo:document.getElementById('auto-nucleo').value,
+    responsavel:document.getElementById('auto-responsavel').value,
+    empreiteira:document.getElementById('auto-empreiteira').value,
+    encarregado:document.getElementById('auto-encarregado').value,
+    local:document.getElementById('auto-local').value,
+    ordem_servico:document.getElementById('auto-os').value
+  };
+  const ass=document.getElementById('auto-assinatura').value;
+  if(ass) payload.assinatura_presente=ass==='true';
+  try{
+    const resp=await fetch('/api/rdo/automatico/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!resp.ok) throw new Error(await resp.text());
+    const data=await resp.json();
+    state.auto_rdo_id=data.rdo?.id;
+    renderRdoAutomatico(data);
+    await carregarBackend();
+    toast('RDO automatico criado para revisao');
+  }catch(err){toast('Erro RDO automatico: '+err.message)}
+}
+
+function renderRdoAutomatico(data){
+  const rdo=data.rdo||{};
+  const ext=data.resultado_extracao||{};
+  const evid=data.evidencia||{};
+  const pend=(ext.pendencias||[]).map(x=>`<span class="pending-badge">${x}</span>`).join('');
+  const conf=Object.entries(ext.confianca||{}).map(([k,v])=>`<span class="confidence-badge">${k}: ${Math.round(v*100)}%</span>`).join('');
+  document.getElementById('auto-status').innerHTML=`RDO #${rdo.id||'-'} | status ${rdo.status_revisao||'-'}<br>${pend||'Sem pendencias fortes'}<br>${conf}`;
+  document.getElementById('auto-evidencia').innerHTML=`<b>${evid.nome_arquivo||'-'}</b><br><span style="font-family:var(--mono);font-size:10px">${evid.caminho||''}</span><br><br>Hash: ${evid.hash_sha256||'-'}<br>Assinatura: ${evid.assinatura_presente?'sim':'nao'}`;
+  document.getElementById('auto-review-json').value=JSON.stringify({
+    data:rdo.data,nucleo:rdo.nucleo,responsavel:rdo.responsavel,local:rdo.local,
+    empreiteira:rdo.empreiteira,encarregado:rdo.encarregado,ordem_servico:rdo.ordem_servico,
+    assinatura_presente:rdo.assinatura_presente,servicos:rdo.apontamentos||[],equipe:rdo.equipe||[],
+    ocorrencias:rdo.ocorrencias||[],status_revisao:'em_revisao'
+  },null,2);
+}
+
+async function salvarRevisaoRdoAutomatico(){
+  if(!state.auto_rdo_id){toast('Nenhum RDO automatico ativo');return}
+  try{
+    const payload=JSON.parse(document.getElementById('auto-review-json').value||'{}');
+    const resp=await fetch(`/api/rdo/${state.auto_rdo_id}/revisar`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!resp.ok) throw new Error(await resp.text());
+    const rdo=await resp.json();
+    document.getElementById('auto-review-json').value=JSON.stringify(rdo,null,2);
+    await carregarBackend();
+    toast('Revisao salva');
+  }catch(err){toast('Erro revisao: '+err.message)}
+}
+
+async function finalizarRdoAutomatico(){
+  if(!state.auto_rdo_id){toast('Nenhum RDO automatico ativo');return}
+  const resp=await fetch(`/api/rdo/${state.auto_rdo_id}/finalizar`,{method:'POST'});
+  if(!resp.ok){toast('Erro ao finalizar');return}
+  const data=await resp.json();
+  document.getElementById('auto-review-json').value=JSON.stringify(data,null,2);
+  await carregarBackend();
+  toast('RDO finalizado e integrado');
+}
+
+async function rejeitarRdoAutomatico(){
+  if(!state.auto_rdo_id){toast('Nenhum RDO automatico ativo');return}
+  const motivo=prompt('Motivo da rejeicao')||'Rejeitado na revisao';
+  const resp=await fetch(`/api/rdo/${state.auto_rdo_id}/rejeitar`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({motivo})});
+  if(!resp.ok){toast('Erro ao rejeitar');return}
+  document.getElementById('auto-status').textContent='RDO rejeitado';
+  await carregarBackend();
+  toast('RDO rejeitado');
+}
+
+async function abrirRelatorio360Automatico(){
+  if(!state.auto_rdo_id){toast('Nenhum RDO automatico ativo');return}
+  const resp=await fetch(`/api/relatorio360/rdo/${state.auto_rdo_id}`);
+  const data=await resp.json();
+  const w=window.open('','_blank');
+  w.document.write(`<pre style="font-family:monospace;padding:20px;white-space:pre-wrap">${JSON.stringify(data,null,2)}</pre>`);
+  w.document.close();
+}
+
+function renderHistory() {
+  const list=document.getElementById('rdo-list');
+  if(!state.rdos.length){list.innerHTML='<p style="color:var(--dim);text-align:center;padding:30px">Nenhum RDO registrado</p>';return}
+  list.innerHTML=state.rdos.slice().reverse().map((r,i)=>{
+    const nsCount=r.ns_trabalhadas?.length||0;
+    const occCount=r.ocorrencias?.length||0;
+    const fotoCount=r.fotos?.length||0;
+    const d=new Date(r.data+'T12:00:00');
+    const dia=d.getDate();const mes=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][d.getMonth()];
+    return`<div class="rdo-item" onclick="viewRDO(${state.rdos.length-1-i})">
+      <div class="date">${dia}<br><small>${mes}</small></div>
+      <div class="summary"><b>RDO ${r.numero}</b> — ${r.nucleo}<br>${nsCount} NS · ${occCount} ocorrências · ${fotoCount} fotos<br>Clima: ${r.clima?.manha||'?'} / ${r.clima?.tarde||'?'}</div>
+      <div class="value">R$ ${(r.custo_total||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+    </div>`;
+  }).join('');
+}
+
+function viewRDO(idx) {
+  const r=state.rdos[idx]; if(!r) return;
+  const w=window.open('','_blank');
+  w.document.write(`<pre style="font-family:monospace;padding:20px">${JSON.stringify(r,null,2)}</pre>`);
+  w.document.close();
+}
+
+// ════════════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════════════
+function renderDashboard() {
+  const rdos=state.rdos;
+  const totalCusto=rdos.reduce((s,r)=>s+(r.custo_total||0),0);
+  const nsSet=new Set();rdos.forEach(r=>(r.ns_trabalhadas||[]).forEach(n=>nsSet.add(n)));
+  const totalOcc=rdos.reduce((s,r)=>s+(r.ocorrencias?.length||0),0);
+  const totalFotos=rdos.reduce((s,r)=>s+(r.fotos?.length||0),0);
+  
+  document.getElementById('d-rdos').textContent=rdos.length;
+  document.getElementById('d-custo').textContent='R$ '+totalCusto.toLocaleString('pt-BR',{minimumFractionDigits:0});
+  document.getElementById('d-ns').textContent=nsSet.size;
+  document.getElementById('d-occ').textContent=totalOcc;
+  document.getElementById('d-fotos').textContent=totalFotos;
+  
+  // NS ranking
+  const nsCount={};
+  rdos.forEach(r=>(r.ns_trabalhadas||[]).forEach(n=>{nsCount[n]=(nsCount[n]||0)+1}));
+  const ranking=Object.entries(nsCount).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  document.getElementById('ns-ranking').innerHTML=ranking.map(([ns,cnt])=>
+    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03)">
+      <span style="font-family:var(--mono);font-size:11px">${ns}</span>
+      <span style="color:var(--acc);font-family:var(--mono)">${cnt} dias</span>
+    </div>`
+  ).join('') || '<p style="color:var(--dim)">Sem dados</p>';
+}
+
+// ════════════════════════════════════════════════════════
+// RDO IMPORT
+// ════════════════════════════════════════════════════════
+function importarRDOs(){document.getElementById('rdo-import-input').click()}
+function handleRDOImport(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.rdos) {state.rdos=data.rdos;if(data.ns_list)state.ns_list=data.ns_list;if(data.svc_catalog)state.svc_catalog=data.svc_catalog;}
+      else if(Array.isArray(data)) state.rdos=data;
+      renderNSGrid();toast(`${state.rdos.length} RDOs importados`);
+    }catch(err){toast('Erro: '+err.message)}
+  };
+  reader.readAsText(file);event.target.value='';
+}
+
+// ════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════
+function updateRdoNum(){
+  const rdos=state.rdos.filter(r=>r.nucleo===document.getElementById('rdo-nucleo').value);
+  document.getElementById('rdo-num').value=String(rdos.length+1).padStart(3,'0');
+}
+
+function limparRDO(){
+  state.selected_ns.clear();state.occurrences=[];state.photos=[];state.svc_entries={};state.weather={manha:'',tarde:''};
+  document.querySelectorAll('.weather-opt').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('rdo-obs').value='';
+  renderNSGrid();renderServicos();renderOccurrences();renderPhotos();
+  toast('Formulário limpo');
+}
+
+function toast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+(async function init(){
+  // Set today's date
+  document.getElementById('rdo-data').value=new Date().toISOString().slice(0,10);
+  try{
+    await carregarBackend();
+    toast('RDO conectado ao backend');
+  }catch(e){
+    try{
+      const saved=localStorage.getItem('construdata_rdos');
+      if(saved) state.rdos=JSON.parse(saved);
+    }catch(localErr){}
+    toast('Backend indisponivel — usando modo local');
+  }
+  renderNSGrid();
+  renderCatalog();
+})();
+</script>
+</body>
+</html>

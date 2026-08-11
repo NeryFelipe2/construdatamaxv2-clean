@@ -1,0 +1,16 @@
+OK: Part successfully added to catalog --> Alas DER 1989\BBC_1989.xml
+OK: Part successfully added to catalog --> Alas DER 1989\BBT_1989.xml
+OK: Part successfully added to catalog --> Alas DNIT 2010\BBC_2010.xml
+OK: Part successfully added to catalog --> Alas DNIT 2010\BBT_2010.xml
+OK: Part successfully added to catalog --> ALA_GENERICA\ALA.xml
+OK: Part successfully added to catalog --> Caixa_Coletora_sarjeta\Caixa_Coletora_sarjeta.xml
+OK: Part successfully added to catalog --> Caixa_de_Captacao\Caixa_de_Captacao.xml
+OK: Part successfully added to catalog --> Caixa_de_Inspecao\Caixa_de_Inspecao.xml
+OK: Part successfully added to catalog --> Caixa_de_ligacao\Caixa_ligacao.xml
+OK: Part successfully added to catalog --> Caixa_de_passagem\Caixa_de_passagem.xml
+OK: Part successfully added to catalog --> PVBL\PVBL2.xml
+OK: Part successfully added to catalog --> PV_Redondo\PV_Redondo.xml
+OK: Part successfully added to catalog --> PV_Retangular\AeccStructTwoTierRectBase_Metric.xml
+OK: Part successfully added to catalog --> PV_Retangular\PV_Retangular.xml
+OK: Part successfully added to catalog --> Terminal_de_inspecao\Terminal de inspecao.xml
+CatalogRegen complete: saving --> D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric structures\metric structures.apc

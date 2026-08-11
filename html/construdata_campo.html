@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConstruDataMaxV2 Campo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060f;--panel:#10101c;--panel2:#161629;--line:#2a2a44;
+  --acc:#00ff88;--warn:#ffd000;--danger:#ff4466;--info:#34c8ff;
+  --text:#eef3ff;--muted:#7f8aa5;--mono:'JetBrains Mono',monospace;--font:'IBM Plex Sans',sans-serif;
+}
+body{background:radial-gradient(circle at top,#15203a 0%,#06060f 48%);color:var(--text);font-family:var(--font);min-height:100vh}
+.app{max-width:960px;margin:0 auto;padding:18px}
+.hero{padding:20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(52,200,255,.08));margin-bottom:16px}
+.hero h1{font-size:28px;line-height:1.1;margin-bottom:8px}
+.hero p{color:var(--muted);font-size:14px}
+.grid{display:grid;gap:14px}
+.grid.cards{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:16px}
+.card{background:rgba(16,16,28,.92);border:1px solid var(--line);border-radius:18px;padding:16px}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.metric{font-size:28px;font-weight:700}
+.metric.acc{color:var(--acc)} .metric.warn{color:var(--warn)} .metric.info{color:var(--info)}
+.list{display:grid;gap:10px}
+.item{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}
+.item .top{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px}
+.badge{font:700 11px var(--mono);padding:4px 8px;border-radius:999px;border:1px solid}
+.badge.plan{color:var(--warn);border-color:rgba(255,208,0,.35);background:rgba(255,208,0,.08)}
+.badge.exec{color:var(--info);border-color:rgba(52,200,255,.35);background:rgba(52,200,255,.08)}
+.badge.done{color:var(--acc);border-color:rgba(0,255,136,.35);background:rgba(0,255,136,.08)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.section-title h3{font-size:16px}
+.btn{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+@media (max-width:640px){.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <h1>Campo conectado ao RDO, NS e cadastro</h1>
+    <p>Interface mobile-first para consulta de NS, progresso diario e fotos vinculadas ao backend.</p>
+  </section>
+
+  <section class="grid cards" id="cards"></section>
+
+  <section class="card" style="margin-bottom:16px">
+    <div class="section-title">
+      <h3>NS em campo</h3>
+      <button class="btn" onclick="loadAll()">Atualizar</button>
+    </div>
+    <div class="list" id="ns-list"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h3>RDOs recentes</h3>
+    </div>
+    <div class="list" id="rdo-list"></div>
+  </section>
+</div>
+
+<script>
+async function api(path){
+  const res = await fetch(path);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+function badgeClass(status){
+  if(status === 'CONCLUIDA' || status === 'MEDIDA') return 'done';
+  if(status === 'EM_EXECUCAO') return 'exec';
+  return 'plan';
+}
+
+function renderCards(data){
+  const cards = [
+    {label:'NS total', value:data.n_total || 0, cls:'acc'},
+    {label:'% fisico', value:`${data.pct_fisico || 0}%`, cls:'info'},
+    {label:'RDOs', value:data.rdos || 0, cls:'warn'},
+    {label:'m/dia', value:data.m_por_dia || 0, cls:'acc'},
+  ];
+  document.getElementById('cards').innerHTML = cards.map(card => `
+    <article class="card">
+      <h2>${card.label}</h2>
+      <div class="metric ${card.cls}">${card.value}</div>
+    </article>
+  `).join('');
+}
+
+function renderNs(items){
+  const host = document.getElementById('ns-list');
+  if(!items.length){
+    host.innerHTML = '<div class="muted">Nenhuma NS encontrada.</div>';
+    return;
+  }
+  host.innerHTML = items.slice(0, 24).map(item => `
+    <article class="item">
+      <div class="top">
+        <div>
+          <div class="mono">${item.codigo || ('NS_' + String(item.seq || item.id).padStart(3,'0'))}</div>
+          <div>${item.pv_ini || '?'} -> ${item.pv_fim || '?'}</div>
+        </div>
+        <span class="badge ${badgeClass(item.status)}">${item.status}</span>
+      </div>
+      <div class="muted">DN ${item.dn_mm || '?'} | ${item.ext_m || 0} m | ${item.rua || 'Sem logradouro'}</div>
+    </article>
+  `).join('');
+}
+
+function renderRdos(items){
+  const host = document.getElementById('rdo-list');
+  if(!items.length){
+    host.innerHTML = '<div class="muted">Nenhum RDO registrado.</div>';
+    return;
+  }
+  host.innerHTML = items.slice(0, 12).map(item => `
+    <article class="item">
+      <div class="top">
+        <div>
+          <div class="mono">RDO ${String(item.numero || item.id).padStart(3,'0')}</div>
+          <div>${item.nucleo || 'REDE'} | ${item.data}</div>
+        </div>
+        <span class="badge ${item.status === 'FECHADO' ? 'done' : 'exec'}">${item.status}</span>
+      </div>
+      <div class="muted">Custo do dia: R$ ${(item.total_custo || 0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+    </article>
+  `).join('');
+}
+
+async function loadAll(){
+  try{
+    const [dashboard, ns, rdo] = await Promise.all([
+      api('/api/dashboard'),
+      api('/api/ns'),
+      api('/api/rdo'),
+    ]);
+    renderCards(dashboard);
+    renderNs(ns.items || []);
+    renderRdos(rdo.items || []);
+  }catch(err){
+    document.getElementById('cards').innerHTML = `<article class="card"><h2>Erro</h2><div class="muted">${err.message}</div></article>`;
+  }
+}
+
+loadAll();
+</script>
+</body>
+</html>

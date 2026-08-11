@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ConstruData - HydroNetwork | Fluxograma BIM 5D</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Outfit:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050510;--s1:#0b0b18;--s2:#121228;--s3:#1a1a38;--brd:#252548;
+--acc:#00ff88;--red:#ff3355;--yel:#ffd000;--blu:#3388ff;--cyn:#00ddff;--mag:#cc44ff;--ora:#ff8833;--grn:#00cc66;
+--agua:#00aaff;--esg:#00ff88;
+--txt:#d8d8ee;--dim:#556;--font:'Outfit',sans-serif;--mono:'IBM Plex Mono',monospace}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);min-height:100vh}
+.hdr{background:linear-gradient(135deg,#08081a,#101030);border-bottom:2px solid var(--acc);padding:20px 40px;display:flex;align-items:center;gap:20px}
+.hdr h1{font-size:24px;font-weight:800;color:var(--acc)}.hdr h1 span{color:var(--dim);font-weight:300;font-size:15px}
+.hdr .v{background:var(--yel);color:#000;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;font-family:var(--mono)}
+.content{max-width:1400px;margin:0 auto;padding:30px 40px}
+h2{font-size:22px;font-weight:800;margin:40px 0 8px;color:var(--txt)}
+h2 em{color:var(--acc);font-style:normal}
+.sub{color:var(--dim);font-size:12px;margin-bottom:20px}
+.divider{height:2px;background:linear-gradient(90deg,var(--acc),transparent);margin:40px 0;border-radius:2px}
+
+/* FLOW */
+.flow-v{display:flex;flex-direction:column;gap:0;align-items:center;margin:20px 0}
+.flow-h{display:flex;gap:0;align-items:stretch;justify-content:center;flex-wrap:wrap;margin:15px 0}
+.fbox{min-width:160px;max-width:200px;padding:14px;border-radius:10px;border:1.5px solid var(--brd);text-align:center;position:relative;transition:.3s}
+.fbox:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.fbox .ico{font-size:24px;margin-bottom:6px}
+.fbox .nm{font-size:13px;font-weight:700;margin-bottom:4px}
+.fbox .dt{font-size:9px;color:var(--dim);font-family:var(--mono);line-height:1.6}
+.fbox .tag{font-size:8px;padding:2px 6px;border-radius:3px;margin-top:6px;display:inline-block;font-weight:700;font-family:var(--mono)}
+
+.fbox.input{background:linear-gradient(135deg,rgba(51,136,255,.12),rgba(51,136,255,.04));border-color:rgba(51,136,255,.4)}
+.fbox.input .nm{color:var(--blu)}
+.fbox.proc{background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,255,136,.02));border-color:rgba(0,255,136,.4)}
+.fbox.proc .nm{color:var(--acc)}
+.fbox.out{background:linear-gradient(135deg,rgba(255,208,0,.08),rgba(255,208,0,.02));border-color:rgba(255,208,0,.4)}
+.fbox.out .nm{color:var(--yel)}
+.fbox.bim{background:linear-gradient(135deg,rgba(255,51,85,.08),rgba(255,51,85,.02));border-color:rgba(255,51,85,.4)}
+.fbox.bim .nm{color:var(--red)}
+.fbox.agua{border-color:rgba(0,170,255,.5);background:linear-gradient(135deg,rgba(0,170,255,.1),rgba(0,170,255,.03))}
+.fbox.agua .nm{color:var(--agua)}
+.fbox.esg{border-color:rgba(0,255,136,.5);background:linear-gradient(135deg,rgba(0,255,136,.1),rgba(0,255,136,.03))}
+.fbox.esg .nm{color:var(--esg)}
+.fbox.med{background:linear-gradient(135deg,rgba(204,68,255,.1),rgba(204,68,255,.03));border-color:rgba(204,68,255,.5)}
+.fbox.med .nm{color:var(--mag)}
+.fbox.export{background:linear-gradient(135deg,rgba(255,136,51,.1),rgba(255,136,51,.03));border-color:rgba(255,136,51,.5)}
+.fbox.export .nm{color:var(--ora)}
+
+.arrow-d{text-align:center;color:var(--acc);font-size:22px;padding:4px 0;font-weight:300}
+.arrow-r{color:var(--acc);font-size:20px;display:flex;align-items:center;padding:0 6px}
+.arrow-split{display:flex;justify-content:center;gap:80px;position:relative;padding:10px 0}
+.arrow-split::before{content:'';position:absolute;top:0;left:50%;width:50%;height:1px;background:var(--acc);transform:translateX(-50%)}
+
+/* PHASE BLOCK */
+.phase{background:var(--s1);border:1.5px solid var(--brd);border-radius:12px;padding:20px;margin:15px 0}
+.phase h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.phase h3 .num{background:var(--acc);color:#000;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:var(--mono)}
+.phase h3 .badge{font-size:9px;padding:2px 8px;border-radius:10px;font-family:var(--mono);font-weight:600}
+.phase h3 .badge.a{background:rgba(0,170,255,.15);color:var(--agua)}
+.phase h3 .badge.e{background:rgba(0,255,136,.15);color:var(--esg)}
+.phase h3 .badge.ae{background:linear-gradient(90deg,rgba(0,170,255,.15),rgba(0,255,136,.15));color:var(--txt)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
+.tbl th{padding:6px 10px;text-align:left;font-weight:600;color:var(--acc);font-size:9px;text-transform:uppercase;border-bottom:1px solid var(--brd);background:var(--s2)}
+.tbl td{padding:5px 10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.tbl .f{font-family:var(--mono);color:var(--cyn)}
+.tbl .agua{color:var(--agua)}.tbl .esg{color:var(--esg)}
+
+/* HIGHLIGHT */
+.hi{background:linear-gradient(135deg,rgba(0,255,136,.06),rgba(0,255,136,.02));border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px;margin:15px 0}
+.hi h4{color:var(--acc);font-size:14px;margin-bottom:8px}
+.hi p{font-size:12px;line-height:1.8}
+
+.code{background:#080812;border:1px solid var(--brd);border-radius:6px;padding:12px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--txt);margin:10px 0;overflow-x:auto}
+.code .c{color:#3a3a55}.code .k{color:var(--blu)}.code .s{color:var(--acc)}.code .n{color:var(--yel)}.code .f{color:var(--mag)}
+
+.footer{padding:20px;text-align:center;font-size:10px;color:var(--dim);font-family:var(--mono);border-top:1px solid var(--brd);margin-top:40px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>ConstruData <span>HydroNetwork</span></h1>
+  <div class="v">BIM 5D</div>
+  <div style="flex:1"></div>
+  <div style="font-size:11px;color:var(--dim);font-family:var(--mono);text-align:right">
+    CT 11481051 · SABESP · SLNR Santos<br>
+    FCN Construções e Saneamento
+  </div>
+</div>
+
+<div class="content">
+
+<h2><em>FLUXOGRAMA COMPLETO</em> — DO PROJETO AO BIM 5D</h2>
+<p class="sub">Água 💧 + Esgoto 🟢 · Entrada por DXF/DWG/LandXML · Medição pela Nota de Serviço · Custos customizáveis</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 1: ENTRADA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">1</span> ENTRADA — Receber Projeto <span class="badge ae">ÁGUA + ESGOTO</span></h3>
+  
+  <div class="flow-h">
+    <div class="fbox input">
+      <div class="ico">📁</div>
+      <div class="nm">DXF ProSaneamento</div>
+      <div class="dt">Núcleos existentes<br>TUBO_PVC / TUBO_PE_80<br>PS_PONTOS</div>
+      <div class="tag" style="background:rgba(0,255,136,.15);color:var(--esg)">ESGOTO + ÁGUA</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">⚙️</div>
+      <div class="nm">ler_dxf_gdal.py</div>
+      <div class="dt">GDAL/pyogrio<br>Clustering scipy<br>Auto-name água<br>Fallback grau≥2</div>
+    </div>
+    <div class="arrow-r" style="color:var(--dim)">│</div>
+    <div class="fbox input">
+      <div class="ico">📁</div>
+      <div class="nm">DWG Civil 3D</div>
+      <div class="dt">Pipe Networks<br>AEC Proxy Objects<br>Novos núcleos</div>
+      <div class="tag" style="background:rgba(204,68,255,.15);color:var(--mag)">PIPE NETWORK</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">🔓</div>
+      <div class="nm">ler_dwg_aec.py</div>
+      <div class="dt">libredwg convert<br>Parse PV labels<br>Reconstrução<br>topológica</div>
+    </div>
+    <div class="arrow-r" style="color:var(--dim)">│</div>
+    <div class="fbox input">
+      <div class="ico">📁</div>
+      <div class="nm">LandXML</div>
+      <div class="dt">Export do Civil 3D<br>Pipe Network<br>completo</div>
+      <div class="tag" style="background:rgba(51,136,255,.15);color:var(--blu)">NATIVO</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">⚙️</div>
+      <div class="nm">ler_landxml.py</div>
+      <div class="dt">XML parser<br>Structures + Pipes<br>Mesma saída</div>
+    </div>
+  </div>
+  
+  <div class="arrow-d">▼ ▼ ▼</div>
+  
+  <div class="hi">
+    <h4>🔄 CONVERGÊNCIA — Formato único interno</h4>
+    <p>Qualquer entrada → mesmo formato: <code>pvs</code> (dict nome→{x,y,ct,cf}) + <code>trechos</code> (list {pv_ini,pv_fim,dn,ext,decl,material})<br>
+    <b>Água</b> (PE 80/100, DN 63-160, sem declividade) e <b>Esgoto</b> (PVC, DN 200-400, com declividade/cotas) tratados no mesmo fluxo.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 2: PIPE NETWORK PARAMÉTRICO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">2</span> PIPE NETWORK PARAMÉTRICO <span class="badge ae">ÁGUA + ESGOTO</span></h3>
+  
+  <div class="flow-h">
+    <div class="fbox proc">
+      <div class="ico">🔗</div>
+      <div class="nm">Grafo Topológico</div>
+      <div class="dt">Cada PV sabe quais<br>tubos conectam.<br>Adjacência bidirecional.</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">📐</div>
+      <div class="nm">Recálculo Cascata</div>
+      <div class="dt">Mexeu PV → extensão<br>→ declividade → Manning<br>→ custo → geometria</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">🏗️</div>
+      <div class="nm">Geometria 3D Real</div>
+      <div class="dt">SweptDiskSolid (tubos)<br>ExtrudedAreaSolid (PVs)<br>IFC / LandXML / DXF</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">🌊</div>
+      <div class="nm">Hidráulica Manning</div>
+      <div class="dt">V = (1/n)·Rh²/³·I¹/²<br>Q = V·A<br>τ = γ·Rh·I<br><b style="color:var(--agua)">ÁGUA:</b> Hazen-Williams</div>
+    </div>
+  </div>
+  
+  <div class="grid" style="margin-top:15px">
+    <div style="background:var(--s2);border:1px solid rgba(0,170,255,.3);border-radius:8px;padding:14px">
+      <h4 style="color:var(--agua);font-size:12px;margin-bottom:8px">💧 REDE DE ÁGUA</h4>
+      <table class="tbl">
+        <tr><td class="f">Material</td><td>PE 80 / PE 100</td></tr>
+        <tr><td class="f">DNs</td><td>63, 75, 110, 160 mm</td></tr>
+        <tr><td class="f">Manning n</td><td>0.011 (PEAD)</td></tr>
+        <tr><td class="f">Pressão</td><td>PN 12.5 / 16 bar</td></tr>
+        <tr><td class="f">Junta</td><td>Eletrofusão</td></tr>
+        <tr><td class="f">Catálogo</td><td>PEAD_SABESP.xml</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--s2);border:1px solid rgba(0,255,136,.3);border-radius:8px;padding:14px">
+      <h4 style="color:var(--esg);font-size:12px;margin-bottom:8px">🟢 REDE DE ESGOTO</h4>
+      <table class="tbl">
+        <tr><td class="f">Material</td><td>PVC Rígido NBR 7362</td></tr>
+        <tr><td class="f">DNs</td><td>100, 150, 200, 300, 400 mm</td></tr>
+        <tr><td class="f">Manning n</td><td>0.013 (PVC)</td></tr>
+        <tr><td class="f">Declividade</td><td>Projeto / calculada</td></tr>
+        <tr><td class="f">Junta</td><td>Bolsa-Ponta</td></tr>
+        <tr><td class="f">Catálogo</td><td>PVC_SABESP.xml</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 3: NOTAS DE SERVIÇO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">3</span> NOTAS DE SERVIÇO <span class="badge ae">ÁGUA + ESGOTO</span></h3>
+  
+  <div class="flow-h">
+    <div class="fbox proc">
+      <div class="ico">⚙️</div>
+      <div class="nm">gerar_ns.py</div>
+      <div class="dt">1 NS por trecho<br>Água + Esgoto<br>Mesmo formato</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox out">
+      <div class="ico">📋</div>
+      <div class="nm">NS JSON</div>
+      <div class="dt">Dados estruturados<br>PV, DN, ext, cotas<br>material, hidráulica</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox out">
+      <div class="ico">📄</div>
+      <div class="nm">NS PDF A4</div>
+      <div class="dt">Impressão campo<br>Header + dados<br>+ perfil + mapa</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox out">
+      <div class="ico">🗺️</div>
+      <div class="nm">HTML Leaflet</div>
+      <div class="dt">Mapa interativo<br>Satélite Esri<br>Click → detalhes</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox out">
+      <div class="ico">🌐</div>
+      <div class="nm">GeoJSON</div>
+      <div class="dt">EPSG:31983<br>Import QGIS<br>Geometria rede</div>
+    </div>
+  </div>
+  
+  <div class="hi">
+    <h4>📋 A NS é a UNIDADE CENTRAL do sistema</h4>
+    <p>Cada NS = 1 trecho da rede (PV_A → PV_B). Toda medição, todo custo, todo cronograma referencia a NS.<br>
+    <b>NS_001_ESG</b> = trecho esgoto | <b>NS_001_AGU</b> = trecho água.<br>
+    A NS vai pro campo (PDF) → volta com dados as-built → gera cadastro → gera medição → fecha o ciclo 5D.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 4: CUSTOS E MEDIÇÃO -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">4</span> CUSTOS E MEDIÇÃO <span class="badge" style="background:rgba(204,68,255,.15);color:var(--mag)">CUSTOMIZÁVEL</span></h3>
+  
+  <div class="flow-h">
+    <div class="fbox med">
+      <div class="ico">💰</div>
+      <div class="nm">Tabela de Preços</div>
+      <div class="dt"><b>IMPORTADA POR VOCÊ</b><br>Planilha do contrato<br>Anexo C / Medição<br>NÃO é SINAPI fixo</div>
+      <div class="tag" style="background:rgba(255,208,0,.2);color:var(--yel)">CUSTOMIZÁVEL</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox proc">
+      <div class="ico">⚙️</div>
+      <div class="nm">Motor de Custo</div>
+      <div class="dt">Preço unit × qtd<br>por serviço<br>por NS/trecho</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox med">
+      <div class="ico">📊</div>
+      <div class="nm">Boletim de Medição</div>
+      <div class="dt">BM por período<br>Vinculado às NS<br>Status: executado/<br>medido/aprovado</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox med">
+      <div class="ico">📈</div>
+      <div class="nm">Curva S</div>
+      <div class="dt">Previsto × Real<br>Custo acumulado<br>Por núcleo + total</div>
+    </div>
+  </div>
+  
+  <div class="grid" style="margin-top:15px">
+    <div style="background:var(--s2);border:1px solid rgba(204,68,255,.3);border-radius:8px;padding:14px">
+      <h4 style="color:var(--mag);font-size:12px;margin-bottom:8px">💰 TABELA DE PREÇOS — Formato de entrada</h4>
+      <table class="tbl">
+        <tr><th>Código</th><th>Serviço</th><th>Unidade</th><th>Preço Unit.</th><th>Fonte</th></tr>
+        <tr><td class="f">ESG-001</td><td>Tubo PVC DN200</td><td>m</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">ESG-002</td><td>Tubo PVC DN300</td><td>m</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">ESG-010</td><td>PV concreto Ø1200</td><td>un</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">AGU-001</td><td>Tubo PEAD DN63</td><td>m</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">GER-001</td><td>Escavação 1ª cat</td><td>m³</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">GER-002</td><td>Reaterro compactado</td><td>m³</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+        <tr><td class="f">GER-003</td><td>Reposição CBUQ</td><td>m²</td><td>R$ ???</td><td><b>SUA MEDIÇÃO</b></td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--dim);margin-top:8px">Você importa CSV/Excel com seus preços reais do contrato. O sistema aplica automaticamente em cada NS.</p>
+    </div>
+    <div style="background:var(--s2);border:1px solid rgba(204,68,255,.3);border-radius:8px;padding:14px">
+      <h4 style="color:var(--mag);font-size:12px;margin-bottom:8px">📊 MEDIÇÃO PELA NS</h4>
+      <table class="tbl">
+        <tr><th>BM</th><th>NS</th><th>Serviço</th><th>Qtd</th><th>Valor</th></tr>
+        <tr><td class="f">BM_03</td><td>NS_001_ESG</td><td>Tubo DN200</td><td>14.5m</td><td>R$ ???</td></tr>
+        <tr><td class="f">BM_03</td><td>NS_001_ESG</td><td>Escavação</td><td>17.4m³</td><td>R$ ???</td></tr>
+        <tr><td class="f">BM_03</td><td>NS_001_ESG</td><td>PV concreto</td><td>1 un</td><td>R$ ???</td></tr>
+        <tr><td class="f">BM_03</td><td>NS_015_AGU</td><td>Tubo PEAD DN63</td><td>22.3m</td><td>R$ ???</td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--dim);margin-top:8px">Cada NS gera automaticamente os itens de medição. Você marca quais foram executadas → BM pronto.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 5: CRONOGRAMA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">5</span> CRONOGRAMA — MACRO + POR NS <span class="badge" style="background:rgba(255,136,51,.15);color:var(--ora)">MULTI-EXPORT</span></h3>
+  
+  <div class="grid">
+    <div style="background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:14px">
+      <h4 style="color:var(--ora);font-size:12px;margin-bottom:8px">📅 CRONOGRAMA MACRO (projeto inteiro)</h4>
+      <table class="tbl">
+        <tr><th>Nível</th><th>Exemplo</th><th>Duração</th></tr>
+        <tr><td class="f">Contrato</td><td>SLNR Santos</td><td>600 dias</td></tr>
+        <tr><td class="f">Núcleo</td><td>Verde e Teteu</td><td>~180 dias</td></tr>
+        <tr><td class="f">Núcleo</td><td>São Manoel</td><td>~120 dias</td></tr>
+        <tr><td class="f">Núcleo</td><td>Pantanal</td><td>~150 dias</td></tr>
+        <tr><td class="f">Fase</td><td>Escavação V&T</td><td>~44 dias</td></tr>
+        <tr><td class="f">Fase</td><td>Assentamento V&T</td><td>~33 dias</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:14px">
+      <h4 style="color:var(--ora);font-size:12px;margin-bottom:8px">📋 CRONOGRAMA POR NS (com custo)</h4>
+      <table class="tbl">
+        <tr><th>NS</th><th>Trecho</th><th>Início</th><th>Fim</th><th>Custo</th></tr>
+        <tr><td class="f">NS_001_ESG</td><td>PV01→PV02</td><td>01/04</td><td>03/04</td><td>R$ ???</td></tr>
+        <tr><td class="f">NS_002_ESG</td><td>PV02→PV03</td><td>03/04</td><td>05/04</td><td>R$ ???</td></tr>
+        <tr><td class="f">NS_001_AGU</td><td>N_001→N_002</td><td>15/04</td><td>16/04</td><td>R$ ???</td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--dim);margin-top:8px">Cada NS tem data prevista + custo. Sequenciamento automático por ramo/adjacência.</p>
+    </div>
+  </div>
+  
+  <div class="flow-h" style="margin-top:15px">
+    <div class="fbox export">
+      <div class="ico">📅</div>
+      <div class="nm">MS Project</div>
+      <div class="dt">XML nativo<br>WBS completo<br>Gantt automático</div>
+      <div class="tag" style="background:rgba(255,136,51,.2);color:var(--ora)">.xml</div>
+    </div>
+    <div class="arrow-r">+</div>
+    <div class="fbox export">
+      <div class="ico">📅</div>
+      <div class="nm">Primavera P6</div>
+      <div class="dt">XER export<br>WBS + Activities<br>Resources</div>
+      <div class="tag" style="background:rgba(255,136,51,.2);color:var(--ora)">.xer</div>
+    </div>
+    <div class="arrow-r">+</div>
+    <div class="fbox export">
+      <div class="ico">📅</div>
+      <div class="nm">OpenProject</div>
+      <div class="dt">CSV / XML import<br>Open source<br>Gratuito</div>
+      <div class="tag" style="background:rgba(255,136,51,.2);color:var(--ora)">.csv</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 6: BIM 5D -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">6</span> BIM 5D — MODELO PARAMÉTRICO COMPLETO</h3>
+  
+  <div class="flow-h">
+    <div class="fbox bim">
+      <div class="ico">📐</div>
+      <div class="nm">3D Geometria</div>
+      <div class="dt">IFC SweptDiskSolid<br>Tubos ocos reais<br>PVs cilindro<br>Coordenadas UTM</div>
+      <div class="tag" style="background:rgba(255,51,85,.2);color:var(--red)">3D</div>
+    </div>
+    <div class="arrow-r">+</div>
+    <div class="fbox bim">
+      <div class="ico">📅</div>
+      <div class="nm">4D Tempo</div>
+      <div class="dt">Cronograma macro<br>+ por NS<br>Fases vinculadas<br>aos objetos 3D</div>
+      <div class="tag" style="background:rgba(255,51,85,.2);color:var(--red)">4D</div>
+    </div>
+    <div class="arrow-r">+</div>
+    <div class="fbox bim">
+      <div class="ico">💰</div>
+      <div class="nm">5D Custo</div>
+      <div class="dt">Preços do CONTRATO<br>Por NS / por trecho<br>Custo acumulado<br>Medição vinculada</div>
+      <div class="tag" style="background:rgba(255,51,85,.2);color:var(--red)">5D</div>
+    </div>
+    <div class="arrow-r">→</div>
+    <div class="fbox bim" style="min-width:200px">
+      <div class="ico">💎</div>
+      <div class="nm">ConstruData Manage</div>
+      <div class="dt">Viewer 3D (Three.js)<br>Click → propriedades + custo<br>Timeline 4D animada<br>Curva S em tempo real<br>Medição pela NS</div>
+      <div class="tag" style="background:rgba(255,208,0,.2);color:var(--yel)">PLATAFORMA</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FASE 7: CICLO DE VIDA -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="phase">
+  <h3><span class="num">7</span> CICLO DE VIDA DA OBRA — MEDIÇÃO PELA NS</h3>
+  
+  <div class="flow-v">
+    <div class="flow-h">
+      <div class="fbox input"><div class="ico">📁</div><div class="nm">Receber Projeto</div><div class="dt">DXF/DWG/XML</div></div>
+      <div class="arrow-r">→</div>
+      <div class="fbox proc"><div class="ico">⚙️</div><div class="nm">Pipeline Automático</div><div class="dt">Leitura → NS → 5D</div></div>
+      <div class="arrow-r">→</div>
+      <div class="fbox out"><div class="ico">📋</div><div class="nm">NS de Campo</div><div class="dt">PDF pro encanador<br>ÁGUA + ESGOTO</div></div>
+      <div class="arrow-r">→</div>
+      <div class="fbox proc"><div class="ico">🏗️</div><div class="nm">Execução</div><div class="dt">Encanador segue NS<br>Topo mede as-built</div></div>
+    </div>
+    <div class="arrow-d">▼</div>
+    <div class="flow-h">
+      <div class="fbox bim"><div class="ico">💎</div><div class="nm">Controle 5D</div><div class="dt">Verde=executado<br>Amarelo=andamento<br>Vermelho=atrasado</div></div>
+      <div class="arrow-r">←</div>
+      <div class="fbox export"><div class="ico">📅</div><div class="nm">Cronograma</div><div class="dt">Project / Primavera<br>OpenProject</div></div>
+      <div class="arrow-r">←</div>
+      <div class="fbox med"><div class="ico">📊</div><div class="nm">Medição (BM)</div><div class="dt">NS executadas<br>→ BM mensal<br>→ pagamento</div></div>
+      <div class="arrow-r">←</div>
+      <div class="fbox out"><div class="ico">📐</div><div class="nm">As-Built + Cadastro</div><div class="dt">NTS 292 → SIGNOS<br>Condição p/ pagar</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<h2><em>SCRIPTS</em> — Mapa do Código</h2>
+
+<div class="code">
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="c">  LEITORES (qualquer formato → pvs + trechos)</span><br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="f">ler_dxf_gdal.py</span>&nbsp;&nbsp;&nbsp;← DXF ProSaneamento (água + esgoto)<br>
+<span class="f">ler_dwg_aec.py</span>&nbsp;&nbsp;&nbsp;← DWG Civil 3D (AEC Proxy desbloqueado)<br>
+<span class="f">ler_landxml.py</span>&nbsp;&nbsp;&nbsp;← LandXML (export Civil 3D nativo)<br>
+<br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="c">  GERADORES (pvs + trechos → tudo)</span><br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="f">gerar_ns.py</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ NS campo (PDF + JSON + HTML + GeoJSON)<br>
+<span class="f">gerar_civil3d.py</span>&nbsp;→ LandXML + Cadastro DXF + Dynamo + .scr<br>
+<span class="f">gerar_cadastro_nts292.py</span> → DXF georref As-Built + Meta JSON<br>
+<span class="f">gerar_ifc_lod500.py</span>&nbsp;&nbsp;&nbsp;&nbsp;→ IFC 3D real (ifcopenshell) + CSV + BIM JSON<br>
+<span class="f">gerar_project_xml.py</span>&nbsp;&nbsp;&nbsp;→ MS Project XML (macro + por NS)<br>
+<span class="f">gerar_primavera.py</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Primavera P6 XER <span class="c">[A CONSTRUIR]</span><br>
+<span class="f">gerar_openproject.py</span>&nbsp;&nbsp;&nbsp;→ OpenProject CSV <span class="c">[A CONSTRUIR]</span><br>
+<br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="c">  CONTROLE (medição + custo + curva S)</span><br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="f">motor_custo.py</span>&nbsp;&nbsp;&nbsp;→ Aplica tabela de preços customizável <span class="c">[A CONSTRUIR]</span><br>
+<span class="f">motor_medicao.py</span>&nbsp;→ NS → BM → pagamento <span class="c">[A CONSTRUIR]</span><br>
+<span class="f">motor_curvas.py</span>&nbsp;&nbsp;→ Curva S previsto × real <span class="c">[A CONSTRUIR]</span><br>
+<br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="c">  ORQUESTRADOR</span><br>
+<span class="c">═══════════════════════════════════════════════════════════</span><br>
+<span class="f">construdata_pipeline.py</span> → Roda tudo: entrada → 5D completo<br>
+<span class="f">construdata_manage.html</span> → Viewer 3D + controle (Three.js)<br>
+<span class="f">construdata_controle.html</span> → As-Built + Medição + Curva S<br>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<div class="divider"></div>
+
+<h2><em>STATUS</em> — O que temos vs O que falta</h2>
+
+<table class="tbl">
+  <thead><tr><th>Módulo</th><th>Status</th><th>Próximo</th></tr></thead>
+  <tbody>
+    <tr><td>Leitura DXF (água + esgoto)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Leitura DWG AEC Proxy</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Leitura LandXML</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Notas de Serviço (água + esgoto)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Civil 3D (LandXML + Dynamo + SCR)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Cadastro NTS 292</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>IFC 3D real (ifcopenshell)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>MS Project XML</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Viewer 3D (ConstruData Manage)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>As-Built + Medição + Curva S (GUI)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr><td>Catálogos SABESP (PVC/PEAD/PV)</td><td style="color:var(--acc)">✅ PRONTO</td><td>—</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Pipe Network Paramétrico (recálculo cascata)</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Mexer PV → recalcula tudo</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Motor de Custo customizável</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Importar tabela preços do contrato</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Cronograma macro (todos núcleos)</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>WBS multinível + por NS</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Export Primavera P6</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Formato XER</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Export OpenProject</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>CSV com WBS</td></tr>
+    <tr style="background:rgba(255,208,0,.05)"><td><b>Motor de Medição (NS → BM)</b></td><td style="color:var(--yel)">🔨 PRÓXIMO</td><td>Automático pela NS</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<div class="footer">
+  ConstruData - HydroNetwork · BIM 5D · FCN Construções e Saneamento · CT 11481051 · SABESP · SLNR Santos<br>
+  Água 💧 + Esgoto 🟢 · DXF + DWG + LandXML → NS → Pipe Network → IFC → Project/Primavera → Medição → 5D
+</div>
+
+</body>
+</html>

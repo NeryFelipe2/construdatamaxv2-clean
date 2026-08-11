@@ -1,0 +1,74 @@
+{
+  "workflows": {
+    "rNQGyLxaWFtG1Skq": {
+      "lastSyncedHash": "fde34dc077cc4689edc2b64119d97772507f93578b698e906f5ffe8055bf37a5",
+      "lastSyncedAt": "2026-04-21T17:19:03.891Z",
+      "filename": "webhook-rdo-whatsapp.workflow.ts"
+    },
+    "fCfmVcQ0Nyopk7YJ": {
+      "lastSyncedHash": "391d2ef9aeb5a9fe9f4c2147f4be82e54c752af291c762ce29ea2ea24bc4bf06",
+      "lastSyncedAt": "2026-04-21T17:19:20.036Z",
+      "filename": "assistente-diario-obra.workflow.ts"
+    },
+    "3Aqn1DuuDyysnh40": {
+      "lastSyncedHash": "cd1cd4d1a62f831a5394c05bb28d196e03f7564ff582a93d46674cdd196b29ed",
+      "lastSyncedAt": "2026-04-21T17:19:32.920Z",
+      "filename": "alerta-medicao-prazos.workflow.ts"
+    },
+    "UKhLLXVRVItN2HxM": {
+      "lastSyncedHash": "9708bc14d665e548f7c0ec9d4b71953dfcd05d95dfdc24d09c9cf14106c4e1ce",
+      "lastSyncedAt": "2026-04-21T17:19:46.175Z",
+      "filename": "cobranca-matinal-diretor.workflow.ts"
+    },
+    "kkKiV91wGJTqC2ta": {
+      "lastSyncedHash": "2cdb12a4923d684ec76e88dca217d75f0e7684ff6879d2d7616b697eec5b7156",
+      "lastSyncedAt": "2026-04-21T17:19:58.576Z",
+      "filename": "gestao-construdata-joao-dashboard.workflow.ts"
+    },
+    "26fM62qiXUhjMGZ9": {
+      "lastSyncedHash": "5c8eb7e8f7c6d0474360557cdd2477ab31ff9d394a888035a7f71a26172b53e2",
+      "lastSyncedAt": "2026-04-21T17:20:08.221Z",
+      "filename": "gestao-osasco-rdo-dashboard.workflow.ts"
+    },
+    "1NG0s28rvzv8fksX": {
+      "lastSyncedHash": "3130a001341af6ca0ac8f94ed450481c70ef508c3d1844559a7ac7e296932bc1",
+      "lastSyncedAt": "2026-04-21T17:20:21.247Z",
+      "filename": "gestao-pardinho-rdo-dashboard.workflow.ts"
+    },
+    "YrInUWvU1xhqyw0B": {
+      "lastSyncedHash": "ae5111def1aed1e4ee2bf7021640664f23662043137ebcfee13e56f63230d9cd",
+      "lastSyncedAt": "2026-04-21T17:20:35.545Z",
+      "filename": "gestao-sala-tecnica-dashboard.workflow.ts"
+    },
+    "lPXwtRuE3f16pkGj": {
+      "lastSyncedHash": "62cd1c851cfebe06a26f0fb2f0f8b1fb01a8795e614102946d8eafbf86c12a51",
+      "lastSyncedAt": "2026-04-21T17:20:53.466Z",
+      "filename": "pardinho-lean-lps-planejamento.workflow.ts"
+    },
+    "z2fkgrGsvxCdEOvq": {
+      "lastSyncedHash": "deee0ce8add55740876a8930cc63c1a46fb61e0f55f193de1e299adbf00f6223",
+      "lastSyncedAt": "2026-04-21T18:06:58.335Z",
+      "filename": "gestao-whatsapp-router.workflow.ts"
+    },
+    "9qCZcL1CtV3rpRaZ": {
+      "lastSyncedHash": "e6a85b3aa27a2ca4c9b88d87d48e278421672c9c4074734e5f46674c3257b6ba",
+      "lastSyncedAt": "2026-04-22T04:27:39.887Z",
+      "filename": "CONSTRUDATA_MASTER_V3_CORRIGIDO.workflow.ts"
+    },
+    "fff66666-6666-4666-b666-666666666666": {
+      "lastSyncedHash": "c1c3f3913164b0967fe856909b814d39776ee17e48cc51ea305b98ab1247b299",
+      "lastSyncedAt": "2026-04-22T00:05:13.506Z",
+      "filename": "CONSTRUDATA_TAREFA_WHATSAPP.workflow.ts"
+    },
+    "bbb22222-2222-4222-b222-222222222222": {
+      "lastSyncedHash": "ecd12855d4564b2a357f3b9ba5a3d39d0cebb1eeb54b2e1fe4624e8496ec45e3",
+      "lastSyncedAt": "2026-04-21T22:52:18.851Z",
+      "filename": "CONSTRUDATA_RDO_FINAL.workflow.ts"
+    },
+    "ccc33333-3333-4333-b333-333333333333": {
+      "lastSyncedHash": "ea8cabb5088d6f69c9888f8a9110440ca10153b51a5b03d3908eb2d1d4fdada4",
+      "lastSyncedAt": "2026-04-21T22:52:22.233Z",
+      "filename": "CONSTRUDATA_FINANCEIRO_AI.workflow.ts"
+    }
+  }
+}

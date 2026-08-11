@@ -1,0 +1,31 @@
+{
+  "nucleo": "OBRA_EXEMPLO",
+  "pvs": {
+    "PV_01": {
+      "x": 357840,
+      "y": 7357810,
+      "ct": 8.07,
+      "cf": 6.87,
+      "prof": 1.2
+    },
+    "PV_02": {
+      "x": 357910,
+      "y": 7357812,
+      "ct": 7.54,
+      "cf": 6.34,
+      "prof": 1.2
+    }
+  },
+  "trechos": [
+    {
+      "pv_ini": "PV_01",
+      "pv_fim": "PV_02",
+      "dn_mm": 150,
+      "ext_m": 70,
+      "decl_mm": 0.005,
+      "material": "PVC",
+      "rua": "Rua Exemplo",
+      "tipo": "esgoto"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+Begin Part Validation | BTTC
+
+Begin Part Family self validation test
+ERROR: Required Parameter not found: Between
+OK: Basic Table Row IDs validated
+OK: Part Domain parameter validated -- Pipe_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- Triplo
+OK: Part Description parameter validated -- BTTC
+OK: Part Name parameter validated -- BTTC
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 2354BF15-A8DB-46a2-95D3-25F1F89026D3
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ERROR: Duplicate Parameter Name: Espacamento
+ERROR: Duplicate Parameter Desc: Espaçamento entre tubos
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+ 
+
+Begin Pipe Component Table Validation | Type =  Pipe
+ERROR: Table Data Validation Failed | D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric pipes\Galeria_Circular\BTTC.xml
+
+ERROR: Part Validation Failed | Galeria_Circular\BTTC.xml

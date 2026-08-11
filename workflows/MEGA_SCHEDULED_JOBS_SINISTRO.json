@@ -1,0 +1,57 @@
+{
+  "name": "MEGA_SCHEDULED_JOBS_SINISTRO",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "schedule-morning-trigger",
+      "name": "Disparador Matinal 7h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const EVOLUTION_URL = 'http://rk-evolution:8080/message/sendText/construdata-felipe';\nconst EVOLUTION_API_KEY = 'construdata2026';\n\nconst diretores = [\n  { nome: \"Luiz Fernando\", telefone: \"5537999425397\" },\n  { nome: \"Felipe Nery\", telefone: \"5561981846325\" }\n];\n\nconst financeiros = [\n  { nome: \"Renato\", telefone: \"5528999154319\" },\n  { nome: \"Emilly Anjos\", telefone: \"5513974168911\" }\n];\n\nconst hoje = new Date();\nconst diaSemana = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'][hoje.getDay()];\nconst dataFormatada = hoje.toLocaleDateString('pt-BR');\n\nconst msgDiretor = `👷 *BOM DIA DIRETOR!*\\n📅 ${diaSemana}, ${dataFormatada}\\n\\n📋 *TAREFAS DO DIA:*\\n1. Delegar tarefas para equipes de campo\\n2. Revisar RDOs pendentes\\n3. Aprovar medições em aberto\\n4. Acompanhar prazos críticos\\n\\n🔗 https://construdatamaxv2-clean.vercel.app/app/delegar-tarefas\\n\\n⚠️ _Não esqueça de delegar antes das 8h!_`;\n\nconst msgFinanceiro = `💰 *BOM DIA FINANCEIRO!*\\n📅 ${diaSemana}, ${dataFormatada}\\n\\n📋 *TAREFAS DO DIA:*\\n1. Registrar pagamentos realizados ontem\\n2. Conciliar extratos bancários\\n3. Atualizar fluxo de caixa\\n4. Enviar comprovantes pendentes\\n\\n🔗 https://construdatamaxv2-clean.vercel.app/app/dre-financeiro\\n\\n⚠️ _Registre todos os pagamentos do dia anterior!_`;\n\n// Função de Fetch assíncrono interno no n8n\nconst fetchApi = async (url, options) => {\n     const axios = require('axios');\n     try {\n         const res = await axios(url, options);\n         return res.data;\n     } catch (err) {\n         console.error('Fetch error:', err.message);\n         return null;\n     }\n};\n\nconst results = [];\n\n// 1. Enviar para Diretores\nfor (const d of diretores) {\n    await fetchApi(EVOLUTION_URL, {\n        method: 'POST',\n        headers: {\n            'apikey': EVOLUTION_API_KEY,\n            'Content-Type': 'application/json'\n        },\n        data: {\n            number: d.telefone,\n            textMessage: { text: msgDiretor }\n        }\n    });\n    results.push({ json: { tipo: 'diretor', nome: d.nome, enviado: true } });\n}\n\n// 2. Enviar para Financeiro\nfor (const f of financeiros) {\n    await fetchApi(EVOLUTION_URL, {\n        method: 'POST',\n        headers: {\n            'apikey': EVOLUTION_API_KEY,\n            'Content-Type': 'application/json'\n        },\n        data: {\n            number: f.telefone,\n            textMessage: { text: msgFinanceiro }\n        }\n    });\n    results.push({ json: { tipo: 'financeiro', nome: f.nome, enviado: true } });\n}\n\nreturn results;"
+      },
+      "id": "mega-schedule-code",
+      "name": "Processador Lembretes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        450,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Disparador Matinal 7h": {
+      "main": [
+        [
+          {
+            "node": "Processador Lembretes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b1a2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "id": "scheduled-jobs-sinistro"
+}

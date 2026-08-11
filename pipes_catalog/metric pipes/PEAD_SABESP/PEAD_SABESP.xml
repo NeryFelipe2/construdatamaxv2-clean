@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PartDefinition xmlns="http://www.autodesk.com/civil/Parts">
+  <Name>PEAD_SABESP</Name>
+  <Description>Tubo PEAD para esgoto - NBR 13750</Description>
+  <Material>HDPE</Material>
+  <Roughness>0.011</Roughness>
+  <Diameters>
+    <Diameter>63</Diameter>
+    <Diameter>75</Diameter>
+    <Diameter>110</Diameter>
+    <Diameter>160</Diameter>
+    <Diameter>200</Diameter>
+    <Diameter>250</Diameter>
+    <Diameter>315</Diameter>
+  </Diameters>
+  <Pressure>10.0</Pressure>
+  <Stiffness>Flexible</Stiffness>
+  <Length>6.0</Length>
+  <JointType>Electrofusion</JointType>
+  <Standard>NBR 13750</Standard>
+</PartDefinition>

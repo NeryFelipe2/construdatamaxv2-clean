@@ -1,0 +1,142 @@
+﻿<?xml version="1.0"?>
+<LandPart desc="Part Table" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink" fixColumn="C1">
+	<ColumnConstView desc="Parameter-driven Display" id="CCV1" viewKey="3d" viewName="AeccPartRecipe" pathsRelativeTo="Table">
+		<Images>
+			<Image>
+				<URL xlink:title="Part Reference Image" xlink:href="BBT_1989.bmp"/>
+			</Image>
+		</Images>
+		<Recipe>BBT_1989.dwg</Recipe>
+	</ColumnConstView>
+	<ColumnConstList desc="Esconsidade" dataType="float" unit="" name="Esconsidade" id="CCL1" visible="1" context="Esconsidade_" index="0">
+		<Item id="i0">0.0001</Item>
+		<Item id="i1">10.0000</Item>
+		<Item id="i2">20.0000</Item>
+		<Item id="i3">30.0000</Item>
+		<Item id="i4">40.0000</Item>
+		<Item id="i5">320.0000</Item>
+		<Item id="i6">330.0000</Item>
+		<Item id="i7">340.0000</Item>
+		<Item id="i8">350.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Tubos em Linha" dataType="int" unit="" name="Qtd" id="CCL2" visible="1" context="Qtd_" index="0">
+		<Item id="i0">1</Item>
+		<Item id="i1">2</Item>
+		<Item id="i2">3</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Diâmetro do tubo" dataType="float" unit="mm" name="SBSH" id="CCL3" visible="1" context="StructHeight" index="0">
+		<Item id="i0">600.0000</Item>
+		<Item id="i1">800.0000</Item>
+		<Item id="i2">1000.0000</Item>
+		<Item id="i3">1200.0000</Item>
+		<Item id="i4">1500.0000</Item>
+		<Item id="i5">2000.0000</Item>
+	</ColumnConstList>
+	<ColumnConstList desc="Estrutura Existente" dataType="string" unit="" name="CTravBool" id="CCL4" visible="1" context="CTravBool_" index="0">
+		<Item id="i0">False</Item>
+		<Item id="i1">True</Item>
+	</ColumnConstList>
+  <ColumnConstList desc="Parâmetro R (DNIT)" dataType="string" unit="" name="ParamR" id="CCL5" visible="1" context="ParamR_" index="0">
+    <Item id="i0">ZonaUrbana</Item>
+    <Item id="i1">ZonaResid</Item>
+    <Item id="i2">ZonaSubUrb</Item>
+    <Item id="i3">ZonaRural</Item>
+  </ColumnConstList>
+  <ColumnConstList desc="Parâmetro K (DNOS)" dataType="string" unit="" name="ParamK" id="CCL6" visible="1" context="ParamK_" index="0">
+    <Item id="i0">ArenoArgiloso</Item>
+    <Item id="i1">Comum</Item>
+    <Item id="i2">Argiloso</Item>
+    <Item id="i3">ArgilosoVegMedia</Item>
+    <Item id="i4">RochaVegEscassa</Item>
+    <Item id="i5">Rochoso</Item>
+  </ColumnConstList>
+	<ColumnRangeList desc="Run Off" dataType="float" unit="" name="Coef_C" id="CCR1" visible="1" context="Coef_C_" index="0">
+		<Item id="i0" rangeVal="Min">0.0000</Item>
+		<Item id="i1" rangeVal="Max">1.0000</Item>
+		<Item id="i2" rangeVal="Default">0.5000</Item>
+	</ColumnRangeList>
+	<ColumnRangeList desc="Tempo de Concentração" dataType="float" unit="min" name="Coef_TC" id="CCR2" visible="1" context="Coef_TC_" index="0">
+		<Item id="i0" rangeVal="Min">0.0000</Item>
+		<Item id="i1" rangeVal="Max">1000000.0000</Item>
+		<Item id="i2" rangeVal="Default">10.0000</Item>
+	</ColumnRangeList>
+	<ColumnRangeList desc="Área de contribuição" dataType="float" unit="m²" name="AreaContr" id="CCR3" visible="1" context="AreaContr_" index="0">
+		<Item id="i0" rangeVal="Min">0.0000</Item>
+		<Item id="i1" rangeVal="Max">1000000000000000.0000</Item>
+		<Item id="i2" rangeVal="Default">0.0000</Item>
+	</ColumnRangeList>
+	<ColumnRangeList desc="Contribuição Inicial" dataType="float" unit="l/s" name="ContrIni" id="CCR4" visible="1" context="ContrIni_" index="0">
+		<Item id="i0" rangeVal="Min">0.0000</Item>
+		<Item id="i1" rangeVal="Max">10000000000.0000</Item>
+		<Item id="i2" rangeVal="Default">0.0000</Item>
+	</ColumnRangeList>
+	<ColumnConst desc="Part Domain" dataType="string" unit="" name="PDom" id="CC0" visible="0" context="Catalog_Domain" index="0">Structure_Domain</ColumnConst>
+	<ColumnConst desc="Part Type" dataType="string" unit="" name="PTyp" id="CC1" visible="1" context="Catalog_PartType" index="0">Struct_InletOutlet</ColumnConst>
+	<ColumnConst desc="Part Subtype" dataType="string" unit="" name="PSTyp" id="CC2" visible="1" context="Catalog_SubType" index="0">ALA</ColumnConst>
+	<ColumnConst desc="Part Name" dataType="string" unit="" name="PrtNm" id="CC3" visible="0" context="Catalog_PartName" index="0">BBT_1989</ColumnConst>
+	<ColumnConst desc="Part Description" dataType="string" unit="" name="PrtD" id="CC4" visible="1" context="Catalog_PartDesc" index="0">Boca de bueiro tubular 1989</ColumnConst>
+	<ColumnConst desc="Part ID" dataType="string" unit="" name="PrtID" id="CC5" visible="0" context="Catalog_PartID" index="0">5C8344C5-36E3-429E-8E41-130E2FDD85D8</ColumnConst>
+	<ColumnConst desc="Data Version" dataType="string" unit="" name="DVer" id="CC6" visible="0" context="DataVersion" index="0">2.0</ColumnConst>
+	<ColumnConst desc="Content Type" dataType="int" unit="" name="CntTy" id="CC7" visible="0" context="Content_Type" index="0">4</ColumnConst>
+	<ColumnConst desc="Hide Part Flag" dataType="bool" unit="" name="HPrtF" id="CC8" visible="0" context="Catalog_PartHide" index="0">0</ColumnConst>
+	<ColumnConst desc="Structure Shape" dataType="string" unit="" name="SBS" id="CC9" visible="0" context="StructBoundingShape" index="0">BoundingShape_Box</ColumnConst>
+	<ColumnConst desc="g" dataType="float" unit="mm" name="SVPC" id="CC10" visible="1" context="StructVertPipeClearance" index="0">300.0000</ColumnConst>
+	<ColumnConst desc="Model Angle Parameter 1" dataType="float" unit="deg" name="Esconsidade" id="CC11" visible="1" context="Geometry_ModelAngleParameter" index="1">0.0001</ColumnConst>
+	<ColumnConst desc="Model Parameter 3" dataType="float" unit="" name="Qtd" id="CC12" visible="0" context="Geometry_ModelParameter" index="3">1.0000</ColumnConst>
+	<ColumnConst desc="Custom Sizing Flag" dataType="bool" unit="" name="CusSF" id="CC13" visible="0" context="CustomPartSizing_Flag" index="0">0</ColumnConst>
+	<ColumnConst desc="Structure Length" dataType="float" unit="mm" name="SBSL" id="CC14" visible="0" context="StructLength" index="0">1.0000</ColumnConst>
+	<ColumnConst desc="Espaçamento entre tubos" dataType="float" unit="mm" name="Espacamento" id="CC15" visible="0" context="Espacamento_" index="0">10.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, k" dataType="float" unit="mm" name="k" id="CC16" visible="1" context="k_" index="0">100.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, m" dataType="float" unit="mm" name="m" id="CC17" visible="1" context="m_" index="0">200.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, k" dataType="float" unit="mm" name="k" id="CC18" visible="0" context="Geometry_ModelDistanceParameter" index="12">100.0000</ColumnConst>
+	<ColumnConst desc="Album Tipo, m" dataType="float" unit="mm" name="m" id="CC19" visible="0" context="Geometry_ModelDistanceParameter" index="14">200.0000</ColumnConst>
+	<ColumnConst desc="Structure Width" dataType="float" unit="mm" name="SBSW" id="CC20" visible="1" context="StructWidth" index="0">1.0000</ColumnConst>
+	<ColumnConst desc="Contribuição Final" dataType="float" unit="l/s" name="ContrFim" id="CC21" visible="0" context="ContrFim_" index="0">0.0000</ColumnConst>
+	 
+	<ColumnCalc desc="Model Angle Parameter 2" dataType="float" unit="deg" name="AlfaD" id="CCA0" visible="0" context="Geometry_ModelAngleParameter" index="2">$Esconsidade/100</ColumnCalc>
+	<ColumnCalc desc="Diâmetro do tubo" dataType="float" unit="mm" name="SHBW" id="CCA1" visible="0" context="StructHwBaseWidth" index="0">$SBSH</ColumnCalc>
+	<ColumnCalc desc="Model Parameter 4" dataType="float" unit="" name="DNM" id="CCA2" visible="0" context="Geometry_ModelParameter" index="4">$SHBW/1000</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, c" dataType="float" unit="mm" name="c" id="CCA3" visible="0" context="Geometry_ModelDistanceParameter" index="11">-12450.3968253964*$DNM^5+71731.1507936496*$DNM^4+-157180.555555555*$DNM^3+164654.563492065*$DNM^2+-81754.7619047641*$DNM^1+16650.0000000006</ColumnCalc>
+	<ColumnCalc desc="d1" dataType="float" unit="mm" name="d1" id="CCA4" visible="0" context="Geometry_ModelDistanceParameter" index="17">-671.756628788019*$DNM^6+3772.44825487096*$DNM^5+-7907.61972402813*$DNM^4+7627.81554383404*$DNM^3+-3307.41747835693*$DNM^2+556.611201299326*$DNM^1+29.9188311687471</ColumnCalc>
+	<ColumnCalc desc="d2" dataType="float" unit="mm" name="d2" id="CCA5" visible="0" context="Geometry_ModelDistanceParameter" index="18">$d1</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, e" dataType="float" unit="mm" name="e" id="CCA6" visible="0" context="Geometry_ModelDistanceParameter" index="15">380.291005291017*$DNM^5+-2204.03439153441*$DNM^4+4816.13756613757*$DNM^3+-5015.01322751329*$DNM^2+2753.57142857156*$DNM^1+-480.952380952402</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, f" dataType="float" unit="" name="f" id="CCA7" visible="0" context="Geometry_ModelParameter" index="5">3199.40476190468*$DNM^5+-19888.3928571425*$DNM^4+47446.4285714283*$DNM^3+-54222.3214285718*$DNM^2+29786.3095238102*$DNM^1+-6171.42857142879</ColumnCalc>
+	<ColumnCalc desc="=c" dataType="float" unit="mm" name="LenA1" id="CCA8" visible="0" context="Geometry_Distance2D" index="1">$c</ColumnCalc>
+	<ColumnCalc desc="=e" dataType="float" unit="mm" name="LenA10" id="CCA9" visible="0" context="Geometry_Distance2D" index="10">$e</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, b" dataType="float" unit="mm" name="SHBTh" id="CCA10" visible="1" context="StructHwBaseThickness" index="0">-7515.63251563377*$DNM^6+49558.0808080881*$DNM^5+-129787.457912475*$DNM^4+172411.616161635*$DNM^3+-122180.134680146*$DNM^2+43755.3030303063*$DNM^1+-5991.77489177527</ColumnCalc>
+	<ColumnCalc desc="2D Distance 2" dataType="float" unit="mm" name="LenA2" id="CCA11" visible="0" context="Geometry_Distance2D" index="2">$SHBTh</ColumnCalc>
+	<ColumnCalc desc="=f" dataType="float" unit="mm" name="LenA3" id="CCA12" visible="0" context="Geometry_Distance2D" index="3">$f</ColumnCalc>
+	<ColumnCalc desc="dn*Qtd+Espacamento" dataType="float" unit="mm" name="LenA4" id="CCA13" visible="0" context="Geometry_Distance2D" index="4">$Qtd*$SHBW+($Qtd-1)*($d1+200)</ColumnCalc>
+	<ColumnCalc desc="=k" dataType="float" unit="mm" name="LenA5" id="CCA14" visible="0" context="Geometry_Distance2D" index="5">$k</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, q" dataType="float" unit="mm" name="q" id="CCA15" visible="0" context="Geometry_ModelDistanceParameter" index="13">3273.80952380945*$DNM^5+-20267.8571428569*$DNM^4+48202.3809523808*$DNM^3+-54957.1428571433*$DNM^2+30134.5238095245*$DNM^1+-6185.7142857145</ColumnCalc>
+	<ColumnCalc desc="=q" dataType="float" unit="mm" name="LenA6" id="CCA16" visible="1" context="Geometry_Distance2D" index="6">$q</ColumnCalc>
+	<ColumnCalc desc="=m" dataType="float" unit="mm" name="LenA7" id="CCA17" visible="0" context="Geometry_Distance2D" index="7">$m</ColumnCalc>
+	<ColumnCalc desc="h" dataType="float" unit="mm" name="WPOf1" id="CCA18" visible="1" context="Geometry_WorkplaneOffset" index="1">$SVPC+$d2+$SHBW</ColumnCalc>
+	<ColumnCalc desc="2D Distance 8" dataType="float" unit="mm" name="LenA8" id="CCA19" visible="0" context="Geometry_Distance2D" index="8">$WPOf1</ColumnCalc>
+	<ColumnCalc desc="2D Distance 9" dataType="float" unit="mm" name="LenA9" id="CCA20" visible="0" context="Geometry_Distance2D" index="9">$WPOf1</ColumnCalc>
+	<ColumnCalc desc="p" dataType="float" unit="mm" name="p" id="CCA21" visible="0" context="Geometry_ModelDistanceParameter" index="10">-3802.91005290993*$DNM^5+23230.8201058197*$DNM^4+-54530.423280423*$DNM^3+61441.7989417995*$DNM^2+-33084.5238095245*$DNM^1+6995.23809523833</ColumnCalc>
+	<ColumnCalc desc="=p" dataType="float" unit="mm" name="LenB1" id="CCA22" visible="0" context="Geometry_Distance3D" index="1">$p</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, n" dataType="float" unit="mm" name="n" id="CCA23" visible="1" context="Geometry_ModelDistanceParameter" index="16">1256.98953823982*$DNM^6+-7634.9431818201*$DNM^5+18221.2752525296*$DNM^4+-21995.7386363678*$DNM^3+14196.0858585885*$DNM^2+-4394.31818181903*$DNM^1+750.649350649451</ColumnCalc>
+	<ColumnCalc desc="=n+p" dataType="float" unit="mm" name="LenB2" id="CCA24" visible="0" context="Geometry_Distance3D" index="2">$n+$p</ColumnCalc>
+	<ColumnCalc desc="Ala Esquerda" dataType="float" unit="deg" name="PathA2" id="CCA25" visible="1" context="PathAngle" index="2">1.75744236752234*$AlfaD^8+-19.4962874084013*$AlfaD^7+78.1473064250531*$AlfaD^6+-133.427356979799*$AlfaD^5+89.1563674497083*$AlfaD^4+-26.6003774454166*$AlfaD^3+3.51038068281241*$AlfaD^2+-0.161610078099727*$AlfaD^1+30</ColumnCalc>
+	<ColumnCalc desc="Ala Direita" dataType="float" unit="deg" name="PathA3" id="CCA26" visible="1" context="PathAngle" index="3">-25.7681990446167*$AlfaD^8+365.251183559457*$AlfaD^7+-2006.64694281835*$AlfaD^6+5277.78134058936*$AlfaD^5+-6555.24890467907*$AlfaD^4+3216.89042602473*$AlfaD^3+-584.372654750349*$AlfaD^2+-11.6844642195275*$AlfaD^1+30</ColumnCalc>
+	<ColumnCalc desc="Aplica Esconsidade" dataType="float" unit="deg" name="PathA4" id="CCA27" visible="1" context="PathAngle" index="4">90+$Esconsidade</ColumnCalc>
+	 
+	<ColumnCalc desc="FaceInt" dataType="float" unit="mm" name="WPOf2" id="CCA29" visible="0" context="Geometry_WorkplaneOffset" index="2">$SHBTh/2</ColumnCalc>
+	<ColumnCalc desc="Workplane Offset 3" dataType="float" unit="mm" name="WPOf3" id="CCA30" visible="0" context="Geometry_WorkplaneOffset" index="3">$WPOf2+$LenA1</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, c" dataType="float" unit="mm" name="c" id="CCA31" visible="1" context="c_" index="0">-12450.3968253964*$DNM^5+71731.1507936496*$DNM^4+-157180.555555555*$DNM^3+164654.563492065*$DNM^2+-81754.7619047641*$DNM^1+16650.0000000006</ColumnCalc>
+	<ColumnCalc desc="Parede do tubo (d1)" dataType="float" unit="mm" name="d1" id="CCA32" visible="1" context="d1_" index="0">-671.756628788019*$DNM^6+3772.44825487096*$DNM^5+-7907.61972402813*$DNM^4+7627.81554383404*$DNM^3+-3307.41747835693*$DNM^2+556.611201299326*$DNM^1+29.9188311687471</ColumnCalc>
+	<ColumnCalc desc="Parede do tubo (d2)" dataType="float" unit="mm" name="d2" id="CCA33" visible="1" context="d2_" index="0">$d1</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, e" dataType="float" unit="mm" name="e" id="CCA34" visible="1" context="e_" index="0">380.291005291017*$DNM^5+-2204.03439153441*$DNM^4+4816.13756613757*$DNM^3+-5015.01322751329*$DNM^2+2753.57142857156*$DNM^1+-480.952380952402</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, f" dataType="float" unit="mm" name="f" id="CCA35" visible="1" context="f_" index="0">3199.40476190468*$DNM^5+-19888.3928571425*$DNM^4+47446.4285714283*$DNM^3+-54222.3214285718*$DNM^2+29786.3095238102*$DNM^1+-6171.42857142879</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, n" dataType="float" unit="mm" name="n" id="CCA36" visible="1" context="n_" index="0">1256.98953823982*$DNM^6+-7634.9431818201*$DNM^5+18221.2752525296*$DNM^4+-21995.7386363678*$DNM^3+14196.0858585885*$DNM^2+-4394.31818181903*$DNM^1+750.649350649451</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, p" dataType="float" unit="mm" name="p" id="CCA37" visible="1" context="p_" index="0">-3802.91005290993*$DNM^5+23230.8201058197*$DNM^4+-54530.423280423*$DNM^3+61441.7989417995*$DNM^2+-33084.5238095245*$DNM^1+6995.23809523833</ColumnCalc>
+	<ColumnCalc desc="Album Tipo, q" dataType="float" unit="mm" name="q" id="CCA38" visible="1" context="q_" index="0">3273.80952380945*$DNM^5+-20267.8571428569*$DNM^4+48202.3809523808*$DNM^3+-54957.1428571433*$DNM^2+30134.5238095245*$DNM^1+-6185.7142857145</ColumnCalc>
+	<ColumnCalc desc="Abertura direita" dataType="float" unit="" name="AbDir" id="CCA39" visible="0" context="AbDir_" index="0">$PathA2</ColumnCalc>
+	<ColumnCalc desc="Abertura esquerda" dataType="float" unit="" name="AbEsq" id="CCA40" visible="0" context="AbEsq_" index="0">$PathA3</ColumnCalc>
+	<ColumnCalc desc="Part Size Name" dataType="string" unit="" name="PrtSN" id="CCA41" visible="1" context="Catalog_PartSizeName" index="0">"BBT_1989 " + "$Qtd" + " x " + FormatNumber($SHBW,0) + " x " + FormatNumber($Esconsidade,0) + " º"</ColumnCalc>
+	<ColumnCalc desc="Paramento do tubo" dataType="float" unit="mm" name="b" id="CCA42" visible="1" context="b_" index="0">$SHBTh</ColumnCalc>
+	<ColumnCalc desc="Parede do tubo" dataType="float" unit="mm" name="d" id="CCA43" visible="1" context="d_" index="0">-671.756628788019*$DNM^6+3772.44825487096*$DNM^5+-7907.61972402813*$DNM^4+7627.81554383404*$DNM^3+-3307.41747835693*$DNM^2+556.611201299326*$DNM^1+29.9188311687471</ColumnCalc>
+  <ColumnCalc desc="SRS" dataType="float" unit="mm" name="SRS" id="CCA43" visible="0" context="Geometry_ModelDistanceParameter" index="19">$WPOf1</ColumnCalc>
+  <ColumnCalc desc="Rim to Sump Height" dataType="float" unit="mm" name="SRS" id="CCA44" visible="1" context="StructRimToSumpHeight" index="0">$WPOf1</ColumnCalc>
+</LandPart>

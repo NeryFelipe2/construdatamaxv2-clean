@@ -1,0 +1,3621 @@
+{
+  "meta": {
+    "plataforma": "ConstruData - HydroNetwork",
+    "modulo": "Micro-Planejamento",
+    "nucleo": "TETEU TESTE",
+    "data": "2026-03-29T01:51:07.163660",
+    "empresa": "FCN Construções e Saneamento"
+  },
+  "resumo": {
+    "n_trechos": 50,
+    "extensao_total": 708.0,
+    "dias_sequencial": 63,
+    "dias_paralelo": 11,
+    "equipes_max": 6,
+    "custo_frente_total": 187950,
+    "custo_por_metro_frente": 265.41
+  },
+  "por_morfologia": {
+    "morro": {
+      "descricao": "Morro/favela (declividade > 15%)",
+      "n_trechos": 30,
+      "extensao_m": 252.0,
+      "pct_total": 35.6,
+      "dias_total": 35,
+      "custo_frente": 109200,
+      "prod_media_dia": 7.2,
+      "equipe_recomendada": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ]
+    },
+    "planicie": {
+      "descricao": "Terreno plano (declividade < 8%)",
+      "n_trechos": 16,
+      "extensao_m": 355.0,
+      "pct_total": 50.1,
+      "dias_total": 21,
+      "custo_frente": 59220,
+      "prod_media_dia": 16.9,
+      "equipe_recomendada": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ]
+    },
+    "encosta": {
+      "descricao": "Encosta moderada (8-15%)",
+      "n_trechos": 4,
+      "extensao_m": 101.0,
+      "pct_total": 14.2,
+      "dias_total": 7,
+      "custo_frente": 19530,
+      "prod_media_dia": 14.4,
+      "equipe_recomendada": {
+        "encanador": 2,
+        "ajudante": 6,
+        "operador_retro": 1,
+        "sinaleiro": 1,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retroescavadeira",
+        "Compactador",
+        "Escoramento metálico"
+      ]
+    }
+  },
+  "material_consolidado": {
+    "Tubo PVC DN200": {
+      "qtd": 370.36999999999995,
+      "un": "m"
+    },
+    "Areia fundação": {
+      "qtd": 176.90000000000006,
+      "un": "m³"
+    },
+    "Brita": {
+      "qtd": 155.90000000000006,
+      "un": "m³"
+    },
+    "CBUQ": {
+      "qtd": 623.1999999999999,
+      "un": "m²"
+    },
+    "PV concreto DN1200": {
+      "qtd": 50,
+      "un": "un"
+    },
+    "Tubo PVC DN300": {
+      "qtd": 326.46000000000004,
+      "un": "m"
+    },
+    "Tubo PVC DN400": {
+      "qtd": 11.31,
+      "un": "m"
+    }
+  },
+  "trechos": [
+    {
+      "ns": "PV_64→PI_34",
+      "ext_m": 21.25,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 2,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 6240,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 21.25,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 5.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.7,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 18.7,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 1
+    },
+    {
+      "ns": "PI_34→PI_41",
+      "ext_m": 3.97,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 3.97,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.0,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 0.9,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 2
+    },
+    {
+      "ns": "PI_41→PI_42",
+      "ext_m": 7.34,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 7.34,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.6,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 6.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 3
+    },
+    {
+      "ns": "PI_42→PI_43",
+      "ext_m": 8.08,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 8.08,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.0,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 7.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 4
+    },
+    {
+      "ns": "PI_43→PI_44",
+      "ext_m": 4.65,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 4.65,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.2,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 4.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 5
+    },
+    {
+      "ns": "PI_44→PI_45",
+      "ext_m": 5.76,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.76,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 6
+    },
+    {
+      "ns": "PI_45→PV_61",
+      "ext_m": 5.98,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.98,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 7
+    },
+    {
+      "ns": "PV_61→PI_47",
+      "ext_m": 6.62,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 6.62,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.7,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.5,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 8
+    },
+    {
+      "ns": "PI_47→PI_272",
+      "ext_m": 4.42,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 4.42,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.1,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.9,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 9
+    },
+    {
+      "ns": "PI_272→PV_60_2",
+      "ext_m": 3.47,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 3.47,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 0.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 0.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 10
+    },
+    {
+      "ns": "PV_60→PV_23",
+      "ext_m": 16.24,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 16.24,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 4.1,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 3.6,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 14.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 11
+    },
+    {
+      "ns": "PV_23→PI_69",
+      "ext_m": 5.46,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.46,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 4.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 12
+    },
+    {
+      "ns": "PI_69→PV_24",
+      "ext_m": 5.77,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.77,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 13
+    },
+    {
+      "ns": "PV_24→PI_88",
+      "ext_m": 9.17,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 9.17,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 8.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 14
+    },
+    {
+      "ns": "PI_88→PI_72",
+      "ext_m": 22.17,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "encosta",
+      "morfologia_desc": "Encosta moderada (8-15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mista (mecânica + manual)",
+      "escoramento": "metálico tipo hamburguesa ou pontalete",
+      "prod_m_dia": 20,
+      "duracao_dias": 2,
+      "fator_custo": 1.25,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 6,
+        "operador_retro": 1,
+        "sinaleiro": 1,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retroescavadeira",
+        "Compactador",
+        "Escoramento metálico"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "deslizamento de talude",
+        "drenagem pluvial",
+        "acesso máquina limitado"
+      ],
+      "custo_mo_dia": 2240,
+      "custo_eq_dia": 550,
+      "custo_frente_total": 5580,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 22.17,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 5.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.9,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 19.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 15
+    },
+    {
+      "ns": "PI_72→PV_27",
+      "ext_m": 12.64,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 2,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 6240,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 12.64,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.2,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 11.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 16
+    },
+    {
+      "ns": "PV_27→PV_28",
+      "ext_m": 13.34,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 13.34,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.9,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 11.7,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 17
+    },
+    {
+      "ns": "PV_28→PI_75",
+      "ext_m": 23.49,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 2,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 6240,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 23.49,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 5.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 5.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 20.7,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 18
+    },
+    {
+      "ns": "PI_75→PI_76",
+      "ext_m": 6.28,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 6.28,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.6,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 19
+    },
+    {
+      "ns": "PI_76→PI_77",
+      "ext_m": 4.69,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 4.69,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.2,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 4.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 20
+    },
+    {
+      "ns": "PI_77→PI_78",
+      "ext_m": 12.66,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 12.66,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.2,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 11.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 21
+    },
+    {
+      "ns": "PI_00→PI_78",
+      "ext_m": 15.35,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 15.35,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 3.4,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 13.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 22
+    },
+    {
+      "ns": "PV_60_2→PV_60",
+      "ext_m": 7.13,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 7.13,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.6,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 6.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 23
+    },
+    {
+      "ns": "PI_41→PI_80",
+      "ext_m": 10.68,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 10.68,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.7,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 9.4,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 24
+    },
+    {
+      "ns": "PI_80→PI_81",
+      "ext_m": 5.56,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.56,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 4.9,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 25
+    },
+    {
+      "ns": "PI_81→PI_82",
+      "ext_m": 13.61,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 2,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 6240,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 13.61,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 3.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 12.0,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 26
+    },
+    {
+      "ns": "PI_82→PI_83",
+      "ext_m": 13.78,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 13.78,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 3.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 12.1,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 27
+    },
+    {
+      "ns": "PV_28→PI_86",
+      "ext_m": 13.19,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 2,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 6240,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 13.19,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 3.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.9,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 11.6,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 28
+    },
+    {
+      "ns": "PI_86→PV_38_2",
+      "ext_m": 3.71,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 3.71,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 0.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 0.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 29
+    },
+    {
+      "ns": "PV_38_2→PV_37_2",
+      "ext_m": 17.97,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 17.97,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 4.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 15.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 30
+    },
+    {
+      "ns": "PV_37_2→PI_87",
+      "ext_m": 6.04,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 6.04,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 31
+    },
+    {
+      "ns": "PI_87→PI_89",
+      "ext_m": 5.69,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 5.69,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.4,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.0,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 32
+    },
+    {
+      "ns": "PI_89→PI_90",
+      "ext_m": 4.77,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 4.77,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.2,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.0,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 4.2,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 33
+    },
+    {
+      "ns": "PI_90→PI_98",
+      "ext_m": 7.74,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 7.74,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.7,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 6.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 34
+    },
+    {
+      "ns": "PI_82→PI_92",
+      "ext_m": 23.58,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 23.58,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 5.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 5.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 20.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 35
+    },
+    {
+      "ns": "PI_92→PI_93",
+      "ext_m": 10.05,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 10.05,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 8.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 36
+    },
+    {
+      "ns": "PI_93→PV_27",
+      "ext_m": 9.98,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 9.98,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.5,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 8.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 37
+    },
+    {
+      "ns": "PI_94→PI_83",
+      "ext_m": 30.36,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 2,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 5640,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 30.36,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 7.6,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 6.7,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 26.7,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 38
+    },
+    {
+      "ns": "PI_98→PV_G27",
+      "ext_m": 6.76,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 6.76,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 1.7,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 1.5,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 5.9,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 39
+    },
+    {
+      "ns": "PV_24→PV_G27",
+      "ext_m": 3.71,
+      "dn_mm": 200,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "rede_esg_tronco",
+      "frente_desc": "Rede coletora esgoto — tronco",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "escavação",
+        "lastro",
+        "assentamento",
+        "junta",
+        "teste",
+        "reaterro",
+        "compactação",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN200": {
+          "qtd": 3.71,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 0.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 0.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 40
+    },
+    {
+      "ns": "PV_18→PI_78",
+      "ext_m": 11.38,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 11.38,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.5,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 10.0,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 41
+    },
+    {
+      "ns": "PI_162→PV_18",
+      "ext_m": 75.39,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 3,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 8460,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 75.39,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 18.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 16.6,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 66.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 42
+    },
+    {
+      "ns": "PV_36→PV_37",
+      "ext_m": 22.24,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 22.24,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 5.6,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.9,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 19.6,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 43
+    },
+    {
+      "ns": "PV_37→PV_38",
+      "ext_m": 19.12,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 1,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 2820,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 19.12,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 4.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.2,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 16.8,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 44
+    },
+    {
+      "ns": "PV_38→PI_00",
+      "ext_m": 73.29,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "planicie",
+      "morfologia_desc": "Terreno plano (declividade < 8%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mecânica",
+      "escoramento": "pontalete leve ou dispensa",
+      "prod_m_dia": 30,
+      "duracao_dias": 3,
+      "fator_custo": 1.0,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 4,
+        "operador_retro": 1,
+        "sinaleiro": 1
+      },
+      "equipamentos": [
+        "Retroescavadeira",
+        "Compactador de solo",
+        "Placa vibratória"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "interferência rede existente",
+        "nível freático"
+      ],
+      "custo_mo_dia": 1670,
+      "custo_eq_dia": 1150,
+      "custo_frente_total": 8460,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 73.29,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 18.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 16.1,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 64.5,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 45
+    },
+    {
+      "ns": "PI_94→PV_G1",
+      "ext_m": 33.15,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "encosta",
+      "morfologia_desc": "Encosta moderada (8-15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mista (mecânica + manual)",
+      "escoramento": "metálico tipo hamburguesa ou pontalete",
+      "prod_m_dia": 20,
+      "duracao_dias": 2,
+      "fator_custo": 1.25,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 6,
+        "operador_retro": 1,
+        "sinaleiro": 1,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retroescavadeira",
+        "Compactador",
+        "Escoramento metálico"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "deslizamento de talude",
+        "drenagem pluvial",
+        "acesso máquina limitado"
+      ],
+      "custo_mo_dia": 2240,
+      "custo_eq_dia": 550,
+      "custo_frente_total": 5580,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 33.15,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 8.3,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 7.3,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 29.2,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 46
+    },
+    {
+      "ns": "PV_G1→PV_36",
+      "ext_m": 18.86,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "encosta",
+      "morfologia_desc": "Encosta moderada (8-15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mista (mecânica + manual)",
+      "escoramento": "metálico tipo hamburguesa ou pontalete",
+      "prod_m_dia": 20,
+      "duracao_dias": 1,
+      "fator_custo": 1.25,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 6,
+        "operador_retro": 1,
+        "sinaleiro": 1,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retroescavadeira",
+        "Compactador",
+        "Escoramento metálico"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "deslizamento de talude",
+        "drenagem pluvial",
+        "acesso máquina limitado"
+      ],
+      "custo_mo_dia": 2240,
+      "custo_eq_dia": 550,
+      "custo_frente_total": 2790,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 18.86,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 4.7,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 4.1,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 16.6,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 47
+    },
+    {
+      "ns": "PI_00→PV_G7",
+      "ext_m": 11.31,
+      "dn_mm": 400,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN400": {
+          "qtd": 11.31,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 2.8,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 2.5,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 10.0,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 48
+    },
+    {
+      "ns": "PI_83→PV_G5",
+      "ext_m": 26.5,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "encosta",
+      "morfologia_desc": "Encosta moderada (8-15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "mista (mecânica + manual)",
+      "escoramento": "metálico tipo hamburguesa ou pontalete",
+      "prod_m_dia": 20,
+      "duracao_dias": 2,
+      "fator_custo": 1.25,
+      "equipe": {
+        "encanador": 2,
+        "ajudante": 6,
+        "operador_retro": 1,
+        "sinaleiro": 1,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retroescavadeira",
+        "Compactador",
+        "Escoramento metálico"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "deslizamento de talude",
+        "drenagem pluvial",
+        "acesso máquina limitado"
+      ],
+      "custo_mo_dia": 2240,
+      "custo_eq_dia": 550,
+      "custo_frente_total": 5580,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 26.5,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 6.6,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 5.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 23.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 49
+    },
+    {
+      "ns": "PV_G5→PV_37",
+      "ext_m": 3.79,
+      "dn_mm": 300,
+      "tipo": "esgoto",
+      "morfologia": "morro",
+      "morfologia_desc": "Morro/favela (declividade > 15%)",
+      "frente": "prolongamento",
+      "frente_desc": "Prolongamento de rede em via",
+      "escavacao": "manual predominante",
+      "escoramento": "metálico pesado ou madeira reforçada — OBRIGATÓRIO",
+      "prod_m_dia": 12,
+      "duracao_dias": 1,
+      "fator_custo": 1.65,
+      "equipe": {
+        "encanador": 3,
+        "ajudante": 8,
+        "operador_mini": 1,
+        "sinaleiro": 2,
+        "carpinteiro": 1
+      },
+      "equipamentos": [
+        "Mini-retro (onde acessa)",
+        "Martelete",
+        "Guincho/talha",
+        "Bomba submersa"
+      ],
+      "sequencia_servico": [
+        "sinalização",
+        "demolição",
+        "escavação",
+        "escoramento",
+        "lastro",
+        "assentamento",
+        "PV",
+        "teste",
+        "reaterro",
+        "compactação",
+        "sub-base",
+        "CBUQ"
+      ],
+      "riscos": [
+        "desmoronamento",
+        "alagamento vala",
+        "acesso material manual",
+        "segurança trabalhador"
+      ],
+      "custo_mo_dia": 2970,
+      "custo_eq_dia": 150,
+      "custo_frente_total": 3120,
+      "material_necessario": {
+        "Tubo PVC DN300": {
+          "qtd": 3.79,
+          "un": "m"
+        },
+        "Areia fundação": {
+          "qtd": 0.9,
+          "un": "m³"
+        },
+        "Brita": {
+          "qtd": 0.8,
+          "un": "m³"
+        },
+        "CBUQ": {
+          "qtd": 3.3,
+          "un": "m²"
+        },
+        "PV concreto DN1200": {
+          "qtd": 1,
+          "un": "un"
+        }
+      },
+      "ns_id": 50
+    }
+  ],
+  "recomendacoes": [
+    {
+      "prioridade": "ALTA",
+      "tipo": "EQUIPE MORRO",
+      "acao": "Alocar 2 equipe(s) especializada(s) em morro. Produtividade 7m/dia. Escoramento OBRIGATÓRIO. Equipamento: mini-retro onde acessa + manual.",
+      "equipes": 2,
+      "extensao": 252.0,
+      "dias_estimados": 18
+    },
+    {
+      "prioridade": "MÉDIA",
+      "tipo": "EQUIPE ENCOSTA",
+      "acao": "Alocar 1 equipe(s) mista(s). Mini-retro onde acessa, manual no resto. Escoramento metálico. Produtividade 14m/dia.",
+      "equipes": 1,
+      "extensao": 101.0,
+      "dias_estimados": 7
+    },
+    {
+      "prioridade": "NORMAL",
+      "tipo": "EQUIPE PADRÃO",
+      "acao": "Alocar 3 equipe(s) padrão c/ retroescavadeira. Produtividade máxima: 17m/dia. Via normal.",
+      "equipes": 3,
+      "extensao": 355.0,
+      "dias_estimados": 7
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Autodesk Civil 3D Pipe Catalog 2004 -->
+<pXML id="F670B5B9-DA12-476d-B461-4FB5C5650A82" version="1.0" name="Metric Pipes" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<Desc>Metric Pipe Catalog</Desc>
+	<DefaultLinearUnits>mm</DefaultLinearUnits>
+	<Images>
+		<Image>
+			<URL xlink:title="Catalog Image" xlink:href="Autodesk Logo.jpg" xlink:show="embed" xlink:actuate="onLoad"/>
+		</Image>
+	</Images>
+	<Supplier name="Generic">
+		<Images>
+			<Image>
+				<URL xlink:title="Logo" xlink:href="Autodesk Logo.jpg" xlink:show="embed" xlink:actuate="onLoad"/>
+			</Image>
+		</Images>
+		<Link>
+			<URL xlink:title="Metric Pipe Catalog" xlink:href="http://www.autodesk.com" xml:lang="en"/>
+		</Link>
+	</Supplier>
+	<Extrinsics>
+		<Extrinsic>
+			<AeccCIRules>
+				<DomainHierarchy>
+					<Domain>
+						<DomainEnum>Pipe_Domain</DomainEnum>
+						<Type>
+							<TypeEnum>Pipe</TypeEnum>
+						</Type>
+					</Domain>
+				</DomainHierarchy>
+				<DomainSet>
+					<DomainEnum>Pipe_Domain</DomainEnum>
+				</DomainSet>
+				<TypeSet>
+					<TypeEnum>Pipe</TypeEnum>
+					<TypeEnum>Elbow</TypeEnum>
+					<TypeEnum>Tee</TypeEnum>
+					<TypeEnum>Wye</TypeEnum>
+					<TypeEnum>Cross</TypeEnum>
+					<TypeEnum>Takeoff</TypeEnum>
+					<TypeEnum>Transition</TypeEnum>
+					<TypeEnum>Coupling</TypeEnum>
+					<TypeEnum>Endcap</TypeEnum>
+				</TypeSet>
+				<SubTypeSet>
+					<SubTypeString>Simples</SubTypeString>
+					<SubTypeString>Duplo</SubTypeString>
+					<SubTypeString>Triplo</SubTypeString>
+				</SubTypeSet>
+				<ShapeSet>
+					<PartShapeEnum>Round</PartShapeEnum>
+				</ShapeSet>
+				<ConnectionTypeSet>
+					<ConnectionTypeEnum>Undefined_Connection_Type</ConnectionTypeEnum>
+				</ConnectionTypeSet>
+				<MaterialSet></MaterialSet>
+				<ParameterSet>
+					<ParameterString>BTRowID</ParameterString>
+					<ParameterString>PID</ParameterString>
+					<ParameterString>WTh</ParameterString>
+					<ParameterString>CTravBool</ParameterString>
+					<ParameterString>PDom</ParameterString>
+					<ParameterString>PTyp</ParameterString>
+					<ParameterString>PSTyp</ParameterString>
+					<ParameterString>PrtNm</ParameterString>
+					<ParameterString>PrtD</ParameterString>
+					<ParameterString>PrtID</ParameterString>
+					<ParameterString>DVer</ParameterString>
+					<ParameterString>CntTy</ParameterString>
+					<ParameterString>HPrtF</ParameterString>
+					<ParameterString>CSS</ParameterString>
+					<ParameterString>CusSF</ParameterString>
+					<ParameterString>Espacamento</ParameterString>
+					<ParameterString>CatID</ParameterString>
+					<ParameterString>PrtSN</ParameterString>
+					<ParameterString>BdyD1</ParameterString>
+					<ParameterString>LenA2</ParameterString>
+					<ParameterString>LenA3</ParameterString>
+					<ParameterString>LenA1</ParameterString>
+					<ParameterString>PIW</ParameterString>
+					<ParameterString>PIH</ParameterString>
+					<ParameterString>Misula</ParameterString>
+				</ParameterSet>
+				<UnitsSet>
+					<UnitsEnum/>
+					<UnitsEnum>inch</UnitsEnum>
+					<UnitsEnum>ft</UnitsEnum>
+					<UnitsEnum>mm</UnitsEnum>
+					<UnitsEnum>cm</UnitsEnum>
+					<UnitsEnum>m</UnitsEnum>
+					<UnitsEnum>deg</UnitsEnum>
+				</UnitsSet>
+				<RelativePathPreference>Table</RelativePathPreference>
+			</AeccCIRules>
+		</Extrinsic>
+	</Extrinsics>
+	<Chapter name="ADS">ADS
+		<Desc>ADS</Desc>
+		<Part name="ADS" id="EF6BA1CE-6B1D-4596-80C0-94042948E654">
+			<Desc>ADS</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="ADS" xlink:href="ADS\ADS.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="ADS\ADS.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Galeria_Circular">Galeria_Circular
+		<Desc>Galeria_Circular</Desc>
+		<Part name="BDTC" id="FE73135E-8155-4bde-8D4C-EA7FA218568C">
+			<Desc>BDTC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BDTC" xlink:href="Galeria_Circular\BDTC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Circular\BDTC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Duplo" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BSTC" id="4397B145-3AFF-47f4-9D9D-C2C5F836CA9F">
+			<Desc>BSTC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BSTC" xlink:href="Galeria_Circular\BSTC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Circular\BSTC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BTTC" id="2354BF15-A8DB-46a2-95D3-25F1F89026D3">
+			<Desc>BTTC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BTTC" xlink:href="Galeria_Circular\BTTC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Circular\BTTC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Triplo" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="TLDC" id="5F7F319D-24B1-434E-8207-9D0A0B1C8F64">
+			<Desc>TLDC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="TLDC" xlink:href="Galeria_Circular\TLDC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Circular\TLDC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Duplo" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="TLSC" id="8158D4D7-AB46-400C-8B3A-BA3004904171">
+			<Desc>TLSC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="TLSC" xlink:href="Galeria_Circular\TLSC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Circular\TLSC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Galeria_Retangular">Galeria_Retangular
+		<Desc>Galeria_Retangular</Desc>
+		<Part name="BDRC" id="825049EB-56C0-46a5-97C3-57FE3A0F8703">
+			<Desc>BDRC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BDRC" xlink:href="Galeria_Retangular\BDRC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Retangular\BDRC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Duplo" part_shape="SweptShape_Rectangular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BSRC" id="C4E12D47-EDA8-4c41-86EB-6D7DCC8A735B">
+			<Desc>BSRC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BSRC" xlink:href="Galeria_Retangular\BSRC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Retangular\BSRC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Rectangular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+		<Part name="BTRC" id="C83FA190-3BA8-46A1-AE7C-B8BE87A5D67B">
+			<Desc>BTRC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="BTRC" xlink:href="Galeria_Retangular\BTRC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Galeria_Retangular\BTRC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Triplo" part_shape="SweptShape_Rectangular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="PEAD">PEAD
+		<Desc>PEAD</Desc>
+		<Part name="PEAD" id="E2A2470B-6183-4ACE-8599-FCAD025DF010">
+			<Desc>PEAD</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="PEAD" xlink:href="PEAD\PEAD.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="PEAD\PEAD.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+	<Chapter name="Pvc">Pvc
+		<Desc>Pvc</Desc>
+		<Part name="PVC" id="7C73A302-6B19-4608-8759-93282841A242">
+			<Desc>PVC</Desc>
+			<Images>
+				<Image>
+					<URL xlink:title="PVC" xlink:href="Pvc\PVC.bmp" xlink:show="embed" xlink:actuate="onLoad"/>
+				</Image>
+			</Images>
+			<TableRef>
+				<URL xlink:href="Pvc\PVC.xml"/>
+			</TableRef>
+			<Extrinsics>
+				<Extrinsic name="AeccPartSearchAttribList">
+					<AeccPartSearchAttribList domain="Pipe_Domain" part_type="Pipe" part_subtype="Simples" part_shape="SweptShape_Circular" placeholder="False" hidepart="False"/>
+				</Extrinsic>
+			</Extrinsics>
+		</Part>
+	</Chapter>
+</pXML>

@@ -1,0 +1,170 @@
+{
+  "gerado_em": "2026-03-23T16:45:26.131204",
+  "plataforma": "ConstruData HydroNetwork V4",
+  "empresa": "FCN Construções e Saneamento",
+  "contrato": "CT 11481051 · SE LIGA NA REDE · Santos/SP",
+  "modelo": {
+    "r2_test": 0.1861,
+    "r2_cv_mean": 0.0043,
+    "r2_cv_std": 0.1583,
+    "mae": 3.134,
+    "rmse": 4.37,
+    "best_params": {
+      "learning_rate": 0.05,
+      "max_depth": 3,
+      "n_estimators": 50,
+      "subsample": 1.0
+    },
+    "best_cv_score": 0.1122,
+    "n_combos": 54,
+    "n_modelos": 162,
+    "algoritmo": "XGBoost"
+  },
+  "cenarios": [
+    {
+      "nome": "Baseline (ritmo atual)",
+      "producao_diaria": 2.6,
+      "producao_mensal": 58.0,
+      "lig_realizadas": 1676,
+      "lig_faltam": 23707,
+      "dias_para_concluir": 9053,
+      "data_conclusao": "31/12/2050",
+      "custo_extra_mensal": 0.0,
+      "aceleracao_pct": 0.0
+    },
+    {
+      "nome": "Aceleração +10%",
+      "producao_diaria": 2.9,
+      "producao_mensal": 63.0,
+      "lig_realizadas": 1676,
+      "lig_faltam": 23707,
+      "dias_para_concluir": 8230,
+      "data_conclusao": "29/09/2048",
+      "custo_extra_mensal": 5000.0,
+      "aceleracao_pct": 10.0
+    },
+    {
+      "nome": "Aceleração +20%",
+      "producao_diaria": 3.1,
+      "producao_mensal": 69.0,
+      "lig_realizadas": 1676,
+      "lig_faltam": 23707,
+      "dias_para_concluir": 7544,
+      "data_conclusao": "13/11/2046",
+      "custo_extra_mensal": 10000.0,
+      "aceleracao_pct": 20.0
+    },
+    {
+      "nome": "Aceleração +30%",
+      "producao_diaria": 3.4,
+      "producao_mensal": 75.0,
+      "lig_realizadas": 1676,
+      "lig_faltam": 23707,
+      "dias_para_concluir": 6964,
+      "data_conclusao": "12/04/2045",
+      "custo_extra_mensal": 15000.0,
+      "aceleracao_pct": 30.0
+    },
+    {
+      "nome": "Meta contratual (366/mês)",
+      "producao_diaria": 8.8,
+      "producao_mensal": 194.0,
+      "lig_realizadas": 1676,
+      "lig_faltam": 23707,
+      "dias_para_concluir": 2694,
+      "data_conclusao": "03/08/2033",
+      "custo_extra_mensal": 118044.08,
+      "aceleracao_pct": 236.1
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "la_r3",
+      "importancia": 0.2039722055196762
+    },
+    {
+      "feature": "mes",
+      "importancia": 0.15405842661857605
+    },
+    {
+      "feature": "le_r3",
+      "importancia": 0.10535148531198502
+    },
+    {
+      "feature": "nucleo_enc",
+      "importancia": 0.10504154860973358
+    },
+    {
+      "feature": "lig_total_r7",
+      "importancia": 0.10038379579782486
+    },
+    {
+      "feature": "lig_total_r3",
+      "importancia": 0.09179706871509552
+    },
+    {
+      "feature": "dia_semana",
+      "importancia": 0.07113395631313324
+    },
+    {
+      "feature": "pra_r7",
+      "importancia": 0.06749540567398071
+    },
+    {
+      "feature": "pra_r3",
+      "importancia": 0.05132557079195976
+    },
+    {
+      "feature": "dias_decorridos",
+      "importancia": 0.04944048821926117
+    },
+    {
+      "feature": "fim_semana",
+      "importancia": 0.0
+    }
+  ],
+  "resumo_nucleos": {
+    "J_CARLOS": {
+      "label": "João Carlos",
+      "total_dias": 87,
+      "total_lig": 206,
+      "media_dia": 2.37,
+      "max_dia": 21
+    },
+    "M_TETEU": {
+      "label": "Morro do Teteu",
+      "total_dias": 78,
+      "total_lig": 414,
+      "media_dia": 5.31,
+      "max_dia": 22
+    },
+    "P_BAIXO": {
+      "label": "Pantanal Baixo",
+      "total_dias": 116,
+      "total_lig": 393,
+      "media_dia": 3.39,
+      "max_dia": 27
+    },
+    "S_MANOEL": {
+      "label": "São Manoel",
+      "total_dias": 94,
+      "total_lig": 329,
+      "media_dia": 3.5,
+      "max_dia": 34
+    },
+    "V_CRIADORES": {
+      "label": "Vila Criadores",
+      "total_dias": 89,
+      "total_lig": 233,
+      "media_dia": 2.62,
+      "max_dia": 15
+    },
+    "V_ISRAEL": {
+      "label": "Vila Israel",
+      "total_dias": 57,
+      "total_lig": 101,
+      "media_dia": 1.77,
+      "max_dia": 13
+    }
+  }
+}

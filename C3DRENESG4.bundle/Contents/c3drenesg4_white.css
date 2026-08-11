@@ -1,0 +1,74 @@
+svg {background-color: white;}
+
+/* preview dos editores de seção */         
+.editCota          { stroke: black; font-size  :0.05px; text-anchor: middle; stroke-width: 0.002px; }  /* cotas nos editores e previews das seções */
+.editSecao         { stroke: blue;  fill: none;  stroke-width: 0.01px; }  /* linhas editores e previews das seções */ 
+.editLamina        { stroke: gray;  fill: none;  stroke-width: 0.01px; }  /* lamina d'água */
+.editLaminaErr     { stroke: red;   fill: none;  stroke-width: 0.01px; }  /* lamina d'água com erro*/
+.editVala          { stroke: green; fill: none;  stroke-width: 0.01px; }  /* polilinha que representa a vala */
+.editValaErr       { stroke: red;   fill: none;  stroke-width: 0.01px; }  /* polilinha que representa a vala, quando tem erro*/
+
+/* preview do gráfico sarjeta */
+.perfilSarjTxt      {stroke: brown;  font-size:10px; text-anchor: left; alignment-baseline: botton; } /* textos em geral */
+.perfilEixos        {stroke: blue;   stroke-width: 1px;  }              /* eixos X e Y do gráfico */
+.perfilSegmento     {stroke: black;  stroke-width: 1px;  }              /* elinha vertical que divide os segmentos */
+.perfilCurva        {stroke: orange; stroke-width: 2px; fill: none; }   /* curva do gráfico */
+.perfilLimites      {stroke: red;    stroke-width: 1px; fill: none; }   /* linhas que representam o máximo e mínimo */
+.perfilSarjTracker  {stroke: green;  stroke-width: 1px;  }              /* linha que representa o cursor se movendo */
+
+/* preview da planta da sarjeta */
+.plantaSarj        {stroke: black; stroke-width: 1px; fill:none; stroke-linecap: round; } /* eixos da sarjeta quando não está selecionada */
+.plantaSarjSel     {stroke: blue;  stroke-width: 1px; fill:none; stroke-linecap: round; } /* eixos da sarjeta quando está selecionada */
+.plantaNoEntra     {stroke: gray;  stroke-width: 3px; }                                   /* marca que representa um nó que entra */
+.plantaNoSai       {stroke: gray;  stroke-width: 3px; }                                   /* marca que representa um nó que sai */
+.plantaSegmento    {stroke: black; stroke-width: 1px; fill: none; }                       /* linha que representa o cursor se movendo */
+.plantaSarjTracker {stroke: green; stroke-width: 1px;  } 
+           
+/* preview da planta de drenagem e esgoto */
+.plantaPlArea          {stroke: gray;  stroke-width: 0.5px; fill-opacity: 0.2; stroke-linecap:round;} /* polilinha da área de contribuição */
+.plantaPlAreaSel       {stroke: gray;  stroke-width: 1px;   fill-opacity:0.4;  stroke-linecap:round;} /* polilinha da área de contribuição quando selecionada */
+.plantaEixoTubo        {stroke: black; stroke-width: 1px;   fill:none;         stroke-linecap:round;} /* eixo do tubo */
+.plantaEixoTuboSel     {stroke: blue;  stroke-width: 1px;   fill:none;         troke-linecap:round;}  /* eixo do tubo quando selecionado */
+.plantaEstrutura       {stroke: brown; stroke-width: 0.2px; fill:brown; }                             /* marca que representa a estrutura */
+.plantaEstruturaTxt    {fill:   brown; font-size :5px }                                               /* nome da estrutura */
+.plantaEstruturaSel    {stroke: blue;  stroke-width: 0.2px; fill: blue; }                             /* marca que representa a estrutura quando selecionada */
+.plantaEstruturaSelTxt {fill:   blue; font-size:5px }                                                 /* nome da estrutura quando selecionada */
+.plantaInterfOk        {stroke: gray;  fill:gray; stroke-width: 0.5px; font-size:5px }                /* marca que representa interferência, quando OK */
+.plantaInterfErr       {stroke: red;  fill:red; stroke-width: 0.5px; font-size:5px }                  /* marca que representa interferência, quando com ERRO */
+.plantaInterfOkTxt     {fill:   gray; font-size:5px }                                                 /* nome da interferência, quando OK */
+.plantaInterfErrTxt    {fill:   red; font-size:5px }                                                  /* nome da interferência, quando com ERRO */
+.plantaTracker         {stroke: red; stroke-width: 1px;  }                                            /* linha que representa o cursor se movendo */
+
+/* preview seção dos tubos de drenagem e esgoto */
+.secaoTerreno  { stroke-width: 0.05px;  fill: none; }                                       /* linha que representa a superfície do tubo */
+.secaoVala     { stroke: green; fill: none; stroke-width: 0.05px; stroke-linecap: round;}   /* linha que representa a vala escavada */
+.secaoTubo     { stroke: blue;  fill: none; stroke-width: 0.03px;}                          /* representa a seção do tubo */
+.secaoEixo     { stroke: gray;  fill: none; stroke-width: 0.05px; }                         /* representa os eixos de referência */
+
+/* preview do perfil das redes de drenagem e esgoto */
+.perfilTubo          {stroke: black;   stroke-width: 0.01px; fill:gray; fill-opacity: 0.4;}    /* representa os tubos não selecionados */
+.perfilTuboErr       {stroke: red;     stroke-width: 0.01px; fill:red; fill-opacity: 0.4;}     /* representa os tubos com algum erro */
+.perfilTuboSel       {stroke: blue;    stroke-width: 0.01px; fill:blue; fill-opacity: 0.4; }   /* representa os tubos selecionados */
+.perfilInterfOk      {stroke: gray;    stroke-width: 0.02px; fill:none; }                      /* seção das interferências, quando OK */
+.perfilInterfErr     {stroke: red;     stroke-width: 0.02px; fill:none; }                      /* seção das interferências, quando com ERRO */
+.perfilEstrutura     {stroke: blue;    stroke-width: 0.04px; fill:none; }                      /* representa a estrutura, quando OK */
+.perfilEstruturaErr  {stroke: red;     stroke-width: 0.04px; fill:none; }                      /* representa a estrutura, quando com ERRO */
+.perfilTxt           {fill:   brown;    font-size: 0.5px }                                      /* nomes das estruturas */
+.perfilTerreno       {stroke: orange;  stroke-width: 0.02px; fill:none; }                      /* linha da superfície do tubo */
+.perfilLamina        {stroke: cyan;    stroke-width:0.01px; }                                  /* lâmina escomando dentro do tubo */
+.perfilCobrimento    {stroke: brown;   stroke-width: 0.01px; }                                 /* linha que indica ERRO no cobrimento máximo ou mínimo */
+.perfilTracker       {stroke: green;   stroke-width: 0.02px;  }                                /* linha que representa o cursor se movendo */
+.perfilBlip          {fill: black;}                                                            /* linha que representa o cursor se movendo */
+.perfilInterfOkTxt     {fill:   gray; font-size: 0.5px}                                                 /* nome da interferência, quando OK */
+.perfilInterfErrTxt    {fill:   red; font-size: 0.5px }                                                  /* nome da interferência, quando com ERRO */
+
+/* tabelas em geral */
+th   { background-color: gray; padding:5px; border-style:solid; border-width: 1px;  border-color: black;}
+ 
+td   { padding:3px;   border-style:solid;  border-width: 1px;  border-color: black;} 
+
+body { font-family: verdana; font-size: small; text-align: justify;   line-height: 16pt; }
+ 
+table { border-color: black;  border-collapse: collapse;  border-style: solid;  border-width: 2px;  margin: 10px;  font-size: small; }
+ 
+

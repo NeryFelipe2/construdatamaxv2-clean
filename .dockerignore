@@ -1,0 +1,32 @@
+# Dados pesados
+SAIDA_COMPLETA.rar
+*.rar
+*.zip
+*.dxf
+*.dwg
+*.ifc
+*.sqlite
+*.db
+
+# Diretórios de cache/build
+__pycache__/
+.venv/
+.git/
+.pytest_cache/
+.aider*
+.claude/
+.kilo/
+.qwen/
+.sixth/
+.databricks/
+
+# Saídas temporárias
+SAIDA_*/
+tmp_*/
+_tmp_*/
+*.csv
+TETÉU_ESGOTO*
+
+# IDE
+.vscode/
+*.code-workspace

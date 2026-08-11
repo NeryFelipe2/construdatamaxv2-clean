@@ -1,0 +1,27 @@
+Begin Part Validation | Terminal de inspecao
+
+Begin Part Family self validation test
+Part Family self-validation complete, no errors found
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- TL
+OK: Part Description parameter validated -- Terminal_de_inspecao
+OK: Part Name parameter validated -- Terminal de inspecao
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 3C4D8FDC-0274-4D81-BA25-4DF742DF94FE
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter SBSD uses Context=StructDiameter
+OK: Calc Parameter BdyD1 uses Context=BodyGeometry_Diameter
+OK: Calc Parameter FTh uses Context=FloorThickness
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter SBSH uses Context=StructHeight
+ 
+OK: Query validation successful
+
+OK: Part Validated | Terminal_de_inspecao\Terminal de inspecao.xml

@@ -1,0 +1,27 @@
+# pack-refs with: peeled fully-peeled sorted 
+9b66fe0e8a5a75c548f4f99b90c61dbdd894dc2e refs/remotes/origin/CCWI-WDSA-2026-Paper
+0bd4bfdf6c0778640d112650f896c5f93baf9a15 refs/remotes/origin/dev
+abc015f671a9e51c83d7d7c91da4e511fe2baddf refs/remotes/origin/dev-PSV_Fix
+801dc94f9c3d90dbfb045ccd1915e848af9c7d22 refs/remotes/origin/dev-leakage-docs
+dac67d43f93bfcfd24f2871b0b1089fcd34b9c3e refs/remotes/origin/dev-reduced_reallocs
+24e77cf01cbcbd10845398544a1ef8394e242521 refs/remotes/origin/dev_2.3_hyd
+bda4d412dc9d510831011a693f65614b38434d91 refs/remotes/origin/dev_pump_battery
+4066fed25a97bb0229c76614406db9b3873842cf refs/remotes/origin/gh-pages
+e73587543b07681bafbb7a32c92dbca9564d7b6e refs/remotes/origin/gh-pages-2.3
+444725fbf16ab28b0470ef0ed281dc4849d49583 refs/remotes/origin/master
+c4b7c90634c73c1f800b2a18ea01f4be5b6711c1 refs/tags/benchmark-chane-dev2
+28253cbf84118c6e3fc15da34c386f0b5a07b5c4 refs/tags/v2.0.11
+^993cfce8a4be925fe0419d18fb10ec88cab49aa0
+6e8efa29e2ca13170020d3de8010b5629990239a refs/tags/v2.0.12
+^0cd38fd6978b3d8d47a19f15d718f75075864c5a
+e34adc16854e1af04824b294e01f4a755058a477 refs/tags/v2.1
+4d8d82ddc260fce216af9321fc3d9a4646ac6827 refs/tags/v2.2
+5cdb33110e3e52c1b06733012e4b8c7533e936ba refs/tags/v2.2.0-dev.3
+3e8298cc073ee346cd1d9ebc119050614d4e6ebb refs/tags/v2.2.0-dev.4
+^d42f191d4555cd1862937450c89a48fffb7c7fe5
+8a15ba7c7eb216aaa33dcf19b6276149bbc196eb refs/tags/v2.3
+86af5f0702ce1a3f638e5ead71e0d6aa037310f8 refs/tags/v2.3.1
+3ccf17c612128a0c056d40b55baef4e57eaf215d refs/tags/v2.3.2
+fea7d04333cfcaa843e126ca084d560024218feb refs/tags/v2.3.3
+9b90723e9a0ed2652172b58e707653c8716963bb refs/tags/v2.3.4
+444725fbf16ab28b0470ef0ed281dc4849d49583 refs/tags/v2.3.5

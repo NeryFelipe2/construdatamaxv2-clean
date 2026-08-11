@@ -1,0 +1,114 @@
+Begin Part Validation | BBT_1989
+
+Begin Part Family self validation test
+ERROR: Required Parameter not found: Between
+ERROR: Parameter may be used more than once, index must be greater than zero: Qtd ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: k ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: m ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: c ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: d1 ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: d2 ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: e ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: f ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: n ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: p ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: q ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: AbDir ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: AbEsq ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: b ([0])
+ERROR: Parameter may be used more than once, index must be greater than zero: d ([0])
+OK: Part Domain parameter validated -- Structure_Domain
+ERROR: Part Type parameter not validated
+OK: Part Subtype parameter validated -- ALA
+OK: Part Description parameter validated -- Boca de bueiro tubular 1989
+OK: Part Name parameter validated -- BBT_1989
+OK: Part Size Name parameter found
+OK: Unique Part Family ID  validated -- 5C8344C5-36E3-429E-8E41-130E2FDD85D8
+OK: Data Version parameter validated, version = 2.0
+OK: Sample Expanded Table row successfully created
+ERROR: Duplicate Parameter Name: Esconsidade
+ERROR: Duplicate Parameter Name: Qtd
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: k
+ERROR: Duplicate Parameter Desc: Album Tipo, k
+ERROR: Duplicate Parameter Name: m
+ERROR: Duplicate Parameter Desc: Album Tipo, m
+ERROR: Duplicate Parameter Desc: Diâmetro do tubo
+ERROR: Duplicate Parameter Name: c
+ERROR: Duplicate Parameter Desc: Album Tipo, c
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: d1
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: d2
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: e
+ERROR: Duplicate Parameter Desc: Album Tipo, e
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: f
+ERROR: Duplicate Parameter Desc: Album Tipo, f
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: n
+ERROR: Duplicate Parameter Desc: Album Tipo, n
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: p
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: q
+ERROR: Duplicate Parameter Desc: Album Tipo, q
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Context (Index):  (0)
+ERROR: Duplicate Parameter Name: SRS
+ 
+Begin Calc Usage Validation
+OK: Calc Parameter AlfaD uses Context=Geometry_ModelAngleParameter
+OK: Calc Parameter SHBW uses Context=StructHwBaseWidth
+OK: Calc Parameter DNM uses Context=Geometry_ModelParameter
+OK: Calc Parameter c uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter d1 uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter d2 uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter e uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter f uses Context=Geometry_ModelParameter
+OK: Calc Parameter LenA1 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA10 uses Context=Geometry_Distance2D
+OK: Calc Parameter SHBTh uses Context=StructHwBaseThickness
+OK: Calc Parameter LenA2 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA3 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA4 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA5 uses Context=Geometry_Distance2D
+OK: Calc Parameter q uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter LenA6 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA7 uses Context=Geometry_Distance2D
+OK: Calc Parameter WPOf1 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter LenA8 uses Context=Geometry_Distance2D
+OK: Calc Parameter LenA9 uses Context=Geometry_Distance2D
+OK: Calc Parameter p uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter LenB1 uses Context=Geometry_Distance3D
+OK: Calc Parameter n uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter LenB2 uses Context=Geometry_Distance3D
+OK: Calc Parameter PathA2 uses Context=PathAngle
+OK: Calc Parameter PathA3 uses Context=PathAngle
+OK: Calc Parameter PathA4 uses Context=PathAngle
+OK: Calc Parameter WPOf2 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter WPOf3 uses Context=Geometry_WorkplaneOffset
+OK: Calc Parameter c uses Context=
+OK: Calc Parameter d1 uses Context=
+OK: Calc Parameter d2 uses Context=
+OK: Calc Parameter e uses Context=
+OK: Calc Parameter f uses Context=
+OK: Calc Parameter n uses Context=
+OK: Calc Parameter p uses Context=
+OK: Calc Parameter q uses Context=
+OK: Calc Parameter AbDir uses Context=
+OK: Calc Parameter AbEsq uses Context=
+OK: Calc Parameter PrtSN uses Context=Catalog_PartSizeName
+OK: Calc Parameter b uses Context=
+OK: Calc Parameter d uses Context=
+OK: Calc Parameter SRS uses Context=Geometry_ModelDistanceParameter
+OK: Calc Parameter SRS uses Context=StructRimToSumpHeight
+ 
+ERROR: Table Data Validation Failed | D:\DROPBOX\Dropbox\PROGRAMAS\C3DRENESG4\português\pipes catalog\metric structures\Alas DER 1989\BBT_1989.xml
+
+ERROR: Part Validation Failed | Alas DER 1989\BBT_1989.xml

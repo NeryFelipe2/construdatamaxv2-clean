@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ConstruDataWeb NS V5</title>
+  <style>
+    :root{--navy:#071a31;--blue:#2354cf;--cyan:#1fd1ff;--green:#00bd73;--orange:#ff6f19;--red:#e92c3a;--bg:#eef2f6;--card:#fff;--line:#d8e0eb;--text:#07111f;--muted:#69778d}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}.side{background:var(--navy);color:#d8e7ff}.project{height:38px;display:flex;align-items:center;padding:0 14px;background:#0b2039;border-bottom:1px solid #24476b;font-weight:800;font-size:13px}.brand{display:flex;gap:12px;align-items:center;padding:16px 14px 20px}.logo{width:38px;height:38px;border-radius:8px;display:grid;place-items:center;background:#001f36;color:var(--cyan);font-weight:900}.brand strong{display:block;color:#fff}.brand span{font-size:10px;color:#35c9ef;letter-spacing:.12em;font-weight:800}.nav-title{color:#5ea4d8;font-size:10px;letter-spacing:.16em;font-weight:900;padding:14px 16px 7px}nav a{height:28px;display:flex;align-items:center;margin:2px 12px;padding:0 10px;color:#9eb3c8;border-radius:7px;text-decoration:none;font-size:13px}nav a.active{color:#18d5ff;background:#123f66}header{min-height:64px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:14px}h1{margin:0;font-size:17px}.status{font-size:12px;color:#d9e6ff;margin-top:5px}.content{padding:18px 22px 28px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}select,.btn{height:34px;border-radius:7px;border:1px solid var(--line);padding:0 12px;background:#fff;font-weight:800}.btn{border:0;color:#fff;background:#153b8f;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}.btn.green{background:var(--green)}.btn.orange{background:var(--orange)}.kpis{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 5px #0001}.kpi{padding:15px;min-height:105px}.label{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:900}.value{font-size:28px;font-weight:950;margin-top:9px}.sub{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.3}.grid{display:grid;grid-template-columns:330px minmax(0,1fr) 360px;gap:14px;margin-top:14px}.panel{padding:16px}.panel h2{font-size:14px;margin:0 0 12px}.modules{display:grid;gap:8px}.module{border:1px solid #e4eaf3;background:#fbfcfe;border-radius:8px;padding:10px;cursor:pointer}.module.active{border-color:#2354cf;background:#eef4ff}.module strong{display:block;font-size:13px}.pill{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:950;background:#e7eefb;color:#2354cf;margin-top:7px}.rows{display:grid;gap:10px}.row{border:1px solid #e4eaf3;background:#fbfcfe;border-radius:8px;padding:10px}.row strong{display:block;font-size:13px}.contracts{display:grid;gap:10px}.contract{border-left:4px solid var(--blue);background:#f8fafc;padding:10px;border-radius:7px;font-size:12px}textarea{width:100%;height:165px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:12px;font-family:inherit;font-size:13px}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f5f8fc;color:#5d6d83;text-align:left;text-transform:uppercase;font-size:11px;padding:10px;border-bottom:1px solid var(--line)}td{padding:10px;border-bottom:1px solid #edf1f7;vertical-align:top}.wide{margin-top:14px}
+    @media(max-width:1180px){.app{grid-template-columns:1fr}.side{display:none}.grid,.kpis{grid-template-columns:1fr}.content{padding:14px}header{align-items:flex-start;flex-direction:column;padding:14px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="project">NS V5 Web</div>
+      <div class="brand"><div class="logo">C</div><div><strong>ConstruData</strong><span>HYDRONETWORK</span></div></div>
+      <nav>
+        <div class="nav-title">GESTAO</div><a href="/manage">Gestao 360</a><a href="/ns-v5" class="active">NS V5 Web</a><a href="/bi/analytics">BI Analytics</a>
+        <div class="nav-title">OPERACAO</div><a href="/rdo">RDO</a><a href="/ciclo-operacional">Ciclo Operacional</a><a href="/controle">Controle / Fluxo</a>
+      </nav>
+    </aside>
+    <main>
+      <header>
+        <div><h1>NOVA NS V5 no ConstruDataWeb</h1><div class="status" id="status">Carregando camada web...</div></div>
+        <div><button class="btn orange" id="btnMl">Rodar ML/Fallback</button></div>
+      </header>
+      <section class="content">
+        <div class="toolbar">
+          <select id="project"></select>
+          <button class="btn" id="reload">Atualizar</button>
+          <a class="btn green" href="/api/bi/analytics/export/pdf">Exportar BI PDF</a>
+          <a class="btn green" href="/api/bi/analytics/export/excel">Exportar BI Excel</a>
+        </div>
+        <div class="kpis">
+          <div class="card kpi"><div class="label">RDOs</div><div class="value" id="kRdos">0</div><div class="sub">Digital + automatico</div></div>
+          <div class="card kpi"><div class="label">NS</div><div class="value" id="kNs">0</div><div class="sub">Notas e trechos</div></div>
+          <div class="card kpi"><div class="label">Planejamentos</div><div class="value" id="kPlan">0</div><div class="sub">Semanais</div></div>
+          <div class="card kpi"><div class="label">Desvios</div><div class="value" id="kDesvios">0</div><div class="sub">Automaticos</div></div>
+          <div class="card kpi"><div class="label">PPC</div><div class="value" id="kPpc">0</div><div class="sub">Media</div></div>
+          <div class="card kpi"><div class="label">Custo</div><div class="value" id="kCusto">0</div><div class="sub">Lancado</div></div>
+        </div>
+        <div class="grid">
+          <div class="card panel"><h2>14 modulos migrados</h2><div class="modules" id="modules"></div></div>
+          <div class="card panel"><h2 id="moduleTitle">Modulo</h2><div class="rows" id="moduleRows"></div></div>
+          <div class="card panel">
+            <h2>RDO / Operacao por texto</h2>
+            <textarea id="rdoText" placeholder="Cole aqui RDO, producao, custos, desvios ou planejamento..."></textarea>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn green" id="sendText">Preencher RDO</button><button class="btn orange" id="openCycle">Abrir ciclo</button></div>
+            <div class="sub" id="textResult">O web envia para API, sem chamar script solto.</div>
+            <h2 style="margin-top:18px">Contratos</h2><div class="contracts" id="contracts"></div>
+          </div>
+        </div>
+        <div class="card panel wide"><h2>Desvios e replanejamento</h2><table><thead><tr><th>Atividade</th><th>Meta</th><th>Realizado</th><th>PPC</th><th>Severidade</th><th>Acao</th></tr></thead><tbody id="desvios"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const $=id=>document.getElementById(id); const fmt=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2});
+    const initialModule=location.pathname.startsWith('/ns-v5/')?decodeURIComponent(location.pathname.split('/').filter(Boolean).pop()):'';
+    let current='', snap=null, active=initialModule;
+    const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const n=v=>fmt.format(Number(v||0));
+    async function projects(){const r=await fetch('/api/ns-v5/projects'); const j=await r.json(); $('project').innerHTML=j.items.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join(''); current=$('project').value; await load();}
+    async function load(){current=$('project').value; $('status').textContent='Carregando snapshot ns-v5...'; const r=await fetch(`/api/ns-v5/projects/${current}/snapshot`); snap=await r.json(); active=active||snap.modules[0].key; render();}
+    function render(){const k=snap.kpis||{}; $('status').textContent=`${snap.projeto.nome} | ${snap.nucleos.join(', ')} | ${snap.version}`; $('kRdos').textContent=n(k.rdos_total); $('kNs').textContent=n(k.ns_total); $('kPlan').textContent=n(k.planejamentos_total); $('kDesvios').textContent=n(k.desvios_total); $('kPpc').textContent=n(k.ppc_medio)+'%'; $('kCusto').textContent='R$ '+n(k.custo_total);
+      $('modules').innerHTML=snap.modules.map(m=>`<div class="module ${m.key===active?'active':''}" onclick="selectModule('${m.key}')"><strong>${esc(m.title)}</strong><span class="pill">${esc(m.status)}</span><div class="sub">${esc((m.api||[]).join(' | '))}</div></div>`).join('');
+      $('contracts').innerHTML=Object.entries(snap.contracts).map(([k,v])=>`<div class="contract"><strong>${esc(k)}</strong><div>${esc(v.join(', '))}</div></div>`).join('');
+      $('desvios').innerHTML=(snap.desvios||[]).slice(0,20).map(d=>`<tr><td>${esc(d.atividade)}</td><td>${n(d.meta)}</td><td>${n(d.realizado)}</td><td>${n(d.ppc)}%</td><td>${esc(d.severidade)}</td><td>${esc(d.acao_recomendada||'-')}</td></tr>`).join('');
+      selectModule(active,false);
+    }
+    async function selectModule(key, rerender=true){active=key; if(rerender)history.replaceState(null,'',`/ns-v5/${key}`); const mod=snap.modules.find(m=>m.key===key); $('moduleTitle').textContent=mod?mod.title:key; const r=await fetch(`/api/ns-v5/projects/${current}/modules/${key}`); const j=await r.json(); const items=Array.isArray(j.items)?j.items:(j.items?.rdos||j.items?.ns||j.items?.desvios||Object.entries(j.items||{}).map(([k,v])=>({campo:k,valor:JSON.stringify(v).slice(0,240)}))); $('moduleRows').innerHTML=(items||[]).slice(0,18).map(item=>`<div class="row"><strong>${esc(item.numero?`#${item.numero}`:item.id?`#${item.id}`:item.nome||item.campo||mod.title)}</strong><div class="sub">${esc(item.data||item.nucleo||item.status||item.valor||item.observacoes||JSON.stringify(item).slice(0,180))}</div></div>`).join('')||'<div class="sub">Sem dados ainda.</div>'; if(rerender)render();}
+    async function sendText(){const texto=$('rdoText').value.trim(); if(!texto)return; const r=await fetch(`/api/ns-v5/projects/${current}/rdo/preencher-texto`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texto})}); const j=await r.json(); $('textResult').textContent=r.ok?`Texto aplicado. RDO/operacao: ${j.rdo_id||j.id||'registrado'}`:(j.detail||'Erro'); await load();}
+    $('reload').onclick=load; $('project').onchange=load; $('sendText').onclick=sendText; $('openCycle').onclick=()=>location.href='/ciclo-operacional'; $('btnMl').onclick=async()=>{await fetch(`/api/ns-v5/projects/${current}/ml/recalcular`,{method:'POST'}); await load();};
+    projects().catch(e=>$('status').textContent=e.message);
+  </script>
+</body>
+</html>

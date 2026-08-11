@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StructureDefinition xmlns="http://www.autodesk.com/civil/Parts">
+  <Name>PV_REDONDO_SABESP</Name>
+  <Description>Poço de Visita Redondo - Norma SABESP</Description>
+  <Type>Manhole</Type>
+  <Shape>Round</Shape>
+  <Diameter>1200</Diameter>
+  <Height>1000</Height>
+  <ConeHeight>300</ConeHeight>
+  <BaseThickness>150</BaseThickness>
+  <WallThickness>150</WallThickness>
+  <CoverDiameter>600</CoverDiameter>
+  <SumpDepth>200</SumpDepth>
+  <Standard>SABESP N-100</Standard>
+</StructureDefinition>

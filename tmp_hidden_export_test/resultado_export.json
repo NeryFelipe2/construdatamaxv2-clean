@@ -1,0 +1,13 @@
+{
+  "base": "test_hidden_export_pipe_network_export_20260326_111141",
+  "json": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\_construdata_exports\\test_hidden_export_pipe_network_export_20260326_111141.json",
+  "networks_csv": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\_construdata_exports\\test_hidden_export_pipe_network_export_20260326_111141_networks.csv",
+  "pipes_csv": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\_construdata_exports\\test_hidden_export_pipe_network_export_20260326_111141_pipes.csv",
+  "structures_csv": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\_construdata_exports\\test_hidden_export_pipe_network_export_20260326_111141_structures.csv",
+  "latest_mtime": 1774534301.4444659,
+  "elapsed_seconds": 2.49,
+  "dwg": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\test_hidden_export.dwg",
+  "dll": "C:\\ProgramData\\Autodesk\\ApplicationPlugins\\PipeNetworkExporter.bundle\\Contents\\PipeNetworkExporter.dll",
+  "prog_id": "AutoCAD.Application.25",
+  "output_dir": "C:\\Users\\felip\\Downloads\\NOVA NS Versao 5\\tmp_hidden_export_test\\_construdata_exports"
+}

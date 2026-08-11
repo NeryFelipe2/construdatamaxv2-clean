@@ -1,0 +1,724 @@
+{
+  "projeto": "SLNR Santos — CT 11481051",
+  "empresa": "FCN Construções e Saneamento",
+  "data_inicio": "2026-04-01",
+  "nucleos": [
+    {
+      "nome": "Verde e Teteu",
+      "extensao_m": 2621,
+      "n_trechos": 180,
+      "equipes": 3,
+      "inicio": "2026-04-01",
+      "fim": "2026-11-13",
+      "duracao_dias": 226,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-04-01",
+          "fim": "2026-04-22",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-04-22",
+          "fim": "2026-05-06",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-05-06",
+          "fim": "2026-06-24",
+          "duracao_dias": 35,
+          "predecessora": "PRJ",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2026-06-24",
+          "fim": "2026-07-31",
+          "duracao_dias": 27,
+          "predecessora": "ESC",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2026-07-31",
+          "fim": "2026-08-26",
+          "duracao_dias": 18,
+          "predecessora": "ASS",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2026-08-26",
+          "fim": "2026-09-21",
+          "duracao_dias": 18,
+          "predecessora": "PVS",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2026-09-21",
+          "fim": "2026-09-28",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2026-09-28",
+          "fim": "2026-10-07",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2026-09-21",
+          "fim": "2026-10-15",
+          "duracao_dias": 18,
+          "predecessora": "REA",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2026-09-28",
+          "fim": "2026-10-12",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2026-10-07",
+          "fim": "2026-11-13",
+          "duracao_dias": 27,
+          "predecessora": "LAV",
+          "nucleo": "Verde e Teteu"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2026-10-12",
+          "fim": "2026-10-19",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "Verde e Teteu"
+        }
+      ]
+    },
+    {
+      "nome": "São Manoel",
+      "extensao_m": 1275,
+      "n_trechos": 16,
+      "equipes": 2,
+      "inicio": "2026-04-15",
+      "fim": "2026-10-13",
+      "duracao_dias": 181,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-04-15",
+          "fim": "2026-05-06",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-05-06",
+          "fim": "2026-05-20",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-05-20",
+          "fim": "2026-06-25",
+          "duracao_dias": 26,
+          "predecessora": "PRJ",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2026-06-25",
+          "fim": "2026-07-23",
+          "duracao_dias": 20,
+          "predecessora": "ESC",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2026-07-23",
+          "fim": "2026-08-11",
+          "duracao_dias": 13,
+          "predecessora": "ASS",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2026-08-11",
+          "fim": "2026-08-28",
+          "duracao_dias": 13,
+          "predecessora": "PVS",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2026-08-28",
+          "fim": "2026-09-04",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2026-09-04",
+          "fim": "2026-09-15",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2026-08-28",
+          "fim": "2026-09-16",
+          "duracao_dias": 13,
+          "predecessora": "REA",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2026-09-04",
+          "fim": "2026-09-18",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2026-09-15",
+          "fim": "2026-10-13",
+          "duracao_dias": 20,
+          "predecessora": "LAV",
+          "nucleo": "São Manoel"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2026-09-18",
+          "fim": "2026-09-25",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "São Manoel"
+        }
+      ]
+    },
+    {
+      "nome": "Vila Israel",
+      "extensao_m": 11509,
+      "n_trechos": 861,
+      "equipes": 3,
+      "inicio": "2026-04-29",
+      "fim": "2028-07-14",
+      "duracao_dias": 807,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-04-29",
+          "fim": "2026-05-20",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-05-20",
+          "fim": "2026-06-03",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-06-03",
+          "fim": "2027-01-05",
+          "duracao_dias": 154,
+          "predecessora": "PRJ",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2027-01-05",
+          "fim": "2027-06-16",
+          "duracao_dias": 116,
+          "predecessora": "ESC",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2027-06-16",
+          "fim": "2027-10-01",
+          "duracao_dias": 77,
+          "predecessora": "ASS",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2027-10-01",
+          "fim": "2028-01-18",
+          "duracao_dias": 77,
+          "predecessora": "PVS",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2028-01-18",
+          "fim": "2028-01-25",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2028-01-25",
+          "fim": "2028-02-03",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2028-01-18",
+          "fim": "2028-05-04",
+          "duracao_dias": 77,
+          "predecessora": "REA",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2028-01-25",
+          "fim": "2028-02-08",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2028-02-03",
+          "fim": "2028-07-14",
+          "duracao_dias": 116,
+          "predecessora": "LAV",
+          "nucleo": "Vila Israel"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2028-02-08",
+          "fim": "2028-02-15",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "Vila Israel"
+        }
+      ]
+    },
+    {
+      "nome": "Pantanal Baixo",
+      "extensao_m": 6720,
+      "n_trechos": 189,
+      "equipes": 3,
+      "inicio": "2026-05-13",
+      "fim": "2027-09-20",
+      "duracao_dias": 495,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-05-13",
+          "fim": "2026-06-03",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-06-03",
+          "fim": "2026-06-17",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-06-17",
+          "fim": "2026-10-21",
+          "duracao_dias": 90,
+          "predecessora": "PRJ",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2026-10-21",
+          "fim": "2027-01-25",
+          "duracao_dias": 68,
+          "predecessora": "ESC",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2027-01-25",
+          "fim": "2027-03-29",
+          "duracao_dias": 45,
+          "predecessora": "ASS",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2027-03-29",
+          "fim": "2027-05-31",
+          "duracao_dias": 45,
+          "predecessora": "PVS",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2027-05-31",
+          "fim": "2027-06-07",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2027-06-07",
+          "fim": "2027-06-16",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2027-05-31",
+          "fim": "2027-08-02",
+          "duracao_dias": 45,
+          "predecessora": "REA",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2027-06-07",
+          "fim": "2027-06-21",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2027-06-16",
+          "fim": "2027-09-20",
+          "duracao_dias": 68,
+          "predecessora": "LAV",
+          "nucleo": "Pantanal Baixo"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2027-06-21",
+          "fim": "2027-06-28",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "Pantanal Baixo"
+        }
+      ]
+    },
+    {
+      "nome": "Vila Criadores",
+      "extensao_m": 4138,
+      "n_trechos": 130,
+      "equipes": 2,
+      "inicio": "2026-05-27",
+      "fim": "2027-09-01",
+      "duracao_dias": 462,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-05-27",
+          "fim": "2026-06-17",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-06-17",
+          "fim": "2026-07-01",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-07-01",
+          "fim": "2026-10-26",
+          "duracao_dias": 83,
+          "predecessora": "PRJ",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2026-10-26",
+          "fim": "2027-01-21",
+          "duracao_dias": 63,
+          "predecessora": "ESC",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2027-01-21",
+          "fim": "2027-03-22",
+          "duracao_dias": 42,
+          "predecessora": "ASS",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2027-03-22",
+          "fim": "2027-05-19",
+          "duracao_dias": 42,
+          "predecessora": "PVS",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2027-05-19",
+          "fim": "2027-05-26",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2027-05-26",
+          "fim": "2027-06-04",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2027-05-19",
+          "fim": "2027-07-16",
+          "duracao_dias": 42,
+          "predecessora": "REA",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2027-05-26",
+          "fim": "2027-06-09",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2027-06-04",
+          "fim": "2027-09-01",
+          "duracao_dias": 63,
+          "predecessora": "LAV",
+          "nucleo": "Vila Criadores"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2027-06-09",
+          "fim": "2027-06-16",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "Vila Criadores"
+        }
+      ]
+    },
+    {
+      "nome": "João Carlos",
+      "extensao_m": 3000,
+      "n_trechos": 100,
+      "equipes": 2,
+      "inicio": "2026-06-10",
+      "fim": "2027-05-21",
+      "duracao_dias": 345,
+      "fases": [
+        {
+          "id": "TOP",
+          "nome": "Topografia + Cadastro",
+          "inicio": "2026-06-10",
+          "fim": "2026-07-01",
+          "duracao_dias": 15,
+          "predecessora": null,
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "PRJ",
+          "nome": "Projeto + Planejamento",
+          "inicio": "2026-07-01",
+          "fim": "2026-07-15",
+          "duracao_dias": 10,
+          "predecessora": "TOP",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "ESC",
+          "nome": "Escavação",
+          "inicio": "2026-07-15",
+          "fim": "2026-10-07",
+          "duracao_dias": 60,
+          "predecessora": "PRJ",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "ASS",
+          "nome": "Assentamento Tubulação",
+          "inicio": "2026-10-07",
+          "fim": "2026-12-09",
+          "duracao_dias": 45,
+          "predecessora": "ESC",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "PVS",
+          "nome": "Montagem PVs/PIs",
+          "inicio": "2026-12-09",
+          "fim": "2027-01-20",
+          "duracao_dias": 30,
+          "predecessora": "ASS",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "REA",
+          "nome": "Reaterro + Compactação",
+          "inicio": "2027-01-20",
+          "fim": "2027-03-03",
+          "duracao_dias": 30,
+          "predecessora": "PVS",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "TST",
+          "nome": "Teste Estanqueidade",
+          "inicio": "2027-03-03",
+          "fim": "2027-03-10",
+          "duracao_dias": 5,
+          "predecessora": "REA",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "LAV",
+          "nome": "Lavagem + Coliformes",
+          "inicio": "2027-03-10",
+          "fim": "2027-03-19",
+          "duracao_dias": 7,
+          "predecessora": "TST",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "PAV",
+          "nome": "Pavimentação CBUQ",
+          "inicio": "2027-03-03",
+          "fim": "2027-04-14",
+          "duracao_dias": 30,
+          "predecessora": "REA",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "CAD",
+          "nome": "Cadastro NTS 292",
+          "inicio": "2027-03-10",
+          "fim": "2027-03-24",
+          "duracao_dias": 10,
+          "predecessora": "TST",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "LIG",
+          "nome": "Ligações Prediais",
+          "inicio": "2027-03-19",
+          "fim": "2027-05-21",
+          "duracao_dias": 45,
+          "predecessora": "LAV",
+          "nucleo": "João Carlos"
+        },
+        {
+          "id": "MED",
+          "nome": "Medição + BM",
+          "inicio": "2027-03-24",
+          "fim": "2027-03-31",
+          "duracao_dias": 5,
+          "predecessora": "CAD",
+          "nucleo": "João Carlos"
+        }
+      ]
+    }
+  ],
+  "total_tarefas": 72,
+  "data_fim": "2028-07-14",
+  "duracao_total_dias": 835
+}

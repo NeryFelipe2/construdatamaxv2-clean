@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage 
+    SchemaVersion="1.0" 
+    AutodeskProduct="AutoCAD" 
+    Name="ConstruData SABESP" 
+    Description="Pipeline unificado para geração de Notas de Serviço SABESP - SE LIGA NA REDE" 
+    AppVersion="5.1.0" 
+    FriendlyVersion="5.1.0" 
+    ProductType="Application" 
+    SupportedLocales="Ptb" 
+    HelpFile="./Contents/help_PT.html" 
+    AppNameSpace="appstore.exchange.autodesk.com" 
+    OnlineDocumentation="https://github.com/NeryFelipe2/NOVA-NS-Versao-5" 
+    Author="Felipe Nery - FCN Construções e Saneamento" 
+    ProductCode="{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}" 
+    UpgradeCode="{12345678-90AB-CDEF-1234-567890ABCDEF}" 
+    Icon="./Contents/Resources/construdata.ico">
+    
+  <CompanyDetails 
+      Name="FCN Construções e Saneamento" 
+      Email="felipe.nery@dgsengenharia.com.br" 
+      Url="https://github.com/NeryFelipe2/NOVA-NS-Versao-5" 
+      Phone="+55 13 99999-9999" />
+      
+  <RuntimeRequirements />
+  
+  <!-- Civil 3D 2020-2024 (.NET 4.8) -->
+  <Components Description="Civil 3D 2020-2024">
+    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R23.0" SeriesMax="R24.3" />
+    <ComponentEntry 
+        AppName="ConstruData" 
+        Version="5.1.0" 
+        ModuleName="./Contents/dotnet_4/ConstruData_2020.dll" 
+        ModuleNameWin64="./Contents/dotnet_4/ConstruData_2020.dll" 
+        AppDescription="ConstruData SABESP v5.1 - Civil 3D 2020-2024" 
+        LoadOnAutoCADStartup="True">
+      <Commands>
+        <Command Global="CONSTRUDATA" Local="CONSTRUDATA" />
+        <Command Global="CONSTRUDATA_BATCH" Local="CONSTRUDATA_BATCH" />
+        <Command Global="CONSTRUDATA_QA" Local="CONSTRUDATA_QA" />
+      </Commands>
+    </ComponentEntry>
+    <ComponentEntry 
+        AppName="ConstruData" 
+        Version="5.1.0" 
+        ModuleName="./Contents/Resources/ConstruData.cuix" 
+        AppDescription="ConstruData CUIX" 
+        LoadOnAutoCADStartup="True" />
+  </Components>
+  
+  <!-- Civil 3D 2025+ (.NET 8) -->
+  <Components Description="Civil 3D 2025+">
+    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R25.0" SeriesMax="R26.0" />
+    <ComponentEntry 
+        AppName="ConstruData" 
+        Version="5.1.0" 
+        ModuleName="./Contents/dotnet_8/ConstruData_2025.dll" 
+        ModuleNameWin64="./Contents/dotnet_8/ConstruData_2025.dll" 
+        AppDescription="ConstruData SABESP v5.1 - Civil 3D 2025+" 
+        LoadOnAutoCADStartup="True">
+      <Commands>
+        <Command Global="CONSTRUDATA" Local="CONSTRUDATA" />
+        <Command Global="CONSTRUDATA_BATCH" Local="CONSTRUDATA_BATCH" />
+        <Command Global="CONSTRUDATA_QA" Local="CONSTRUDATA_QA" />
+      </Commands>
+    </ComponentEntry>
+    <ComponentEntry 
+        AppName="ConstruData" 
+        Version="5.1.0" 
+        ModuleName="./Contents/Resources/ConstruData.cuix" 
+        AppDescription="ConstruData CUIX" 
+        LoadOnAutoCADStartup="True" />
+  </Components>
+  
+  <!-- Dynamo Scripts -->
+  <Components Description="Dynamo Scripts">
+    <RuntimeRequirements OS="Win64" Platform="Civil3D" SeriesMin="R23.0" SeriesMax="R26.0" />
+    <ComponentEntry 
+        AppName="ConstruDataDynamo" 
+        Version="5.1.0" 
+        ModuleName="./Contents/Dynamo/ConstruData.pkg.json" 
+        AppDescription="ConstruData Dynamo Nodes" 
+        LoadOnAutoCADStartup="False" />
+  </Components>
+  
+</ApplicationPackage>

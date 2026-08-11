@@ -1,0 +1,302 @@
+{
+  "id": "codexTask0422260",
+  "name": "CONSTRUDATA_CODEX_TAREFA",
+  "active": false,
+  "nodes": [
+    {
+      "id": "1166e091-83bb-4245-abea-18cbf693926f",
+      "name": "Webhook Tarefa",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "codex-sub-tarefa",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "3f3392b4-a023-465a-abc2-9d080e8c3076",
+      "name": "Parse Tarefa",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const input = $json.body || $json;\nconst phone = input.phone || '';\nconst rawText = (input.text || '').replace(/^@tarefa\\s*/i, '').trim();\nconst delegante = input.user_nome || 'Desconhecido';\nconst deleganteId = input.user_id || null;\nconst parts = rawText.split(/\\s+/);\nlet responsavelHint = '';\nlet descricao = rawText;\nif (parts.length >= 2) {\n  responsavelHint = parts[0].replace('@', '');\n  descricao = parts.slice(1).join(' ');\n}\nreturn { phone, delegante, deleganteId, responsavelHint, descricao, textoOriginal: rawText };"
+      }
+    },
+    {
+      "id": "4a2b4cee-61aa-4716-aa86-036cdfaf7128",
+      "name": "Buscar Responsavel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,telefone_whatsapp,cargo&nome=ilike.*{{ $json.responsavelHint }}*&limit=1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "23202282-ffec-448d-94a5-7503b5268e73",
+      "name": "Montar Tarefa",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const parsed = $node['Parse Tarefa'].json;\nconst rawResp = $json;\nconst resp = Array.isArray(rawResp) ? rawResp[0] : rawResp;\nconst responsavel = resp && resp.nome ? resp.nome : parsed.responsavelHint;\nconst responsavelTel = resp && resp.telefone_whatsapp ? resp.telefone_whatsapp : null;\nreturn {\n  delegante: parsed.delegante,\n  deleganteId: parsed.deleganteId,\n  delegantePhone: parsed.phone,\n  responsavel,\n  responsavelTel,\n  descricao: parsed.descricao,\n  tipo: 'campo',\n  status: 'pendente',\n  prioridade: 'media',\n  origem: 'whatsapp-codex',\n};"
+      }
+    },
+    {
+      "id": "9dce26f7-d366-4424-9e67-3409bf394930",
+      "name": "Insert Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        960,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/tarefas",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"descricao\":\"{{ $json.descricao }}\",\"responsavel\":\"{{ $json.responsavel }}\",\"delegante\":\"{{ $json.delegante }}\",\"tipo\":\"{{ $json.tipo }}\",\"status\":\"{{ $json.status }}\",\"prioridade\":\"{{ $json.prioridade }}\",\"origem\":\"{{ $json.origem }}\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "b85d66eb-499c-4bea-bd5e-eeb8f204f1fd",
+      "name": "Confirmar Delegante",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1200,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.EVOLUTION_API_URL || 'http://evolution:8080').replace(/\\/$/, '')) + '/message/sendText/' + ($env.EVOLUTION_INSTANCE || 'construdata-felipe') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.EVOLUTION_API_KEY || 'construdata2026' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"{{ $node['Montar Tarefa'].json.delegantePhone }}\",\"textMessage\":{\"text\":\"CODEX tarefa criada.\\n\\nDescricao: {{ $node['Montar Tarefa'].json.descricao }}\\nResponsavel: {{ $node['Montar Tarefa'].json.responsavel }}\\nStatus: pendente\"}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "b03bd811-faca-4f7e-a9ad-b1ceaf0cfd12",
+      "name": "Tem Tel Resp?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "hasTel",
+              "leftValue": "={{ $node['Montar Tarefa'].json.responsavelTel }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "cbe12d6f-814f-4d50-bc49-a70862e6cb96",
+      "name": "Notificar Responsavel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1200,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.EVOLUTION_API_URL || 'http://evolution:8080').replace(/\\/$/, '')) + '/message/sendText/' + ($env.EVOLUTION_INSTANCE || 'construdata-felipe') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.EVOLUTION_API_KEY || 'construdata2026' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"{{ $node['Montar Tarefa'].json.responsavelTel }}\",\"textMessage\":{\"text\":\"Nova tarefa CODEX para voce.\\n\\n{{ $node['Montar Tarefa'].json.descricao }}\\n\\nDelegada por: {{ $node['Montar Tarefa'].json.delegante }}\\nPrioridade: {{ $node['Montar Tarefa'].json.prioridade }}\"}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "9b7023c3-1e3a-4a94-b527-929fa4429cf8",
+      "name": "Response OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"status\":\"ok\",\"tarefa\":\"{{ $node['Montar Tarefa'].json.descricao }}\",\"responsavel\":\"{{ $node['Montar Tarefa'].json.responsavel }}\",\"version\":\"CODEX\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Tarefa": {
+      "main": [
+        [
+          {
+            "node": "Parse Tarefa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Tarefa": {
+      "main": [
+        [
+          {
+            "node": "Buscar Responsavel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Responsavel": {
+      "main": [
+        [
+          {
+            "node": "Montar Tarefa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Tarefa": {
+      "main": [
+        [
+          {
+            "node": "Insert Supabase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tem Tel Resp?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Supabase": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Delegante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmar Delegante": {
+      "main": [
+        [
+          {
+            "node": "Response OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Tel Resp?": {
+      "main": [
+        [
+          {
+            "node": "Notificar Responsavel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": null
+}

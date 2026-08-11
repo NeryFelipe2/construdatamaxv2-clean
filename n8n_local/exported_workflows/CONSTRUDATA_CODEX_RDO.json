@@ -1,0 +1,238 @@
+{
+  "id": "codexRdo04222600",
+  "name": "CONSTRUDATA_CODEX_RDO",
+  "active": false,
+  "nodes": [
+    {
+      "id": "69bf5b7c-0b20-4168-b80a-8ff5c6094af8",
+      "name": "Webhook RDO",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "codex-sub-rdo",
+        "responseMode": "onReceived",
+        "options": {}
+      }
+    },
+    {
+      "id": "7d7b9de8-f92d-4000-98e6-e9a59a290f5d",
+      "name": "RDO Logic Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const input = $json.body || $json;\nconst phone = input.phone;\nconst text = (input.text || '').trim();\nconst currentStep = input.state || 'start_rdo';\nconst currentData = input.data || {};\nconst user = input.user || { nome: 'Desconhecido' };\n\nconst PROJETOS = {\n  '1': { nome: 'TATUI', id: 'c2bf8fda-b2e0-4bc1-9535-4891d596ea10' },\n  '2': { nome: 'OSASCO', id: 'f3c6645b-347f-4382-b9c5-d103c27ec511' },\n  '3': { nome: 'CONSORCIO', id: 'abe7f66c-004b-4bb5-a245-6be67debd9f7' },\n  '4': { nome: 'PARDINHO', id: 'ec112c9a-1669-4287-8079-526d6940ce82' },\n  '5': { nome: 'BRASILIA', id: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d' },\n  '6': { nome: 'RK SUB', id: 'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8' },\n};\n\nfunction findProject(rawText) {\n  const normalized = (rawText || '').trim().toUpperCase();\n  if (PROJETOS[normalized]) return PROJETOS[normalized];\n  for (const entry of Object.values(PROJETOS)) {\n    if (normalized.includes(entry.nome) || entry.nome.includes(normalized)) return entry;\n  }\n  return { nome: normalized || 'NAO INFORMADO', id: null };\n}\n\nlet nextStep = '';\nlet nextFlow = 'rdo';\nlet message = '';\nlet saveData = { ...currentData };\n\nswitch (currentStep) {\n  case 'start_rdo':\n  case 'rdo_flow':\n    nextStep = 'waiting_obra';\n    message = 'CODEX RDO\\nQual obra?\\n\\n1 - Tatui\\n2 - Osasco\\n3 - Consorcio\\n4 - Pardinho\\n5 - Brasilia\\n6 - RK Sub';\n    break;\n  case 'waiting_obra': {\n    const projeto = findProject(text);\n    saveData.obra = projeto.nome;\n    saveData.project_id = projeto.id;\n    nextStep = 'waiting_clima';\n    message = 'Obra: ' + projeto.nome + '\\nInforme o clima:\\n1 - Sol\\n2 - Chuva\\n3 - Nublado\\n4 - Chuvisco';\n    break;\n  }\n  case 'waiting_clima': {\n    const mapaClima = { '1': 'bom', '2': 'chuva', '3': 'nublado', '4': 'chuvisco' };\n    saveData.clima = mapaClima[text] || text || 'bom';\n    nextStep = 'waiting_equipe';\n    message = 'Quantidade da equipe?';\n    break;\n  }\n  case 'waiting_equipe':\n    saveData.equipe_total = parseInt(text, 10) || 0;\n    nextStep = 'waiting_producao';\n    message = 'Producao em metros? Exemplo: 12.5';\n    break;\n  case 'waiting_producao':\n    saveData.producao_m = parseFloat((text || '').replace(',', '.')) || 0;\n    nextStep = 'waiting_turno';\n    message = 'Turno?\\n1 - Diurno\\n2 - Noturno\\n3 - Integral';\n    break;\n  case 'waiting_turno': {\n    const mapaTurno = { '1': 'Diurno', '2': 'Noturno', '3': 'Integral' };\n    saveData.turno = mapaTurno[text] || text || 'Diurno';\n    nextStep = 'waiting_atividades';\n    message = 'Quais atividades realizadas?';\n    break;\n  }\n  case 'waiting_atividades':\n    saveData.atividades = text;\n    nextStep = 'finished';\n    nextFlow = 'idle';\n    message = 'RDO CODEX registrado com sucesso.\\n\\nObra: ' + (saveData.obra || '-') + '\\nClima: ' + (saveData.clima || '-') + '\\nEquipe: ' + (saveData.equipe_total || 0) + '\\nProducao: ' + (saveData.producao_m || 0) + ' m\\nTurno: ' + (saveData.turno || '-') + '\\nAtividades: ' + (saveData.atividades || '-') + '\\nApontador: ' + user.nome;\n    break;\n  default:\n    nextStep = 'idle';\n    nextFlow = 'idle';\n    message = 'Envie #rdo para reiniciar o fluxo CODEX.';\n}\n\nreturn { phone, nextStep, nextFlow, message, saveData, user };"
+      }
+    },
+    {
+      "id": "f697aeca-d9ce-42ac-a3bc-fbbf726514a7",
+      "name": "Update State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone_number: $json.phone, current_flow: $json.nextFlow, current_step: $json.nextStep, flow_data: $json.saveData }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "315a825d-d05a-4642-a874-0b3c25a8f80f",
+      "name": "Is Finished?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "done",
+              "leftValue": "={{ $node['RDO Logic Engine'].json.nextStep }}",
+              "rightValue": "finished",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "eb530bd7-472f-4bb4-bbe5-3e2c2545bdd8",
+      "name": "Save RDO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        960,
+        160
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/rdos",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ project_id: $node['RDO Logic Engine'].json.saveData.project_id, data: new Date().toISOString().split('T')[0], equipe_number: $node['RDO Logic Engine'].json.saveData.equipe_total, producao_m: $node['RDO Logic Engine'].json.saveData.producao_m || 0, clima: $node['RDO Logic Engine'].json.saveData.clima, turno: $node['RDO Logic Engine'].json.saveData.turno || 'Diurno', observacoes: $node['RDO Logic Engine'].json.saveData.atividades, apontador: ($node['RDO Logic Engine'].json.user || {}).nome || 'WhatsApp', status: 'aberto', fotos: [] }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "d20fd11e-8b5d-45c5-a924-0b1b4f883810",
+      "name": "Notify User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        960,
+        440
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ (($env.EVOLUTION_API_URL || 'http://evolution:8080').replace(/\\/$/, '')) + '/message/sendText/' + ($env.EVOLUTION_INSTANCE || 'construdata-felipe') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.EVOLUTION_API_KEY || 'construdata2026' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"{{ $node['RDO Logic Engine'].json.phone }}\",\"textMessage\":{\"text\":\"{{ $node['RDO Logic Engine'].json.message }}\"}}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook RDO": {
+      "main": [
+        [
+          {
+            "node": "RDO Logic Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RDO Logic Engine": {
+      "main": [
+        [
+          {
+            "node": "Update State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update State": {
+      "main": [
+        [
+          {
+            "node": "Is Finished?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Finished?": {
+      "main": [
+        [
+          {
+            "node": "Save RDO",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  }
+}
