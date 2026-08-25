@@ -7,6 +7,9 @@ import type { DbProjeto } from "@/lib/supabase";
 import { useThemeStore, LayoutTheme } from "@/store/themeStore";
 import { useAppModeStore } from "@/store/appModeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { AuthGate } from "@/components/auth/AuthGate";
+import { OrgSelector } from "@/components/layout/OrgSelector";
+import { UserMenu } from "@/components/layout/UserMenu";
 import { DemoBanner } from "@/components/shared/DemoBanner";
 import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 import { TourProvider } from "@/components/ui/GuidedTour";
@@ -21,6 +24,7 @@ const TorreDeControlePage = lazy(() => import("@/features/torre-de-controle/inde
 const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) => ({ default: m.Gestao360Page })));
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
 const MaoDeObraPage = lazy(() => import("@/features/mao-de-obra/index").then((m) => ({ default: m.MaoDeObraPage })));
+const PessoalPage = lazy(() => import("@/features/pessoal/index").then((m) => ({ default: m.PessoalPage })));
 const OtimizacaoFrotaPage = lazy(() => import("@/features/otimizacao-frota/index").then((m) => ({ default: m.default })));
 const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos/index").then((m) => ({ default: m.GestaoEquipamentosPage })));
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
@@ -56,6 +60,7 @@ const ProgramacaoSemanaPage = lazy(() => import("@/features/programacao-semana/i
 const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index").then((m) => ({ default: m.PlanilhasModeloPage })));
 const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
 const MetaLigacoesPage = lazy(() => import("@/features/meta-ligacoes/index").then((m) => ({ default: m.MetaLigacoesPage })));
+const LoginPage = lazy(() => import("@/features/login/index").then((m) => ({ default: m.LoginPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 // Derived from the shared NAV_GROUPS config (src/config/navigation.ts) — the
@@ -525,11 +530,15 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
           <Menu size={20} />
         </button>
         <span className={cn("text-sm font-bold tracking-wide md:hidden", mobileTitle)}>ConstruData</span>
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-2">
+          <OrgSelector isDark={isDark} />
           <ProjectSelector isDark={isDark} />
         </div>
-        <div className="ml-auto md:hidden">
-          <ProjectSelector isDark={isDark} />
+        <div className="ml-auto flex items-center gap-2">
+          <div className="md:hidden">
+            <ProjectSelector isDark={isDark} />
+          </div>
+          <UserMenu isDark={isDark} />
         </div>
       </div>
 
@@ -559,9 +568,18 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
 function AdaptiveShell() {
   const theme = useThemeStore((s) => s.theme);
 
-  if (theme === 'ekyte') return <AppLayout />;
-  if (theme === 'dark')  return <SidebarShell isDark={true} />;
-  return <SidebarShell isDark={false} />;
+  const shell =
+    theme === 'ekyte' ? <AppLayout /> :
+    theme === 'dark'  ? <SidebarShell isDark={true} /> :
+    <SidebarShell isDark={false} />;
+
+  // FAB dentro do shell autenticado: nao aparece na tela de /login.
+  return (
+    <>
+      <ThemeSwitcherFab />
+      {shell}
+    </>
+  );
 }
 
 // ─── NS V5 wrapper ──────────────────────────────────────────────────────────
@@ -574,8 +592,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <TourProvider>
-      <ThemeSwitcherFab />
       <Routes>
+        <Route path="/login" element={<LazyRoute><LoginPage /></LazyRoute>} />
+        <Route element={<AuthGate />}>
         <Route path="/app" element={<AdaptiveShell />}>
           <Route index element={<Navigate to="/app/gestao-360" replace />} />
           <Route path="guia" element={<LazyRoute><GuiaPage /></LazyRoute>} />
@@ -595,6 +614,7 @@ export default function App() {
           <Route path="bim" element={<LazyRoute><BimPage /></LazyRoute>} />
           <Route path="suprimentos" element={<LazyRoute><SuprimentosPage /></LazyRoute>} />
           <Route path="mao-de-obra" element={<LazyRoute><MaoDeObraPage /></LazyRoute>} />
+          <Route path="pessoal" element={<LazyRoute><PessoalPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
@@ -624,6 +644,7 @@ export default function App() {
           <Route path="diario-obra" element={<Navigate to="/app/rdo" replace />} />
           <Route path="campo-whatsapp" element={<LazyRoute><CampoWhatsappPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
+        </Route>
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>

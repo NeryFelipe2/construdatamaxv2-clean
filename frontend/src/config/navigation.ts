@@ -88,6 +88,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: 'Suprimentos', to: '/app/suprimentos', icon: FolderKanban },
       { label: 'Mão de Obra', to: '/app/mao-de-obra', icon: UserCircle },
+      { label: 'Pessoal', to: '/app/pessoal', icon: Users },
       { label: 'Equipamentos', to: '/app/gestao-equipamentos', icon: Wrench },
       { label: 'Quantitativos', to: '/app/quantitativos', icon: Calculator },
     ],

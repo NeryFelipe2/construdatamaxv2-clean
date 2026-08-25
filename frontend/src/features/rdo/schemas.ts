@@ -27,6 +27,22 @@ export const rdoTrechoSchema = z.object({
   system:            z.enum(['agua', 'esgoto', 'drenagem', 'estrutura', 'pavimentacao', 'outro']).optional(),
 })
 
+/**
+ * Presença NOMINAL no RDO (linha da lista da seção Mão de Obra).
+ * Espelha rdo_presenca (migration 020): pessoaId null = avulso sem cadastro;
+ * desmarcado (presente=false) exige motivoAusencia — validado no refine.
+ */
+export const rdoPresencaSchema = z.object({
+  pessoaId:      z.string().nullable(),
+  nome:          z.string().min(1),
+  equipeId:      z.string().nullable(),
+  funcao:        z.string().nullable(),
+  presente:      z.boolean(),
+  motivoAusencia: z.string().nullable(),
+  horasNormais:  z.number().min(0).max(24),
+  horasExtras:   z.number().min(0).max(12),
+})
+
 export const rdoSchema = z.object({
   date:        dateString,
   responsible: z.string().min(1, 'Responsável obrigatório').max(100),
@@ -44,6 +60,8 @@ export const rdoSchema = z.object({
   }),
   observations: z.string().max(2000),
   incidents:    z.string().max(2000),
+  // aditivo: lista nominal de presença (opcional — RDO antigo continua válido)
+  presencas: z.array(rdoPresencaSchema).optional(),
 })
 
 export const rdoFinancialEntrySchema = z.object({
@@ -56,3 +74,4 @@ export const rdoFinancialEntrySchema = z.object({
 
 export type RdoFormData            = z.infer<typeof rdoSchema>
 export type RdoFinancialEntryData  = z.infer<typeof rdoFinancialEntrySchema>
+export type RdoPresencaData        = z.infer<typeof rdoPresencaSchema>
