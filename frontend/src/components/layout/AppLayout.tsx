@@ -4,6 +4,8 @@ import {
   Menu, Settings, Bell, Search, Plus, Filter, RotateCw, MessageSquare, Calendar, MoreHorizontal, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { OrgSelector } from "@/components/layout/OrgSelector";
+import { UserMenu } from "@/components/layout/UserMenu";
 import { NAV_GROUPS as MODULE_GROUPS } from "@/config/navigation";
 import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 
@@ -91,11 +93,10 @@ export function AppLayout() {
             <Layers size={18} />
           </button>
 
-          <button className="h-full px-2 ml-1">
-            <div className="w-8 h-8 rounded-full bg-indigo-300 border-2 border-white/20 overflow-hidden flex items-center justify-center">
-               <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Avatar" className="w-full h-full object-cover" />
-            </div>
-          </button>
+          <div className="flex items-center gap-2 px-2 ml-1">
+            <OrgSelector isDark={false} />
+            <UserMenu isDark={false} />
+          </div>
         </div>
       </header>
 

@@ -5,7 +5,7 @@ import { apiCriarProjeto, apiProjetoDashboard, apiProjetos, type CanonicalIntegr
 const STORAGE_KEY = 'cdata-active-project'
 // WCR-only: sempre serve os dados reais WCR (Boi/Sakura/Retorno). O Supabase entra
 // depois como fonte "live"; enquanto ele estiver fora, o app já mostra a WCR no Vercel.
-const ALLOW_DEMO_DATA = true
+const ALLOW_DEMO_DATA = import.meta.env.VITE_ENABLE_DEMO_DATA === 'true'
 
 interface ProjectContextState {
   projetos: DbProjeto[]
