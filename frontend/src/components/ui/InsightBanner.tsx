@@ -39,8 +39,8 @@ const STYLE_MAP: Record<InsightType, {
     iconColor: 'text-amber-400', titleColor: 'text-amber-400', textColor: 'text-amber-200/80',
   },
   info: {
-    bg: 'bg-cyan-500/5', border: 'border-cyan-500/20', icon: Lightbulb,
-    iconColor: 'text-cyan-400', titleColor: 'text-cyan-400', textColor: 'text-cyan-200/80',
+    bg: 'bg-[#f97316]/5', border: 'border-[#f97316]/20', icon: Lightbulb,
+    iconColor: 'text-[#f97316]', titleColor: 'text-[#f97316]', textColor: 'text-orange-200/80',
   },
   efficiency: {
     bg: 'bg-purple-500/5', border: 'border-purple-500/20', icon: Zap,
@@ -69,7 +69,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           <div className="flex items-center gap-2">
             <h4 className={`text-xs font-bold ${style.titleColor}`}>{insight.title}</h4>
             {insight.metric && (
-              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-[#e4f2f8] bg-[#0d2040] px-2 py-0.5 rounded-full">
+              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-[#f5f5f5] bg-[#2c2c2c] px-2 py-0.5 rounded-full">
                 {insight.metric.value}
                 {insight.metric.trend === 'up' && <TrendingUp size={9} className="text-emerald-400" />}
                 {insight.metric.trend === 'down' && <TrendingUp size={9} className="text-rose-400 rotate-180" />}
@@ -79,7 +79,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           <p className={`text-[11px] ${style.textColor} leading-relaxed mt-0.5`}>{insight.message}</p>
           
           {insight.detail && expanded && (
-            <p className="text-[10px] text-[#8fb3c8] leading-relaxed mt-2 border-t border-[#20406a] pt-2">
+            <p className="text-[10px] text-[#a3a3a3] leading-relaxed mt-2 border-t border-[#525252] pt-2">
               {insight.detail}
             </p>
           )}
@@ -98,7 +98,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
             {insight.action && insight.action.onClick && (
               <button
                 onClick={insight.action.onClick}
-                className="flex items-center gap-1 text-[10px] font-medium text-[#2abfdc] hover:underline"
+                className="flex items-center gap-1 text-[10px] font-medium text-[#f97316] hover:underline"
               >
                 <ArrowRight size={10} /> {insight.action.label}
               </button>
@@ -106,7 +106,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           </div>
         </div>
         {onDismiss && (
-          <button onClick={() => onDismiss(insight.id)} className="text-[#5a8caa]/50 hover:text-white shrink-0">
+          <button onClick={() => onDismiss(insight.id)} className="text-[#6b6b6b]/50 hover:text-[#f5f5f5] shrink-0">
             <X size={12} />
           </button>
         )}
@@ -133,10 +133,10 @@ export function InsightsPanel({
   if (visible.length === 0) return null
 
   return (
-    <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
+    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
       <button
         onClick={() => collapsible && setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-[#14294e] transition-colors"
+        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-[#484848]/40 transition-colors"
       >
         <Sparkles size={14} className="text-purple-400" />
         <span className="text-xs font-bold text-purple-400 uppercase tracking-wider flex-1 text-left">
@@ -146,7 +146,7 @@ export function InsightsPanel({
           {visible.length} {visible.length === 1 ? 'insight' : 'insights'}
         </span>
         {collapsible && (
-          isOpen ? <ChevronDown size={14} className="text-[#5a8caa]" /> : <ChevronRight size={14} className="text-[#5a8caa]" />
+          isOpen ? <ChevronDown size={14} className="text-[#6b6b6b]" /> : <ChevronRight size={14} className="text-[#6b6b6b]" />
         )}
       </button>
       {isOpen && (

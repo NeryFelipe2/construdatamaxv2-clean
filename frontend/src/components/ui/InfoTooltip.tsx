@@ -98,7 +98,7 @@ export function InfoTooltip({
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
-          className="text-[#5a8caa]/60 hover:text-[#2abfdc] transition-colors focus:outline-none"
+          className="text-[#6b6b6b]/60 hover:text-[#f97316] transition-colors focus:outline-none"
           aria-label={`Informação: ${content.title}`}
         >
           <HelpCircle size={size} />
@@ -111,14 +111,14 @@ export function InfoTooltip({
           className={`absolute z-[100] ${positionClasses[position]} w-72 animate-in fade-in-0 zoom-in-95`}
           style={{ animationDuration: '150ms' }}
         >
-          <div className="bg-[#1a2e4a] border border-[#2a4a6e] rounded-xl shadow-2xl shadow-black/40 overflow-hidden">
+          <div className="bg-[#484848] border border-[#525252] rounded-xl shadow-2xl shadow-black/40 overflow-hidden">
             {/* Header */}
-            <div className="bg-[#0d2040] px-4 py-2.5 flex items-center gap-2 border-b border-[#2a4a6e]">
-              <Info size={13} className="text-[#2abfdc] shrink-0" />
-              <span className="text-xs font-bold text-[#e4f2f8] flex-1">{content.title}</span>
+            <div className="bg-[#2c2c2c] px-4 py-2.5 flex items-center gap-2 border-b border-[#525252]">
+              <Info size={13} className="text-[#f97316] shrink-0" />
+              <span className="text-xs font-bold text-[#f5f5f5] flex-1">{content.title}</span>
               <button
                 onClick={(e) => { e.stopPropagation(); setIsOpen(false) }}
-                className="text-[#5a8caa] hover:text-white p-0.5"
+                className="text-[#6b6b6b] hover:text-[#f5f5f5] p-0.5"
               >
                 <X size={11} />
               </button>
@@ -126,7 +126,7 @@ export function InfoTooltip({
 
             {/* Body */}
             <div className="px-4 py-3 space-y-2.5">
-              <p className="text-[11px] text-[#c8dce8] leading-relaxed">{content.description}</p>
+              <p className="text-[11px] text-[#f5f5f5] leading-relaxed">{content.description}</p>
 
               {content.whyItMatters && (
                 <div className="flex items-start gap-2 bg-yellow-500/5 border border-yellow-500/15 rounded-lg px-3 py-2">
@@ -139,11 +139,11 @@ export function InfoTooltip({
               )}
 
               {content.actionHint && (
-                <div className="flex items-start gap-2 bg-cyan-500/5 border border-cyan-500/15 rounded-lg px-3 py-2">
-                  <ArrowRight size={12} className="text-cyan-400 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 bg-[#f97316]/5 border border-[#f97316]/15 rounded-lg px-3 py-2">
+                  <ArrowRight size={12} className="text-[#f97316] shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider">O que fazer</span>
-                    <p className="text-[10px] text-cyan-200/80 leading-relaxed mt-0.5">{content.actionHint}</p>
+                    <span className="text-[9px] font-bold text-[#f97316] uppercase tracking-wider">O que fazer</span>
+                    <p className="text-[10px] text-orange-200/80 leading-relaxed mt-0.5">{content.actionHint}</p>
                   </div>
                 </div>
               )}

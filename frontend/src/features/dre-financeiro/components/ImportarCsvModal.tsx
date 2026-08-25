@@ -94,29 +94,27 @@ export function ImportarCsvModal({ projectId, onClose, onSaved }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.7)' }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="w-full max-w-3xl rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl"
-        style={{ maxHeight: '90vh' }}
+        className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-3xl shadow-2xl max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#525252] shrink-0">
           <div className="flex items-center gap-2.5">
-            <FileSpreadsheet size={17} className="text-cyan-400" />
+            <FileSpreadsheet size={17} className="text-[#f97316]" />
             <div>
-              <h2 className="text-sm font-bold text-[#e4f2f8]">Importar Lançamentos (CSV)</h2>
-              <p className="text-[10px] text-[#5a8caa]">
+              <h2 className="text-sm font-bold text-[#f5f5f5]">Importar Lançamentos (CSV)</h2>
+              <p className="text-[10px] text-[#6b6b6b]">
                 {step === 'upload' && 'Selecione um arquivo .csv'}
                 {step === 'preview' && `${filename} — ${rows.length} linha(s) detectada(s)`}
                 {step === 'done' && 'Importação concluída'}
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-[#5a8caa] hover:text-[#e4f2f8] transition-colors">
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors">
             <X size={16} />
           </button>
         </div>
@@ -133,20 +131,20 @@ export function ImportarCsvModal({ projectId, onClose, onSaved }: Props) {
                 className={cn(
                   'border-2 border-dashed rounded-xl p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors',
                   isDragging
-                    ? 'border-cyan-400 bg-cyan-400/10'
-                    : 'border-[#20406a] hover:border-cyan-400/50 hover:bg-cyan-400/5',
+                    ? 'border-[#f97316] bg-[#f97316]/10'
+                    : 'border-[#525252] hover:border-[#f97316]/50 hover:bg-[#f97316]/5',
                 )}
               >
-                <Upload size={32} className={cn('transition-colors', isDragging ? 'text-cyan-400' : 'text-[#5a8caa]')} />
+                <Upload size={32} className={cn('transition-colors', isDragging ? 'text-[#f97316]' : 'text-[#6b6b6b]')} />
                 <div className="text-center">
-                  <p className="text-sm font-medium text-[#e4f2f8]">Arraste um arquivo aqui</p>
-                  <p className="text-xs text-[#5a8caa] mt-1">ou clique para selecionar</p>
-                  <p className="text-[10px] text-[#5a8caa]/60 mt-2">.csv — colunas: tipo, categoria, descricao, valor, data</p>
+                  <p className="text-sm font-medium text-[#f5f5f5]">Arraste um arquivo aqui</p>
+                  <p className="text-xs text-[#6b6b6b] mt-1">ou clique para selecionar</p>
+                  <p className="text-[10px] text-[#6b6b6b]/60 mt-2">.csv — colunas: tipo, categoria, descricao, valor, data</p>
                 </div>
               </div>
               <input ref={inputRef} type="file" accept=".csv" className="hidden" onChange={handleInputChange} />
-              <div className="bg-[#0d2040] border border-[#20406a] rounded-lg px-3 py-2.5">
-                <p className="text-[10px] text-[#5a8caa] font-mono leading-relaxed whitespace-pre-wrap">
+              <div className="bg-[#333333] border border-[#525252] rounded-lg px-3 py-2.5">
+                <p className="text-[10px] text-[#6b6b6b] font-mono leading-relaxed whitespace-pre-wrap">
 {`tipo,categoria,descricao,valor,data
 RECEITA,Medição,Medição #1 rede água,150000,2026-07-05
 DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
@@ -174,12 +172,12 @@ DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
                 )}
               </div>
 
-              <div className="bg-[#0d2040] border border-[#20406a] rounded-xl overflow-auto max-h-96">
+              <div className="bg-[#333333] border border-[#525252] rounded-xl overflow-auto max-h-96">
                 <table className="w-full text-[11px]">
-                  <thead className="sticky top-0 bg-[#0d2040]">
-                    <tr className="border-b border-[#20406a]">
+                  <thead className="sticky top-0 bg-[#333333]">
+                    <tr className="border-b border-[#525252]">
                       {['#', 'Tipo', 'Categoria', 'Descrição', 'Valor', 'Data', 'Motivo'].map((h) => (
-                        <th key={h} className="px-2.5 py-2 text-left text-[#5a8caa] font-medium whitespace-nowrap uppercase tracking-wide">{h}</th>
+                        <th key={h} className="px-2.5 py-2 text-left text-[#6b6b6b] font-medium whitespace-nowrap uppercase tracking-wide">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -188,11 +186,11 @@ DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
                       <tr
                         key={i}
                         className={cn(
-                          'border-t border-[#20406a]/50',
-                          r.valid ? 'text-[#e4f2f8]' : 'bg-rose-500/10 text-rose-300',
+                          'border-t border-[#525252]/50',
+                          r.valid ? 'text-[#f5f5f5]' : 'bg-rose-500/10 text-rose-300',
                         )}
                       >
-                        <td className="px-2.5 py-1.5 text-[#5a8caa]">{r.lineNumber}</td>
+                        <td className="px-2.5 py-1.5 text-[#6b6b6b]">{r.lineNumber}</td>
                         <td className="px-2.5 py-1.5 font-mono">{r.tipo ?? r.raw.tipo ?? '—'}</td>
                         <td className="px-2.5 py-1.5">{r.categoria}</td>
                         <td className="px-2.5 py-1.5 max-w-[220px] truncate" title={r.descricao}>{r.descricao || '—'}</td>
@@ -220,8 +218,8 @@ DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
             <div className="flex flex-col items-center gap-4 py-8">
               <CheckCircle2 size={48} className="text-emerald-400" />
               <div className="text-center">
-                <p className="text-sm font-bold text-[#e4f2f8]">Importação concluída!</p>
-                <p className="text-xs text-[#5a8caa] mt-1">
+                <p className="text-sm font-bold text-[#f5f5f5]">Importação concluída!</p>
+                <p className="text-xs text-[#6b6b6b] mt-1">
                   {result.importados} lançamento{result.importados !== 1 ? 's' : ''} importado{result.importados !== 1 ? 's' : ''}, {result.ignorados} ignorado{result.ignorados !== 1 ? 's' : ''}.
                 </p>
               </div>
@@ -230,10 +228,10 @@ DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-5 py-4 border-t border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-t border-[#525252] shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs text-[#5a8caa] hover:text-[#e4f2f8] transition-colors"
+            className="px-4 py-2 text-xs text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
           >
             {step === 'done' ? 'Fechar' : 'Cancelar'}
           </button>
@@ -242,14 +240,14 @@ DESPESA,Material,Tubo PEAD DN63,22500,2026-06-25`}
               <>
                 <button
                   onClick={() => { setStep('upload'); setRows([]); setFilename('') }}
-                  className="px-4 py-2 text-xs text-[#5a8caa] border border-[#20406a] rounded-lg hover:text-[#e4f2f8] transition-colors"
+                  className="px-4 py-2 text-xs text-[#6b6b6b] border border-[#525252] rounded-lg hover:text-[#f5f5f5] transition-colors"
                 >
                   Voltar
                 </button>
                 <button
                   onClick={handleImport}
                   disabled={importing || validRows.length === 0}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-emerald-500 text-[#0a1628] hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-emerald-500 text-[#2c2c2c] hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   {importing ? 'Importando...' : `Confirmar importação (${validRows.length} linha${validRows.length !== 1 ? 's' : ''} válida${validRows.length !== 1 ? 's' : ''})`}
                 </button>

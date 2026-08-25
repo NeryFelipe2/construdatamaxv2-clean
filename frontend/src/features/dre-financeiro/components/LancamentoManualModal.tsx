@@ -27,8 +27,8 @@ const CATEGORIA_SUGESTOES = [
 
 const inp = (err?: boolean) =>
   cn(
-    'w-full rounded-lg px-3 py-2 text-xs bg-[#0d2040] border text-[#e4f2f8] placeholder-[#5a8caa] outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all',
-    err ? 'border-rose-500' : 'border-[#20406a] focus:border-cyan-400/60',
+    'w-full rounded-lg px-3 py-2 text-xs bg-[#3d3d3d] border text-[#f5f5f5] placeholder-[#6b6b6b] outline-none focus:ring-1 focus:ring-[#f97316]/40 transition-all',
+    err ? 'border-rose-500' : 'border-[#525252] focus:border-[#f97316]',
   )
 
 export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
@@ -86,24 +86,22 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.7)' }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#20406a] bg-[#112645] flex flex-col shadow-2xl"
-        style={{ maxHeight: '90vh' }}
+        className="bg-[#2c2c2c] border border-[#525252] rounded-xl w-full max-w-md shadow-2xl max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#20406a] shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#525252] shrink-0">
           <div className="flex items-center gap-2">
             <Receipt size={15} className="text-emerald-400" />
-            <h2 className="text-[#e4f2f8] font-bold text-sm">Novo Lançamento</h2>
+            <h2 className="text-[#f5f5f5] font-bold text-sm">Novo Lançamento</h2>
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#5a8caa] hover:text-[#e4f2f8] hover:bg-[#0d2040] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#3d3d3d] transition-colors"
           >
             <X size={14} />
           </button>
@@ -113,7 +111,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
         <div className="overflow-y-auto px-5 py-4 flex flex-col gap-3">
           {/* Tipo */}
           <div>
-            <label className="block text-[10px] font-semibold text-[#5a8caa] uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-wider mb-1">
               Tipo *
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -124,7 +122,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
                   'py-2 rounded-lg text-xs font-bold border transition-colors',
                   tipo === 'RECEITA'
                     ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40'
-                    : 'bg-[#0d2040] text-[#5a8caa] border-[#20406a] hover:text-[#e4f2f8]',
+                    : 'bg-[#3d3d3d] text-[#6b6b6b] border-[#525252] hover:text-[#f5f5f5]',
                 )}
               >
                 RECEITA
@@ -136,7 +134,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
                   'py-2 rounded-lg text-xs font-bold border transition-colors',
                   tipo === 'DESPESA'
                     ? 'bg-rose-500/15 text-rose-400 border-rose-500/40'
-                    : 'bg-[#0d2040] text-[#5a8caa] border-[#20406a] hover:text-[#e4f2f8]',
+                    : 'bg-[#3d3d3d] text-[#6b6b6b] border-[#525252] hover:text-[#f5f5f5]',
                 )}
               >
                 DESPESA
@@ -146,7 +144,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
 
           {/* Categoria */}
           <div>
-            <label className="block text-[10px] font-semibold text-[#5a8caa] uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-wider mb-1">
               Categoria *
             </label>
             <input
@@ -164,7 +162,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
 
           {/* Descrição */}
           <div>
-            <label className="block text-[10px] font-semibold text-[#5a8caa] uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-wider mb-1">
               Descrição *
             </label>
             <input
@@ -179,7 +177,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
           {/* Valor + Data */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] font-semibold text-[#5a8caa] uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-wider mb-1">
                 Valor (R$) *
               </label>
               <input
@@ -193,7 +191,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
               {errors.valor && <p className="text-[10px] text-rose-400 mt-0.5">{errors.valor}</p>}
             </div>
             <div>
-              <label className="block text-[10px] font-semibold text-[#5a8caa] uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-wider mb-1">
                 Data (opcional)
               </label>
               <input
@@ -214,11 +212,11 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-[#20406a] shrink-0">
+        <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-[#525252] shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 rounded-lg text-xs text-[#5a8caa] hover:text-[#e4f2f8] hover:bg-[#0d2040] transition-colors"
+            className="px-3 py-1.5 rounded-lg text-xs text-[#6b6b6b] hover:text-[#f5f5f5] hover:bg-[#3d3d3d] transition-colors"
           >
             Cancelar
           </button>
@@ -226,7 +224,7 @@ export function LancamentoManualModal({ projectId, onClose, onSaved }: Props) {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-[#0a1628] hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-[#2c2c2c] hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {saving ? 'Salvando...' : 'Salvar Lançamento'}
           </button>
