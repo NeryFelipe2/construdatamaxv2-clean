@@ -25,6 +25,7 @@ const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) 
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
 const MaoDeObraPage = lazy(() => import("@/features/mao-de-obra/index").then((m) => ({ default: m.MaoDeObraPage })));
 const PessoalPage = lazy(() => import("@/features/pessoal/index").then((m) => ({ default: m.PessoalPage })));
+const UsuariosPage = lazy(() => import("@/features/usuarios/index").then((m) => ({ default: m.UsuariosPage })));
 const OtimizacaoFrotaPage = lazy(() => import("@/features/otimizacao-frota/index").then((m) => ({ default: m.default })));
 const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos/index").then((m) => ({ default: m.GestaoEquipamentosPage })));
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
@@ -615,6 +616,7 @@ export default function App() {
           <Route path="suprimentos" element={<LazyRoute><SuprimentosPage /></LazyRoute>} />
           <Route path="mao-de-obra" element={<LazyRoute><MaoDeObraPage /></LazyRoute>} />
           <Route path="pessoal" element={<LazyRoute><PessoalPage /></LazyRoute>} />
+          <Route path="usuarios" element={<LazyRoute><UsuariosPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
