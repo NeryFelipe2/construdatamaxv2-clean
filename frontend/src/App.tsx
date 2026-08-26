@@ -23,8 +23,7 @@ import { NAV_GROUPS, type NavItem } from "@/config/navigation";
 const TorreDeControlePage = lazy(() => import("@/features/torre-de-controle/index").then((m) => ({ default: m.TorreDeControlePage })));
 const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) => ({ default: m.Gestao360Page })));
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
-const MaoDeObraPage = lazy(() => import("@/features/mao-de-obra/index").then((m) => ({ default: m.MaoDeObraPage })));
-const PessoalPage = lazy(() => import("@/features/pessoal/index").then((m) => ({ default: m.PessoalPage })));
+const RecursosHumanosPage = lazy(() => import("@/features/recursos-humanos/index").then((m) => ({ default: m.RecursosHumanosPage })));
 const UsuariosPage = lazy(() => import("@/features/usuarios/index").then((m) => ({ default: m.UsuariosPage })));
 const OtimizacaoFrotaPage = lazy(() => import("@/features/otimizacao-frota/index").then((m) => ({ default: m.default })));
 const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos/index").then((m) => ({ default: m.GestaoEquipamentosPage })));
@@ -56,7 +55,6 @@ const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").t
 const MedicaoPage = lazy(() => import("@/features/medicao/index").then((m) => ({ default: m.MedicaoPage })));
 const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
 const CampoWhatsappPage = lazy(() => import("@/features/campo-whatsapp/index").then((m) => ({ default: m.CampoWhatsappPage })));
-const EquipesKanbanPage = lazy(() => import("@/features/equipes-kanban/index"));
 const ProgramacaoSemanaPage = lazy(() => import("@/features/programacao-semana/index").then((m) => ({ default: m.ProgramacaoSemanaPage })));
 const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index").then((m) => ({ default: m.PlanilhasModeloPage })));
 const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
@@ -614,8 +612,11 @@ export default function App() {
           <Route path="rede-360" element={<LazyRoute><Rede360Page /></LazyRoute>} />
           <Route path="bim" element={<LazyRoute><BimPage /></LazyRoute>} />
           <Route path="suprimentos" element={<LazyRoute><SuprimentosPage /></LazyRoute>} />
-          <Route path="mao-de-obra" element={<LazyRoute><MaoDeObraPage /></LazyRoute>} />
-          <Route path="pessoal" element={<LazyRoute><PessoalPage /></LazyRoute>} />
+          <Route path="recursos-humanos" element={<LazyRoute><RecursosHumanosPage /></LazyRoute>} />
+          {/* rotas antigas -> aba equivalente do novo modulo (nao quebra link salvo) */}
+          <Route path="equipes-kanban" element={<Navigate to="/app/recursos-humanos?aba=kanban" replace />} />
+          <Route path="pessoal" element={<Navigate to="/app/recursos-humanos?aba=pessoal" replace />} />
+          <Route path="mao-de-obra" element={<Navigate to="/app/recursos-humanos?aba=mao-de-obra" replace />} />
           <Route path="usuarios" element={<LazyRoute><UsuariosPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
@@ -639,7 +640,6 @@ export default function App() {
           <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
           {/* Aposentado 10/07/2026: dado 100% congelado (extração pontual de 28/06), sem indicação forte de obsolescência — RDO já mostra dado real/atual */}
           <Route path="wcr-diario" element={<Navigate to="/app/rdo" replace />} />
-          <Route path="equipes-kanban" element={<LazyRoute><EquipesKanbanPage /></LazyRoute>} />
           <Route path="programacao-semana" element={<LazyRoute><ProgramacaoSemanaPage /></LazyRoute>} />
           <Route path="meta-ligacoes" element={<LazyRoute><MetaLigacoesPage /></LazyRoute>} />
           {/* 13/07/2026: virou a aba "Diário / Equipes" dentro de RDO — uma tela só, tudo no mesmo lugar */}

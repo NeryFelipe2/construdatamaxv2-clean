@@ -76,7 +76,6 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     id: 'operacao', category: 'Operação de Campo',
     items: [
-      { label: 'Kanban Equipes', to: '/app/equipes-kanban', icon: Users },
       { label: 'RDO', to: '/app/rdo', icon: FileText },
       { label: 'Campo WhatsApp', to: '/app/campo-whatsapp', icon: MessageSquare },
       { label: 'Relatório 360', to: '/app/relatorio360', icon: ClipboardList },
@@ -86,9 +85,8 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     id: 'recursos', category: 'Recursos',
     items: [
+      { label: 'Recursos Humanos', to: '/app/recursos-humanos', icon: UserCircle },
       { label: 'Suprimentos', to: '/app/suprimentos', icon: FolderKanban },
-      { label: 'Mão de Obra', to: '/app/mao-de-obra', icon: UserCircle },
-      { label: 'Pessoal', to: '/app/pessoal', icon: Users },
       { label: 'Usuários & Acessos', to: '/app/usuarios', icon: ShieldCheck },
       { label: 'Equipamentos', to: '/app/gestao-equipamentos', icon: Wrench },
       { label: 'Quantitativos', to: '/app/quantitativos', icon: Calculator },
