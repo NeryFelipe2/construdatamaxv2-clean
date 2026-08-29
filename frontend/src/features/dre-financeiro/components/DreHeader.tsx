@@ -19,6 +19,7 @@ import type { CanonicalIntegrationStatus } from '@/lib/api'
 const TABS: { key: DreTab; label: string; icon: any }[] = [
   { key: 'dre', label: 'DRE', icon: Receipt },
   { key: 'fluxo', label: 'Fluxo de Caixa', icon: Wallet },
+  { key: 'fcp', label: 'Fluxo de Caixa Projetado', icon: CalendarRange },
   { key: 'custos', label: 'Custo por Trecho', icon: Calculator },
   { key: 'eficiencia', label: 'Eficiência da Plataforma', icon: Target },
 ]

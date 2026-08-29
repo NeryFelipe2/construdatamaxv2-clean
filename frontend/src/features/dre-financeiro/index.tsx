@@ -18,6 +18,7 @@ import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useSupabaseDre } from '@/lib/useSupabaseDre'
 import { useAppModeStore } from '@/store/appModeStore'
 import { useDreStore } from '@/store/dreStore'
+import { FcpPanel } from './components/fcp/FcpPanel'
 import { DRE_FALLBACK, FLUXO_CAIXA, TRECHOS_FALLBACK, EFICIENCIA } from '@/data/mockDre'
 import { DreHeader, DreKpiCard } from './components/DreHeader'
 import { LancamentoManualModal } from './components/LancamentoManualModal'
@@ -513,6 +514,8 @@ export function DreFinanceiroPage() {
         )}
 
         {/* ═══ CUSTO POR TRECHO ═══ */}
+        {tab === 'fcp' && <FcpPanel />}
+
         {tab === 'custos' && (
           <>
             {trechosView.length > 0 && <InsightsPanel

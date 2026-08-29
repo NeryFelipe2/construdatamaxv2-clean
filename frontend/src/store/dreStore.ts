@@ -5,7 +5,7 @@
  */
 import { create } from 'zustand'
 
-export type DreTab = 'dre' | 'fluxo' | 'custos' | 'eficiencia'
+export type DreTab = 'dre' | 'fluxo' | 'fcp' | 'custos' | 'eficiencia'
 
 interface DreState {
   activeTab: DreTab
