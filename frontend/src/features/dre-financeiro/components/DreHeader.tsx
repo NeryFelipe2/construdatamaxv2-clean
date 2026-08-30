@@ -10,7 +10,7 @@
  * (icon/color/trend/sub/tooltip/dataTour) — a cor do VALOR é semântica de
  * dado (receita verde, despesa vermelha), nunca cromo do tema.
  */
-import { DollarSign, Plus, Upload, RefreshCw, Receipt, Wallet, Calculator, Target, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { DollarSign, Plus, Upload, RefreshCw, Receipt, Wallet, Calculator, Target, ArrowUpRight, ArrowDownRight, CalendarRange, Landmark } from 'lucide-react'
 import { InfoTooltip, type TooltipContent } from '@/components/ui/InfoTooltip'
 import { TourButton } from '@/components/ui/GuidedTour'
 import { useDreStore, type DreTab } from '@/store/dreStore'
@@ -20,7 +20,7 @@ const TABS: { key: DreTab; label: string; icon: any }[] = [
   { key: 'dre', label: 'DRE', icon: Receipt },
   { key: 'fluxo', label: 'Fluxo de Caixa', icon: Wallet },
   { key: 'fcp', label: 'Fluxo de Caixa Projetado', icon: CalendarRange },
-  { key: 'caixa', label: 'Controle de Caixa', icon: Wallet },
+  { key: 'caixa', label: 'Controle de Caixa', icon: Landmark },
   { key: 'custos', label: 'Custo por Trecho', icon: Calculator },
   { key: 'eficiencia', label: 'Eficiência da Plataforma', icon: Target },
 ]
