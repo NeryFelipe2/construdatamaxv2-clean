@@ -9,7 +9,7 @@
 import { useMemo, useState } from 'react'
 import {
   SlidersHorizontal, Wallet, CalendarRange, Receipt, Target, Coins, Tags,
-  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle,
+  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle, GitBranch,
 } from 'lucide-react'
 import { useFcp, type FcpStatus } from '@/hooks/useFcp'
 import { useAuthStore } from '@/store/authStore'
@@ -138,7 +138,9 @@ export function FcpPanel() {
               <button className={btnNeutro} onClick={() => setMostrarDevolver((v) => !v)}>
                 <Undo2 size={14} /> Devolver
               </button>
-              <button className={btnPrimario} onClick={() => void fcp.mudarStatus('aprovado')}>
+              <button className={btnPrimario}
+                title="Ao aprovar, as tarefas da semana nascem no LPS com a meta de produção deste FCP"
+                onClick={() => void fcp.mudarStatus('aprovado')}>
                 <CheckCircle2 size={14} /> Aprovar
               </button>
             </>
@@ -165,6 +167,17 @@ export function FcpPanel() {
           </div>
         )}
       </div>
+
+      {status === 'aprovado' && (
+        <div className="flex items-start gap-2 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-200">
+          <GitBranch size={15} className="mt-0.5 shrink-0" />
+          <div>
+            <span className="font-semibold">Integrado ao LPS.</span>{' '}
+            As tarefas da semana nasceram no LPS com a meta de produção deste FCP. O realizado
+            lançado lá volta sozinho para o Planejado × Realizado aqui — mão dupla, sem digitar duas vezes.
+          </div>
+        </div>
+      )}
 
       {status === 'devolvido' && fcp.fcp?.observacao && (
         <div className="flex items-start gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
