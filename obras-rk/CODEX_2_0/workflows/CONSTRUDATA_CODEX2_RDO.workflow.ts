@@ -67,12 +67,12 @@ const currentData = input.data || {};
 const user = input.user || { nome: 'Desconhecido' };
 
 const PROJETOS = {
-  '1': { nome: 'TATUI', id: 'c2bf8fda-b2e0-4bc1-9535-4891d596ea10' },
-  '2': { nome: 'OSASCO', id: 'f3c6645b-347f-4382-b9c5-d103c27ec511' },
-  '3': { nome: 'CONSORCIO', id: 'abe7f66c-004b-4bb5-a245-6be67debd9f7' },
-  '4': { nome: 'PARDINHO', id: 'ec112c9a-1669-4287-8079-526d6940ce82' },
-  '5': { nome: 'BRASILIA', id: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d' },
-  '6': { nome: 'RK SUB', id: 'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8' },
+  '1': { nome: 'TATUI', id: 'c2bf8fda-b2e0-4bc1-9535-4891d596ea10', alcada: 'Obra RK - diretores Felipe, Luiz e Renato' },
+  '2': { nome: 'OSASCO', id: 'f3c6645b-347f-4382-b9c5-d103c27ec511', alcada: 'Obra RK - diretores Felipe, Luiz e Renato' },
+  '3': { nome: 'CONSORCIO / SLNR', id: 'abe7f66c-004b-4bb5-a245-6be67debd9f7', alcada: 'Consorcio / SLNR - Felipe gerente de sala tecnica' },
+  '4': { nome: 'PARDINHO', id: 'ec112c9a-1669-4287-8079-526d6940ce82', alcada: 'Obra RK - diretores Felipe, Luiz e Renato' },
+  '5': { nome: 'BRASILIA', id: '2a28beec-b1f8-4b0c-8416-d0710bb35d9d', alcada: 'ConstruData' },
+  '6': { nome: 'RK SUB / SANTOS EMPREITA', id: 'd4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f7a8', alcada: 'Obra RK - diretores Felipe, Luiz e Renato' },
 };
 
 function findProject(rawText) {
@@ -93,14 +93,15 @@ switch (currentStep) {
   case 'start_rdo':
   case 'rdo_flow':
     nextStep = 'waiting_obra';
-    message = 'CODEX 2.0 RDO\\nQual obra?\\n\\n1 - Tatui\\n2 - Osasco\\n3 - Consorcio\\n4 - Pardinho\\n5 - Brasilia\\n6 - RK Sub';
+    message = 'CODEX 2.0 RDO\\nQual obra?\\n\\n1 - Tatui (RK: Felipe/Luiz/Renato)\\n2 - Osasco (RK: Felipe/Luiz/Renato)\\n3 - Consorcio / SLNR (Felipe: sala tecnica)\\n4 - Pardinho (RK: Felipe/Luiz/Renato)\\n5 - Brasilia (ConstruData)\\n6 - RK Sub / Santos Empreita (RK: Felipe/Luiz/Renato)';
     break;
   case 'waiting_obra': {
     const projeto = findProject(text);
     saveData.obra = projeto.nome;
     saveData.project_id = projeto.id;
+    saveData.alcada = projeto.alcada;
     nextStep = 'waiting_clima';
-    message = 'Obra: ' + projeto.nome + '\\nInforme o clima:\\n1 - Sol\\n2 - Chuva\\n3 - Nublado\\n4 - Chuvisco';
+    message = 'Obra: ' + projeto.nome + '\\nAlcada: ' + (projeto.alcada || '-') + '\\nInforme o clima:\\n1 - Sol\\n2 - Chuva\\n3 - Nublado\\n4 - Chuvisco';
     break;
   }
   case 'waiting_clima': {

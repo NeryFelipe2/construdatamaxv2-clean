@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from collections import defaultdict
 from contextlib import contextmanager
 from datetime import date, datetime
@@ -36,7 +37,11 @@ _bootstrapped = False
 def _get_engine():
     global _engine
     if _engine is None:
-        connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+        if DATABASE_URL.startswith("sqlite"):
+            connect_args = {"check_same_thread": False}
+        else:
+            timeout_seconds = int(os.environ.get("DATABASE_CONNECT_TIMEOUT_SECONDS", "5"))
+            connect_args = {"connect_timeout": timeout_seconds}
         _engine = create_engine(DATABASE_URL, connect_args=connect_args, future=True, echo=False)
     return _engine
 

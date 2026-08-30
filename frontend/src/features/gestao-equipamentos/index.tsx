@@ -4,16 +4,18 @@ import { FleetDashboard }    from './components/FleetDashboard'
 import { MaintenancePanel }  from './components/MaintenancePanel'
 import { UtilizacaoPanel }   from './components/UtilizacaoPanel'
 import { CustosPanel }       from './components/CustosPanel'
+import { FrotaKanbanPanel }  from './components/FrotaKanbanPanel'
 import { EquipamentosPage }  from '@/features/equipamentos/index'
 
 export function GestaoEquipamentosPage() {
-  const [activeTab, setActiveTab] = useState('equipamentos')
+  const [activeTab, setActiveTab] = useState('kanban')
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-[#333333]">
       <GestaoHeader activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex-1 overflow-hidden">
+        {activeTab === 'kanban'       && <FrotaKanbanPanel />}
         {activeTab === 'equipamentos' && <EquipamentosPage />}
         {activeTab === 'dashboard'    && <FleetDashboard />}
         {activeTab === 'manutencoes'  && <MaintenancePanel />}

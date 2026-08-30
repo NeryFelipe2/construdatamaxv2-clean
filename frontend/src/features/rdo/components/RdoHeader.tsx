@@ -4,15 +4,23 @@
 import { useState } from 'react'
 import { FileText, Plus, Download, Settings, MessageSquare, Repeat } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
+import { useProjectContext } from '@/store/projectContext'
+import { useAppModeStore } from '@/store/appModeStore'
 import { LogoConfigModal } from './LogoConfigModal'
 import type { RdoTab } from '@/types'
+
+// Abas que exigem projeto real ativo (Modo Demo OFF) — desabilitadas caso contrário.
+const REQUIRE_REAL_DATA: RdoTab[] = ['producao']
 
 const TABS: { key: RdoTab; label: string; icon?: React.ReactNode }[] = [
   { key: 'dashboard',       label: 'Dashboard'         },
   { key: 'novo',            label: '+ Novo RDO'         },
+  { key: 'automatico',      label: 'RDO Automatico'    },
   { key: 'historico',       label: 'Histórico de RDOs'  },
+  { key: 'diario',          label: 'Diário / Equipes'   },
   { key: 'integracao',      label: 'RDO × Planejamento' },
   { key: 'financeiro',      label: 'Financeiro'         },
+  { key: 'producao',        label: 'Produção'           },
   { key: 'whatsapp-bot',    label: '📱 RDO WhatsApp',   icon: <MessageSquare size={12} /> },
   { key: 'whatsapp-fluxo',  label: '🔄 Controle Fluxo', icon: <Repeat size={12} /> },
 ]
@@ -25,7 +33,16 @@ function escapeCell(value: string | number | null | undefined): string {
 
 export function RdoHeader() {
   const { activeTab, setActiveTab, rdos } = useRdoStore()
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
   const [showLogoModal, setShowLogoModal] = useState(false)
+
+  const podeDadoReal = !!activeProjectId && !isDemoMode
+  const motivoBloqueio = isDemoMode
+    ? 'Desative o Modo Demonstração para lançar produção real'
+    : !activeProjectId
+      ? 'Selecione um projeto ativo'
+      : undefined
 
   function handleExportCsv() {
     const BOM = '\uFEFF'
@@ -105,14 +122,19 @@ export function RdoHeader() {
         <div className="flex px-6 gap-1 min-w-max pb-0">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.key
+            const disabled = REQUIRE_REAL_DATA.includes(tab.key) && !podeDadoReal
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={() => { if (!disabled) setActiveTab(tab.key) }}
+                disabled={disabled}
+                title={disabled ? motivoBloqueio : undefined}
                 className={`px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap border-b-2 ${
-                  isActive
-                    ? 'text-[#f97316] border-[#f97316] bg-[#3d3d3d]'
-                    : 'text-[#a3a3a3] border-transparent hover:text-[#f5f5f5] hover:bg-[#3d3d3d]/50'
+                  disabled
+                    ? 'text-[#6b6b6b] border-transparent opacity-50 cursor-not-allowed'
+                    : isActive
+                      ? 'text-[#f97316] border-[#f97316] bg-[#3d3d3d]'
+                      : 'text-[#a3a3a3] border-transparent hover:text-[#f5f5f5] hover:bg-[#3d3d3d]/50'
                 }`}
               >
                 {tab.label}

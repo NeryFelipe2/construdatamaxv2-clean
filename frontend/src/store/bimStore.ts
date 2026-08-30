@@ -43,11 +43,11 @@ async function parseShapefileToSegments(
   shp: ArrayBuffer,
   dbf: ArrayBuffer,
 ): Promise<BimSegment[]> {
-  const shpjs = await import('shpjs')
+  const { parseShp, parseDbf } = await import('shpjs')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const geometries: any[] = (shpjs as any).parseShp(shp)
+  const geometries: any[] = parseShp(shp) as any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const attributes: Record<string, string | number>[] = (shpjs as any).dbf.parseDbf(dbf)
+  const attributes: Record<string, string | number>[] = parseDbf(dbf) as any
 
   return geometries.map((geom, i) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,6 +101,11 @@ interface BimState {
   forgeTokenExpiry: number | null
   forgeUrn:         string | null
   forgeClientId:    string | null
+  // Client Secret is intentionally kept ONLY in this in-memory store field —
+  // never written to localStorage (credential would sit in plain text on
+  // disk, readable by any XSS). It disappears on tab close/reload; the UI
+  // re-prompts for it (see BimForgeViewer.tsx hasCredentials check).
+  forgeClientSecret: string | null
 
   setActiveTab(tab: BimTab): void
   addProject(p: BimProject): void
@@ -150,6 +155,7 @@ export const useBimStore = create<BimState>((set, get) => ({
   forgeTokenExpiry: null,
   forgeUrn:         null,
   forgeClientId:    null,
+  forgeClientSecret: null,
 
   setActiveTab(tab) { set({ activeTab: tab }) },
 
@@ -445,11 +451,9 @@ export const useBimStore = create<BimState>((set, get) => ({
   setForgeUrn(urn)    { set({ forgeUrn: urn }) },
   setForgeCredentials(clientId, clientSecret) {
     try {
-      localStorage.setItem('aps-client-id',     clientId)
-      localStorage.setItem('aps-client-secret', clientSecret)
+      localStorage.setItem('aps-client-id', clientId)
     } catch { /* noop */ }
-    set({ forgeClientId: clientId })
-    void clientSecret  // stored in localStorage only, not in state
+    set({ forgeClientId: clientId, forgeClientSecret: clientSecret })
   },
 
   /**

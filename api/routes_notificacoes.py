@@ -6,22 +6,31 @@ Rotas de notificacao automatica e proxy LLM.
 from __future__ import annotations
 
 import os
-import json
+import asyncio
 import httpx
 from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 
+from api.supabase_client import filter_rk_rows, rk_project_ids
+
 router = APIRouter(tags=["notificacoes"])
 
 # ─── Supabase config ────────────────────────────────────────────────────────
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", os.environ.get("VITE_SUPABASE_URL", ""))
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", os.environ.get("VITE_SUPABASE_ANON_KEY", ""))
+SUPABASE_KEY = os.environ.get(
+    "SUPABASE_SERVICE_ROLE_KEY",
+    os.environ.get("SUPABASE_SERVICE_KEY", os.environ.get("VITE_SUPABASE_ANON_KEY", "")),
+)
 
 def _supabase_headers():
     return {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+
+
+def _rk_in_filter() -> str:
+    return ",".join(rk_project_ids(include_aliases=True))
 
 # ─── Notificacao de pendencias ──────────────────────────────────────────────
 
@@ -32,33 +41,40 @@ async def check_pendencias():
         return {"status": "skip", "reason": "Supabase nao configurado"}
 
     async with httpx.AsyncClient() as client:
+        rk_ids = _rk_in_filter()
         # Buscar itens pendentes
         r = await client.get(
-            f"{SUPABASE_URL}/rest/v1/punch_list_items?status=eq.aberto&select=*",
+            f"{SUPABASE_URL}/rest/v1/punch_list_items?status=eq.aberto&projeto_id=in.({rk_ids})&select=*",
             headers=_supabase_headers()
         )
-        items = r.json() if r.status_code == 200 else []
+        items = filter_rk_rows(r.json() if r.status_code == 200 else [])
 
         # Buscar contatos
         r2 = await client.get(
-            f"{SUPABASE_URL}/rest/v1/contatos?ativo=eq.true&select=*",
+            f"{SUPABASE_URL}/rest/v1/contatos?ativo=eq.true&projeto_id=in.({rk_ids})&select=*",
             headers=_supabase_headers()
         )
-        contatos = r2.json() if r2.status_code == 200 else []
+        contatos = filter_rk_rows(r2.json() if r2.status_code == 200 else [])
 
     # Mapear responsaveis para telefones
-    contato_map = {c["nome"]: c["telefone_whatsapp"] for c in contatos if isinstance(c, dict)}
+    contato_map = {
+        (c.get("nome"), c.get("projeto_id")): c.get("telefone_whatsapp")
+        for c in contatos
+        if isinstance(c, dict) and c.get("nome") and c.get("telefone_whatsapp")
+    }
 
     notificacoes = []
     for item in items:
         if not isinstance(item, dict):
             continue
         resp = item.get("responsavel", "")
-        tel = contato_map.get(resp)
+        projeto_id = item.get("projeto_id")
+        tel = contato_map.get((resp, projeto_id))
         if tel:
             notificacoes.append({
                 "responsavel": resp,
                 "telefone": tel,
+                "projeto_id": projeto_id,
                 "item": item.get("descricao", ""),
                 "prazo": item.get("prazo", ""),
                 "localizacao": item.get("localizacao", ""),
@@ -80,17 +96,17 @@ async def disparar_notificacoes():
 
     for n in data.get("notificacoes", []):
         msg = f"⚠️ PENDENCIA: {n['item']}\n📍 {n['localizacao']}\n📅 Prazo: {n['prazo']}\nResolva o mais rapido possivel."
-        # Tentar enviar via whatsapp-motor
         try:
-            async with httpx.AsyncClient() as client:
-                await client.post(
-                    f"{os.environ.get('WHATSAPP_MOTOR_URL', 'http://localhost:3001')}/send",
-                    json={"telefone": n["telefone"], "mensagem": msg},
-                    timeout=10,
-                )
+            from api.routes_whatsapp import enviar_mensagem
+
+            result = await asyncio.to_thread(
+                enviar_mensagem,
+                {"telefone": n["telefone"], "mensagem": msg, "projeto_id": n.get("projeto_id")},
+            )
+            if result.get("delivery") not in {"blocked_non_rk", "blocked_unregistered_phone"}:
                 enviados += 1
         except Exception:
-            pass  # Motor WhatsApp offline
+            pass
 
     return {"status": "ok", "enviados": enviados, "total": len(data.get("notificacoes", []))}
 

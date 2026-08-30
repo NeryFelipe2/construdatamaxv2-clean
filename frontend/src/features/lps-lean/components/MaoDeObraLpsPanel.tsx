@@ -1,6 +1,12 @@
 /**
- * MaoDeObraLpsPanel — Staffing dimensioning panel within LPS module.
- * Cross-references with maoDeObraStore for worker availability.
+ * MaoDeObraLpsPanel — efetivo REAL das equipes dentro do módulo LPS.
+ *
+ * 27/07/2026 (Fase 2 LPS-real): o staffing "inventado" a partir das atividades
+ * (computeStaffingFromActivities) morreu. Agora cada linha é uma equipe ATIVA
+ * de `wcr_equipes` com o efetivo contado em `equipe_membros` (lpsStore →
+ * carregarStaffingReal). Não existe dimensionamento-alvo cadastrado no banco,
+ * então o gap numérico é 0 por honestidade — o sinal de déficit é qualitativo
+ * (equipe `a_contratar` ou ativa sem nenhum membro cadastrado).
  */
 import { useEffect } from 'react'
 import { Users, RefreshCw } from 'lucide-react'
@@ -41,11 +47,11 @@ export function MaoDeObraLpsPanel() {
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold text-[#f5f5f5]">{totalRequired}</p>
+          <p className="text-2xl font-bold text-[#f5f5f5] font-mono [font-variant-numeric:tabular-nums]">{totalRequired}</p>
           <p className="text-[#6b6b6b] text-xs">Necessários</p>
         </div>
         <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold text-[#f97316]">{totalAvailable}</p>
+          <p className="text-2xl font-bold text-[#f97316] font-mono [font-variant-numeric:tabular-nums]">{totalAvailable}</p>
           <p className="text-[#6b6b6b] text-xs">Disponíveis</p>
         </div>
         <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 text-center">
@@ -68,25 +74,25 @@ export function MaoDeObraLpsPanel() {
           onClick={computeStaffingDimensions}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea580c] transition-colors"
         >
-          <RefreshCw size={12} />Recalcular
+          <RefreshCw size={12} />Recarregar
         </button>
-        <span className="text-[#6b6b6b] text-xs">Dados cruzados com módulo Mão de Obra</span>
+        <span className="text-[#6b6b6b] text-[9px] font-mono uppercase tracking-wider">TABELAS wcr_equipes (ativas) + equipe_membros</span>
       </div>
 
       {/* Table */}
       <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-[#525252] flex items-center gap-2">
           <Users size={14} className="text-[#f97316]" />
-          <h3 className="text-[#f5f5f5] text-sm font-semibold">Dimensionamento de Equipes</h3>
+          <h3 className="text-[#f5f5f5] text-sm font-semibold">Efetivo Real por Equipe</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-[#525252]">
-                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Atividade / Equipe</th>
-                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Equipes Req.</th>
-                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Trabalhadores Req.</th>
-                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Disponíveis</th>
+                <th className="px-3 py-2 text-left text-[#6b6b6b] font-medium">Equipe</th>
+                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Frentes</th>
+                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Efetivo</th>
+                <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Membros cadastrados</th>
                 <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Gap</th>
                 <th className="px-3 py-2 text-center text-[#6b6b6b] font-medium">Status</th>
               </tr>
@@ -95,7 +101,7 @@ export function MaoDeObraLpsPanel() {
               {staffingDimensions.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-8 text-center text-[#6b6b6b]">
-                    Clique em "Recalcular" para cruzar dados com MdO.
+                    0 equipes ativas encontradas em wcr_equipes (ou Supabase indisponível) — cadastre as equipes no Organograma.
                   </td>
                 </tr>
               ) : (

@@ -30,23 +30,19 @@ export interface BotStep {
 
 // ─── Opções padronizadas (SABESP / Saneamento) ─────────────────────────────
 
+// WCR Saneamento — Contrato Sabesp 13.546/25-00 (Zona Norte SP). Só as frentes
+// reais da obra (ver store/projectContext.ts) — este simulador é só uma prévia
+// do fluxo conversacional do bot, mas as opções batem com os núcleos de verdade.
 export const NUCLEOS: BotOption[] = [
-  { value: 'slnr-santos', label: 'SLNR Santos', emoji: '1️⃣' },
-  { value: 'slnr-sv', label: 'SLNR São Vicente', emoji: '2️⃣' },
-  { value: 'slnr-pg', label: 'SLNR Praia Grande', emoji: '3️⃣' },
-  { value: 'slnr-guaruja', label: 'SLNR Guarujá', emoji: '4️⃣' },
-  { value: 'pardinho-itapetininga', label: 'Pardinho - Consórcio Itapetininga', emoji: '5️⃣' },
-  { value: 'osasco-clu', label: 'Osasco - Consórcio CLU Osasco', emoji: '6️⃣' },
-  { value: 'sala-tecnica-slnr', label: 'Sala Técnica - SLNR Santos', emoji: '7️⃣' },
+  { value: 'wcr-boi-malhado', label: 'WCR — Boi Malhado', emoji: '1️⃣' },
+  { value: 'wcr-ilha-bela', label: 'WCR — Ilha Bela', emoji: '2️⃣' },
+  { value: 'wcr-retorno', label: 'WCR — Comunidade do Retorno', emoji: '3️⃣' },
 ]
 
 export const PROJETOS: BotOption[] = [
-  { value: 'ct-11481051', label: 'CT 11481051 - Rede Esgoto', emoji: '1️⃣' },
-  { value: 'ct-11481052', label: 'CT 11481052 - Rede Água', emoji: '2️⃣' },
-  { value: 'ct-11481053', label: 'CT 11481053 - Ligações', emoji: '3️⃣' },
-  { value: 'ct-pardinho-2026', label: 'CT Pardinho - Consórcio Itapetininga', emoji: '4️⃣' },
-  { value: 'ct-clu-osc-2026', label: 'CT CLU Osasco - Consórcio CLU', emoji: '5️⃣' },
-  { value: 'ct-sala-tecnica', label: 'CT 11481051 - Sala Técnica', emoji: '6️⃣' },
+  { value: 'ct-13546-agua', label: '13.546/25-00 — Rede Água', emoji: '1️⃣' },
+  { value: 'ct-13546-esgoto', label: '13.546/25-00 — Rede Esgoto', emoji: '2️⃣' },
+  { value: 'ct-13546-ligacoes', label: '13.546/25-00 — Ligações', emoji: '3️⃣' },
 ]
 
 export const CLIMA_OPTIONS: BotOption[] = [

@@ -7,6 +7,7 @@ import { useQuantitativosStore } from '@/store/quantitativosStore'
 import { exportCustomBaseToCsv, exportCustomBaseToXlsx, parseExcelToCustomBase } from '../utils/exportEngine'
 import { mockSinapi } from '@/data/mockSinapi'
 import { mockSeinfra } from '@/data/mockSeinfra'
+import { usePrecosContratoBase } from '@/hooks/usePrecosContratoBase'
 import type { CostBaseSource, CustomBaseEntry } from '@/types'
 
 const ACCENT = '#8b5cf6'
@@ -107,16 +108,23 @@ export function BancoDadosPanel() {
   const [importError, setImportError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  const {
+    entries: contratoEntries, loading: contratoLoading, error: contratoError,
+    ano: contratoAno, setAno: setContratoAno, anosDisponiveis: contratoAnos,
+  } = usePrecosContratoBase()
+
   const BASE_OPTIONS: { value: CostBaseSource; label: string; desc: string; count: number }[] = [
-    { value: 'sinapi',  label: 'SINAPI',  desc: 'Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil — CAIXA/CEF', count: mockSinapi.length },
-    { value: 'seinfra', label: 'SEINFRA', desc: 'Tabela de referência de custos de obras públicas — Secretaria de Infraestrutura', count: mockSeinfra.length },
-    { value: 'custom',  label: 'Base Própria', desc: 'Tabela de custos personalizada — importe via PDF ou Excel ou adicione manualmente', count: customBase.length },
+    { value: 'sinapi',   label: 'SINAPI',   desc: 'Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil — CAIXA/CEF', count: mockSinapi.length },
+    { value: 'seinfra',  label: 'SEINFRA',  desc: 'Tabela de referência de custos de obras públicas — Secretaria de Infraestrutura', count: mockSeinfra.length },
+    { value: 'contrato', label: 'Contrato (Sabesp)', desc: 'Catálogo oficial e real de preços do contrato WCR × Sabesp — já com 60% (parte WCR) aplicado', count: contratoEntries.length },
+    { value: 'custom',   label: 'Base Própria', desc: 'Tabela de custos personalizada — importe via PDF ou Excel ou adicione manualmente', count: customBase.length },
   ]
 
-  // Entries to display (SINAPI, SEINFRA, or custom)
+  // Entries to display (SINAPI, SEINFRA, Contrato real, ou custom)
   const displayEntries: { code: string; description: string; unit: string; unitCost: number; category: string }[] =
-    costBase === 'sinapi'  ? mockSinapi :
-    costBase === 'seinfra' ? mockSeinfra :
+    costBase === 'sinapi'   ? mockSinapi :
+    costBase === 'seinfra'  ? mockSeinfra :
+    costBase === 'contrato' ? contratoEntries :
     customBase
 
   const filtered = displayEntries.filter((e) => {
@@ -168,6 +176,44 @@ export function BancoDadosPanel() {
         ))}
       </div>
 
+      {/* Catálogo oficial do contrato — dado real (precos_contrato) */}
+      {costBase === 'contrato' && (
+        <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-5 space-y-3">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h3 className="text-[#f5f5f5] font-medium text-sm">Catálogo Oficial do Contrato — WCR × Sabesp</h3>
+              <p className="text-[#6b6b6b] text-xs mt-1">
+                Fonte real: tabela <span className="text-[#a3a3a3] font-mono">precos_contrato</span> (4.788 linhas, 3 anos). Preço unitário já aplicado a 60% (parte WCR do valor cheio do contrato).
+              </p>
+            </div>
+            <div className="flex gap-1 bg-[#2c2c2c] border border-[#525252] rounded-lg p-1">
+              {contratoAnos.map((a) => (
+                <button
+                  key={a}
+                  onClick={() => setContratoAno(a)}
+                  className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                    contratoAno === a ? 'bg-violet-600 text-white' : 'text-[#6b6b6b] hover:text-[#f5f5f5]'
+                  }`}
+                >
+                  {a}
+                </button>
+              ))}
+            </div>
+          </div>
+          {contratoLoading && <p className="text-[#6b6b6b] text-xs">Carregando catálogo oficial…</p>}
+          {contratoError && (
+            <p className="text-amber-400 text-xs bg-amber-950/30 border border-amber-800/40 rounded-lg px-3 py-2">
+              ⚠ Sem dado real — {contratoError}
+            </p>
+          )}
+          {!contratoLoading && !contratoError && contratoEntries.length === 0 && (
+            <p className="text-amber-400 text-xs bg-amber-950/30 border border-amber-800/40 rounded-lg px-3 py-2">
+              ⚠ 0 registros para o ano {contratoAno}. Sem dado real disponível.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Custom base import controls */}
       {costBase === 'custom' && (
         <div className="bg-[#3d3d3d] rounded-xl border border-[#525252] p-5 space-y-3">
@@ -209,7 +255,7 @@ export function BancoDadosPanel() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={`Buscar em ${costBase === 'sinapi' ? 'SINAPI' : costBase === 'seinfra' ? 'SEINFRA' : 'Base Própria'}...`}
+          placeholder={`Buscar em ${costBase === 'sinapi' ? 'SINAPI' : costBase === 'seinfra' ? 'SEINFRA' : costBase === 'contrato' ? 'Contrato (Sabesp)' : 'Base Própria'}...`}
           className="w-full bg-[#3d3d3d] border border-[#525252] rounded-lg pl-9 pr-4 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-violet-500"
         />
       </div>

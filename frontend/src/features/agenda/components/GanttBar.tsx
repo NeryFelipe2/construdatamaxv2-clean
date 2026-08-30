@@ -4,10 +4,12 @@ import { useAgendaStore } from '@/store/agendaStore'
 import {
   COLUMN_WIDTH,
   getBarStyle,
+  getLaneRect,
   applyDragDelta,
   applyResizeLeft,
   applyResizeRight,
-  weekPx,
+  snapPx,
+  effectiveSnapUnit,
 } from '../utils'
 
 // ─── Color map ─────────────────────────────────────────────────────────────────
@@ -33,12 +35,26 @@ interface GanttBarProps {
   viewStart: string
   visibleWeeks: number
   pixelsPerDay?: number   // defaults to COLUMN_WIDTH / 7 (week mode)
+  /** faixa horizontal da barra dentro da linha (ver computeLanes em utils.ts) */
+  laneIndex?: number
+  /** total de faixas da linha — 1 mantém a geometria original (top 10/h 48) */
+  laneCount?: number
+  /** dias da janela real (getViewParams do viewMode) — sem isto a barra some, ver getBarStyle */
+  totalDays?: number
 }
 
-export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_WIDTH / 7 }: GanttBarProps) {
-  const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask } = useAgendaStore()
+export function GanttBar({
+  task,
+  viewStart,
+  visibleWeeks,
+  pixelsPerDay = COLUMN_WIDTH / 7,
+  laneIndex = 0,
+  laneCount = 1,
+  totalDays,
+}: GanttBarProps) {
+  const { moveTask, updateTask, setEditingTask, selectedTaskId, selectTask, snapUnit } = useAgendaStore()
 
-  const [previewOffsetWeeks, setPreviewOffsetWeeks] = useState(0)
+  const [previewOffsetUnits, setPreviewOffsetUnits] = useState(0)
   const [resizeStartDelta, setResizeStartDelta]     = useState(0)
   const [resizeEndDelta, setResizeEndDelta]         = useState(0)
   const [isDragging, setIsDragging]                 = useState(false)
@@ -46,24 +62,26 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
 
   const hasMoved    = useRef(false)
   const cleanupRef  = useRef<(() => void) | null>(null)
-  const onePxWeek   = weekPx(pixelsPerDay)   // px per 7-day snap
+  // Snap efetivo: abaixo de 6 px/dia o snap diário viraria jitter — força semana
+  const snapUnitEff = effectiveSnapUnit(pixelsPerDay, snapUnit)
+  const onePxSnap   = snapPx(pixelsPerDay, snapUnitEff)   // px per snap step
 
   useEffect(() => {
     return () => { if (cleanupRef.current) cleanupRef.current() }
   }, [])
 
-  // Compute bar style
-  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetWeeks, pixelsPerDay)
+  // Compute bar style — totalDays vem da janela real do viewMode (ver getBarStyle)
+  let barStyle = getBarStyle(task, viewStart, visibleWeeks, previewOffsetUnits, pixelsPerDay, snapUnitEff, totalDays)
 
   if (isResizing && resizeStartDelta !== 0) {
     barStyle = getBarStyle(
-      { ...task, startDate: applyResizeLeft(task, Math.round(resizeStartDelta / onePxWeek)) },
-      viewStart, visibleWeeks, 0, pixelsPerDay
+      { ...task, startDate: applyResizeLeft(task, Math.round(resizeStartDelta / onePxSnap), snapUnitEff) },
+      viewStart, visibleWeeks, 0, pixelsPerDay, 'week', totalDays
     )
   } else if (isResizing && resizeEndDelta !== 0) {
     barStyle = getBarStyle(
-      { ...task, endDate: applyResizeRight(task, Math.round(resizeEndDelta / onePxWeek)) },
-      viewStart, visibleWeeks, 0, pixelsPerDay
+      { ...task, endDate: applyResizeRight(task, Math.round(resizeEndDelta / onePxSnap), snapUnitEff) },
+      viewStart, visibleWeeks, 0, pixelsPerDay, 'week', totalDays
     )
   }
 
@@ -89,7 +107,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
       function onMove(ev: PointerEvent) {
         const deltaX = ev.clientX - startX
         if (Math.abs(deltaX) > 4) hasMoved.current = true
-        setPreviewOffsetWeeks(Math.round(deltaX / onePxWeek))
+        setPreviewOffsetUnits(Math.round(deltaX / onePxSnap))
       }
 
       function onUp(ev: PointerEvent) {
@@ -97,11 +115,11 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         cleanupRef.current = null
         setIsDragging(false)
 
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
-        setPreviewOffsetWeeks(0)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
+        setPreviewOffsetUnits(0)
 
-        if (hasMoved.current && deltaWeeks !== 0) {
-          const { newStart, newEnd } = applyDragDelta(task, deltaWeeks)
+        if (hasMoved.current && deltaUnits !== 0) {
+          const { newStart, newEnd } = applyDragDelta(task, deltaUnits, snapUnitEff)
           moveTask(task.id, newStart, newEnd)
         } else if (!hasMoved.current) {
           selectTask(task.id)
@@ -116,7 +134,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, moveTask, setEditingTask, selectTask, onePxWeek]
+    [task, moveTask, setEditingTask, selectTask, onePxSnap, snapUnitEff]
   )
 
   // ── Left resize handler ────────────────────────────────────────────────────
@@ -143,10 +161,10 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointermove', onMove)
         cleanupRef.current = null
         setIsResizing(false)
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
         setResizeStartDelta(0)
-        if (hasMoved.current && deltaWeeks !== 0) {
-          updateTask(task.id, { startDate: applyResizeLeft(task, deltaWeeks) })
+        if (hasMoved.current && deltaUnits !== 0) {
+          updateTask(task.id, { startDate: applyResizeLeft(task, deltaUnits, snapUnitEff) })
         }
       }
 
@@ -157,7 +175,7 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, updateTask, onePxWeek]
+    [task, updateTask, onePxSnap, snapUnitEff]
   )
 
   // ── Right resize handler ───────────────────────────────────────────────────
@@ -184,10 +202,10 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointermove', onMove)
         cleanupRef.current = null
         setIsResizing(false)
-        const deltaWeeks = Math.round((ev.clientX - startX) / onePxWeek)
+        const deltaUnits = Math.round((ev.clientX - startX) / onePxSnap)
         setResizeEndDelta(0)
-        if (hasMoved.current && deltaWeeks !== 0) {
-          updateTask(task.id, { endDate: applyResizeRight(task, deltaWeeks) })
+        if (hasMoved.current && deltaUnits !== 0) {
+          updateTask(task.id, { endDate: applyResizeRight(task, deltaUnits, snapUnitEff) })
         }
       }
 
@@ -198,21 +216,28 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
         el.removeEventListener('pointerup', onUp)
       }
     },
-    [task, updateTask, onePxWeek]
+    [task, updateTask, onePxSnap, snapUnitEff]
   )
 
   const bg     = COLOR_BG[task.color]
   const border = COLOR_BORDER[task.color]
+
+  // Faixa vertical: com laneCount = 1 devolve o top/height de sempre; com
+  // várias, divide a altura da linha pra nenhuma barra cobrir a outra.
+  const lane = getLaneRect(laneIndex, laneCount)
+  // Barra fina não comporta 11px — cai pra 9px e, abaixo de 14px, some o texto
+  // (o título continua no `title` do elemento, então o hover ainda informa).
+  const labelPx = lane.height >= 26 ? 11 : lane.height >= 14 ? 9 : 0
 
   return (
     <div
       onPointerDown={handleBarPointerDown}
       style={{
         position: 'absolute',
-        top: 10,
+        top: lane.top,
         left: barStyle.left,
         width: barStyle.width,
-        height: 48,
+        height: lane.height,
         background: bg,
         borderRadius: 6,
         border: `1.5px solid ${isSelected ? '#fff' : border}`,
@@ -237,14 +262,19 @@ export function GanttBar({ task, viewStart, visibleWeeks, pixelsPerDay = COLUMN_
       />
 
       {/* Label */}
-      <div
-        className="flex items-center h-full overflow-hidden pointer-events-none"
-        style={{ paddingLeft: 12, paddingRight: 12 }}
-      >
-        <span className="text-white text-[11px] font-semibold truncate leading-none">
-          {task.title}
-        </span>
-      </div>
+      {labelPx > 0 && (
+        <div
+          className="flex items-center h-full overflow-hidden pointer-events-none"
+          style={{ paddingLeft: labelPx >= 11 ? 12 : 8, paddingRight: labelPx >= 11 ? 12 : 8 }}
+        >
+          <span
+            className="text-white font-semibold truncate leading-none"
+            style={{ fontSize: labelPx }}
+          >
+            {task.title}
+          </span>
+        </div>
+      )}
 
       {/* Right resize handle */}
       <div

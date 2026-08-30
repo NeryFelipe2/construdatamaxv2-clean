@@ -4,7 +4,7 @@
   "active": false,
   "nodes": [
     {
-      "id": "f7209e71-d8a0-4ca9-b3dc-379a95e37a3f",
+      "id": "3d2aceda-3305-4261-83fe-e93c628de0e1",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "062dffe6-0d7a-412f-964d-484eef5a196a",
+      "id": "c36c124c-9534-46dc-ac7b-7202fa9b0334",
       "name": "Prepare Image",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "7a29e74a-73ea-4a0b-87d2-a7afbfbe7ef8",
+      "id": "b09d9c4c-0aa9-4bbd-903c-0c46f59adab3",
       "name": "Gemini OCR",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -60,7 +60,7 @@
       }
     },
     {
-      "id": "4c9bbc01-77ac-4d8c-8c13-a24a89dfe10c",
+      "id": "93bc1ca5-13ce-4ebb-bc10-65473d70eeba",
       "name": "Parse Output",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -73,7 +73,7 @@
       }
     },
     {
-      "id": "18e8a115-f518-48b8-b956-bfc68c0fde74",
+      "id": "a37f5553-81bc-48a0-a190-83e90cffb597",
       "name": "Save State",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -112,7 +112,7 @@
       }
     },
     {
-      "id": "d1a4033e-3e28-4f31-895f-9ce67dc90944",
+      "id": "090aee81-2550-4d7a-9712-41eba9150e55",
       "name": "Was Parsed?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -144,7 +144,7 @@
       }
     },
     {
-      "id": "aa8a2361-7e5d-422b-b67c-8eb16addc5bd",
+      "id": "65da27cf-fd5b-4215-bc40-a1b2771fb73f",
       "name": "Save Fluxo Caixa",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
@@ -183,7 +183,7 @@
       }
     },
     {
-      "id": "a5d74acc-4fd6-4b22-8b17-683935bead1a",
+      "id": "1692f71a-8ba0-44b3-a3ce-212fa8681c89",
       "name": "Confirm User",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,

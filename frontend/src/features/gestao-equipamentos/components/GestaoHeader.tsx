@@ -7,6 +7,7 @@ interface GestaoHeaderProps {
 }
 
 const TABS: { key: string; label: string }[] = [
+  { key: 'kanban',       label: 'Kanban Frota' },
   { key: 'equipamentos', label: 'Equipamentos' },
   { key: 'dashboard',    label: 'Dashboard'    },
   { key: 'manutencoes',  label: 'Manutenções'  },

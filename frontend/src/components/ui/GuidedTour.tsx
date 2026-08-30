@@ -284,34 +284,34 @@ function TourOverlay({
 
       {/* Popover */}
       <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
-        <div className="pointer-events-auto w-[440px] max-w-[90vw] bg-[#112645] border border-[#2a4a6e] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden animate-in fade-in-0 zoom-in-95" style={{ animationDuration: '200ms' }}>
+        <div className="pointer-events-auto w-[440px] max-w-[90vw] bg-[#3d3d3d] border border-[#525252] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden animate-in fade-in-0 zoom-in-95" style={{ animationDuration: '200ms' }}>
           {/* Progress bar */}
-          <div className="h-1 bg-[#0d2040]">
+          <div className="h-1 bg-[#2c2c2c]">
             <div
-              className="h-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300"
+              className="h-full bg-[#f97316] transition-all duration-300"
               style={{ width: `${((stepIndex + 1) / totalSteps) * 100}%` }}
             />
           </div>
 
           {/* Header */}
-          <div className="px-5 py-3 border-b border-[#20406a] flex items-center gap-3">
+          <div className="px-5 py-3 border-b border-[#525252] flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center">
               <GraduationCap size={16} className="text-purple-400" />
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-bold text-[#e4f2f8]">{step.title}</h3>
-              <span className="text-[10px] text-[#5a8caa]">
+              <h3 className="text-sm font-bold text-[#f5f5f5]">{step.title}</h3>
+              <span className="text-[10px] text-[#6b6b6b]">
                 Passo {stepIndex + 1} de {totalSteps}
               </span>
             </div>
-            <button onClick={stopTour} className="text-[#5a8caa] hover:text-white p-1">
+            <button onClick={stopTour} className="text-[#6b6b6b] hover:text-[#f5f5f5] p-1">
               <X size={16} />
             </button>
           </div>
 
           {/* Content */}
           <div className="px-5 py-4 space-y-3">
-            <p className="text-xs text-[#c8dce8] leading-relaxed">{step.description}</p>
+            <p className="text-xs text-[#f5f5f5] leading-relaxed">{step.description}</p>
 
             {step.insight && (
               <div className="flex items-start gap-2 bg-purple-500/8 border border-purple-500/15 rounded-lg px-3 py-2.5">
@@ -322,10 +322,10 @@ function TourOverlay({
           </div>
 
           {/* Footer — Navigation */}
-          <div className="px-5 py-3 bg-[#0d2040] border-t border-[#20406a] flex items-center gap-2">
+          <div className="px-5 py-3 bg-[#2c2c2c] border-t border-[#525252] flex items-center gap-2">
             <button
               onClick={stopTour}
-              className="text-[10px] text-[#5a8caa] hover:text-white flex items-center gap-1 px-2 py-1.5"
+              className="text-[10px] text-[#6b6b6b] hover:text-[#f5f5f5] flex items-center gap-1 px-2 py-1.5"
             >
               <SkipForward size={10} /> Pular
             </button>
@@ -333,14 +333,14 @@ function TourOverlay({
             {stepIndex > 0 && (
               <button
                 onClick={prevStep}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[#8fb3c8] hover:text-white hover:bg-[#14294e] transition-colors"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[#a3a3a3] hover:text-[#f5f5f5] hover:bg-[#484848]/40 transition-colors"
               >
                 <ChevronLeft size={12} /> Anterior
               </button>
             )}
             <button
               onClick={nextStep}
-              className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-[11px] font-bold text-white bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 transition-all shadow-lg"
+              className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-[11px] font-bold text-[#ffffff] bg-[#f97316] hover:bg-[#ea580c] transition-all shadow-lg"
             >
               {stepIndex < totalSteps - 1 ? (
                 <>Próximo <ChevronRight size={12} /></>

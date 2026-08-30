@@ -55,6 +55,28 @@ export function GisEditorPage() {
   const [tool, setTool] = useState<"select" | "pv" | "trecho" | "pan">("pan")
   const [selectedPv, setSelectedPv] = useState<PvNode | null>(null)
   const [showPanel, setShowPanel] = useState(true)
+  const [trechoStartId, setTrechoStartId] = useState<string | null>(null)
+  const toolRef = useRef(tool)
+  toolRef.current = tool
+  const pvsRef = useRef(pvs)
+  pvsRef.current = pvs
+  const trechoStartIdRef = useRef(trechoStartId)
+  trechoStartIdRef.current = trechoStartId
+
+  function handlePvClickForTrecho(pv: PvNode) {
+    if (toolRef.current !== "trecho") { setSelectedPv(pv); return }
+    const startId = trechoStartIdRef.current
+    if (!startId) { setTrechoStartId(pv.id); return }
+    if (startId === pv.id) { setTrechoStartId(null); return }
+    const from = pvsRef.current.find(p => p.id === startId)
+    if (!from) { setTrechoStartId(null); return }
+    const latlngs: [number, number][] = [[from.lat, from.lng], [pv.lat, pv.lng]]
+    const ext = mapRef.current ? mapRef.current.distance([from.lat, from.lng], [pv.lat, pv.lng]) : 0
+    const trecho: Trecho = { id: `trecho-${Date.now()}`, from: from.id, to: pv.id, dn: 150, material: "PVC", ext: Math.round(ext * 100) / 100, latlngs }
+    L.polyline(latlngs, { color: "#00e6a0", weight: 3 }).addTo(drawnItemsRef.current)
+    setTrechos(ts => [...ts, trecho])
+    setTrechoStartId(null)
+  }
 
   // Init map
   useEffect(() => {
@@ -91,7 +113,7 @@ export function GisEditorPage() {
         const pv: PvNode = { id, lat: e.latlng.lat, lng: e.latlng.lng, nome: `PV-${pvs.length + 1}`, cota: 0, prof: 0 }
         const marker = L.marker(e.latlng, { icon: PV_ICON, draggable: true })
           .bindTooltip(pv.nome, { permanent: true, direction: "top", offset: [0, -10], className: "pv-tooltip" })
-        marker.on("click", () => setSelectedPv(pv))
+        marker.on("click", () => handlePvClickForTrecho(pv))
         marker.on("dragend", (ev: any) => {
           const pos = ev.target.getLatLng()
           setPvs(ps => ps.map(p => p.id === id ? { ...p, lat: pos.lat, lng: pos.lng } : p))
@@ -187,9 +209,9 @@ export function GisEditorPage() {
           <Upload size={18} />
           <input type="file" accept=".geojson,.json" onChange={importGeoJSON} className="hidden" />
         </label>
-        <label title="Carregar imagem/PDF como fundo" className="w-10 h-10 rounded-lg flex items-center justify-center text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8] cursor-pointer">
+        <label title="Carregar imagem como fundo" className="w-10 h-10 rounded-lg flex items-center justify-center text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8] cursor-pointer">
           <Image size={18} />
-          <input type="file" accept="image/*,.pdf" onChange={loadImageOverlay} className="hidden" />
+          <input type="file" accept="image/*" onChange={loadImageOverlay} className="hidden" />
         </label>
       </div>
 
@@ -199,7 +221,7 @@ export function GisEditorPage() {
 
         {/* Tool indicator */}
         <div className="absolute top-3 left-3 z-[1000] bg-[#0d2040]/90 border border-[#20406a] rounded-lg px-3 py-1.5 text-xs text-[#e4f2f8]">
-          {tool === "pv" ? "Clique no mapa para adicionar PV" : tool === "trecho" ? "Clique 2 PVs para tracar trecho" : "Navegacao"}
+          {tool === "pv" ? "Clique no mapa para adicionar PV" : tool === "trecho" ? (trechoStartId ? "Clique no PV de destino para tracar o trecho" : "Clique no PV de origem para tracar o trecho") : "Navegacao"}
           <span className="ml-2 text-[#5a8caa]">PVs: {pvs.length} | Trechos: {trechos.length}</span>
         </div>
       </div>
@@ -252,7 +274,13 @@ export function GisEditorPage() {
           {/* Trechos List */}
           <div className="p-3 border-t border-[#20406a] space-y-2">
             <div className="text-[10px] text-[#5a8caa] uppercase font-bold">Trechos ({trechos.length})</div>
-            {trechos.length === 0 && <div className="text-[10px] text-[#5a8caa] italic">Funcionalidade em desenvolvimento</div>}
+            {trechos.length === 0 && <div className="text-[10px] text-[#5a8caa] italic">Selecione a ferramenta Tracar Trecho e clique em 2 PVs</div>}
+            {trechos.map(t => (
+              <div key={t.id} className="p-2 rounded-lg border text-xs bg-[#112645] border-[#20406a] text-[#e4f2f8]">
+                <div className="font-medium">{t.from} → {t.to}</div>
+                <div className="text-[10px] text-[#5a8caa] font-mono">DN {t.dn} | {t.material} | {t.ext} m</div>
+              </div>
+            ))}
           </div>
         </div>
       )}

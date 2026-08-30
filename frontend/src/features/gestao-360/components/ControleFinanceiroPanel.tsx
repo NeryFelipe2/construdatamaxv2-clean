@@ -1,30 +1,137 @@
 import { useSupabaseDre } from '@/lib/useSupabaseDre'
+import { apiProjetoControleFluxo, apiProjetoPreencherControleFluxo } from '@/lib/api'
 import { useProjectContext } from '@/store/projectContext'
+import { useAppModeStore } from '@/store/appModeStore'
 import {
   DollarSign, TrendingDown, TrendingUp, AlertTriangle,
   Activity, Calendar, FileText, PieChart, Loader2
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+function extrairValorMonetario(texto: string): number {
+  const match = texto.match(/R\$\s*([\d.,]+)/)
+  if (!match) return 0
+  const normalizado = match[1].replace(/\./g, '').replace(',', '.')
+  const valor = Number(normalizado)
+  return Number.isFinite(valor) ? valor : 0
+}
+
+function parseTextoFluxoLocal(texto: string) {
+  const linhas = texto.split('\n')
+  let custosProjetados = 0
+  let receitasPrevistas = 0
+  let lancamentos = 0
+  let secaoAtual: 'custos' | 'receitas' | null = null
+
+  for (const linhaRaw of linhas) {
+    const linha = linhaRaw.trim()
+    if (!linha) continue
+    const linhaLower = linha.toLowerCase()
+
+    if (linhaLower.startsWith('custos')) {
+      secaoAtual = 'custos'
+      continue
+    }
+    if (linhaLower.startsWith('medicao') || linhaLower.startsWith('medição') || linhaLower.startsWith('recebimento')) {
+      secaoAtual = 'receitas'
+      continue
+    }
+    if (linhaLower.startsWith('desvios')) {
+      secaoAtual = null
+      continue
+    }
+
+    if (linha.startsWith('-') && secaoAtual) {
+      const valor = extrairValorMonetario(linha)
+      if (valor > 0) {
+        if (secaoAtual === 'custos') custosProjetados += valor
+        else receitasPrevistas += valor
+        lancamentos += 1
+      }
+    }
+  }
+
+  return {
+    resumo: {
+      custos_projetados: custosProjetados,
+      receitas_previstas: receitasPrevistas,
+      saldo_projetado: receitasPrevistas - custosProjetados,
+      lancamentos,
+    },
+  }
+}
 
 export function ControleFinanceiroPanel() {
   const { activeProjectId } = useProjectContext()
-  const { lancamentos, trechos, loading } = useSupabaseDre(activeProjectId || 'demo-1')
+  const { lancamentos, trechos, loading, connectionStatus, refresh } = useSupabaseDre(activeProjectId)
 
   const [bacInput, setBacInput] = useState<string>('')
+  const [textoFluxo, setTextoFluxo] = useState('')
+  const [fluxo, setFluxo] = useState<any>(null)
+  const [salvandoFluxo, setSalvandoFluxo] = useState(false)
+
+  const carregarFluxo = async () => {
+    if (!activeProjectId) {
+      setFluxo(null)
+      return
+    }
+    if (useAppModeStore.getState().isDemoMode) {
+      return
+    }
+    try {
+      const payload: any = await apiProjetoControleFluxo(activeProjectId)
+      setFluxo(payload.fluxo ?? null)
+    } catch {
+      setFluxo(null)
+    }
+  }
+
+  useEffect(() => {
+    void carregarFluxo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProjectId])
+
+  const salvarTextoFluxo = async () => {
+    if (!activeProjectId || !textoFluxo.trim()) return
+    setSalvandoFluxo(true)
+
+    if (useAppModeStore.getState().isDemoMode) {
+      try {
+        setFluxo(parseTextoFluxoLocal(textoFluxo))
+        setTextoFluxo('')
+        alert('Controle de obra e fluxo projetado preenchidos (dados locais - modo demo).')
+      } finally {
+        setSalvandoFluxo(false)
+      }
+      return
+    }
+
+    try {
+      const payload: any = await apiProjetoPreencherControleFluxo(activeProjectId, textoFluxo)
+      setFluxo(payload.fluxo ?? null)
+      setTextoFluxo('')
+      await refresh()
+      alert('Controle de obra e fluxo projetado preenchidos.')
+    } catch (e: any) {
+      alert(e?.message || 'Falha ao preencher controle/fluxo.')
+    } finally {
+      setSalvandoFluxo(false)
+    }
+  }
 
   // ----- Financial Calculations -----
   const metrics = useMemo(() => {
     // 1. BAC = Orçamentor Total 
     const trechosBac = trechos.reduce((acc, t) => acc + Number(t.custo_total || 0), 0)
-    const BAC = trechosBac > 0 ? trechosBac : 789171.00 // fallback mock
+    const BAC = trechosBac > 0 ? trechosBac : 789171.00
 
     // 2. EV = Earned Value 
     let EV = trechos.filter(t => t.status === 'executado').reduce((acc, t) => acc + Number(t.custo_total || 0), 0)
-    if (EV === 0 && trechos.length === 0) EV = 7891.71 // mock
+    if (EV === 0 && trechos.length === 0) EV = 7891.71
 
     // 3. AC = Actual Cost
     let AC = lancamentos.filter(l => l.tipo === 'DESPESA').reduce((acc, l) => acc + Number(l.valor || 0), 0)
-    if (AC === 0 && lancamentos.length === 0) AC = 7891.71 // mock
+    if (AC === 0 && lancamentos.length === 0) AC = 7891.71
 
     // 4. PV = Planned Value
     const PV = EV > 0 ? EV * 1.1 : 8500.00 
@@ -56,6 +163,7 @@ export function ControleFinanceiroPanel() {
   const formatBRL = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
   }
+  const fluxoResumo = (fluxo?.resumo ?? {}) as Record<string, number>
 
   if (loading) {
     return (
@@ -77,6 +185,65 @@ export function ControleFinanceiroPanel() {
         <p className="text-sm text-gray-500">
           Acompanhe o desempenho financeiro com indicadores EVM (Earned Value Management).
         </p>
+        <div className="mt-2 text-[11px] font-medium">
+          <span className={`inline-flex items-center rounded-full px-2 py-1 ${
+            connectionStatus === 'connected'
+              ? 'bg-emerald-50 text-emerald-700'
+              : connectionStatus === 'partial'
+                ? 'bg-amber-50 text-amber-700'
+                : 'bg-slate-100 text-slate-600'
+          }`}>
+            {connectionStatus === 'connected' ? 'Canonico' : connectionStatus === 'partial' ? 'Parcial' : 'Local'}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <FileText size={16} className="text-blue-500" />
+              Preencher com Texto
+            </h3>
+            <button
+              type="button"
+              onClick={salvarTextoFluxo}
+              disabled={salvandoFluxo || !textoFluxo.trim()}
+              className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold disabled:opacity-40"
+            >
+              {salvandoFluxo ? 'Processando...' : 'Lancar'}
+            </button>
+          </div>
+          <textarea
+            value={textoFluxo}
+            onChange={(e) => setTextoFluxo(e.target.value)}
+            className="w-full min-h-[145px] rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800 outline-none focus:border-blue-500"
+            placeholder={`Data base: 26/04/2026\nObra: Tatui\nResponsavel: Icaro\n\nCustos fixos:\n- Administrativo abril R$ 8.500,00\n\nMedicao prevista:\n- Medicao abril R$ 82.000,00\n\nRecebimento previsto:\n- Recebimento 20/05/2026 R$ 82.000,00\n\nDesvios:\n- Atraso de material impacta producao`}
+          />
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <TrendingUp size={16} className="text-emerald-500" />
+            Fluxo Projetado
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg bg-rose-50 p-3">
+              <div className="text-[10px] uppercase font-bold text-rose-500">Custos</div>
+              <div className="text-lg font-bold text-rose-700">{formatBRL(Number(fluxoResumo.custos_projetados || 0))}</div>
+            </div>
+            <div className="rounded-lg bg-emerald-50 p-3">
+              <div className="text-[10px] uppercase font-bold text-emerald-500">Recebimentos</div>
+              <div className="text-lg font-bold text-emerald-700">{formatBRL(Number(fluxoResumo.receitas_previstas || 0))}</div>
+            </div>
+            <div className="rounded-lg bg-slate-50 p-3 col-span-2">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Saldo projetado</div>
+              <div className={`text-2xl font-bold ${Number(fluxoResumo.saldo_projetado || 0) >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                {formatBRL(Number(fluxoResumo.saldo_projetado || 0))}
+              </div>
+              <div className="text-[10px] text-gray-400 mt-1">{Number(fluxoResumo.lancamentos || 0)} lancamento(s) projetado(s)</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* CORE METRICS GRID */}

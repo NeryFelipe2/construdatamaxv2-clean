@@ -1,30 +1,36 @@
 import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useState } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useProjectContext } from "@/store/projectContext";
+import type { DbProjeto } from "@/lib/supabase";
 import { useThemeStore, LayoutTheme } from "@/store/themeStore";
+import { useAppModeStore } from "@/store/appModeStore";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { AuthGate } from "@/components/auth/AuthGate";
+import { OrgSelector } from "@/components/layout/OrgSelector";
+import { UserMenu } from "@/components/layout/UserMenu";
+import { DemoBanner } from "@/components/shared/DemoBanner";
+import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 import { TourProvider } from "@/components/ui/GuidedTour";
 import {
   Menu, X, ChevronLeft, ChevronRight, ChevronDown, Plus,
-  Cpu, Radio, PackageSearch, Users, Wrench, Calendar,
-  CalendarClock, Target, FileText, Calculator, Layers,
-  Map, Network, LayoutDashboard, ClipboardList, FolderKanban,
-  FileSearch, Monitor, MessageSquare, Building2, UserCog,
-  GitBranch, CheckSquare, Sun, Moon, Brain, Palette,
+  Building2, Palette, FlaskConical, Pencil,
 } from "lucide-react";
+import { NAV_GROUPS, type NavItem } from "@/config/navigation";
 
 // ─── Lazy-loaded modules ────────────────────────────────────────────────────
 const TorreDeControlePage = lazy(() => import("@/features/torre-de-controle/index").then((m) => ({ default: m.TorreDeControlePage })));
 const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) => ({ default: m.Gestao360Page })));
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
-const MaoDeObraPage = lazy(() => import("@/features/mao-de-obra/index").then((m) => ({ default: m.MaoDeObraPage })));
+const RecursosHumanosPage = lazy(() => import("@/features/recursos-humanos/index").then((m) => ({ default: m.RecursosHumanosPage })));
+const UsuariosPage = lazy(() => import("@/features/usuarios/index").then((m) => ({ default: m.UsuariosPage })));
+const AuditoriaPage = lazy(() => import("@/features/auditoria/index").then((m) => ({ default: m.AuditoriaPage })));
 const OtimizacaoFrotaPage = lazy(() => import("@/features/otimizacao-frota/index").then((m) => ({ default: m.default })));
 const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos/index").then((m) => ({ default: m.GestaoEquipamentosPage })));
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
 const PlanejamentoPage = lazy(() => import("@/features/planejamento/index").then((m) => ({ default: m.PlanejamentoPage })));
 const Relatorio360Page = lazy(() => import("@/features/relatorio360/index").then((m) => ({ default: m.Relatorio360Page })));
-const RdoListaPage = lazy(() => import("@/features/rdo-lista/index").then((m) => ({ default: m.RdoListaPage })));
 const Rede360Page = lazy(() => import("@/features/rede-360/index").then((m) => ({ default: m.Rede360Page })));
 const LpsPage = lazy(() => import("@/features/lps-lean/index").then((m) => ({ default: m.LpsPage })));
 const BimPage = lazy(() => import("@/features/bim/index").then((m) => ({ default: m.BimPage })));
@@ -41,53 +47,29 @@ const IaAnalyticsPage = lazy(() => import("@/features/ia-analytics/index").then(
 const GisEditorPage = lazy(() => import("@/features/gis-editor/index").then((m) => ({ default: m.GisEditorPage })));
 const EvmPage = lazy(() => import("@/features/evm/index").then((m) => ({ default: m.EvmPage })));
 const PlanejamentoMestrePage = lazy(() => import("@/features/planejamento-mestre/index").then((m) => ({ default: m.PlanejamentoMestrePage })));
+const NsPlanejamentoPage = lazy(() => import("@/features/ns-planejamento/index").then((m) => ({ default: m.NsPlanejamentoPage })));
 const OperacaoCampoPage = lazy(() => import("@/features/operacao-campo/index").then((m) => ({ default: m.OperacaoCampoPage })));
 const MotorNsV5Page = lazy(() => import("@/features/motor-ns-v5/index").then((m) => ({ default: m.MotorNsV5Page })));
 const LeitorPdfPage = lazy(() => import("@/features/leitor-pdf/index").then((m) => ({ default: m.LeitorPdfPage })));
 const EngineV5Dashboard = lazy(() => import("@/features/engine-v5/index").then((m) => ({ default: m.default })));
 const DreFinanceiroPage = lazy(() => import("@/features/dre-financeiro/index").then((m) => ({ default: m.DreFinanceiroPage })));
+const MedicaoPage = lazy(() => import("@/features/medicao/index").then((m) => ({ default: m.MedicaoPage })));
 const AgentChatPage = lazy(() => import("@/features/agent-chat/index").then((m) => ({ default: m.AgentChatPage })));
+const CampoWhatsappPage = lazy(() => import("@/features/campo-whatsapp/index").then((m) => ({ default: m.CampoWhatsappPage })));
+const ProgramacaoSemanaPage = lazy(() => import("@/features/programacao-semana/index").then((m) => ({ default: m.ProgramacaoSemanaPage })));
+const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index").then((m) => ({ default: m.PlanilhasModeloPage })));
+const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
+const MetaLigacoesPage = lazy(() => import("@/features/meta-ligacoes/index").then((m) => ({ default: m.MetaLigacoesPage })));
+const LoginPage = lazy(() => import("@/features/login/index").then((m) => ({ default: m.LoginPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
-const navItems = [
-  { section: "Gestão" },
-  { label: "Gestão 360", icon: LayoutDashboard, to: "/app/gestao-360" },
-  { label: "Torre Controle", icon: Radio, to: "/app/torre-de-controle" },
-  { label: "Projetos", icon: FolderKanban, to: "/app/projetos" },
-  { section: "Engenharia" },
-  { label: "Motor NS V5", icon: Monitor, to: "/app/ns-v5" },
-  { label: "Mapa / GIS", icon: Map, to: "/app/mapa-interativo" },
-  { label: "BIM 3D/4D/5D", icon: Layers, to: "/app/bim" },
-  { label: "Rede 360", icon: Network, to: "/app/rede-360" },
-  { label: "Pré-Construção", icon: FileSearch, to: "/app/pre-construcao" },
-  { section: "Planejamento" },
-  { label: "Planejamento", icon: CalendarClock, to: "/app/planejamento" },
-  { label: "Plan. Mestre", icon: CalendarClock, to: "/app/planejamento-mestre" },
-  { label: "Agenda", icon: Calendar, to: "/app/agenda" },
-  { label: "LPS / Lean", icon: Target, to: "/app/lps-lean" },
-  { label: "EVM / Curva S", icon: Calculator, to: "/app/evm" },
-  { section: "Financeiro" },
-  { label: "DRE & Resultado", icon: Calculator, to: "/app/dre-financeiro" },
-  { section: "Operação de Campo" },
-  { label: "RDO", icon: FileText, to: "/app/rdo" },
-  { label: "RDOs WhatsApp (Live)", icon: FileText, to: "/app/rdo-lista" },
-  { label: "Relatório 360", icon: ClipboardList, to: "/app/relatorio360" },
-  { label: "Punch List", icon: CheckSquare, to: "/app/punch-list" },
-  { section: "Recursos" },
-  { label: "Suprimentos", icon: PackageSearch, to: "/app/suprimentos" },
-  { label: "Mão de Obra", icon: Users, to: "/app/mao-de-obra" },
-  { label: "Equipamentos", icon: Wrench, to: "/app/gestao-equipamentos" },
-  { label: "Quantitativos", icon: Calculator, to: "/app/quantitativos" },
-  { section: "IA & Inteligência" },
-  { label: "Engine V5", icon: Cpu, to: "/app/engine-v5" },
-  { label: "IA & Analytics", icon: Brain, to: "/app/ia-analytics" },
-  { label: "Agente Chat", icon: MessageSquare, to: "/app/agent-chat" },
-  { label: "Leitor PDF", icon: FileSearch, to: "/app/leitor-pdf" },
-  { section: "Comunicação" },
-  { label: "Contatos", icon: UserCog, to: "/app/gestao-contatos" },
-  { label: "Fluxo Oper.", icon: GitBranch, to: "/app/fluxo-operacional" },
-  { label: "WhatsApp RDO", icon: MessageSquare, to: "/app/whatsapp-rdo" },
-] as const;
+// Derived from the shared NAV_GROUPS config (src/config/navigation.ts) — the
+// same source AppLayout.tsx (eKyte theme) reads from, so the two menus can
+// never drift apart again (see 20/07/2026 fix).
+const navItems: ({ section: string } | NavItem)[] = NAV_GROUPS.flatMap((g) => [
+  { section: g.category },
+  ...g.items,
+]);
 
 // ─── Loading fallback ───────────────────────────────────────────────────────
 function RouteFallback() {
@@ -100,8 +82,46 @@ function RouteFallback() {
     </div>
   );
 }
+// Isola crashes de página: sem isso, uma exceção em qualquer módulo desmonta a
+// árvore React inteira e o app vira tela em branco sem menu.
+class RouteErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("Erro no módulo da rota:", error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="flex items-center justify-center h-full p-8">
+          <div className="max-w-md w-full bg-red-50 border border-red-200 rounded-xl p-6 text-center space-y-3">
+            <div className="text-red-600 font-bold text-sm">Este módulo encontrou um erro</div>
+            <div className="text-red-500 text-xs font-mono break-all">{this.state.error.message}</div>
+            <button
+              onClick={() => this.setState({ error: null })}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function LazyRoute({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <RouteErrorBoundary>{children}</RouteErrorBoundary>
+    </Suspense>
+  );
 }
 
 // ─── Theme Switcher FAB (floating action button) ────────────────────────────
@@ -143,6 +163,8 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
     try { return localStorage.getItem(SIDEBAR_KEY) !== "false"; } catch { return true; }
   });
   const cycleTheme = useThemeStore((s) => s.cycleTheme);
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode);
+  const toggleDemoMode = useAppModeStore((s) => s.toggleDemoMode);
 
   function toggleSidebar() {
     setIsOpen((prev) => {
@@ -198,7 +220,7 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
             );
           }
           if (!("to" in item)) return null;
-          const nav = item as { label: string; icon: typeof Monitor; to: string };
+          const nav = item as NavItem;
           return (
             <NavLink
               key={nav.to}
@@ -236,6 +258,17 @@ function Sidebar({ isDark, onClose }: { isDark: boolean; onClose?: () => void })
             {isOpen ? <ChevronLeft size={20} className="shrink-0" /> : <ChevronRight size={20} className="shrink-0" />}
             {isOpen && <span className="text-xs font-medium whitespace-nowrap">Recolher</span>}
           </button>
+          <button
+            onClick={toggleDemoMode}
+            title={isDemoMode ? "Desativar Modo Demo" : "Ativar Modo Demo"}
+            className={cn(
+              "flex items-center gap-3 h-10 px-[10px] rounded-lg transition-colors",
+              isDemoMode ? "bg-[#2abfdc]/12 text-[#2abfdc]" : `${c.itemDefault} ${c.itemHover}`,
+            )}
+          >
+            <FlaskConical size={20} className="shrink-0" />
+            {isOpen && <span className="text-xs font-medium whitespace-nowrap">{isDemoMode ? "Modo Demo: ON" : "Modo Demo: OFF"}</span>}
+          </button>
         </div>
       </nav>
     </aside>
@@ -248,11 +281,13 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
   const activeProjectId = useProjectContext((s) => s.activeProjectId);
   const setActiveProject = useProjectContext((s) => s.setActiveProject);
   const addProjeto = useProjectContext((s) => s.addProjeto);
+  const updateProjeto = useProjectContext((s) => s.updateProjeto);
   const [open, setOpen] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [novoNome, setNovoNome] = useState("");
   const [novoCidade, setNovoCidade] = useState("");
   const [novoTipo, setNovoTipo] = useState<"agua" | "esgoto" | "misto">("esgoto");
+  const [editOpen, setEditOpen] = useState(false);
 
   const active = projetos.find((p) => p.id === activeProjectId);
 
@@ -272,7 +307,7 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
     : { btnBg: "bg-white", btnBorder: "border-gray-300", btnHover: "hover:border-blue-400", text: "text-gray-800", accent: "text-blue-600", dropBg: "bg-white", dropBorder: "border-gray-200", inputBg: "bg-gray-50", section: "text-gray-400", sub: "text-gray-500", hoverRow: "hover:bg-gray-50", activeRow: "bg-blue-50" };
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-1.5">
       <button
         onClick={() => setOpen(!open)}
         className={cn("flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors max-w-[280px]", c.btnBg, c.btnBorder, c.btnHover)}
@@ -281,6 +316,26 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
         <span className={cn("text-xs font-medium truncate", c.text)}>{active?.nome ?? "Selecionar Projeto"}</span>
         <ChevronDown size={12} className={cn("shrink-0 transition-transform", c.sub, open && "rotate-180")} />
       </button>
+
+      {active && (
+        <button
+          onClick={() => setEditOpen(true)}
+          title="Editar contrato do projeto"
+          aria-label="Editar contrato do projeto"
+          className={cn("flex items-center justify-center w-7 h-7 rounded-lg border transition-colors shrink-0", c.btnBg, c.btnBorder, c.btnHover)}
+        >
+          <Pencil size={12} className={cn("shrink-0", c.accent)} />
+        </button>
+      )}
+
+      {editOpen && active && (
+        <EditContratoModal
+          isDark={isDark}
+          projeto={active}
+          onClose={() => setEditOpen(false)}
+          onSave={updateProjeto}
+        />
+      )}
 
       {open && (
         <>
@@ -340,6 +395,119 @@ function ProjectSelector({ isDark }: { isDark: boolean }) {
   );
 }
 
+// ─── Edit Contrato Modal ────────────────────────────────────────────────────
+function EditContratoModal({
+  isDark, projeto, onClose, onSave,
+}: {
+  isDark: boolean;
+  projeto: DbProjeto;
+  onClose: () => void;
+  onSave: (id: string, patch: Partial<DbProjeto>) => Promise<boolean>;
+}) {
+  const [contrato, setContrato] = useState(projeto.contrato ?? "");
+  const [valor, setValor] = useState(String(projeto.orcamento_total ?? 0));
+  const [dataInicio, setDataInicio] = useState(projeto.data_inicio ?? "");
+  const [dataFim, setDataFim] = useState(projeto.data_fim ?? "");
+  const [cidade, setCidade] = useState(projeto.cidade ?? "");
+  const [responsavel, setResponsavel] = useState(projeto.responsavel_nome ?? "");
+  const [saving, setSaving] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  const c = isDark
+    ? { bg: "bg-[#0d2040]", border: "border-[#20406a]", text: "text-[#e4f2f8]", sub: "text-[#5a8caa]", inputBg: "bg-[#071422]", overlay: "rgba(4,10,20,0.72)" }
+    : { bg: "bg-white", border: "border-gray-200", text: "text-gray-800", sub: "text-gray-500", inputBg: "bg-gray-50", overlay: "rgba(15,23,42,0.5)" };
+
+  async function handleSave() {
+    setSaving(true);
+    setErro(null);
+    const valorNum = Number(valor.replace(/\./g, "").replace(",", "."));
+    const ok = await onSave(projeto.id, {
+      contrato,
+      orcamento_total: Number.isFinite(valorNum) ? valorNum : projeto.orcamento_total,
+      data_inicio: dataInicio,
+      data_fim: dataFim || null,
+      cidade,
+      responsavel_nome: responsavel,
+    });
+    setSaving(false);
+    if (!ok) {
+      setErro("Salvo só localmente — Supabase indisponível no momento.");
+      return;
+    }
+    onClose();
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      style={{ background: c.overlay }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className={cn("w-full max-w-md rounded-2xl border shadow-2xl", c.bg, c.border)} onClick={(e) => e.stopPropagation()}>
+        <div className={cn("flex items-center justify-between px-5 py-4 border-b", c.border)}>
+          <h2 className={cn("text-sm font-bold", c.text)}>Editar contrato — {projeto.nome}</h2>
+          <button onClick={onClose} className={cn("w-7 h-7 flex items-center justify-center rounded-lg transition-colors", c.sub, "hover:text-red-400")}>
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-3 px-5 py-4">
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Nº do Contrato</span>
+            <input value={contrato} onChange={(e) => setContrato(e.target.value)}
+              placeholder="13.546/25-00"
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Valor do Contrato (R$)</span>
+            <input value={valor} onChange={(e) => setValor(e.target.value)}
+              inputMode="decimal" placeholder="690000"
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <div className="grid grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1">
+              <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Data Início</span>
+              <input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)}
+                className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Data Fim</span>
+              <input type="date" value={dataFim ?? ""} onChange={(e) => setDataFim(e.target.value)}
+                className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+            </label>
+          </div>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Cidade</span>
+            <input value={cidade} onChange={(e) => setCidade(e.target.value)}
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          <label className="flex flex-col gap-1">
+            <span className={cn("text-[10px] uppercase tracking-widest font-semibold", c.sub)}>Responsável</span>
+            <input value={responsavel} onChange={(e) => setResponsavel(e.target.value)}
+              className={cn("w-full border rounded-lg px-3 py-2 text-sm outline-none", c.inputBg, c.border, c.text)} />
+          </label>
+
+          {erro && <p className="text-[11px] text-amber-400">{erro}</p>}
+        </div>
+
+        <div className={cn("flex items-center justify-end gap-2 px-5 py-4 border-t", c.border)}>
+          <button onClick={onClose} className={cn("px-4 py-2 rounded-lg border text-xs transition-colors", c.border, c.sub)}>
+            Cancelar
+          </button>
+          <button onClick={handleSave} disabled={saving}
+            className="px-4 py-2 rounded-lg bg-cyan-500 text-white text-xs font-semibold hover:bg-cyan-600 disabled:opacity-50 transition-colors">
+            {saving ? "Salvando..." : "Salvar"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // SIDEBAR SHELL (used for Dark and Light themes)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -356,18 +524,26 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
+      <DemoBanner />
       <div className={cn("flex items-center gap-3 px-4 h-11 border-b shrink-0 z-20", headerBg, headerBorder)}>
         <button onClick={() => setMobileOpen(true)} className={cn("transition-colors md:hidden", mobileBtn)} aria-label="Abrir menu">
           <Menu size={20} />
         </button>
         <span className={cn("text-sm font-bold tracking-wide md:hidden", mobileTitle)}>ConstruData</span>
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-2">
+          <OrgSelector isDark={isDark} />
           <ProjectSelector isDark={isDark} />
         </div>
-        <div className="ml-auto md:hidden">
-          <ProjectSelector isDark={isDark} />
+        <div className="ml-auto flex items-center gap-2">
+          <div className="md:hidden">
+            <ProjectSelector isDark={isDark} />
+          </div>
+          <UserMenu isDark={isDark} />
         </div>
       </div>
+
+      {/* Trilho guiado da semana (P1..P5) — barra fina, colapsável via guiaStore */}
+      <GuiaTrilhoBar />
 
       <div className="flex flex-1 overflow-hidden">
         {mobileOpen && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={() => setMobileOpen(false)} />}
@@ -392,9 +568,18 @@ function SidebarShell({ isDark }: { isDark: boolean }) {
 function AdaptiveShell() {
   const theme = useThemeStore((s) => s.theme);
 
-  if (theme === 'ekyte') return <AppLayout />;
-  if (theme === 'dark')  return <SidebarShell isDark={true} />;
-  return <SidebarShell isDark={false} />;
+  const shell =
+    theme === 'ekyte' ? <AppLayout /> :
+    theme === 'dark'  ? <SidebarShell isDark={true} /> :
+    <SidebarShell isDark={false} />;
+
+  // FAB dentro do shell autenticado: nao aparece na tela de /login.
+  return (
+    <>
+      <ThemeSwitcherFab />
+      {shell}
+    </>
+  );
 }
 
 // ─── NS V5 wrapper ──────────────────────────────────────────────────────────
@@ -407,15 +592,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <TourProvider>
-      <ThemeSwitcherFab />
       <Routes>
+        <Route path="/login" element={<LazyRoute><LoginPage /></LazyRoute>} />
+        <Route element={<AuthGate />}>
         <Route path="/app" element={<AdaptiveShell />}>
           <Route index element={<Navigate to="/app/gestao-360" replace />} />
+          <Route path="guia" element={<LazyRoute><GuiaPage /></LazyRoute>} />
           <Route path="ns-v5" element={<NsV5Page />} />
           <Route path="gestao-360" element={<LazyRoute><Gestao360Page /></LazyRoute>} />
           <Route path="torre-de-controle" element={<LazyRoute><TorreDeControlePage /></LazyRoute>} />
           <Route path="relatorio360" element={<LazyRoute><Relatorio360Page /></LazyRoute>} />
-          <Route path="rdo-lista" element={<LazyRoute><RdoListaPage /></LazyRoute>} />
+          {/* 13/07/2026: unificado dentro de RDO (a query sem filtro de projeto virou redundante depois do fix do bug que zerava o Dashboard de /app/rdo) */}
+          <Route path="rdo-lista" element={<Navigate to="/app/rdo" replace />} />
           <Route path="projetos" element={<LazyRoute><ProjetosPage /></LazyRoute>} />
           <Route path="planejamento" element={<LazyRoute><PlanejamentoPage /></LazyRoute>} />
           <Route path="agenda" element={<LazyRoute><AgendaPage /></LazyRoute>} />
@@ -425,7 +613,13 @@ export default function App() {
           <Route path="rede-360" element={<LazyRoute><Rede360Page /></LazyRoute>} />
           <Route path="bim" element={<LazyRoute><BimPage /></LazyRoute>} />
           <Route path="suprimentos" element={<LazyRoute><SuprimentosPage /></LazyRoute>} />
-          <Route path="mao-de-obra" element={<LazyRoute><MaoDeObraPage /></LazyRoute>} />
+          <Route path="recursos-humanos" element={<LazyRoute><RecursosHumanosPage /></LazyRoute>} />
+          {/* rotas antigas -> aba equivalente do novo modulo (nao quebra link salvo) */}
+          <Route path="equipes-kanban" element={<Navigate to="/app/recursos-humanos?aba=kanban" replace />} />
+          <Route path="pessoal" element={<Navigate to="/app/recursos-humanos?aba=pessoal" replace />} />
+          <Route path="mao-de-obra" element={<Navigate to="/app/recursos-humanos?aba=mao-de-obra" replace />} />
+          <Route path="usuarios" element={<LazyRoute><UsuariosPage /></LazyRoute>} />
+          <Route path="auditoria" element={<LazyRoute><AuditoriaPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />
@@ -434,6 +628,8 @@ export default function App() {
           <Route path="gis-editor" element={<LazyRoute><GisEditorPage /></LazyRoute>} />
           <Route path="evm" element={<LazyRoute><EvmPage /></LazyRoute>} />
           <Route path="planejamento-mestre" element={<LazyRoute><PlanejamentoMestrePage /></LazyRoute>} />
+          <Route path="ns-planejamento" element={<LazyRoute><NsPlanejamentoPage /></LazyRoute>} />
+          <Route path="planilhas" element={<LazyRoute><PlanilhasModeloPage /></LazyRoute>} />
           <Route path="operacao-campo" element={<LazyRoute><OperacaoCampoPage /></LazyRoute>} />
           <Route path="gestao-contatos" element={<LazyRoute><GestaoContatosPage /></LazyRoute>} />
           <Route path="fluxo-operacional" element={<LazyRoute><FluxoOperacionalPage /></LazyRoute>} />
@@ -442,8 +638,17 @@ export default function App() {
           <Route path="leitor-pdf" element={<LazyRoute><LeitorPdfPage /></LazyRoute>} />
           <Route path="engine-v5" element={<LazyRoute><EngineV5Dashboard /></LazyRoute>} />
           <Route path="dre-financeiro" element={<LazyRoute><DreFinanceiroPage /></LazyRoute>} />
+          <Route path="medicao" element={<LazyRoute><MedicaoPage /></LazyRoute>} />
           <Route path="agent-chat" element={<LazyRoute><AgentChatPage /></LazyRoute>} />
+          {/* Aposentado 10/07/2026: dado 100% congelado (extração pontual de 28/06), sem indicação forte de obsolescência — RDO já mostra dado real/atual */}
+          <Route path="wcr-diario" element={<Navigate to="/app/rdo" replace />} />
+          <Route path="programacao-semana" element={<LazyRoute><ProgramacaoSemanaPage /></LazyRoute>} />
+          <Route path="meta-ligacoes" element={<LazyRoute><MetaLigacoesPage /></LazyRoute>} />
+          {/* 13/07/2026: virou a aba "Diário / Equipes" dentro de RDO — uma tela só, tudo no mesmo lugar */}
+          <Route path="diario-obra" element={<Navigate to="/app/rdo" replace />} />
+          <Route path="campo-whatsapp" element={<LazyRoute><CampoWhatsappPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
+        </Route>
         </Route>
         <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>

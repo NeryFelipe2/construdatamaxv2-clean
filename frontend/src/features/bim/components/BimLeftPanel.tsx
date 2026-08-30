@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useBimStore } from '@/store/bimStore'
-import { Building2, DollarSign, Eye, EyeOff, Layers as LayersIcon, Droplets } from 'lucide-react'
+import { useIfcModels } from '@/hooks/useIfcModels'
+import { Building2, DollarSign, Eye, EyeOff, Layers as LayersIcon, Droplets, FileBox, ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 function fmtBRL(n: number) {
@@ -20,7 +22,12 @@ export function BimLeftPanel() {
   const toggleLayer    = useBimStore((s) => s.toggleLayer)
   const setActiveProject = useBimStore((s) => s.setActiveProject)
 
-  if (projects.length === 0) {
+  const { modelos: ifcModelos, loading: ifcLoading, error: ifcError } = useIfcModels()
+  const [expandedIfcId, setExpandedIfcId] = useState<string | null>(null)
+
+  const hasIfcSection = ifcLoading || !!ifcError || ifcModelos.length > 0
+
+  if (projects.length === 0 && !hasIfcSection) {
     return (
       <div className="w-56 bg-[#2c2c2c] border-r border-[#3d3d3d] flex flex-col items-center justify-center p-4 shrink-0">
         <LayersIcon size={32} className="text-gray-700 mb-2" />
@@ -34,6 +41,67 @@ export function BimLeftPanel() {
 
   return (
     <div className="w-56 bg-[#2c2c2c] border-r border-[#3d3d3d] flex flex-col shrink-0 overflow-y-auto">
+      {/* Modelos IFC cadastrados (Supabase, real) */}
+      {hasIfcSection && (
+        <div className="p-2 border-b border-[#3d3d3d]">
+          <p className="text-[#6b6b6b] text-[10px] font-semibold uppercase tracking-wider mb-1.5 px-1">
+            Modelos IFC cadastrados{ifcModelos.length > 0 ? ` (${ifcModelos.length})` : ''}
+          </p>
+          {ifcLoading && <p className="px-1 text-[11px] text-gray-600">Carregando…</p>}
+          {ifcError && (
+            <p className="px-1 text-[11px] text-amber-400">Erro ao carregar modelos IFC: {ifcError}</p>
+          )}
+          {!ifcLoading && !ifcError && ifcModelos.length === 0 && (
+            <p className="px-1 text-[11px] text-amber-400">Nenhum modelo IFC cadastrado.</p>
+          )}
+          <div className="space-y-1">
+            {ifcModelos.map((m) => {
+              const isOpen = expandedIfcId === m.id
+              const topTipos = Object.entries(m.tiposCount).sort((a, b) => b[1] - a[1]).slice(0, 6)
+              return (
+                <div key={m.id} className="rounded-lg border border-[#3d3d3d] overflow-hidden">
+                  <button
+                    onClick={() => setExpandedIfcId(isOpen ? null : m.id)}
+                    className="w-full text-left px-2 py-1.5 hover:bg-[#3d3d3d] transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <FileBox size={11} className="text-indigo-400 shrink-0" />
+                      <span className="text-xs text-[#f5f5f5] font-medium truncate flex-1">{m.fileName}</span>
+                      {isOpen ? <ChevronDown size={11} className="text-gray-600 shrink-0" /> : <ChevronRight size={11} className="text-gray-600 shrink-0" />}
+                    </div>
+                    <div className="flex items-center justify-between mt-1 pl-[19px]">
+                      {m.lod && (
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-600/40">
+                          {m.lod}
+                        </span>
+                      )}
+                      <span className="text-[10px] text-gray-600 ml-auto">{m.elementosCount.toLocaleString('pt-BR')} elementos</span>
+                    </div>
+                    {m.createdAt && (
+                      <p className="text-[10px] text-gray-700 mt-0.5 pl-[19px]">
+                        {new Date(m.createdAt).toLocaleDateString('pt-BR')}
+                      </p>
+                    )}
+                  </button>
+                  {isOpen && (
+                    <div className="px-2 py-1.5 bg-[#232323] border-t border-[#3d3d3d] space-y-0.5 max-h-40 overflow-y-auto">
+                      {topTipos.length === 0 ? (
+                        <p className="text-[10px] text-gray-600">Sem detalhamento por tipo IFC.</p>
+                      ) : topTipos.map(([tipo, qtd]) => (
+                        <div key={tipo} className="flex justify-between gap-2 text-[10px]">
+                          <span className="text-[#a3a3a3] truncate">{tipo}</span>
+                          <span className="text-[#f5f5f5] font-mono shrink-0">{qtd}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Project switcher */}
       {projects.length > 0 && (
         <div className="p-2 border-b border-[#3d3d3d]">

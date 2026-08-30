@@ -5,9 +5,10 @@
 import { useState, useMemo } from 'react'
 import {
   Search, Printer, Trash2, ChevronDown, ChevronRight,
-  Cloud, CloudRain, Sun, Zap, Camera, MapPin, Edit3, X,
+  Cloud, CloudRain, Sun, Zap, Camera, MapPin, Edit3, X, CheckCircle2,
 } from 'lucide-react'
 import { useRdoStore } from '@/store/rdoStore'
+import { useProjectContext } from '@/store/projectContext'
 import { printRdoPDF, printRdosBatchPDF } from '../utils/rdoPdfExport'
 import type { RDO, RdoWeatherCondition } from '@/types'
 
@@ -41,6 +42,25 @@ function statusBadge(status: string) {
 }
 
 // ─── Print layout (hidden on screen, visible when printing) ──────────────────
+
+function reviewBadge(rdo: RDO) {
+  const status = rdo.statusRevisao || 'rascunho'
+  const label: Record<string, string> = {
+    rascunho: 'Rascunho',
+    extraido: 'Extraido',
+    em_revisao: 'Em revisao',
+    finalizado: 'Finalizado',
+    rejeitado: 'Rejeitado',
+  }
+  const cls = status === 'finalizado'
+    ? 'bg-emerald-900/50 text-emerald-300'
+    : status === 'rejeitado'
+      ? 'bg-red-900/50 text-red-300'
+      : status === 'extraido'
+        ? 'bg-sky-900/50 text-sky-300'
+        : 'bg-yellow-900/50 text-yellow-300'
+  return <span className={`px-2 py-0.5 rounded-full text-xs ${cls}`}>{label[status] || status}</span>
+}
 
 function PrintLayout({ rdo }: { rdo: RDO }) {
   const totalWorkers = rdo.manpower.foremanCount + rdo.manpower.officialCount
@@ -213,12 +233,20 @@ function PrintLayout({ rdo }: { rdo: RDO }) {
 
 function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; onEdit: () => void }) {
   const [expanded, setExpanded] = useState(false)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const finalizarRdo = useRdoStore((s) => s.finalizarRdo)
   const totalWorkers = rdo.manpower.foremanCount + rdo.manpower.officialCount
     + rdo.manpower.helperCount + rdo.manpower.operatorCount
   const totalMeters = rdo.trechos.reduce((s, t) => s + t.executedMeters, 0)
 
   function handlePrint() {
     printRdoPDF(rdo)
+  }
+
+  async function handleFinalizeReview() {
+    if (!activeProjectId) return
+    const result = await finalizarRdo(activeProjectId, rdo.id)
+    alert(result ? 'RDO finalizado e medicao gerada.' : 'Falha ao finalizar RDO.')
   }
 
   return (
@@ -232,6 +260,7 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-white font-semibold">RDO #{rdo.number}</span>
             <span className="text-[#a3a3a3] text-sm">{fmtDate(rdo.date)}</span>
+            {reviewBadge(rdo)}
             <div className="flex items-center gap-1 text-[#a3a3a3] text-xs">
               {weatherIcon(rdo.weather.morning)}
               <span>{weatherLabel(rdo.weather.morning)}</span>
@@ -265,6 +294,16 @@ function RdoCard({ rdo, onDelete, onEdit }: { rdo: RDO; onDelete: () => void; on
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
+          {rdo.statusRevisao !== 'finalizado' && rdo.statusRevisao !== 'rejeitado' && (
+            <button
+              onClick={handleFinalizeReview}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700/80 hover:bg-emerald-600 text-white text-xs transition-colors"
+              title="Finalizar RDO V5"
+            >
+              <CheckCircle2 size={13} />
+              Finalizar
+            </button>
+          )}
           <button
             onClick={onEdit}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#484848] hover:bg-[#525252] text-[#f5f5f5] text-xs transition-colors"

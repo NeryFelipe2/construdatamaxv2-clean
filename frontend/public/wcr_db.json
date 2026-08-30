@@ -1,0 +1,1018 @@
+{
+ "projetos": [
+  {
+   "id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "nome": "WCR — Boi Malhado",
+   "contrato": "13.546/25-00",
+   "cidade": "São Paulo (Zona Norte)",
+   "cliente": "WCR Saneamento / Sabesp",
+   "tipo": "misto",
+   "data_inicio": "2026-06-11",
+   "data_fim": "2026-08-15",
+   "orcamento_total": 690000,
+   "status": "ativo",
+   "responsavel_nome": "Felipe Nery",
+   "responsavel_telefone": "5561981846325"
+  },
+  {
+   "id": "bf33d1fb-4716-5a9c-adce-97f1273615b2",
+   "nome": "WCR — Sakura",
+   "contrato": "13.546/25-00",
+   "cidade": "São Paulo (Zona Norte)",
+   "cliente": "WCR Saneamento / Sabesp",
+   "tipo": "misto",
+   "data_inicio": "2026-07-15",
+   "data_fim": "2026-09-02",
+   "orcamento_total": 520000,
+   "status": "ativo",
+   "responsavel_nome": "Felipe Nery",
+   "responsavel_telefone": "5561981846325"
+  },
+  {
+   "id": "1c318114-c465-526f-a967-a1f02e34a7c7",
+   "nome": "WCR — Comunidade do Retorno",
+   "contrato": "13.546/25-00",
+   "cidade": "São Paulo (Zona Norte)",
+   "cliente": "WCR Saneamento / Sabesp",
+   "tipo": "misto",
+   "data_inicio": "2026-06-29",
+   "data_fim": "2026-12-15",
+   "orcamento_total": 4800000,
+   "status": "ativo",
+   "responsavel_nome": "Felipe Nery / Jailton",
+   "responsavel_telefone": "5561981846325"
+  }
+ ],
+ "frentes": [
+  {
+   "id": "4b88a0cd-b13b-5b6f-b24e-a9eea89bea7a",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "nome": "Esgoto — Israel + Zé Claudino + Léo/Rodrigo",
+   "setor": "Boi Malhado",
+   "tipo_rede": "esgoto",
+   "extensao_total": 700,
+   "pvs_total": 60,
+   "status": "ativa"
+  },
+  {
+   "id": "c3b2ad51-66ed-5f6e-800f-b90ecdca600b",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "nome": "Água — Renan/Jesse + Ediel",
+   "setor": "Boi Malhado",
+   "tipo_rede": "agua",
+   "extensao_total": 500,
+   "pvs_total": 0,
+   "status": "ativa"
+  },
+  {
+   "id": "02e93b0a-5112-547b-ad0d-5faacb12d84f",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "nome": "Caixas U.M.A / Ramais — Mazinho",
+   "setor": "Boi Malhado",
+   "tipo_rede": "agua",
+   "extensao_total": 0,
+   "pvs_total": 0,
+   "status": "ativa"
+  },
+  {
+   "id": "1f0e7849-0477-59a8-b4cd-b523ab0e2099",
+   "projeto_id": "bf33d1fb-4716-5a9c-adce-97f1273615b2",
+   "nome": "Esgoto",
+   "setor": "Sakura",
+   "tipo_rede": "esgoto",
+   "extensao_total": 700,
+   "pvs_total": 45,
+   "status": "pausada"
+  },
+  {
+   "id": "85ab803e-a826-51a5-90ff-7fa34acb5906",
+   "projeto_id": "bf33d1fb-4716-5a9c-adce-97f1273615b2",
+   "nome": "Água",
+   "setor": "Sakura",
+   "tipo_rede": "agua",
+   "extensao_total": 550,
+   "pvs_total": 0,
+   "status": "pausada"
+  },
+  {
+   "id": "0d0a6a9f-8350-57d7-afc3-a6f6672d5b43",
+   "projeto_id": "1c318114-c465-526f-a967-a1f02e34a7c7",
+   "nome": "Esgoto — rede + coletor",
+   "setor": "Comunidade do Retorno",
+   "tipo_rede": "esgoto",
+   "extensao_total": 1065,
+   "pvs_total": 17,
+   "status": "pausada"
+  },
+  {
+   "id": "147e98c0-e166-5850-9019-893062d85267",
+   "projeto_id": "1c318114-c465-526f-a967-a1f02e34a7c7",
+   "nome": "Água MND — Jailton",
+   "setor": "Comunidade do Retorno",
+   "tipo_rede": "agua",
+   "extensao_total": 1000,
+   "pvs_total": 0,
+   "status": "pausada"
+  },
+  {
+   "id": "7a4cfca7-fcf2-5179-b90e-4ce2f67dfa0b",
+   "projeto_id": "1c318114-c465-526f-a967-a1f02e34a7c7",
+   "nome": "EEE — Estação Elevatória",
+   "setor": "Comunidade do Retorno",
+   "tipo_rede": "esgoto",
+   "extensao_total": 180,
+   "pvs_total": 1,
+   "status": "pausada"
+  }
+ ],
+ "contatos": [
+  {
+   "id": "b6a218c1-6d04-5b33-aca2-fc930e8ab0c0",
+   "nome": "Israel Neves",
+   "cargo": "Líder de equipe (ESGOTO)",
+   "telefone_whatsapp": "",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "ativo": true
+  },
+  {
+   "id": "1366953b-1c4f-5372-b8ad-3756ba294d5f",
+   "nome": "Renan",
+   "cargo": "Líder de equipe (AGUA)",
+   "telefone_whatsapp": "",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "ativo": true
+  },
+  {
+   "id": "8aee2bda-6b3f-572e-a9f3-c75cb1304457",
+   "nome": "Mazinho",
+   "cargo": "Líder de equipe (AGUA)",
+   "telefone_whatsapp": "",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "ativo": true
+  },
+  {
+   "id": "2b2e2dae-1f99-5844-b975-f453ba4fd0c8",
+   "nome": "Rodrigo / Léo",
+   "cargo": "Líder de equipe (ESGOTO)",
+   "telefone_whatsapp": "",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "ativo": true
+  },
+  {
+   "id": "2e76ce5c-7be7-5828-9f12-632ba0d4376c",
+   "nome": "José Claudino",
+   "cargo": "Líder de equipe (ESGOTO)",
+   "telefone_whatsapp": "",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "ativo": true
+  }
+ ],
+ "rdos": [
+  {
+   "id": "84fe6a8b-4587-5f5b-bdf8-e76c764f1c5d",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-11",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-12",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "a6b423f8-5ed8-5be3-97f8-cc363a44503c",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-13",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-15",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "32bf464d-3b25-5722-8c61-208661122373",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-16",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-17",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-18",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-19",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  },
+  {
+   "id": "53913b38-bd92-5bce-a5a1-7bfd871e4283",
+   "projeto_id": "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+   "data": "2026-06-21",
+   "clima": "Ensolarado",
+   "turno": "Diurno",
+   "status": "fechado"
+  }
+ ],
+ "rdo_equipes": [
+  {
+   "id": "931675a4-ab88-5db9-82e4-b071667e1f4a",
+   "rdo_id": "84fe6a8b-4587-5f5b-bdf8-e76c764f1c5d",
+   "tipo": "AGUA",
+   "lider_nome": "Geral / Administrativo"
+  },
+  {
+   "id": "0ab643e6-e92a-55eb-8e16-861cf791c5ab",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "GERAL",
+   "lider_nome": "Wellington (lider Rodrigo)"
+  },
+  {
+   "id": "901f7e08-eebd-5092-8576-9f7fe3cb63f0",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "AGUA",
+   "lider_nome": "Robert (motorista Marcos)"
+  },
+  {
+   "id": "3835f3b4-a915-5357-b159-719452baaaa0",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "ESGOTO",
+   "lider_nome": "Wellington 2 (lider Jose Glaudino)"
+  },
+  {
+   "id": "5ca61d1b-d9a2-584f-874f-a14f26600f86",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "AGUA",
+   "lider_nome": "Jesse (lider Renan)"
+  },
+  {
+   "id": "9e09ce11-91bb-5498-a740-91399383c4e3",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "AGUA",
+   "lider_nome": "Jesse (lider Mazinho)"
+  },
+  {
+   "id": "a799447b-0d97-5c62-8916-8632e5948a12",
+   "rdo_id": "ff8926c1-42a6-5e71-ac82-7879acd873d7",
+   "tipo": "GERAL",
+   "lider_nome": "Robert"
+  },
+  {
+   "id": "c7b95f4e-6e17-5272-b2c6-9e648079c1bc",
+   "rdo_id": "a6b423f8-5ed8-5be3-97f8-cc363a44503c",
+   "tipo": "AGUA",
+   "lider_nome": "Renan"
+  },
+  {
+   "id": "7085a10d-416b-5acb-9f1b-e398e47ecfde",
+   "rdo_id": "a6b423f8-5ed8-5be3-97f8-cc363a44503c",
+   "tipo": "AGUA",
+   "lider_nome": "Mazinho"
+  },
+  {
+   "id": "64b20033-03e0-51e0-8ce1-a42346fe9070",
+   "rdo_id": "a6b423f8-5ed8-5be3-97f8-cc363a44503c",
+   "tipo": "AGUA",
+   "lider_nome": "Robert"
+  },
+  {
+   "id": "9220c27c-b234-54a4-a264-82071bfb150e",
+   "rdo_id": "a6b423f8-5ed8-5be3-97f8-cc363a44503c",
+   "tipo": "GERAL",
+   "lider_nome": "Edson/Robert"
+  },
+  {
+   "id": "843b645d-090c-5368-8606-f310a04f583a",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "GERAL",
+   "lider_nome": "Geral / Administrativo"
+  },
+  {
+   "id": "d6b3c962-a958-5ee0-885a-c2a6eafcec9f",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "AGUA",
+   "lider_nome": "Renan"
+  },
+  {
+   "id": "4d0f5d7e-f7e0-550c-86b8-126f242e519e",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "GERAL",
+   "lider_nome": "Ediel"
+  },
+  {
+   "id": "951874e7-61a3-5552-b86b-48d62239064a",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "AGUA",
+   "lider_nome": "Mazinho"
+  },
+  {
+   "id": "527264e9-226e-5d3a-9910-00de21c4817f",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "ESGOTO",
+   "lider_nome": "Ze Claudino"
+  },
+  {
+   "id": "a68eed33-9c73-5ac0-91c4-fbc880a67ed1",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "ESGOTO",
+   "lider_nome": "Leo/Rodrigo"
+  },
+  {
+   "id": "a853d4a7-22a1-562f-bfec-e160a71609da",
+   "rdo_id": "732b02e6-36d7-532d-96f0-b43cafeda473",
+   "tipo": "ESGOTO",
+   "lider_nome": "Robert"
+  },
+  {
+   "id": "468ba45e-be1d-5108-ad7a-ea7a578b0ee6",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "AGUA",
+   "lider_nome": "Mazinho"
+  },
+  {
+   "id": "80800bb4-0282-5f43-8030-546caa1c5451",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "GERAL",
+   "lider_nome": "Edson"
+  },
+  {
+   "id": "873fff61-fba7-5ad9-917a-839bcf6ea135",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "AGUA",
+   "lider_nome": "Joao/Robert"
+  },
+  {
+   "id": "1344a126-d08e-556d-a464-f3ad2925145e",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "ESGOTO",
+   "lider_nome": "Leo/Rodrigo"
+  },
+  {
+   "id": "920bb26a-eeee-544d-9115-033c23b62fb3",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "ESGOTO",
+   "lider_nome": "Ze Glaudino"
+  },
+  {
+   "id": "efac9869-bdd9-5681-88e6-57afd59c93e4",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "AGUA",
+   "lider_nome": "Renan/Ediel"
+  },
+  {
+   "id": "dcee5a5b-f5a6-51a0-90f8-b32d4ad89a2f",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "AGUA",
+   "lider_nome": "Renan/Fabio"
+  },
+  {
+   "id": "99d4f452-a415-5a4b-a073-199a58bebc94",
+   "rdo_id": "32bf464d-3b25-5722-8c61-208661122373",
+   "tipo": "AGUA",
+   "lider_nome": "Geral / Administrativo"
+  },
+  {
+   "id": "43f5a747-2c09-5c28-96de-f27315160680",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "AGUA",
+   "lider_nome": "Geral / Administrativo"
+  },
+  {
+   "id": "f2580132-0290-568f-9bfb-a528e161e908",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "ESGOTO",
+   "lider_nome": "Leo/Rodrigo"
+  },
+  {
+   "id": "de6f8ddc-340a-59f4-8874-e2ac104a8e84",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "AGUA",
+   "lider_nome": "Renan/Ediel"
+  },
+  {
+   "id": "d56522e6-a3d5-5c28-b9f2-f33f7b500891",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "ESGOTO",
+   "lider_nome": "Ze Glaudino"
+  },
+  {
+   "id": "479af578-851b-5cfa-842f-7a826b69dea3",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "GERAL",
+   "lider_nome": "Joao/Edson/Robert"
+  },
+  {
+   "id": "37eadd2b-023e-5d0a-ac72-a62ef722acfc",
+   "rdo_id": "4d0127e1-2d60-5480-bb3a-8c6d2b0597b2",
+   "tipo": "AGUA",
+   "lider_nome": "Robert (Sao Cleto)"
+  },
+  {
+   "id": "a02e4005-b972-56f9-8009-58c00401a3e9",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "AGUA",
+   "lider_nome": "Renan + Ediel (combinadas)"
+  },
+  {
+   "id": "a39bf9dd-7476-54a3-94f4-5c4514d9274d",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "AGUA",
+   "lider_nome": "Geral / Administrativo"
+  },
+  {
+   "id": "4ccede89-9cba-5f13-974b-fc2bf8ba580c",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "ESGOTO",
+   "lider_nome": "Leo/Rodrigo"
+  },
+  {
+   "id": "cc431b05-d372-58b1-8610-e7b3fca6dd06",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "ESGOTO",
+   "lider_nome": "Ze Glaudino"
+  },
+  {
+   "id": "048c8985-c893-5ad8-843b-95a899d564be",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "AGUA",
+   "lider_nome": "Mazinho"
+  },
+  {
+   "id": "24df90db-b63f-5ae0-a386-feb5bb3e2b80",
+   "rdo_id": "390aeb83-b3d5-5643-8d9e-4d158bfdebdb",
+   "tipo": "AGUA",
+   "lider_nome": "Robert"
+  },
+  {
+   "id": "4ccc9c28-24f9-527a-8441-e500102a2346",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "ESGOTO",
+   "lider_nome": "Israel/Edson/Joao/Robert"
+  },
+  {
+   "id": "5c2e2e69-b43c-5d85-935c-4f1b6a3841ce",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "ESGOTO",
+   "lider_nome": "Ze Glaudino"
+  },
+  {
+   "id": "454af33a-5cf0-5271-bd48-e7de93ab940f",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "AGUA",
+   "lider_nome": "Renan/Ediel"
+  },
+  {
+   "id": "f61d107b-f0dc-5c37-a724-3689eec9bf7c",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "ESGOTO",
+   "lider_nome": "Leo"
+  },
+  {
+   "id": "7e8e22ff-d05a-58c1-8db0-36be7d3be29f",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "AGUA",
+   "lider_nome": "Mazinho"
+  },
+  {
+   "id": "abedd5fe-30aa-542e-87d5-217c9e3b5a3f",
+   "rdo_id": "e96a7767-8305-5f66-b23a-fb1d06908bdb",
+   "tipo": "AGUA",
+   "lider_nome": "Renan (Jesse)"
+  },
+  {
+   "id": "e36cd598-e1b9-57d1-8907-156c74fcb1c7",
+   "rdo_id": "53913b38-bd92-5bce-a5a1-7bfd871e4283",
+   "tipo": "GERAL",
+   "lider_nome": "Israel"
+  }
+ ],
+ "rdo_atividades": [
+  {
+   "id": "ccdf271d-5f4f-5245-9f6c-9e06610f2bbc",
+   "equipe_id": "931675a4-ab88-5db9-82e4-b071667e1f4a",
+   "rua": "Boi Malhado",
+   "servico": "relacao/levantamento de ligacoes de agua (administrativo, sera enviado pela programadora do consorcio)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": ""
+  },
+  {
+   "id": "c00e912c-7a61-5137-b036-0dfb5f9e920a",
+   "equipe_id": "931675a4-ab88-5db9-82e4-b071667e1f4a",
+   "rua": "comunidade do retorno",
+   "servico": "necessidade de projetar rede auxiliar (planejamento, citado por Felipe Nery)",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": ""
+  },
+  {
+   "id": "525431df-06b9-507c-8380-868d02b63b26",
+   "equipe_id": "0ab643e6-e92a-55eb-8e16-861cf791c5ab",
+   "rua": "rua do campo (casa 57A)",
+   "servico": "limpeza da rua e instalacao de 1 caixa U.M.A; LA 1; LE 1 (casa 57A)",
+   "tubo": "geral",
+   "metragem": 0,
+   "observacao": "1 caixa UMA; LA 1; LE 1"
+  },
+  {
+   "id": "44f68a62-2f72-5093-8700-1a74e856a032",
+   "equipe_id": "901f7e08-eebd-5092-8576-9f7fe3cb63f0",
+   "rua": "canteiro",
+   "servico": "busca de material no canteiro (50 caixas U.M.A)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "50 caixas U.M.A"
+  },
+  {
+   "id": "c9bb73df-4756-5bf9-8a1c-355a7803ca71",
+   "equipe_id": "3835f3b4-a915-5357-b159-719452baaaa0",
+   "rua": "rua 2 casas 23, 33, 48, 54",
+   "servico": "ligacoes de esgoto (LE) e reparos",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "4 LE; 4 reparos"
+  },
+  {
+   "id": "20408351-f0a5-58e8-9681-8f96cbdc71f4",
+   "equipe_id": "5ca61d1b-d9a2-584f-874f-a14f26600f86",
+   "rua": "",
+   "servico": "execucao de ligacoes de agua com cavalete e HM (cavalete duplo, 2 HM)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "27 ligacoes de agua"
+  },
+  {
+   "id": "b6f09a22-2a74-5410-9071-a98ba22c1410",
+   "equipe_id": "9e09ce11-91bb-5498-a740-91399383c4e3",
+   "rua": "Rua Bahia (casas 45,43,50,41,37,41,31,1,36,30,4)",
+   "servico": "instalacao de caixas U.M.A",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "11 caixas U.M.A"
+  },
+  {
+   "id": "faee3156-9ed9-588a-86c8-33c3fc307f8e",
+   "equipe_id": "a799447b-0d97-5c62-8916-8632e5948a12",
+   "rua": "Travessa Primeiro de Abril",
+   "servico": "retirada de concreto (2 PI) e concreto retirado",
+   "tubo": "geral",
+   "metragem": 5.0,
+   "observacao": "2 PI; 5 metros de concreto retirado"
+  },
+  {
+   "id": "c06acb4d-1085-5bcf-abc4-9f3131749c19",
+   "equipe_id": "a799447b-0d97-5c62-8916-8632e5948a12",
+   "rua": "Travessa pingo de mel",
+   "servico": "concretagem",
+   "tubo": "geral",
+   "metragem": 30.0,
+   "observacao": "30 metros"
+  },
+  {
+   "id": "9c1db63e-1327-5645-b256-6a0e6e24661d",
+   "equipe_id": "a799447b-0d97-5c62-8916-8632e5948a12",
+   "rua": "Travessa meu cantinho",
+   "servico": "concretagem",
+   "tubo": "geral",
+   "metragem": 20.0,
+   "observacao": "20 metros"
+  },
+  {
+   "id": "185947ef-d048-5e3d-bf8b-64802753a58f",
+   "equipe_id": "c7b95f4e-6e17-5272-b2c6-9e648079c1bc",
+   "rua": "rua 02",
+   "servico": "prolongamento de rede e ligacao de ramal de agua",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": ""
+  },
+  {
+   "id": "b74fbc86-5f0a-5a04-8096-7dc9111edc65",
+   "equipe_id": "c7b95f4e-6e17-5272-b2c6-9e648079c1bc",
+   "rua": "Rua 2",
+   "servico": "prolongamento (PAD 63) e ligacoes de agua com cavalete e HM",
+   "tubo": "agua",
+   "metragem": 80.0,
+   "observacao": "80 mtrs de PAD de 63; 10 ligacoes de agua com cavalete e HM"
+  },
+  {
+   "id": "5c9337f1-fb77-5a83-8672-f8f1714e8cdb",
+   "equipe_id": "c7b95f4e-6e17-5272-b2c6-9e648079c1bc",
+   "rua": "Rua 2",
+   "servico": "rebaixamento de ramal e concretagem (limpeza do local)",
+   "tubo": "geral",
+   "metragem": 0,
+   "observacao": "10 servicos"
+  },
+  {
+   "id": "86eb4dae-569f-5408-8a8e-1c49dd3a3fe2",
+   "equipe_id": "7085a10d-416b-5acb-9f1b-e398e47ecfde",
+   "rua": "rua 03 (casas 43,48,44,52,38,29,32,25,28,23,27,21,19,24,22,17,20,15)",
+   "servico": "instalacao de caixas de agua encanada (caixas U.M.A)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "21 instalacoes concluidas"
+  },
+  {
+   "id": "731e0edb-ca79-5cb9-86d4-29204ded99b2",
+   "equipe_id": "64b20033-03e0-51e0-8ce1-a42346fe9070",
+   "rua": "rua 2",
+   "servico": "aterramento de ramais de P.A.D e acabamento de concreto dos ramais (apoio)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": ""
+  },
+  {
+   "id": "1c6be5ca-9dc0-518f-9865-190aa7720e24",
+   "equipe_id": "9220c27c-b234-54a4-a264-82071bfb150e",
+   "rua": "Rua 2",
+   "servico": "rebaixamento de ramal com concretagem",
+   "tubo": "geral",
+   "metragem": 0,
+   "observacao": "10 servicos"
+  },
+  {
+   "id": "6a72a6f6-b924-500e-9299-d38e6bc59fc8",
+   "equipe_id": "843b645d-090c-5368-8606-f310a04f583a",
+   "rua": "Rua 2, casas 56 e 36",
+   "servico": "Correcao de By Pass e conferencia de estanqueidade (referente a 13/06)",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "2 casas (56, 36)"
+  },
+  {
+   "id": "2bb26dbe-feb9-5ba9-8b46-1ea8c2498b8e",
+   "equipe_id": "843b645d-090c-5368-8606-f310a04f583a",
+   "rua": "Rua Vitoria da Conquista / Rua 2 (casas 31,27,38,2,3,4,2B)",
+   "servico": "registro fotografico de status de ligacoes/caixas UMA/relogios/PI por casa (fotos Gabriel Sousa)",
+   "tubo": "geral",
+   "metragem": 0,
+   "observacao": "casas 31,27,38,2,3,4,2B (caixas UMA, hidrometros, ligacao de esgoto - ver fotos)"
+  },
+  {
+   "id": "00c2dbfd-4ced-5e8d-9315-0a35f6697195",
+   "equipe_id": "d6b3c962-a958-5ee0-885a-c2a6eafcec9f",
+   "rua": "Rua 2 (casas 73,71,69,86,84,82,75,80,78A,78B,76,67,74,65,63,70,61,59,68,57)",
+   "servico": "ligacoes de agua com HM, RA e solda eletrofusao (apontamento Renan, Rua 2)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "HM: 56; RA: 26; Solda eletrofusao: 26"
+  },
+  {
+   "id": "15c6f127-4b7e-5d7d-91a9-7c39039caef3",
+   "equipe_id": "d6b3c962-a958-5ee0-885a-c2a6eafcec9f",
+   "rua": "Rua 3 Bahia (casas 07,05,03,01,04)",
+   "servico": "ligacoes de agua, RA e solda eletrofusao",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "RA: 05; Solda eletrofusao: 5"
+  },
+  {
+   "id": "ee775d43-ccb6-5fc4-8a7c-3dc67b18beea",
+   "equipe_id": "4d0f5d7e-f7e0-550c-86b8-126f242e519e",
+   "rua": "Rua 3 Bahia (LE realizadas na Rua 2)",
+   "servico": "ligacoes de esgoto (LE) e RA (rede de agua 63mm). Obs: ligacoes de esgoto realizadas na Rua 2",
+   "tubo": "geral",
+   "metragem": 34.0,
+   "observacao": "LE: 3; RA: 34 mts 63 mm"
+  },
+  {
+   "id": "5485660b-dfc4-52d0-a0fb-0915883d24a0",
+   "equipe_id": "951874e7-61a3-5552-b86b-48d62239064a",
+   "rua": "Rua 3 Bahia (casas 27,44,46,20,15,10,08,06,04,05,12)",
+   "servico": "instalacao de caixas U.M.A",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "Caixa U.M.A: 16"
+  },
+  {
+   "id": "d5c76c6d-63a4-5ed7-8de6-f7a66e5b4ff1",
+   "equipe_id": "527264e9-226e-5d3a-9910-00de21c4817f",
+   "rua": "Rua 2 (casas 58,60,47,49,51)",
+   "servico": "ligacoes de esgoto (LE) e reforma de caixas de inspecao",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "LE: 5; reforma de 4 caixas de inspecao"
+  },
+  {
+   "id": "cd2379a3-8683-5b34-a8e1-1cde79b88da6",
+   "equipe_id": "a68eed33-9c73-5ac0-91c4-fbc880a67ed1",
+   "rua": "Rua Santa Rosa do Sul (Caixa de inspecao casa 57A)",
+   "servico": "construcao de 1 PV e reforma de 1 caixa de inspecao",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "PV: 1; Caixa de inspecao: reforma (casa 57A)"
+  },
+  {
+   "id": "780e15b3-0042-5b16-b01f-1e2aaaa8bf3c",
+   "equipe_id": "a853d4a7-22a1-562f-bfec-e160a71609da",
+   "rua": "Travessa Primeiro de Abril",
+   "servico": "escavacao/retirada de solo, retirada de capa, acabamento de PI, construcao de 1 PV",
+   "tubo": "esgoto",
+   "metragem": 25.0,
+   "observacao": "PV: 1; 25 mts escavacao e retirada de solo; 30 MTS retirada de capa; 3 acabamento de PI"
+  },
+  {
+   "id": "626a8e4e-9f93-5596-8167-e4666382eba3",
+   "equipe_id": "468ba45e-be1d-5108-ad7a-ea7a578b0ee6",
+   "rua": "Rua 03 (casas 1,2A,2B,3,5A,5C,6,7,8,11,14,16,18,13)",
+   "servico": "instalacao de caixas de agua encanada (caixas U.M.A, caixa para 2 relogios; casa 3 = 3 caixas/6 relogios)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "15 a 16 caixas (texto diz '15 instalacao concluidas' e tambem 'Total = 16 caixas')"
+  },
+  {
+   "id": "33f5a05f-6d77-5962-a07d-9765c66a0c76",
+   "equipe_id": "80800bb4-0282-5f43-8030-546caa1c5451",
+   "rua": "Rua 2 (escada da viela)",
+   "servico": "reparo de 2 PI, extensao de rede PEAD 63, retirada/reposicao de solo, compactacao, limpeza/sinalizacao (escada da viela)",
+   "tubo": "geral",
+   "metragem": 25.0,
+   "observacao": "2 PI reparados; 25 metros extensao de rede ped 63; 25 metros retirada de solo; 25 metros reposicao de solo"
+  },
+  {
+   "id": "9be883c8-3234-5256-a2fb-18544e6e473b",
+   "equipe_id": "873fff61-fba7-5ad9-917a-839bcf6ea135",
+   "rua": "",
+   "servico": "escavacao de ligacao de agua e corte",
+   "tubo": "agua",
+   "metragem": 32.0,
+   "observacao": "3 escavacoes de ligacao de agua; 32 metros de corte"
+  },
+  {
+   "id": "76cf0f7c-c316-51a0-a831-757ef4306578",
+   "equipe_id": "1344a126-d08e-556d-a464-f3ad2925145e",
+   "rua": "Rua Santa Rosa do Sul",
+   "servico": "construcao de 1 PV (continuacao do PV do dia anterior)",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "PV: 1"
+  },
+  {
+   "id": "a0b6f326-183a-5526-9a08-92e1decc6bae",
+   "equipe_id": "920bb26a-eeee-544d-9115-033c23b62fb3",
+   "rua": "Rua 2",
+   "servico": "remanejamento da rede de esgoto, ligacoes de esgoto (LE), reforco de caixas de inspecao existentes",
+   "tubo": "esgoto",
+   "metragem": 35.0,
+   "observacao": "LE: 10; 35 mts de remanejamento da rede de esgoto (vala 1,90 m com escoramento); 10 caixas de inspecao existentes reforcadas"
+  },
+  {
+   "id": "cbf6d875-7059-57fc-8917-07240d019c7a",
+   "equipe_id": "efac9869-bdd9-5681-88e6-57afd59c93e4",
+   "rua": "Rua 3 Bahia",
+   "servico": "execucao de rede de agua, RA, solda eletrofusao, interligacoes (2 Ts e 2 luvas 63mm)",
+   "tubo": "agua",
+   "metragem": 92.0,
+   "observacao": "Rede de agua: 92 MTS 63mm; RA: 60; Solda eletrofusao: 60; Interligacao: 2"
+  },
+  {
+   "id": "63b8e465-16c3-5d74-b429-2fc1a50631e9",
+   "equipe_id": "dcee5a5b-f5a6-51a0-90f8-b32d4ad89a2f",
+   "rua": "Nucleo Sao Cleto (endereco nao informado)",
+   "servico": "ramais para cloragem (RA, solda eletrofusao; 02 caps)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "RA: 2; Solda eletrofusao: 4; 02 ramais para cloragem; 02 caps"
+  },
+  {
+   "id": "a9ebd779-f302-57d6-b541-0d5f222eb487",
+   "equipe_id": "99d4f452-a415-5a4b-a073-199a58bebc94",
+   "rua": "Rua Perola Alta, Rua Lacos da Amizade, Rua Rutilo, Rua Flor dos Ipes, Rua Safira Baixa (comunidade Sitio Sakura)",
+   "servico": "baixas Geocall / verificacao de hidrometros (administrativo - status de relogios por casa)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "varios status (sem relogio / numero nao existe / ja baixado) L1135-1182; total hidros Sitio Sakura: 279"
+  },
+  {
+   "id": "55acae9c-d6e4-5c2c-aa87-25ff7f963412",
+   "equipe_id": "43f5a747-2c09-5c28-96de-f27315160680",
+   "rua": "Rua 3 Bahia (casas 47,45,50,43,41,38,32A,37,44,46,48,41,33,42,40,31,38,29,36,27,34,32,25A,25,30,28,23,24)",
+   "servico": "ligacoes de agua da Rua 3 Bahia (realizadas dia 16/06, reportadas dia 17)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "28 casas listadas (ligacoes de agua)"
+  },
+  {
+   "id": "d7f78e3a-b544-50c0-bf0d-427ce115a369",
+   "equipe_id": "43f5a747-2c09-5c28-96de-f27315160680",
+   "rua": "Rua 2 (citado em discussao)",
+   "servico": "localizacao de hidrometros (administrativo)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "99 hidros localizados; falta 34 baixas de hidrometro"
+  },
+  {
+   "id": "84c538a8-0855-5062-a8cf-ae4d4aea5d8d",
+   "equipe_id": "f2580132-0290-568f-9bfb-a528e161e908",
+   "rua": "Rua Santa Rosa do Sul / rua 10",
+   "servico": "construcao de PV (finalizado), construcao de 1 caixa de inspecao, colocacao de 2 grades",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "PV: 1 (finalizado); Caixa de inspecao: 1; 2 grades"
+  },
+  {
+   "id": "a3532395-c370-5e70-adcc-b0b323a39648",
+   "equipe_id": "de6f8ddc-340a-59f4-8874-e2ac104a8e84",
+   "rua": "Rua 3 Bahia",
+   "servico": "rede de agua, RA, solda eletrofusao, VCA no concreto",
+   "tubo": "agua",
+   "metragem": 30.0,
+   "observacao": "Rede de agua: 30 MTS 63mm; RA: 8; Solda eletrofusao: 8; 30 metros de VCA no concreto"
+  },
+  {
+   "id": "183fb7c4-8fde-5231-b93e-691c6ce92081",
+   "equipe_id": "d56522e6-a3d5-5c28-b9f2-f33f7b500891",
+   "rua": "Rua 2 (casas 60,58,51,2 finalizadas)",
+   "servico": "ligacoes de esgoto (rede 300mm), caixas de inspecao finalizadas com acabamento interno",
+   "tubo": "esgoto",
+   "metragem": 15.0,
+   "observacao": "PRE: 15 metros (prof 2,00) rede 300mm; Caixa de inspecao: 4"
+  },
+  {
+   "id": "7d1edfaa-c131-59f2-a8fa-e33bf063460b",
+   "equipe_id": "479af578-851b-5cfa-842f-7a826b69dea3",
+   "rua": "Travessa Primeiro de Abril e Travessa Flor de Caju",
+   "servico": "cimentado, retirada de concreto e 1 PI",
+   "tubo": "geral",
+   "metragem": 30.0,
+   "observacao": "30 metros de cimentado (Trav Primeiro de Abril); 30 metros de concreto retirado + 1 PI (Trav Flor de Caju); PI: 1"
+  },
+  {
+   "id": "7985e2b2-ee35-56fb-b9d9-fe39e2ddcebb",
+   "equipe_id": "37eadd2b-023e-5d0a-ac72-a62ef722acfc",
+   "rua": "Nucleo Sao Cleto (endereco nao informado)",
+   "servico": "rede de agua, solda eletrofusao, VCA no concreto (2 luvas 63mm)",
+   "tubo": "agua",
+   "metragem": 10.0,
+   "observacao": "Rede de agua: 10 MTS 63mm; Solda eletrofusao: 2; 10 MTS de VCA no concreto; 2 luvas 63mm"
+  },
+  {
+   "id": "b995ef33-f917-5353-a333-2171605e0d74",
+   "equipe_id": "a02e4005-b972-56f9-8009-58c00401a3e9",
+   "rua": "Rua Bahia (20 casas, 12 metros rede) e Rua Jose Vandir (37 casas, 150 metros rede)",
+   "servico": "execucao de rede de agua, ligacoes de agua (LA), RA, solda eletrofusao (Rua Bahia + Rua Jose Vandir)",
+   "tubo": "agua",
+   "metragem": 162.0,
+   "observacao": "PRA: 162 metros; LA: 56; RA: 56; Solda eletrofusao: 56; HM: 83 (versao corrigida do Jesse Souza)"
+  },
+  {
+   "id": "56c955ef-8d5a-5cc3-b8e8-723fceec8da7",
+   "equipe_id": "a39bf9dd-7476-54a3-94f4-5c4514d9274d",
+   "rua": "Rua 3 Bahia (casas 21,22,19,17,20,18,15a,15,16,13,11,14,12,10,9,8,6,4,2,1)",
+   "servico": "ligacoes de agua da Rua 3 Bahia (realizadas dia 18/06)",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "20 casas listadas (ligacoes de agua)"
+  },
+  {
+   "id": "e8ef6a57-1d73-56be-b673-fc189405bf37",
+   "equipe_id": "4ccede89-9cba-5f13-974b-fc2bf8ba580c",
+   "rua": "Rua Santa Rosa do Tocantins (casa 32)",
+   "servico": "rede de esgoto (PRE), ligacao de esgoto (LE), construcao de 1 PV, 1 caixa de inspecao",
+   "tubo": "esgoto",
+   "metragem": 18.0,
+   "observacao": "PRE: 18 mts; PV: 1; LE: 1"
+  },
+  {
+   "id": "d6f4b343-fd5d-582a-9be9-15137cca78bc",
+   "equipe_id": "cc431b05-d372-58b1-8610-e7b3fca6dd06",
+   "rua": "Rua 2 (casas 55,57,59,63 ligadas; 61,62,64,66,68,70 em espera; casa 50 C.I ok)",
+   "servico": "remanejamento de rede de esgoto (300mm), 1 caixa de inspecao, C.I casa 50 ok",
+   "tubo": "esgoto",
+   "metragem": 42.0,
+   "observacao": "PRE: 42 metros rede 300mm; Caixa de inspecao: 1"
+  },
+  {
+   "id": "daeb5eae-6c6b-51ca-9ccf-3ac3e576c2a3",
+   "equipe_id": "048c8985-c893-5ad8-843b-95a899d564be",
+   "rua": "Rua Jose Vandir (casas 43,45,77,28,41,39,37,24,35,22,22B,33,31,18,29,29B,26,25,16,21,12,4,11,7,1)",
+   "servico": "instalacao de caixas U.M.A",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "Caixa U.M.A: 32"
+  },
+  {
+   "id": "e32ac7d2-6644-5680-959f-1261eea01548",
+   "equipe_id": "24df90db-b63f-5ae0-a386-feb5bb3e2b80",
+   "rua": "Travessa Flor de Caju",
+   "servico": "execucao de rede de agua / PEAD 63mm (PRA)",
+   "tubo": "agua",
+   "metragem": 30.0,
+   "observacao": "30 metros de PEAD 63mm; PRA: 30 metros"
+  },
+  {
+   "id": "6b49b25e-a1f2-5ebb-ac78-aa1a279902bf",
+   "equipe_id": "4ccc9c28-24f9-527a-8441-e500102a2346",
+   "rua": "Rua 4 Jose Vandir (casas 3,6,8)",
+   "servico": "reforma de 2 PI, 3 caixas de inspecao",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "PI: 2 reforma; Caixa de inspecao: 3"
+  },
+  {
+   "id": "1c07bde4-a6e9-5d01-84d6-01d6659844c8",
+   "equipe_id": "5c2e2e69-b43c-5d85-935c-4f1b6a3841ce",
+   "rua": "Rua 2 (casas 68,67,63,72,65,74,76,78,69)",
+   "servico": "ligacoes de esgoto (LE)",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "LE: 9"
+  },
+  {
+   "id": "289fa189-78df-5a94-97db-17419fe5fe01",
+   "equipe_id": "454af33a-5cf0-5271-bd48-e7de93ab940f",
+   "rua": "Rua Jose Vandir (casas 44,42,40,55,53,59,56,49,32,34,47,30,45)",
+   "servico": "execucao de rede de agua, ligacoes de agua (LA), RA, solda eletrofusao",
+   "tubo": "agua",
+   "metragem": 41.0,
+   "observacao": "PRA: 41 metros; LA: 13; RA: 13; Solda eletrofusao: 13"
+  },
+  {
+   "id": "6a69527e-94f9-5ec3-8301-824d1d9c56c7",
+   "equipe_id": "f61d107b-f0dc-5c37-a724-3689eec9bf7c",
+   "rua": "Rua Santa Rosa do Tocantins (casa 09); acabamento no PV da rua Santa Rosa do Sul",
+   "servico": "acabamento no PV (rua Santa Rosa do Sul)",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "casa 09"
+  },
+  {
+   "id": "8bc0c1be-44b6-5a1c-b52a-e6aa6fe21729",
+   "equipe_id": "7e8e22ff-d05a-58c1-8db0-36be7d3be29f",
+   "rua": "Rua Jose Vandir (casas 26,32,34,49,48,44,63,50,53,55,36,42,52,61)",
+   "servico": "instalacao de caixas U.M.A",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "Caixa U.M.A: 14"
+  },
+  {
+   "id": "a8f93e32-0c10-5b52-8c37-d63dc7356092",
+   "equipe_id": "abedd5fe-30aa-542e-87d5-217c9e3b5a3f",
+   "rua": "Rua 4",
+   "servico": "PAD 63 e ligacoes de agua com cavalete e HM (apontamento Jesse)",
+   "tubo": "agua",
+   "metragem": 45.0,
+   "observacao": "45 mtrs de PAD de 63; 46 ligacoes de agua com cavalete e HM (46 no total)"
+  },
+  {
+   "id": "ccc14eb6-9e77-5b8b-870c-269019c84fcb",
+   "equipe_id": "e36cd598-e1b9-57d1-8907-156c74fcb1c7",
+   "rua": "Rua 02",
+   "servico": "retirada de bota fora",
+   "tubo": "geral",
+   "metragem": 0,
+   "observacao": "05 viagens"
+  },
+  {
+   "id": "8d435b25-e16d-518c-bc92-35ad5724dc20",
+   "equipe_id": "e36cd598-e1b9-57d1-8907-156c74fcb1c7",
+   "rua": "Rua 02",
+   "servico": "reparos de ligacao de agua",
+   "tubo": "agua",
+   "metragem": 0,
+   "observacao": "04 reparos"
+  },
+  {
+   "id": "65b198a0-78e6-5988-8f29-135c0c54e9ca",
+   "equipe_id": "e36cd598-e1b9-57d1-8907-156c74fcb1c7",
+   "rua": "Rua Pantanal viela 01 parte baixa",
+   "servico": "desobstrucao de esgoto",
+   "tubo": "esgoto",
+   "metragem": 0,
+   "observacao": "1 viela"
+  }
+ ],
+ "_delete_projeto_ids": [
+  "99e34e64-ff72-592f-9f15-24a81fe6cd91",
+  "bf33d1fb-4716-5a9c-adce-97f1273615b2",
+  "1c318114-c465-526f-a967-a1f02e34a7c7"
+ ]
+}

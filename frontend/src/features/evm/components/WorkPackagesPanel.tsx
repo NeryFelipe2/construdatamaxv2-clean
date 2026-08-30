@@ -3,8 +3,9 @@
  * Grid of expandable cards showing work packages with cost accounts & measurements.
  */
 import { useState } from 'react'
-import { Plus, Copy, ChevronDown, ChevronUp, Package } from 'lucide-react'
+import { Plus, Copy, ChevronDown, ChevronUp, Package, Info } from 'lucide-react'
 import { useEvmStore } from '@/store/evmStore'
+import { useAppModeStore } from '@/store/appModeStore'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/utils'
 import type { WorkPackage } from '@/types'
@@ -23,7 +24,36 @@ const PILLAR_LABELS: Record<string, string> = {
   impostos_indiretos: 'Impostos',
 }
 
+/**
+ * WorkPackagesPanel — biblioteca de pacotes reutilizáveis é uma feature de
+ * CONFIGURAÇÃO (catálogo), não uma leitura de execução — não tem análogo em
+ * nenhuma tabela real hoje, e virar "real" exigiria persistir esse catálogo
+ * no Supabase (decisão de produto, não uma simples troca de fonte de dado).
+ * Até essa decisão, o CRUD mock só fica disponível dentro do Modo Demo.
+ */
 export function WorkPackagesPanel() {
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
+
+  if (!isDemoMode) {
+    return (
+      <div className="p-6">
+        <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-start gap-3">
+          <Info size={18} className="text-sky-400 shrink-0 mt-0.5" />
+          <p className="text-[#a3a3a3] text-sm leading-relaxed">
+            A <b className="text-[#f5f5f5]">Biblioteca de Work Packages</b> ainda não está conectada a dado
+            real — é uma funcionalidade de configuração (catálogo de pacotes reutilizáveis), sem tabela
+            equivalente no banco hoje. Ative o <b className="text-[#f5f5f5]">Modo Demonstração</b> para ver
+            o conceito ilustrado.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return <WorkPackagesPanelMock />
+}
+
+function WorkPackagesPanelMock() {
   const { workPackages, addWorkPackage } = useEvmStore()
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showNewForm, setShowNewForm] = useState(false)

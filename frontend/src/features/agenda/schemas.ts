@@ -19,6 +19,7 @@ export const taskSchema = z
     completionPct:  z.number().min(0).max(100).optional(),
     linkedProjectId: z.string().optional(),
     notes:          z.string().max(500, 'Máximo 500 caracteres').optional(),
+    dependsOn:      z.array(z.string()).optional(),
   })
   .refine(
     (data) => parseISO(data.endDate) >= parseISO(data.startDate),

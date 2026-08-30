@@ -167,7 +167,7 @@ export function EscalamentoPanel() {
           </div>
           <button
             onClick={runReallocationEngine}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#525252] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
           >
             <RefreshCw size={13} />
             Rodar Engine
@@ -206,7 +206,7 @@ export function EscalamentoPanel() {
           </p>
           <button
             onClick={() => setIsOcorrenciaOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-[#ffffff] text-xs font-semibold transition-colors"
           >
             <Plus size={13} />
             Registrar
@@ -219,12 +219,12 @@ export function EscalamentoPanel() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[#525252]">
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Data</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Tipo</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Descrição</th>
-                  <th className="text-right text-[#6b6b6b] font-medium pb-2">Impacto</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2 hidden md:table-cell">Equipes</th>
+                <tr className="border-b border-[#525252]/50">
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Data</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Tipo</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Descrição</th>
+                  <th className="text-right text-[#a3a3a3] font-medium pb-2">Impacto</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2 hidden md:table-cell">Equipes</th>
                 </tr>
               </thead>
               <tbody>

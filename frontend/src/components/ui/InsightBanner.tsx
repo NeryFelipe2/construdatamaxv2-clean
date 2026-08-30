@@ -39,8 +39,8 @@ const STYLE_MAP: Record<InsightType, {
     iconColor: 'text-amber-400', titleColor: 'text-amber-400', textColor: 'text-amber-200/80',
   },
   info: {
-    bg: 'bg-cyan-500/5', border: 'border-cyan-500/20', icon: Lightbulb,
-    iconColor: 'text-cyan-400', titleColor: 'text-cyan-400', textColor: 'text-cyan-200/80',
+    bg: 'bg-[#f97316]/5', border: 'border-[#f97316]/20', icon: Lightbulb,
+    iconColor: 'text-[#f97316]', titleColor: 'text-[#f97316]', textColor: 'text-orange-200/80',
   },
   efficiency: {
     bg: 'bg-purple-500/5', border: 'border-purple-500/20', icon: Zap,
@@ -69,7 +69,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           <div className="flex items-center gap-2">
             <h4 className={`text-xs font-bold ${style.titleColor}`}>{insight.title}</h4>
             {insight.metric && (
-              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-[#e4f2f8] bg-[#0d2040] px-2 py-0.5 rounded-full">
+              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-[#f5f5f5] bg-[#2c2c2c] px-2 py-0.5 rounded-full">
                 {insight.metric.value}
                 {insight.metric.trend === 'up' && <TrendingUp size={9} className="text-emerald-400" />}
                 {insight.metric.trend === 'down' && <TrendingUp size={9} className="text-rose-400 rotate-180" />}
@@ -79,7 +79,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           <p className={`text-[11px] ${style.textColor} leading-relaxed mt-0.5`}>{insight.message}</p>
           
           {insight.detail && expanded && (
-            <p className="text-[10px] text-[#8fb3c8] leading-relaxed mt-2 border-t border-[#20406a] pt-2">
+            <p className="text-[10px] text-[#a3a3a3] leading-relaxed mt-2 border-t border-[#525252] pt-2">
               {insight.detail}
             </p>
           )}
@@ -94,10 +94,11 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
                 {expanded ? 'Menos detalhes' : 'Mais detalhes'}
               </button>
             )}
-            {insight.action && (
+            {/* Só renderiza como botão clicável se houver onClick real — nunca um link morto (regra: sem botão que finge funcionar) */}
+            {insight.action && insight.action.onClick && (
               <button
                 onClick={insight.action.onClick}
-                className="flex items-center gap-1 text-[10px] font-medium text-[#2abfdc] hover:underline"
+                className="flex items-center gap-1 text-[10px] font-medium text-[#f97316] hover:underline"
               >
                 <ArrowRight size={10} /> {insight.action.label}
               </button>
@@ -105,7 +106,7 @@ export function InsightBanner({ insight, onDismiss }: { insight: Insight; onDism
           </div>
         </div>
         {onDismiss && (
-          <button onClick={() => onDismiss(insight.id)} className="text-[#5a8caa]/50 hover:text-white shrink-0">
+          <button onClick={() => onDismiss(insight.id)} className="text-[#6b6b6b]/50 hover:text-[#f5f5f5] shrink-0">
             <X size={12} />
           </button>
         )}
@@ -132,10 +133,10 @@ export function InsightsPanel({
   if (visible.length === 0) return null
 
   return (
-    <div className="bg-[#112645] border border-[#20406a] rounded-xl overflow-hidden">
+    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl overflow-hidden">
       <button
         onClick={() => collapsible && setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-[#14294e] transition-colors"
+        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-[#484848]/40 transition-colors"
       >
         <Sparkles size={14} className="text-purple-400" />
         <span className="text-xs font-bold text-purple-400 uppercase tracking-wider flex-1 text-left">
@@ -145,7 +146,7 @@ export function InsightsPanel({
           {visible.length} {visible.length === 1 ? 'insight' : 'insights'}
         </span>
         {collapsible && (
-          isOpen ? <ChevronDown size={14} className="text-[#5a8caa]" /> : <ChevronRight size={14} className="text-[#5a8caa]" />
+          isOpen ? <ChevronDown size={14} className="text-[#6b6b6b]" /> : <ChevronRight size={14} className="text-[#6b6b6b]" />
         )}
       </button>
       {isOpen && (
@@ -170,6 +171,9 @@ export function generateDreInsights(data: {
   margemLiquida: number
   lucroLiquido: number
   totalReceita: number
+  onVerCustoPorTrecho?: () => void
+  onVerEficiencia?: () => void
+  onVerComposicaoCustos?: () => void
 }): Insight[] {
   const insights: Insight[] = []
 
@@ -191,7 +195,7 @@ export function generateDreInsights(data: {
       message: `Margem bruta em ${data.margemBruta.toFixed(1)}% — abaixo dos 20% recomendados. Revise custos diretos.`,
       metric: { label: 'Margem', value: `${data.margemBruta.toFixed(1)}%`, trend: 'down' },
       detail: 'Verifique: (1) Produtividade por equipe no Planejamento, (2) Custo unitário por trecho, (3) Retrabalhos no RDO.',
-      action: { label: 'Ver Custo por Trecho' },
+      action: { label: 'Ver Custo por Trecho', onClick: data.onVerCustoPorTrecho },
     })
   }
 
@@ -214,7 +218,7 @@ export function generateDreInsights(data: {
     message: 'A plataforma economiza R$ 39.300/mês em processos manuais. ROI de 1.250%.',
     metric: { label: 'ROI', value: '1.250%', trend: 'up' },
     detail: 'Comparativo: Geração de NS cai de 4h para 5min. Conferência de medição cai de 40h para 2h. RDO em campo cai de 2,5h para 18min.',
-    action: { label: 'Ver detalhes de eficiência' },
+    action: { label: 'Ver detalhes de eficiência', onClick: data.onVerEficiencia },
   })
 
   // Guarantee insight
@@ -224,7 +228,7 @@ export function generateDreInsights(data: {
     title: 'Qual a garantia que o trecho custa tanto?',
     message: 'Cada custo é calculado pelo motor NS V5 com base em: profundidade, DN, tipo de solo e produtividade real.',
     detail: 'O algoritmo usa os dados reais da topografia (GSI), materiais aplicados (RDO) e produtividade medida (PPC). Não é estimativa — é rastreamento unitário.',
-    action: { label: 'Ver composição de custos' },
+    action: { label: 'Ver composição de custos', onClick: data.onVerComposicaoCustos },
   })
 
   return insights
@@ -235,6 +239,7 @@ export function generateFluxoCaixaInsights(data: {
   mesBreakeven: string
   totalRecebido: number
   totalGasto: number
+  onVerCronogramaFinanceiro?: () => void
 }): Insight[] {
   const insights: Insight[] = []
 
@@ -254,7 +259,7 @@ export function generateFluxoCaixaInsights(data: {
       message: `Saldo negativo — o projeto precisa de capital de giro até atingir o breakeven em ${data.mesBreakeven}.`,
       metric: { label: 'Déficit', value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(Math.abs(data.saldoAtual)), trend: 'down' },
       detail: 'Estratégia: Antecipe trechos de maior valor de medição para acelerar recebimentos.',
-      action: { label: 'Ver cronograma financeiro' },
+      action: { label: 'Ver cronograma financeiro', onClick: data.onVerCronogramaFinanceiro },
     })
   }
 

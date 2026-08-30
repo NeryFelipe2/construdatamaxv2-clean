@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, Plus, GanttChart, CalendarDays } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, Plus, GanttChart, CalendarDays, Magnet } from 'lucide-react'
 import { useAgendaStore } from '@/store/agendaStore'
-import { formatViewRange } from '../utils'
-import type { AgendaViewMode } from '@/types'
+import { formatViewRange, getViewParams } from '../utils'
+import type { AgendaViewMode, AgendaSnapUnit } from '@/types'
 import { cn } from '@/lib/utils'
 import { format, startOfWeek, parseISO } from 'date-fns'
 
@@ -20,14 +20,20 @@ const VIEW_MODES: { key: AgendaViewMode; label: string }[] = [
   { key: 'year',     label: 'Ano'       },
 ]
 
+const SNAP_UNITS: { key: AgendaSnapUnit; label: string; title: string }[] = [
+  { key: 'week', label: 'Semana', title: 'Arrastar/redimensionar de 7 em 7 dias' },
+  { key: 'day',  label: 'Dia',    title: 'Arrastar/redimensionar de 1 em 1 dia (em zooms muito abertos vira semana automaticamente)' },
+]
+
 export function AgendaToolbar({ searchTerm, onSearchChange, onAddTask }: AgendaToolbarProps) {
   const {
     viewStart, visibleWeeks, viewMode,
     panLeft, panRight, setViewMode,
     displayView, setDisplayView,
     setVisibleWeeks, setViewStart,
+    snapUnit, setSnapUnit,
   } = useAgendaStore()
-  const range = formatViewRange(viewStart, visibleWeeks)
+  const range = formatViewRange(viewStart, visibleWeeks, getViewParams(viewMode).totalDays)
 
   function handleDateJump(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
@@ -54,7 +60,11 @@ export function AgendaToolbar({ searchTerm, onSearchChange, onAddTask }: AgendaT
         </div>
 
         {/* Filter */}
-        <button className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#525252] text-[#6b6b6b] hover:text-[#f5f5f5] hover:border-[#1f3c5e] transition-colors">
+        <button
+          disabled
+          title="Filtros indisponíveis nesta versão"
+          className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#525252] text-[#3f3f3f] cursor-not-allowed"
+        >
           <SlidersHorizontal size={14} />
         </button>
 
@@ -161,6 +171,28 @@ export function AgendaToolbar({ searchTerm, onSearchChange, onAddTask }: AgendaT
               )}
             >
               {vm.label}
+            </button>
+          ))}
+
+          <div className="h-4 w-px bg-[#525252] mx-2" />
+
+          {/* Snap do drag/resize */}
+          <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-[#6b6b6b] font-semibold mr-1">
+            <Magnet size={11} /> Snap:
+          </span>
+          {SNAP_UNITS.map((su) => (
+            <button
+              key={su.key}
+              onClick={() => setSnapUnit(su.key)}
+              title={su.title}
+              className={cn(
+                'px-3 py-1 rounded-md border text-xs font-medium transition-colors',
+                snapUnit === su.key
+                  ? 'bg-[#f97316]/20 border-[#f97316]/50 text-[#f97316]'
+                  : 'border-[#525252] text-[#6b6b6b] hover:text-[#a3a3a3] hover:border-[#2a3a5e]'
+              )}
+            >
+              {su.label}
             </button>
           ))}
         </div>

@@ -10,10 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 // ── SUPABASE ──
+// SERVICE_ROLE (não anon): o motor roda no servidor, nunca no navegador.
+// Com o RLS por organização fechado, a anon key deixaria o bot mudo.
+// Fallback para a anon key só para não quebrar quem ainda não setou a env.
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
 );
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.warn('[SUPABASE] AVISO: rodando com ANON key — defina SUPABASE_SERVICE_ROLE_KEY no ../.env antes de fechar o RLS');
+}
 console.log('[SUPABASE] Conectado a', process.env.SUPABASE_URL ? process.env.SUPABASE_URL.slice(0,30)+'...' : 'SEM URL!');
 
 console.log('Iniciando Motor do WhatsApp...');

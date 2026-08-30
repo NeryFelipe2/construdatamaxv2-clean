@@ -1,9 +1,17 @@
 /**
  * LpsHeader — KPI strip + tab navigation for the LPS/Lean module.
+ *
+ * Honestidade dos KPIs (27/07): os números são ancorados na SEMANA ISO CORRENTE
+ * real, não na última semana que tiver dado — antes o header mostrava a carga
+ * histórica de lps_tasks (W15-W27, importada em 14/07) como "esta semana"
+ * (148/150, PPC 99%), o exato falso-alto que a regra "nenhum número inventado"
+ * proíbe. Sem compromisso gravado na semana corrente, mostra 0/0 e aponta pro
+ * wizard do Semáforo. O PPC (4 sem.) considera só as 4 semanas ISO anteriores à
+ * corrente e declara quantas delas têm dado.
  */
 import { useMemo } from 'react'
 import { Target, TrendingUp, TrendingDown, Minus, AlertTriangle } from 'lucide-react'
-import { useLpsStore, computeWeeklyPPC } from '@/store/lpsStore'
+import { useLpsStore, computeWeeklyPPC, isoWeek, weekOffset } from '@/store/lpsStore'
 import type { LpsTab } from '@/types'
 
 const CNC_LABELS: Record<string, string> = {
@@ -32,22 +40,30 @@ export function LpsHeader() {
   const activeTab    = useLpsStore((s) => s.activeTab)
   const setActiveTab = useLpsStore((s) => s.setActiveTab)
   const activities   = useLpsStore((s) => s.activities)
+  const connectionStatus = useLpsStore((s) => s.connectionStatus)
 
   const weekly = useMemo(() => computeWeeklyPPC(activities), [activities])
 
-  // PPC média últimas 4 semanas (past only)
-  const pastWeekly = weekly.slice(-5, -1)  // 4 semanas passadas
+  // Semana ISO corrente REAL (não a última com dado — ver cabeçalho)
+  const semanaCorrente = useMemo(() => isoWeek(new Date()), [])
+  const ultimas4 = useMemo(
+    () => [-4, -3, -2, -1].map((off) => weekOffset(new Date(), off)),
+    [],
+  )
+
+  // PPC média das 4 semanas ISO anteriores à corrente — só as que têm dado
+  const pastWeekly = weekly.filter((w) => ultimas4.includes(w.week))
   const avgPpc = pastWeekly.length > 0
     ? Math.round(pastWeekly.reduce((s, w) => s + w.ppc, 0) / pastWeekly.length)
+    : null
+
+  // Tendência: últimas 2 semanas (das 4 anteriores) que têm dado
+  const trend = pastWeekly.length >= 2
+    ? pastWeekly[pastWeekly.length - 1].ppc - pastWeekly[pastWeekly.length - 2].ppc
     : 0
 
-  // Tendência: comparar última vs penúltima
-  const last    = weekly[weekly.length - 2]?.ppc ?? 0
-  const prev    = weekly[weekly.length - 3]?.ppc ?? 0
-  const trend   = last - prev
-
-  // Atividades da semana atual
-  const currentWeek = weekly[weekly.length - 1]
+  // Compromissos da semana ISO corrente (0/0 honesto se ninguém comprometeu ainda)
+  const currentWeek = weekly.find((w) => w.week === semanaCorrente)
   const weekPlanned   = currentWeek?.planned   ?? 0
   const weekCompleted = currentWeek?.completed ?? 0
 
@@ -61,7 +77,9 @@ export function LpsHeader() {
     }, {})
   const topCnc = Object.entries(cncCount).sort((a, b) => b[1] - a[1])[0]
 
-  const ppcColor = avgPpc >= 80 ? 'text-green-400' : avgPpc >= 60 ? 'text-yellow-400' : 'text-red-400'
+  const ppcColor = avgPpc === null
+    ? 'text-[#a3a3a3]'
+    : avgPpc >= 80 ? 'text-green-400' : avgPpc >= 60 ? 'text-yellow-400' : 'text-red-400'
 
   return (
     <div className="bg-[#2c2c2c] border-b border-[#3d3d3d]">
@@ -76,12 +94,26 @@ export function LpsHeader() {
             <p className="text-xs font-bold text-white leading-tight">LPS / Lean</p>
             <p className="text-[10px] text-[#6b6b6b] leading-tight">Last Planner System</p>
           </div>
+          <span className={`ml-2 inline-flex items-center rounded-full px-2 py-1 text-[10px] font-semibold ${
+            connectionStatus === 'connected'
+              ? 'bg-green-500/15 text-green-300'
+              : connectionStatus === 'partial'
+                ? 'bg-yellow-500/15 text-yellow-300'
+                : 'bg-[#484848] text-[#a3a3a3]'
+          }`}>
+            {connectionStatus === 'connected' ? 'Conectado' : connectionStatus === 'partial' ? 'Parcial' : 'Local'}
+          </span>
         </div>
 
         <div className="w-px h-8 bg-[#484848] shrink-0" />
 
-        {/* PPC médio */}
-        <Kpi label="PPC (4 sem.)" value={`${avgPpc}%`} valueClass={ppcColor} />
+        {/* PPC médio — só semanas anteriores à corrente que têm dado */}
+        <Kpi
+          label="PPC (4 sem.)"
+          value={avgPpc === null ? '—' : `${avgPpc}%`}
+          sub={avgPpc === null ? 'sem dado nas 4 sem.' : `${pastWeekly.length} de 4 sem. c/ dado`}
+          valueClass={ppcColor}
+        />
 
         {/* Tendência */}
         <div className="flex flex-col gap-0.5">
@@ -98,11 +130,11 @@ export function LpsHeader() {
           </div>
         </div>
 
-        {/* Semana atual */}
+        {/* Semana ISO corrente real — 0/0 até alguém comprometer no Semáforo */}
         <Kpi
-          label="Esta Semana"
+          label={`Esta Semana (${semanaCorrente})`}
           value={`${weekCompleted}/${weekPlanned}`}
-          sub="concluídas/planejadas"
+          sub={weekPlanned === 0 ? 'nenhum compromisso — use o Semáforo' : 'concluídas/planejadas'}
           valueClass={weekPlanned > 0 && weekCompleted === weekPlanned ? 'text-green-400' : 'text-white'}
         />
 
