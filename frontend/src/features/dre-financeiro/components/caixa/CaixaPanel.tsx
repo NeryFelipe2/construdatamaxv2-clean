@@ -18,6 +18,7 @@ import { ImportarCaixaModal } from '../importador/ImportarCaixaModal'
 import { baixarModeloCaixa } from '../importador/planilhaCaixa'
 import { cardCls, inputCls, btnPrimario, btnNeutro, thCls, trCls, vazioCls, brl, dataBr, corValor } from '../fcp/ui'
 import * as XLSX from 'xlsx'
+import { SeloAutoria } from '@/components/shared/SeloAutoria'
 
 type Aba = 'lancamentos' | 'he' | 'conferencia' | 'relatorios'
 
@@ -112,7 +113,8 @@ export function CaixaPanel() {
           <button className={btnNeutro} onClick={() => void caixa.recarregar()} disabled={caixa.loading}>
             <RefreshCw size={14} className={caixa.loading ? 'animate-spin' : ''} /> Atualizar
           </button>
-          <button className={btnNeutro} onClick={() => baixarModeloCaixa(caixa.categorias.map((c) => c.nome))}>
+          <button className={btnNeutro} onClick={() => baixarModeloCaixa(caixa.categorias.map((c) => c.nome), [], [],
+              Number(caixa.mes.slice(0, 4)), Number(caixa.mes.slice(5, 7)))}>
             <Download size={14} /> Baixar modelo
           </button>
           <button className={btnPrimario} onClick={() => setImportar(true)}>
@@ -165,7 +167,7 @@ export function CaixaPanel() {
                     <th className={thCls}>Obra</th><th className={thCls}>Solicitante</th>
                     <th className={`${thCls} text-right`}>Valor</th>
                     <th className={`${thCls} text-right`}>Acumulado</th>
-                    <th className={thCls}>Status</th><th className={thCls}></th>
+                    <th className={thCls}>Status</th><th className={thCls}>Histórico</th><th className={thCls}></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -194,6 +196,9 @@ export function CaixaPanel() {
                         <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${COR_STATUS[l.status]}`}>
                           {l.status}
                         </span>
+                      </td>
+                      <td className="px-4 py-1.5">
+                        <SeloAutoria tabela="caixa_lancamento" registroId={l.id} compacto />
                       </td>
                       <td className="px-4 py-1.5">
                         <button onClick={() => void caixa.excluirLancamento(l.id)}

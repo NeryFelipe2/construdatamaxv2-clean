@@ -25,6 +25,7 @@ const Gestao360Page = lazy(() => import("@/features/gestao-360/index").then((m) 
 const SuprimentosPage = lazy(() => import("@/features/suprimentos/index").then((m) => ({ default: m.SuprimentosPage })));
 const RecursosHumanosPage = lazy(() => import("@/features/recursos-humanos/index").then((m) => ({ default: m.RecursosHumanosPage })));
 const UsuariosPage = lazy(() => import("@/features/usuarios/index").then((m) => ({ default: m.UsuariosPage })));
+const AuditoriaPage = lazy(() => import("@/features/auditoria/index").then((m) => ({ default: m.AuditoriaPage })));
 const OtimizacaoFrotaPage = lazy(() => import("@/features/otimizacao-frota/index").then((m) => ({ default: m.default })));
 const GestaoEquipamentosPage = lazy(() => import("@/features/gestao-equipamentos/index").then((m) => ({ default: m.GestaoEquipamentosPage })));
 const AgendaPage = lazy(() => import("@/features/agenda/index").then((m) => ({ default: m.AgendaPage })));
@@ -618,6 +619,7 @@ export default function App() {
           <Route path="pessoal" element={<Navigate to="/app/recursos-humanos?aba=pessoal" replace />} />
           <Route path="mao-de-obra" element={<Navigate to="/app/recursos-humanos?aba=mao-de-obra" replace />} />
           <Route path="usuarios" element={<LazyRoute><UsuariosPage /></LazyRoute>} />
+          <Route path="auditoria" element={<LazyRoute><AuditoriaPage /></LazyRoute>} />
           <Route path="gestao-equipamentos" element={<LazyRoute><GestaoEquipamentosPage /></LazyRoute>} />
           <Route path="otimizacao-frota" element={<LazyRoute><OtimizacaoFrotaPage /></LazyRoute>} />
           <Route path="quantitativos" element={<LazyRoute><QuantitativosPage /></LazyRoute>} />

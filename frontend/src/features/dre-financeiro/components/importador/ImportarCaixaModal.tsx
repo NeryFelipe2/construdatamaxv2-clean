@@ -57,7 +57,7 @@ export function ImportarCaixaModal({ caixa, onClose }: { caixa: UseCaixaReturn; 
     setErroLeitura(null); setArquivo(file.name)
     try {
       const buf = await file.arrayBuffer()
-      const lida = lerPlanilhaCaixa(buf)
+      const lida = lerPlanilhaCaixa(buf, Number(caixa.mes.slice(0, 4)))
       setLeitura(lida)
 
       if (lida.lancamentos.length === 0 && lida.horasExtras.length === 0) {
@@ -169,6 +169,7 @@ export function ImportarCaixaModal({ caixa, onClose }: { caixa: UseCaixaReturn; 
                   onClick={() => baixarModeloCaixa(
                     caixa.categorias.map((c) => c.nome),
                     [...new Set(caixa.lancamentos.map((l) => l.obra_texto ?? '').filter(Boolean))],
+                    [], Number(caixa.mes.slice(0, 4)), Number(caixa.mes.slice(5, 7)),
                   )}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-[#484848] text-[#f5f5f5] hover:bg-[#525252]">
                   <Download size={14} /> Baixar modelo de lançamento

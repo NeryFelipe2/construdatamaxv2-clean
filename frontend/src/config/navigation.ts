@@ -13,7 +13,7 @@ import {
   BookOpen, Layers, Play, FolderKanban, Cpu, Filter, Target, FileSearch,
   CalendarClock, ClipboardList, Droplets, Waves, FileSpreadsheet, Calendar,
   Calculator, Users, FileText, MessageSquare, CheckSquare, UserCircle, Wrench,
-  Brain, UserCog, GitBranch, ShieldCheck,
+  Brain, UserCog, GitBranch, ShieldCheck, History,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -88,6 +88,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: 'Recursos Humanos', to: '/app/recursos-humanos', icon: UserCircle },
       { label: 'Suprimentos', to: '/app/suprimentos', icon: FolderKanban },
       { label: 'Usuários & Acessos', to: '/app/usuarios', icon: ShieldCheck },
+      { label: 'Auditoria', to: '/app/auditoria', icon: History },
       { label: 'Equipamentos', to: '/app/gestao-equipamentos', icon: Wrench },
       { label: 'Quantitativos', to: '/app/quantitativos', icon: Calculator },
     ],
