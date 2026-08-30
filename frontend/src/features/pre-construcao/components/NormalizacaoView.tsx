@@ -149,7 +149,22 @@ export function NormalizacaoView() {
         </span>
         <div className="ml-auto flex items-center gap-2">
           <button
-            onClick={acceptAllNormalizations}
+            onClick={() => {
+              usePreConstrucaoStore.setState((st) => ({
+                takeoffItems: st.takeoffItems.map((i) => {
+                  const suggestion = suggestions.find((s) => s.item.id === i.id)
+                  if (!suggestion || !suggestion.hasSuggestion || suggestion.acceptedOrRejected) return i
+                  return {
+                    ...i,
+                    normalized:            true,
+                    normalizedDescription: suggestion.suggestedDesc,
+                    normalizedQuantity:    suggestion.suggestedQty,
+                    normalizedUnit:        suggestion.suggestedUnit,
+                  }
+                }),
+              }))
+              acceptAllNormalizations()
+            }}
             disabled={withSuggestions === 0}
             className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#16a34a]/20 hover:bg-[#16a34a]/30 text-[#4ade80] text-xs font-semibold transition-colors disabled:opacity-40"
           >

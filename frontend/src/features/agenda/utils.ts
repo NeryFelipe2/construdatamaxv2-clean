@@ -13,7 +13,7 @@ import {
   getQuarter,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import type { AgendaTask, AgendaViewMode } from '@/types'
+import type { AgendaTask, AgendaViewMode, AgendaSnapUnit } from '@/types'
 
 export const COLUMN_WIDTH = 140  // px per week (legacy constant, kept for drag math)
 export const ROW_HEIGHT   = 72   // px per resource row
@@ -113,20 +113,35 @@ export interface BarStyle {
   visible: boolean
 }
 
+/**
+ * Geometria da barra no Gantt.
+ *
+ * `totalDaysOverride` existe porque a largura real da janela vem de
+ * getViewParams(viewMode) (70 dias no modo semana, 14 no dia…), NÃO de
+ * `visibleWeeks` — que no store nasce 0. Sem o override, `totalDays` dava 0 e
+ * a condição de visibilidade virava `dayOffset < 0`: só apareciam tarefas que
+ * COMEÇARAM ANTES do início da janela. Na prática o Gantt mostrava apenas as 2
+ * projeções agregadas (que começam lá atrás) e escondia todas as tarefas das
+ * equipes — a Agenda parecia vazia com 20+ tarefas reais no banco (28/07).
+ */
 export function getBarStyle(
   task: AgendaTask,
   viewStart: string,
   visibleWeeks: number,
-  previewOffsetWeeks: number = 0,
-  pixelsPerDay: number = COLUMN_WIDTH / 7
+  previewOffsetUnits: number = 0,
+  pixelsPerDay: number = COLUMN_WIDTH / 7,
+  unit: AgendaSnapUnit = 'week',
+  totalDaysOverride?: number
 ): BarStyle {
   const start        = parseISO(viewStart)
-  const taskStart    = addWeeks(parseISO(task.startDate), previewOffsetWeeks)
+  const taskStart    = unit === 'day'
+    ? addDays(parseISO(task.startDate), previewOffsetUnits)
+    : addWeeks(parseISO(task.startDate), previewOffsetUnits)
   const taskEnd      = parseISO(task.endDate)
 
   const dayOffset       = differenceInDays(taskStart, start)
   const taskDurationDays = Math.max(1, differenceInDays(taskEnd, taskStart))
-  const totalDays       = visibleWeeks * 7
+  const totalDays       = totalDaysOverride ?? visibleWeeks * 7
 
   const left  = dayOffset * pixelsPerDay + 4
   const width = Math.max(20, taskDurationDays * pixelsPerDay - 8)
@@ -176,6 +191,81 @@ export function getResizeRightStyle(
   return getBarStyle(modifiedTask, viewStart, visibleWeeks, 0, pixelsPerDay)
 }
 
+// ─── Faixas (lanes) dentro de uma linha ───────────────────────────────────────
+
+/** Padding vertical da linha quando há mais de uma faixa. */
+export const LANE_PAD_Y = 6
+/** Espaço entre duas faixas. */
+export const LANE_GAP = 2
+/** Geometria da barra quando a linha tem 1 faixa só (comportamento original). */
+export const BAR_TOP_SINGLE    = 10
+export const BAR_HEIGHT_SINGLE = 48
+
+export interface LaneLayout {
+  /** faixa (0-based) de cada tarefa, por task.id */
+  laneByTask: Map<string, number>
+  /** quantas faixas a linha precisa (>= 1) */
+  laneCount: number
+}
+
+/**
+ * Distribui as tarefas de UMA linha (mesmo recurso) em faixas horizontais pra
+ * que barras com datas sobrepostas não fiquem literalmente uma em cima da
+ * outra — o caso real hoje é a linha `eq-pente-fino`, que acumula as 4 fases
+ * macro do pente fino (F1..F4, semanas inteiras) MAIS as tarefas diárias por
+ * PV do cronograma: sem faixas, as diárias cobrem a barra da fase e some tudo
+ * que está atrás.
+ *
+ * Algoritmo guloso clássico de interval partitioning: ordena por início e
+ * coloca cada tarefa na primeira faixa já livre. Determinístico (não depende
+ * da ordem de chegada do array) e O(n · faixas).
+ */
+export function computeLanes(tasks: AgendaTask[]): LaneLayout {
+  const laneByTask = new Map<string, number>()
+  if (tasks.length === 0) return { laneByTask, laneCount: 1 }
+
+  const ordered = [...tasks].sort((a, b) => {
+    const byStart = a.startDate.localeCompare(b.startDate)
+    return byStart !== 0 ? byStart : a.endDate.localeCompare(b.endDate)
+  })
+
+  // fim (exclusivo, em ms) já ocupado em cada faixa
+  const laneEnds: number[] = []
+
+  for (const task of ordered) {
+    const startDate = parseISO(task.startDate)
+    const start = startDate.getTime()
+    // getBarStyle desenha no mínimo 1 dia (Math.max(1, …)), então uma tarefa
+    // com data_fim = data_inicio ocupa o dia inteiro — o fim efetivo é o dia
+    // seguinte, senão duas tarefas do MESMO dia cairiam na mesma faixa.
+    const end = Math.max(parseISO(task.endDate).getTime(), addDays(startDate, 1).getTime())
+
+    let lane = laneEnds.findIndex((laneEnd) => laneEnd <= start)
+    if (lane === -1) {
+      lane = laneEnds.length
+      laneEnds.push(end)
+    } else {
+      laneEnds[lane] = end
+    }
+    laneByTask.set(task.id, lane)
+  }
+
+  return { laneByTask, laneCount: Math.max(1, laneEnds.length) }
+}
+
+/**
+ * Retângulo vertical (top/height, relativo ao topo da linha) de uma faixa.
+ * Com 1 faixa devolve exatamente a geometria antiga (top 10 / height 48), pra
+ * não mexer no visual das linhas que não têm sobreposição.
+ */
+export function getLaneRect(laneIndex: number, laneCount: number): { top: number; height: number } {
+  if (laneCount <= 1) return { top: BAR_TOP_SINGLE, height: BAR_HEIGHT_SINGLE }
+  const area   = ROW_HEIGHT - LANE_PAD_Y * 2
+  const height = Math.max(6, (area - (laneCount - 1) * LANE_GAP) / laneCount)
+  const top    = LANE_PAD_Y + laneIndex * (height + LANE_GAP)
+  return { top, height }
+}
+
 // ─── Today indicator ──────────────────────────────────────────────────────────
 
 export function getTodayOffset(
@@ -193,9 +283,14 @@ export function getTodayOffset(
 
 // ─── Date range display ───────────────────────────────────────────────────────
 
-export function formatViewRange(viewStart: string, visibleWeeks: number): string {
+/**
+ * Rótulo do período no topo da Agenda. `totalDays` (da janela real do viewMode)
+ * é o que manda; `visibleWeeks` sozinho nasce 0 no store e fazia o rótulo
+ * mostrar "20/07/2026 — 20/07/2026", como se a janela tivesse largura zero.
+ */
+export function formatViewRange(viewStart: string, visibleWeeks: number, totalDays?: number): string {
   const start = parseISO(viewStart)
-  const end   = addWeeks(start, visibleWeeks)
+  const end   = totalDays != null ? addDays(start, totalDays) : addWeeks(start, visibleWeeks)
   const startStr = format(start, 'dd/MM/yyyy', { locale: ptBR })
   const endStr   = format(end,   'dd/MM/yyyy', { locale: ptBR })
   return `${startStr} — ${endStr}`
@@ -207,34 +302,85 @@ export function getWeekLabel(date: Date): string {
   return String(getISOWeek(date))
 }
 
-// ─── Task move/resize calculation (week-snap) ─────────────────────────────────
+// ─── Task move/resize calculation (snap semanal ou diário) ───────────────────
 
-export function applyDragDelta(task: AgendaTask, deltaWeeks: number): { newStart: string; newEnd: string } {
-  const newStart   = format(addWeeks(parseISO(task.startDate), deltaWeeks), 'yyyy-MM-dd')
+/** Soma `delta` unidades de snap (semanas ou dias) a uma data. */
+function addSnapUnits(date: Date, delta: number, unit: AgendaSnapUnit): Date {
+  return unit === 'day' ? addDays(date, delta) : addWeeks(date, delta)
+}
+
+export function applyDragDelta(
+  task: AgendaTask,
+  deltaUnits: number,
+  unit: AgendaSnapUnit = 'week'
+): { newStart: string; newEnd: string } {
+  const newStart   = format(addSnapUnits(parseISO(task.startDate), deltaUnits, unit), 'yyyy-MM-dd')
   const duration   = differenceInDays(parseISO(task.endDate), parseISO(task.startDate))
   const newEnd     = format(addDays(parseISO(newStart), duration), 'yyyy-MM-dd')
   return { newStart, newEnd }
 }
 
-export function applyResizeLeft(task: AgendaTask, deltaWeeks: number): string {
-  const newStart = format(addWeeks(parseISO(task.startDate), deltaWeeks), 'yyyy-MM-dd')
+export function applyResizeLeft(task: AgendaTask, deltaUnits: number, unit: AgendaSnapUnit = 'week'): string {
+  const newStart = format(addSnapUnits(parseISO(task.startDate), deltaUnits, unit), 'yyyy-MM-dd')
   if (!isBefore(parseISO(newStart), parseISO(task.endDate))) {
-    return format(addDays(parseISO(task.endDate), -7), 'yyyy-MM-dd')
+    return format(addDays(parseISO(task.endDate), unit === 'day' ? -1 : -7), 'yyyy-MM-dd')
   }
   return newStart
 }
 
-export function applyResizeRight(task: AgendaTask, deltaWeeks: number): string {
-  const newEnd = format(addWeeks(parseISO(task.endDate), deltaWeeks), 'yyyy-MM-dd')
+export function applyResizeRight(task: AgendaTask, deltaUnits: number, unit: AgendaSnapUnit = 'week'): string {
+  const newEnd = format(addSnapUnits(parseISO(task.endDate), deltaUnits, unit), 'yyyy-MM-dd')
   if (!isAfter(parseISO(newEnd), parseISO(task.startDate))) {
-    return format(addDays(parseISO(task.startDate), 7), 'yyyy-MM-dd')
+    return format(addDays(parseISO(task.startDate), unit === 'day' ? 1 : 7), 'yyyy-MM-dd')
   }
   return newEnd
 }
 
-// ─── Week-snap column width for drag calculation ──────────────────────────────
+// ─── Snap pixel width for drag calculation ────────────────────────────────────
 
 /** Returns 1 week's pixel width for the given pixelsPerDay */
 export function weekPx(pixelsPerDay: number): number {
   return pixelsPerDay * 7
+}
+
+/** Largura em px de 1 passo de snap (1 dia ou 1 semana). */
+export function snapPx(pixelsPerDay: number, unit: AgendaSnapUnit): number {
+  return pixelsPerDay * (unit === 'day' ? 1 : 7)
+}
+
+/**
+ * Snap efetivo: abaixo de 6 px/dia (mês pra cima, ver getViewParams) um passo
+ * de 1 dia teria < 6px e o drag viraria jitter — força 'week' nesses zooms.
+ */
+export function effectiveSnapUnit(pixelsPerDay: number, unit: AgendaSnapUnit): AgendaSnapUnit {
+  return pixelsPerDay < 6 ? 'week' : unit
+}
+
+// ─── Dependências (fim→início) ────────────────────────────────────────────────
+
+/**
+ * true se adicionar `depId` em `taskId`.dependsOn criaria ciclo — i.e. se
+ * `taskId` já é alcançável a partir de `depId` seguindo as arestas dependsOn.
+ * DFS iterativa simples; `visited` protege contra ciclos pré-existentes no
+ * dado (nunca deveria acontecer, mas não pode travar a UI se acontecer).
+ */
+export function criariaCiclo(tasks: AgendaTask[], taskId: string, depId: string): boolean {
+  if (taskId === depId) return true
+  const byId = new Map(tasks.map((t) => [t.id, t]))
+  const visited = new Set<string>()
+  const stack = [depId]
+  while (stack.length > 0) {
+    const currentId = stack.pop()!
+    if (currentId === taskId) return true
+    if (visited.has(currentId)) continue
+    visited.add(currentId)
+    const current = byId.get(currentId)
+    for (const next of current?.dependsOn ?? []) stack.push(next)
+  }
+  return false
+}
+
+/** Violação fim→início: dependência termina DEPOIS da task começar. */
+export function dependencyViolated(dep: AgendaTask, task: AgendaTask): boolean {
+  return isAfter(parseISO(dep.endDate), parseISO(task.startDate))
 }

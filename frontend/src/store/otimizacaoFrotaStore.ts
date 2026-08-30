@@ -270,7 +270,10 @@ export const useOtimizacaoFrotaStore = create<OtimizacaoFrotaState>((set, get) =
           }
         })
 
-        set({ healthScores: scores })
+        const knownIds = new Set(equipment.map((eq) => eq.id))
+        const manualScores = get().healthScores.filter((h) => !knownIds.has(h.equipmentId))
+
+        set({ healthScores: [...scores, ...manualScores] })
       })
     })
   },

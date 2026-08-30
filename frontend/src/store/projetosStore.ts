@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { MOCK_PROJETOS } from '@/data/mockProjetos'
 import { apiProjetoDashboard } from '@/lib/api'
-import { mapDbProjetoToProject } from '@/lib/canonicalProject'
+import { mapDbProjetoToProject, custoRealMedicao } from '@/lib/canonicalProject'
 import type { DbProjeto } from '@/lib/supabase'
 import type {
   BudgetLine,
@@ -189,11 +189,22 @@ export const useProjetosStore = create<ProjetosState & ProjetosActions>((set, ge
       }
 
       const dashboard = activeProjectId ? await apiProjetoDashboard(activeProjectId).catch(() => null) : null
-      const nextProjects = projetos.map((projeto) => {
+      // custo real (medicao_itens) por projeto — substitui o custo_total_dia
+      // da API (frequentemente indisponível) sem inventar número: soma o que
+      // já está gravado no banco. Roda em paralelo, um por projeto.
+      const custosReais = await Promise.all(
+        projetos.map((p) => custoRealMedicao(p.id).catch(() => null)),
+      )
+      const nextProjects = projetos.map((projeto, i) => {
         const existing = get().projects.find((project) => project.id === projeto.id)
+        const custoReal = custosReais[i]
+        const dashboardComCustoReal =
+          custoReal != null
+            ? { ...(projeto.id === activeProjectId ? dashboard : null), kpis: { ...(projeto.id === activeProjectId ? dashboard?.kpis : null), custo_total_dia: custoReal } }
+            : (projeto.id === activeProjectId ? dashboard : null)
         const mapped = mapDbProjetoToProject(projeto as DbProjeto, {
           existing,
-          dashboard: projeto.id === activeProjectId ? dashboard : null,
+          dashboard: dashboardComCustoReal as any,
         })
         return mergeProject(existing, mapped)
       })

@@ -46,8 +46,8 @@ function RoleBarChart({ items }: { items: BarItem[] }) {
         const x = PADL + pct * chartW
         return (
           <g key={pct}>
-            <line x1={x} y1={0} x2={x} y2={H - 20} stroke="var(--color-border)" strokeWidth={0.5} strokeDasharray="3 3" />
-            <text x={x} y={H - 4} textAnchor="middle" fontSize={8} fill="var(--color-text-muted)">
+            <line x1={x} y1={0} x2={x} y2={H - 20} stroke="#525252" strokeWidth={0.5} strokeDasharray="3 3" />
+            <text x={x} y={H - 4} textAnchor="middle" fontSize={8} fill="#6b6b6b">
               {fmtCompact(maxVal * pct)}
             </text>
           </g>
@@ -62,7 +62,7 @@ function RoleBarChart({ items }: { items: BarItem[] }) {
         const truncLabel = item.role.length > 20 ? item.role.slice(0, 19) + '…' : item.role
         return (
           <g key={item.role}>
-            <text x={0} y={y + barH / 2 + 5} fontSize={10} fill="var(--color-text-secondary)">
+            <text x={0} y={y + barH / 2 + 5} fontSize={10} fill="#a3a3a3">
               {truncLabel}
             </text>
             {/* Base */}
@@ -74,7 +74,7 @@ function RoleBarChart({ items }: { items: BarItem[] }) {
             {/* Total label at end */}
             {total > 0 && (
               <text x={PADL + wBase + wOT + wNight + 5} y={y + barH / 2 + 5} fontSize={9}
-                fill="var(--color-text-muted)">
+                fill="#6b6b6b">
                 {fmtCompact(total)}
               </text>
             )}
@@ -145,12 +145,12 @@ export function CMOPanel() {
   const fgtsTotal = summary.totalCost * 0.08
 
   const kpiCards = [
-    { label: 'Total Bruto',         value: fmt(summary.baseCost + summary.overtimeCost + summary.nightCost), color: 'text-[var(--color-accent)]' },
+    { label: 'Total Bruto',         value: fmt(summary.baseCost + summary.overtimeCost + summary.nightCost), color: 'text-[#f97316]' },
     { label: 'Horas Regulares',     value: fmtH(summary.regularHours),  color: 'text-[#22c55e]' },
-    { label: 'Custo Hora Extra',    value: fmt(summary.overtimeCost),    color: summary.overtimeCost > 2000 ? 'text-[#f59e0b]' : 'text-[var(--color-text-primary)]' },
+    { label: 'Custo Hora Extra',    value: fmt(summary.overtimeCost),    color: summary.overtimeCost > 2000 ? 'text-[#f59e0b]' : 'text-[#f5f5f5]' },
     { label: 'Adicional Noturno',   value: fmt(summary.nightCost),       color: 'text-[#8b5cf6]' },
     { label: 'FGTS (empregador)',   value: fmt(fgtsTotal),               color: 'text-[#ef4444]' },
-    { label: 'Total Geral',         value: fmt(summary.totalCost + fgtsTotal), color: 'text-[var(--color-text-primary)]' },
+    { label: 'Total Geral',         value: fmt(summary.totalCost + fgtsTotal), color: 'text-[#f5f5f5]' },
   ]
 
   const barItems: BarItem[] = summary.roleBreakdown.map(r => ({
@@ -167,26 +167,26 @@ export function CMOPanel() {
         {/* Month selector */}
         <div className="flex items-center gap-2">
           <button onClick={prevMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors text-lg">
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#3d3d3d] border border-[#525252] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors text-lg">
             ‹
           </button>
-          <span className="min-w-[160px] text-center text-sm font-semibold text-[var(--color-text-primary)] capitalize">
+          <span className="min-w-[160px] text-center text-sm font-semibold text-[#f5f5f5] capitalize">
             {monthLabel}
           </span>
           <button onClick={nextMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors text-lg">
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#3d3d3d] border border-[#525252] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors text-lg">
             ›
           </button>
         </div>
 
         {/* Scenario toggle */}
-        <div className="flex gap-1 p-1 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+        <div className="flex gap-1 p-1 rounded-xl bg-[#3d3d3d] border border-[#525252]">
           {(['base', 'optimized'] as const).map(sc => (
             <button key={sc} onClick={() => setScenario(sc)}
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 scenario === sc
-                  ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  ? 'bg-[#f97316] text-[#ffffff] shadow-sm'
+                  : 'text-[#a3a3a3] hover:text-[#f5f5f5]'
               }`}>
               {sc === 'base' ? 'Base' : 'Otimizado'}
             </button>
@@ -201,28 +201,28 @@ export function CMOPanel() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between text-xs">
-                <label className="text-[var(--color-text-secondary)]">Redução de HE</label>
+                <label className="text-[#a3a3a3]">Redução de HE</label>
                 <span className="font-semibold text-[#f59e0b]">{otReductionPct}%</span>
               </div>
               <input type="range" min={0} max={50} value={otReductionPct}
                 onChange={(e) => setOtReductionPct(Number(e.target.value))}
                 className="w-full accent-orange-500" />
-              <p className="text-[10px] text-[var(--color-text-muted)]">Reduz horas extras de {100 - otReductionPct}% dos turnos OT</p>
+              <p className="text-[10px] text-[#6b6b6b]">Reduz horas extras de {100 - otReductionPct}% dos turnos OT</p>
             </div>
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between text-xs">
-                <label className="text-[var(--color-text-secondary)]">Redistribuição Noturno</label>
+                <label className="text-[#a3a3a3]">Redistribuição Noturno</label>
                 <span className="font-semibold text-[#8b5cf6]">{nightRedistPct}%</span>
               </div>
               <input type="range" min={0} max={100} value={nightRedistPct}
                 onChange={(e) => setNightRedistPct(Number(e.target.value))}
                 className="w-full accent-purple-500" />
-              <p className="text-[10px] text-[var(--color-text-muted)]">Simulação: redistribuir {nightRedistPct}% dos turnos noturnos para o dia</p>
+              <p className="text-[10px] text-[#6b6b6b]">Simulação: redistribuir {nightRedistPct}% dos turnos noturnos para o dia</p>
             </div>
           </div>
           {savings > 0 && (
             <div className="border-t border-[#22c55e]/20 pt-3 flex flex-col gap-1.5">
-              <p className="text-xs font-semibold text-[var(--color-text-secondary)]">Economia estimada:</p>
+              <p className="text-xs font-semibold text-[#a3a3a3]">Economia estimada:</p>
               <div className="flex flex-wrap gap-4 text-xs">
                 <span className="text-[#f59e0b]">
                   HE: <strong>{fmt(baseSummary.overtimeCost - summary.overtimeCost)}</strong>
@@ -243,59 +243,59 @@ export function CMOPanel() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {kpiCards.map(card => (
           <div key={card.label}
-            className="flex flex-col items-center px-3 py-3 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+            className="flex flex-col items-center px-3 py-3 rounded-2xl bg-[#3d3d3d] border border-[#525252]">
             <span className={`text-base font-bold ${card.color}`}>{card.value}</span>
-            <span className="text-xs text-[var(--color-text-muted)] text-center mt-0.5 leading-tight">{card.label}</span>
+            <span className="text-xs text-[#6b6b6b] text-center mt-0.5 leading-tight">{card.label}</span>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Role breakdown table */}
-        <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
-          <div className="px-4 py-3 border-b border-[var(--color-border)]">
-            <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Custo por Cargo</h3>
+        <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
+          <div className="px-4 py-3 border-b border-[#525252]">
+            <h3 className="text-sm font-bold text-[#f5f5f5]">Custo por Cargo</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+                <tr className="border-b border-[#525252]/50">
                   {['Cargo', 'Qnt.', 'H. Reg.', 'H.E.', 'H. Not.', 'Total'].map(h => (
-                    <th key={h} className="px-3 py-2 text-left font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap">
+                    <th key={h} className="px-3 py-2 text-left text-xs font-medium text-[#a3a3a3] whitespace-nowrap">
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
+              <tbody className="divide-y divide-[#525252]/50">
                 {summary.roleBreakdown.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-3 py-6 text-center text-[var(--color-text-muted)]">
+                    <td colSpan={6} className="px-3 py-6 text-center text-[#6b6b6b]">
                       Sem dados para este mês
                     </td>
                   </tr>
                 ) : summary.roleBreakdown.map(r => (
-                  <tr key={r.role} className="hover:bg-[var(--color-surface)] transition-colors">
-                    <td className="px-3 py-2 font-medium text-[var(--color-text-primary)] max-w-[120px] truncate">{r.role}</td>
-                    <td className="px-3 py-2 text-center text-[var(--color-text-secondary)]">{r.workerCount}</td>
-                    <td className="px-3 py-2 text-[var(--color-text-secondary)]">{fmtH(r.regularHours)}</td>
+                  <tr key={r.role} className="hover:bg-[#2c2c2c] transition-colors">
+                    <td className="px-3 py-2 font-medium text-[#f5f5f5] max-w-[120px] truncate">{r.role}</td>
+                    <td className="px-3 py-2 text-center text-[#a3a3a3]">{r.workerCount}</td>
+                    <td className="px-3 py-2 text-[#a3a3a3]">{fmtH(r.regularHours)}</td>
                     <td className="px-3 py-2 text-[#f59e0b]">{fmtH(r.overtimeHours)}</td>
                     <td className="px-3 py-2 text-[#8b5cf6]">{fmtH(r.nightHours)}</td>
-                    <td className="px-3 py-2 font-semibold text-[var(--color-text-primary)]">{fmt(r.totalCost)}</td>
+                    <td className="px-3 py-2 font-semibold text-[#f5f5f5]">{fmt(r.totalCost)}</td>
                   </tr>
                 ))}
               </tbody>
               {summary.roleBreakdown.length > 0 && (
-                <tfoot className="border-t-2 border-[var(--color-border)]">
-                  <tr className="bg-[var(--color-surface)]">
-                    <td className="px-3 py-2 font-bold text-[var(--color-text-primary)]">Total</td>
-                    <td className="px-3 py-2 text-center font-semibold text-[var(--color-text-secondary)]">
+                <tfoot className="border-t-2 border-[#525252]">
+                  <tr className="bg-[#2c2c2c]">
+                    <td className="px-3 py-2 font-bold text-[#f5f5f5]">Total</td>
+                    <td className="px-3 py-2 text-center font-semibold text-[#a3a3a3]">
                       {summary.roleBreakdown.reduce((s, r) => s + r.workerCount, 0)}
                     </td>
-                    <td className="px-3 py-2 font-semibold text-[var(--color-text-secondary)]">{fmtH(summary.regularHours)}</td>
+                    <td className="px-3 py-2 font-semibold text-[#a3a3a3]">{fmtH(summary.regularHours)}</td>
                     <td className="px-3 py-2 font-semibold text-[#f59e0b]">{fmtH(summary.overtimeHours)}</td>
                     <td className="px-3 py-2 font-semibold text-[#8b5cf6]">{fmtH(summary.nightHours)}</td>
-                    <td className="px-3 py-2 font-bold text-[var(--color-text-primary)]">{fmt(summary.totalCost)}</td>
+                    <td className="px-3 py-2 font-bold text-[#f5f5f5]">{fmt(summary.totalCost)}</td>
                   </tr>
                 </tfoot>
               )}
@@ -304,15 +304,15 @@ export function CMOPanel() {
         </div>
 
         {/* Bar chart */}
-        <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
-          <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-3">Custo por Cargo — Composição</h3>
+        <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
+          <h3 className="text-sm font-bold text-[#f5f5f5] mb-3">Custo por Cargo — Composição</h3>
           {barItems.length === 0 ? (
-            <p className="text-sm text-[var(--color-text-muted)] text-center py-8">Sem dados para este mês</p>
+            <p className="text-sm text-[#6b6b6b] text-center py-8">Sem dados para este mês</p>
           ) : (
             <RoleBarChart items={barItems} />
           )}
           {/* Legend */}
-          <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-[var(--color-border)]">
+          <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-[#525252]">
             {[
               { color: 'bg-[#3b82f6]', label: 'Regular' },
               { color: 'bg-[#f59e0b]', label: 'Hora Extra' },
@@ -320,7 +320,7 @@ export function CMOPanel() {
             ].map(({ color, label }) => (
               <div key={label} className="flex items-center gap-1.5">
                 <span className={`w-3 h-3 rounded-sm ${color}`} />
-                <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+                <span className="text-xs text-[#6b6b6b]">{label}</span>
               </div>
             ))}
           </div>

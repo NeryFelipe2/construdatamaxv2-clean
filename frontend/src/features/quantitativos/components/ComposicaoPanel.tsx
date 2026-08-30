@@ -10,12 +10,14 @@ import type { OrcamentoItem, CostBaseSource } from '@/types'
 // Import SINAPI/SEINFRA mock data
 import { mockSinapi } from '@/data/mockSinapi'
 import { NETWORK_TEMPLATES } from '@/data/mockNetworks'
+import { buscarPrecosContrato, type PrecoContrato } from '@/hooks/usePrecosContrato'
 
 const SOURCE_BADGE: Record<CostBaseSource, string> = {
-  sinapi:  'bg-blue-900/50 text-blue-300',
-  seinfra: 'bg-teal-900/50 text-teal-300',
-  custom:  'bg-violet-900/50 text-violet-300',
-  manual:  'bg-[#484848] text-[#a3a3a3]',
+  sinapi:   'bg-blue-900/50 text-blue-300',
+  seinfra:  'bg-teal-900/50 text-teal-300',
+  custom:   'bg-violet-900/50 text-violet-300',
+  manual:   'bg-[#484848] text-[#a3a3a3]',
+  contrato: 'bg-orange-900/50 text-orange-300',
 }
 
 function fmtBRL(n: number) {
@@ -65,7 +67,7 @@ function EditCell({ value, onSave, type = 'text' }: {
   )
 }
 
-// SINAPI Search Dialog
+// SINAPI / Contrato (Sabesp) Search Dialog
 function SinapiSearchDialog({ onAdd, onClose, costBase }: {
   onAdd: (item: Omit<OrcamentoItem, 'id' | 'totalCost'>) => void
   onClose: () => void
@@ -74,14 +76,33 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
   const { bdiGlobal } = useQuantitativosStore()
   const [query, setQuery] = useState('')
   const [qty, setQty] = useState(1)
+  const isContrato = costBase === 'contrato'
 
-  const filtered = useMemo(() => {
+  const filteredSinapi = useMemo(() => {
+    if (isContrato) return []
     if (!query.trim()) return mockSinapi.slice(0, 20)
     const q = query.toLowerCase()
     return mockSinapi.filter((e) => e.description.toLowerCase().includes(q) || e.code.includes(q)).slice(0, 30)
-  }, [query])
+  }, [query, isContrato])
 
-  function handleAdd(entry: typeof mockSinapi[0]) {
+  // Contrato: busca real na tabela `precos_contrato` (Supabase), sob demanda —
+  // nunca filtramos localmente um mock, e nunca inferimos resultado sem buscar.
+  const [contratoResults, setContratoResults] = useState<PrecoContrato[]>([])
+  const [buscando, setBuscando] = useState(false)
+  const [buscou, setBuscou] = useState(false)
+
+  async function buscarContrato() {
+    if (query.trim().length < 2) return
+    setBuscando(true)
+    setBuscou(true)
+    try {
+      setContratoResults(await buscarPrecosContrato(query))
+    } finally {
+      setBuscando(false)
+    }
+  }
+
+  function handleAddSinapi(entry: typeof mockSinapi[0]) {
     onAdd({
       code: entry.code,
       description: entry.description,
@@ -95,11 +116,27 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
     onClose()
   }
 
+  function handleAddContrato(entry: PrecoContrato) {
+    onAdd({
+      code: entry.codigo,
+      description: entry.descricao,
+      unit: entry.unidade ?? 'un',
+      quantity: qty,
+      unitCost: entry.valor_wcr,
+      bdi: bdiGlobal,
+      category: 'Contrato Sabesp',
+      source: costBase,
+    })
+    onClose()
+  }
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
       <div className="bg-[#3d3d3d] border border-[#525252] rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
         <div className="px-5 py-4 border-b border-[#525252] flex items-center justify-between">
-          <h3 className="text-white font-semibold text-sm">Buscar Item — SINAPI</h3>
+          <h3 className="text-white font-semibold text-sm">
+            Buscar Item — {isContrato ? 'Contrato (Sabesp)' : 'SINAPI'}
+          </h3>
           <button onClick={onClose} className="text-[#a3a3a3] hover:text-[#f5f5f5]"><X size={18} /></button>
         </div>
         <div className="px-5 py-3 border-b border-[#525252] flex items-center gap-3">
@@ -110,10 +147,21 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar por código ou descrição..."
+              onKeyDown={(e) => { if (isContrato && e.key === 'Enter') buscarContrato() }}
+              placeholder={isContrato ? 'Buscar por código ou descrição no contrato oficial...' : 'Buscar por código ou descrição...'}
               className="w-full bg-[#484848] border border-[#5e5e5e] rounded-lg pl-9 pr-4 py-2 text-sm text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-violet-500"
             />
           </div>
+          {isContrato && (
+            <button
+              onClick={buscarContrato}
+              disabled={query.trim().length < 2 || buscando}
+              className="px-3 py-2 rounded-lg text-xs font-semibold text-white disabled:opacity-40 transition-opacity whitespace-nowrap"
+              style={{ backgroundColor: '#8b5cf6' }}
+            >
+              {buscando ? 'Buscando...' : 'Buscar'}
+            </button>
+          )}
           <div className="flex items-center gap-2">
             <label className="text-[#a3a3a3] text-xs">Qtd:</label>
             <input
@@ -126,23 +174,58 @@ function SinapiSearchDialog({ onAdd, onClose, costBase }: {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {filtered.map((entry) => (
-            <div
-              key={entry.code}
-              onClick={() => handleAdd(entry)}
-              className="px-5 py-3 border-b border-[#525252]/50 hover:bg-gray-750/40 cursor-pointer flex items-start justify-between gap-3 group"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="text-[#f5f5f5] text-sm group-hover:text-violet-300 transition-colors">{entry.description}</p>
-                <p className="text-[#6b6b6b] text-xs mt-0.5">{entry.code} · {entry.unit} · {entry.category}</p>
-              </div>
-              <span className="text-violet-400 text-sm font-medium whitespace-nowrap shrink-0">
-                {fmtBRL(entry.unitCost)}/{entry.unit}
-              </span>
-            </div>
-          ))}
-          {filtered.length === 0 && (
-            <p className="text-center text-[#6b6b6b] py-10">Nenhum item encontrado.</p>
+          {isContrato ? (
+            <>
+              {!buscou && (
+                <p className="text-center text-[#6b6b6b] py-10 text-sm px-6">
+                  Digite ao menos 2 caracteres e clique em Buscar para consultar o catálogo oficial do contrato (tabela real, 4.788 itens).
+                </p>
+              )}
+              {buscou && buscando && (
+                <p className="text-center text-[#6b6b6b] py-10 text-sm">Buscando…</p>
+              )}
+              {buscou && !buscando && contratoResults.length === 0 && (
+                <p className="text-center text-amber-400 py-10 text-sm px-6">
+                  ⚠ Nenhum item encontrado no catálogo oficial para "{query}". Sem dado real para esse termo.
+                </p>
+              )}
+              {contratoResults.map((entry) => (
+                <div
+                  key={entry.id}
+                  onClick={() => handleAddContrato(entry)}
+                  className="px-5 py-3 border-b border-[#525252]/50 hover:bg-gray-750/40 cursor-pointer flex items-start justify-between gap-3 group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[#f5f5f5] text-sm group-hover:text-violet-300 transition-colors">{entry.descricao}</p>
+                    <p className="text-[#6b6b6b] text-xs mt-0.5">{entry.codigo} · {entry.unidade ?? 'un'} · WCR 60% do contrato</p>
+                  </div>
+                  <span className="text-violet-400 text-sm font-medium whitespace-nowrap shrink-0">
+                    {fmtBRL(entry.valor_wcr)}/{entry.unidade ?? 'un'}
+                  </span>
+                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              {filteredSinapi.map((entry) => (
+                <div
+                  key={entry.code}
+                  onClick={() => handleAddSinapi(entry)}
+                  className="px-5 py-3 border-b border-[#525252]/50 hover:bg-gray-750/40 cursor-pointer flex items-start justify-between gap-3 group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[#f5f5f5] text-sm group-hover:text-violet-300 transition-colors">{entry.description}</p>
+                    <p className="text-[#6b6b6b] text-xs mt-0.5">{entry.code} · {entry.unit} · {entry.category}</p>
+                  </div>
+                  <span className="text-violet-400 text-sm font-medium whitespace-nowrap shrink-0">
+                    {fmtBRL(entry.unitCost)}/{entry.unit}
+                  </span>
+                </div>
+              ))}
+              {filteredSinapi.length === 0 && (
+                <p className="text-center text-[#6b6b6b] py-10">Nenhum item encontrado.</p>
+              )}
+            </>
           )}
         </div>
       </div>

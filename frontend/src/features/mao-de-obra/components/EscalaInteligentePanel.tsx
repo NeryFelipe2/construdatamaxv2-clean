@@ -75,12 +75,12 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
     onSave(form as Omit<Shift, 'id'>)
   }
 
-  const fieldClass = 'w-full bg-[#333333] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
+  const fieldClass = 'w-full bg-[#333333] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
   const labelClass = 'block text-[#6b6b6b] text-xs mb-1'
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[#333333] border border-[#525252] rounded-2xl w-full max-w-md">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl w-full max-w-md">
         <div className="flex items-center justify-between p-4 border-b border-[#525252]">
           <h3 className="text-[#f5f5f5] text-sm font-semibold">{initial?.id ? 'Editar Turno' : 'Novo Turno'}</h3>
           <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
@@ -145,7 +145,7 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
             )}
             <div className="flex gap-2 ml-auto">
               <button type="button" onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">Cancelar</button>
-              <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">Salvar</button>
+              <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold">Salvar</button>
             </div>
           </div>
         </form>
@@ -159,11 +159,11 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
 function CLTSettingsModal({ settings, onSave, onClose }: { settings: CLTSettings; onSave: (s: Partial<CLTSettings>) => void; onClose: () => void }) {
   const [form, setForm] = useState({ ...settings })
   const num = (field: keyof CLTSettings) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((p) => ({ ...p, [field]: parseFloat(e.target.value) || 0 }))
-  const fieldClass = 'w-full bg-[#333333] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
+  const fieldClass = 'w-full bg-[#333333] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
   const labelClass = 'block text-[#6b6b6b] text-xs mb-1'
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[#333333] border border-[#525252] rounded-2xl w-full max-w-sm">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl w-full max-w-sm">
         <div className="flex items-center justify-between p-4 border-b border-[#525252]">
           <h3 className="text-[#f5f5f5] text-sm font-semibold">Configurações CLT</h3>
           <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5]"><X size={16} /></button>
@@ -179,7 +179,7 @@ function CLTSettingsModal({ settings, onSave, onClose }: { settings: CLTSettings
           <div><label className={labelClass}>Taxa HE (%)</label><input type="number" className={fieldClass} value={form.overtimeRate} onChange={num('overtimeRate')} /></div>
           <div className="col-span-2 flex justify-end gap-2 pt-1">
             <button onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs">Cancelar</button>
-            <button onClick={() => { onSave(form); onClose() }} className="px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">Salvar</button>
+            <button onClick={() => { onSave(form); onClose() }} className="px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold">Salvar</button>
           </div>
         </div>
       </div>
@@ -223,7 +223,7 @@ function MonthlyView({ shifts, year, month, onDayClick }: { shifts: Shift[]; yea
           const isWeekend = dow === 0 || dow === 6
           const color = info
             ? info.absent > 0 ? '#ef4444' : info.dayOff > 0 ? '#6b6b6b' : '#22c55e'
-            : isWeekend ? '#1f3c5e' : '#525252'
+            : isWeekend ? '#3d3d3d' : '#525252'
           return (
             <button
               key={ymd}
@@ -266,10 +266,10 @@ function WeeklyView({ shifts, workers, dates, onCellClick }: {
     <div className="overflow-x-auto">
       <table className="w-full text-xs border-collapse">
         <thead>
-          <tr>
-            <th className="text-left px-2 py-2 text-[#6b6b6b] font-medium w-32">Colaborador</th>
+          <tr className="border-b border-[#525252]/50">
+            <th className="text-left px-2 py-2 text-[#a3a3a3] font-medium w-32">Colaborador</th>
             {dates.map((d) => (
-              <th key={toYMD(d)} className="text-center px-1 py-2 text-[#6b6b6b] font-medium min-w-[80px]">
+              <th key={toYMD(d)} className="text-center px-1 py-2 text-[#a3a3a3] font-medium min-w-[80px]">
                 <div>{['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][d.getDay()]}</div>
                 <div className="text-[10px]">{d.getDate().toString().padStart(2, '0')}/{(d.getMonth() + 1).toString().padStart(2, '0')}</div>
               </th>
@@ -290,7 +290,7 @@ function WeeklyView({ shifts, workers, dates, onCellClick }: {
                     onClick={() => onCellClick(w.id, ymd)}
                   >
                     {dayShifts.length === 0 ? (
-                      <span className="text-[#1f3c5e]">—</span>
+                      <span className="text-[#525252]">—</span>
                     ) : (
                       dayShifts.map((s) => {
                         const color = SHIFT_TYPE_COLOR[s.status === 'absent' ? 'absent' : s.type]
@@ -330,7 +330,7 @@ function DailyView({ shifts, workers, selectedDate, onAddShift, onEditShift }: {
         <p className="text-[#f5f5f5] text-sm font-semibold">
           {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
         </p>
-        <button onClick={onAddShift} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold">
+        <button onClick={onAddShift} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold">
           <Plus size={12} /> Adicionar Turno
         </button>
       </div>
@@ -438,16 +438,14 @@ export function EscalaInteligentePanel() {
       {/* Toolbar */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* View mode */}
-        <div className="flex rounded-lg border border-[#525252] overflow-hidden">
+        <div className="flex gap-1 p-1 rounded-lg bg-[#3d3d3d] border border-[#525252] overflow-x-auto scrollbar-hide">
           {([['month', Calendar, 'Mês'], ['week', LayoutGrid, 'Semana'], ['day', List, 'Dia']] as const).map(([mode, Icon, label]) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs transition-colors"
-              style={{
-                background: viewMode === mode ? '#f97316' : 'transparent',
-                color: viewMode === mode ? '#fff' : '#6b6b6b',
-              }}
+              className={`flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors whitespace-nowrap ${
+                viewMode === mode ? 'bg-[#f97316] text-[#ffffff]' : 'text-[#a3a3a3] hover:text-[#f5f5f5] hover:bg-[#484848]'
+              }`}
             >
               <Icon size={12} />{label}
             </button>
@@ -477,7 +475,7 @@ export function EscalaInteligentePanel() {
           </button>
           <button
             onClick={() => { generateSchedule(currentMonthStr) }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3b82f6] text-white text-xs font-semibold hover:bg-[#2563eb]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3b82f6] text-[#ffffff] text-xs font-semibold hover:bg-[#2563eb]"
           >
             <Zap size={12} /> Gerar Escala Automática
           </button>

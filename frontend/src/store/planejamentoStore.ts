@@ -37,6 +37,12 @@ import {
   computeSCurve,
   computeHistogram,
 } from '@/features/planejamento/utils/analysisEngine'
+import {
+  salvarPlanTrecho,
+  removerPlanTrecho,
+  salvarPlanTeam,
+  removerPlanTeam,
+} from '@/hooks/usePlanTrechosTeams'
 
 // ─── Tab type ─────────────────────────────────────────────────────────────────
 
@@ -85,10 +91,20 @@ interface PlanejamentoState {
   // Project budget
   projectBudget: number
 
+  // Projeto ativo — setado pela page, usado só pra saber onde persistir
+  // trechos/teams (salvarPlanTrecho/salvarPlanTeam) em plan_trechos/plan_teams.
+  projetoAtivoId: string | null
+
   // ── Actions ──────────────────────────────────────────────────────────────────
 
   setActiveTab: (tab: PlanejamentoTab) => void
   setProjectBudget: (budget: number) => void
+  setProjetoAtivoId: (id: string | null) => void
+
+  // Hidratação a partir do banco — popula com dado real, sem round-trip de
+  // escrita de volta (usar só ao carregar, nunca em resposta a uma edição).
+  hidratarTrechos: (trechos: PlanTrecho[]) => void
+  hidratarTeams:   (teams: PlanTeam[]) => void
 
   // Trechos
   addTrecho:    (t: Omit<PlanTrecho, 'id'>) => void
@@ -172,31 +188,49 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
   ],
 
   projectBudget: 0,
+  projetoAtivoId: null,
 
   // ── Navigation ────────────────────────────────────────────────────────────────
 
   setActiveTab: (tab) => set({ activeTab: tab }),
   setProjectBudget: (budget) => set({ projectBudget: Math.max(0, budget) }),
+  setProjetoAtivoId: (id) => set({ projetoAtivoId: id }),
+
+  // ── Hidratação (dado real vindo do banco) ────────────────────────────────────
+
+  hidratarTrechos: (trechos) => set({ trechos, isScheduleDirty: true }),
+  hidratarTeams:   (teams) => set({ teams, isScheduleDirty: true }),
 
   // ── Trechos ───────────────────────────────────────────────────────────────────
 
-  addTrecho: (t) =>
+  addTrecho: (t) => {
+    const novoTrecho: PlanTrecho = { ...t, id: crypto.randomUUID() }
     set((s) => ({
-      trechos: [...s.trechos, { ...t, id: crypto.randomUUID() }],
+      trechos: [...s.trechos, novoTrecho],
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId } = get()
+    if (projetoAtivoId) salvarPlanTrecho(projetoAtivoId, novoTrecho)
+  },
 
-  updateTrecho: (id, updates) =>
+  updateTrecho: (id, updates) => {
     set((s) => ({
       trechos: s.trechos.map((t) => t.id === id ? { ...t, ...updates } : t),
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId, trechos } = get()
+    const atualizado = trechos.find((t) => t.id === id)
+    if (projetoAtivoId && atualizado) salvarPlanTrecho(projetoAtivoId, atualizado)
+  },
 
-  removeTrecho: (id) =>
+  removeTrecho: (id) => {
     set((s) => ({
       trechos: s.trechos.filter((t) => t.id !== id),
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId } = get()
+    if (projetoAtivoId) removerPlanTrecho(id)
+  },
 
   reorderTrechos: (trechos) => set({ trechos, isScheduleDirty: true }),
 
@@ -232,6 +266,8 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
           trechos: [...s.trechos, ...newTrechos],
           isScheduleDirty: true,
         }))
+        const { projetoAtivoId } = get()
+        if (projetoAtivoId) newTrechos.forEach((t) => salvarPlanTrecho(projetoAtivoId, t))
       })
       .catch(() => {
         // preConstrucaoStore not available — silently ignore
@@ -240,23 +276,34 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
 
   // ── Teams ─────────────────────────────────────────────────────────────────────
 
-  addTeam: (t) =>
+  addTeam: (t) => {
+    const novoTeam: PlanTeam = { ...t, id: crypto.randomUUID() }
     set((s) => ({
-      teams: [...s.teams, { ...t, id: crypto.randomUUID() }],
+      teams: [...s.teams, novoTeam],
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId } = get()
+    if (projetoAtivoId) salvarPlanTeam(projetoAtivoId, novoTeam)
+  },
 
-  updateTeam: (id, updates) =>
+  updateTeam: (id, updates) => {
     set((s) => ({
       teams: s.teams.map((t) => t.id === id ? { ...t, ...updates } : t),
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId, teams } = get()
+    const atualizado = teams.find((t) => t.id === id)
+    if (projetoAtivoId && atualizado) salvarPlanTeam(projetoAtivoId, atualizado)
+  },
 
-  removeTeam: (id) =>
+  removeTeam: (id) => {
     set((s) => ({
       teams: s.teams.filter((t) => t.id !== id),
       isScheduleDirty: true,
-    })),
+    }))
+    const { projetoAtivoId } = get()
+    if (projetoAtivoId) removerPlanTeam(id)
+  },
 
   // ── Productivity ──────────────────────────────────────────────────────────────
 
@@ -405,23 +452,28 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
 
   // ── RDO Sync ──────────────────────────────────────────────────────────────────
 
-  syncExecutionFromRdo: (entries) =>
-    set((s) => ({
-      trechos: s.trechos.map((t) => {
-        const match = entries.find((e) => e.trechoCode === t.code)
-        if (!match) return t
-        const status: 'not_started' | 'in_progress' | 'completed' =
-          match.executedMeters === 0 ? 'not_started'
-          : match.executedMeters >= t.lengthM ? 'completed'
-          : 'in_progress'
-        return {
-          ...t,
-          executedMeters: match.executedMeters,
-          executionStatus: status,
-          lastRdoDate: match.date,
-        }
-      }),
-    })),
+  syncExecutionFromRdo: (entries) => {
+    const { trechos, projetoAtivoId } = get()
+    const alterados: PlanTrecho[] = []
+    const novosTrechos = trechos.map((t) => {
+      const match = entries.find((e) => e.trechoCode === t.code)
+      if (!match) return t
+      const status: 'not_started' | 'in_progress' | 'completed' =
+        match.executedMeters === 0 ? 'not_started'
+        : match.executedMeters >= t.lengthM ? 'completed'
+        : 'in_progress'
+      const atualizado: PlanTrecho = {
+        ...t,
+        executedMeters: match.executedMeters,
+        executionStatus: status,
+        lastRdoDate: match.date,
+      }
+      alterados.push(atualizado)
+      return atualizado
+    })
+    set({ trechos: novosTrechos })
+    if (projetoAtivoId) alterados.forEach((t) => salvarPlanTrecho(projetoAtivoId, t))
+  },
 
   // ── Demo / Clear ──────────────────────────────────────────────────────────────
 
@@ -498,6 +550,8 @@ export const usePlanejamentoStore = create<PlanejamentoState>((set, get) => ({
         trechos: newTrechos,
         isScheduleDirty: true,
       }))
+      const { projetoAtivoId } = get()
+      if (projetoAtivoId) newTrechos.forEach((t) => salvarPlanTrecho(projetoAtivoId, t))
     })
   },
 }))

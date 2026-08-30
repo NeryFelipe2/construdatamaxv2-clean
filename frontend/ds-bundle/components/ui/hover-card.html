@@ -1,0 +1,46 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoverCard Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+    .animate-in { animation: fadeIn 0.15s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+  <div class="flex items-center justify-center gap-8">
+    <div class="relative inline-block">
+      <span class="cursor-pointer text-[#2abfdc] hover:underline">Passe o mouse aqui</span>
+      <div class="absolute z-50 w-64 rounded-xl border border-[#20406a] bg-[#112645] p-4 text-[#f5f5f5] shadow-md outline-none animate-in mt-2 left-0">
+        <h4 class="text-sm font-bold text-[#2abfdc] mb-2">Informações Adicionais</h4>
+        <p class="text-xs text-[#a3a3a3] leading-relaxed">Este é um card que aparece ao passar o mouse. Útil para mostrar detalhes adicionais sem precisar clicar.</p>
+        <div class="mt-3 pt-3 border-t border-[#20406a]">
+          <a href="#" class="text-xs text-[#2abfdc] hover:underline">Ver mais →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative inline-block">
+      <div class="flex items-center gap-2 cursor-pointer">
+        <div class="w-10 h-10 rounded-full bg-[#2abfdc]/20 flex items-center justify-center text-[#2abfdc] font-bold">FN</div>
+        <span class="text-[#f5f5f5]">Felipe Nery</span>
+      </div>
+      <div class="absolute z-50 w-72 rounded-xl border border-[#20406a] bg-[#112645] p-4 text-[#f5f5f5] shadow-md outline-none animate-in mt-2 left-0">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-full bg-[#2abfdc]/20 flex items-center justify-center text-[#2abfdc] font-bold text-lg">FN</div>
+          <div>
+            <h4 class="font-bold text-[#f5f5f5]">Felipe Nery</h4>
+            <p class="text-xs text-[#a3a3a3]">Engenheiro de Produção</p>
+          </div>
+        </div>
+        <p class="text-xs text-[#a3a3a3] leading-relaxed">Especialista em gestão de obras de saneamento com 10+ anos de experiência.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

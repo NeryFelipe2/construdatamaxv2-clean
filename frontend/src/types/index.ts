@@ -248,6 +248,8 @@ export type TaskColor    = 'blue' | 'orange' | 'green' | 'red' | 'purple'
 export type AgendaPriority = 'low' | 'medium' | 'high' | 'critical'
 export type AgendaViewMode = 'day' | 'week' | 'month' | 'quarter' | 'semester' | 'year'
 export type AgendaDisplayView = 'gantt' | 'calendar'
+/** Granularidade do snap de drag/resize no Gantt (toggle na toolbar). */
+export type AgendaSnapUnit = 'week' | 'day'
 
 export interface AgendaTask {
   id: string
@@ -265,6 +267,23 @@ export interface AgendaTask {
   completionPct?: number     // 0-100
   linkedProjectId?: string
   notes?: string
+  /**
+   * ids de outras AgendaTask das quais esta depende (fim→início). Persistido
+   * em agenda_tasks.depends_on (text[] not null default '{}'). Violação
+   * (endDate da dependência > startDate desta) é SÓ alerta visual no Gantt
+   * (seta vermelha em DependencyArrows) — nunca reposiciona nada.
+   */
+  dependsOn?: string[]
+  /**
+   * true quando `endDate` é só um placeholder técnico pro Gantt (sem essa
+   * data o GanttBar não consegue desenhar a barra — ver getBarStyle em
+   * features/agenda/utils.ts) e NÃO representa um prazo real projetado.
+   * Setado pelo hook de hidratação (useAgendaSupabase.ts) quando a tarefa
+   * vem do banco com data_fim = NULL ("sem ritmo real suficiente pra
+   * projetar prazo"). Tarefas criadas/editadas pelo TaskEditDialog nunca
+   * têm esse campo (o form sempre exige uma data de fim real).
+   */
+  endDateUnknown?: boolean
 }
 
 export interface AgendaResource {
@@ -1198,7 +1217,7 @@ export interface PlanScenario {
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
 export type RdoReviewStatus = 'rascunho' | 'extraido' | 'em_revisao' | 'finalizado' | 'rejeitado'
-export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'integracao' | 'financeiro' | 'whatsapp-bot' | 'whatsapp-fluxo'
+export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'diario' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
@@ -1323,7 +1342,7 @@ export interface RDO {
 
 // ─── Quantitativos e Orçamento ────────────────────────────────────────────────
 
-export type CostBaseSource = 'sinapi' | 'seinfra' | 'custom' | 'manual'
+export type CostBaseSource = 'sinapi' | 'seinfra' | 'custom' | 'manual' | 'contrato'
 export type QuantTab = 'composicao' | 'resumo' | 'banco' | 'historico'
 
 export interface OrcamentoItem {
@@ -1437,6 +1456,12 @@ export interface LpsRestriction {
   linkedMasterActivityIds?: string[]
   alertSentAt?: string
   alertMessage?: string
+  /** Coluna `origem` de lps_restricoes — rastreia a fonte da restrição (ex.: "seed ocorrencias_obra 27/07 (id=…)"). Base do dedup das sugestões do RestricoesPanel. */
+  origem?: string
+  /** FK opcional lps_restricoes.frente_id → wcr_equipes.id (restrição ligada a uma equipe/frente). */
+  frenteId?: string
+  /** Valor CRU de lps_restricoes.tipo (taxonomia CNC: 'mao de obra'|'material'|'equipamento'|'clima'|'projeto/sabesp'|'interferencia/moradores'|'retrabalho'|'planejamento'|'seguranca'|'outro') — preservado pra não perder granularidade (ex.: 'seguranca') no round-trip com LpsRestrictionCategory. */
+  tipoDb?: string
 }
 
 export interface LpsActivity {
@@ -1495,6 +1520,8 @@ export interface MapSegment {
   depth?: number
   label?: string
   color?: string
+  /** 'planejado' = ainda sem status de execução confirmado em campo (ex. rede_planejada do Retorno); omitido = executado/real. */
+  origem?: 'planejado'
 }
 
 export interface MapLayer {
@@ -1669,7 +1696,7 @@ export interface HardeningPoint {
 
 // ── Planejamento Mestre ──────────────────────────────────────────────────────
 
-export type PlanejamentoMestreTab = 'macro' | 'derivacao' | 'whatif' | 'integrada' | 'semanal'
+export type PlanejamentoMestreTab = 'macro' | 'derivacao' | 'whatif' | 'integrada' | 'semanal' | 'por-equipe'
 
 export interface ProgramacaoDiaria {
   previsto:  number
@@ -1819,7 +1846,7 @@ export interface TrendPoint {
 
 // ── EVM (Earned Value Management) ──────────────────────────────────────────
 
-export type EvmTab = 'dashboard' | 'medicao' | 'plano-contas' | 'work-packages' | 'indices'
+export type EvmTab = 'dashboard' | 'medicao' | 'plano-contas' | 'work-packages' | 'indices' | 'curva-real'
 
 export type CostPillar = 'material' | 'equipamento' | 'mao_de_obra' | 'impostos_indiretos'
 

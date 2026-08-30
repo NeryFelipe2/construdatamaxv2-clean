@@ -55,6 +55,95 @@ function mapWeatherFromDb(value: string | null | undefined): RDO['weather']['mor
   return 'good'
 }
 
+// ─── Presença nominal (módulo Pessoal · migration 020) ───────────────────────
+
+/**
+ * Linha de presença nominal enviada pelo NovoRdoPanel. `pessoaId` null =
+ * avulso sem cadastro (nome_snapshot garante que o RDO nunca corrompe).
+ * Campos além do schema zod (cargoId/equipeNome) são metadados opcionais.
+ */
+export interface RdoPresencaInput {
+  pessoaId: string | null
+  nome: string
+  equipeId: string | null
+  equipeNome?: string | null
+  cargoId?: string | null
+  funcao: string | null
+  presente: boolean
+  motivoAusencia: string | null
+  horasNormais: number
+  horasExtras: number
+}
+
+/**
+ * Grava a lista nominal em rdo_presenca. TOLERANTE por contrato: tabela
+ * inexistente (migrations de pessoal não aplicadas), rdo_id não resolvido ou
+ * qualquer erro → loga e segue — o RDO em si já foi criado pelo caminho atual.
+ */
+async function gravarPresencasNoSupabase(
+  projectId: string,
+  dataRdo: string,
+  presencas: RdoPresencaInput[],
+  created: Record<string, unknown> | null,
+): Promise<void> {
+  if (!supabase || !presencas || presencas.length === 0) return
+  try {
+    // resolve o id do RDO criado: resposta da API, senão o mais recente do projeto/data
+    let rdoId: string | null = null
+    if (created) {
+      const c = created as { id?: unknown; rdo_id?: unknown; rdo?: { id?: unknown } | null }
+      if (c.id !== undefined && c.id !== null) rdoId = String(c.id)
+      else if (c.rdo_id !== undefined && c.rdo_id !== null) rdoId = String(c.rdo_id)
+      else if (c.rdo && c.rdo.id !== undefined && c.rdo.id !== null) rdoId = String(c.rdo.id)
+    }
+    if (!rdoId) {
+      const { data } = await supabase
+        .from('rdos')
+        .select('id')
+        .eq('projeto_id', projectId)
+        .eq('data', dataRdo)
+        .order('created_at', { ascending: false })
+        .limit(1)
+      if (data && data.length > 0) rdoId = String((data[0] as { id: unknown }).id)
+    }
+    if (!rdoId) {
+      console.warn('[rdo_presenca] rdo_id não resolvido — presença nominal não gravada')
+      return
+    }
+
+    // dedupe por pessoaId (índice UNIQUE parcial em rdo_presenca) — avulsos passam todos
+    const vistos = new Set<string>()
+    const rows = presencas
+      .filter((p) => {
+        if (!p.pessoaId) return true
+        if (vistos.has(p.pessoaId)) return false
+        vistos.add(p.pessoaId)
+        return true
+      })
+      .map((p) => ({
+        rdo_id: rdoId,
+        pessoa_id: p.pessoaId,
+        nome_snapshot: p.nome,
+        equipe_id: p.equipeId,
+        equipe_nome_snapshot: p.equipeNome ?? null,
+        cargo_id: p.cargoId ?? null,
+        funcao_no_dia: p.funcao,
+        presente: p.presente,
+        motivo_ausencia: p.presente ? null : p.motivoAusencia ?? 'outro',
+        horas_normais: p.horasNormais,
+        horas_extras: p.horasExtras,
+        origem: 'web',
+      }))
+    const { error } = await supabase.from('rdo_presenca').insert(rows)
+    if (error) {
+      // tabela ausente (42P01/PGRST205) ou constraint — nunca derruba o fluxo do RDO
+      console.warn('[rdo_presenca] não gravado (migrations de pessoal aplicadas?):', error.message)
+    }
+  } catch (e) {
+    console.warn('[rdo_presenca] não gravado:', e instanceof Error ? e.message : e)
+  }
+}
+
 // ─── State ────────────────────────────────────────────────────────────────────
 
 interface RdoState {
@@ -93,7 +182,7 @@ interface RdoState {
   // ── Backend sync ─────────────────────────────────────────────────────────────
   fetchFromBackend:       (nucleo?: string) => Promise<void>
   createRdoOnBackend:     (payload: Record<string, unknown>) => Promise<Record<string, unknown> | null>
-  createRdoForProject:    (projectId: string, rdo: Omit<RDO, 'id' | 'number' | 'createdAt' | 'updatedAt'>) => Promise<Record<string, unknown> | null>
+  createRdoForProject:    (projectId: string, rdo: Omit<RDO, 'id' | 'number' | 'createdAt' | 'updatedAt'> & { presencas?: RdoPresencaInput[] }) => Promise<Record<string, unknown> | null>
   createRdoTextForProject: (projectId: string, texto: string) => Promise<Record<string, unknown> | null>
   createAutomaticoFromText: (projectId: string, texto: string) => Promise<ApiRdoAutomaticoResult | null>
   uploadAutomatico:       (projectId: string, fd: FormData) => Promise<ApiRdoAutomaticoResult | null>
@@ -374,6 +463,11 @@ export const useRdoStore = create<RdoState>((set, get) => ({
 
     try {
       const created = await apiProjetoCriarRdo(projectId, payload)
+      // Presença NOMINAL (aditivo): se a lista veio e o supabase existe, grava
+      // também em rdo_presenca — tolerante a tabela inexistente (catch e segue).
+      if (rdo.presencas && rdo.presencas.length > 0) {
+        await gravarPresencasNoSupabase(projectId, rdo.date, rdo.presencas, created)
+      }
       await get().loadFromSupabase(projectId)
       set({ integrationStatus: 'connected', currentProjectId: projectId, isSaving: false })
       return created
@@ -489,8 +583,15 @@ export const useRdoStore = create<RdoState>((set, get) => ({
       if (projectId) {
         try {
           const apiRows = await apiProjetoRdos(projectId)
-          rows = (apiRows.items ?? []) as Record<string, unknown>[]
-          set({ integrationStatus: 'connected' })
+          const items = (apiRows.items ?? []) as Record<string, unknown>[]
+          // só aceita a API se ela trouxe RDOs de verdade — um array vazio (`[]`)
+          // é truthy em JS, então `rows = []` passava direto pelo `if (!rows)`
+          // abaixo e NUNCA caía no fallback do Supabase (que tem os 37 RDOs
+          // reais). Bug real: API respondendo 200 vazio zerava o Dashboard.
+          if (items.length > 0) {
+            rows = items
+            set({ integrationStatus: 'connected' })
+          }
         } catch {
           rows = null
         }

@@ -75,7 +75,7 @@ export const useGestao360Store = create<Gestao360State>((set, get) => ({
   selectedProjectId: null,
   activeTab:         'dashboard',
 
-  useBackend:     true,
+  useBackend:     false,
   backendLoading: false,
   backendError:   null,
   dashboard:      null,

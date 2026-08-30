@@ -32,8 +32,8 @@ const BASEMAPS: Record<string, { url: string; label: string; attribution: string
 
 export function MapaOperacionalPanel() {
   const {
-    assets, serviceOrders, outages, circuitAssets, deviceAssets, weatherStations,
-    layerVisibility, selectedAssetId, selectedCircuitId,
+    assets: allAssets, serviceOrders, outages, circuitAssets, deviceAssets, weatherStations,
+    layerVisibility, selectedAssetId, selectedCircuitId, searchQuery,
     setSelectedAssetId, setSelectedCircuitId,
   } = useRede360Store(
     useShallow((s) => ({
@@ -46,10 +46,16 @@ export function MapaOperacionalPanel() {
       layerVisibility:      s.layerVisibility,
       selectedAssetId:      s.selectedAssetId,
       selectedCircuitId:    s.selectedCircuitId,
+      searchQuery:          s.searchQuery,
       setSelectedAssetId:   s.setSelectedAssetId,
       setSelectedCircuitId: s.setSelectedCircuitId,
     }))
   )
+
+  const query = searchQuery.trim().toLowerCase()
+  const assets = query
+    ? allAssets.filter((a) => a.name.toLowerCase().includes(query) || a.code.toLowerCase().includes(query))
+    : allAssets
 
   const [basemap, setBasemap] = useState('dark')
   const bm = BASEMAPS[basemap] ?? BASEMAPS.dark

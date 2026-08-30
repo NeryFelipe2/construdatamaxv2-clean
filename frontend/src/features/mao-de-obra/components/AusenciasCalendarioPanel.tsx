@@ -39,7 +39,7 @@ const ABSENCE_BG: Record<AbsenceType, string> = {
   unjustified: 'bg-[#ef4444]/15 text-[#ef4444]',
   vacation:    'bg-[#22c55e]/15 text-[#22c55e]',
   accident:    'bg-[#8b5cf6]/15 text-[#8b5cf6]',
-  other:       'bg-[var(--color-surface)] text-[var(--color-text-secondary)]',
+  other:       'bg-[#2c2c2c] text-[#a3a3a3]',
 }
 
 // ─── CSV ──────────────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ function CalendarView({
     <div>
       <div className="grid grid-cols-7 gap-1 mb-1">
         {dayLabels.map(d => (
-          <div key={d} className="text-center text-xs font-semibold text-[var(--color-text-muted)] py-1">{d}</div>
+          <div key={d} className="text-center text-xs font-semibold text-[#6b6b6b] py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -108,10 +108,10 @@ function CalendarView({
               onClick={() => inMonth && onDayClick(dateStr)}
               className={`min-h-[64px] p-1 rounded-xl border transition-colors ${
                 !inMonth ? 'opacity-30 pointer-events-none border-transparent' :
-                today    ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5' :
-                           'border-[var(--color-border)] hover:border-[var(--color-accent)]/50 cursor-pointer'
+                today    ? 'border-[#f97316] bg-[#f97316]/5' :
+                           'border-[#525252] hover:border-[#f97316]/50 cursor-pointer'
               }`}>
-              <div className={`text-xs font-semibold mb-1 w-6 h-6 flex items-center justify-center rounded-full ${today ? 'bg-[var(--color-accent)] text-white' : 'text-[var(--color-text-secondary)]'}`}>
+              <div className={`text-xs font-semibold mb-1 w-6 h-6 flex items-center justify-center rounded-full ${today ? 'bg-[#f97316] text-[#ffffff]' : 'text-[#a3a3a3]'}`}>
                 {day.getDate()}
               </div>
               <div className="flex flex-wrap gap-0.5">
@@ -119,7 +119,7 @@ function CalendarView({
                   <span key={a.id} className="w-2 h-2 rounded-full inline-block" style={{ background: ABSENCE_DOT_COLORS[a.type] }} title={ABSENCE_LABELS[a.type]} />
                 ))}
                 {dayAbs.length > 5 && (
-                  <span className="text-[9px] text-[var(--color-text-muted)]">+{dayAbs.length - 5}</span>
+                  <span className="text-[9px] text-[#6b6b6b]">+{dayAbs.length - 5}</span>
                 )}
               </div>
             </div>
@@ -140,19 +140,19 @@ function DayPopover({ date, absences, workerName, onClose }: {
 }) {
   if (absences.length === 0) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-sm bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-5" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-sm bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-5" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
+          <h3 className="text-sm font-bold text-[#f5f5f5]">
             {new Date(date + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })}
           </h3>
-          <button onClick={onClose} className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">✕</button>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors">✕</button>
         </div>
         <div className="space-y-2">
           {absences.map(a => (
-            <div key={a.id} className="flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+            <div key={a.id} className="flex items-center justify-between p-3 rounded-xl border border-[#525252] bg-[#2c2c2c]">
               <div>
-                <div className="text-sm font-medium text-[var(--color-text-primary)]">{workerName(a.workerId)}</div>
+                <div className="text-sm font-medium text-[#f5f5f5]">{workerName(a.workerId)}</div>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ABSENCE_BG[a.type]}`}>{ABSENCE_LABELS[a.type]}</span>
               </div>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -191,25 +191,25 @@ function TimelineView({ month, absences, workers }: {
       <table className="text-xs border-collapse">
         <thead>
           <tr>
-            <th className="sticky left-0 z-10 bg-[var(--color-surface-elevated)] px-3 py-2 text-left font-semibold text-[var(--color-text-secondary)] min-w-[160px] border-b border-[var(--color-border)]">
+            <th className="sticky left-0 z-10 bg-[#3d3d3d] px-3 py-2 text-left font-medium text-[#a3a3a3] min-w-[160px] border-b border-[#525252]/50">
               Colaborador
             </th>
             {days.map(d => {
               const dow = d.getDay()
               return (
-                <th key={d.toISOString()} className={`px-1 py-2 text-center font-medium border-b border-[var(--color-border)] min-w-[28px] ${dow === 0 ? 'text-[#ef4444]/70' : 'text-[var(--color-text-muted)]'}`}>
+                <th key={d.toISOString()} className={`px-1 py-2 text-center font-medium border-b border-[#525252]/50 min-w-[28px] ${dow === 0 ? 'text-[#ef4444]/70' : 'text-[#6b6b6b]'}`}>
                   {d.getDate()}
                 </th>
               )
             })}
           </tr>
         </thead>
-        <tbody className="divide-y divide-[var(--color-border)]">
+        <tbody className="divide-y divide-[#525252]/50">
           {activeWorkers.length === 0 ? (
-            <tr><td colSpan={days.length + 1} className="px-3 py-8 text-center text-[var(--color-text-muted)]">Nenhuma ausência encontrada</td></tr>
+            <tr><td colSpan={days.length + 1} className="px-3 py-8 text-center text-[#6b6b6b]">Nenhuma ausência encontrada</td></tr>
           ) : activeWorkers.map(w => (
-            <tr key={w.id} className="hover:bg-[var(--color-surface)]/50 transition-colors">
-              <td className="sticky left-0 z-10 bg-[var(--color-surface-elevated)] px-3 py-2 font-medium text-[var(--color-text-primary)] whitespace-nowrap">
+            <tr key={w.id} className="hover:bg-[#2c2c2c]/50 transition-colors">
+              <td className="sticky left-0 z-10 bg-[#3d3d3d] px-3 py-2 font-medium text-[#f5f5f5] whitespace-nowrap">
                 {w.name.split(' ').slice(0, 2).join(' ')}
               </td>
               {days.map(d => {
@@ -231,11 +231,11 @@ function TimelineView({ month, absences, workers }: {
         </tbody>
       </table>
       {/* Legend */}
-      <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-[var(--color-border)]">
+      <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-[#525252]">
         {(Object.entries(ABSENCE_DOT_COLORS) as Array<[AbsenceType, string]>).map(([type, color]) => (
           <div key={type} className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-sm" style={{ background: color }} />
-            <span className="text-xs text-[var(--color-text-muted)]">{ABSENCE_LABELS[type]}</span>
+            <span className="text-xs text-[#6b6b6b]">{ABSENCE_LABELS[type]}</span>
           </div>
         ))}
       </div>
@@ -251,11 +251,11 @@ function AbsenceBarChart({ data }: { data: Array<{ label: string; value: number;
     <div className="space-y-2">
       {data.filter(d => d.value > 0).map(d => (
         <div key={d.label} className="flex items-center gap-2">
-          <span className="text-xs text-[var(--color-text-secondary)] w-24 shrink-0">{d.label}</span>
-          <div className="flex-1 h-3 rounded-full bg-[var(--color-border)] overflow-hidden">
+          <span className="text-xs text-[#a3a3a3] w-24 shrink-0">{d.label}</span>
+          <div className="flex-1 h-3 rounded-full bg-[#525252] overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${(d.value / max) * 100}%`, background: d.color }} />
           </div>
-          <span className="text-xs font-semibold text-[var(--color-text-primary)] w-5 text-right">{d.value}</span>
+          <span className="text-xs font-semibold text-[#f5f5f5] w-5 text-right">{d.value}</span>
         </div>
       ))}
     </div>
@@ -392,41 +392,41 @@ export function AusenciasCalendarioPanel() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: 'Taxa de Ausência',       value: `${absenceRate}%`,     color: parseFloat(absenceRate) > 5 ? 'text-[#ef4444]' : 'text-[#22c55e]' },
-          { label: 'Ausências esta Semana',  value: absencesThisWeek,      color: absencesThisWeek > 0 ? 'text-[#f59e0b]' : 'text-[var(--color-text-primary)]' },
-          { label: 'Ausências este Mês',     value: absencesThisMonth,     color: 'text-[var(--color-text-primary)]' },
-          { label: 'Média por Colaborador',  value: `${avgPerWorker}d`,    color: 'text-[var(--color-text-secondary)]' },
+          { label: 'Ausências esta Semana',  value: absencesThisWeek,      color: absencesThisWeek > 0 ? 'text-[#f59e0b]' : 'text-[#f5f5f5]' },
+          { label: 'Ausências este Mês',     value: absencesThisMonth,     color: 'text-[#f5f5f5]' },
+          { label: 'Média por Colaborador',  value: `${avgPerWorker}d`,    color: 'text-[#a3a3a3]' },
         ].map(stat => (
           <div key={stat.label}
-            className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+            className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[#3d3d3d] border border-[#525252]">
             <span className={`text-xl font-bold ${stat.color}`}>{stat.value}</span>
-            <span className="text-xs text-[var(--color-text-muted)] text-center mt-0.5">{stat.label}</span>
+            <span className="text-xs text-[#6b6b6b] text-center mt-0.5">{stat.label}</span>
           </div>
         ))}
       </div>
 
       {/* Charts (collapsible) */}
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] overflow-hidden">
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
         <button onClick={() => setShowCharts(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-[var(--color-text-primary)] hover:bg-[var(--color-surface)] transition-colors">
+          className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-[#f5f5f5] hover:bg-[#2c2c2c] transition-colors">
           <span>Análise de Ausências (30 dias)</span>
-          <span className="text-xs text-[var(--color-text-muted)]">{showCharts ? '▲' : '▼'}</span>
+          <span className="text-xs text-[#6b6b6b]">{showCharts ? '▲' : '▼'}</span>
         </button>
         {showCharts && (
           <div className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase mb-3">Por Tipo</p>
+              <p className="text-xs font-semibold text-[#a3a3a3] uppercase mb-3">Por Tipo</p>
               <AbsenceBarChart data={chartData} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase mb-3">Top 5 Ausentes</p>
+              <p className="text-xs font-semibold text-[#a3a3a3] uppercase mb-3">Top 5 Ausentes</p>
               {top5.length === 0 ? (
-                <p className="text-sm text-[var(--color-text-muted)]">Sem ausências nos últimos 30 dias</p>
+                <p className="text-sm text-[#6b6b6b]">Sem ausências nos últimos 30 dias</p>
               ) : (
                 <div className="space-y-2">
                   {top5.map(({ worker, count }, i) => (
                     <div key={worker!.id} className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-[var(--color-accent)]/10 text-[var(--color-accent)]">{i + 1}</span>
-                      <span className="flex-1 text-sm text-[var(--color-text-primary)] truncate">{worker!.name.split(' ').slice(0, 2).join(' ')}</span>
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-[#f97316]/10 text-[#f97316]">{i + 1}</span>
+                      <span className="flex-1 text-sm text-[#f5f5f5] truncate">{worker!.name.split(' ').slice(0, 2).join(' ')}</span>
                       <span className="text-xs font-semibold text-[#ef4444]">{count}x</span>
                     </div>
                   ))}
@@ -440,22 +440,22 @@ export function AusenciasCalendarioPanel() {
       {/* Filter bar */}
       <div className="flex flex-wrap gap-2 items-center">
         <select value={filterWorker} onChange={e => setFilterWorker(e.target.value)}
-          className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
           <option value="all">Todos os colaboradores</option>
           {workerList.map(w => <option key={w.id} value={w.id}>{w.name.split(' ').slice(0, 2).join(' ')}</option>)}
         </select>
         <select value={filterDept} onChange={e => setFilterDept(e.target.value)}
-          className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
           <option value="all">Todos os depto.</option>
           {departments.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
         <select value={filterType} onChange={e => setFilterType(e.target.value as AbsenceType | 'all')}
-          className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
           <option value="all">Todos os tipos</option>
           {(Object.keys(ABSENCE_LABELS) as AbsenceType[]).map(t => <option key={t} value={t}>{ABSENCE_LABELS[t]}</option>)}
         </select>
         <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as WorkerAbsence['status'] | 'all')}
-          className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
           <option value="all">Todos os status</option>
           <option value="open">Em aberto</option>
           <option value="covered">Coberta</option>
@@ -464,18 +464,18 @@ export function AusenciasCalendarioPanel() {
         {viewMode === 'list' && (
           <>
             <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
-              className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]" />
+              className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]" />
             <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
-              className="px-2 py-1.5 rounded-lg text-xs border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]" />
+              className="px-2 py-1.5 rounded-lg text-xs border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]" />
           </>
         )}
         <div className="ml-auto flex gap-2">
           <button onClick={handleExportCSV}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors">
             Exportar CSV
           </button>
           <button onClick={() => window.print()}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+            className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors">
             PDF
           </button>
         </div>
@@ -483,11 +483,11 @@ export function AusenciasCalendarioPanel() {
 
       {/* View mode toggle + navigation */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex gap-1 p-1 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+        <div className="flex gap-1 p-1 rounded-lg bg-[#3d3d3d] border border-[#525252] overflow-x-auto scrollbar-hide">
           {(['calendar', 'timeline', 'list'] as ViewMode[]).map(v => (
             <button key={v} onClick={() => setViewMode(v)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                viewMode === v ? 'bg-[var(--color-accent)] text-white shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+              className={`shrink-0 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors whitespace-nowrap ${
+                viewMode === v ? 'bg-[#f97316] text-[#ffffff]' : 'text-[#a3a3a3] hover:text-[#f5f5f5] hover:bg-[#484848]'
               }`}>
               {v === 'calendar' ? 'Calendário' : v === 'timeline' ? 'Timeline' : 'Lista'}
             </button>
@@ -496,14 +496,14 @@ export function AusenciasCalendarioPanel() {
         {viewMode !== 'list' && (
           <div className="flex items-center gap-2">
             <button onClick={handlePrevMonth}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors text-lg">
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors text-lg">
               ‹
             </button>
-            <span className="min-w-[140px] text-center text-sm font-semibold text-[var(--color-text-primary)] capitalize">
+            <span className="min-w-[140px] text-center text-sm font-semibold text-[#f5f5f5] capitalize">
               {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
             </span>
             <button onClick={handleNextMonth}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors text-lg">
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors text-lg">
               ›
             </button>
           </div>
@@ -511,7 +511,7 @@ export function AusenciasCalendarioPanel() {
       </div>
 
       {/* View content */}
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
         {viewMode === 'calendar' && (
           <CalendarView
             month={currentMonth}
@@ -530,23 +530,23 @@ export function AusenciasCalendarioPanel() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+                <tr className="border-b border-[#525252]/50">
                   {['Data', 'Colaborador', 'Departamento', 'Tipo', 'Status', 'Substituto'].map(h => (
-                    <th key={h} className="text-left px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap">{h}</th>
+                    <th key={h} className="text-left px-3 py-2 text-xs font-medium text-[#a3a3a3] whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
+              <tbody className="divide-y divide-[#525252]/50">
                 {filteredAbsences.length === 0 ? (
-                  <tr><td colSpan={6} className="px-3 py-8 text-center text-sm text-[var(--color-text-muted)]">Nenhuma ausência encontrada</td></tr>
+                  <tr><td colSpan={6} className="px-3 py-8 text-center text-sm text-[#6b6b6b]">Nenhuma ausência encontrada</td></tr>
                 ) : filteredAbsences.map(a => {
                   const w   = workerMap[a.workerId]
                   const sub = a.substituteWorkerId ? (workerMap[a.substituteWorkerId]?.name ?? '—') : '—'
                   return (
-                    <tr key={a.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                      <td className="px-3 py-2 text-[var(--color-text-secondary)] whitespace-nowrap">{new Date(a.date + 'T12:00:00').toLocaleDateString('pt-BR')}</td>
-                      <td className="px-3 py-2 font-medium text-[var(--color-text-primary)]">{w?.name ?? a.workerId}</td>
-                      <td className="px-3 py-2 text-[var(--color-text-muted)]">{w?.department ?? '—'}</td>
+                    <tr key={a.id} className="hover:bg-[#2c2c2c] transition-colors">
+                      <td className="px-3 py-2 text-[#a3a3a3] whitespace-nowrap">{new Date(a.date + 'T12:00:00').toLocaleDateString('pt-BR')}</td>
+                      <td className="px-3 py-2 font-medium text-[#f5f5f5]">{w?.name ?? a.workerId}</td>
+                      <td className="px-3 py-2 text-[#6b6b6b]">{w?.department ?? '—'}</td>
                       <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ABSENCE_BG[a.type]}`}>{ABSENCE_LABELS[a.type]}</span></td>
                       <td className="px-3 py-2">
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -557,7 +557,7 @@ export function AusenciasCalendarioPanel() {
                           {a.status === 'covered' ? 'Coberta' : a.status === 'uncovered' ? 'Descoberta' : 'Aberta'}
                         </span>
                       </td>
-                      <td className="px-3 py-2 text-[var(--color-text-muted)]">{sub}</td>
+                      <td className="px-3 py-2 text-[#6b6b6b]">{sub}</td>
                     </tr>
                   )
                 })}

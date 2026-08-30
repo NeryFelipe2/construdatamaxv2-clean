@@ -4,12 +4,14 @@ import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useRelatorio360Store } from '@/store/relatorio360Store'
 import { useCurrentDate, useCurrentReport } from '@/hooks/useRelatorio360'
+import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { printRelatorio360PDF } from '../utils/relatorio360PdfExport'
 
 export function ReportHeader() {
   const rawDate       = useCurrentDate()
   const currentDate   = rawDate || new Date().toISOString().slice(0, 10)
   const report        = useCurrentReport()
+  const activeProjeto = useProjectContext(selectActiveProjeto)
   const { goToPrevDay, goToNextDay, goToDate, reports } = useRelatorio360Store()
 
   const [showPeriod, setShowPeriod]   = useState(false)
@@ -49,7 +51,7 @@ export function ReportHeader() {
             <span>Relatório Diário de Obra</span>
           </div>
           <h1 className="text-[#f5f5f5] text-xl font-bold leading-tight">
-            {report?.projectName ?? 'Sem Projeto'}
+            {activeProjeto?.nome ?? report?.projectName ?? 'Sem Projeto'}
           </h1>
         </div>
 

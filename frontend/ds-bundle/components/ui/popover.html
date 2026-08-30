@@ -1,0 +1,42 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popover Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+    .animate-in { animation: fadeIn 0.15s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+  <div class="flex flex-col items-center gap-8">
+    <div class="relative inline-block">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-[#2abfdc] text-black h-9 px-4 py-2">
+        Abrir Popover
+      </button>
+      <div class="absolute z-50 max-h-[var(--radix-popover-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-xl border border-[#20406a] bg-[#112645] p-4 text-[#f5f5f5] shadow-lg outline-none animate-in mt-2 left-0 w-64">
+        <h4 class="text-sm font-bold text-[#2abfdc] mb-2">Título do Popover</h4>
+        <p class="text-xs text-[#a3a3a3] leading-relaxed">Conteúdo do popover com informações adicionais que aparecem ao clicar.</p>
+        <div class="mt-3 pt-3 border-t border-[#20406a]">
+          <button class="text-xs text-[#2abfdc] hover:underline">Ação primária</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative inline-block">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-[#20406a] bg-transparent text-[#a3a3a3] hover:bg-[#1a3662] h-9 px-4 py-2">
+        ⋮ Menu
+      </button>
+      <div class="absolute right-0 z-50 min-w-[10rem] rounded-xl border border-[#20406a] bg-[#112645] p-2 text-[#f5f5f5] shadow-lg outline-none animate-in mt-2 w-48">
+        <button class="w-full text-left px-3 py-2 text-sm text-[#f5f5f5] hover:bg-[#1a3662] rounded-lg transition-colors">Editar</button>
+        <button class="w-full text-left px-3 py-2 text-sm text-[#f5f5f5] hover:bg-[#1a3662] rounded-lg transition-colors">Duplicar</button>
+        <button class="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">Excluir</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

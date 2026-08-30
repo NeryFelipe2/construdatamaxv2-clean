@@ -13,9 +13,11 @@ interface AppModeState {
 
 const STORAGE_KEY = 'cdata-demo'
 
-// Default to demo mode ON so first-time visitors see a populated platform.
+// WCR é operação real, não vitrine de demo — o app abre sempre em modo AO VIVO
+// por padrão (só liga demo se alguém ligar manualmente, e mesmo assim fica
+// salvo só naquele navegador).
 const savedRaw = localStorage.getItem(STORAGE_KEY)
-const initialDemo: boolean = savedRaw === null ? true : savedRaw === 'true'
+const initialDemo: boolean = savedRaw === 'true'
 
 export const useAppModeStore = create<AppModeState>((set) => ({
   isDemoMode: initialDemo,
@@ -45,6 +47,7 @@ export const useAppModeStore = create<AppModeState>((set) => ({
         import('./bimStore').then(({ useBimStore }) => useBimStore.getState().loadDemoData())
         import('./lpsStore').then(({ useLpsStore }) => useLpsStore.getState().loadDemoData())
         import('./mapaInterativoStore').then(({ useMapaInterativoStore }) => useMapaInterativoStore.getState().loadDemoData())
+        import('./evmStore').then(({ useEvmStore }) => useEvmStore.getState().loadDemoData())
       } else {
         // Clear all stores to empty state
         import('./projetosStore').then(({ useProjetosStore }) => useProjetosStore.getState().clearData())
@@ -64,6 +67,7 @@ export const useAppModeStore = create<AppModeState>((set) => ({
         import('./bimStore').then(({ useBimStore }) => useBimStore.getState().clearData())
         import('./lpsStore').then(({ useLpsStore }) => useLpsStore.getState().clearData())
         import('./mapaInterativoStore').then(({ useMapaInterativoStore }) => useMapaInterativoStore.getState().clearData())
+        import('./evmStore').then(({ useEvmStore }) => useEvmStore.getState().clearData())
       }
 
       return { isDemoMode: next }

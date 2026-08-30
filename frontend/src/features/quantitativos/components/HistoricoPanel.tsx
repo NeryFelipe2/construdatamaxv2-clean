@@ -13,10 +13,11 @@ function fmtDate(iso: string) {
 }
 
 const SOURCE_BADGE: Record<string, string> = {
-  sinapi:  'bg-blue-900/50 text-blue-300',
-  seinfra: 'bg-teal-900/50 text-teal-300',
-  custom:  'bg-violet-900/50 text-violet-300',
-  manual:  'bg-[#484848] text-[#a3a3a3]',
+  sinapi:   'bg-blue-900/50 text-blue-300',
+  seinfra:  'bg-teal-900/50 text-teal-300',
+  custom:   'bg-violet-900/50 text-violet-300',
+  manual:   'bg-[#484848] text-[#a3a3a3]',
+  contrato: 'bg-orange-900/50 text-orange-300',
 }
 
 function SaveDialog({ onSave, onClose }: { onSave: (name: string, desc?: string) => void; onClose: () => void }) {

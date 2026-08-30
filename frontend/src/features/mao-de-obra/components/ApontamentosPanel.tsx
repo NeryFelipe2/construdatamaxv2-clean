@@ -38,11 +38,11 @@ function ProgressTable({ progress }: { progress: PhysicalProgress[] }) {
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b border-[#525252]">
-              <th className="text-left text-[#6b6b6b] font-medium pb-2">Atividade</th>
-              <th className="text-right text-[#6b6b6b] font-medium pb-2">Planejado</th>
-              <th className="text-right text-[#6b6b6b] font-medium pb-2">Realizado</th>
-              <th className="text-right text-[#6b6b6b] font-medium pb-2">Desvio</th>
+            <tr className="border-b border-[#525252]/50">
+              <th className="text-left text-[#a3a3a3] font-medium pb-2">Atividade</th>
+              <th className="text-right text-[#a3a3a3] font-medium pb-2">Planejado</th>
+              <th className="text-right text-[#a3a3a3] font-medium pb-2">Realizado</th>
+              <th className="text-right text-[#a3a3a3] font-medium pb-2">Desvio</th>
             </tr>
           </thead>
           <tbody>
@@ -95,13 +95,13 @@ function TimecardTable({
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[#525252]">
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Data</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Funcionário</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2 hidden md:table-cell">Atividade</th>
-                  <th className="text-right text-[#6b6b6b] font-medium pb-2">HH</th>
-                  <th className="text-right text-[#6b6b6b] font-medium pb-2">Qtd</th>
-                  <th className="text-left text-[#6b6b6b] font-medium pb-2">Un</th>
+                <tr className="border-b border-[#525252]/50">
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Data</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Funcionário</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2 hidden md:table-cell">Atividade</th>
+                  <th className="text-right text-[#a3a3a3] font-medium pb-2">HH</th>
+                  <th className="text-right text-[#a3a3a3] font-medium pb-2">Qtd</th>
+                  <th className="text-left text-[#a3a3a3] font-medium pb-2">Un</th>
                 </tr>
               </thead>
               <tbody>
@@ -185,7 +185,7 @@ export function ApontamentosPanel() {
       <div className="flex gap-2">
         <button
           onClick={() => setIsDialogOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-sm font-semibold transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-[#ffffff] text-sm font-semibold transition-colors"
         >
           <Plus size={15} />
           Novo Apontamento
@@ -194,7 +194,7 @@ export function ApontamentosPanel() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={isImporting}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-sm font-medium hover:bg-[#484848] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#525252] text-[#f5f5f5] text-sm font-medium hover:bg-[#484848] transition-colors disabled:opacity-50"
         >
           {isImporting ? <Loader2 size={15} className="animate-spin" /> : <Upload size={15} />}
           {isImporting ? 'Importando...' : 'Importar Planilha'}

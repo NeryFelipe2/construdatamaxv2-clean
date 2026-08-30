@@ -1,0 +1,81 @@
+# ══════════════════════════════════════════════════════════════════════
+# EVOLUTION API — stack minima e definitiva para o bot de RDO da WCR
+#
+# Sobe 3 containers: Postgres (sessao do WhatsApp), Evolution (WhatsApp)
+# e Caddy (HTTPS automatico, de graca, sem precisar comprar dominio).
+#
+# COMO USAR: veja ../README-LIGAR.md — passo a passo copiavel.
+# ══════════════════════════════════════════════════════════════════════
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      POSTGRES_DB: evolution
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evolution"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  evolution:
+    image: atendai/evolution-api:v2.1.1
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SERVER_URL: https://${HOSTNAME_PUBLICO:?defina HOSTNAME_PUBLICO no .env}
+      SERVER_PORT: 8080
+      AUTHENTICATION_API_KEY: ${EVOLUTION_KEY:?defina EVOLUTION_KEY no .env}
+      AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
+
+      # sessao do WhatsApp persistida no Postgres: reboot do servidor
+      # NAO derruba o chip nem pede QR de novo
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evolution:${POSTGRES_PASSWORD}@postgres:5432/evolution?schema=public
+      DATABASE_CONNECTION_CLIENT_NAME: evolution_wcr
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "false"   # nao guardamos conteudo de mensagem
+      DATABASE_SAVE_MESSAGE_UPDATE: "false"
+      DATABASE_SAVE_DATA_CONTACTS: "false"
+      DATABASE_SAVE_DATA_CHATS: "false"
+
+      CACHE_REDIS_ENABLED: "false"
+      CACHE_LOCAL_ENABLED: "true"
+      RABBITMQ_ENABLED: "false"
+
+      DEL_INSTANCE: "false"
+      LOG_LEVEL: "ERROR"
+      TZ: America/Sao_Paulo
+    volumes:
+      - instances:/evolution/instances
+    # sem "ports:" — so o Caddy fala com ela. A API nunca fica exposta em HTTP puro.
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    depends_on: [evolution]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      HOSTNAME_PUBLICO: ${HOSTNAME_PUBLICO}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pg:
+  instances:
+  caddy_data:
+  caddy_config:

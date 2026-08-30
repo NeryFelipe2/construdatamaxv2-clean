@@ -10,7 +10,10 @@
 import { useState, useRef } from 'react'
 import { Upload, X, FileText, AlertTriangle, CheckCircle } from 'lucide-react'
 import { useMapaInterativoStore } from '@/store/mapaInterativoStore'
+import { useProjectContext } from '@/store/projectContext'
 import { utmToWgs84 } from '@/utils/utmToWgs84'
+import { parseKmlText, parseKmz, parseShpReal, parseGpkg, type GeoImportResult } from '@/utils/geoImport'
+import { salvarImportComoAFazer } from '@/hooks/useGeoAFazer'
 import type { MapNode, MapSegment, MapNetworkType, MapNodeType } from '@/types'
 
 interface Props {
@@ -158,41 +161,6 @@ function parseDxf(text: string): ParseResult {
   return { ok: true, nodes, segments, message: `${nodes.length} nós e ${segments.length} trechos importados do DXF.` }
 }
 
-function parseShpBbox(buffer: ArrayBuffer, _fileName: string): ParseResult {
-  const view = new DataView(buffer)
-  if (view.byteLength < 100) return { ok: false, message: 'Arquivo SHP muito pequeno ou inválido.' }
-
-  const fileCode = view.getInt32(0, false)
-  if (fileCode !== 9994) return { ok: false, message: 'Código de arquivo SHP inválido (esperado 9994).' }
-
-  const xMin = view.getFloat64(36, true)
-  const yMin = view.getFloat64(44, true)
-  const xMax = view.getFloat64(52, true)
-  const yMax = view.getFloat64(60, true)
-
-  if (isNaN(xMin) || isNaN(yMin) || isNaN(xMax) || isNaN(yMax)) {
-    return { ok: false, message: 'Não foi possível ler o bounding box do SHP.' }
-  }
-
-  const corners: MapNode[] = [
-    { id: crypto.randomUUID(), lat: yMin, lng: xMin, label: 'SHP-SW', nodeType: 'endpoint' },
-    { id: crypto.randomUUID(), lat: yMin, lng: xMax, label: 'SHP-SE', nodeType: 'endpoint' },
-    { id: crypto.randomUUID(), lat: yMax, lng: xMax, label: 'SHP-NE', nodeType: 'endpoint' },
-    { id: crypto.randomUUID(), lat: yMax, lng: xMin, label: 'SHP-NW', nodeType: 'endpoint' },
-  ]
-  const segs: MapSegment[] = [
-    { id: crypto.randomUUID(), fromNodeId: corners[0].id, toNodeId: corners[1].id, networkType: 'generic', label: 'SHP bbox' },
-    { id: crypto.randomUUID(), fromNodeId: corners[1].id, toNodeId: corners[2].id, networkType: 'generic', label: 'SHP bbox' },
-    { id: crypto.randomUUID(), fromNodeId: corners[2].id, toNodeId: corners[3].id, networkType: 'generic', label: 'SHP bbox' },
-    { id: crypto.randomUUID(), fromNodeId: corners[3].id, toNodeId: corners[0].id, networkType: 'generic', label: 'SHP bbox' },
-  ]
-
-  return {
-    ok: true, nodes: corners, segments: segs,
-    message: `SHP importado como bounding box (${xMin.toFixed(4)}, ${yMin.toFixed(4)}) → (${xMax.toFixed(4)}, ${yMax.toFixed(4)}).`,
-  }
-}
-
 function parseJson(text: string): ParseResult {
   try {
     const data = JSON.parse(text)
@@ -229,16 +197,51 @@ export function MapaImportModal({ onClose }: Props) {
   const [connectSeq, setConnectSeq] = useState(true)
   const [netType, setNetType]       = useState<MapNetworkType>('sewer')
   const [showUtmOpts, setShowUtmOpts] = useState(false)
+  const [salvarBanco, setSalvarBanco] = useState(false)
+  const [salvandoBanco, setSalvandoBanco] = useState(false)
+  const [bancoMsg, setBancoMsg] = useState<string | null>(null)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const projetos = useProjectContext((s) => s.projetos)
+  const projetoAtivo = projetos.find((p) => p.id === activeProjectId) ?? null
   const fileRef = useRef<HTMLInputElement>(null)
   const lastTextRef = useRef<string | null>(null)
   const lastExtRef  = useRef<string>('')
+
+  /** Converte nós com coordenadas UTM cruas (|lat|>90) para WGS84 usando zona/hemisfério da UI. */
+  function fixUtmNodes(r: ParseResult): ParseResult {
+    if (!r.ok) return r
+    const pareceUtm = r.nodes.some((n) => Math.abs(n.lat) > 90 || Math.abs(n.lng) > 180)
+    if (!pareceUtm) return r
+    setShowUtmOpts(true)
+    const nodes = r.nodes.map((n) => {
+      if (Math.abs(n.lat) <= 90 && Math.abs(n.lng) <= 180) return n
+      // DXF grava easting em lng(x) e northing em lat(y)
+      const { lat, lng } = utmToWgs84(n.lng, n.lat, utmZone, utmHemi)
+      return { ...n, lat, lng }
+    })
+    return { ...r, nodes, isUtm: true, message: `${r.message} (UTM ${utmZone}${utmHemi} → WGS84)` }
+  }
+
+  function geoToParse(r: GeoImportResult, formato: string): ParseResult {
+    const avisos = r.warnings.length > 0 ? ` ⚠ ${r.warnings.join(' ')}` : ''
+    return {
+      ok: true,
+      nodes: r.nodes,
+      segments: r.segments,
+      message: `${formato}: ${r.nodes.length} nós, ${r.segments.length} trechos (${r.featuresLidas} features).${avisos}`,
+    }
+  }
 
   function parseText(text: string, ext: string) {
     lastTextRef.current = text
     lastExtRef.current  = ext
     let r: ParseResult
-    if (ext === 'dxf')  r = parseDxf(text)
+    if (ext === 'dxf')  r = fixUtmNodes(parseDxf(text))
     else if (ext === 'json') r = parseJson(text)
+    else if (ext === 'kml') {
+      try { r = geoToParse(parseKmlText(text, { utmZone, utmHemi, networkType: netType }), 'KML') }
+      catch (e) { r = { ok: false, message: e instanceof Error ? e.message : 'Erro ao ler KML.' } }
+    }
     else {
       r = parseTxt(text, utmZone, utmHemi, connectSeq, netType)
       if (r.ok && r.isUtm) setShowUtmOpts(true)
@@ -255,7 +258,7 @@ export function MapaImportModal({ onClose }: Props) {
     setShowUtmOpts(false)
 
     if (ext === 'dwg') {
-      setResult({ ok: false, message: 'Formato DWG é binário proprietário da Autodesk. Converta para DXF via AutoCAD, LibreCAD ou FreeCAD antes de importar.' })
+      setResult({ ok: false, message: 'Formato DWG é binário proprietário da Autodesk. Converta para DXF (AutoCAD/LibreCAD/FreeCAD) e importe o DXF, ou use o Motor NS V5 (backend) que aceita DWG direto.' })
       setLoading(false)
       return
     }
@@ -264,8 +267,29 @@ export function MapaImportModal({ onClose }: Props) {
       setLoading(false)
       return
     }
-    if (ext === 'shp') {
-      file.arrayBuffer().then((buf) => { setResult(parseShpBbox(buf, file.name)); setLoading(false) })
+    const opts = { utmZone, utmHemi, networkType: netType }
+    if (ext === 'shp' || ext === 'zip') {
+      file.arrayBuffer()
+        .then((buf) => parseShpReal(buf, file.name, opts))
+        .then((r) => setResult(fixUtmNodes(geoToParse(r, ext === 'zip' ? 'Shapefile (zip)' : 'SHP'))))
+        .catch((e) => setResult({ ok: false, message: e instanceof Error ? e.message : 'Erro ao ler shapefile.' }))
+        .finally(() => setLoading(false))
+      return
+    }
+    if (ext === 'kmz') {
+      file.arrayBuffer()
+        .then((buf) => parseKmz(buf, opts))
+        .then((r) => setResult(geoToParse(r, 'KMZ')))
+        .catch((e) => setResult({ ok: false, message: e instanceof Error ? e.message : 'Erro ao ler KMZ.' }))
+        .finally(() => setLoading(false))
+      return
+    }
+    if (ext === 'gpkg') {
+      file.arrayBuffer()
+        .then((buf) => parseGpkg(buf, opts))
+        .then((r) => setResult(geoToParse(r, `GPKG [${r.tabelas.join(', ')}]`)))
+        .catch((e) => setResult({ ok: false, message: e instanceof Error ? e.message : 'Erro ao ler GPKG.' }))
+        .finally(() => setLoading(false))
       return
     }
 
@@ -285,8 +309,31 @@ export function MapaImportModal({ onClose }: Props) {
     if (file) handleFile(file)
   }
 
-  function handleConfirm() {
+  async function handleConfirm() {
     if (!result || !result.ok) return
+    if (salvarBanco) {
+      if (!activeProjectId || !projetoAtivo) {
+        setBancoMsg('Selecione um projeto ativo no topo do site para salvar como A Fazer.')
+        return
+      }
+      setSalvandoBanco(true)
+      setBancoMsg(null)
+      try {
+        const r = await salvarImportComoAFazer({
+          nodes: result.nodes,
+          segments: result.segments,
+          projetoId: activeProjectId,
+          nucleo: projetoAtivo.nome,
+          isAgua: netType === 'water',
+        })
+        setBancoMsg(`Banco: ${r.pvs} PVs, ${r.trechos} trechos, ${r.ns} NS gravados em ${projetoAtivo.nome}.${r.avisos.length ? ' ⚠ ' + r.avisos.join(' ') : ''}`)
+      } catch (e) {
+        setBancoMsg(`Erro ao salvar no banco: ${e instanceof Error ? e.message : String(e)}`)
+        setSalvandoBanco(false)
+        return // não fecha nem importa pro mapa se o banco falhou — usuário decide
+      }
+      setSalvandoBanco(false)
+    }
     if (result.nodes.length > 0)    importNodes(result.nodes)
     if (result.segments.length > 0) importSegments(result.segments)
     onClose()
@@ -312,14 +359,14 @@ export function MapaImportModal({ onClose }: Props) {
           >
             <Upload size={28} className="mx-auto text-[#6b6b6b] mb-2" />
             <p className="text-sm text-[#a3a3a3]">Arraste ou clique para selecionar</p>
-            <p className="text-[10px] text-gray-600 mt-1">.txt .csv .dxf .shp .json .ifc .dwg</p>
+            <p className="text-[10px] text-gray-600 mt-1">.kml .kmz .shp .zip .gpkg .dxf .txt .csv .json</p>
             {fileName && <p className="text-xs text-orange-400 mt-2 font-semibold">{fileName}</p>}
           </div>
 
           <input
             ref={fileRef}
             type="file"
-            accept=".txt,.csv,.dxf,.shp,.json,.ifc,.dwg"
+            accept=".txt,.csv,.dxf,.shp,.zip,.json,.ifc,.dwg,.kml,.kmz,.gpkg"
             className="hidden"
             onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
           />
@@ -399,12 +446,32 @@ export function MapaImportModal({ onClose }: Props) {
             </div>
           )}
 
+          {/* Salvar no banco como A Fazer */}
+          <label className="flex items-center gap-2 cursor-pointer bg-[#3d3d3d]/50 border border-[#525252] rounded-lg px-3 py-2">
+            <input
+              type="checkbox"
+              checked={salvarBanco}
+              onChange={(e) => setSalvarBanco(e.target.checked)}
+              className="accent-orange-500"
+            />
+            <span className="text-xs text-[#f5f5f5]">
+              Salvar no banco como <span className="font-semibold text-orange-400">A Fazer</span> (gera PV / Trecho / NS)
+              {projetoAtivo ? <span className="text-[#6b6b6b]"> — projeto: {projetoAtivo.nome}</span> : <span className="text-red-400"> — nenhum projeto ativo!</span>}
+            </span>
+          </label>
+          {bancoMsg && (
+            <div className={`p-3 rounded-lg text-xs ${bancoMsg.startsWith('Erro') || bancoMsg.startsWith('Selecione') ? 'bg-red-900/30 border border-red-800 text-red-300' : 'bg-green-900/30 border border-green-800 text-green-300'}`}>
+              {bancoMsg}
+            </div>
+          )}
+
           {/* Format info */}
           <div className="text-[10px] text-gray-600 space-y-0.5">
-            <p><span className="text-[#6b6b6b]">.txt/.csv</span> — lat,lng ou <span className="text-blue-500">easting,northing[,elevação]</span> (UTM auto-detectado)</p>
-            <p><span className="text-[#6b6b6b]">.dxf</span> — entidades LINE e LWPOLYLINE → nós e trechos</p>
-            <p><span className="text-[#6b6b6b]">.shp</span> — importa bounding box como 4 nós de canto</p>
-            <p><span className="text-[#6b6b6b]">.json</span> — formato nativo da plataforma &#123; nodes, segments &#125;</p>
+            <p><span className="text-[#6b6b6b]">.kml/.kmz</span> — Google Earth (WGS84), pontos e linhas</p>
+            <p><span className="text-[#6b6b6b]">.shp/.zip</span> — Shapefile; zip com .prj reprojeta sozinho, .shp puro usa a zona UTM acima</p>
+            <p><span className="text-[#6b6b6b]">.gpkg</span> — GeoPackage (QGIS); detecta SIRGAS2000/WGS84 UTM pelo EPSG</p>
+            <p><span className="text-[#6b6b6b]">.dxf</span> — LINE/LWPOLYLINE; UTM convertido pela zona acima</p>
+            <p><span className="text-[#6b6b6b]">.txt/.csv</span> — lat,lng ou easting,northing (UTM auto-detectado) · <span className="text-[#6b6b6b]">.json</span> — nativo</p>
           </div>
         </div>
 
@@ -415,11 +482,11 @@ export function MapaImportModal({ onClose }: Props) {
           </button>
           <button
             onClick={handleConfirm}
-            disabled={!result?.ok}
+            disabled={!result?.ok || salvandoBanco}
             className="px-4 py-2 bg-orange-600 hover:bg-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <FileText size={13} className="inline mr-1" />
-            Importar
+            {salvandoBanco ? 'Salvando no banco…' : salvarBanco ? 'Importar + Salvar A Fazer' : 'Importar'}
           </button>
         </div>
       </div>

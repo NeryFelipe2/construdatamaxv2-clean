@@ -3,8 +3,11 @@
  * Sections: Material, Equipamentos, Mão de Obra, Impostos/Indiretos.
  */
 import { useState } from 'react'
-import { Plus, Trash2, Package, Wrench, Users, FileText } from 'lucide-react'
+import { Plus, Trash2, Package, Wrench, Users, FileText, AlertTriangle, Info } from 'lucide-react'
 import { useEvmStore } from '@/store/evmStore'
+import { useAppModeStore } from '@/store/appModeStore'
+import { useProjectContext } from '@/store/projectContext'
+import { usePlanoContasReal } from '@/hooks/usePlanoContasReal'
 import { formatCurrency } from '@/lib/utils'
 import type { CostPillar } from '@/types'
 
@@ -38,7 +41,19 @@ const EMPTY_FORM: NewEntryForm = {
   activityId: '',
 }
 
+/**
+ * PlanoContasPanel — decide entre o Plano de Contas mock (Modo Demo ligado,
+ * com orçado × real completo) e o Plano de Contas real (Modo Demo desligado).
+ */
 export function PlanoContasPanel() {
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+
+  if (isDemoMode) return <PlanoContasPanelMock />
+  return <PlanoContasPanelReal activeProjectId={activeProjectId} />
+}
+
+function PlanoContasPanelMock() {
   const { costAccounts, addCostAccount, removeCostAccount } = useEvmStore()
   const [addingPillar, setAddingPillar] = useState<CostPillar | null>(null)
   const [form, setForm] = useState<NewEntryForm>({ ...EMPTY_FORM })
@@ -234,6 +249,119 @@ export function PlanoContasPanel() {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+/* ─── Plano de Contas com dado real ───────────────────────────────────
+ * Não existe orçamento detalhado por pilar em lugar nenhum hoje — `projetos`
+ * só tem `orcamento_total` (um número único). Este bloco mostra SÓ o lado
+ * REAL (despesas de `lancamentos_financeiros`, mapeadas por `categoria`
+ * texto-livre para um dos 4 pilares) com aviso explícito da ausência do
+ * orçado. Categorias que não batem no dicionário aparecem separadas, nunca
+ * descartadas silenciosamente. */
+
+const PILARES_REAL: { key: CostPillar; label: string; color: string; icon: typeof Package }[] = [
+  { key: 'material', label: 'Material', color: '#38bdf8', icon: Package },
+  { key: 'equipamento', label: 'Equipamentos', color: '#f97316', icon: Wrench },
+  { key: 'mao_de_obra', label: 'Mão de Obra', color: '#22c55e', icon: Users },
+  { key: 'impostos_indiretos', label: 'Impostos / Indiretos', color: '#a78bfa', icon: FileText },
+]
+
+function PlanoContasPanelReal({ activeProjectId }: { activeProjectId: string | null }) {
+  const { porPilar, naoCategorizado, categoriasNaoMapeadas, total, temDados, loading, error } =
+    usePlanoContasReal(activeProjectId)
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-5 flex items-start gap-3">
+        <Info size={18} className="text-sky-400 shrink-0 mt-0.5" />
+        <p className="text-[#a3a3a3] text-sm leading-relaxed">
+          Este Plano de Contas mostra <b className="text-[#f5f5f5]">só o lado Real</b> (despesas lançadas na
+          DRE, mapeadas pela categoria digitada em cada lançamento). <b className="text-amber-300">Orçamento
+          detalhado por pilar não está cadastrado</b> — só o orçamento total do contrato (BAC) existe hoje.
+          Para acompanhar orçado × real por pilar, seria preciso cadastrar essa quebra em uma tela nova.
+        </p>
+      </div>
+
+      {!activeProjectId && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">Selecione um projeto ativo.</span>
+        </div>
+      )}
+
+      {activeProjectId && !loading && !temDados && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
+          <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <span className="text-amber-200/90 text-xs leading-relaxed">
+            <b className="text-amber-300">Sem despesas reais suficientes para esta obra.</b> Nada aqui é
+            estimado ou de exemplo. Lance despesas (DRE → Lançamento) para este projeto, ou ative o{' '}
+            <b className="text-amber-300">Modo Demonstração</b> para ver um exemplo ilustrativo.
+          </span>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-300 text-xs">
+          {error}
+        </div>
+      )}
+
+      {temDados && (
+        <>
+          <div className="flex items-center justify-between">
+            <h2 className="text-[#f5f5f5] text-sm font-semibold">Plano de Contas — Despesas Reais por Pilar</h2>
+            <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-2">
+              <span className="text-[#a3a3a3] text-xs mr-2">Total de Despesas</span>
+              <span className="font-mono text-[#f97316] text-sm font-semibold">{formatCurrency(total)}</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {PILARES_REAL.map((pillar) => {
+              const Icon = pillar.icon
+              const valor = porPilar[pillar.key]
+              const pct = total > 0 ? (valor / total) * 100 : 0
+              return (
+                <div key={pillar.key} className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4" style={{ borderLeftWidth: 4, borderLeftColor: pillar.color }}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${pillar.color}20` }}>
+                      <Icon size={15} style={{ color: pillar.color }} />
+                    </div>
+                    <span className="text-[#f5f5f5] text-sm font-semibold">{pillar.label}</span>
+                  </div>
+                  <p className="font-mono text-lg font-semibold" style={{ color: pillar.color }}>{formatCurrency(valor)}</p>
+                  <p className="text-[#6b6b6b] text-xs mt-1">{pct.toFixed(1)}% do total de despesas</p>
+                </div>
+              )
+            })}
+          </div>
+
+          {naoCategorizado > 0 && (
+            <div className="bg-[#3d3d3d] border border-amber-700/50 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-amber-400 text-sm font-semibold">
+                    Não categorizado — {formatCurrency(naoCategorizado)}
+                  </p>
+                  <p className="text-[#a3a3a3] text-xs mt-1">
+                    Lançamentos cuja categoria não bate com nenhum dos 4 pilares (Material / Equipamento /
+                    Mão de Obra / Impostos). Corrija a categoria do lançamento na DRE para incluir no pilar
+                    correto.
+                  </p>
+                  {categoriasNaoMapeadas.length > 0 && (
+                    <p className="text-[#6b6b6b] text-[10px] font-mono mt-2">
+                      Categorias encontradas: {categoriasNaoMapeadas.join(', ')}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
