@@ -9,9 +9,10 @@
 import { useMemo, useState } from 'react'
 import {
   SlidersHorizontal, Wallet, CalendarRange, Receipt, Target, Coins, Tags,
-  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle, GitBranch,
+  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle, GitBranch, Plus,
 } from 'lucide-react'
 import { useFcp, type FcpStatus } from '@/hooks/useFcp'
+import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { useAuthStore } from '@/store/authStore'
 import { PremissasPanel } from './PremissasPanel'
 import { CustosPanel } from './CustosPanel'
@@ -64,7 +65,10 @@ const mesBr = (m: string) =>
   new Date(m + '-01T12:00:00').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
 
 export function FcpPanel() {
-  const fcp = useFcp()
+  const { activeProjectId } = useProjectContext()
+  const projetoAtivo = useProjectContext(selectActiveProjeto)
+  const fcp = useFcp(activeProjectId)
+  const [criando, setCriando] = useState(false)
   const [aba, setAba] = useState<Aba>('semanal')
   const [obsDevolucao, setObsDevolucao] = useState('')
   const [mostrarDevolver, setMostrarDevolver] = useState(false)
@@ -90,14 +94,39 @@ export function FcpPanel() {
     return <div className={vazioCls}>Carregando fluxo de caixa projetado…</div>
   }
 
-  if (fcp.fcps.length === 0) {
+  if (!activeProjectId) {
     return (
       <div className={`${cardCls} p-6 max-w-2xl`}>
-        <h3 className="text-sm font-semibold text-[#f5f5f5] mb-2">Nenhum FCP cadastrado ainda</h3>
+        <h3 className="text-sm font-semibold text-[#f5f5f5] mb-2">Selecione uma obra</h3>
         <p className="text-xs text-[#a3a3a3] leading-relaxed">
-          O Fluxo de Caixa Projetado é semanal, um por semana de obra. Importe a planilha
-          modelo do engenheiro ou crie um FCP em branco para começar.
+          O Fluxo de Caixa Projetado é por obra — escolha uma no seletor do topo.
         </p>
+      </div>
+    )
+  }
+
+  if (fcp.fcps.length === 0) {
+    const criar = async () => {
+      setCriando(true)
+      // segunda-feira da semana corrente
+      const hoje = new Date(); const dow = (hoje.getDay() + 6) % 7
+      hoje.setDate(hoje.getDate() - dow)
+      await fcp.criarFcp(projetoAtivo?.nome ?? 'FCP', hoje.toISOString().slice(0, 10))
+      setCriando(false)
+    }
+    return (
+      <div className={`${cardCls} p-6 max-w-2xl`}>
+        <h3 className="text-sm font-semibold text-[#f5f5f5] mb-2">
+          {projetoAtivo?.nome ?? 'Esta obra'} ainda não tem FCP
+        </h3>
+        <p className="text-xs text-[#a3a3a3] leading-relaxed mb-4">
+          O Fluxo de Caixa Projetado é semanal e pertence à obra. Crie o desta obra e
+          preencha as premissas, o ticket e os custos — a grade calcula sozinha.
+        </p>
+        {fcp.erro && <p className="text-xs text-red-300 mb-3">{fcp.erro}</p>}
+        <button className={btnPrimario} disabled={criando} onClick={() => void criar()}>
+          <Plus size={14} /> {criando ? 'Criando…' : `Criar FCP de ${projetoAtivo?.nome ?? 'obra'}`}
+        </button>
       </div>
     )
   }

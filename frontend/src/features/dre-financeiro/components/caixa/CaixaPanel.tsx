@@ -14,6 +14,7 @@ import {
   AlertTriangle, Trash2, Check, Plus,
 } from 'lucide-react'
 import { useCaixa, type StatusLanc } from '@/hooks/useCaixa'
+import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { ImportarCaixaModal } from '../importador/ImportarCaixaModal'
 import { baixarModeloCaixa } from '../importador/planilhaCaixa'
 import { cardCls, inputCls, btnPrimario, btnNeutro, thCls, trCls, vazioCls, brl, dataBr, corValor } from '../fcp/ui'
@@ -36,7 +37,9 @@ const COR_STATUS: Record<StatusLanc, string> = {
 }
 
 export function CaixaPanel() {
-  const caixa = useCaixa()
+  const { activeProjectId } = useProjectContext()
+  const projetoAtivo = useProjectContext(selectActiveProjeto)
+  const caixa = useCaixa(activeProjectId, projetoAtivo?.nome ?? null)
   const [aba, setAba] = useState<Aba>('lancamentos')
   const [importar, setImportar] = useState(false)
   const [selecao, setSelecao] = useState<Set<string>>(new Set())
@@ -77,6 +80,15 @@ export function CaixaPanel() {
       ]),
     ]), 'Lançamentos')
     XLSX.writeFile(wb, `CONTROLE_DE_CAIXA_${caixa.mes}.xlsx`)
+  }
+
+  if (!activeProjectId) {
+    return (
+      <div className={`${cardCls} p-6 max-w-2xl`}>
+        <h3 className="text-sm font-semibold text-[#f5f5f5] mb-2">Selecione uma obra</h3>
+        <p className="text-xs text-[#a3a3a3]">O Controle de Caixa é por obra — escolha uma no seletor do topo.</p>
+      </div>
+    )
   }
 
   if (caixa.tabelasAusentes) {

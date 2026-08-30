@@ -60,6 +60,7 @@ export interface FcpPremissas {
 export interface FcpObra {
   id: string
   fcp_id: string
+  projeto_id: string | null
   nome: string
   ordem: number
   ticket_unico: number | null
@@ -199,6 +200,8 @@ export interface UseFcpReturn {
   tabelasAusentes: boolean
   travado: boolean
   recarregar: () => Promise<void>
+  /** Cria um FCP em branco para a obra ativa (documento + premissas padrão + a obra). */
+  criarFcp: (nome: string, semanaRef: string) => Promise<boolean>
   salvarPremissas: (p: Partial<FcpPremissas>) => Promise<boolean>
   salvarObra: (id: string, p: Partial<FcpObra>) => Promise<boolean>
   lancarRealizado: (obraId: string, semana: number, producao: number | null) => Promise<boolean>
@@ -207,7 +210,7 @@ export interface UseFcpReturn {
   setHorizonteSemanas: (n: number) => void
 }
 
-export function useFcp(): UseFcpReturn {
+export function useFcp(projetoId: string | null): UseFcpReturn {
   const [fcps, setFcps] = useState<Fcp[]>([])
   const [fcpId, setFcpId] = useState<string | null>(null)
   const [premissas, setPremissas] = useState<FcpPremissas | null>(null)
@@ -228,9 +231,14 @@ export function useFcp(): UseFcpReturn {
   // lista de FCPs (o seletor de semana no topo)
   const carregarLista = useCallback(async () => {
     if (!supabase) { setLoading(false); return }
+    // O FCP é POR OBRA: sem obra selecionada não há o que listar. Foi a falta
+    // deste filtro que fez o FCP de Bertioga+Santos aparecer "dentro" do
+    // Sakura — o documento estava pendurado direto na organização.
+    if (!projetoId) { setFcps([]); setFcpId(null); setLoading(false); return }
     const { data, error } = await supabase
       .from('fcp')
-      .select('id, nome, semana_ref, status, observacao, versao, aprovado_em, enviado_em, devolvido_em, created_at')
+      .select('id, nome, semana_ref, status, observacao, versao, aprovado_em, enviado_em, devolvido_em, created_at, fcp_obra!inner(projeto_id)')
+      .eq('fcp_obra.projeto_id', projetoId)
       .is('deleted_at', null)
       .order('semana_ref', { ascending: false })
     if (error) {
@@ -239,9 +247,10 @@ export function useFcp(): UseFcpReturn {
     }
     const lista = (data ?? []) as Fcp[]
     setFcps(lista)
-    setFcpId((atual) => atual ?? lista[0]?.id ?? null)
+    // troca de obra: se o FCP selecionado não pertence à nova obra, solta
+    setFcpId((atual) => (atual && lista.some((f) => f.id === atual) ? atual : lista[0]?.id ?? null))
     setLoading(false)
-  }, [])
+  }, [projetoId])
 
   // conteúdo do FCP selecionado (entradas + resultados calculados no banco)
   const carregarDetalhe = useCallback(async (id: string) => {
@@ -350,6 +359,37 @@ export function useFcp(): UseFcpReturn {
     if (fcpId) await carregarDetalhe(fcpId)
   }, [carregarLista, carregarDetalhe, fcpId])
 
+  const criarFcp = useCallback(async (nome: string, semanaRef: string) => {
+    if (!supabase || !projetoId) return false
+    setErro(null)
+    // 1. o documento
+    const { data: doc, error: e1 } = await supabase.from('fcp')
+      .insert({ nome, semana_ref: semanaRef }).select('id').single()
+    if (e1) {
+      setErro(e1.code === '23505'
+        ? 'Já existe um FCP para essa semana nesta empresa — selecione-o na lista.'
+        : e1.message)
+      return false
+    }
+    const novoId = (doc as { id: string }).id
+    // 2. premissas padrão (mesmos defaults da migration 026); o engenheiro
+    //    ajusta tudo na aba Premissas
+    const fim = new Date(semanaRef + 'T12:00:00'); fim.setDate(fim.getDate() + 364)
+    const { error: e2 } = await supabase.from('fcp_premissas')
+      .insert({ fcp_id: novoId, inicio_obra: semanaRef, fim_operacao: fim.toISOString().slice(0, 10) })
+    if (e2) { setErro(e2.message); return false }
+    // 3. a obra do documento = a obra ativa do seletor. O CHECK do banco exige
+    //    um modo de ticket, então entra com ticket_unico = 0 — a grade não
+    //    projeta nada até o engenheiro preencher o ticket real em Custos.
+    const nomeCurto = nome.replace(/^WCR\s*—\s*/i, '').toUpperCase()
+    const { error: e3 } = await supabase.from('fcp_obra')
+      .insert({ fcp_id: novoId, nome: nomeCurto, ordem: 1, projeto_id: projetoId, ticket_unico: 0 })
+    if (e3) { setErro(e3.message); return false }
+    await carregarLista()
+    setFcpId(novoId)
+    return true
+  }, [projetoId, carregarLista])
+
   const salvarPremissas = useCallback(async (p: Partial<FcpPremissas>) => {
     if (!supabase || !fcpId || travado) return false
     const { error } = await supabase.from('fcp_premissas').update(p).eq('fcp_id', fcpId)
@@ -398,7 +438,7 @@ export function useFcp(): UseFcpReturn {
     fcps, fcpId, setFcpId, fcp, premissas, obras, pessoas, gerais, realizados, precos,
     semanas, capital, viabilidade, custoPorObra,
     loading, erro, tabelasAusentes, travado,
-    recarregar, salvarPremissas, salvarObra, lancarRealizado, mudarStatus,
+    recarregar, criarFcp, salvarPremissas, salvarObra, lancarRealizado, mudarStatus,
     horizonteSemanas, setHorizonteSemanas,
   }
 }

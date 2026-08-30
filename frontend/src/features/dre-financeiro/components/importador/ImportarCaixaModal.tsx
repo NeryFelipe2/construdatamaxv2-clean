@@ -12,6 +12,7 @@ import {
   Plus, Equal, ArrowRight, Ban,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { useProjectContext } from '@/store/projectContext'
 import type { UseCaixaReturn } from '@/hooks/useCaixa'
 import { calcularDiff, detectarNovidades, norm, type LinhaDiff, type Veredicto } from './diff'
 import {
@@ -44,6 +45,15 @@ export function ImportarCaixaModal({ caixa, onClose }: { caixa: UseCaixaReturn; 
   const [gravando, setGravando] = useState(false)
   const [resultado, setResultado] = useState<{ criados: number; atualizados: number; ignorados: number; erros: string[] } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const projetos = useProjectContext((s) => s.projetos)
+
+  /** coluna OBRA da planilha → projeto do sistema (aceita "BOI MALHADO" e "WCR — Boi Malhado") */
+  const projetoDaObra = (obra: string): string | null => {
+    const alvo = norm(obra)
+    if (!alvo) return null
+    const hit = projetos.find((p) => norm(p.nome) === alvo || norm(p.nome) === norm('WCR — ' + obra))
+    return hit?.id ?? null
+  }
 
   const resumo = useMemo(() => {
     const r: Record<Veredicto, number> = { NOVO: 0, IGUAL: 0, DIFERENTE: 0, ERRO: 0 }
@@ -124,7 +134,9 @@ export function ImportarCaixaModal({ caixa, onClose }: { caixa: UseCaixaReturn; 
       const campos = {
         tipo: l.dados.tipo, data_inicio: l.dados.data_inicio, data_fim: l.dados.data_fim,
         descricao: l.dados.descricao, valor: l.dados.valor, categoria_id: catId,
-        obra_texto: l.dados.obra, forma_pagamento: l.dados.forma_pagamento,
+        obra_texto: l.dados.obra,
+        projeto_id: projetoDaObra(l.dados.obra),   // vínculo real com o centro de custo
+        forma_pagamento: l.dados.forma_pagamento,
         status: l.dados.status, anexo_url: l.dados.anexo, observacao: l.dados.observacao,
         origem: 'planilha', import_lote: lote,
       }

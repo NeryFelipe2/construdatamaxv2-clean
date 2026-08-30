@@ -106,7 +106,7 @@ export interface UseCaixaReturn {
 
 const mesAtual = () => new Date().toISOString().slice(0, 7)
 
-export function useCaixa(): UseCaixaReturn {
+export function useCaixa(projetoId: string | null, nomeObra?: string | null): UseCaixaReturn {
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [lancamentos, setLancamentos] = useState<Lancamento[]>([])
   const [horasExtras, setHorasExtras] = useState<HoraExtra[]>([])
@@ -118,6 +118,10 @@ export function useCaixa(): UseCaixaReturn {
 
   const carregar = useCallback(async () => {
     if (!supabase) { setLoading(false); return }
+    // Caixa é POR OBRA, como o resto do DRE. Sem obra no seletor, nada a listar.
+    if (!projetoId) {
+      setLancamentos([]); setHorasExtras([]); setLoading(false); return
+    }
     setLoading(true); setErro(null)
     const ini = `${mes}-01`
     const fim = new Date(Number(mes.slice(0, 4)), Number(mes.slice(5, 7)), 0).toISOString().slice(0, 10)
@@ -126,11 +130,13 @@ export function useCaixa(): UseCaixaReturn {
         supabase.from('caixa_categoria').select('id, nome, tipo, ordem, ativo').is('deleted_at', null).order('ordem'),
         supabase.from('caixa_lancamento')
           .select('*, caixa_lancamento_solicitante(pessoa_id, pessoas(nome_completo))')
-          .is('deleted_at', null).gte('data_inicio', ini).lte('data_inicio', fim)
+          .is('deleted_at', null).eq('projeto_id', projetoId)
+          .gte('data_inicio', ini).lte('data_inicio', fim)
           .order('data_inicio', { ascending: true }),
         supabase.from('horas_extras')
           .select('*, pessoas(nome_completo, cargo_texto)')
-          .is('deleted_at', null).gte('data', ini).lte('data', fim).order('data'),
+          .is('deleted_at', null).eq('projeto_id', projetoId)
+          .gte('data', ini).lte('data', fim).order('data'),
         supabase.from('he_valor_cargo').select('*').is('deleted_at', null),
       ])
       if (oCat.error && ausente(oCat.error)) { setTabelasAusentes(true); return }
@@ -155,7 +161,7 @@ export function useCaixa(): UseCaixaReturn {
     } finally {
       setLoading(false)
     }
-  }, [mes])
+  }, [mes, projetoId])
 
   useEffect(() => { void carregar() }, [carregar])
 
@@ -212,6 +218,9 @@ export function useCaixa(): UseCaixaReturn {
   const criarLancamento = useCallback(async (l: Partial<Lancamento> & { solicitantes?: string[] }) => {
     if (!supabase) return false
     const { solicitantes, ...campos } = l
+    // todo lançamento nasce na obra ativa — é o vínculo com o centro de custo
+    if (projetoId) { campos.projeto_id = campos.projeto_id ?? projetoId }
+    if (nomeObra && !campos.obra_texto) campos.obra_texto = nomeObra
     const { data, error } = await supabase.from('caixa_lancamento').insert(campos).select('id').single()
     if (error) { setErro(error.message); return false }
     if (solicitantes?.length) {
@@ -219,7 +228,7 @@ export function useCaixa(): UseCaixaReturn {
         .insert(solicitantes.map((p) => ({ lancamento_id: (data as { id: string }).id, pessoa_id: p })))
     }
     await carregar(); return true
-  }, [carregar])
+  }, [carregar, projetoId, nomeObra])
 
   const atualizarLancamento = useCallback(async (id: string, p: Partial<Lancamento>) => {
     if (!supabase) return false
@@ -249,6 +258,8 @@ export function useCaixa(): UseCaixaReturn {
 
   const lancarHe = useCallback(async (h: Partial<HoraExtra>) => {
     if (!supabase) return false
+    if (projetoId) h.projeto_id = h.projeto_id ?? projetoId
+    if (nomeObra && !h.obra_texto) h.obra_texto = nomeObra
     const { error } = await supabase.from('horas_extras')
       .upsert(h, { onConflict: 'pessoa_id,data' })
     if (error) { setErro(error.message); return false }
