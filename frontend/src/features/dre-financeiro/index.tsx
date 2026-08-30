@@ -19,6 +19,7 @@ import { useSupabaseDre } from '@/lib/useSupabaseDre'
 import { useAppModeStore } from '@/store/appModeStore'
 import { useDreStore } from '@/store/dreStore'
 import { FcpPanel } from './components/fcp/FcpPanel'
+import { CaixaPanel } from './components/caixa/CaixaPanel'
 import { DRE_FALLBACK, FLUXO_CAIXA, TRECHOS_FALLBACK, EFICIENCIA } from '@/data/mockDre'
 import { DreHeader, DreKpiCard } from './components/DreHeader'
 import { LancamentoManualModal } from './components/LancamentoManualModal'
@@ -515,6 +516,8 @@ export function DreFinanceiroPage() {
 
         {/* ═══ CUSTO POR TRECHO ═══ */}
         {tab === 'fcp' && <FcpPanel />}
+
+        {tab === 'caixa' && <CaixaPanel />}
 
         {tab === 'custos' && (
           <>
