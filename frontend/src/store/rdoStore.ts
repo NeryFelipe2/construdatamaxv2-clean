@@ -455,7 +455,9 @@ export const useRdoStore = create<RdoState>((set, get) => ({
           (rdo.directCostBRL || 0) +
           (rdo.indirectCostBRL || 0),
         paralisacoes: rdo.stoppageNotes || '',
-        payload_original: rdo,
+        // ⚠️ status_revisao em snake_case é o que loadFromSupabase lê; template/wcr/status vão
+        // junto no objeto — sem eles a recarga de 30 s apagava o RDO WCR da tela.
+        payload_original: { ...rdo, ...(rdo.statusRevisao ? { status_revisao: rdo.statusRevisao } : {}) },
       }
       if (climaDb) {
         payload.clima = climaDb
@@ -707,6 +709,15 @@ export const useRdoStore = create<RdoState>((set, get) => ({
           pendingFields: Array.isArray(rdoV5.pending_fields) ? rdoV5.pending_fields.map(String) : [],
           extractionConfidence: (rdoV5.confidence && typeof rdoV5.confidence === 'object') ? rdoV5.confidence as Record<string, number> : undefined,
           evidencias: [],
+          ...(payloadOriginal.template === 'wcr' && payloadOriginal.wcr && typeof payloadOriginal.wcr === 'object'
+            ? {
+                template: 'wcr' as const,
+                wcr: payloadOriginal.wcr as RDO['wcr'],
+                siteId: projetoId || null,
+                status: (String(payloadOriginal.status_revisao || payloadOriginal.status || '') === 'rascunho'
+                  ? 'rascunho' : 'finalizado') as RDO['status'],
+              }
+            : {}),
           createdAt: now,
           updatedAt: now,
         } as RDO)

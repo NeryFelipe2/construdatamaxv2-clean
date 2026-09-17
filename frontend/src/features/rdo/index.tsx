@@ -24,11 +24,14 @@ import { FinanceiroPanel } from './components/FinanceiroPanel'
 import { ProducaoPanel } from './components/ProducaoPanel'
 import { WhatsAppBotPanel } from './components/WhatsAppBotPanel'
 import { WhatsAppFluxoPanel } from './components/WhatsAppFluxoPanel'
+import { ImportarPresencaWhatsappPanel } from './components/ImportarPresencaWhatsappPanel'
+import { RdoWcrPanel } from './components/RdoWcrPanel'
 
 /** Abas válidas pro deep-link ?tab= (mesma união de RdoTab em types). */
 const RDO_TABS_VALIDAS: RdoTab[] = [
   'dashboard', 'novo', 'automatico', 'historico', 'diario',
   'integracao', 'financeiro', 'producao', 'whatsapp-bot', 'whatsapp-fluxo',
+  'presenca-whatsapp', 'wcr',
 ]
 
 export function RdoPage() {
@@ -64,6 +67,8 @@ export function RdoPage() {
       case 'producao':        return <ProducaoPanel />
       case 'whatsapp-bot':    return <WhatsAppBotPanel />
       case 'whatsapp-fluxo':  return <WhatsAppFluxoPanel />
+      case 'presenca-whatsapp': return <ImportarPresencaWhatsappPanel />
+      case 'wcr':             return <RdoWcrPanel />
       default:                return <DashboardPanel />
     }
   }
