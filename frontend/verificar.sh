@@ -56,3 +56,7 @@ if faltas:
     raise SystemExit(1)
 print("OK — nada usado sem importar.")
 PY
+
+echo; echo "── testes (node:test via tsx) ──"
+npm test --silent 2>&1 | grep -E "^ℹ (tests|pass|fail)|^✖" | tail -40
+if npm test --silent >/dev/null 2>&1; then echo "OK — testes passando."; else echo "!! TESTES FALHANDO"; exit 1; fi

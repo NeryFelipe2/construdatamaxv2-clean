@@ -12,6 +12,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { hojeLocalISO } from '@/lib/utils'
 
 export type TipoLanc = 'RECEITA' | 'DESPESA'
 export type StatusLanc = 'pendente' | 'conferido' | 'pago'
@@ -104,7 +105,8 @@ export interface UseCaixaReturn {
   valorSugeridoHe: (cargo: string | null | undefined) => number | null
 }
 
-const mesAtual = () => new Date().toISOString().slice(0, 7)
+// ⚠️ Data LOCAL: toISOString() é UTC e depois das 21h do último dia do mês já mostrava o mês seguinte.
+const mesAtual = () => hojeLocalISO().slice(0, 7)
 
 export function useCaixa(projetoId: string | null, nomeObra?: string | null): UseCaixaReturn {
   const [categorias, setCategorias] = useState<Categoria[]>([])
@@ -124,7 +126,7 @@ export function useCaixa(projetoId: string | null, nomeObra?: string | null): Us
     }
     setLoading(true); setErro(null)
     const ini = `${mes}-01`
-    const fim = new Date(Number(mes.slice(0, 4)), Number(mes.slice(5, 7)), 0).toISOString().slice(0, 10)
+    const fim = `${mes}-${String(new Date(Number(mes.slice(0, 4)), Number(mes.slice(5, 7)), 0).getDate()).padStart(2, '0')}`
     try {
       const [oCat, oLanc, oHe, oVal] = await Promise.all([
         supabase.from('caixa_categoria').select('id, nome, tipo, ordem, ativo').is('deleted_at', null).order('ordem'),

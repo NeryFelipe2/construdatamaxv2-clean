@@ -10,6 +10,11 @@ import { useAuthStore } from "@/store/authStore";
 // repete so como rede de seguranca.
 useAuthStore.getState().inicializar();
 
+// Guarda global de arrastar: sem ela, soltar um arquivo fora de uma <AreaDeSoltar> faz o
+// navegador NAVEGAR para o arquivo e destruir a aplicação (formulário aberto, dado não gravado).
+window.addEventListener("dragover", (event) => { event.preventDefault(); });
+window.addEventListener("drop", (event) => { event.preventDefault(); });
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />

@@ -1217,7 +1217,7 @@ export interface PlanScenario {
 export type RdoWeatherCondition = 'good' | 'rain' | 'cloudy' | 'storm'
 export type RdoTrechoStatus     = 'not_started' | 'in_progress' | 'completed'
 export type RdoReviewStatus = 'rascunho' | 'extraido' | 'em_revisao' | 'finalizado' | 'rejeitado'
-export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'diario' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo'
+export type RdoTab = 'dashboard' | 'novo' | 'automatico' | 'historico' | 'diario' | 'integracao' | 'financeiro' | 'producao' | 'whatsapp-bot' | 'whatsapp-fluxo' | 'presenca-whatsapp' | 'wcr'
 
 export interface RdoWeather {
   morning:      RdoWeatherCondition
@@ -1335,6 +1335,15 @@ export interface RDO {
   assinaturaPresente?:   boolean
   pendingFields?:        string[]
   extractionConfidence?: Record<string, number>
+
+  // -- RDO WCR (apontamento do WhatsApp; features/rdo/components/RdoWcrPanel) ----------
+  /** Modelo do RDO. Ausente = RDO genérico. */
+  template?:  'wcr'
+  wcr?:       RdoWcrData
+  /** ⚠️ Rascunho não alimenta produção, custo nem FCP. Ausente = finalizado (ver isRdoFinalized). */
+  status?:    'rascunho' | 'finalizado'
+  /** Obra do RDO. No ConstruData é o `projeto_id`. */
+  siteId?:    string | null
 
   createdAt:    string
   updatedAt:    string
@@ -1942,4 +1951,63 @@ export interface SCurveMultiPoint {
   actualPhysicalPct: number
   earnedValuePct: number
   actualCostPct: number
+}
+
+// ─── Controle de Caixa (motor do pacote: utils/controleDeCaixa*.ts) ──────────
+// Forma neutra de um lançamento de caixa, usada pelo motor de conferência. O banco do
+// ConstruData guarda em `caixa_lancamento`; a tradução está em
+// features/dre-financeiro/utils/caixaCd.ts.
+
+export type EntradaCategoria = 'medicao' | 'adiantamento' | 'reajuste' | 'outro'
+export type SaidaCategoria =
+  | 'materiais' | 'mao_de_obra' | 'equipamentos' | 'subempreiteiros' | 'administrativo' | 'outro'
+
+export interface FinanceiroEntry {
+  id: string
+  tipo: 'entrada' | 'saida'
+  descricao: string
+  valor: number
+  /** ISO `yyyy-MM-dd`. */
+  data: string
+  dataFim?: string
+  categoria: EntradaCategoria | SaidaCategoria | string
+  obraId?: string
+  solicitantes?: string[]
+  conferido?: boolean
+  conferidoPor?: string
+  conferidoEm?: string
+  /** 'planilha' | 'horas-extras' | 'manual' … — "sumiu da planilha" só vale para 'planilha'. */
+  origem?: string
+  /** Identidade por conteúdo (`tipo|data|DESCRIÇÃO#ordem`). */
+  chavePlanilha?: string
+  funcionarioNome?: string
+  cargo?: string
+  createdAt?: string
+}
+
+// ─── RDO WCR ──────────────────────────────────────────────────────────────────
+
+export interface RdoWcrProducaoRow {
+  /** A sigla canônica: 'PRA', 'LA', 'Caixa UMA'… */
+  sigla:      string
+  /** ⚠️ String, e vazia quer dizer NÃO INFORMADO — não zero. */
+  quantidade: string
+  /** 'M' para rede (PRA/PRE), 'UN' para o resto. Decide o que pode ser somado com o quê. */
+  unidade:    'M' | 'UN'
+  /** Item do contrato desta obra, vindo do de-para. Ausente = não mapeado, sem valor. */
+  contractServiceId?: string
+}
+
+export interface RdoWcrData {
+  equipe?:      string
+  /** Ponto dentro da obra. ⚠️ Não é cidade nem obra. */
+  nucleo?:      string
+  imoveis:      string[]
+  producao:     RdoWcrProducaoRow[]
+  observacoes?: string
+  /** `true` quando o ano da data foi deduzido. A tela e o PDF precisam mostrar isso. */
+  anoInferido?: boolean
+  /** O texto colado, cortado em 4.000 caracteres. É a prova do que a máquina leu. */
+  textoOriginal?: string
+  naoEntendidas?: string[]
 }

@@ -186,8 +186,11 @@ export function paraPeriodo(v: unknown): Periodo | null {
   if (v === null || v === undefined || v === '') return null
 
   const iso = (d: Date) => d.toISOString().slice(0, 10)
+  // Date vinda do xlsx (cellDates) é meia-noite LOCAL: ler em UTC pode voltar um dia.
+  const isoLocal = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
-  if (v instanceof Date && !isNaN(v.getTime())) return { inicio: iso(v), fim: null }
+  if (v instanceof Date && !isNaN(v.getTime())) return { inicio: isoLocal(v), fim: null }
 
   // serial do Excel (dias desde 30/12/1899)
   if (typeof v === 'number' && v > 20000 && v < 60000) {

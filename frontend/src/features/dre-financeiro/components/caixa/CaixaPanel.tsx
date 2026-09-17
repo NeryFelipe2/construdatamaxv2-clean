@@ -11,12 +11,13 @@
 import { useMemo, useState } from 'react'
 import {
   Wallet, CalendarClock, CheckSquare, BarChart3, Upload, Download, RefreshCw,
-  AlertTriangle, Trash2, Check, Plus,
+  AlertTriangle, Trash2, Check, Plus, FileDown,
 } from 'lucide-react'
 import { useCaixa, type StatusLanc } from '@/hooks/useCaixa'
 import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
 import { ImportarCaixaModal } from '../importador/ImportarCaixaModal'
 import { baixarModeloCaixa } from '../importador/planilhaCaixa'
+import { baixarPlanilhaModelo } from '../../utils/controleDeCaixaModelo'
 import { cardCls, inputCls, btnPrimario, btnNeutro, thCls, trCls, vazioCls, brl, dataBr, corValor } from '../fcp/ui'
 import * as XLSX from 'xlsx'
 import { SeloAutoria } from '@/components/shared/SeloAutoria'
@@ -128,6 +129,19 @@ export function CaixaPanel() {
           <button className={btnNeutro} onClick={() => baixarModeloCaixa(caixa.categorias.map((c) => c.nome), [], [],
               Number(caixa.mes.slice(0, 4)), Number(caixa.mes.slice(5, 7)))}>
             <Download size={14} /> Baixar modelo
+          </button>
+          <button className={btnNeutro} disabled={caixa.lancamentos.length === 0}
+            title="Planilha com coluna ID: reimportada, casa exatamente com cada lançamento, mesmo que a descrição mude"
+            onClick={() => baixarPlanilhaModelo({
+              mes: Number(caixa.mes.slice(5, 7)), ano: Number(caixa.mes.slice(0, 4)),
+              entries: caixa.lancamentos.map((l) => ({
+                id: l.id, tipo: l.tipo === 'RECEITA' ? 'entrada' : 'saida', descricao: l.descricao, valor: l.valor,
+                data: l.data_inicio, dataFim: l.data_fim ?? undefined, categoria: nomeCat(l.categoria_id),
+                solicitantes: (l.solicitantes ?? []).map((s) => s.nome), conferido: l.status !== 'pendente',
+                origem: l.origem,
+              })),
+            })}>
+            <FileDown size={14} /> Exportar com ID
           </button>
           <button className={btnPrimario} onClick={() => setImportar(true)}>
             <Upload size={14} /> Importar planilha
