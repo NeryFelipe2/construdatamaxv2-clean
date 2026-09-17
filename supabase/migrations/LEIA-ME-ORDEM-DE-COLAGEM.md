@@ -51,3 +51,18 @@ tem os outros níveis (por tabela, e o rollback da view de equipes).
 ## O que NUNCA rodar
 `DROP TABLE` de qualquer coisa. `funcionarios`, `equipe_membros_legacy` e
 `rdo_mao_obra` são o backup auditável — ficam congeladas para sempre.
+
+## 16/09/2026 — JÁ APLICADAS (conector Supabase, autorizado pelo Felipe) — NÃO colar de novo
+
+| Migration | Estado |
+|---|---|
+| `20260904_032_fcp_lps_projeto_certo.sql` | aplicada e conferida (função nova com `join public.fcp_obra`) |
+| `20260916_033_caixa_chave_importacao.sql` | aplicada e conferida (2 colunas + índice) |
+| 034 | **não existe** — não foi necessária (o motor TS do FCP não precisou de mudança de schema) |
+| `20260916_035_controle_operacional.sql` | aplicada e conferida; planilha preenchida (rev15-PLANEJADOxREALIZADO-) importada: 1.345 linhas, 31 pessoas |
+
+## 20260916_035 — Controle Operacional
+
+| Arquivo | O que faz | Conferir |
+|---|---|---|
+| `20260916_035_controle_operacional.sql` | Módulo **Controle Operacional** (planilha CONTROLE OPERACIONAL SABESP rev16): 19 tabelas novas (`op_*` + `pessoa_vencimento`), reusa `pessoas`, `ocorrencias_obra` e `lps_tasks` só por FK (nenhum ALTER nelas). org_id vem do projeto por trigger; serviço criado na tela ganha código `<PREFIXO>-S0001`; RPC `op_folha_agregada()` (membro vê o custo da folha, nunca salário individual). Faz **checagem prévia** e para com mensagem clara se faltar tabela/coluna. | bloco CONFERÊNCIA: **19** tabelas · **38** policies · **0** abertas · **19** com RLS · **4** funções · **1** trigger de código · **19** triggers de org · anon executa a RPC = **false** |

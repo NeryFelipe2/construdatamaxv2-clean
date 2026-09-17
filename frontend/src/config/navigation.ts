@@ -14,6 +14,7 @@ import {
   CalendarClock, ClipboardList, Droplets, Waves, FileSpreadsheet, Calendar,
   Calculator, Users, FileText, MessageSquare, CheckSquare, UserCircle, Wrench,
   Brain, UserCog, GitBranch, ShieldCheck, History,
+  ClipboardCheck,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -77,6 +78,7 @@ export const NAV_GROUPS: NavGroup[] = [
     id: 'operacao', category: 'Operação de Campo',
     items: [
       { label: 'RDO', to: '/app/rdo', icon: FileText },
+      { label: 'Controle Operacional', to: '/app/controle-operacional', icon: ClipboardCheck },
       { label: 'Campo WhatsApp', to: '/app/campo-whatsapp', icon: MessageSquare },
       { label: 'Relatório 360', to: '/app/relatorio360', icon: ClipboardList },
       { label: 'Punch List', to: '/app/punch-list', icon: CheckSquare },

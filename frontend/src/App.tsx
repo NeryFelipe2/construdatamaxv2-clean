@@ -61,6 +61,7 @@ const PlanilhasModeloPage = lazy(() => import("@/features/planilhas-modelo/index
 const GuiaPage = lazy(() => import("@/features/guia/index").then((m) => ({ default: m.GuiaPage })));
 const MetaLigacoesPage = lazy(() => import("@/features/meta-ligacoes/index").then((m) => ({ default: m.MetaLigacoesPage })));
 const LoginPage = lazy(() => import("@/features/login/index").then((m) => ({ default: m.LoginPage })));
+const ControleOperacionalPage = lazy(() => import("@/features/controle-operacional/index").then((m) => ({ default: m.ControleOperacionalPage })));
 
 // ─── Nav items (used by Dark/Light sidebar) ─────────────────────────────────
 // Derived from the shared NAV_GROUPS config (src/config/navigation.ts) — the
@@ -647,6 +648,7 @@ export default function App() {
           {/* 13/07/2026: virou a aba "Diário / Equipes" dentro de RDO — uma tela só, tudo no mesmo lugar */}
           <Route path="diario-obra" element={<Navigate to="/app/rdo" replace />} />
           <Route path="campo-whatsapp" element={<LazyRoute><CampoWhatsappPage /></LazyRoute>} />
+          <Route path="controle-operacional" element={<LazyRoute><ControleOperacionalPage /></LazyRoute>} />
           <Route path="*" element={<Navigate to="/app/gestao-360" replace />} />
         </Route>
         </Route>

@@ -118,13 +118,17 @@ export const useProjectContext = create<ProjectContextState>((set, get) => ({
   fetchProjetos: async () => {
     set({ loading: true })
     // WCR live: se o Supabase estiver configurado, carrega SÓ os projetos WCR
-    // (contrato 13.546/25-00) direto do banco, com os ids reais (UUID).
+    // direto do banco, com os ids reais (UUID).
+    // ⚠️ Filtro pelo NOME "WCR —", não pelo contrato: o filtro antigo
+    // (contrato 13.546/25-00, o da ZN) escondia "WCR — Bertioga" e "WCR — Santos",
+    // que são outro contrato — e com eles o FCP e o Controle Operacional dessas obras.
     if (supabase) {
       try {
         const { data } = await supabase
           .from('projetos')
           .select('*')
-          .eq('contrato', '13.546/25-00')
+          .ilike('nome', 'WCR%')
+          .is('deleted_at', null)
           .order('created_at', { ascending: true })
         if (data && data.length > 0) {
           const cur = get().activeProjectId
