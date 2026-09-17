@@ -856,16 +856,27 @@ def _strip_accents(value: str) -> str:
     ).lower().strip()
 
 
+#: Separadores aceitos em "chave <sep> valor". O modelo de apontamento que a
+#: obra usa no dia a dia escreve com HÍFEN ("Produção - 03/10", "Equipe - Juan",
+#: "PRA - 12"), não com dois-pontos. Aceitar só ":"/"=" fazia TODAS as linhas do
+#: modelo passarem batido: a data caía no dia de hoje, o responsável ficava
+#: "não informado" e o texto inteiro ia parar no campo produção.
+#: A ordem importa — ":" é testado antes de "-" para que "Local: Rua A - 100"
+#: continue quebrando no dois-pontos.
+_SEPARADORES_KV = (":", "=", "-", "–")
+
+
 def _find_kv(text: str, keys: list[str]) -> str | None:
     wanted = {_strip_accents(key) for key in keys}
     for line in text.splitlines():
         raw = line.strip()
-        if ":" not in raw and "=" not in raw:
-            continue
-        sep = ":" if ":" in raw else "="
-        left, right = raw.split(sep, 1)
-        if _strip_accents(left) in wanted:
-            return right.strip()
+        for sep in _SEPARADORES_KV:
+            if sep not in raw:
+                continue
+            left, right = raw.split(sep, 1)
+            # a chave precisa bater INTEIRA — "3 barra de 6 metro" nunca vira campo
+            if _strip_accents(left) in wanted:
+                return right.strip()
     return None
 
 
@@ -883,10 +894,205 @@ def _first_number(value: Any) -> float:
     return _money(match.group(1)) if match else 0.0
 
 
+#: Siglas do APONTAMENTO DIÁRIO da obra → (rótulo, unidade, campo canônico).
+#: Os campos canônicos são os MESMOS que a tela de Produção e a importação de
+#: CSV já usam (la, le, pra_m, c_uma, pre_m, c_insp, pv, pi, lie, lia, ihm, int),
+#: para o apontamento cair no mesmo vocabulário do resto do sistema.
+_SIGLAS_APONTAMENTO: dict[str, tuple[str, str, str]] = {
+    # ── SERVIÇO ÁGUA
+    "pra":           ("PRA — rede de água",                    "m",  "pra_m"),
+    "la":            ("LA — ligação de água",                  "un", "la"),
+    "lia":           ("LIA — ligação intradomiciliar de água", "un", "lia"),
+    "caixa uma":     ("C.UMA — caixa UMA",                     "un", "c_uma"),
+    "c uma":         ("C.UMA — caixa UMA",                     "un", "c_uma"),
+    "c.uma":         ("C.UMA — caixa UMA",                     "un", "c_uma"),
+    "uma":           ("C.UMA — caixa UMA",                     "un", "c_uma"),
+    "hm":            ("IHM — hidrômetro",                      "un", "ihm"),
+    "ihm":           ("IHM — hidrômetro",                      "un", "ihm"),
+    "interligacao":  ("INT — interligação",                    "un", "int"),
+    "int":           ("INT — interligação",                    "un", "int"),
+    "valvula":       ("Válvula",                               "un", "valvula"),
+    # ── SERVIÇO ESGOTO
+    "pre":           ("PRE — rede de esgoto",                    "m",  "pre_m"),
+    "le":            ("LE — ligação de esgoto",                  "un", "le"),
+    "lie":           ("LIE — ligação intradomiciliar de esgoto", "un", "lie"),
+    "pv":            ("PV — poço de visita",                     "un", "pv"),
+    "pi":            ("PI — poço de inspeção",                   "un", "pi"),
+    "ci":            ("C.INSP — caixa de inspeção",              "un", "c_insp"),
+    "c insp":        ("C.INSP — caixa de inspeção",              "un", "c_insp"),
+    "c.insp":        ("C.INSP — caixa de inspeção",              "un", "c_insp"),
+}
+
+_RE_LINHA_SIGLA = re.compile(r"^\s*([^:=\-–]{1,18})\s*[:=\-–]\s*(.*)$")
+_RE_DATA_CURTA = re.compile(r"^(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?$")
+
+
+def _data_do_apontamento(valor: str) -> str | None:
+    """'03/10' → 2026-10-03 (dia/mês, padrão BR, ano corrente quando omitido)."""
+    match = _RE_DATA_CURTA.match((valor or "").strip())
+    if not match:
+        return None
+    dia, mes, ano = match.group(1), match.group(2), match.group(3)
+    try:
+        dia_i, mes_i = int(dia), int(mes)
+        if not (1 <= dia_i <= 31 and 1 <= mes_i <= 12):
+            return None
+        if ano:
+            ano_i = int(ano)
+            if ano_i < 100:
+                ano_i += 2000
+        else:
+            ano_i = date.today().year
+        return date(ano_i, mes_i, dia_i).isoformat()
+    except ValueError:
+        return None
+
+
+def _extract_apontamento(raw: str) -> dict[str, Any] | None:
+    """
+    Lê o MODELO DE APONTAMENTO DIÁRIO usado pela obra:
+
+        Produção - 03/10
+        Equipe - Juan
+        Núcleo - Boi Malhado
+        Imóvel - Travessa Vaness Atalantas
+
+        SERVIÇO ÁGUA
+        PRA - 12
+        LA - 3
+        ...
+        obs: qualquer coisa fora da lista escreve aqui
+
+    Devolve None quando o texto não é esse modelo — aí o extrator genérico
+    (Local:, Empreiteira:, …) continua valendo como antes.
+
+    Sigla sem valor não vira item: o modelo circula em branco e preencher zero
+    seria inventar produção que ninguém executou.
+    """
+    linhas = [linha.strip() for linha in (raw or "").splitlines()]
+
+    cabecalho: dict[str, str] = {}
+    # Imóvel e Equipe REPETEM na mesma mensagem (a equipe roda três ruas no dia,
+    # ou o apontador manda duas equipes juntas) — guardar só a última perderia
+    # as outras, então acumula na ordem em que apareceram, sem repetir.
+    imoveis: list[str] = []
+    equipes: list[str] = []
+    itens: list[dict[str, Any]] = []
+    obs: list[str] = []
+    coletando_obs = False
+
+    def _acrescentar(destino: list[str], valor: str) -> None:
+        limpo = re.sub(r"\s+", " ", valor).strip(" .;,-")
+        if limpo and not any(_strip_accents(limpo) == _strip_accents(x) for x in destino):
+            destino.append(limpo)
+
+    for linha in linhas:
+        if not linha:
+            continue
+        chave_norm = _strip_accents(linha)
+
+        # a partir de "obs" tudo que vier é observação livre
+        if chave_norm.startswith("obs"):
+            coletando_obs = True
+            resto = linha.split(":", 1)[1].strip() if ":" in linha else ""
+            if resto and not resto.lower().startswith("qualquer coisa fora da lista"):
+                obs.append(resto)
+            continue
+
+        # cabeçalho de seção — não é dado, é título
+        if chave_norm in {"servico agua", "servicos agua", "servico esgoto", "servicos esgoto"}:
+            coletando_obs = False
+            continue
+
+        match = _RE_LINHA_SIGLA.match(linha)
+        if not match:
+            if coletando_obs:
+                obs.append(linha)
+            continue
+
+        rotulo_raw, valor = match.group(1).strip(), match.group(2).strip()
+        rotulo = _strip_accents(rotulo_raw)
+
+        if rotulo in {"producao", "data", "dia"}:
+            # "Produção - 03/10" é a DATA do apontamento. Já "Producao: rede
+            # DN200" (formato antigo) é descrição — não é este modelo, então
+            # deixa passar para o extrator genérico em vez de virar data.
+            if _data_do_apontamento(valor):
+                cabecalho["data"] = valor
+                coletando_obs = False
+            continue
+        if rotulo in {"equipe", "lider", "encarregado"}:
+            _acrescentar(equipes, valor)
+            coletando_obs = False
+            continue
+        if rotulo in {"nucleo", "obra"}:
+            cabecalho["nucleo"] = valor
+            coletando_obs = False
+            continue
+        if rotulo in {"imovel", "imoveis", "rua", "local", "endereco"}:
+            _acrescentar(imoveis, valor)
+            coletando_obs = False
+            continue
+
+        sigla = _SIGLAS_APONTAMENTO.get(rotulo)
+        if sigla:
+            coletando_obs = False
+            quantidade = _first_number(valor) if valor else 0.0
+            if quantidade > 0:
+                nome, unidade, campo = sigla
+                itens.append({
+                    "sigla": rotulo_raw.upper(),
+                    "rotulo": nome,
+                    "quantidade": quantidade,
+                    "unidade": unidade,
+                    "campo": campo,
+                })
+            continue
+
+        if coletando_obs:
+            obs.append(linha)
+
+    # É o modelo da obra quando aparecem ao menos DOIS sinais dele: títulos
+    # "SERVIÇO ÁGUA/ESGOTO" ou linhas de sigla conhecida (mesmo em branco — o
+    # modelo circula vazio). Um RDO no formato antigo ("Local:", "Producao:")
+    # não tem esses sinais e segue pelo extrator genérico, sem regressão.
+    marcadores = 0
+    for linha in linhas:
+        if _strip_accents(linha) in {"servico agua", "servicos agua", "servico esgoto", "servicos esgoto"}:
+            marcadores += 1
+            continue
+        match = _RE_LINHA_SIGLA.match(linha)
+        if match and _strip_accents(match.group(1).strip()) in _SIGLAS_APONTAMENTO:
+            marcadores += 1
+    if marcadores < 2:
+        return None
+
+    metros_rede = sum(i["quantidade"] for i in itens if i["unidade"] == "m")
+    resumo = " · ".join(f"{i['sigla']} {i['quantidade']:g} {i['unidade']}" for i in itens)
+
+    return {
+        "data": _data_do_apontamento(cabecalho.get("data", "")),
+        "responsavel": " / ".join(equipes) if equipes else None,
+        "nucleo": cabecalho.get("nucleo") or None,
+        "imovel": " · ".join(imoveis) if imoveis else None,
+        "imoveis": imoveis,
+        "equipes": equipes,
+        "itens": itens,
+        "metros_rede": metros_rede,
+        "resumo": resumo,
+        "observacoes": "\n".join(obs).strip(),
+    }
+
+
 def _extract_rdo_text(text: str) -> dict[str, Any]:
     raw = text or ""
     date_raw = _find_kv(raw, ["data", "dia"])
-    data_ref = parse_date(date_raw).isoformat() if date_raw else date.today().isoformat()
+    # parse_date() só entende ISO: "15/08/2026" virava silenciosamente o dia de
+    # HOJE, carimbando o RDO com a data errada. Data brasileira vem primeiro.
+    data_ref = (
+        _data_do_apontamento(date_raw or "")
+        or (parse_date(date_raw).isoformat() if date_raw else date.today().isoformat())
+    )
     responsavel = (
         _find_kv(raw, ["responsavel", "engenheiro", "encarregado", "apontador", "lider"])
         or "Responsavel nao informado"
@@ -897,6 +1103,29 @@ def _extract_rdo_text(text: str) -> dict[str, Any]:
     ocorrencias = _find_kv(raw, ["ocorrencia", "ocorrencias", "desvio", "paralisacao", "restricao"]) or ""
     equipe = _find_kv(raw, ["equipe", "mao de obra", "funcionarios"])
     producao_m = _first_number(_find_kv(raw, ["metragem", "metros", "producao m"]) or producao)
+
+    # ── Modelo de apontamento diário da obra (Produção/Equipe/Núcleo/Imóvel +
+    #    siglas de água e esgoto). Quando reconhecido, ele MANDA nos campos:
+    #    o extrator genérico não sabe que "Produção - 03/10" é a data do
+    #    apontamento, nem que PRA/PRE são metros de rede.
+    itens_producao: list[dict[str, Any]] = []
+    apontamento = _extract_apontamento(raw)
+    if apontamento:
+        itens_producao = apontamento["itens"]
+        if apontamento["data"]:
+            data_ref = apontamento["data"]
+        if apontamento["responsavel"]:
+            responsavel = apontamento["responsavel"]
+        partes_local = [p for p in (apontamento["imovel"], apontamento["nucleo"]) if p]
+        if partes_local:
+            local = " — ".join(partes_local)
+        # produção vira o resumo do que foi executado (vazio quando o modelo
+        # circulou em branco — aí o campo fica pendente, que é a verdade)
+        producao = apontamento["resumo"]
+        producao_m = apontamento["metros_rede"]
+        if apontamento["observacoes"]:
+            ocorrencias = apontamento["observacoes"]
+        equipe = None  # "Equipe - Juan" é nome de líder, não contagem de gente
     custo_direto = _money(_find_kv(raw, ["custo direto", "custos diretos", "direto"]))
     custo_indireto = _money(_find_kv(raw, ["custo indireto", "custos indiretos", "indireto"]))
     custo_total = _money(_find_kv(raw, ["custo total", "total do dia", "total"])) or custo_direto + custo_indireto
@@ -915,11 +1144,13 @@ def _extract_rdo_text(text: str) -> dict[str, Any]:
         "custo_total_dia": custo_total,
         "ocorrencias": ocorrencias,
         "assinatura_presente": assinatura,
+        "itens_producao": itens_producao,
     }
     pending = [key for key in ["local", "producao", "producao_m"] if not fields.get(key)]
     confidence = {
         key: 0.92 if fields.get(key) not in ("", 0, 0.0, None, "Responsavel nao informado") else 0.35
         for key in fields
+        if not isinstance(fields.get(key), list)
     }
     return {
         "fields": fields,
@@ -956,7 +1187,18 @@ def _payload_from_extraction(project_id: str, extraction: dict[str, Any], origem
             "empreiteira": fields.get("empreiteira"),
             "assinatura_presente": fields.get("assinatura_presente"),
         },
-        "atividades": [{
+        # Uma atividade por sigla do apontamento (PRA em metros, LA em unidades…);
+        # sem apontamento reconhecido, mantém a linha única de sempre.
+        "atividades": [
+            {
+                "local": fields.get("local"),
+                "servico": item.get("rotulo") or item.get("sigla"),
+                "quantidade": safe_float(item.get("quantidade")),
+                "unidade": item.get("unidade") or "un",
+                "campo": item.get("campo"),
+            }
+            for item in (fields.get("itens_producao") or [])
+        ] or [{
             "local": fields.get("local"),
             "servico": fields.get("producao") or "Producao RDO",
             "quantidade": safe_float(fields.get("producao_m")),

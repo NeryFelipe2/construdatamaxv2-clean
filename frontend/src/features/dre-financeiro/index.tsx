@@ -24,7 +24,8 @@ import { DRE_FALLBACK, FLUXO_CAIXA, TRECHOS_FALLBACK, EFICIENCIA } from '@/data/
 import { DreHeader, DreKpiCard } from './components/DreHeader'
 import { LancamentoManualModal } from './components/LancamentoManualModal'
 import { ImportarCsvModal } from './components/ImportarCsvModal'
-import { ImportarCsvFluxoModal } from './components/ImportarCsvFluxoModal'
+import { ImportarFluxoModal } from './components/ImportarFluxoModal'
+import type { ObraContexto } from './components/importador/planilhaFluxo'
 import { computeFluxoCaixa, type OrigemMes } from './utils/computeFluxoCaixa'
 import { parseValorBR } from './utils/parseCsvLancamentos'
 import { useFluxoProjecao } from '@/hooks/useFluxoProjecao'
@@ -106,6 +107,19 @@ export function DreFinanceiroPage() {
       ? mesesEntre(projetoAtivo.data_inicio, projetoAtivo.data_fim)
       : 0,
   } : CONTRATO_VAZIO
+
+  // Contexto que timbra o modelo de planilha do Fluxo de Caixa: projeto, local e
+  // condições (contrato, cliente, prazo, valor) saem do cadastro — ninguém redigita.
+  const obraFluxo: ObraContexto | null = activeProjectId && projetoAtivo ? {
+    projetoId: activeProjectId,
+    nome: (projetoAtivo as any).nome || 'Obra sem nome',
+    contrato: projetoAtivo.contrato ?? null,
+    cliente: (projetoAtivo as any).cliente ?? null,
+    cidade: projetoAtivo.cidade ?? null,
+    dataInicio: projetoAtivo.data_inicio ?? null,
+    dataFim: (projetoAtivo as any).data_fim ?? null,
+    valorContrato: Number((projetoAtivo as any).orcamento_total) || null,
+  } : null
 
   // Dados reais ou fallback (fallback só no Modo Demo)
   const receitasDB = lancamentos.filter(x => x.tipo === 'RECEITA').map(x => ({ desc: x.descricao, valor: Number(x.valor) }))
@@ -318,7 +332,7 @@ export function DreFinanceiroPage() {
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start gap-2.5">
                 <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
                 <span className="text-xs text-amber-200/90 leading-relaxed">
-                  <b className="text-amber-300">Sem fluxo de caixa para esta obra.</b> A série mensal aparece quando houver lançamentos financeiros (meses passados/corrente) ou projeções cadastradas (meses futuros). Use <b>Gerar meses até o fim da obra</b> ou <b>Importar CSV</b> abaixo para começar a projeção — nada aqui é estimado ou de exemplo.
+                  <b className="text-amber-300">Sem fluxo de caixa para esta obra.</b> A série mensal aparece quando houver lançamentos financeiros (meses passados/corrente) ou projeções cadastradas (meses futuros). Use <b>Gerar meses até o fim da obra</b> ou <b>Importar planilha (Excel)</b> abaixo para começar a projeção — nada aqui é estimado ou de exemplo.
                 </span>
               </div>
             )}
@@ -413,13 +427,13 @@ export function DreFinanceiroPage() {
                       onClick={() => setShowFluxoCsvModal(true)}
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-[#484848] text-[#f5f5f5] rounded-lg text-xs font-semibold hover:bg-[#525252] transition-colors"
                     >
-                      <Upload size={12} /> Importar CSV
+                      <Upload size={12} /> Importar planilha (Excel)
                     </button>
                   </div>
                 </div>
                 {projecoes.length === 0 ? (
                   <div className="px-5 py-6 text-center text-xs text-[#6b6b6b]">
-                    Nenhuma projeção cadastrada. Clique em <b className="text-[#f97316]">Gerar meses até o fim da obra</b> para criar as linhas dos meses futuros e depois preencha os valores previstos, ou <b className="text-[#f97316]">Importar CSV</b>.
+                    Nenhuma projeção cadastrada. Clique em <b className="text-[#f97316]">Importar planilha (Excel)</b> para baixar o modelo já preenchido com esta obra e subir os meses de uma vez, ou em <b className="text-[#f97316]">Gerar meses até o fim da obra</b> para criar as linhas em branco e digitar aqui.
                   </div>
                 ) : (
                   <table className="w-full text-xs">
@@ -714,9 +728,10 @@ export function DreFinanceiroPage() {
           onSaved={refresh}
         />
       )}
-      {showFluxoCsvModal && activeProjectId && (
-        <ImportarCsvFluxoModal
+      {showFluxoCsvModal && activeProjectId && obraFluxo && (
+        <ImportarFluxoModal
           projectId={activeProjectId}
+          obra={obraFluxo}
           onClose={() => setShowFluxoCsvModal(false)}
           onSaved={reloadProjecoes}
         />

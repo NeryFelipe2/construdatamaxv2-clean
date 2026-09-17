@@ -11,11 +11,16 @@
  *                            Dias são colunas; o "PG" vive numa coluna OBS que
  *                            cobre um bloco de dias. O mês vem do NOME DA ABA.
  *
- * DUAS COLUNAS FORAM ACRESCENTADAS ao final das despesas, porque sem elas não
- * existe análise por centro de custo nem por natureza de gasto (pedido explícito):
- *   CATEGORIA e OBRA.
- * O parser aceita a planilha sem elas — só marca as linhas como erro, com o
- * motivo, em vez de recusar o arquivo inteiro.
+ * DUAS COLUNAS SÃO SUGERIDAS no modelo, para análise por centro de custo e por
+ * natureza de gasto: CATEGORIA e OBRA. Mas elas NÃO são obrigatórias — a
+ * planilha que o engenheiro usa hoje não as tem, e barrar por isso reprovava as
+ * 117 linhas do arquivo real sem importar nada. Quando faltam:
+ *   · CATEGORIA → deduzida da descrição (ver categoriaPorDescricao)
+ *   · OBRA      → vem da obra selecionada na tela (o Caixa já é escopado por obra)
+ *
+ * A linha de rodapé da planilha ("SALDO==>>" / "TOTAL") é descartada por
+ * linhaDeFechamento(): ela vinha sendo lida como lançamento e fazia o saldo
+ * sair exatamente o dobro do verdadeiro.
  *
  * O modelo gerado e o parser saem DAS MESMAS constantes: se o layout mudar,
  * muda nos dois ao mesmo tempo.
@@ -50,6 +55,14 @@ export const VALORES_HE_PADRAO: Record<string, number> = {
   'ENCARREGADO DE OBRA I': 350,
   'OPERADOR DE RETRO': 350,
   'PEDREIRO I': 300,
+
+  // Cargos da relação de 18/08 que não estavam na tabela. Valor estimado em
+  // 300 (igual ao ajudante) por decisão do engenheiro, para destravar a
+  // apuração — é estimativa, não valor negociado.
+  'AUXILIAR DE CADASTRO II': 300,
+  'SOLDADOR DE PEAD': 300,
+  'ENCANADOR DE ESGOTO III': 300,
+  'ENCANADOR DE ÁGUA III': 300,
 }
 
 // ─── tipos de saída ─────────────────────────────────────────────────────────
@@ -250,17 +263,27 @@ export function lerPlanilhaCaixa(buffer: ArrayBuffer, anoPadrao = new Date().get
   if (!abaD) {
     avisos.push('A aba DESPESAS não foi encontrada. Use o modelo do sistema.')
   } else {
-    const linhas = XLSX.utils.sheet_to_json<unknown[]>(wb.Sheets[abaD], { header: 1, raw: false, defval: '' })
+    // raw:true — não raw:false. Com raw:false o XLSX devolve o TEXTO FORMATADO
+    // da célula, que segue o number format que a planilha de origem tiver
+    // (algumas vêm em M/D/AA americano, não DD/MM/AAAA); paraPeriodo() sempre
+    // lê a primeira dupla como dia/mês, então "7/13/26" (13 de julho) virava
+    // "2026-13-07" (mês 13, inválido) e "7/9/26" (9 de julho) virava
+    // silenciosamente "2026-09-07" (7 de setembro) — mês e dia trocados, sem
+    // erro nenhum. Com raw:true a célula-data chega como objeto Date de
+    // verdade (cellDates:true acima), que não tem ambiguidade de formato; só
+    // texto solto (ex.: "01 A 10/07/2026", que não é uma data de célula) segue
+    // como string, exatamente como paraPeriodo() já espera.
+    const linhas = XLSX.utils.sheet_to_json<unknown[]>(wb.Sheets[abaD], { header: 1, raw: true, defval: '' })
     const iCab = acharLinhaCabecalho(linhas)
     const m = mapearDespesas(linhas[iCab] ?? [])
     if (m.descricao === undefined || m.valor === undefined) {
       avisos.push('Não achei as colunas DESCRIÇÃO e VALOR na aba DESPESAS.')
     }
     if (m.categoria === undefined) {
-      avisos.push('A planilha não tem a coluna CATEGORIA — as despesas vão entrar como erro. Baixe o modelo novo.')
+      avisos.push('A planilha não tem a coluna CATEGORIA — a categoria será deduzida da descrição de cada despesa.')
     }
     if (m.obra === undefined) {
-      avisos.push('A planilha não tem a coluna OBRA — as despesas vão entrar como erro. Baixe o modelo novo.')
+      avisos.push('A planilha não tem a coluna OBRA — será usada a obra selecionada na tela.')
     }
     const val = (l: unknown[], k: string) => (m[k] === undefined ? '' : l[m[k]])
 
@@ -268,6 +291,13 @@ export function lerPlanilhaCaixa(buffer: ArrayBuffer, anoPadrao = new Date().get
       const l = linhas[i] ?? []
       if (vazia(l)) continue
       const nLinha = i + 1
+
+      // Linha de fechamento da planilha ("SALDO==>>", "TOTAL", "TOTAIS"…).
+      // Não basta olhar a DESCRIÇÃO: na planilha real da WCR o marcador vive na
+      // coluna DATA DA DESPESA e a descrição fica VAZIA — a linha passava pelo
+      // filtro e entrava como lançamento, somando o total por cima dos valores
+      // reais e fazendo o saldo sair exatamente o DOBRO do verdadeiro.
+      if (linhaDeFechamento(l)) continue
 
       // RECEITA: colunas A (ENTRADA) e B (DATA), quando ENTRADA > 0
       const entrada = paraNumero(val(l, 'entrada'))
@@ -311,7 +341,9 @@ export function lerPlanilhaCaixa(buffer: ArrayBuffer, anoPadrao = new Date().get
           data_texto: per?.textoOriginal,
           descricao,
           valor: valor ?? NaN,
-          categoria: String(val(l, 'categoria') ?? '').trim(),
+          // Sem coluna CATEGORIA na planilha, deduz da descrição em vez de
+          // barrar a linha (ver categoriaPorDescricao).
+          categoria: String(val(l, 'categoria') ?? '').trim() || categoriaPorDescricao(descricao),
           obra: String(val(l, 'obra') ?? '').trim(),
           solicitantes: separarNomes(val(l, 'solicitante')),
           forma_pagamento: null,
@@ -385,6 +417,47 @@ export function lerPlanilhaCaixa(buffer: ArrayBuffer, anoPadrao = new Date().get
   return { lancamentos, horasExtras, avisos, anoHe: anoPadrao }
 }
 
+// ─── linha de fechamento / classificação automática ─────────────────────────
+
+/**
+ * A linha de rodapé da planilha ("SALDO==>>", "TOTAL", "TOTAIS", "SOMA") não é
+ * lançamento. Olha TODAS as células da linha, porque na planilha real da WCR o
+ * marcador não está na descrição — está na coluna DATA DA DESPESA.
+ */
+export function linhaDeFechamento(l: unknown[]): boolean {
+  return l.some((c) => /^\s*(saldo|totais|total|soma|subtotal)\b/i.test(String(c ?? '')))
+}
+
+/**
+ * A planilha do engenheiro não tem coluna CATEGORIA — e o pedido foi que ele
+ * continuasse usando a planilha dele. Então a categoria é deduzida da própria
+ * descrição, que já diz do que se trata ("DIESEL - MÁQUINA JAILTON").
+ * O que não casar com nada vira 'Outros' e pode ser reclassificado na tela:
+ * palpite explícito é melhor do que barrar a importação inteira.
+ */
+const PISTAS_CATEGORIA: [RegExp, string][] = [
+  [/diesel|gasolina|combust|etanol|arla/i,               'Combustível'],
+  [/uber|99|taxi|táxi|transporte|passagem|bilhete/i, 'Transporte/Uber'],
+  [/vale.?transporte|vt\b/i,                              'Vale-transporte'],
+  [/\bvr\b|refei|janta|almoço|alimenta|marmita|lanche/i, 'Alimentação/VR'],
+  [/hora extra|\bhe\b/i,                                  'Hora extra'],
+  [/pneu|borracharia|mecânic|mecanic|revisão|óleo|oleo|funilaria/i, 'Manutenção de veículo'],
+  [/máquina|maquina|retroescavadeira|escavadeira|munck/i, 'Manutenção de máquina'],
+  [/sinistro/i,                                           'Sinistro'],
+  [/alojamento|hotel|pousada|moradia|república/i,     'Alojamento'],
+  [/ferramenta|furadeira|serra|clipe|disco/i,             'Ferramentas'],
+  [/diária|diaria|terceiro|apontador|freela/i,        'Diárias/terceiros'],
+  [/adiantamento|vale\b/i,                                'Adiantamento'],
+  [/medição|medicao/i,                           'Medição'],
+  [/escritório|escritorio|papelaria|cartório|cartorio/i, 'Escritório'],
+  [/material|materiais|depósito|deposito|tela|cimento|areia|brita|tubo|conex/i, 'Materiais'],
+]
+
+export function categoriaPorDescricao(descricao: string): string {
+  for (const [re, cat] of PISTAS_CATEGORIA) if (re.test(descricao)) return cat
+  return 'Outros'
+}
+
 // ─── validação por linha ────────────────────────────────────────────────────
 
 export function validarLancamento(l: LancamentoPlanilha): Problema[] {
@@ -394,8 +467,12 @@ export function validarLancamento(l: LancamentoPlanilha): Problema[] {
   if (!Number.isFinite(l.valor)) p.push({ campo: 'valor', mensagem: 'Valor não é um número.', bloqueia: true })
   else if (l.valor < 0) p.push({ campo: 'valor', mensagem: 'Valor negativo — use a coluna certa (receita ou despesa).', bloqueia: true })
   else if (l.valor === 0) p.push({ campo: 'valor', mensagem: 'Valor zerado — confira.', bloqueia: false })
-  if (!l.categoria) p.push({ campo: 'categoria', mensagem: 'Categoria é obrigatória (coluna CATEGORIA).', bloqueia: true })
-  if (!l.obra) p.push({ campo: 'obra', mensagem: 'Obra é obrigatória (coluna OBRA — centro de custo).', bloqueia: true })
+  if (!l.categoria) p.push({ campo: 'categoria', mensagem: 'Sem categoria — entra como "Outros", reclassifique depois.', bloqueia: false })
+  // A obra NÃO bloqueia: a planilha do engenheiro não tem essa coluna e o
+  // Controle de Caixa já é escopado pela obra selecionada na tela — é de lá
+  // que ela vem quando a planilha não informa. Exigir a coluna barrava as 117
+  // linhas do arquivo real e não importava nada.
+  if (!l.obra) p.push({ campo: 'obra', mensagem: 'Sem obra na planilha — será usada a obra selecionada na tela.', bloqueia: false })
   if (l.data_fim && l.data_fim < l.data_inicio) p.push({ campo: 'data', mensagem: 'Fim do período antes do início.', bloqueia: true })
   if (l.valor > 100000) p.push({ campo: 'valor', mensagem: 'Acima de R$ 100 mil — confira antes de confirmar.', bloqueia: false })
   if (!l.solicitantes.length && l.tipo === 'DESPESA') {

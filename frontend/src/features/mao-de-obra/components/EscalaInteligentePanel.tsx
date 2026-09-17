@@ -2,8 +2,8 @@ import { useState, useMemo, useCallback } from 'react'
 import { Calendar, LayoutGrid, List, Settings, Zap, X, Plus } from 'lucide-react'
 import { useMaoDeObraStore } from '@/store/maoDeObraStore'
 import { useShallow } from 'zustand/react/shallow'
-import type { Shift, CLTViolationLevel, CLTSettings } from '@/types'
-import { calcShiftHours } from '../utils/cltEngine'
+import type { Shift, CLTViolation, CLTViolationLevel, CLTSettings } from '@/types'
+import { calcShiftHours, checkNewBlockingViolations } from '../utils/cltEngine'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -52,12 +52,13 @@ function toYMD(d: Date): string { return d.toISOString().slice(0, 10) }
 interface ShiftDialogProps {
   initial?: Partial<Shift>
   workers: { id: string; name: string; role: string }[]
+  blockedViolations?: CLTViolation[]
   onSave: (shift: Omit<Shift, 'id'>) => void
   onDelete?: () => void
   onClose: () => void
 }
 
-function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialogProps) {
+function ShiftDialog({ initial, workers, blockedViolations = [], onSave, onDelete, onClose }: ShiftDialogProps) {
   const [form, setForm] = useState({
     workerId:     initial?.workerId ?? (workers[0]?.id ?? ''),
     date:         initial?.date ?? toYMD(new Date()),
@@ -131,9 +132,18 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
             <label className={labelClass}>Frente de Trabalho</label>
             <input className={fieldClass} value={form.workFront ?? ''} onChange={(e) => setForm((p) => ({ ...p, workFront: e.target.value }))} />
           </div>
-          {form.type === 'overtime' && (
+          {blockedViolations.length > 0 && (
+            <div className="rounded-lg border border-[#ef4444]/40 bg-[#ef4444]/10 p-3 text-xs text-[#fca5a5] flex flex-col gap-1.5">
+              <span className="font-semibold text-[#ef4444]">Este turno estoura um limite bloqueante da CLT:</span>
+              {blockedViolations.map((v) => <span key={v.id}>• {v.description}</span>)}
+              <span className="text-[#fca5a5]/80">Para salvar mesmo assim, escreva o motivo abaixo e clique em Salvar de novo.</span>
+            </div>
+          )}
+          {(form.type === 'overtime' || blockedViolations.length > 0) && (
             <div>
-              <label className={labelClass}>Motivo da HE</label>
+              <label className={labelClass}>
+                {blockedViolations.length > 0 ? 'Justificativa (obrigatória para salvar mesmo assim)' : 'Motivo da HE'}
+              </label>
               <input className={fieldClass} value={form.overtimeReason ?? ''} onChange={(e) => setForm((p) => ({ ...p, overtimeReason: e.target.value }))} />
             </div>
           )}
@@ -145,7 +155,13 @@ function ShiftDialog({ initial, workers, onSave, onDelete, onClose }: ShiftDialo
             )}
             <div className="flex gap-2 ml-auto">
               <button type="button" onClick={onClose} className="px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5]">Cancelar</button>
-              <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold">Salvar</button>
+              <button
+                type="submit"
+                disabled={blockedViolations.length > 0 && !form.overtimeReason?.trim()}
+                className="px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {blockedViolations.length > 0 ? 'Salvar mesmo assim' : 'Salvar'}
+              </button>
             </div>
           </div>
         </form>
@@ -393,6 +409,7 @@ export function EscalaInteligentePanel() {
   const [month,        setMonth]        = useState(now.getMonth())
   const [selectedDate, setSelectedDate] = useState(toYMD(now))
   const [shiftDialog,  setShiftDialog]  = useState<{ open: boolean; initial?: Partial<Shift> }>({ open: false })
+  const [blockedViolations, setBlockedViolations] = useState<CLTViolation[]>([])
   const [showSettings, setShowSettings] = useState(false)
 
   const weekDates = useMemo(() => weekOf(new Date(selectedDate + 'T00:00:00')), [selectedDate])
@@ -410,16 +427,26 @@ export function EscalaInteligentePanel() {
 
   function handleCellClick(workerId: string, date: string) {
     setSelectedDate(date)
+    setBlockedViolations([])
     setShiftDialog({ open: true, initial: { workerId, date } })
   }
 
   function handleSaveShift(shift: Omit<Shift, 'id'>) {
+    // Checa ANTES de salvar — "bloqueante" precisa impedir o salvamento de
+    // verdade, não só acender uma etiqueta vermelha depois do fato consumado.
+    const candidato: Shift = { ...shift, id: shiftDialog.initial?.id ?? '' }
+    const bloqueios = checkNewBlockingViolations(candidato, workers, shifts, cltSettings)
+    if (bloqueios.length > 0 && !shift.overtimeReason?.trim()) {
+      setBlockedViolations(bloqueios)
+      return
+    }
     if (shiftDialog.initial?.id) {
       updateShift(shiftDialog.initial.id, shift)
     } else {
       addShift(shift)
     }
     revalidateCLT()
+    setBlockedViolations([])
     setShiftDialog({ open: false })
   }
 
@@ -428,6 +455,7 @@ export function EscalaInteligentePanel() {
       removeShift(shiftDialog.initial.id)
       revalidateCLT()
     }
+    setBlockedViolations([])
     setShiftDialog({ open: false })
   }
 
@@ -496,8 +524,8 @@ export function EscalaInteligentePanel() {
               shifts={shifts}
               workers={activeWorkers}
               selectedDate={selectedDate}
-              onAddShift={() => setShiftDialog({ open: true, initial: { date: selectedDate } })}
-              onEditShift={(s) => setShiftDialog({ open: true, initial: s })}
+              onAddShift={() => { setBlockedViolations([]); setShiftDialog({ open: true, initial: { date: selectedDate } }) }}
+              onEditShift={(s) => { setBlockedViolations([]); setShiftDialog({ open: true, initial: s }) }}
             />
           )}
         </div>
@@ -562,9 +590,10 @@ export function EscalaInteligentePanel() {
         <ShiftDialog
           initial={shiftDialog.initial}
           workers={activeWorkers}
+          blockedViolations={blockedViolations}
           onSave={handleSaveShift}
           onDelete={shiftDialog.initial?.id ? handleDeleteShift : undefined}
-          onClose={() => setShiftDialog({ open: false })}
+          onClose={() => { setBlockedViolations([]); setShiftDialog({ open: false }) }}
         />
       )}
 
