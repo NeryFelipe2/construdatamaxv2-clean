@@ -1,13 +1,15 @@
 /**
  * SemanalPanel — a grade de N semanas por obra + o bloco PLANEJADO × REALIZADO.
  *
- * Todas as linhas vêm calculadas de fcp_semanas(). O engenheiro só digita a
+ * Todas as linhas vêm do motor TS (useFcp → fluxoSemanal). O engenheiro só digita a
  * PRODUÇÃO REALIZADA; semana em branco usa o planejado (regra da planilha), e
  * apagar o valor devolve a semana ao planejado.
  */
 import { useEffect, useState } from 'react'
 import type { UseFcpReturn, FcpSemana } from '@/hooks/useFcp'
 import { cardCls, thCls, trCls, vazioCls, brl, num1, pct, dataBr, corValor } from './ui'
+import { CapitalLegado } from './CapitalLegado'
+import { RdoWcrNoFcp } from './RdoWcrNoFcp'
 
 /** Célula onde o engenheiro lança o realizado da semana. */
 function CelulaRealizado({
@@ -70,7 +72,7 @@ function LinhaGrade({
 }
 
 export function SemanalPanel({ fcp }: { fcp: UseFcpReturn }) {
-  const { obras, semanas, travado, lancarRealizado, horizonteSemanas, setHorizonteSemanas, capital } = fcp
+  const { obras, semanas, travado, lancarRealizado, horizonteSemanas, setHorizonteSemanas, capital, capitalLegado } = fcp
 
   if (obras.length === 0) return <div className={vazioCls}>Nenhuma obra cadastrada neste FCP.</div>
   if (semanas.length === 0) {
@@ -108,7 +110,7 @@ export function SemanalPanel({ fcp }: { fcp: UseFcpReturn }) {
         </div>
         <div className="flex gap-3 overflow-x-auto">
           <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-2 min-w-[150px]">
-            <div className="text-[10px] text-[#a3a3a3] uppercase tracking-wide">Pior ponto do caixa</div>
+            <div className="text-[10px] text-[#a3a3a3] uppercase tracking-wide">Pior ponto — {horizonteSemanas} semanas</div>
             <div className={`font-mono text-base font-semibold ${corValor(pior)}`}>{brl(pior)}</div>
           </div>
           <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-2 min-w-[150px]">
@@ -118,12 +120,15 @@ export function SemanalPanel({ fcp }: { fcp: UseFcpReturn }) {
             </div>
             {capital && (
               <div className="text-[10px] text-[#6b6b6b]">
-                necessidade + {pct(capital.contingencia, 0)} de contingência
+                contrato inteiro · necessidade + {pct(capital.contingencia, 0)} de contingência
+                {capital.mes_pior_ponto && <> · pior mês {dataBr(capital.mes_pior_ponto).slice(3)}</>}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {capitalLegado && capital && <CapitalLegado legado={capitalLegado} novo={capital.capital_recomendado} />}
 
       {obras.map((obra) => {
         const linhas = porObra(obra.id)
@@ -201,6 +206,8 @@ export function SemanalPanel({ fcp }: { fcp: UseFcpReturn }) {
           </div>
         )
       })}
+
+      <RdoWcrNoFcp fcp={fcp} />
 
       {/* consolidado das obras */}
       <div className={`${cardCls} overflow-hidden`}>

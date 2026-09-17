@@ -30,7 +30,7 @@ const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'content-type': 'application/json', ...CORS } })
 
 const norm = (s: unknown) =>
-  String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim()
+  String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim()
 
 function paraNumero(v: unknown): number | null {
   if (v === null || v === undefined || v === '') return null
@@ -208,12 +208,15 @@ async function tratarFcp(sb: SupabaseClient, dados: Record<string, unknown>, dry
     }
   }
 
-  const { data: capital } = await sb.rpc('fcp_capital', { p_fcp_id: fcpId, p_semanas: 12 })
+  // O capital NÃO sai mais daqui (16/09/2026): o cálculo do FCP passou para o motor TS do app, e a
+  // função SQL fcp_capital ficou como legado — ela descartava a defasagem e subestimava o capital.
+  // Devolver o número dela ao n8n seria espalhar o valor errado. O capital é o da tela do FCP.
   const resumo = linhas.reduce((a, l) => { a[l.veredicto] = (a[l.veredicto] ?? 0) + 1; return a }, {} as Record<string, number>)
   return json({
     ok: true, dryRun, fcp_id: fcpId, fcp: (fcp as { nome: string }).nome,
     resumo, linhas, gravado: dryRun ? null : { realizados: gravados },
-    capital: Array.isArray(capital) ? capital[0] : capital,
+    capital: null,
+    aviso_capital: 'O capital recomendado é calculado na tela do FCP (DRE & Resultado → Fluxo de Caixa Projetado).',
   })
 }
 

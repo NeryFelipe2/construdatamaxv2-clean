@@ -1,7 +1,7 @@
 /**
  * PremissasPanel — o painel de controle do FCP (aba PREMISSAS da planilha).
- * Cada campo aqui recalcula o fluxo inteiro, porque o cálculo vive no banco:
- * salvar dispara uma releitura de fcp_semanas/fcp_capital/fcp_viabilidade.
+ * Cada campo aqui recalcula o fluxo inteiro: salvar grava a premissa e o
+ * motor TS (useFcp) recalcula semanal, mensal, capital e viabilidade.
  */
 import { useEffect, useState } from 'react'
 import { Lock } from 'lucide-react'

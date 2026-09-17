@@ -1,5 +1,5 @@
 /**
- * ViabilidadePanel — produção necessária por cenário (vem de fcp_viabilidade()).
+ * ViabilidadePanel — produção necessária por cenário (motor TS: viabilidadeDaCidade).
  * SERVIÇOS/DIA é o número que o engenheiro leva para a obra; obra com mix
  * água/esgoto mostra os dois separados, porque a equipe é diferente.
  */
@@ -25,6 +25,17 @@ export function ViabilidadePanel({ fcp }: { fcp: UseFcpReturn }) {
         const linhas = viabilidade.filter((v) => v.obra === nome).sort((a, b) => a.margem - b.margem)
         const obra = obras.find((o) => o.nome === nome)
         const temMix = obra?.pct_esgoto !== null && obra?.pct_esgoto !== undefined
+        if (linhas.every((v) => v.sem_ticket)) {
+          return (
+            <div key={nome} className={`${cardCls} px-5 py-4`}>
+              <h3 className="text-sm font-bold text-[#f5f5f5] uppercase tracking-wide">{nome}</h3>
+              <p className="text-xs text-amber-200 mt-1">
+                Sem ticket — não dá para dizer quantos serviços por dia são necessários (não é zero: é não informado).
+                Preencha o ticket da obra para esta tabela aparecer.
+              </p>
+            </div>
+          )
+        }
         return (
           <div key={nome} className={`${cardCls} overflow-hidden`}>
             <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-[#525252] flex-wrap">

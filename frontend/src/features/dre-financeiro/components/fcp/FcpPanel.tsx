@@ -6,10 +6,10 @@
  * FCP aprovado é do BANCO (trigger fcp_trava_aprovado); aqui a tela só desabilita
  * antes para o usuário não esbarrar no erro.
  */
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
   SlidersHorizontal, Wallet, CalendarRange, Receipt, Target, Coins, Tags,
-  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle, GitBranch, Plus,
+  Send, CheckCircle2, Undo2, Lock, RefreshCw, AlertTriangle, GitBranch, Plus, Upload,
 } from 'lucide-react'
 import { useFcp, type FcpStatus } from '@/hooks/useFcp'
 import { useProjectContext, selectActiveProjeto } from '@/store/projectContext'
@@ -19,7 +19,9 @@ import { CustosPanel } from './CustosPanel'
 import { SemanalPanel } from './SemanalPanel'
 import { ViabilidadePanel } from './ViabilidadePanel'
 import { PrecosPanel } from './PrecosPanel'
+import { ImportarFcpModal } from '../ImportarFcpModal'
 import { cardCls, btnNeutro, btnPrimario, thCls, trCls, vazioCls, brl, pct, dataBr, corValor } from './ui'
+import { CapitalLegado } from './CapitalLegado'
 
 type Aba = 'premissas' | 'custos' | 'semanal' | 'mensal' | 'economico' | 'viabilidade' | 'precos'
 
@@ -40,41 +42,25 @@ const STATUS_META: Record<FcpStatus, { rotulo: string; cor: string }> = {
   devolvido: { rotulo: 'Devolvido', cor: 'bg-amber-500/15 text-amber-200' },
 }
 
-/** FCP Mensal e Econômico derivam da grade semanal, agregando por mês. */
-function agregarPorMes(semanas: ReturnType<typeof useFcp>['semanas']) {
-  const mapa = new Map<string, {
-    mes: string; recebimento: number; medicao: number; imposto: number
-    desconto: number; custoWcr: number; mobilizacao: number; despesas: number; saldo: number
-  }>()
-  for (const s of semanas) {
-    const mes = (s.data_ini ?? '').slice(0, 7)
-    if (!mes) continue
-    const a = mapa.get(mes) ?? {
-      mes, recebimento: 0, medicao: 0, imposto: 0, desconto: 0,
-      custoWcr: 0, mobilizacao: 0, despesas: 0, saldo: 0,
-    }
-    a.recebimento += s.recebimento; a.medicao += s.medicao; a.imposto += s.imposto
-    a.desconto += s.desconto_consorcio; a.custoWcr += s.custo_wcr
-    a.mobilizacao += s.mobilizacao; a.despesas += s.despesas; a.saldo += s.saldo_periodo
-    mapa.set(mes, a)
-  }
-  return [...mapa.values()].sort((a, b) => a.mes.localeCompare(b.mes))
-}
+// FCP Mensal e Econômico vêm do motor (fcp.mensal / fcp.economico). Antes eram somados aqui a
+// partir da grade semanal, pondo a semana inteira no mês em que ela começa — o mensal da planilha
+// rateia por dia, e o capital sai do MENSAL, então as duas contas precisam ser a mesma.
 
 const mesBr = (m: string) =>
-  new Date(m + '-01T12:00:00').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
+  new Date(m.slice(0, 7) + '-01T12:00:00').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
 
 export function FcpPanel() {
   const { activeProjectId } = useProjectContext()
   const projetoAtivo = useProjectContext(selectActiveProjeto)
   const fcp = useFcp(activeProjectId)
   const [criando, setCriando] = useState(false)
+  const [importar, setImportar] = useState(false)
   const [aba, setAba] = useState<Aba>('semanal')
   const [obsDevolucao, setObsDevolucao] = useState('')
   const [mostrarDevolver, setMostrarDevolver] = useState(false)
   const ehAdmin = useAuthStore((s) => s.profile?.is_global_admin === true)
 
-  const meses = useMemo(() => agregarPorMes(fcp.semanas), [fcp.semanas])
+  const meses = fcp.mensal
 
   if (fcp.tabelasAusentes) {
     return (
@@ -111,7 +97,9 @@ export function FcpPanel() {
       // segunda-feira da semana corrente
       const hoje = new Date(); const dow = (hoje.getDay() + 6) % 7
       hoje.setDate(hoje.getDate() - dow)
-      await fcp.criarFcp(projetoAtivo?.nome ?? 'FCP', hoje.toISOString().slice(0, 10))
+      // data LOCAL: toISOString() é UTC e depois das 21h a semana "pulava" um dia
+      const seg = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`
+      await fcp.criarFcp(projetoAtivo?.nome ?? 'FCP', seg)
       setCriando(false)
     }
     return (
@@ -124,9 +112,17 @@ export function FcpPanel() {
           preencha as premissas, o ticket e os custos — a grade calcula sozinha.
         </p>
         {fcp.erro && <p className="text-xs text-red-300 mb-3">{fcp.erro}</p>}
-        <button className={btnPrimario} disabled={criando} onClick={() => void criar()}>
-          <Plus size={14} /> {criando ? 'Criando…' : `Criar FCP de ${projetoAtivo?.nome ?? 'obra'}`}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button className={btnPrimario} disabled={criando} onClick={() => void criar()}>
+            <Plus size={14} /> {criando ? 'Criando…' : `Criar FCP em branco`}
+          </button>
+          <button className={btnNeutro} onClick={() => setImportar(true)}>
+            <Upload size={14} /> Importar planilha
+          </button>
+        </div>
+        {importar && (
+          <ImportarFcpModal onClose={() => setImportar(false)} onSaved={(id) => { setImportar(false); void fcp.recarregar(); fcp.setFcpId(id) }} />
+        )}
       </div>
     )
   }
@@ -157,6 +153,11 @@ export function FcpPanel() {
           <button className={btnNeutro} onClick={() => void fcp.recarregar()} disabled={fcp.loading}>
             <RefreshCw size={14} className={fcp.loading ? 'animate-spin' : ''} /> Atualizar
           </button>
+          {status !== 'aprovado' && (
+            <button className={btnNeutro} onClick={() => setImportar(true)}>
+              <Upload size={14} /> Importar planilha
+            </button>
+          )}
           {(status === 'rascunho' || status === 'devolvido') && (
             <button className={btnPrimario} onClick={() => void fcp.mudarStatus('enviado')}>
               <Send size={14} /> Enviar à diretoria
@@ -221,6 +222,16 @@ export function FcpPanel() {
         </div>
       )}
 
+      {fcp.pendencias.length > 0 && (
+        <div className="flex items-start gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+          <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+          <div className="space-y-0.5">
+            <p className="font-semibold">O cálculo está incompleto enquanto isto não for resolvido:</p>
+            {fcp.pendencias.map((p, i) => <p key={i} className="text-amber-200/90">· {p.mensagem}</p>)}
+          </div>
+        </div>
+      )}
+
       {/* abas internas */}
       <div className="overflow-x-auto">
         <div className="flex gap-1 p-1 rounded-lg bg-[#3d3d3d] border border-[#525252] min-w-max">
@@ -251,6 +262,7 @@ export function FcpPanel() {
               {fcp.capital && ([
                 ['Pior ponto do caixa', fcp.capital.pior_saldo, true],
                 ['Necessidade máxima', fcp.capital.necessidade, false],
+                [`Contingência (${pct(fcp.capital.contingencia, 0)})`, fcp.capital.contingencia_valor, false],
                 ['Capital recomendado', fcp.capital.capital_recomendado, false],
               ] as const).map(([rotulo, valor, vermelho]) => (
                 <div key={rotulo} className={`${cardCls} px-4 py-3 min-w-[170px]`}>
@@ -261,43 +273,90 @@ export function FcpPanel() {
                 </div>
               ))}
             </div>
+            {fcp.capital?.mes_pior_ponto && (
+              <p className="text-xs text-[#a3a3a3]">
+                O pior ponto é em <span className="text-[#f5f5f5] font-semibold">{mesBr(fcp.capital.mes_pior_ponto)}</span>,
+                antes de a medição daquele mês cair — é o dinheiro que precisa estar disponível no dia em que a folha vence.
+              </p>
+            )}
+            {fcp.capitalLegado && <CapitalLegado legado={fcp.capitalLegado} novo={fcp.capital?.capital_recomendado ?? 0} />}
+
             <div className={`${cardCls} overflow-hidden`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead><tr className={trCls}>
                     <th className={thCls}>Mês</th>
-                    <th className={`${thCls} text-right`}>Medição</th>
+                    <th className={`${thCls} text-right`}>Medição do mês</th>
                     <th className={`${thCls} text-right`}>Recebimento</th>
-                    <th className={`${thCls} text-right`}>Despesas</th>
-                    <th className={`${thCls} text-right`}>Saldo do mês</th>
-                    <th className={`${thCls} text-right`}>Saldo acumulado</th>
+                    <th className={`${thCls} text-right`}>(–) Desconto consórcio</th>
+                    <th className={`${thCls} text-right`}>(–) Imposto</th>
+                    <th className={`${thCls} text-right`}>Sai do caixa</th>
+                    <th className={`${thCls} text-right`}>Acumulado antes do recebimento</th>
+                    <th className={`${thCls} text-right`}>Acumulado depois</th>
                   </tr></thead>
                   <tbody>
-                    {(() => { let ac = 0; return meses.map((m) => { ac += m.saldo; return (
-                      <tr key={m.mes} className={`${trCls} hover:bg-[#484848]/40`}>
-                        <td className="px-4 py-2 text-[#f5f5f5]">{mesBr(m.mes)}</td>
-                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.medicao)}</td>
+                    {meses.map((m) => (
+                      <tr key={m.mes.mes} className={`${trCls} hover:bg-[#484848]/40 ${m.mes.mes === fcp.capital?.mes_pior_ponto ? 'bg-red-500/5' : ''}`}>
+                        <td className="px-4 py-2 text-[#f5f5f5] whitespace-nowrap">
+                          {mesBr(m.mes.mes)}
+                          <div className="text-[10px] text-[#6b6b6b]">paga em {dataBr(m.mes.dataPagamento)}</div>
+                        </td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.medicaoBruta)}</td>
                         <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.recebimento)}</td>
-                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.despesas)}</td>
-                        <td className={`px-4 py-2 text-right font-mono text-xs ${corValor(m.saldo)}`}>{brl(m.saldo)}</td>
-                        <td className={`px-4 py-2 text-right font-mono ${corValor(ac)}`}>{brl(ac)}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.descontoConsorcio)}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.imposto)}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.saiDoCaixa)}</td>
+                        <td className={`px-4 py-2 text-right font-mono text-xs ${corValor(m.acumuladoAntesDoRecebimento)}`}>{brl(m.acumuladoAntesDoRecebimento)}</td>
+                        <td className={`px-4 py-2 text-right font-mono ${corValor(m.acumuladoDepois)}`}>{brl(m.acumuladoDepois)}</td>
                       </tr>
-                    )})})()}
+                    ))}
                   </tbody>
                 </table>
               </div>
             </div>
+
+            {fcp.sensibilidade.length > 0 && (
+              <div className={`${cardCls} overflow-hidden`}>
+                <div className="px-5 py-3 border-b border-[#525252]">
+                  <h3 className="text-sm font-bold text-[#f5f5f5] uppercase tracking-wide">Sensibilidade — o mesmo contrato nos 4 cenários</h3>
+                  <p className="text-[11px] text-[#6b6b6b] mt-0.5">Usa a produção PREVISTA de cada cenário (o realizado lançado não entra aqui).</p>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className={trCls}>
+                      <th className={thCls}>Cenário</th>
+                      <th className={`${thCls} text-right`}>Margem</th>
+                      <th className={`${thCls} text-right`}>Capital recomendado</th>
+                      <th className={`${thCls} text-right`}>Pior mês</th>
+                      <th className={`${thCls} text-right`}>Resultado no fim do contrato</th>
+                    </tr></thead>
+                    <tbody>
+                      {fcp.sensibilidade.map((s) => (
+                        <tr key={s.cenario} className={`${trCls} ${s.adotado ? 'bg-[#f97316]/10' : ''}`}>
+                          <td className={`px-4 py-2 ${s.adotado ? 'text-[#f97316] font-semibold' : 'text-[#f5f5f5]'}`}>{s.cenario}</td>
+                          <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{pct(s.margem, 0)}</td>
+                          <td className="px-4 py-2 text-right font-mono text-xs text-[#f5f5f5]">{brl(s.capital.capitalRecomendado)}</td>
+                          <td className="px-4 py-2 text-right text-xs text-[#a3a3a3]">{s.capital.mesDoPiorPonto ? mesBr(s.capital.mesDoPiorPonto) : '—'}</td>
+                          <td className={`px-4 py-2 text-right font-mono text-xs ${corValor(s.resultadoFinal)}`}>{brl(s.resultadoFinal)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         )
       )}
 
       {aba === 'economico' && (
-        meses.length === 0 ? <div className={vazioCls}>Sem competências calculadas.</div> : (
+        fcp.economico.length === 0 ? <div className={vazioCls}>Sem competências calculadas.</div> : (
           <div className="space-y-3">
             <p className="text-xs text-[#6b6b6b] max-w-3xl leading-relaxed">
               Resultado por COMPETÊNCIA: a margem real da operação, mês a mês, com todos os custos —
               inclusive os que o consórcio banca. É diferente do resultado de CAIXA do FCP Mensal:
-              os dois só se encontram no fim do contrato.
+              os dois só se encontram no fim do contrato. No 1º mês o resultado pode sair negativo:
+              é saldo devido ao consórcio, compensado em seguida.
             </p>
             <div className={`${cardCls} overflow-hidden`}>
               <div className="overflow-x-auto">
@@ -306,36 +365,39 @@ export function FcpPanel() {
                     <th className={thCls}>Mês</th>
                     <th className={`${thCls} text-right`}>Medição bruta</th>
                     <th className={`${thCls} text-right`}>(–) Imposto</th>
-                    <th className={`${thCls} text-right`}>(–) Custos (todos)</th>
-                    <th className={`${thCls} text-right`}>(=) Resultado do mês</th>
+                    <th className={`${thCls} text-right`}>(–) Folha</th>
+                    <th className={`${thCls} text-right`}>(–) Engenheiro</th>
+                    <th className={`${thCls} text-right`}>(–) Estrutura</th>
+                    <th className={`${thCls} text-right`}>(–) Indiretos</th>
+                    <th className={`${thCls} text-right`}>(–) Mobilização</th>
+                    <th className={`${thCls} text-right`}>(=) Resultado</th>
                     <th className={`${thCls} text-right`}>Acumulado</th>
                     <th className={`${thCls} text-right`}>Margem</th>
                   </tr></thead>
                   <tbody>
-                    {(() => { let ac = 0; return meses.map((m) => {
-                      const custos = m.desconto + m.custoWcr + m.mobilizacao
-                      const res = m.medicao - m.imposto - custos
-                      ac += res
-                      return (
-                        <tr key={m.mes} className={`${trCls} hover:bg-[#484848]/40`}>
-                          <td className="px-4 py-2 text-[#f5f5f5]">{mesBr(m.mes)}</td>
-                          <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.medicao)}</td>
-                          <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(m.imposto)}</td>
-                          <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(custos)}</td>
-                          <td className={`px-4 py-2 text-right font-mono text-xs ${corValor(res)}`}>{brl(res)}</td>
-                          <td className={`px-4 py-2 text-right font-mono ${corValor(ac)}`}>{brl(ac)}</td>
-                          <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">
-                            {m.medicao > 0 ? pct(res / m.medicao) : '—'}
-                          </td>
-                        </tr>
-                      )
-                    })})()}
+                    {fcp.economico.map((m) => (
+                      <tr key={m.mes.mes} className={`${trCls} hover:bg-[#484848]/40`}>
+                        <td className="px-4 py-2 text-[#f5f5f5]">{mesBr(m.mes.mes)}</td>
+                        {[m.medicaoBruta, m.imposto, m.folha, m.engenheiro, m.estrutura, m.indiretos, m.mobilizacao].map((v, i) => (
+                          <td key={i} className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">{brl(v)}</td>
+                        ))}
+                        <td className={`px-4 py-2 text-right font-mono text-xs ${corValor(m.resultado)}`}>{brl(m.resultado)}</td>
+                        <td className={`px-4 py-2 text-right font-mono ${corValor(m.resultadoAcumulado)}`}>{brl(m.resultadoAcumulado)}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-[#a3a3a3]">
+                          {m.medicaoBruta > 0 ? pct(m.margem) : '—'}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
         )
+      )}
+
+      {importar && (
+        <ImportarFcpModal onClose={() => setImportar(false)} onSaved={(id) => { setImportar(false); void fcp.recarregar(); fcp.setFcpId(id) }} />
       )}
     </div>
   )
