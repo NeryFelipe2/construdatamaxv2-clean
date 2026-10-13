@@ -60,6 +60,9 @@ Render:
 - `DATABASE_URL`
 - `GEMINI_API_KEY`
 - `CONSTRUDATA_API_BASE_URL`
+- `CONSTRUDATA_RUN_STARTUP_DB_TASKS=false`
+- `DATABASE_CONNECT_TIMEOUT_SECONDS=5`
+- `DATABASE_STARTUP_STATEMENT_TIMEOUT_MS=5000`
 - `PLATFORM_NAME=construdatamaxv2`
 - `PLATFORM_DISPLAY_NAME=ConstruDataMaxV2`
 
@@ -70,6 +73,7 @@ Vercel:
 ## Banco / Supabase
 
 O backend usa `DATABASE_URL` apontando para o Supabase via session pooler.
+O `/health` nao depende mais do `DATABASE_URL` durante o startup; problemas de banco devem aparecer nos endpoints de integracao ou quando `CONSTRUDATA_RUN_STARTUP_DB_TASKS=true`.
 
 Formato esperado:
 

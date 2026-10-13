@@ -1,0 +1,1433 @@
+{
+ "nodes": [
+  {
+   "id": "wn001",
+   "lat": -23.48016,
+   "lng": -46.669912,
+   "label": "EP-001",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn002",
+   "lat": -23.47947,
+   "lng": -46.669627,
+   "label": "EP-002",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn003",
+   "lat": -23.479593,
+   "lng": -46.669667,
+   "label": "EP-003",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn004",
+   "lat": -23.479498,
+   "lng": -46.669981,
+   "label": "PV-004",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn005",
+   "lat": -23.480329,
+   "lng": -46.669546,
+   "label": "EP-005",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn006",
+   "lat": -23.479762,
+   "lng": -46.669234,
+   "label": "EP-006",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn007",
+   "lat": -23.480421,
+   "lng": -46.669291,
+   "label": "EP-007",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn008",
+   "lat": -23.47985,
+   "lng": -46.669028,
+   "label": "EP-008",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn009",
+   "lat": -23.480544,
+   "lng": -46.668967,
+   "label": "EP-009",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn010",
+   "lat": -23.479577,
+   "lng": -46.668743,
+   "label": "EP-010",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn011",
+   "lat": -23.479702,
+   "lng": -46.668565,
+   "label": "EP-011",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn012",
+   "lat": -23.479496,
+   "lng": -46.668358,
+   "label": "EP-012",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn013",
+   "lat": -23.479918,
+   "lng": -46.668673,
+   "label": "EP-013",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn014",
+   "lat": -23.479647,
+   "lng": -46.668176,
+   "label": "EP-014",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn015",
+   "lat": -23.480008,
+   "lng": -46.668081,
+   "label": "EP-015",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn016",
+   "lat": -23.479903,
+   "lng": -46.668308,
+   "label": "EP-016",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn017",
+   "lat": -23.479954,
+   "lng": -46.668194,
+   "label": "EP-017",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn018",
+   "lat": -23.479674,
+   "lng": -46.66805,
+   "label": "EP-018",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn019",
+   "lat": -23.480039,
+   "lng": -46.668379,
+   "label": "EP-019",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn020",
+   "lat": -23.480669,
+   "lng": -46.668634,
+   "label": "EP-020",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn021",
+   "lat": -23.480213,
+   "lng": -46.668183,
+   "label": "PV-021",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn022",
+   "lat": -23.480567,
+   "lng": -46.668186,
+   "label": "PV-022",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn023",
+   "lat": -23.479793,
+   "lng": -46.667845,
+   "label": "EP-023",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn024",
+   "lat": -23.479944,
+   "lng": -46.667534,
+   "label": "PV-024",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn025",
+   "lat": -23.479739,
+   "lng": -46.667513,
+   "label": "PV-025",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn026",
+   "lat": -23.480535,
+   "lng": -46.667871,
+   "label": "EP-026",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn027",
+   "lat": -23.480248,
+   "lng": -46.66785,
+   "label": "EP-027",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn028",
+   "lat": -23.480554,
+   "lng": -46.667358,
+   "label": "EP-028",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn029",
+   "lat": -23.48057,
+   "lng": -46.66704,
+   "label": "EP-029",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn030",
+   "lat": -23.480578,
+   "lng": -46.666737,
+   "label": "EP-030",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn031",
+   "lat": -23.48111,
+   "lng": -46.666738,
+   "label": "PV-031",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn032",
+   "lat": -23.480599,
+   "lng": -46.66641,
+   "label": "EP-032",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn033",
+   "lat": -23.481604,
+   "lng": -46.66637,
+   "label": "EP-033",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn034",
+   "lat": -23.480547,
+   "lng": -46.665641,
+   "label": "EP-034",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn035",
+   "lat": -23.480103,
+   "lng": -46.665763,
+   "label": "EP-035",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn036",
+   "lat": -23.480457,
+   "lng": -46.665467,
+   "label": "EP-036",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn037",
+   "lat": -23.479931,
+   "lng": -46.665567,
+   "label": "EP-037",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn038",
+   "lat": -23.480516,
+   "lng": -46.665134,
+   "label": "EP-038",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn039",
+   "lat": -23.48081,
+   "lng": -46.665029,
+   "label": "EP-039",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn040",
+   "lat": -23.480672,
+   "lng": -46.665153,
+   "label": "EP-040",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn041",
+   "lat": -23.481427,
+   "lng": -46.664821,
+   "label": "EP-041",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn042",
+   "lat": -23.481075,
+   "lng": -46.664653,
+   "label": "EP-042",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn043",
+   "lat": -23.481279,
+   "lng": -46.66495,
+   "label": "EP-043",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn044",
+   "lat": -23.482294,
+   "lng": -46.665442,
+   "label": "PV-044",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn045",
+   "lat": -23.482447,
+   "lng": -46.665188,
+   "label": "EP-045",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn046",
+   "lat": -23.482316,
+   "lng": -46.665082,
+   "label": "EP-046",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn047",
+   "lat": -23.482147,
+   "lng": -46.665372,
+   "label": "EP-047",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn048",
+   "lat": -23.482462,
+   "lng": -46.664188,
+   "label": "EP-048",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn049",
+   "lat": -23.482989,
+   "lng": -46.664422,
+   "label": "EP-049",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn050",
+   "lat": -23.48204,
+   "lng": -46.66252,
+   "label": "EP-050",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn051",
+   "lat": -23.482327,
+   "lng": -46.662082,
+   "label": "EP-051",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn052",
+   "lat": -23.482171,
+   "lng": -46.662333,
+   "label": "EP-052",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn053",
+   "lat": -23.482125,
+   "lng": -46.662587,
+   "label": "PV-053",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn054",
+   "lat": -23.482482,
+   "lng": -46.662875,
+   "label": "EP-054",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn055",
+   "lat": -23.48278,
+   "lng": -46.662437,
+   "label": "PV-055",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn056",
+   "lat": -23.479518,
+   "lng": -46.665592,
+   "label": "PV-056",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn057",
+   "lat": -23.480587,
+   "lng": -46.663458,
+   "label": "PV-057",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn058",
+   "lat": -23.479609,
+   "lng": -46.665901,
+   "label": "EP-058",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn059",
+   "lat": -23.480257,
+   "lng": -46.664123,
+   "label": "EP-059",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn060",
+   "lat": -23.481383,
+   "lng": -46.662881,
+   "label": "EP-060",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn061",
+   "lat": -23.480293,
+   "lng": -46.664104,
+   "label": "EP-061",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn062",
+   "lat": -23.481375,
+   "lng": -46.662833,
+   "label": "PV-062",
+   "nodeType": "junction"
+  },
+  {
+   "id": "wn063",
+   "lat": -23.480697,
+   "lng": -46.662538,
+   "label": "EP-063",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn064",
+   "lat": -23.481008,
+   "lng": -46.663108,
+   "label": "EP-064",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn065",
+   "lat": -23.481206,
+   "lng": -46.663405,
+   "label": "EP-065",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn066",
+   "lat": -23.481013,
+   "lng": -46.663114,
+   "label": "EP-066",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn067",
+   "lat": -23.480473,
+   "lng": -46.662159,
+   "label": "EP-067",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn068",
+   "lat": -23.480691,
+   "lng": -46.662499,
+   "label": "EP-068",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn069",
+   "lat": -23.480219,
+   "lng": -46.662882,
+   "label": "EP-069",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn070",
+   "lat": -23.480899,
+   "lng": -46.662821,
+   "label": "EP-070",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn071",
+   "lat": -23.480394,
+   "lng": -46.66313,
+   "label": "EP-071",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn072",
+   "lat": -23.480844,
+   "lng": -46.662835,
+   "label": "EP-072",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn073",
+   "lat": -23.481374,
+   "lng": -46.662829,
+   "label": "EP-073",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn074",
+   "lat": -23.482017,
+   "lng": -46.66188,
+   "label": "EP-074",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn075",
+   "lat": -23.481541,
+   "lng": -46.66316,
+   "label": "EP-075",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn076",
+   "lat": -23.481753,
+   "lng": -46.662276,
+   "label": "EP-076",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn077",
+   "lat": -23.482931,
+   "lng": -46.663237,
+   "label": "EP-077",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn078",
+   "lat": -23.482156,
+   "lng": -46.665368,
+   "label": "EP-078",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn079",
+   "lat": -23.481975,
+   "lng": -46.664141,
+   "label": "EP-079",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn080",
+   "lat": -23.482992,
+   "lng": -46.664416,
+   "label": "EP-080",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn081",
+   "lat": -23.48204,
+   "lng": -46.662515,
+   "label": "EP-081",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn082",
+   "lat": -23.482319,
+   "lng": -46.662076,
+   "label": "EP-082",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn083",
+   "lat": -23.482174,
+   "lng": -46.662322,
+   "label": "EP-083",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn084",
+   "lat": -23.482484,
+   "lng": -46.662867,
+   "label": "EP-084",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn085",
+   "lat": -23.482462,
+   "lng": -46.665185,
+   "label": "EP-085",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn086",
+   "lat": -23.482328,
+   "lng": -46.665085,
+   "label": "EP-086",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn087",
+   "lat": -23.480468,
+   "lng": -46.665401,
+   "label": "EP-087",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn088",
+   "lat": -23.480618,
+   "lng": -46.666205,
+   "label": "EP-088",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn089",
+   "lat": -23.479617,
+   "lng": -46.665913,
+   "label": "EP-089",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn090",
+   "lat": -23.48057,
+   "lng": -46.665864,
+   "label": "EP-090",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn091",
+   "lat": -23.4801,
+   "lng": -46.665754,
+   "label": "EP-091",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn092",
+   "lat": -23.48055,
+   "lng": -46.665647,
+   "label": "EP-092",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn093",
+   "lat": -23.479935,
+   "lng": -46.665576,
+   "label": "EP-093",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn094",
+   "lat": -23.480446,
+   "lng": -46.665461,
+   "label": "EP-094",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn095",
+   "lat": -23.480476,
+   "lng": -46.665402,
+   "label": "EP-095",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn096",
+   "lat": -23.481216,
+   "lng": -46.665471,
+   "label": "EP-096",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn097",
+   "lat": -23.480642,
+   "lng": -46.666059,
+   "label": "EP-097",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn098",
+   "lat": -23.481501,
+   "lng": -46.665939,
+   "label": "EP-098",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn099",
+   "lat": -23.480619,
+   "lng": -46.666403,
+   "label": "EP-099",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn100",
+   "lat": -23.481587,
+   "lng": -46.666386,
+   "label": "EP-100",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn101",
+   "lat": -23.480596,
+   "lng": -46.666739,
+   "label": "EP-101",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn102",
+   "lat": -23.480563,
+   "lng": -46.667033,
+   "label": "EP-102",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn103",
+   "lat": -23.480547,
+   "lng": -46.667351,
+   "label": "EP-103",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn104",
+   "lat": -23.480176,
+   "lng": -46.66988,
+   "label": "EP-104",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn105",
+   "lat": -23.479477,
+   "lng": -46.669639,
+   "label": "EP-105",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn106",
+   "lat": -23.479586,
+   "lng": -46.669677,
+   "label": "EP-106",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn107",
+   "lat": -23.479768,
+   "lng": -46.669227,
+   "label": "EP-107",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn108",
+   "lat": -23.48031,
+   "lng": -46.669545,
+   "label": "EP-108",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn109",
+   "lat": -23.479853,
+   "lng": -46.669019,
+   "label": "EP-109",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn110",
+   "lat": -23.480403,
+   "lng": -46.669276,
+   "label": "EP-110",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn111",
+   "lat": -23.480535,
+   "lng": -46.668958,
+   "label": "EP-111",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn112",
+   "lat": -23.479577,
+   "lng": -46.668733,
+   "label": "EP-112",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn113",
+   "lat": -23.479496,
+   "lng": -46.668359,
+   "label": "EP-113",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn114",
+   "lat": -23.47968,
+   "lng": -46.66855,
+   "label": "EP-114",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn115",
+   "lat": -23.47965,
+   "lng": -46.668167,
+   "label": "EP-115",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn116",
+   "lat": -23.479928,
+   "lng": -46.668675,
+   "label": "EP-116",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn117",
+   "lat": -23.479999,
+   "lng": -46.668078,
+   "label": "EP-117",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn118",
+   "lat": -23.479908,
+   "lng": -46.668295,
+   "label": "EP-118",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn119",
+   "lat": -23.480035,
+   "lng": -46.668369,
+   "label": "EP-119",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn120",
+   "lat": -23.480665,
+   "lng": -46.668624,
+   "label": "EP-120",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn121",
+   "lat": -23.480257,
+   "lng": -46.667841,
+   "label": "EP-121",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn122",
+   "lat": -23.480522,
+   "lng": -46.667871,
+   "label": "EP-122",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn123",
+   "lat": -23.479793,
+   "lng": -46.667836,
+   "label": "EP-123",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn124",
+   "lat": -23.47995,
+   "lng": -46.667533,
+   "label": "EP-124",
+   "nodeType": "endpoint"
+  },
+  {
+   "id": "wn125",
+   "lat": -23.480539,
+   "lng": -46.667532,
+   "label": "EP-125",
+   "nodeType": "endpoint"
+  }
+ ],
+ "segments": [
+  {
+   "id": "ws001",
+   "fromNodeId": "wn001",
+   "toNodeId": "wn002",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws002",
+   "fromNodeId": "wn003",
+   "toNodeId": "wn004",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws003",
+   "fromNodeId": "wn005",
+   "toNodeId": "wn006",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws004",
+   "fromNodeId": "wn007",
+   "toNodeId": "wn008",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws005",
+   "fromNodeId": "wn009",
+   "toNodeId": "wn010",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws006",
+   "fromNodeId": "wn011",
+   "toNodeId": "wn012",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws007",
+   "fromNodeId": "wn013",
+   "toNodeId": "wn014",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws008",
+   "fromNodeId": "wn015",
+   "toNodeId": "wn016",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws009",
+   "fromNodeId": "wn017",
+   "toNodeId": "wn018",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws010",
+   "fromNodeId": "wn019",
+   "toNodeId": "wn020",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws011",
+   "fromNodeId": "wn021",
+   "toNodeId": "wn022",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws012",
+   "fromNodeId": "wn023",
+   "toNodeId": "wn024",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws013",
+   "fromNodeId": "wn024",
+   "toNodeId": "wn025",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws014",
+   "fromNodeId": "wn026",
+   "toNodeId": "wn027",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws015",
+   "fromNodeId": "wn028",
+   "toNodeId": "wn029",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws016",
+   "fromNodeId": "wn030",
+   "toNodeId": "wn031",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws017",
+   "fromNodeId": "wn032",
+   "toNodeId": "wn033",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws018",
+   "fromNodeId": "wn034",
+   "toNodeId": "wn035",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws019",
+   "fromNodeId": "wn036",
+   "toNodeId": "wn037",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws020",
+   "fromNodeId": "wn038",
+   "toNodeId": "wn039",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws021",
+   "fromNodeId": "wn040",
+   "toNodeId": "wn041",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws022",
+   "fromNodeId": "wn042",
+   "toNodeId": "wn043",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws023",
+   "fromNodeId": "wn044",
+   "toNodeId": "wn045",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws024",
+   "fromNodeId": "wn046",
+   "toNodeId": "wn047",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws025",
+   "fromNodeId": "wn048",
+   "toNodeId": "wn049",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws026",
+   "fromNodeId": "wn050",
+   "toNodeId": "wn051",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws027",
+   "fromNodeId": "wn052",
+   "toNodeId": "wn053",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws028",
+   "fromNodeId": "wn054",
+   "toNodeId": "wn055",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws029",
+   "fromNodeId": "wn056",
+   "toNodeId": "wn057",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws030",
+   "fromNodeId": "wn058",
+   "toNodeId": "wn056",
+   "networkType": "sewer",
+   "diameter": 200,
+   "material": "PVC"
+  },
+  {
+   "id": "ws031",
+   "fromNodeId": "wn059",
+   "toNodeId": "wn057",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws032",
+   "fromNodeId": "wn060",
+   "toNodeId": "wn061",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws033",
+   "fromNodeId": "wn057",
+   "toNodeId": "wn062",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws034",
+   "fromNodeId": "wn063",
+   "toNodeId": "wn064",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws035",
+   "fromNodeId": "wn065",
+   "toNodeId": "wn066",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws036",
+   "fromNodeId": "wn067",
+   "toNodeId": "wn068",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws037",
+   "fromNodeId": "wn069",
+   "toNodeId": "wn070",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws038",
+   "fromNodeId": "wn071",
+   "toNodeId": "wn072",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws039",
+   "fromNodeId": "wn073",
+   "toNodeId": "wn074",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws040",
+   "fromNodeId": "wn075",
+   "toNodeId": "wn062",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws041",
+   "fromNodeId": "wn076",
+   "toNodeId": "wn077",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws042",
+   "fromNodeId": "wn044",
+   "toNodeId": "wn078",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws043",
+   "fromNodeId": "wn079",
+   "toNodeId": "wn080",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws044",
+   "fromNodeId": "wn081",
+   "toNodeId": "wn082",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws045",
+   "fromNodeId": "wn053",
+   "toNodeId": "wn083",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws046",
+   "fromNodeId": "wn084",
+   "toNodeId": "wn055",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws047",
+   "fromNodeId": "wn085",
+   "toNodeId": "wn086",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws048",
+   "fromNodeId": "wn087",
+   "toNodeId": "wn088",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws049",
+   "fromNodeId": "wn089",
+   "toNodeId": "wn090",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws050",
+   "fromNodeId": "wn091",
+   "toNodeId": "wn092",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws051",
+   "fromNodeId": "wn093",
+   "toNodeId": "wn094",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws052",
+   "fromNodeId": "wn095",
+   "toNodeId": "wn096",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws053",
+   "fromNodeId": "wn097",
+   "toNodeId": "wn098",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws054",
+   "fromNodeId": "wn099",
+   "toNodeId": "wn100",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws055",
+   "fromNodeId": "wn101",
+   "toNodeId": "wn031",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws056",
+   "fromNodeId": "wn102",
+   "toNodeId": "wn103",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws057",
+   "fromNodeId": "wn104",
+   "toNodeId": "wn004",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws058",
+   "fromNodeId": "wn105",
+   "toNodeId": "wn106",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws059",
+   "fromNodeId": "wn107",
+   "toNodeId": "wn108",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws060",
+   "fromNodeId": "wn109",
+   "toNodeId": "wn110",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws061",
+   "fromNodeId": "wn111",
+   "toNodeId": "wn112",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws062",
+   "fromNodeId": "wn113",
+   "toNodeId": "wn114",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws063",
+   "fromNodeId": "wn115",
+   "toNodeId": "wn116",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws064",
+   "fromNodeId": "wn117",
+   "toNodeId": "wn118",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws065",
+   "fromNodeId": "wn119",
+   "toNodeId": "wn120",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws066",
+   "fromNodeId": "wn021",
+   "toNodeId": "wn022",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws067",
+   "fromNodeId": "wn121",
+   "toNodeId": "wn122",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws068",
+   "fromNodeId": "wn123",
+   "toNodeId": "wn124",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  },
+  {
+   "id": "ws069",
+   "fromNodeId": "wn025",
+   "toNodeId": "wn125",
+   "networkType": "water",
+   "diameter": 63,
+   "material": "PEAD"
+  }
+ ]
+}

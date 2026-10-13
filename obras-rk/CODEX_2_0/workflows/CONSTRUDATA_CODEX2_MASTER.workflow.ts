@@ -1,8 +1,8 @@
-﻿import { workflow, node, links } from '@n8n-as-code/transformer';
+import { workflow, node, links } from '@n8n-as-code/transformer';
 
 // <workflow-map>
 // Workflow : CONSTRUDATA_CODEX2_MASTER
-// Nodes   : 12  |  Connections: 11
+// Nodes   : 14  |  Connections: 13
 //
 // NODE INDEX
 // ------------------------------------------------------------------
@@ -19,6 +19,9 @@
 // SendHelp                         httpRequest
 // IsTarefa                         if
 // CallTarefa                       httpRequest
+// IsDashboard                      if
+// BuildDashboardImage              code
+// SendDashboardImage               httpRequest
 //
 // ROUTING MAP
 // ------------------------------------------------------------------
@@ -33,7 +36,10 @@
 //             -> CallFinanceiro
 //           -> IsTarefa
 //             -> CallTarefa
-//            .out(1) -> SendHelp
+//            .out(1) -> IsDashboard
+//              -> BuildDashboardImage
+//                -> SendDashboardImage
+//              .out(1) -> SendHelp
 // </workflow-map>
 
 @workflow({
@@ -62,7 +68,7 @@ export class ConstrudataCodex2MasterWorkflow {
         position: [-960, 304],
     })
     Extract = {
-        jsCode: "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete', 'send.message'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const fromMe = msg.key?.fromMe || false;\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  if (fromMe && text.includes('Version: CODEX 2.0')) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;",
+        jsCode: "const items = $input.all();\nif (items.length === 0) return [];\n\nconst out = [];\nfor (const item of items) {\n  const raw = item.json;\n  const payload = raw.body || raw;\n\n  if (payload.event && ['messages.update', 'messages.delete'].includes(payload.event)) {\n    continue;\n  }\n\n  const msg = payload.data || payload;\n  const remoteJid = msg.key?.remoteJid || msg.remoteJid;\n  if (!remoteJid || remoteJid.includes('@g.us')) continue;\n\n  const phone = remoteJid.replace('@s.whatsapp.net', '').split('@')[0];\n\n  let text = '';\n  if (msg.message?.conversation) text = msg.message.conversation;\n  else if (msg.message?.extendedTextMessage?.text) text = msg.message.extendedTextMessage.text;\n  else if (msg.message?.imageMessage?.caption) text = msg.message.imageMessage.caption;\n\n  const fromMe = msg.key?.fromMe || false;\n  const normalized = (text || '').trim().toLowerCase();\n  const ownCommand = /^(menu|m|ajuda|help|comandos|opcoes|opções|dashboard|painel|dash|grafico|gráfico|oi|ola|olá|bom dia|boa tarde|boa noite|[1-9]|1[0-6])$/.test(normalized) || normalized.startsWith('@') || normalized.startsWith('#');\n  if (fromMe && !ownCommand) continue;\n\n  const hasImage = !!msg.message?.imageMessage;\n  const imageBase64 = hasImage && msg.message?.imageMessage?.base64 ? msg.message.imageMessage.base64 : '';\n\n  if (text || hasImage) {\n    out.push({ phone, text, hasImage, imageBase64, raw: msg, fromMe });\n  }\n}\n\nreturn out;",
     };
 
     @node({
@@ -72,7 +78,7 @@ export class ConstrudataCodex2MasterWorkflow {
         position: [-720, 192],
     })
     LookupContato = {
-        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})",
+        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/contatos?select=id,nome,cargo,projeto_id,frente_id,telefone_whatsapp&or=(telefone_whatsapp.eq.{{ $json.phone }},telefone_whatsapp.eq.{{ (() => { const p = $json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&order=created_at.desc.nullslast,id.asc&limit=1",
         sendHeaders: true,
         headerParameters: {
             parameters: [
@@ -94,9 +100,10 @@ export class ConstrudataCodex2MasterWorkflow {
         type: 'n8n-nodes-base.httpRequest',
         version: 4.1,
         position: [-720, 432],
+        alwaysOutputData: true,
     })
     GetState = {
-        url: '=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?phone_number=eq.{{ $node.Extract.json.phone }}',
+        url: "=https://vblfdikfobsirwpdnybw.supabase.co/rest/v1/user_state?select=*&or=(phone_number.eq.{{ $('Extract').first().json.phone }},phone_number.eq.{{ (() => { const p = $('Extract').first().json.phone; if (p.length === 12 && p.startsWith('55')) return p.slice(0,4) + '9' + p.slice(4); return p; })() }})&limit=1",
         sendHeaders: true,
         headerParameters: {
             parameters: [
@@ -127,6 +134,7 @@ const text = extracted.text || '';
 const hasImage = extracted.hasImage;
 const raw = extracted.raw;
 const imageBase64 = extracted.imageBase64;
+const emit = (payload) => [{ json: payload }];
 
 const contatoRaw = $('Lookup Contato').first().json;
 let contato = null;
@@ -180,40 +188,68 @@ const tarefaEngenheiros = '👷 TAREFA ENGENHEIROS\\n\\nUse: @tarefaengenheiros 
 const tarefaSetor = '🏭 TAREFA POR SETOR (Consórcio)\\n\\nUse: @tarefaconsorcio <setor> <descrição>\\n\\nSetores: planejamento, producao, sala, todos\\n\\nFabrizzio sempre recebe cópia.\\nEx: @tarefaconsorcio sala revisar NS-12';
 const planoCustos = '💰 PLANO DE CUSTOS (Financeiro)\\n\\nAs perguntas de custo vão embutidas no RDO dos engenheiros de campo.\\n\\nUse a opção 11 ou @pagamento para abrir o fluxo financeiro.';
 
+const statusRdo = '📊 STATUS RDO HOJE\\n\\nConsulta rápida do RDO operacional.\\n\\nPara lançar um novo RDO, use a opção 7 ou envie @rdo.\\nPara acompanhar no painel, acesse:\\nhttps://construdatamaxv2-clean.vercel.app';
+const equipeContatos = '👥 EQUIPE E CONTATOS\\n\\nDIRETORIA RK\\nFelipe Nery - Diretor RK\\nLuiz Fernando - Diretor RK\\nRenato - Diretor RK\\n\\nOBRAS / OPERAÇÃO\\nMateus - Osasco Eng\\nÍcaro - Tatuí\\nIgor - RK Santos Empreita\\n\\nCONSÓRCIO / SLNR\\nFabrizzio - Gerente/Diretor (recebe info)\\nJunior - Planejamento\\nValdeans - Planejamento\\nVeronica - Planejamento\\nGabriel - Sala Técnica\\nVinicius - Sala Técnica\\nJosé Marcio - Gerente Produção';
+const projetosAtivos = '🏗️ PROJETOS ATIVOS / RDO\\n\\n1 - Tatuí — Obra RK. Diretores: Felipe, Luiz e Renato\\n2 - Osasco — Obra RK. Diretores: Felipe, Luiz e Renato\\n3 - Consórcio / SLNR — Felipe como gerente de sala técnica\\n4 - Pardinho — Obra RK. Diretores: Felipe, Luiz e Renato\\n5 - Brasília — ConstruData\\n6 - RK Sub / Santos Empreita — Obra RK. Diretores: Felipe, Luiz e Renato\\n\\nPara lançar RDO de obra, envie @rdo ou escolha 7.';
+const dashboardConsolidado = '📈 DASHBOARD CONSOLIDADO\\n\\nAcesse o ConstruData Gestão 360:\\nhttps://construdatamaxv2-clean.vercel.app\\n\\nO RDO enviado pelo WhatsApp sobe no Supabase e aparece no painel da obra vinculada.';
+const reenviarCobranca = '📣 REENVIAR COBRANÇA\\n\\nComando reservado para alerta geral de RDO/cobrança.\\n\\nSe quiser cobrar RDO agora, use a opção 7.';
+const iaMenu = '🤖 INTELIGÊNCIA ARTIFICIAL\\n\\nEnvie sua pergunta depois de @ia.\\n\\nEx: @ia resumir status das obras\\n\\nPara RDO, use @rdo ou opção 7.';
+
 const lower = text.toLowerCase().trim();
 if (['menu', 'm', 'ajuda', 'help', 'comandos', 'opcoes', 'opções', 'oi', 'ola', 'olá', 'bom dia', 'boa tarde', 'boa noite'].includes(lower)) {
-  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '8' || lower === '@meurdo' || lower === '#meurdo') {
-  return { action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: directorRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '9' || lower === '@guialembrar') {
-  return { action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: lembrar, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '10') {
-  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '1') {
+  return emit({ action: 'help', helpText: statusRdo, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '2') {
+  return emit({ action: 'help', helpText: equipeContatos, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '3') {
+  return emit({ action: 'help', helpText: projetosAtivos, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '4' || lower === 'dashboard' || lower === '@dashboard' || lower === 'painel' || lower === '@painel' || lower === 'dash') {
+  return emit({ action: 'dashboard', helpText: dashboardConsolidado, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '5') {
+  return emit({ action: 'help', helpText: reenviarCobranca, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '6' || lower === '@ia' || lower.startsWith('@ia ')) {
+  return emit({ action: 'help', helpText: iaMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '11' || lower.includes('#gasto') || lower.includes('#financeiro') || lower.includes('@pagamento') || hasImage) {
-  return { action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user };
+  return emit({ action: 'fin', phone, text, hasImage, imageBase64, raw, state: 'start_financeiro', data: {}, user });
 }
 if (lower === '12' || lower === '@guiatarefasetor') {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '13' || lower === '@guiatarefa' || lower === '@guiatarefapessoa') {
-  return { action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaPessoa, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '14' || lower === '@guiatarefadiretoria') {
-  return { action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaDiretoria, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '15' || lower === '@guiatarefaengenheiros') {
-  return { action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaEngenheiros, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower === '16') {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
+}
+if (lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
+  return emit({ action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: { menuOption: lower }, user });
 }
 if (current && current.current_step && current.current_step !== 'idle' && current.current_step !== 'finished') {
   const flow = current.current_flow || 'rdo';
-  return {
+  return emit({
     action: 'continue_' + flow,
     phone,
     text,
@@ -223,21 +259,15 @@ if (current && current.current_step && current.current_step !== 'idle' && curren
     state: current.current_step,
     data: current.flow_data || {},
     user,
-  };
-}
-if (lower === '1' || lower === '7' || lower.includes('#rdo') || lower.includes('@rdo')) {
-  return { action: 'rdo', phone, text, hasImage, imageBase64, raw, state: 'start_rdo', data: {}, user };
+  });
 }
 if (lower.startsWith('@tarefaconsorcio') && lower.split(/\\s+/).length < 3) {
-  return { action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
+  return emit({ action: 'help', helpText: tarefaSetor, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });
 }
 if (lower.startsWith('@tarefa') || lower.includes('#tarefa')) {
-  return { action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user };
+  return emit({ action: 'tarefa', phone, text, hasImage, imageBase64, raw, state: 'start_tarefa', data: {}, user });
 }
-if (lower === '2' || lower === '3' || lower === '4' || lower === '5' || lower === '6') {
-  return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };
-}
-return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user };`,
+return emit({ action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64, raw, state: 'idle', data: {}, user });`,
     };
 
     @node({
@@ -323,6 +353,188 @@ return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64,
     };
 
     @node({
+        name: 'Is Dashboard?',
+        type: 'n8n-nodes-base.if',
+        version: 2.2,
+        position: [0, 512],
+    })
+    IsDashboard = {
+        conditions: {
+            options: { caseSensitive: true, leftValue: '', typeValidation: 'strict' },
+            conditions: [
+                {
+                    id: 'dash',
+                    leftValue: '={{ $json.action }}',
+                    rightValue: 'dashboard',
+                    operator: { type: 'string', operation: 'equals' },
+                },
+            ],
+            combinator: 'and',
+        },
+        options: {},
+    };
+
+    @node({
+        name: 'Build Dashboard Image',
+        type: 'n8n-nodes-base.code',
+        version: 2,
+        position: [240, 512],
+    })
+    BuildDashboardImage = {
+        jsCode: `const input = $json;
+const SUPABASE_URL = 'https://vblfdikfobsirwpdnybw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZibGZkaWtmb2JzaXJ3cGRueWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzAwODIsImV4cCI6MjA4ODk0NjA4Mn0.GOx3HoMh3P2Zzxz8BxNsfQBfXwsNZNQsdVc3nJaqRy4';
+const headers = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+const today = new Date().toISOString().slice(0, 10);
+
+async function get(path) {
+  try {
+    return await this.helpers.httpRequest({
+      method: 'GET',
+      url: SUPABASE_URL + '/rest/v1/' + path,
+      headers,
+      json: true,
+    });
+  } catch (e) {
+    return [];
+  }
+}
+function brl(n) {
+  return Number(n || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+const [rdos, tarefas] = await Promise.all([
+  get('rdos?select=project_id,data,equipe_number,producao_m,ligacoes_dia,observacoes,apontador,custo_diesel,custo_alimentacao,custo_mao_obra,custo_materiais,latitude,longitude,fotos,status&limit=200'),
+  get('tarefas?select=responsavel,status,prioridade&status=eq.pendente&limit=1000'),
+]);
+
+const rdosHoje = rdos.filter((r) => String(r.data || '').slice(0, 10) === today);
+const base = rdosHoje.length ? rdosHoje : rdos.slice(0, 20);
+const producao = base.reduce((s, r) => s + Number(r.producao_m || 0), 0);
+const equipe = base.reduce((s, r) => s + Number(r.equipe_number || 0), 0);
+const custo = base.reduce((s, r) => s + Number(r.custo_diesel || 0) + Number(r.custo_alimentacao || 0) + Number(r.custo_mao_obra || 0) + Number(r.custo_materiais || 0), 0);
+const fotos = base.filter((r) => Array.isArray(r.fotos) && r.fotos.length > 0).length;
+const gps = base.filter((r) => r.latitude && r.longitude).length;
+const ocorr = base.filter((r) => /ocorr|paralis|pend/i.test(String(r.observacoes || ''))).length;
+const pendentes = tarefas.length;
+const criticas = tarefas.filter((t) => String(t.prioridade || '').toLowerCase() === 'alta').length;
+const porResp = Object.entries(tarefas.reduce((acc, t) => {
+  const k = String(t.responsavel || 'Sem responsavel');
+  acc[k] = (acc[k] || 0) + 1;
+  return acc;
+}, {})).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+const bars = porResp.map(([name, value], i) => {
+  const w = Math.max(24, Math.min(330, Number(value) * 9));
+  const y = 348 + i * 38;
+  return '<text x="52" y="' + (y + 16) + '" font-size="18" fill="#16304f">' + esc(name) + '</text>' +
+    '<rect x="210" y="' + y + '" width="' + w + '" height="22" rx="6" fill="#6f4bd8"/>' +
+    '<text x="' + (220 + w) + '" y="' + (y + 17) + '" font-size="16" fill="#16304f" font-weight="700">' + value + '</text>';
+}).join('');
+
+const svg =
+'<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620">' +
+'<rect width="900" height="620" fill="#f7fafc"/>' +
+'<rect x="24" y="20" width="852" height="64" rx="22" fill="#ffffff" stroke="#a3e635" stroke-width="6"/>' +
+'<text x="54" y="61" font-family="Arial" font-size="26" font-weight="700" fill="#0b3058">Dashboard RDO ConstruData - ' + esc(today) + '</text>' +
+'<circle cx="820" cy="52" r="24" fill="#0b5794"/><text x="812" y="61" font-family="Arial" font-size="24" fill="#fff">C</text>' +
+'<text x="54" y="132" font-family="Arial" font-size="18" fill="#55708f">Resumo automatico via WhatsApp, Supabase e ConstruData Web</text>' +
+'<g font-family="Arial">' +
+[['RDOs hoje', String(rdosHoje.length) + '/' + String(rdos.length), '#0ea5e9'], ['Producao', producao.toFixed(1) + ' m', '#22c55e'], ['Equipe', String(equipe), '#f97316'], ['Custo dia', brl(custo), '#ef4444']].map((k, i) => {
+  const x = 52 + i * 206;
+  return '<rect x="' + x + '" y="158" width="184" height="104" rx="16" fill="#ffffff" stroke="#d8e1ea"/>' +
+    '<rect x="' + x + '" y="158" width="184" height="8" rx="4" fill="' + k[2] + '"/>' +
+    '<text x="' + (x + 16) + '" y="198" font-size="18" fill="#55708f">' + k[0] + '</text>' +
+    '<text x="' + (x + 16) + '" y="238" font-size="30" font-weight="700" fill="#16304f">' + esc(k[1]) + '</text>';
+}).join('') +
+'<rect x="52" y="292" width="796" height="280" rx="18" fill="#ffffff" stroke="#d8e1ea"/>' +
+'<text x="80" y="328" font-size="22" font-weight="700" fill="#16304f">Tarefas pendentes por responsavel</text>' +
+bars +
+'<rect x="570" y="330" width="240" height="154" rx="16" fill="#eef6ff"/>' +
+'<text x="594" y="366" font-size="18" fill="#55708f">Pendentes</text><text x="594" y="404" font-size="34" font-weight="700" fill="#16304f">' + pendentes + '</text>' +
+'<text x="594" y="444" font-size="18" fill="#55708f">Criticas</text><text x="690" y="444" font-size="22" font-weight="700" fill="#ef4444">' + criticas + '</text>' +
+'<text x="594" y="478" font-size="18" fill="#55708f">Fotos/GPS/Ocorr.</text><text x="744" y="478" font-size="18" font-weight="700" fill="#16304f">' + fotos + '/' + gps + '/' + ocorr + '</text>' +
+'<rect x="570" y="502" width="240" height="42" rx="12" fill="#dcfce7"/>' +
+'<text x="594" y="529" font-size="16" font-weight="700" fill="#166534">Abrir: /app/rdo</text>' +
+'</g></svg>';
+
+const chartConfig = {
+  type: 'bar',
+  data: {
+    labels: porResp.map(([name]) => String(name)),
+    datasets: [{
+      label: 'Tarefas pendentes',
+      data: porResp.map(([, value]) => Number(value)),
+      backgroundColor: ['#6f4bd8', '#0ea5e9', '#f97316', '#22c55e', '#ef4444'],
+      borderRadius: 8,
+    }],
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Dashboard RDO ConstruData - ' + today,
+        color: '#0b3058',
+        font: { size: 24, weight: 'bold' },
+      },
+      subtitle: {
+        display: true,
+        text: 'RDOs hoje ' + rdosHoje.length + '/' + rdos.length + ' | Producao ' + producao.toFixed(1) + ' m | Equipe ' + equipe + ' | Custo ' + brl(custo),
+        color: '#55708f',
+        font: { size: 16 },
+      },
+    },
+    scales: {
+      x: { ticks: { color: '#16304f', font: { size: 14 } }, grid: { display: false } },
+      y: { beginAtZero: true, ticks: { color: '#55708f' }, grid: { color: '#d8e1ea' } },
+    },
+  },
+};
+const dashboardImage = 'https://quickchart.io/chart?width=900&height=620&format=png&c=' + encodeURIComponent(JSON.stringify(chartConfig));
+const caption = [
+  '📊 Dashboard RDO atualizado',
+  '',
+  'RDOs hoje: ' + rdosHoje.length + '/' + rdos.length,
+  'Produção: ' + producao.toFixed(1) + ' m',
+  'Equipe: ' + equipe,
+  'Custo do dia: ' + brl(custo),
+  'Pendências: ' + pendentes + ' | Críticas: ' + criticas,
+  '',
+  '🔗 https://construdatamaxv2-clean.vercel.app/app/rdo'
+].join('\\n');
+
+return [{ json: { ...input, dashboardImage, caption } }];`,
+    };
+
+    @node({
+        name: 'Send Dashboard Image',
+        type: 'n8n-nodes-base.httpRequest',
+        version: 4.1,
+        position: [480, 512],
+    })
+    SendDashboardImage = {
+        method: 'POST',
+        url: "={{ (($env.EVOLUTION_API_URL || 'http://evolution:8080').replace(/\\/$/, '')) + '/message/sendMedia/' + ($env.EVOLUTION_INSTANCE || 'construdata-felipe') }}",
+        sendHeaders: true,
+        headerParameters: {
+            parameters: [
+                {
+                    name: 'apikey',
+                    value: "={{ $env.EVOLUTION_API_KEY || 'construdata2026' }}",
+                },
+            ],
+        },
+        sendBody: true,
+        specifyBody: 'json',
+        jsonBody: "={{ JSON.stringify({ number: $json.phone, mediatype: 'image', mimetype: 'image/png', media: $json.dashboardImage, fileName: 'dashboard-rdo.png', caption: $json.caption }) }}",
+        options: {},
+    };
+
+    @node({
         name: 'Send Help',
         type: 'n8n-nodes-base.httpRequest',
         version: 4.1,
@@ -399,6 +611,9 @@ return { action: 'help', helpText: fullMenu, phone, text, hasImage, imageBase64,
         this.IsFinanceiro.out(0).to(this.CallFinanceiro.in(0));
         this.IsFinanceiro.out(1).to(this.IsTarefa.in(0));
         this.IsTarefa.out(0).to(this.CallTarefa.in(0));
-        this.IsTarefa.out(1).to(this.SendHelp.in(0));
+        this.IsTarefa.out(1).to(this.IsDashboard.in(0));
+        this.IsDashboard.out(0).to(this.BuildDashboardImage.in(0));
+        this.BuildDashboardImage.out(0).to(this.SendDashboardImage.in(0));
+        this.IsDashboard.out(1).to(this.SendHelp.in(0));
     }
 }

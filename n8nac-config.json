@@ -9,15 +9,13 @@
       "syncFolder": "workflows",
       "projectId": "personal",
       "projectName": "Personal",
-      "instanceIdentifier": "n8n_production_ae317_up_railway_app_felipe_n",
-      "workflowDir": "workflows/n8n_production_ae317_up_railway_app_felipe_n/personal",
+      "instanceIdentifier": "n8n_production_ae317_up_railway_app_user_94e8e113_502f_49a2_b637_af49a3a72c6c",
+      "workflowDir": "workflows/n8n_production_ae317_up_railway_app_user_94e8e113_502f_49a2_b637_af49a3a72c6c/personal",
       "verification": {
         "status": "verified",
         "normalizedHost": "https://n8n-production-ae317.up.railway.app",
-        "userId": "089d0566-6da2-4304-82dc-7ebb170cbd82",
-        "userName": "Felipe Nery",
-        "userEmail": "felipe.nery2@gmail.com",
-        "lastCheckedAt": "2026-04-19T00:40:23.780Z"
+        "userId": "94e8e113-502f-49a2-b637-af49a3a72c6c",
+        "lastCheckedAt": "2026-04-23T01:46:20.946Z"
       }
     }
   ],
@@ -25,6 +23,6 @@
   "syncFolder": "workflows",
   "projectId": "personal",
   "projectName": "Personal",
-  "instanceIdentifier": "n8n_production_ae317_up_railway_app_felipe_n",
-  "workflowDir": "workflows/n8n_production_ae317_up_railway_app_felipe_n/personal"
+  "instanceIdentifier": "n8n_production_ae317_up_railway_app_user_94e8e113_502f_49a2_b637_af49a3a72c6c",
+  "workflowDir": "workflows/n8n_production_ae317_up_railway_app_user_94e8e113_502f_49a2_b637_af49a3a72c6c/personal"
 }

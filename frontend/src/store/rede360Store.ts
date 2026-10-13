@@ -120,6 +120,8 @@ export const useRede360Store = create<Rede360State>((set) => ({
   }),
 
   fetchFromBackend: async (nucleo) => {
+    // WCR demo mode: skip backend (old Supabase data, doesn't have WCR projects)
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') return
     try {
       const [redeRes, geoRes, nucleosRes] = await Promise.allSettled([
         apiManageRede(nucleo),

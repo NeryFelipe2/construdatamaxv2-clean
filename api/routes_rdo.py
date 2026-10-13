@@ -1,19 +1,48 @@
-"""Rotas REST relacionadas ao RDO."""
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
 
+from api.supabase_client import get_supabase
 from campo.rdo_engine import RDOEngine
 
 router = APIRouter(tags=["rdo"])
 engine = RDOEngine()
 
+supabase = get_supabase()
+
 
 @router.get("/api/rdo")
 def api_listar_rdo(nucleo: str = Query(default="")):
+    # 1) Origem principal em producao: Supabase canonico
+    if supabase:
+        try:
+            q = supabase.table("rdos").select("*").order("created_at", desc=True)
+            if nucleo:
+                q = q.eq("nucleo", nucleo)
+            project_id = os.environ.get("DEFAULT_PROJECT_ID", "")
+            if project_id and not nucleo:
+                q = q.eq("projeto_id", project_id)
+            res = q.execute()
+            if res.data:
+                return {"items": res.data}
+        except Exception:
+            pass
+
+        # 3) Fallback legado: rk_rdo_diario
+        try:
+            q = supabase.table("rk_rdo_diario").select("*").order("data_registro", desc=True)
+            if nucleo:
+                q = q.eq("nucleo", nucleo)
+            res = q.execute()
+            return {"items": res.data or []}
+        except Exception:
+            pass
+
+    # 2) Fallback local do engine para ambiente offline
     return {"items": engine.listar_rdos(nucleo=nucleo)}
 
 
@@ -21,6 +50,15 @@ def api_listar_rdo(nucleo: str = Query(default="")):
 def api_criar_rdo(payload: dict):
     if not payload.get("data"):
         raise HTTPException(status_code=400, detail="Campo 'data' obrigatorio")
+    if payload.get("projeto_id") and supabase:
+        row = dict(payload)
+        row.setdefault("origem", "web")
+        row.setdefault("status", "recebido")
+        try:
+            res = supabase.table("rdos").insert(row).execute()
+            return (res.data or [row])[0]
+        except Exception:
+            pass
     return engine.criar_rdo_completo(payload)
 
 

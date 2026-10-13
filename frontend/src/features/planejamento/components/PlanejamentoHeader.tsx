@@ -4,6 +4,7 @@
  */
 import { CalendarClock, Play, Download, Printer, AlertTriangle } from 'lucide-react'
 import { usePlanejamentoStore, type PlanejamentoTab } from '@/store/planejamentoStore'
+import { OperationalCyclePanel } from '@/features/operational/components/OperationalCyclePanel'
 import { exportFullProjectCsv } from '../utils/exportEngine'
 
 const TABS: { key: PlanejamentoTab; label: string }[] = [
@@ -82,6 +83,10 @@ export function PlanejamentoHeader() {
           Configurações alteradas. Clique em <strong className="mx-1">Gerar Planejamento</strong> para atualizar o cronograma.
         </div>
       )}
+
+      <div className="px-6 mb-3">
+        <OperationalCyclePanel compact showPlanningActions />
+      </div>
 
       {/* Tab bar */}
       <div className="overflow-x-auto scrollbar-hide">

@@ -1,0 +1,1548 @@
+{
+  "periodo": "11/06/2026 a 28/06/2026",
+  "obra": "WCR Saneamento - Boi Malhado, Sakura, Comunidade do Retorno",
+  "equipes": [
+    {
+      "nome": "Equipe Wellington",
+      "lider": "Wellington",
+      "tipo": "esgoto",
+      "membros": [
+        "Wellington",
+        "Marcio",
+        "Mauricio",
+        "Cícero",
+        "Juan",
+        "Lenílson",
+        "Zé Claudino"
+      ],
+      "funcoes": {
+        "Wellington": "ajudante",
+        "Marcio": "ajudante",
+        "Mauricio": "pedreiro",
+        "Cícero": "ajudante",
+        "Juan": "operador",
+        "Lenílson": "encanador",
+        "Zé Claudino": "líder"
+      },
+      "maquina": "Mini Escavadeira, Retro Caterpillar"
+    },
+    {
+      "nome": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "tipo": "esgoto",
+      "membros": [
+        "Zé Glaudino",
+        "Juan",
+        "Marcio",
+        "Maurício",
+        "Wellington",
+        "Felipe",
+        "Cícero"
+      ],
+      "funcoes": {
+        "Zé Glaudino": "líder",
+        "Juan": "operador",
+        "Marcio": "ajudante",
+        "Maurício": "pedreiro",
+        "Wellington": "ajudante",
+        "Felipe": "pedreiro",
+        "Cícero": "ajudante"
+      },
+      "maquina": "Mini SANY, Retro New Holland"
+    },
+    {
+      "nome": "Equipe Robert",
+      "lider": "Robert Vieira",
+      "tipo": "esgoto",
+      "membros": [
+        "Robert Vieira",
+        "Edson",
+        "João",
+        "Marcos",
+        "Heliel",
+        "Diego",
+        "Almir",
+        "Pedro",
+        "Israel",
+        "Marcelo"
+      ],
+      "funcoes": {
+        "Robert Vieira": "encarregado",
+        "Edson": "líder",
+        "João": "líder",
+        "Marcos": "motorista/encanador",
+        "Heliel": "motorista/encanador",
+        "Diego": "encanador",
+        "Almir": "ajudante",
+        "Pedro": "pedreiro",
+        "Israel": "operador",
+        "Marcelo": "encanador"
+      },
+      "maquina": "Mini Retro SANY SY26u, Retro Escavadeira",
+      "motoristas": [
+        "Marcos José Farias",
+        "Heliel da Silva Saraiva"
+      ]
+    },
+    {
+      "nome": "Equipe Israel",
+      "lider": "Israel Neves",
+      "tipo": "esgoto",
+      "membros": [
+        "Israel Neves",
+        "Edson",
+        "João",
+        "Marcos",
+        "Heliel",
+        "Diego",
+        "Almir",
+        "Pedro",
+        "Marcelo",
+        "Everton"
+      ],
+      "funcoes": {
+        "Israel Neves": "encarregado/operador",
+        "Edson": "líder",
+        "João": "líder",
+        "Marcos": "encanador",
+        "Heliel": "encanador",
+        "Diego": "encanador",
+        "Almir": "ajudante",
+        "Pedro": "pedreiro",
+        "Marcelo": "encanador",
+        "Everton": "ajudante"
+      },
+      "maquina": "Mini Escavadeira, Retro Escavadeira"
+    },
+    {
+      "nome": "Equipe Ediel",
+      "lider": "Ediel Novais",
+      "tipo": "água",
+      "membros": [
+        "Ediel Novais",
+        "Marcelo",
+        "Cristiano",
+        "Ederson",
+        "Damião",
+        "Leonardo",
+        "Breno",
+        "Serafim",
+        "Anderson"
+      ],
+      "funcoes": {
+        "Ediel Novais": "líder",
+        "Marcelo": "encanador",
+        "Cristiano": "ajudante",
+        "Ederson": "motorista/encanador",
+        "Damião": "pedreiro",
+        "Leonardo": "ajudante",
+        "Breno": "ajudante",
+        "Serafim": "ajudante",
+        "Anderson": "ajudante"
+      },
+      "maquina": "Mini retro SANY SY35U"
+    },
+    {
+      "nome": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "tipo": "água",
+      "membros": [
+        "Mazinho",
+        "Michael",
+        "Marcos Vinicius",
+        "Felipe",
+        "Danilo",
+        "Danio"
+      ],
+      "funcoes": {
+        "Mazinho": "líder/pedreiro",
+        "Michael": "líder/pedreiro",
+        "Marcos Vinicius": "ajudante",
+        "Felipe": "pedreiro",
+        "Danilo": "ajudante"
+      },
+      "maquina": null
+    },
+    {
+      "nome": "Equipe Renan",
+      "lider": "Renan",
+      "tipo": "água",
+      "membros": [
+        "Renan",
+        "Kaue",
+        "Fábio",
+        "Patrick",
+        "Paulo Henrique",
+        "Cristian",
+        "Lenílson"
+      ],
+      "funcoes": {
+        "Renan": "líder",
+        "Kaue": "soldador",
+        "Fábio": "ajudante",
+        "Patrick": "ajudante",
+        "Paulo Henrique": "ajudante",
+        "Cristian": "encanador",
+        "Lenílson": "encanador"
+      },
+      "maquina": "Mini Escavadeira, Retro Escavadeira",
+      "equipamentos": [
+        "Máquina de solda",
+        "Serra sabre",
+        "2 Martelete"
+      ]
+    },
+    {
+      "nome": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "tipo": "esgoto",
+      "membros": [
+        "Léo",
+        "Rodrigo",
+        "Igor",
+        "Regis",
+        "Wesley",
+        "Juan",
+        "Aparecido"
+      ],
+      "funcoes": {
+        "Léo": "líder",
+        "Rodrigo": "líder",
+        "Igor": "ajudante",
+        "Regis": "pedreiro",
+        "Wesley": "ajudante",
+        "Juan": "operador",
+        "Aparecido": "motorista"
+      },
+      "maquina": "Retro New Holland, Retro Catepillar",
+      "equipamentos": [
+        "Mini retro"
+      ]
+    }
+  ],
+  "apontamentos": [
+    {
+      "data": "2026-06-11",
+      "nucleo": "Boi Malhado",
+      "equipe": "Diversas",
+      "servico": "Início das atividades - verificação de campo",
+      "observacoes": "Travessa Sonho Real - vazamento, moradora se machucou"
+    },
+    {
+      "data": "2026-06-12",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Wellington",
+      "lider": "Rodrigo",
+      "rua": "Rua do Campo",
+      "servico": "Limpeza da rua e instalação de 1 caixa U.M.A",
+      "materiais": {
+        "caixa_uma": 1,
+        "LA": 1,
+        "LE": 1
+      },
+      "maquina": "CAT 416 (Gringo)",
+      "casas": [
+        "57A"
+      ]
+    },
+    {
+      "data": "2026-06-12",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Robert",
+      "lider": "Edson/João",
+      "rua": "Travessa Primeiro de Abril, Travessa Pingo de Mel, Travessa Meu Cantinho",
+      "servico": "Execução de rede de esgoto",
+      "materiais": {
+        "PI": 2
+      },
+      "metragem_m": 55,
+      "maquina": "Caminhão Basculante 5D04 Iveco, Mini Escavadeira 3 ton",
+      "motoristas": [
+        "Eliel",
+        "Marcos"
+      ]
+    },
+    {
+      "data": "2026-06-12",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Reparos de ramal de esgoto",
+      "materiais": {
+        "LE": 4
+      },
+      "casas": [
+        "23",
+        "33",
+        "48",
+        "54"
+      ]
+    },
+    {
+      "data": "2026-06-12",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Jesse/Renan",
+      "lider": "Renan",
+      "rua": "Rua 2",
+      "servico": "27 ligações de água com cavalete e HM",
+      "materiais": {
+        "HM": 54,
+        "cavalete_duplo": 2
+      },
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-12",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua Bahia",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 11
+      },
+      "casas": [
+        "45",
+        "43",
+        "50",
+        "41",
+        "37",
+        "31",
+        "36",
+        "30",
+        "4"
+      ]
+    },
+    {
+      "data": "2026-06-13",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua 03",
+      "servico": "Instalação de caixas de água encanada",
+      "materiais": {
+        "caixa_uma": 21
+      },
+      "casas": [
+        "43",
+        "48",
+        "44",
+        "52",
+        "38",
+        "29",
+        "32",
+        "25",
+        "28",
+        "23",
+        "27",
+        "21",
+        "19",
+        "24",
+        "22",
+        "17",
+        "20",
+        "15"
+      ]
+    },
+    {
+      "data": "2026-06-13",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Renan",
+      "lider": "Renan",
+      "rua": "Rua 2 - Prolongamento",
+      "servico": "Ramal de água",
+      "materiais": {
+        "PAD_63mm": 80,
+        "ligacoes_agua": 10,
+        "HM": 20
+      },
+      "maquina": "Mini Escavadeira, Retro Escavadeira",
+      "equipamentos": [
+        "Máquina de solda",
+        "Serra sabre",
+        "2 Martelete"
+      ]
+    },
+    {
+      "data": "2026-06-15",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel",
+      "lider": "Ediel",
+      "rua": "Rua 3 Bahia",
+      "servico": "Ligação de água e rede de esgoto",
+      "materiais": {
+        "LE": 3,
+        "RA": "34 mts 63mm"
+      },
+      "maquina": "Mini retro SANY SY35U"
+    },
+    {
+      "data": "2026-06-15",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua 3 Bahia",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 16
+      },
+      "casas": [
+        "27",
+        "44",
+        "46",
+        "20",
+        "15",
+        "10",
+        "08",
+        "06",
+        "04",
+        "05",
+        "12"
+      ]
+    },
+    {
+      "data": "2026-06-15",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Reforma de caixas de inspeção",
+      "materiais": {
+        "LE": 5
+      },
+      "casas": [
+        "58",
+        "60",
+        "47",
+        "49",
+        "51"
+      ],
+      "maquina": "Retro New Holland"
+    },
+    {
+      "data": "2026-06-15",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "rua": "Santa Rosa do Sul",
+      "servico": "Reforma de caixa de inspeção e construção de PV",
+      "materiais": {
+        "PV": 1
+      },
+      "maquina": "Retro Catepillar"
+    },
+    {
+      "data": "2026-06-15",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Robert",
+      "lider": "Robert",
+      "rua": "Travessa Primeiro de Abril",
+      "servico": "Escavação, retirada de solo e concretagem",
+      "metragem_m": 25,
+      "materiais": {
+        "PV": 1,
+        "PI": 3
+      },
+      "maquina": "Mini Retro SANY sy26u",
+      "equipamentos": [
+        "Caminhão Carroceria",
+        "Basculante",
+        "Gerador",
+        "Moto bomba"
+      ]
+    },
+    {
+      "data": "2026-06-16",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Remanejamento de rede de esgoto",
+      "materiais": {
+        "LE": 10
+      },
+      "metragem_m": 35,
+      "maquina": "Mini SANY",
+      "observacoes": "Vala aberta com 1,90m de profundidade com escoramento, 10 caixas de inspeção reforçadas"
+    },
+    {
+      "data": "2026-06-16",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel + Renan",
+      "lider": "Ediel/Renan",
+      "rua": "Rua 3 Bahia",
+      "servico": "Ramal de água",
+      "materiais": {
+        "RA": 60,
+        "Solda_eletrofusao": 60,
+        "Rede_agua_63mm": "92 mts"
+      },
+      "maquina": "Mini retro SANY",
+      "observacoes": "2 Ts e 2 luvas de 63mm utilizados"
+    },
+    {
+      "data": "2026-06-17",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo/Rodrigo",
+      "rua": "Santa Rosa do Sul/Rua 10",
+      "servico": "Construção de PV e caixa de inspeção",
+      "materiais": {
+        "PV": 1,
+        "Caixa_inspecao": 1,
+        "Grade": 2
+      },
+      "maquina": "Retro Catepillar"
+    },
+    {
+      "data": "2026-06-17",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Caixas de inspeção finalizadas",
+      "materiais": {
+        "Caixa_inspecao": 4
+      },
+      "metragem_m": 15,
+      "profundidade_m": 2.0,
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-17",
+      "nucleo": "São Cleto",
+      "equipe": "Equipe Robert",
+      "lider": "Robert",
+      "servico": "Ramal para cloragem",
+      "materiais": {
+        "RA": 2,
+        "Solda_eletrofusao": 4,
+        "Caps": 2
+      },
+      "maquina": "máquina de solda"
+    },
+    {
+      "data": "2026-06-17",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Robert",
+      "lider": "Edson/João",
+      "rua": "Travessa Primeiro de Abril, Travessa Flor de Caju",
+      "servico": "Cimentado e reparo de PI",
+      "materiais": {
+        "PI": 1
+      },
+      "metragem_m": 30,
+      "maquina": "Mini Retro",
+      "equipamentos": [
+        "Serra Clipper",
+        "Sapinho"
+      ]
+    },
+    {
+      "data": "2026-06-18",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel + Renan",
+      "lider": "Ediel/Renan",
+      "rua": "Rua Bahia, Rua José Vandir",
+      "servico": "Ramais de água",
+      "materiais": {
+        "PRA": 162,
+        "LA": 56,
+        "RA": 56,
+        "Solda_eletrofusao": 56,
+        "Rede_agua_63mm": "162 mts"
+      },
+      "maquina": "Mini retro, Retro escavadeira",
+      "equipamentos": [
+        "Máquina de Solda",
+        "Martelete",
+        "Serra Clipper"
+      ]
+    },
+    {
+      "data": "2026-06-18",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo/Rodrigo",
+      "rua": "Santa Rosa do Tocantins",
+      "servico": "Rede de esgoto",
+      "materiais": {
+        "PRE": 18,
+        "PV": 1,
+        "LE": 1
+      },
+      "maquina": "New Holland"
+    },
+    {
+      "data": "2026-06-18",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Ramal de esgoto e ligação de água",
+      "materiais": {
+        "PRE_300mm": 42,
+        "Caixa_inspecao": 1
+      },
+      "casas": [
+        "55",
+        "57",
+        "59",
+        "63",
+        "61",
+        "62",
+        "64",
+        "66",
+        "68",
+        "70"
+      ],
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-18",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua José Vandir",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 32
+      },
+      "casas": [
+        "43",
+        "45",
+        "77",
+        "28",
+        "41",
+        "39",
+        "37",
+        "24",
+        "35",
+        "22",
+        "22B",
+        "33",
+        "31",
+        "18",
+        "29",
+        "26",
+        "25",
+        "16",
+        "21",
+        "12",
+        "4",
+        "11",
+        "7",
+        "1"
+      ]
+    },
+    {
+      "data": "2026-06-18",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Robert",
+      "lider": "Robert",
+      "rua": "Travessa Flor de Caju",
+      "servico": "Extensão de rede de água",
+      "materiais": {
+        "PRA_PEAD_63mm": 30
+      },
+      "maquina": "Mini retro",
+      "equipamentos": [
+        "Makita",
+        "Martelete",
+        "Serra Clipper"
+      ]
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Israel",
+      "lider": "Edson/João",
+      "rua": "Rua 4 José Vandir",
+      "servico": "Reforma de PI",
+      "materiais": {
+        "PI": 2,
+        "Caixa_inspecao": 3
+      },
+      "casas": [
+        "3",
+        "6",
+        "8"
+      ],
+      "equipamentos": [
+        "Makita",
+        "Martelete",
+        "Mini retro"
+      ]
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Ligação de esgoto",
+      "materiais": {
+        "LE": 9
+      },
+      "casas": [
+        "68",
+        "67",
+        "63",
+        "72",
+        "65",
+        "74",
+        "76",
+        "78",
+        "69"
+      ],
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel + Renan",
+      "lider": "Ediel/Renan",
+      "rua": "Rua José Vandir",
+      "servico": "Ramal de água",
+      "materiais": {
+        "PRA": 41,
+        "LA": 13,
+        "RA": 13,
+        "Solda_eletrofusao": 13
+      },
+      "casas": [
+        "44",
+        "42",
+        "40",
+        "55",
+        "53",
+        "59",
+        "56",
+        "49",
+        "32",
+        "34",
+        "47",
+        "30",
+        "45"
+      ],
+      "maquina": "Mini retro, Retro escavadeira",
+      "equipamentos": [
+        "Máquina de Solda",
+        "Martelete"
+      ]
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "rua": "Santa Rosa do Tocantins",
+      "servico": "Acabamento no PV da rua Santa Rosa do Sul",
+      "maquina": "Retro New Holland"
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua José Vandir",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 14
+      },
+      "casas": [
+        "26",
+        "32",
+        "34",
+        "49",
+        "48",
+        "44",
+        "63",
+        "50",
+        "53",
+        "55",
+        "36",
+        "42",
+        "52",
+        "61"
+      ]
+    },
+    {
+      "data": "2026-06-19",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Renan",
+      "lider": "Renan",
+      "rua": "Rua 4",
+      "servico": "Ramal de água com PAD",
+      "materiais": {
+        "PAD_63mm": 45,
+        "ligacoes_agua": 46,
+        "HM": 46
+      },
+      "maquina": "Mini Escavadeira, Retro Escavadeira",
+      "equipamentos": [
+        "Máquina de solda",
+        "Serra sabre",
+        "2 Martelete"
+      ],
+      "casas_hm": {
+        "39": 2,
+        "22": 1,
+        "28": 2,
+        "43": 3,
+        "45": 1,
+        "30": 1,
+        "32": 4,
+        "77": 3,
+        "34": 1,
+        "49": 2,
+        "13": 3,
+        "36": 1,
+        "53": 4,
+        "55": 2,
+        "40": 2,
+        "42": 1,
+        "44": 2,
+        "59": 4,
+        "61": 4,
+        "46": 2
+      }
+    },
+    {
+      "data": "2026-06-21",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Israel",
+      "lider": "Israel Neves",
+      "rua": "Rua 02, Rua Pantanal viela 01 parte baixa",
+      "servico": "Retirada de bota fora, Reparos de ligação de água, Desobstrução de esgoto",
+      "viagens_bota_fora": 5,
+      "reparos_agua": 4,
+      "maquina": "Retro, Mini retro, Basculante, Caminhão de Equipe",
+      "equipamentos": [
+        "Martelete"
+      ]
+    },
+    {
+      "data": "2026-06-22",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua Miriam Carotenuto, Rua 2",
+      "servico": "3 reparos de caixas de inspeção, 1 ligação de ramal de esgoto, 1 reparo de PI",
+      "materiais": {
+        "LE": 1
+      },
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-22",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo/Rodrigo",
+      "rua": "Santa Rosa do Tocantins",
+      "servico": "Ligação de esgoto",
+      "materiais": {
+        "PRE": 12,
+        "LE": 3
+      },
+      "maquina": "Retro New Holland, Mini retro"
+    },
+    {
+      "data": "2026-06-22",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Renan",
+      "lider": "Renan",
+      "rua": "Rua 4 - José Vandir",
+      "servico": "Instalação de hidrômetros",
+      "materiais": {
+        "HM": 30
+      },
+      "casas": [
+        "5",
+        "1",
+        "7",
+        "25",
+        "21",
+        "13",
+        "4",
+        "29",
+        "9",
+        "11",
+        "13A",
+        "6",
+        "15",
+        "3",
+        "01",
+        "02",
+        "19",
+        "22B",
+        "16",
+        "22A",
+        "18",
+        "25A"
+      ],
+      "observacoes": "30 hidrometros instalados e baixados no app ZN"
+    },
+    {
+      "data": "2026-06-23",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Renan",
+      "lider": "Renan",
+      "rua": "Rua 4 - José Vandir",
+      "servico": "Instalação de hidrômetros",
+      "materiais": {
+        "HM": 60
+      },
+      "observacoes": "45 hidrometros instalados e baixados no app ZN. Faltam baixar: 46, 48, 69, 54, 73"
+    },
+    {
+      "data": "2026-06-23",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Zé Claudino",
+      "lider": "Zé Glaudino",
+      "rua": "Rua 2",
+      "servico": "Limpeza na rua 2",
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-23",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "rua": "Rua Santa Rosa de Goiás",
+      "servico": "Ligação de esgoto",
+      "materiais": {
+        "LE": 1
+      },
+      "maquina": "Mini retro",
+      "observacoes": "Léo trabalhou sem equipe, a equipe ficou no canteiro"
+    },
+    {
+      "data": "2026-06-24",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Israel",
+      "lider": "Edson/João",
+      "rua": "Travessa dos Pioneiros",
+      "servico": "Instalação rede de esgoto, Acabamento de PI",
+      "materiais": {
+        "PI": 4
+      },
+      "metragem_m": 9.5,
+      "maquina": "Retro Escavadeira",
+      "equipamentos": [
+        "Caminhão 3/4",
+        "Basculante",
+        "Makita",
+        "Serra de corte"
+      ]
+    },
+    {
+      "data": "2026-06-24",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Wellington + Léo/Rodrigo",
+      "lider": "Rodrigo/Léo",
+      "rua": "Rua 3 Bahia",
+      "servico": "Rede de esgoto e ramal",
+      "materiais": {
+        "PRE_84mm": 14,
+        "LE": 2
+      },
+      "maquina": "Mini Escavadeira, Retro Caterpillar"
+    },
+    {
+      "data": "2026-06-24",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua 4 José Vandir, Rua 3 Bahia",
+      "servico": "Ramal de água",
+      "materiais": {
+        "HM": 34
+      }
+    },
+    {
+      "data": "2026-06-24",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel",
+      "lider": "Ediel",
+      "rua": "Rua Ilha Bella",
+      "servico": "Aterro de vala"
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Israel",
+      "lider": "Edson/João",
+      "rua": "Travessa dos Pioneiros",
+      "servico": "Lançamento de rede de esgoto 200mm",
+      "materiais": {
+        "PRE_200mm": 42,
+        "PI": 3
+      },
+      "maquina": "Mini Escavadeira, Retro Escavadeira",
+      "equipamentos": [
+        "Makita",
+        "Caminhão 3/4",
+        "Basculante"
+      ]
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Santa Rita do Araguaia, Travessa Mendonça",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 15
+      }
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Wellington",
+      "lider": "Wellington",
+      "rua": "Rua 3 Bahia",
+      "servico": "3 ligações de esgoto, ligação dos ramais de água",
+      "materiais": {
+        "LE": 3
+      },
+      "maquina": "Mini Escavadeira, Retro Caterpillar",
+      "observacoes": "Ramais rompidos devido escavação"
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Ediel + Renan",
+      "lider": "Cristian",
+      "rua": "Rua 3 Bahia",
+      "servico": "Instalação de hidrômetros",
+      "materiais": {
+        "HM": 50,
+        "baixas": 40
+      }
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "São Cleto",
+      "equipe": "Equipe Ediel + Renan",
+      "lider": "Cristian",
+      "servico": "Reforma de PI e acompanhamento de cloragem"
+    },
+    {
+      "data": "2026-06-25",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "rua": "Santa Rosa do Tocantins",
+      "servico": "Rede de esgoto 200mm",
+      "materiais": {
+        "PRE_200mm": 18
+      },
+      "maquina": "Retro New Holland, Mini retro"
+    },
+    {
+      "data": "2026-06-26",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Léo/Rodrigo",
+      "lider": "Léo",
+      "rua": "Rua 2",
+      "servico": "Limpeza da rua 2",
+      "maquina": "Retro New Holland"
+    },
+    {
+      "data": "2026-06-26",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua 4 José Vandir, Travessa Mendonça",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 16
+      }
+    },
+    {
+      "data": "2026-06-26",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Israel",
+      "lider": "Edson/João",
+      "rua": "Travessa dos Pioneiros, Rua 2",
+      "servico": "Limpeza na Rua 2 e reparo na Santa Rita do Tocantins",
+      "maquina": "Mini Escavadeira, Retro Escavadeira"
+    },
+    {
+      "data": "2026-06-26",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Wellington",
+      "lider": "Wellington/Zé Claudino",
+      "rua": "Rua 3 Bahia, Rua 2",
+      "servico": "Organização das ruas",
+      "maquina": "Mini Escavadeira"
+    },
+    {
+      "data": "2026-06-27",
+      "nucleo": "Boi Malhado",
+      "equipe": "Equipe Mazinho",
+      "lider": "Mazinho",
+      "rua": "Rua 01",
+      "servico": "Instalação de caixas U.M.A",
+      "materiais": {
+        "caixa_uma": 14
+      },
+      "casas": [
+        "53",
+        "57",
+        "59A",
+        "59B",
+        "60B",
+        "61",
+        "62A",
+        "62",
+        "70"
+      ]
+    }
+  ],
+  "ordens_servico": [
+    {
+      "data": "16/06/2026",
+      "endereco": "Rua Perola Alta",
+      "items": [
+        {
+          "casa": "19(5)",
+          "observacao": "CASA 4 ABRIR OS (4) OK"
+        },
+        {
+          "casa": "25",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "61",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "84",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "28",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "4",
+          "status": "OK"
+        },
+        {
+          "casa": "52",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "89",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "85",
+          "status": "Já baixado"
+        }
+      ]
+    },
+    {
+      "data": "16/06/2026",
+      "endereco": "Rua Laços da Amizade",
+      "items": [
+        {
+          "casa": "98",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "78",
+          "status": "2 Relogios baixado"
+        },
+        {
+          "casa": "42",
+          "status": "FALTA FAZER LIGAÇÃO E COLOCAR RELOGIO"
+        },
+        {
+          "casa": "24",
+          "status": "FALTA FAZER LIGAÇÃO E COLOCAR RELOGIO"
+        },
+        {
+          "casa": "89",
+          "status": "Já Baixado"
+        },
+        {
+          "casa": "100",
+          "status": "Já Baixado"
+        },
+        {
+          "casa": "74",
+          "status": "FALTA 1 RELOGIO"
+        },
+        {
+          "casa": "69",
+          "status": "Já Baixado"
+        }
+      ]
+    },
+    {
+      "data": "16/06/2026",
+      "endereco": "Rua Rutílo",
+      "items": [
+        {
+          "casa": "30",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "20",
+          "status": "SEM RELOGIO"
+        },
+        {
+          "casa": "15",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "data": "16/06/2026",
+      "endereco": "Rua Flor dos Ipês",
+      "items": [
+        {
+          "casa": "52",
+          "status": "NÚMERO NÃO EXISTE"
+        },
+        {
+          "casa": "15",
+          "status": "CASA 2 SEM RELÓGIO"
+        }
+      ]
+    },
+    {
+      "data": "16/06/2026",
+      "endereco": "Rua Safira Baixa",
+      "items": [
+        {
+          "casa": "3",
+          "status": "SEM RELOGIO"
+        }
+      ]
+    },
+    {
+      "data": "16/06/2026",
+      "endereco": "Comunidade Sítio Sakura",
+      "total_hidrometros": 279,
+      "observacao": "Baixas Geocall"
+    }
+  ],
+  "pedidos_compra": [
+    {
+      "data": "18/06/2026",
+      "material": "Diversos materiais de construção",
+      "fornecedor": "Casa de material Fernando",
+      "valor_total": 1002.46,
+      "quem_pediu": "Alex Barbosa",
+      "notas": 4
+    },
+    {
+      "data": "18/06/2026",
+      "material": "Diversos materiais",
+      "fornecedor": "Material de construção Eliane",
+      "valor_total": 1216.0,
+      "quem_pediu": "Alex Barbosa",
+      "observacao": "Pix 11993878665"
+    },
+    {
+      "data": "18/06/2026",
+      "material": "Peças Kombi",
+      "valor": 760.0,
+      "quem_pediu": "Humberto Wcr",
+      "contato": "11977702033",
+      "cnpj": "60.057.079/0001-19"
+    },
+    {
+      "data": "18/06/2026",
+      "material": "Combustível gasolina",
+      "quem_pediu": "Humberto Wcr",
+      "contato": "11977702033"
+    },
+    {
+      "data": "22/06/2026",
+      "material": "Aparelho apontador",
+      "valor": "Fatura",
+      "quem_pediu": "Alex Barbosa",
+      "status": "Aguardando pagamento",
+      "urgencia": "precisa realizar pagamento, estou SEM internet"
+    },
+    {
+      "data": "22/06/2026",
+      "material": "2 Caixa para hidrômetro",
+      "quem_pediu": "Jesse Souza",
+      "descricao": "Para colocar os hidrômetros - agiliza o trabalho"
+    },
+    {
+      "data": "27/06/2026",
+      "material": "Solda Serra copo",
+      "valor": 50.0,
+      "quem_pediu": "Alex Barbosa",
+      "status": "Urgente",
+      "pix": "aa79fdbe-af63-485e-8ab5-8c185d2ba341"
+    }
+  ],
+  "frota_propria": {
+    "maquinas": [
+      {
+        "tipo": "Retro Escavadeira",
+        "modelo": "CAT 416",
+        "operador": "Gringo",
+        "placa": null,
+        "equipes_usam": [
+          "Equipe Wellington"
+        ],
+        "observacao": "Utilizada na limpeza e instalacao de caixas"
+      },
+      {
+        "tipo": "Mini Retro Escavadeira",
+        "modelo": "SANY SY35U",
+        "operador": "Eder",
+        "placa": null,
+        "equipes_usam": [
+          "Equipe Ediel"
+        ],
+        "observacao": "Horimetro 00453"
+      },
+      {
+        "tipo": "Mini Retro Escavadeira",
+        "modelo": "SANY SY26u",
+        "operador": null,
+        "placa": null,
+        "equipes_usam": [
+          "Equipe Robert"
+        ],
+        "observacao": "Equipamento da equipe Robert"
+      },
+      {
+        "tipo": "Retro Escavadeira",
+        "modelo": "New Holland",
+        "operador": null,
+        "placa": null,
+        "equipes_usam": [
+          "Equipe Ze Claudino",
+          "Equipe Leo/Rodrigo"
+        ],
+        "observacao": "Compartilhada entre equipes"
+      },
+      {
+        "tipo": "Retro Escavadeira",
+        "modelo": "Caterpillar",
+        "operador": null,
+        "placa": null,
+        "equipes_usam": [
+          "Equipe Wellington",
+          "Equipe Leo/Rodrigo"
+        ],
+        "observacao": "Compartilhada entre equipes"
+      },
+      {
+        "tipo": "Retro Escavadeira",
+        "modelo": null,
+        "operador": null,
+        "placa": "SSS0D80",
+        "equipes_usam": [],
+        "observacao": "Retirada para manutencao em 13/06"
+      },
+      {
+        "tipo": "Retro Escavadeira",
+        "modelo": null,
+        "operador": null,
+        "placa": "FUE0J97",
+        "equipes_usam": [],
+        "observacao": "Reposicao em 13/06"
+      }
+    ],
+    "caminhoes": [
+      {
+        "tipo": "Caminhao Basculante",
+        "modelo": "Iveco 5D04",
+        "placa": "5D04",
+        "motoristas": [
+          "Marcos Jose Farias",
+          "Heliel da Silva Saraiva"
+        ],
+        "km_inicial": 300979,
+        "km_inicial_2": 777556,
+        "equipes_usam": [
+          "Equipe Robert",
+          "Equipe Israel"
+        ],
+        "observacao": "Em manutencao desde 10/06"
+      },
+      {
+        "tipo": "Caminhao Carroceria",
+        "modelo": null,
+        "placa": "DAH 2250",
+        "motoristas": [
+          "Eder"
+        ],
+        "equipes_usam": [
+          "Equipe Robert"
+        ],
+        "observacao": "Caminhao carroceria"
+      },
+      {
+        "tipo": "Caminhao 3/4",
+        "modelo": null,
+        "placa": null,
+        "motoristas": [],
+        "equipes_usam": [
+          "Equipe Israel",
+          "Equipe Wellington"
+        ],
+        "observacao": "Caminhao 3/4 com ferramentas (apoio geral)"
+      }
+    ]
+  },
+  "fornecedores_externos": [
+    {
+      "fornecedor": "Luiz Cabral",
+      "veiculos": [
+        {
+          "placa": "FNQ 3725",
+          "tipo": "Caminhao",
+          "motorista": "Juan Carlos",
+          "km": 130680
+        }
+      ],
+      "servico": "Transporte geral"
+    },
+    {
+      "fornecedor": "Fornecedor Externo",
+      "veiculos": [
+        {
+          "placa": "LLY 5D04",
+          "tipo": "Caminhao"
+        }
+      ],
+      "servico": "Transporte geral"
+    },
+    {
+      "fornecedor": "Sakura - Bota-fora",
+      "veiculos": [
+        {
+          "placa": "CLH3H65",
+          "tipo": "Caminhao"
+        },
+        {
+          "placa": "ECT5F06",
+          "tipo": "Caminhao"
+        },
+        {
+          "placa": "HTQ6F44",
+          "tipo": "Caminhao"
+        },
+        {
+          "placa": "HQR2B23",
+          "tipo": "Caminhao"
+        },
+        {
+          "placa": "GNJ5H39",
+          "tipo": "Caminhao"
+        }
+      ],
+      "servico": "Bota-fora - Sakura"
+    }
+  ],
+  "ferramentas": [
+    {
+      "nome": "Maquina de solda",
+      "observacao": "Solda de ramais"
+    },
+    {
+      "nome": "Serra sabre",
+      "observacao": "Corte de tubulacao"
+    },
+    {
+      "nome": "Serra Clipper",
+      "observacao": "Corte de concreto"
+    },
+    {
+      "nome": "Martelete",
+      "observacao": "Escavacao em concreto"
+    },
+    {
+      "nome": "Makita",
+      "observacao": "Ferramenta geral"
+    },
+    {
+      "nome": "Gerador",
+      "observacao": "Energia para equipamentos"
+    },
+    {
+      "nome": "Moto bomba",
+      "observacao": "Bombeamento"
+    },
+    {
+      "nome": "Kit ferramentas",
+      "observacao": "Alicate, chave grife, pa, ferro de cova, serrote, luvas, serra copo, carrinho de mao"
+    }
+  ],
+  "motoristas": [
+    {
+      "nome": "Marcos Jose Farias",
+      "funcao": "Motorista basculante",
+      "veiculo": "5D04 Iveco"
+    },
+    {
+      "nome": "Heliel da Silva Saraiva",
+      "funcao": "Motorista",
+      "veiculo": "5D04 Iveco"
+    },
+    {
+      "nome": "Ederson dos Santos",
+      "funcao": "Motorista/encanador",
+      "veiculo": null
+    },
+    {
+      "nome": "Aparecido Rodrigues Ciriaco",
+      "funcao": "Motorista",
+      "observacao": "Acompanhando manutencao dos veiculos",
+      "veiculo": null
+    },
+    {
+      "nome": "Eliel",
+      "funcao": "Motorista",
+      "veiculo": null
+    },
+    {
+      "nome": "Eder",
+      "funcao": "Operador SANY / Motorista",
+      "veiculo": "SANY SY35U / DAH 2250"
+    }
+  ],
+  "frota_resumo": {
+    "total_maquinas_proprias": 7,
+    "total_caminhoes_proprios": 3,
+    "total_fornecedores_externos": 7,
+    "total_motoristas": 6,
+    "total_ferramentas": 8,
+    "observacao": "Frota propria = 7 maquinas + 3 caminhoes. Veiculos de fornecedores externos separados."
+  },
+  "localizacoes": {
+    "canteiro_principal": "R. Roque de Paula Monteiro, 401",
+    "sakura": "Rua Kotinda, 530 - sem CEP"
+  },
+  "totais_periodo": {
+    "hidrometros_baixados_app_zn": 154,
+    "hidrometros_instalados_periodo": 178,
+    "adesoes_boi_malhado": 784,
+    "hidrometros_sakura": 279,
+    "ligacoes_esgoto_baixadas": 1300
+  },
+  "observacoes_gerais": [
+    "Canteiro de TAIPAS - local de encontro às 7:00",
+    "Local de almoço: Fátima, perto do campo",
+    "Diário de obra gerado em PDF",
+    "Testes de corante em andamento para verificação de rede de esgoto",
+    "Problema: 21 hidrômetros a serem devolvidos dos 500 entregues",
+    "Meta: 1000 ligações de água no Boi Malhado",
+    "Liberação de 100 hidrômetros por vez para baixas no app ZN"
+  ]
+}

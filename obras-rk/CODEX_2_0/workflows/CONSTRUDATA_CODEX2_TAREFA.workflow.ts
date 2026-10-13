@@ -120,7 +120,7 @@ export class ConstrudataCodex2TarefaWorkflow {
         },
         sendBody: true,
         specifyBody: 'json',
-        jsonBody: '={"descricao":"{{ $json.descricao }}","responsavel":"{{ $json.responsavel }}","delegante":"{{ $json.delegante }}","tipo":"{{ $json.tipo }}","status":"{{ $json.status }}","prioridade":"{{ $json.prioridade }}","origem":"{{ $json.origem }}"}',
+        jsonBody: '={"descricao":"{{ $json.descricao }}","responsavel":"{{ $json.responsavel }}","responsavel_phone":"{{ $json.responsavelTel }}","delegante":"{{ $json.delegante }}","delegante_phone":"{{ $json.delegantePhone }}","tipo":"{{ $json.tipo }}","status":"{{ $json.status }}","prioridade":"{{ $json.prioridade }}","origem":"{{ $json.origem }}"}',
         options: {},
     };
 

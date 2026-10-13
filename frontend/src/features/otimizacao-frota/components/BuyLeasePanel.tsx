@@ -542,7 +542,8 @@ export function BuyLeasePanel() {
           </button>
           <button
             onClick={runBuyLeaseEngine}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors"
+            disabled={buyLeaseAnalyses.length === 0}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-xs font-medium hover:bg-[#484848] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <RefreshCw size={13} /> Rodar Engine
           </button>
@@ -556,7 +557,7 @@ export function BuyLeasePanel() {
       {buyLeaseAnalyses.length === 0 ? (
         <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-6 text-center">
           <p className="text-[#6b6b6b] text-sm">
-            Clique em "Nova Análise" ou "Rodar Engine" para calcular a análise financeira.
+            Clique em "Nova Análise" para calcular a análise financeira.
           </p>
         </div>
       ) : (

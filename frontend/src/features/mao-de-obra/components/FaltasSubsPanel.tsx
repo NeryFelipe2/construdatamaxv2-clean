@@ -21,7 +21,7 @@ const ABSENCE_COLORS: Record<AbsenceType, string> = {
   unjustified:  'bg-[#ef4444]/15 text-[#ef4444]',
   vacation:     'bg-[#22c55e]/15 text-[#22c55e]',
   accident:     'bg-[#8b5cf6]/15 text-[#8b5cf6]',
-  other:        'bg-[var(--color-surface)] text-[var(--color-text-secondary)]',
+  other:        'bg-[#2c2c2c] text-[#a3a3a3]',
 }
 
 function TypeBadge({ type }: { type: AbsenceType }) {
@@ -91,14 +91,14 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
     onClose()
   }
 
-  const inputCls = 'w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]'
-  const labelCls = 'block text-xs font-medium text-[var(--color-text-secondary)] mb-1'
+  const inputCls = 'w-full px-3 py-2 rounded-lg border border-[#525252] bg-[#3d3d3d] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]'
+  const labelCls = 'block text-xs font-medium text-[#a3a3a3] mb-1'
   const errCls   = 'text-xs text-[#ef4444] mt-1'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="w-full max-w-lg bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-6 mb-8">
-        <h2 className="text-base font-bold text-[var(--color-text-primary)] mb-5">Registrar Falta</h2>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="w-full max-w-lg bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-6 mb-8">
+        <h2 className="text-base font-bold text-[#f5f5f5] mb-5">Registrar Falta</h2>
 
         {!registeredId ? (
           <div className="space-y-4">
@@ -138,11 +138,11 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={onClose}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+                className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">
                 Cancelar
               </button>
               <button onClick={handleRegister}
-                className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">
+                className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">
                 Registrar Falta
               </button>
             </div>
@@ -155,25 +155,25 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
               <span className="text-sm font-medium text-[#22c55e]">Falta registrada com sucesso</span>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-3">
+              <h3 className="text-sm font-bold text-[#f5f5f5] mb-3">
                 Sugestões de Substituto — {absentWorker?.role}
               </h3>
               {suggestions.length === 0 ? (
-                <p className="text-sm text-[var(--color-text-muted)] py-4 text-center">
+                <p className="text-sm text-[#6b6b6b] py-4 text-center">
                   Nenhum substituto disponível com o mesmo cargo e conformidade CLT
                 </p>
               ) : (
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {suggestions.map((sub, idx) => (
                     <div key={sub.id}
-                      className="flex items-center justify-between p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-accent)]/50 transition-colors">
+                      className="flex items-center justify-between p-3 rounded-xl border border-[#525252] bg-[#2c2c2c] hover:border-[#f97316]/50 transition-colors">
                       <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                        <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-[#f97316]/10 text-[#f97316]">
                           {idx + 1}
                         </span>
                         <div>
-                          <div className="text-sm font-medium text-[var(--color-text-primary)]">{sub.name}</div>
-                          <div className="text-xs text-[var(--color-text-muted)]">
+                          <div className="text-sm font-medium text-[#f5f5f5]">{sub.name}</div>
+                          <div className="text-xs text-[#6b6b6b]">
                             {sub.role} · R$ {sub.hourlyRate.toFixed(2)}/h
                           </div>
                         </div>
@@ -183,7 +183,7 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
                           CLT OK
                         </span>
                         <button onClick={() => handleAssign(sub.id)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">
                           Atribuir
                         </button>
                       </div>
@@ -194,7 +194,7 @@ function AbsenceDialog({ onClose }: AbsenceDialogProps) {
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={onClose}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+                className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">
                 Fechar sem atribuir
               </button>
             </div>
@@ -273,15 +273,15 @@ export function FaltasSubsPanel() {
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Faltas (30d)',   value: recent30.length,                                           color: 'text-[var(--color-text-primary)]' },
+          { label: 'Faltas (30d)',   value: recent30.length,                                           color: 'text-[#f5f5f5]' },
           { label: 'Cobertas',       value: recent30.filter(a => a.status === 'covered').length,       color: 'text-[#22c55e]' },
           { label: 'Descobertas',    value: recent30.filter(a => a.status === 'uncovered').length,     color: 'text-[#ef4444]' },
           { label: 'Em Aberto',      value: recent30.filter(a => a.status === 'open').length,          color: 'text-[#f59e0b]' },
         ].map(stat => (
           <div key={stat.label}
-            className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+            className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[#3d3d3d] border border-[#525252]">
             <span className={`text-2xl font-bold ${stat.color}`}>{stat.value}</span>
-            <span className="text-xs text-[var(--color-text-muted)] mt-0.5">{stat.label}</span>
+            <span className="text-xs text-[#6b6b6b] mt-0.5">{stat.label}</span>
           </div>
         ))}
       </div>
@@ -290,19 +290,19 @@ export function FaltasSubsPanel() {
       {recent30.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* By type */}
-          <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
-            <h3 className="text-xs font-bold text-[var(--color-text-secondary)] uppercase mb-3">Por Tipo (30d)</h3>
+          <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
+            <h3 className="text-xs font-bold text-[#a3a3a3] uppercase mb-3">Por Tipo (30d)</h3>
             <div className="space-y-2">
               {(Object.keys(byType) as AbsenceType[]).map(t => {
                 const cnt = byType[t] ?? 0
                 const pct = recent30.length > 0 ? (cnt / recent30.length) * 100 : 0
                 return (
                   <div key={t} className="flex items-center gap-2">
-                    <span className="text-xs text-[var(--color-text-secondary)] w-28 shrink-0">{ABSENCE_LABELS[t]}</span>
-                    <div className="flex-1 h-2 rounded-full bg-[var(--color-border)] overflow-hidden">
-                      <div className="h-full rounded-full bg-[var(--color-accent)]" style={{ width: `${pct}%` }} />
+                    <span className="text-xs text-[#a3a3a3] w-28 shrink-0">{ABSENCE_LABELS[t]}</span>
+                    <div className="flex-1 h-2 rounded-full bg-[#525252] overflow-hidden">
+                      <div className="h-full rounded-full bg-[#f97316]" style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="text-xs font-semibold text-[var(--color-text-primary)] w-4 text-right">{cnt}</span>
+                    <span className="text-xs font-semibold text-[#f5f5f5] w-4 text-right">{cnt}</span>
                   </div>
                 )
               })}
@@ -310,18 +310,18 @@ export function FaltasSubsPanel() {
           </div>
 
           {/* Top absent workers */}
-          <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
-            <h3 className="text-xs font-bold text-[var(--color-text-secondary)] uppercase mb-3">Mais Ausentes (30d)</h3>
+          <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
+            <h3 className="text-xs font-bold text-[#a3a3a3] uppercase mb-3">Mais Ausentes (30d)</h3>
             {mostAbsent.length === 0 ? (
-              <p className="text-sm text-[var(--color-text-muted)] text-center py-2">Nenhuma falta registrada</p>
+              <p className="text-sm text-[#6b6b6b] text-center py-2">Nenhuma falta registrada</p>
             ) : (
               <div className="space-y-2">
                 {mostAbsent.map(({ worker, count }, idx) => (
                   <div key={worker!.id} className="flex items-center gap-3">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold bg-[#f97316]/10 text-[#f97316]">
                       {idx + 1}
                     </span>
-                    <span className="flex-1 text-sm text-[var(--color-text-primary)] truncate">{worker!.name}</span>
+                    <span className="flex-1 text-sm text-[#f5f5f5] truncate">{worker!.name}</span>
                     <span className="text-xs font-semibold text-[#ef4444]">{count}x</span>
                   </div>
                 ))}
@@ -338,7 +338,7 @@ export function FaltasSubsPanel() {
           <select
             value={filterType}
             onChange={e => setFilterType(e.target.value as AbsenceType | 'all')}
-            className="px-3 py-2 rounded-lg text-sm border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+            className="px-3 py-2 rounded-lg text-sm border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
             <option value="all">Todos os tipos</option>
             {(Object.keys(ABSENCE_LABELS) as AbsenceType[]).map(t => (
               <option key={t} value={t}>{ABSENCE_LABELS[t]}</option>
@@ -348,7 +348,7 @@ export function FaltasSubsPanel() {
           <select
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value as WorkerAbsence['status'] | 'all')}
-            className="px-3 py-2 rounded-lg text-sm border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+            className="px-3 py-2 rounded-lg text-sm border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#f97316]">
             <option value="all">Todos os status</option>
             <option value="open">Em aberto</option>
             <option value="covered">Coberta</option>
@@ -356,37 +356,37 @@ export function FaltasSubsPanel() {
           </select>
         </div>
         <button onClick={() => setDialogOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
           <span className="text-lg leading-none">+</span> Registrar Falta
         </button>
       </div>
 
       {/* Absences table */}
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+              <tr className="border-b border-[#525252]/50">
                 {['Data', 'Colaborador', 'Tipo', 'Status', 'Substituto', 'Ações'].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap">
+                  <th key={h} className="text-left text-[#a3a3a3] text-xs font-medium px-4 py-2 whitespace-nowrap">
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-[var(--color-text-muted)]">
+                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-[#6b6b6b]">
                     Nenhuma falta registrada
                   </td>
                 </tr>
               ) : filtered.map(absence => (
-                <tr key={absence.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)] whitespace-nowrap">
+                <tr key={absence.id} className="hover:bg-[#2c2c2c] transition-colors">
+                  <td className="px-4 py-3 text-[#a3a3a3] whitespace-nowrap">
                     {new Date(absence.date + 'T12:00:00').toLocaleDateString('pt-BR')}
                   </td>
-                  <td className="px-4 py-3 font-medium text-[var(--color-text-primary)]">
+                  <td className="px-4 py-3 font-medium text-[#f5f5f5]">
                     {getWorkerName(absence.workerId)}
                   </td>
                   <td className="px-4 py-3">
@@ -395,7 +395,7 @@ export function FaltasSubsPanel() {
                   <td className="px-4 py-3">
                     <StatusBadge status={absence.status} />
                   </td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">
+                  <td className="px-4 py-3 text-[#a3a3a3]">
                     {getSubName(absence.substituteWorkerId)}
                   </td>
                   <td className="px-4 py-3">

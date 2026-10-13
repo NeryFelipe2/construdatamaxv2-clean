@@ -11,6 +11,7 @@ import { useGestaoEquipamentosStore } from '@/store/gestaoEquipamentosStore'
 import { useProjetosStore } from '@/store/projetosStore'
 import { useShallow } from 'zustand/react/shallow'
 import { ModuleQuickLinks } from '@/components/shared/ModuleQuickLinks'
+import { OperationalCyclePanel } from '@/features/operational/components/OperationalCyclePanel'
 
 // ─── Feed item type ────────────────────────────────────────────────────────────
 
@@ -451,6 +452,8 @@ export function CommandCenterPanel() {
           })}
         </div>
       </div>
+
+      <OperationalCyclePanel />
 
       {/* Feed list */}
       {feed.length === 0 ? (

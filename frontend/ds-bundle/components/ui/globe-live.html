@@ -1,0 +1,39 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobeLive Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="flex flex-col items-center gap-4">
+    <!-- Globe placeholder - shows the badge concept -->
+    <div class="relative aspect-square w-64 rounded-full overflow-hidden" style="background: radial-gradient(circle at 30% 30%, #0d2040 0%, #071422 100%);">
+      <!-- Globe-like gradient -->
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 40%, rgba(42,191,220,0.3) 0%, transparent 50%);"></div>
+
+      <!-- Markers -->
+      <div class="absolute top-[35%] left-[55%] w-2 h-2 rounded-full bg-[#2abfdc] shadow-lg shadow-cyan-500/50"></div>
+      <div class="absolute top-[40%] left-[58%] w-1.5 h-1.5 rounded-full bg-[#2abfdc] shadow-lg shadow-cyan-500/50"></div>
+      <div class="absolute top-[55%] left-[52%] w-2 h-2 rounded-full bg-[#2abfdc] shadow-lg shadow-cyan-500/50"></div>
+      <div class="absolute top-[50%] left-[45%] w-1.5 h-1.5 rounded-full bg-[#2abfdc] shadow-lg shadow-cyan-500/50"></div>
+
+      <!-- Badge -->
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-[#0a1628]/80 backdrop-blur-sm border border-[#2abfdc]/30 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-[#2abfdc] animate-pulse"></span>
+        <span class="text-xs text-[#2abfdc] font-semibold">247 projetos monitorados</span>
+      </div>
+    </div>
+
+    <p class="text-xs text-[#5a8caa] text-center max-w-xs">
+      Globo 3D interativo mostrando localizações de projetos no Brasil.<br>
+      Arrastar para rotacionar, zoom disponível.
+    </p>
+  </div>
+</body>
+</html>

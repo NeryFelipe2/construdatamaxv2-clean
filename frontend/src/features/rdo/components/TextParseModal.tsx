@@ -15,6 +15,7 @@ import type { RDO } from '@/types'
 interface Props {
   onClose:  () => void
   onApply:  (data: ParsedRdoData) => void
+  onCreate?: (text: string, date: string) => Promise<void>
 }
 
 function todayStr() { return new Date().toISOString().slice(0, 10) }
@@ -66,7 +67,7 @@ function FieldRow({ label, value }: { label: string; value: string | number }) {
   )
 }
 
-export function TextParseModal({ onClose, onApply }: Props) {
+export function TextParseModal({ onClose, onApply, onCreate }: Props) {
   const [text, setText]   = useState('')
   const [rdoDate, setRdoDate] = useState(todayStr())
   const [showPreview, setShowPreview] = useState(false)
@@ -74,6 +75,7 @@ export function TextParseModal({ onClose, onApply }: Props) {
   const [showTrechos,  setShowTrechos]    = useState(false)
   const [showEquip,    setShowEquip]      = useState(false)
   const [showIdent,    setShowIdent]      = useState(true)
+  const [saving, setSaving] = useState(false)
 
   const parsed = useMemo<ParsedRdoData | null>(() => {
     if (!text.trim()) return null
@@ -131,6 +133,17 @@ export function TextParseModal({ onClose, onApply }: Props) {
   function handleApply() {
     if (!parsed) return
     onApply({ ...parsed, date: rdoDate })
+  }
+
+  async function handleCreateDirect() {
+    if (!onCreate || !text.trim()) return
+    setSaving(true)
+    try {
+      await onCreate(`Data: ${rdoDate}\n${text}`)
+      onClose()
+    } finally {
+      setSaving(false)
+    }
   }
 
   const totalManpower =
@@ -441,6 +454,16 @@ export function TextParseModal({ onClose, onApply }: Props) {
             >
               {!showPreview ? 'Analisar' : 'Aplicar ao Formulário'}
             </button>
+            {onCreate && (
+              <button
+                type="button"
+                onClick={handleCreateDirect}
+                disabled={!text.trim() || saving}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#0ea5e9] text-white hover:bg-[#0284c7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                {saving ? 'Salvando...' : 'Criar direto'}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Send, Bot, User, Shield, Loader2 } from "lucide-react"
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://construdatamax-api-production.up.railway.app"
+const API_BASE = import.meta.env.VITE_API_URL || "https://construdatamaxv2-clean.onrender.com"
 
 interface Msg {
   role: "user" | "assistant"

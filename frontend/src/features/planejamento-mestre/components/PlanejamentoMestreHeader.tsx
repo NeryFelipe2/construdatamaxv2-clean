@@ -12,6 +12,7 @@ const TABS: { key: PlanejamentoMestreTab; label: string }[] = [
   { key: 'whatif',    label: 'Curto Prazo'     },
   { key: 'integrada', label: 'Visão Integrada' },
   { key: 'semanal',   label: 'Prog. Semanal'   },
+  { key: 'por-equipe', label: 'Por Equipe'     },
 ]
 
 export function PlanejamentoMestreHeader() {
@@ -20,6 +21,8 @@ export function PlanejamentoMestreHeader() {
   const activities = usePlanejamentoMestreStore((s) => s.activities)
   const baselines  = usePlanejamentoMestreStore((s) => s.baselines)
   const activeBlId = usePlanejamentoMestreStore((s) => s.activeBaselineId)
+  const dataSource   = usePlanejamentoMestreStore((s) => s.dataSource)
+  const matchQuality = usePlanejamentoMestreStore((s) => s.matchQuality)
 
   const totalActivities = activities.filter((a) => a.level >= 1 && !a.isMilestone).length
   const avgComplete     = activities.length > 0
@@ -43,6 +46,11 @@ export function PlanejamentoMestreHeader() {
           <div>
             <h1 className="text-[#f5f5f5] font-semibold text-lg leading-tight">Planejamento Mestre</h1>
             <p className="text-[#6b6b6b] text-xs">Planejamento Longo, Médio e Curto Prazo</p>
+            {dataSource === 'real' && (
+              <p className="text-[#6b6b6b] text-[10px] mt-0.5" title="Quantos itens do planejamento casaram com uma equipe real de execução (RDO)">
+                {matchQuality.comMatch} de {matchQuality.totalItens} itens casados com execução real
+              </p>
+            )}
           </div>
         </div>
 

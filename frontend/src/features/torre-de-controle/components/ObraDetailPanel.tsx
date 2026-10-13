@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Pencil, Plus, Trash2, AlertTriangle, MapPin, Building2, Users, Calendar, FileText, DollarSign, CalendarDays, CheckCircle2, Circle, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTorreStore } from '@/store/torreDeControleStore'
+import { OperationalCyclePanel } from '@/features/operational/components/OperationalCyclePanel'
 import type { ConstructionRisk, ConstructionSite, ObraStatus, RiskLevel, RiskStatus, MilestoneStatus, ConstructionMilestone, ConstructionBudgetLine } from '@/types'
 
 // ─── Config ────────────────────────────────────────────────────────────────
@@ -297,6 +298,10 @@ export function ObraDetailPanel() {
               <p className="text-xs text-[#a3a3a3] leading-relaxed">{site.description}</p>
             </Section>
           )}
+
+          <div className="px-4 py-3 border-b border-[#525252]">
+            <OperationalCyclePanel compact />
+          </div>
 
           {/* Orçamento */}
           {site.budgetLines && site.budgetLines.length > 0 && (

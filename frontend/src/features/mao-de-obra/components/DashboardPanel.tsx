@@ -160,11 +160,11 @@ function CertExpiryTable({ workers }: { workers: import('@/types').Worker[] }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#525252]">
-                <th className="text-left text-[#6b6b6b] text-xs font-medium pb-2">Funcionário</th>
-                <th className="text-left text-[#6b6b6b] text-xs font-medium pb-2">Certificação</th>
-                <th className="text-left text-[#6b6b6b] text-xs font-medium pb-2">Vence em</th>
-                <th className="text-left text-[#6b6b6b] text-xs font-medium pb-2">Dias</th>
+              <tr className="border-b border-[#525252]/50">
+                <th className="text-left text-[#a3a3a3] text-xs font-medium pb-2">Funcionário</th>
+                <th className="text-left text-[#a3a3a3] text-xs font-medium pb-2">Certificação</th>
+                <th className="text-left text-[#a3a3a3] text-xs font-medium pb-2">Vence em</th>
+                <th className="text-left text-[#a3a3a3] text-xs font-medium pb-2">Dias</th>
               </tr>
             </thead>
             <tbody>
@@ -302,7 +302,7 @@ export function DashboardPanel() {
           {(['última semana', 'último mês', 'este mês'] as const).map((p) => (
             <button key={p} onClick={() => setPeriod(p)}
               className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                period === p ? 'bg-orange-600 text-white' : 'text-[#a3a3a3] hover:text-white'
+                period === p ? 'bg-orange-600 text-[#ffffff]' : 'text-[#a3a3a3] hover:text-[#f5f5f5]'
               }`}>
               {p}
             </button>

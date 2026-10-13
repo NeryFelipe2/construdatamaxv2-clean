@@ -1,6 +1,7 @@
+import { useMemo } from 'react'
 import type { AgendaResource, AgendaTask } from '@/types'
 import { cn } from '@/lib/utils'
-import { ROW_HEIGHT, SIDEBAR_W } from '../utils'
+import { ROW_HEIGHT, SIDEBAR_W, computeLanes } from '../utils'
 import type { ViewParams } from '../utils'
 import { GanttBar } from './GanttBar'
 
@@ -25,6 +26,10 @@ export function GanttRow({
 }: GanttRowProps) {
   const rowBg         = index % 2 === 0 ? '#2c2c2c' : 'rgba(255,255,255,0.018)'
   const timelineWidth = viewParams.totalDays * viewParams.pixelsPerDay
+
+  // Faixas: tarefas com datas sobrepostas no mesmo recurso ficavam empilhadas
+  // no mesmo top/height e uma escondia a outra (ver computeLanes).
+  const { laneByTask, laneCount } = useMemo(() => computeLanes(tasks), [tasks])
 
   return (
     <div
@@ -79,6 +84,9 @@ export function GanttRow({
             viewStart={viewStart}
             visibleWeeks={visibleWeeks}
             pixelsPerDay={viewParams.pixelsPerDay}
+            laneIndex={laneByTask.get(task.id) ?? 0}
+            laneCount={laneCount}
+            totalDays={viewParams.totalDays}
           />
         ))}
       </div>

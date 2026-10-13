@@ -10,6 +10,8 @@ import type { EquipmentStatus } from '@/types'
 import { useEquipamentosStore } from '@/store/equipamentosStore'
 import { useOtimizacaoFrotaStore } from '@/store/otimizacaoFrotaStore'
 import { useThemeStore } from '@/store/themeStore'
+import { safeFlyTo } from '@/lib/mapUtils'
+import { MapAutoResize } from '@/components/map/MapAutoResize'
 import { STATUS_CONFIG } from '../constants'
 
 // ─── Tile layer URLs ───────────────────────────────────────────────────────────
@@ -91,9 +93,7 @@ function MapController() {
   useEffect(() => {
     if (selectedId && selectedId !== prevId.current) {
       const eq = equipamentos.find((e) => e.id === selectedId)
-      if (eq && eq.lat !== null && eq.lng !== null) {
-        map.flyTo([eq.lat, eq.lng], Math.max(map.getZoom(), 16), { duration: 0.9 })
-      }
+      if (eq) safeFlyTo(map, eq.lat, eq.lng, 16)
     }
     prevId.current = selectedId
   }, [selectedId, equipamentos, map])
@@ -288,6 +288,7 @@ export function EquipmentMap() {
           </LayersControl>
 
           <ScaleControl position="bottomleft" imperial={false} />
+          <MapAutoResize />
           <MapController />
 
           {visible.map((eq) => (

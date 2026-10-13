@@ -2,7 +2,13 @@
  * BimForgeViewer — Autodesk APS (Forge) Viewer integration.
  *
  * Authentication: 2-legged client_credentials flow called from the browser.
- * User provides Client ID + Client Secret via settings modal (stored in localStorage).
+ * User provides Client ID + Client Secret via settings modal. Client ID is
+ * saved to localStorage (not sensitive, just an app identifier). Client
+ * Secret is kept ONLY in the zustand store's in-memory state (bimStore's
+ * forgeClientSecret) — never persisted to disk, so it's gone on tab
+ * close/reload and can't be read off disk by an XSS payload. That means the
+ * setup screen re-prompts for the secret after a reload; see hasCredentials
+ * below.
  * CORS note: POST /authentication/v2/token works on localhost; for production, configure
  * trusted domains in the APS developer console or use a reverse proxy.
  */
@@ -70,9 +76,9 @@ async function fetchApsToken(clientId: string, clientSecret: string): Promise<{ 
 // ─── Setup modal ──────────────────────────────────────────────────────────────
 
 function SetupModal({ onClose }: { onClose: () => void }) {
-  const { setForgeCredentials, setForgeUrn, forgeUrn } = useBimStore()
-  const [clientId,     setClientId]     = useState(() => localStorage.getItem('aps-client-id')     ?? '')
-  const [clientSecret, setClientSecret] = useState(() => localStorage.getItem('aps-client-secret') ?? '')
+  const { setForgeCredentials, setForgeUrn, forgeUrn, forgeClientSecret } = useBimStore()
+  const [clientId,     setClientId]     = useState(() => localStorage.getItem('aps-client-id') ?? '')
+  const [clientSecret, setClientSecret] = useState(() => forgeClientSecret ?? '')
   const [urn,          setUrn]          = useState(forgeUrn ?? '')
   const [saving, setSaving] = useState(false)
   const [err,    setErr]    = useState('')
@@ -102,7 +108,7 @@ function SetupModal({ onClose }: { onClose: () => void }) {
           </div>
           <div>
             <h3 className="text-[#f5f5f5] font-semibold text-sm">Configurar Autodesk APS</h3>
-            <p className="text-[#6b6b6b] text-xs">Credenciais salvas apenas no localStorage do browser</p>
+            <p className="text-[#6b6b6b] text-xs">Client ID fica salvo no navegador; Client Secret só fica em memória (some ao recarregar a página, por segurança)</p>
           </div>
         </div>
 
@@ -182,7 +188,7 @@ function SetupModal({ onClose }: { onClose: () => void }) {
 
 // ─── Placeholder (not configured) ─────────────────────────────────────────────
 
-function ForgeSetupPrompt({ onSetup }: { onSetup: () => void }) {
+function ForgeSetupPrompt({ onSetup, needsSecretOnly }: { onSetup: () => void; needsSecretOnly?: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-8">
       <div className="w-16 h-16 rounded-2xl bg-[#f97316]/10 border border-[#f97316]/20 flex items-center justify-center">
@@ -191,8 +197,9 @@ function ForgeSetupPrompt({ onSetup }: { onSetup: () => void }) {
       <div>
         <h3 className="text-[#f5f5f5] font-semibold text-base mb-2">Autodesk APS Viewer</h3>
         <p className="text-[#6b6b6b] text-sm max-w-sm leading-relaxed">
-          Visualize modelos BIM/IFC diretamente no browser com o viewer nativo da Autodesk.
-          Suporta RVT, IFC, DWG, NWD e mais de 60 formatos.
+          {needsSecretOnly
+            ? 'Por segurança, o Client Secret não fica salvo no navegador — ele foi esquecido ao recarregar a página. Insira novamente para reconectar.'
+            : 'Visualize modelos BIM/IFC diretamente no browser com o viewer nativo da Autodesk. Suporta RVT, IFC, DWG, NWD e mais de 60 formatos.'}
         </p>
       </div>
       <div className="flex flex-col gap-2 text-left bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-3 max-w-sm w-full text-xs text-[#a3a3a3]">
@@ -344,20 +351,21 @@ function ViewerContainer({ token, urn, onSettings }: ViewerContainerProps) {
 // ─── Main BimForgeViewer ──────────────────────────────────────────────────────
 
 export function BimForgeViewer() {
-  const { forgeToken, forgeTokenExpiry, forgeUrn, forgeClientId, setForgeToken, setForgeUrn } = useBimStore()
+  const { forgeToken, forgeTokenExpiry, forgeUrn, forgeClientId, forgeClientSecret, setForgeToken, setForgeUrn } = useBimStore()
   const [showSetup, setShowSetup] = useState(false)
   const [connecting, setConnecting] = useState(false)
   const [connErr, setConnErr] = useState('')
 
-  // Auto-connect if credentials exist but token is missing/expired
+  // Auto-connect (or auto-refresh an expired token) while both credentials are
+  // available in memory. Client Secret is never read from localStorage — after
+  // a reload it's null until the user re-enters it in SetupModal.
   useEffect(() => {
-    const id     = localStorage.getItem('aps-client-id')
-    const secret = localStorage.getItem('aps-client-secret')
-    if (!id || !secret) return
+    const id = forgeClientId ?? localStorage.getItem('aps-client-id')
+    if (!id || !forgeClientSecret) return
     if (forgeToken && forgeTokenExpiry && Date.now() < forgeTokenExpiry) return
 
     setConnecting(true)
-    fetchApsToken(id, secret)
+    fetchApsToken(id, forgeClientSecret)
       .then(({ token, expiry }) => {
         setForgeToken(token, expiry)
         setConnecting(false)
@@ -366,17 +374,21 @@ export function BimForgeViewer() {
         setConnErr(String(e))
         setConnecting(false)
       })
-  }, [forgeToken, forgeTokenExpiry, setForgeToken])
+  }, [forgeClientId, forgeClientSecret, forgeToken, forgeTokenExpiry, setForgeToken])
 
   const isConnected = !!forgeToken && !!forgeTokenExpiry && Date.now() < forgeTokenExpiry
   const hasUrn      = !!forgeUrn
-  const hasCredentials = !!forgeClientId || !!localStorage.getItem('aps-client-id')
+  const hasSavedClientId = !!forgeClientId || !!localStorage.getItem('aps-client-id')
+  // Secret only lives in memory for the current session — if it's missing
+  // (fresh reload) we must ask again instead of trying to "auto-connect" with
+  // nothing and hanging forever.
+  const hasCredentials = hasSavedClientId && !!forgeClientSecret
 
   if (!hasCredentials) {
     return (
       <div className="flex flex-col h-full bg-[#2c2c2c]">
         {showSetup && <SetupModal onClose={() => setShowSetup(false)} />}
-        <ForgeSetupPrompt onSetup={() => setShowSetup(true)} />
+        <ForgeSetupPrompt onSetup={() => setShowSetup(true)} needsSecretOnly={hasSavedClientId} />
       </div>
     )
   }

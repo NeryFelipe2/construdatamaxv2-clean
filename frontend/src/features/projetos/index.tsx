@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useProjetosStore } from '@/store/projetosStore'
+import { useProjectContext } from '@/store/projectContext'
 import { ProjetosSidebar } from './components/ProjetosSidebar'
 import { ProjetosDetail }  from './components/ProjetosDetail'
 import { ProjectDialog }   from './components/ProjectDialog'
@@ -17,7 +18,14 @@ export function ProjetosPage() {
   const editingProjectId  = useProjetosStore((s) => s.editingProjectId)
   const editingPhase      = useProjetosStore((s) => s.editingPhase)
   const editingBudgetLine = useProjetosStore((s) => s.editingBudgetLine)
+  const loadFromProjectContext = useProjetosStore((s) => s.loadFromProjectContext)
+  const activeProjectId = useProjectContext((s) => s.activeProjectId)
+  const projectCount = useProjectContext((s) => s.projetos.length)
   const [mobileTab, setMobileTab] = useState<MobileTab>('lista')
+
+  useEffect(() => {
+    void loadFromProjectContext()
+  }, [loadFromProjectContext, activeProjectId, projectCount])
 
   return (
     <>

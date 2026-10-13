@@ -1,0 +1,6 @@
+# HTTPS automatico (Let's Encrypt). Nao precisa comprar dominio:
+# use <SEU-IP-COM-TRACOS>.sslip.io  — ex.: 203-0-113-45.sslip.io
+{$HOSTNAME_PUBLICO} {
+	encode gzip
+	reverse_proxy evolution:8080
+}

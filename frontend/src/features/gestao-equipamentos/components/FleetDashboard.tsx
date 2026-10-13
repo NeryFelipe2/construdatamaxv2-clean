@@ -2,6 +2,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useEquipamentosStore } from '@/store/equipamentosStore'
 import { useGestaoEquipamentosStore } from '@/store/gestaoEquipamentosStore'
 import { STATUS_CONFIG } from '../../equipamentos/constants'
+import { EquipmentDialog } from '@/features/equipamentos/components/EquipmentDialog'
 import type { EquipmentProfile, EquipmentStatus } from '@/types'
 
 // ─── Status colour map for bar chart ──────────────────────────────────────────
@@ -98,6 +99,7 @@ function EquipCard({ equip }: { equip: EquipmentProfile }) {
 
 export function FleetDashboard() {
   const equipamentos = useEquipamentosStore((s) => s.equipamentos)
+  const editingId     = useEquipamentosStore((s) => s.editingId)
   const { orders } = useGestaoEquipamentosStore(
     useShallow((s) => ({ orders: s.orders })),
   )
@@ -315,6 +317,8 @@ export function FleetDashboard() {
           ))}
         </div>
       </div>
+
+      {editingId && <EquipmentDialog />}
 
     </div>
   )

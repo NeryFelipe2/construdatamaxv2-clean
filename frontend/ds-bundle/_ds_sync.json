@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "projectId": "5272be4e-d933-424d-8aa4-49b9c3f2e5fe",
+  "projectName": "ConstrudaDataMax UI Primitives",
+  "syncedAt": "2026-06-29T00:00:00.000Z",
+  "scope": [
+    "Button", "Card", "Input", "Popover", "HoverCard", "InfoTooltip", "InsightBanner", "StatCard",
+    "GuidedTour", "FlowHoverButton", "GlobeLive",
+    "AppShell", "DemoBanner", "ErrorBoundary", "ModuleQuickLinks", "Sidebar"
+  ],
+  "componentPaths": {
+    "Button": "src/components/ui/button.tsx",
+    "Card": "src/components/ui/card.tsx",
+    "Input": "src/components/ui/input.tsx",
+    "Popover": "src/components/ui/popover.tsx",
+    "HoverCard": "src/components/ui/hover-card.tsx",
+    "InfoTooltip": "src/components/ui/InfoTooltip.tsx",
+    "InsightBanner": "src/components/ui/InsightBanner.tsx",
+    "StatCard": "src/components/shared/StatCard.tsx",
+    "GuidedTour": "src/components/ui/GuidedTour.tsx",
+    "FlowHoverButton": "src/components/ui/flow-hover-button.tsx",
+    "GlobeLive": "src/components/ui/globe-live.tsx",
+    "AppShell": "src/components/shared/AppShell.tsx",
+    "DemoBanner": "src/components/shared/DemoBanner.tsx",
+    "ErrorBoundary": "src/components/shared/ErrorBoundary.tsx",
+    "ModuleQuickLinks": "src/components/shared/ModuleQuickLinks.tsx",
+    "Sidebar": "src/components/shared/Sidebar.tsx"
+  },
+  "featuresScope": [
+    "ScenarioCompareModal", "ConfirmDialog", "EquipmentCard", "EquipmentDialog",
+    "MapaCanvas", "GanttBar", "GanttChart", "TaskEditDialog"
+  ],
+  "notes": {
+    "featuresComponents": "Components from src/features/ are partially scoped. See featuresScope array. Most render as floor cards only due to heavy data coupling.",
+    "layoutComponents": "AppLayout.tsx uses different styling theme (light mode, blue colors) - not fully aligned with dark theme design system."
+  }
+}

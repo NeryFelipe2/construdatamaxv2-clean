@@ -2,6 +2,7 @@
  * CalendarioPanel — Calendar grid with Line A (planned) / Line B (actual).
  * Supports 15-day and monthly view modes.
  */
+import { Fragment } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useOperacaoCampoStore } from '@/store/operacaoCampoStore'
 import { useShallow } from 'zustand/react/shallow'
@@ -119,7 +120,7 @@ export function CalendarioPanel() {
             </thead>
             <tbody>
               {activities.map((act) => (
-                <>
+                <Fragment key={act.id}>
                   {/* Line A — Planned (read-only) */}
                   <tr key={`${act.id}-A`} className="border-t border-[#525252]">
                     <td rowSpan={2} className="sticky left-0 z-10 bg-[#3d3d3d] px-3 py-1.5 text-[#f5f5f5] font-medium align-middle border-r border-[#525252]">
@@ -170,7 +171,7 @@ export function CalendarioPanel() {
                       )
                     })}
                   </tr>
-                </>
+                </Fragment>
               ))}
 
               {/* PPC row */}

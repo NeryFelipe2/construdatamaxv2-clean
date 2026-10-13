@@ -181,3 +181,43 @@ O payload e normalizado automaticamente para os formatos:
 - Evolution API v2 (`data.messages[]`)
 - Meta Cloud API (`from`, `text`)
 - Formato local (`sender`, `message.conversation`)
+
+---
+
+## 6. Teste com o proprio numero do bot
+
+Quando o mesmo WhatsApp esta conectado como bot e o Felipe digita uma mensagem,
+a Evolution entrega o evento como `fromMe=true`.
+
+Regra de seguranca:
+- mensagens de grupos sao ignoradas;
+- mensagens `fromMe=true` em conversa individual sao liberadas para comandos seguros;
+- comandos seguros: `menu`, `oi`, opcoes `1` a `16`, `@comandos`, `#comando` e `construdata teste`.
+
+Exemplos:
+
+```text
+menu
+1
+@rdo
+#menu
+construdata teste menu
+```
+
+Essa trava evita o problema de o bot responder em grupo. Em privado, o proprio
+numero conectado pode testar o menu e as opcoes sem whitelist de telefone. A
+whitelist continua valendo para mensagens recebidas de outros numeros.
+
+Para diretoria/gerencia ou numeros vinculados a mais de um projeto, as opcoes
+`1` e `4` respondem em escopo consolidado, listando os 6 projetos canonicos.
+Para engenheiro/apontador vinculado a uma unica obra, a resposta fica filtrada
+no projeto dele.
+
+Variavel operacional relacionada:
+
+```text
+EVOLUTION_SEND_TIMEOUT_SECONDS=30
+```
+
+O timeout maior reduz falso erro quando a Evolution/Render acorda devagar.
+Nao ha retry automatico de envio para evitar mensagem duplicada no WhatsApp.

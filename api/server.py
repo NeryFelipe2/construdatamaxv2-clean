@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 import tempfile
+import os
 
 # Garante que o repo root está no sys.path para imports dos motores
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -23,8 +24,10 @@ from api.routes_operacao import router as operacao_router
 from api.routes_processamento import router as processamento_router
 from api.routes_rdo import router as rdo_router
 from api.routes_whatsapp import router as whatsapp_router
+from api.routes_integracao_total import router as integracao_total_router
 from api.routes_notificacoes import router as notificacoes_router
 from api.routes_motores import router as motores_router
+from api.routes_pmbok import router as pmbok_router
 
 # ─── NEW V5 Engine Routers (4) ──────────────────────────────────────────────
 from api.routes_engine_v5 import router as engine_v5_router
@@ -34,9 +37,11 @@ from api.routes_leitores import router as leitores_router
 
 # ─── Agent Chat Router ─────────────────────────────────────────────────────
 from api.routes_agent import router as agent_router
+from api.routes_agentes_orquestrador import router as orquestrador_router
 
 from core.config import HTML_DIR, PLATFORM_DISPLAY_NAME, PLATFORM_NAME
 from core.database import bootstrap_database
+from api.startup_migrations import apply_operational_schema_migration
 
 app = FastAPI(
     title=f"{PLATFORM_DISPLAY_NAME} API — Unified V5 Engine",
@@ -58,8 +63,10 @@ app.include_router(cadastro_router)
 app.include_router(processamento_router)
 app.include_router(operacao_router)
 app.include_router(whatsapp_router)
+app.include_router(integracao_total_router)
 app.include_router(notificacoes_router)
 app.include_router(motores_router)
+app.include_router(pmbok_router)
 
 # ─── Register V5 Engine Routers ─────────────────────────────────────────────
 app.include_router(engine_v5_router)
@@ -67,6 +74,7 @@ app.include_router(geradores_router)
 app.include_router(analytics_router)
 app.include_router(leitores_router)
 app.include_router(agent_router)
+app.include_router(orquestrador_router)
 
 # Mount ConstruPlan Flask Offline Backend (Brutal Injection)
 try:
@@ -79,9 +87,42 @@ except Exception as exc:
     logging.error(f"Failed to mount Flask Construplan Backend: {exc}")
 
 
+STARTUP_STATUS = {
+    "database_bootstrap": {"ok": None, "skipped": False, "reason": "not_run"},
+    "operational_migration": {"ok": None, "skipped": False, "reason": "not_run"},
+}
+
+
+def _startup_db_tasks_enabled() -> bool:
+    raw = os.getenv("CONSTRUDATA_RUN_STARTUP_DB_TASKS", "false").strip().lower()
+    return raw in {"1", "true", "yes", "sim", "on"}
+
+
 @app.on_event("startup")
 def on_startup():
-    bootstrap_database(force_import=False)
+    import logging
+
+    if not _startup_db_tasks_enabled():
+        reason = "disabled_by_CONSTRUDATA_RUN_STARTUP_DB_TASKS"
+        STARTUP_STATUS["database_bootstrap"] = {"ok": None, "skipped": True, "reason": reason}
+        STARTUP_STATUS["operational_migration"] = {"ok": None, "skipped": True, "reason": reason}
+        logging.warning("Startup DB tasks skipped so /health can stay available: %s", reason)
+        return
+
+    try:
+        STARTUP_STATUS["database_bootstrap"] = bootstrap_database(force_import=False)
+    except Exception as exc:
+        STARTUP_STATUS["database_bootstrap"] = {"ok": False, "skipped": True, "reason": str(exc)}
+        logging.warning("Database bootstrap skipped so /health can stay available: %s", exc)
+
+    try:
+        result = apply_operational_schema_migration()
+        STARTUP_STATUS["operational_migration"] = result
+        if not result.get("ok"):
+            logging.warning("Operational schema migration not applied: %s", result)
+    except Exception as exc:
+        STARTUP_STATUS["operational_migration"] = {"ok": False, "skipped": True, "reason": str(exc)}
+        logging.warning("Operational schema migration crashed but /health stays available: %s", exc)
 
 
 @app.get("/")
@@ -99,9 +140,10 @@ def health():
         "display_name": PLATFORM_DISPLAY_NAME,
         "version": "3.0.0",
         "engine": "Unified V5",
-        "routers": 14,
+        "routers": 15,
         "motores": len(list(motores_path.glob("*.py"))) - 1 if motores_path.exists() else 0,
         "geradores": len(list(geradores_path.glob("gerar_*.py"))) if geradores_path.exists() else 0,
+        "startup": STARTUP_STATUS,
     }
 
 

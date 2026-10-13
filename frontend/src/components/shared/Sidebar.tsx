@@ -1,38 +1,22 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import {
-  ClipboardList, Calendar, FolderKanban, Radio,
-  Sun, Moon, Wrench, FileSearch, PackageSearch, Users, FlaskConical,
-  Cpu, ChevronRight, ChevronLeft, LayoutDashboard, CalendarClock, FileText,
-  Calculator, Layers, Target, Map, X, Network,
-} from 'lucide-react'
+import { Sun, Moon, FlaskConical, ChevronRight, ChevronLeft, X } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { cn } from '@/lib/utils'
 import { useThemeStore } from '@/store/themeStore'
 import { useAppModeStore } from '@/store/appModeStore'
 import { useAlertCounts } from '@/hooks/useAlertCounts'
+import { NAV_ITEMS_FLAT } from '@/config/navigation'
 
 const SIDEBAR_KEY = 'cdata-sidebar'
 
-const navItems = [
-  { label: 'Gestão 360',      icon: LayoutDashboard,  to: '/app/gestao-360'          },
-  { label: 'Relatório 360',   icon: ClipboardList,    to: '/app/relatorio360'        },
-  { label: 'Agenda',          icon: Calendar,         to: '/app/agenda'              },
-  { label: 'Gest. Equip.',    icon: Wrench,           to: '/app/gestao-equipamentos' },
-  { label: 'Projetos',        icon: FolderKanban,     to: '/app/projetos'            },
-  { label: 'Torre Control',   icon: Radio,            to: '/app/torre-de-controle'   },
-  { label: 'Mapa Interativo', icon: Map,              to: '/app/mapa-interativo'     },
-  { label: 'Pré-Constr.',     icon: FileSearch,       to: '/app/pre-construcao'      },
-  { label: 'Suprimentos',     icon: PackageSearch,    to: '/app/suprimentos'         },
-  { label: 'Mão de Obra',     icon: Users,            to: '/app/mao-de-obra'         },
-  { label: 'Planejamento',    icon: CalendarClock,    to: '/app/planejamento'        },
-  { label: 'LPS/Lean',        icon: Target,           to: '/app/lps-lean'            },
-  { label: 'RDO',             icon: FileText,         to: '/app/rdo'                 },
-  { label: 'Quantitativos',   icon: Calculator,       to: '/app/quantitativos'       },
-  { label: 'BIM 3D/4D/5D',   icon: Layers,           to: '/app/bim'                 },
-  { label: 'Frota',           icon: Cpu,              to: '/app/otimizacao-frota'    },
-  { label: 'Rede 360',        icon: Network,          to: '/app/rede-360'            },
-]
+// NOTA (20/07/2026): este componente não está mais referenciado por nenhuma
+// rota (App.tsx tem seu próprio Sidebar inline para os temas Dark/Light, e o
+// tema eKyte usa AppLayout.tsx). Mantido + atualizado por segurança: se algum
+// dia for religado, os itens já vêm sincronizados via NAV_ITEMS_FLAT em vez de
+// uma lista duplicada e desatualizada (era essa duplicação que escondia
+// módulos do menu).
+const navItems = NAV_ITEMS_FLAT
 
 // ─── Atlântico water-drop logo (matches brand mark) ───────────────────────────
 function WaterDropLogo({ size = 22 }: { size?: number }) {

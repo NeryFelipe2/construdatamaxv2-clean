@@ -1,6 +1,7 @@
 /**
  * EvmPage — root of the EVM (Earned Value Management) module.
- * Routes between 5 tabs via the store's activeTab state.
+ * Routes between 6 tabs via the store's activeTab state (5 with mock/real
+ * dual mode + Curva S Real, que já era só real).
  */
 import { EvmHeader } from './components/EvmHeader'
 import { DashboardPanel } from './components/DashboardPanel'
@@ -8,6 +9,7 @@ import { MedicaoPonderadaPanel } from './components/MedicaoPonderadaPanel'
 import { PlanoContasPanel } from './components/PlanoContasPanel'
 import { WorkPackagesPanel } from './components/WorkPackagesPanel'
 import { IndicesPanel } from './components/IndicesPanel'
+import { CurvaSRealPanel } from './components/CurvaSRealPanel'
 import { useEvmStore } from '@/store/evmStore'
 import type { EvmTab } from '@/types'
 
@@ -17,6 +19,7 @@ const panels: Record<EvmTab, () => React.ReactNode> = {
   'plano-contas':   PlanoContasPanel,
   'work-packages':  WorkPackagesPanel,
   'indices':        IndicesPanel,
+  'curva-real':     CurvaSRealPanel,
 }
 
 export function EvmPage() {

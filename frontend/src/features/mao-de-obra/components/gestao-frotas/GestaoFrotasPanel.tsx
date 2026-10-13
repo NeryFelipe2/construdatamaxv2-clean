@@ -46,14 +46,14 @@ const STATUS_LABELS: Record<VehicleStatus, string> = {
 const STATUS_COLORS: Record<VehicleStatus, string> = {
   active:      'bg-[#22c55e]/15 text-[#22c55e]',
   maintenance: 'bg-[#f59e0b]/15 text-[#f59e0b]',
-  inactive:    'bg-[var(--color-surface)] text-[var(--color-text-muted)]',
+  inactive:    'bg-[#2c2c2c] text-[#6b6b6b]',
   unavailable: 'bg-[#ef4444]/15 text-[#ef4444]',
 }
 const ALERT_COLORS: Record<string, string> = {
   critical: 'bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30',
   high:     'bg-[#f59e0b]/15 text-[#f59e0b] border-[#f59e0b]/30',
   medium:   'bg-[#3b82f6]/15 text-[#3b82f6] border-[#3b82f6]/30',
-  low:      'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border)]',
+  low:      'bg-[#2c2c2c] text-[#a3a3a3] border-[#525252]',
 }
 const FINE_STATUS_COLORS: Record<FineStatus, string> = {
   pending:   'bg-[#f59e0b]/15 text-[#f59e0b]',
@@ -65,20 +65,20 @@ const OS_STATUS_COLORS: Record<ServiceOrderStatus, string> = {
   in_progress:    'bg-[#3b82f6]/15 text-[#3b82f6]',
   awaiting_parts: 'bg-[#8b5cf6]/15 text-[#8b5cf6]',
   completed:      'bg-[#22c55e]/15 text-[#22c55e]',
-  cancelled:      'bg-[var(--color-surface)] text-[var(--color-text-muted)]',
+  cancelled:      'bg-[#2c2c2c] text-[#6b6b6b]',
 }
 const PRIORITY_COLORS: Record<string, string> = {
-  urgent: 'text-[#ef4444]', high: 'text-[#f59e0b]', normal: 'text-[var(--color-text-secondary)]', low: 'text-[var(--color-text-muted)]',
+  urgent: 'text-[#ef4444]', high: 'text-[#f59e0b]', normal: 'text-[#a3a3a3]', low: 'text-[#6b6b6b]',
 }
 
 function StatusBadge({ status }: { status: VehicleStatus }) {
   return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[status]}`}>{STATUS_LABELS[status]}</span>
 }
 
-const inputCls  = 'w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]'
-const labelCls  = 'block text-xs font-medium text-[var(--color-text-secondary)] mb-1'
-const thCls     = 'text-left px-3 py-2 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap'
-const tdCls     = 'px-3 py-3 text-sm text-[var(--color-text-secondary)]'
+const inputCls  = 'w-full px-3 py-2 rounded-lg border border-[#525252] bg-[#3d3d3d] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]'
+const labelCls  = 'block text-xs font-medium text-[#a3a3a3] mb-1'
+const thCls     = 'text-left text-[#a3a3a3] text-xs font-medium px-3 py-2 whitespace-nowrap'
+const tdCls     = 'px-3 py-3 text-sm text-[#a3a3a3]'
 const actionBtn = 'px-3 py-1 rounded-lg text-xs font-medium transition-colors'
 
 // ─── Vehicle Dialog ───────────────────────────────────────────────────────────
@@ -119,9 +119,9 @@ function VehicleDialog({ vehicle, onClose, onSave }: {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="w-full max-w-xl bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-6 mb-8">
-        <h2 className="text-base font-bold text-[var(--color-text-primary)] mb-5">{vehicle ? 'Editar Veículo' : 'Novo Veículo'}</h2>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="w-full max-w-xl bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-6 mb-8">
+        <h2 className="text-base font-bold text-[#f5f5f5] mb-5">{vehicle ? 'Editar Veículo' : 'Novo Veículo'}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -193,8 +193,8 @@ function VehicleDialog({ vehicle, onClose, onSave }: {
             <textarea className={`${inputCls} resize-none`} rows={2} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-            <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+            <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
           </div>
         </form>
       </div>
@@ -206,11 +206,11 @@ function VehicleDialog({ vehicle, onClose, onSave }: {
 
 function SimpleDialog({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="w-full max-w-lg bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-6 mb-8">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="w-full max-w-lg bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-6 mb-8">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-base font-bold text-[var(--color-text-primary)]">{title}</h2>
-          <button onClick={onClose} className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors text-lg leading-none">✕</button>
+          <h2 className="text-base font-bold text-[#f5f5f5]">{title}</h2>
+          <button onClick={onClose} className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors text-lg leading-none">✕</button>
         </div>
         {children}
       </div>
@@ -238,23 +238,23 @@ function VeiculosTab() {
           })}
         </div>
         <button onClick={() => setDialog({ open: true })}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">
           + Novo Veículo
         </button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Placa','Veículo','Tipo','Ano','KM Atual','Combustível','Status','Ações'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {vehicles.map(v => (
                 <>
-                  <tr key={v.id} className={`hover:bg-[var(--color-surface)] transition-colors cursor-pointer ${selected === v.id ? 'bg-[var(--color-surface)]' : ''}`}
+                  <tr key={v.id} className={`hover:bg-[#2c2c2c] transition-colors cursor-pointer ${selected === v.id ? 'bg-[#2c2c2c]' : ''}`}
                     onClick={() => setSelected(s => s === v.id ? null : v.id)}>
-                    <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{v.plate}</td>
-                    <td className={`${tdCls} font-medium text-[var(--color-text-primary)]`}>{v.make} {v.model}</td>
+                    <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{v.plate}</td>
+                    <td className={`${tdCls} font-medium text-[#f5f5f5]`}>{v.make} {v.model}</td>
                     <td className={tdCls}>{VEHICLE_TYPE_LABELS[v.type]}</td>
                     <td className={tdCls}>{v.year}</td>
                     <td className={`${tdCls} font-medium`}>{v.currentKm.toLocaleString('pt-BR')} km</td>
@@ -263,14 +263,14 @@ function VeiculosTab() {
                     <td className={tdCls}>
                       <div className="flex gap-1.5">
                         <button onClick={e => { e.stopPropagation(); setDialog({ open: true, vehicle: v }) }}
-                          className={`${actionBtn} bg-[var(--color-accent)]/10 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20`}>Editar</button>
+                          className={`${actionBtn} bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/20`}>Editar</button>
                         <button onClick={e => { e.stopPropagation(); removeVehicle(v.id) }}
                           className={`${actionBtn} bg-[#ef4444]/10 text-[#ef4444] hover:bg-[#ef4444]/20`}>Remover</button>
                       </div>
                     </td>
                   </tr>
                   {selected === v.id && (
-                    <tr className="bg-[var(--color-surface)]">
+                    <tr className="bg-[#2c2c2c]">
                       <td colSpan={8} className="px-4 py-3">
                         <div className="grid grid-cols-3 gap-4 text-xs">
                           {[
@@ -278,9 +278,9 @@ function VeiculosTab() {
                             ['Aquisição', v.acquisitionDate ? fmtDate(v.acquisitionDate) : '—'],
                             ['Valor Aquisição', fmt(v.acquisitionValue)],
                           ].map(([l, val]) => (
-                            <div key={l}><span className="text-[var(--color-text-muted)]">{l}: </span><span className="font-medium text-[var(--color-text-primary)]">{val}</span></div>
+                            <div key={l}><span className="text-[#6b6b6b]">{l}: </span><span className="font-medium text-[#f5f5f5]">{val}</span></div>
                           ))}
-                          {v.notes && <div className="col-span-3 text-[var(--color-text-muted)]">{v.notes}</div>}
+                          {v.notes && <div className="col-span-3 text-[#6b6b6b]">{v.notes}</div>}
                         </div>
                       </td>
                     </tr>
@@ -344,31 +344,31 @@ function AbastecimentoTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="px-3 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-xs font-medium text-[var(--color-text-secondary)]">
-          Custo mês atual: <strong className="text-[var(--color-text-primary)]">{fmt(totalCostMonth)}</strong>
+        <div className="px-3 py-2 rounded-xl border border-[#525252] bg-[#3d3d3d] text-xs font-medium text-[#a3a3a3]">
+          Custo mês atual: <strong className="text-[#f5f5f5]">{fmt(totalCostMonth)}</strong>
         </div>
         <button onClick={() => setDialog(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">
           + Registrar Abastecimento
         </button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Data','Placa','Motorista','Litros','R$/L','Total','KM','Tanque Cheio','Eficiência','Ações'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {sorted.length === 0
-                ? <tr><td colSpan={10} className="px-3 py-8 text-center text-sm text-[var(--color-text-muted)]">Nenhum abastecimento registrado</td></tr>
+                ? <tr><td colSpan={10} className="px-3 py-8 text-center text-sm text-[#6b6b6b]">Nenhum abastecimento registrado</td></tr>
                 : sorted.map(r => (
-                  <tr key={r.id} className="hover:bg-[var(--color-surface)] transition-colors">
+                  <tr key={r.id} className="hover:bg-[#2c2c2c] transition-colors">
                     <td className={tdCls}>{fmtDate(r.date)}</td>
-                    <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{getVehiclePlate(r.vehicleId)}</td>
+                    <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{getVehiclePlate(r.vehicleId)}</td>
                     <td className={tdCls}>{getDriverName(r.driverId)}</td>
                     <td className={tdCls}>{r.liters.toFixed(1)} L</td>
                     <td className={tdCls}>R$ {r.pricePerLiter.toFixed(2)}</td>
-                    <td className={`${tdCls} font-semibold text-[var(--color-text-primary)]`}>{fmt(r.totalCost)}</td>
+                    <td className={`${tdCls} font-semibold text-[#f5f5f5]`}>{fmt(r.totalCost)}</td>
                     <td className={tdCls}>{r.kmAtFill.toLocaleString('pt-BR')}</td>
                     <td className={tdCls}>{r.fullTank ? '✓' : '—'}</td>
                     <td className={`${tdCls} text-[#22c55e] font-medium`}>{efficiency[r.vehicleId] ?? '—'}</td>
@@ -426,16 +426,16 @@ function AbastecimentoTab() {
             </div>
             <div className="flex items-center gap-2">
               <input type="checkbox" id="fullTank" checked={form.fullTank} onChange={e => setForm(f => ({ ...f, fullTank: e.target.checked }))} className="w-4 h-4 rounded" />
-              <label htmlFor="fullTank" className="text-sm text-[var(--color-text-secondary)]">Tanque cheio</label>
+              <label htmlFor="fullTank" className="text-sm text-[#a3a3a3]">Tanque cheio</label>
             </div>
             {form.liters > 0 && form.pricePerLiter > 0 && (
-              <div className="px-3 py-2 rounded-lg bg-[var(--color-accent)]/10 text-sm text-[var(--color-accent)] font-medium">
+              <div className="px-3 py-2 rounded-lg bg-[#f97316]/10 text-sm text-[#f97316] font-medium">
                 Total: {fmt(form.liters * form.pricePerLiter)}
               </div>
             )}
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -459,7 +459,7 @@ function ManutencaoTab() {
     scheduled:   'bg-[#3b82f6]/15 text-[#3b82f6]',
     in_progress: 'bg-[#f59e0b]/15 text-[#f59e0b]',
     completed:   'bg-[#22c55e]/15 text-[#22c55e]',
-    cancelled:   'bg-[var(--color-surface)] text-[var(--color-text-muted)]',
+    cancelled:   'bg-[#2c2c2c] text-[#6b6b6b]',
   }
   const MAINT_STATUS_LABELS: Record<VehicleMaintenanceStatus, string> = {
     scheduled: 'Agendado', in_progress: 'Em Andamento', completed: 'Concluído', cancelled: 'Cancelado',
@@ -481,30 +481,30 @@ function ManutencaoTab() {
 
   function MaintTable({ items, label }: { items: VehicleMaintenanceRecord[]; label: string }) {
     return (
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
-        <div className="px-4 py-2 border-b border-[var(--color-border)] flex items-center gap-2">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
+        <div className="px-4 py-2 border-b border-[#525252] flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${label === 'Preventiva' ? 'bg-[#22c55e]' : 'bg-[#f59e0b]'}`} />
-          <h4 className="text-xs font-bold text-[var(--color-text-secondary)] uppercase">{label}</h4>
-          <span className="ml-auto text-xs text-[var(--color-text-muted)]">{items.length} registros</span>
+          <h4 className="text-xs font-bold text-[#a3a3a3] uppercase">{label}</h4>
+          <span className="ml-auto text-xs text-[#6b6b6b]">{items.length} registros</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Placa','Descrição','Data','KM','Custo','Próxima','Status',''].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {items.length === 0
-                ? <tr><td colSpan={8} className="px-3 py-6 text-center text-sm text-[var(--color-text-muted)]">Sem registros</td></tr>
+                ? <tr><td colSpan={8} className="px-3 py-6 text-center text-sm text-[#6b6b6b]">Sem registros</td></tr>
                 : items.map(m => (
-                  <tr key={m.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                    <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{getPlate(m.vehicleId)}</td>
+                  <tr key={m.id} className="hover:bg-[#2c2c2c] transition-colors">
+                    <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{getPlate(m.vehicleId)}</td>
                     <td className={`${tdCls} max-w-[160px] truncate`}>{m.description}</td>
                     <td className={tdCls}>{fmtDate(m.serviceDate)}</td>
                     <td className={tdCls}>{m.kmAtService.toLocaleString('pt-BR')}</td>
                     <td className={`${tdCls} font-semibold`}>{fmt(m.cost)}</td>
                     <td className={tdCls}>{m.nextServiceDate ? fmtDate(m.nextServiceDate) : m.nextServiceKm ? `${m.nextServiceKm.toLocaleString('pt-BR')} km` : '—'}</td>
                     <td className={tdCls}><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${MAINT_STATUS_COLORS[m.status]}`}>{MAINT_STATUS_LABELS[m.status]}</span></td>
-                    <td className={tdCls}><button onClick={() => openEdit(m)} className={`${actionBtn} bg-[var(--color-accent)]/10 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20`}>Editar</button></td>
+                    <td className={tdCls}><button onClick={() => openEdit(m)} className={`${actionBtn} bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/20`}>Editar</button></td>
                   </tr>
                 ))}
             </tbody>
@@ -517,7 +517,7 @@ function ManutencaoTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button onClick={openNew} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">+ Nova Manutenção</button>
+        <button onClick={openNew} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">+ Nova Manutenção</button>
       </div>
       <MaintTable items={preventive} label="Preventiva" />
       <MaintTable items={corrective} label="Corretiva" />
@@ -581,8 +581,8 @@ function ManutencaoTab() {
               </div>
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -615,23 +615,23 @@ function MotoristasTab() {
     <div className="space-y-4">
       <div className="flex justify-end">
         <button onClick={() => { setEdit(undefined); setForm({ name: '', cpfMasked: '', licenseNumber: '', licenseCategory: 'B', licenseExpiry: '', phone: '', email: '', status: 'active' }); setDialog(true) }}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">
           + Novo Motorista
         </button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Nome','CPF','CNH','Categoria','Validade CNH','Telefone','Status','Ações'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {drivers.map(d => {
                 const days   = daysUntil(d.licenseExpiry)
-                const expCls = days < 0 ? 'text-[#ef4444]' : days < 30 ? 'text-[#f59e0b]' : 'text-[var(--color-text-secondary)]'
+                const expCls = days < 0 ? 'text-[#ef4444]' : days < 30 ? 'text-[#f59e0b]' : 'text-[#a3a3a3]'
                 return (
-                  <tr key={d.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                    <td className={`${tdCls} font-medium text-[var(--color-text-primary)]`}>{d.name}</td>
+                  <tr key={d.id} className="hover:bg-[#2c2c2c] transition-colors">
+                    <td className={`${tdCls} font-medium text-[#f5f5f5]`}>{d.name}</td>
                     <td className={tdCls}>{d.cpfMasked}</td>
                     <td className={tdCls}>{d.licenseNumber}</td>
                     <td className={`${tdCls} font-bold`}>{d.licenseCategory}</td>
@@ -644,7 +644,7 @@ function MotoristasTab() {
                     </td>
                     <td className={tdCls}>
                       <div className="flex gap-1.5">
-                        <button onClick={() => openEdit(d)} className={`${actionBtn} bg-[var(--color-accent)]/10 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20`}>Editar</button>
+                        <button onClick={() => openEdit(d)} className={`${actionBtn} bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/20`}>Editar</button>
                         <button onClick={() => removeDriver(d.id)} className={`${actionBtn} bg-[#ef4444]/10 text-[#ef4444] hover:bg-[#ef4444]/20`}>Remover</button>
                       </div>
                     </td>
@@ -672,8 +672,8 @@ function MotoristasTab() {
               <div><label className={labelCls}>E-mail</label><input type="email" className={inputCls} value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -695,7 +695,7 @@ function RotasTab() {
   }
   const ROUTE_STATUS_COLORS: Record<RouteStatus, string> = {
     planned: 'bg-[#3b82f6]/15 text-[#3b82f6]', in_progress: 'bg-[#f59e0b]/15 text-[#f59e0b]',
-    completed: 'bg-[#22c55e]/15 text-[#22c55e]', cancelled: 'bg-[var(--color-surface)] text-[var(--color-text-muted)]',
+    completed: 'bg-[#22c55e]/15 text-[#22c55e]', cancelled: 'bg-[#2c2c2c] text-[#6b6b6b]',
   }
 
   function getPlate(id: string) { return vehicles.find(v => v.id === id)?.plate ?? id }
@@ -713,23 +713,23 @@ function RotasTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">+ Registrar Rota</button>
+        <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">+ Registrar Rota</button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Data','Placa','Motorista','Origem','Destino','Saída','Chegada','KM Perc.','Finalidade','Status'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {sorted.length === 0
-                ? <tr><td colSpan={10} className="px-3 py-8 text-center text-sm text-[var(--color-text-muted)]">Nenhuma rota registrada</td></tr>
+                ? <tr><td colSpan={10} className="px-3 py-8 text-center text-sm text-[#6b6b6b]">Nenhuma rota registrada</td></tr>
                 : sorted.map(r => {
                   const kmPerc = r.endKm && r.endKm > r.startKm ? (r.endKm - r.startKm).toLocaleString('pt-BR') + ' km' : '—'
                   return (
-                    <tr key={r.id} className="hover:bg-[var(--color-surface)] transition-colors">
+                    <tr key={r.id} className="hover:bg-[#2c2c2c] transition-colors">
                       <td className={tdCls}>{fmtDate(r.date)}</td>
-                      <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{getPlate(r.vehicleId)}</td>
+                      <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{getPlate(r.vehicleId)}</td>
                       <td className={tdCls}>{getDriver(r.driverId)}</td>
                       <td className={`${tdCls} max-w-[120px] truncate`}>{r.origin}</td>
                       <td className={`${tdCls} max-w-[120px] truncate`}>{r.destination}</td>
@@ -775,8 +775,8 @@ function RotasTab() {
             </div>
             <div><label className={labelCls}>Finalidade</label><input className={inputCls} value={form.purpose} onChange={e => setForm(f => ({ ...f, purpose: e.target.value }))} /></div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -826,20 +826,20 @@ function OrdensTab() {
         ))}
       </div>
       <div className="flex justify-end">
-        <button onClick={openNew} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">+ Nova OS</button>
+        <button onClick={openNew} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">+ Nova OS</button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['OS','Placa','Tipo','Prioridade','Descrição','Custo Est.','Fornecedor','Status','Ações'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {orders.length === 0
-                ? <tr><td colSpan={9} className="px-3 py-8 text-center text-sm text-[var(--color-text-muted)]">Nenhuma OS registrada</td></tr>
+                ? <tr><td colSpan={9} className="px-3 py-8 text-center text-sm text-[#6b6b6b]">Nenhuma OS registrada</td></tr>
                 : orders.map(o => (
-                  <tr key={o.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                    <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{o.code}</td>
+                  <tr key={o.id} className="hover:bg-[#2c2c2c] transition-colors">
+                    <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{o.code}</td>
                     <td className={`${tdCls} font-mono`}>{getPlate(o.vehicleId)}</td>
                     <td className={tdCls}>{o.type === 'preventive' ? 'Prev.' : 'Corret.'}</td>
                     <td className={`${tdCls} font-semibold ${PRIORITY_COLORS[o.priority]}`}>{o.priority.charAt(0).toUpperCase() + o.priority.slice(1)}</td>
@@ -847,7 +847,7 @@ function OrdensTab() {
                     <td className={tdCls}>{o.estimatedCost ? fmt(o.estimatedCost) : '—'}</td>
                     <td className={`${tdCls} max-w-[100px] truncate`}>{o.provider ?? '—'}</td>
                     <td className={tdCls}><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${OS_STATUS_COLORS[o.status]}`}>{OS_STATUS_LABELS[o.status]}</span></td>
-                    <td className={tdCls}><button onClick={() => openEdit(o)} className={`${actionBtn} bg-[var(--color-accent)]/10 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20`}>Editar</button></td>
+                    <td className={tdCls}><button onClick={() => openEdit(o)} className={`${actionBtn} bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/20`}>Editar</button></td>
                   </tr>
                 ))}
             </tbody>
@@ -888,8 +888,8 @@ function OrdensTab() {
               <div><label className={labelCls}>Fornecedor</label><input className={inputCls} value={form.provider} onChange={e => setForm(f => ({ ...f, provider: e.target.value }))} /></div>
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -928,22 +928,22 @@ function MultasTab() {
           </div>
         )}
         <div className="ml-auto">
-          <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">+ Registrar Multa</button>
+          <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">+ Registrar Multa</button>
         </div>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['Data','Placa','Motorista','Infração','Pontos','Valor','Vencimento','Status','Ações'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {fines.length === 0
-                ? <tr><td colSpan={9} className="px-3 py-8 text-center text-sm text-[var(--color-text-muted)]">Nenhuma multa registrada</td></tr>
+                ? <tr><td colSpan={9} className="px-3 py-8 text-center text-sm text-[#6b6b6b]">Nenhuma multa registrada</td></tr>
                 : fines.map(f => (
-                  <tr key={f.id} className="hover:bg-[var(--color-surface)] transition-colors">
+                  <tr key={f.id} className="hover:bg-[#2c2c2c] transition-colors">
                     <td className={tdCls}>{fmtDate(f.date)}</td>
-                    <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{getPlate(f.vehicleId)}</td>
+                    <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{getPlate(f.vehicleId)}</td>
                     <td className={tdCls}>{getDriver(f.driverId)}</td>
                     <td className={`${tdCls} max-w-[160px] truncate`}>{f.infraction}</td>
                     <td className={tdCls}>{f.points ?? '—'}</td>
@@ -993,8 +993,8 @@ function MultasTab() {
               <div><label className={labelCls}>Nº Auto</label><input className={inputCls} value={form.autoNumber} onChange={e => setForm(f => ({ ...f, autoNumber: e.target.value }))} /></div>
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -1042,8 +1042,8 @@ function CustosTab() {
   return (
     <div className="space-y-5">
       {/* Monthly stacked bar chart */}
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
-        <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-4">Custo Mensal (6 meses)</h3>
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
+        <h3 className="text-sm font-bold text-[#f5f5f5] mb-4">Custo Mensal (6 meses)</h3>
         <div className="flex items-end gap-3 h-32">
           {monthlyCosts.map(m => {
             const total = m.fuel + m.maintenance + m.fines
@@ -1056,15 +1056,15 @@ function CustosTab() {
                   <div className="w-full bg-[#f59e0b]" style={{ height: `${m.maintenance / (total || 1) * 100}%` }} />
                   <div className="w-full bg-[#3b82f6]" style={{ height: `${m.fuel / (total || 1) * 100}%` }} />
                 </div>
-                <span className="text-[9px] text-[var(--color-text-muted)] capitalize">{mLabel}</span>
-                {total > 0 && <span className="text-[9px] font-semibold text-[var(--color-text-secondary)]">R${Math.round(total/1000)}k</span>}
+                <span className="text-[9px] text-[#6b6b6b] capitalize">{mLabel}</span>
+                {total > 0 && <span className="text-[9px] font-semibold text-[#a3a3a3]">R${Math.round(total/1000)}k</span>}
               </div>
             )
           })}
         </div>
         <div className="flex gap-4 mt-3">
           {[['bg-[#3b82f6]','Combustível'],['bg-[#f59e0b]','Manutenção'],['bg-[#ef4444]','Multas']].map(([c, l]) => (
-            <div key={l} className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
+            <div key={l} className="flex items-center gap-1.5 text-xs text-[#6b6b6b]">
               <span className={`w-3 h-3 rounded-sm ${c}`} />{l}
             </div>
           ))}
@@ -1072,25 +1072,25 @@ function CustosTab() {
       </div>
 
       {/* Vehicle ranking */}
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
-        <div className="px-4 py-3 border-b border-[var(--color-border)]">
-          <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Custo Total por Veículo</h3>
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
+        <div className="px-4 py-3 border-b border-[#525252]">
+          <h3 className="text-sm font-bold text-[#f5f5f5]">Custo Total por Veículo</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+            <thead><tr className="border-b border-[#525252]/50">
               {['#','Placa','Veículo','Combustível','Manutenção','Multas','Total'].map(h => <th key={h} className={thCls}>{h}</th>)}
             </tr></thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {byVehicle.map((row, i) => (
-                <tr key={row.vehicle.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                  <td className={`${tdCls} text-center font-bold text-[var(--color-text-muted)]`}>{i + 1}</td>
-                  <td className={`${tdCls} font-mono font-bold text-[var(--color-text-primary)]`}>{row.vehicle.plate}</td>
+                <tr key={row.vehicle.id} className="hover:bg-[#2c2c2c] transition-colors">
+                  <td className={`${tdCls} text-center font-bold text-[#6b6b6b]`}>{i + 1}</td>
+                  <td className={`${tdCls} font-mono font-bold text-[#f5f5f5]`}>{row.vehicle.plate}</td>
                   <td className={tdCls}>{row.vehicle.make} {row.vehicle.model}</td>
                   <td className={`${tdCls} text-[#3b82f6]`}>{fmt(row.fuel)}</td>
                   <td className={`${tdCls} text-[#f59e0b]`}>{fmt(row.maint)}</td>
                   <td className={`${tdCls} text-[#ef4444]`}>{fmt(row.fines)}</td>
-                  <td className={`${tdCls} font-bold text-[var(--color-text-primary)]`}>{fmt(row.total)}</td>
+                  <td className={`${tdCls} font-bold text-[#f5f5f5]`}>{fmt(row.total)}</td>
                 </tr>
               ))}
             </tbody>
@@ -1136,30 +1136,30 @@ function AgendamentoTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <button onClick={() => setWeekOffset(w => w - 1)} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors">‹</button>
-          <span className="text-xs text-[var(--color-text-secondary)] min-w-[160px] text-center">
+          <button onClick={() => setWeekOffset(w => w - 1)} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors">‹</button>
+          <span className="text-xs text-[#a3a3a3] min-w-[160px] text-center">
             {new Date(weekDates[0] + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} — {new Date(weekDates[6] + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
           </span>
-          <button onClick={() => setWeekOffset(w => w + 1)} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors">›</button>
+          <button onClick={() => setWeekOffset(w => w + 1)} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors">›</button>
         </div>
-        <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-white text-xs font-bold hover:opacity-90 transition-opacity">+ Novo Agendamento</button>
+        <button onClick={() => setDialog(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-xs font-bold hover:opacity-90 transition-opacity">+ Novo Agendamento</button>
       </div>
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-                <th className={`${thCls} sticky left-0 bg-[var(--color-surface)] z-10 min-w-[100px]`}>Veículo</th>
+              <tr className="border-b border-[#525252]/50">
+                <th className={`${thCls} sticky left-0 bg-[#2c2c2c] z-10 min-w-[100px]`}>Veículo</th>
                 {weekDates.map(d => {
                   const dow = new Date(d + 'T12:00:00').getDay()
                   return <th key={d} className={`${thCls} text-center min-w-[100px] ${dow === 0 ? 'text-[#ef4444]/70' : ''}`}>{new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit' })}</th>
                 })}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {vehicles.map(v => (
-                <tr key={v.id} className="hover:bg-[var(--color-surface)]/50 transition-colors">
-                  <td className="sticky left-0 z-10 bg-[var(--color-surface-elevated)] px-3 py-2 font-mono font-bold text-[var(--color-text-primary)]">{v.plate}</td>
+                <tr key={v.id} className="hover:bg-[#2c2c2c]/50 transition-colors">
+                  <td className="sticky left-0 z-10 bg-[#3d3d3d] px-3 py-2 font-mono font-bold text-[#f5f5f5]">{v.plate}</td>
                   {weekDates.map(date => {
                     const dayEvents = schedules.filter(s => s.vehicleId === v.id && s.scheduledDate === date)
                     return (
@@ -1204,8 +1204,8 @@ function AgendamentoTab() {
             </div>
             <div><label className={labelCls}>Observações</label><textarea className={`${inputCls} resize-none`} rows={2} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} /></div>
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">Cancelar</button>
-              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">Salvar</button>
+              <button type="button" onClick={() => setDialog(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">Cancelar</button>
+              <button type="submit" className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">Salvar</button>
             </div>
           </form>
         </SimpleDialog>
@@ -1233,7 +1233,7 @@ function AlertasTab() {
         ))}
       </div>
       {active.length === 0 ? (
-        <div className="flex flex-col items-center py-12 text-[var(--color-text-muted)]">
+        <div className="flex flex-col items-center py-12 text-[#6b6b6b]">
           <div className="text-3xl mb-2">✓</div>
           <p className="text-sm">Nenhum alerta ativo</p>
         </div>
@@ -1304,12 +1304,12 @@ function InsightsTab() {
         {[
           { label: 'Disponibilidade', value: `${fleetAvail}%`, color: parseFloat(fleetAvail) >= 80 ? 'text-[#22c55e]' : 'text-[#f59e0b]' },
           { label: 'Média km/L',      value: avgKmL,           color: 'text-[#3b82f6]' },
-          { label: 'Custo/km',        value: costPerKm !== '—' ? `R$ ${costPerKm}` : '—', color: 'text-[var(--color-text-primary)]' },
+          { label: 'Custo/km',        value: costPerKm !== '—' ? `R$ ${costPerKm}` : '—', color: 'text-[#f5f5f5]' },
           { label: 'OS em Aberto',    value: openOS,           color: openOS > 0 ? 'text-[#f59e0b]' : 'text-[#22c55e]' },
         ].map(k => (
-          <div key={k.label} className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+          <div key={k.label} className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[#3d3d3d] border border-[#525252]">
             <span className={`text-xl font-bold ${k.color}`}>{k.value}</span>
-            <span className="text-xs text-[var(--color-text-muted)] text-center mt-0.5">{k.label}</span>
+            <span className="text-xs text-[#6b6b6b] text-center mt-0.5">{k.label}</span>
           </div>
         ))}
       </div>
@@ -1318,8 +1318,8 @@ function InsightsTab() {
           ⚠ {activeAlerts} alerta{activeAlerts > 1 ? 's' : ''} crítico{activeAlerts > 1 ? 's' : ''} ativo{activeAlerts > 1 ? 's' : ''} — verifique a aba Alertas
         </div>
       )}
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-4">
-        <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-3">Utilização dos Veículos</h3>
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-4">
+        <h3 className="text-sm font-bold text-[#f5f5f5] mb-3">Utilização dos Veículos</h3>
         {vehicles.map(v => {
           const vRoutes = routes.filter(r => r.vehicleId === v.id && r.status === 'completed')
           const vKm     = vRoutes.reduce((s, r) => s + (r.endKm && r.endKm > r.startKm ? r.endKm - r.startKm : 0), 0)
@@ -1327,11 +1327,11 @@ function InsightsTab() {
           const pct     = (vKm / maxKm) * 100
           return (
             <div key={v.id} className="flex items-center gap-3 mb-2">
-              <span className="font-mono text-xs font-bold text-[var(--color-text-primary)] w-20 shrink-0">{v.plate}</span>
-              <div className="flex-1 h-2 rounded-full bg-[var(--color-border)] overflow-hidden">
-                <div className="h-full rounded-full bg-[var(--color-accent)] transition-all" style={{ width: `${pct}%` }} />
+              <span className="font-mono text-xs font-bold text-[#f5f5f5] w-20 shrink-0">{v.plate}</span>
+              <div className="flex-1 h-2 rounded-full bg-[#525252] overflow-hidden">
+                <div className="h-full rounded-full bg-[#f97316] transition-all" style={{ width: `${pct}%` }} />
               </div>
-              <span className="text-xs text-[var(--color-text-muted)] w-20 text-right">{vKm.toLocaleString('pt-BR')} km</span>
+              <span className="text-xs text-[#6b6b6b] w-20 text-right">{vKm.toLocaleString('pt-BR')} km</span>
             </div>
           )
         })}
@@ -1420,8 +1420,8 @@ function RelatoriosTab() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
-        <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-4">Gerar Relatório</h3>
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] p-5">
+        <h3 className="text-sm font-bold text-[#f5f5f5] mb-4">Gerar Relatório</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div>
             <label className={labelCls}>Veículo</label>
@@ -1447,12 +1447,12 @@ function RelatoriosTab() {
         </div>
         <div className="mt-4 flex justify-end">
           <button onClick={handleGenerate}
-            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--color-accent)] text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-sm">
+            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-sm font-bold hover:opacity-90 transition-opacity shadow-sm">
             Exportar CSV
           </button>
         </div>
       </div>
-      <p className="text-xs text-[var(--color-text-muted)] text-center">
+      <p className="text-xs text-[#6b6b6b] text-center">
         O relatório CSV é gerado localmente — nenhum dado é enviado para servidores externos.
       </p>
     </div>
@@ -1502,17 +1502,17 @@ export function GestaoFrotasPanel() {
   return (
     <div className="space-y-4">
       {/* Sub-tab bar */}
-      <div className="flex overflow-x-auto gap-1 p-1 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] scrollbar-hide">
+      <div className="flex gap-1 p-1 rounded-lg bg-[#3d3d3d] border border-[#525252] overflow-x-auto scrollbar-hide">
         {FLEET_TABS.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`relative shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+            className={`relative shrink-0 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]'
+                ? 'bg-[#f97316] text-[#ffffff]'
+                : 'text-[#a3a3a3] hover:text-[#f5f5f5] hover:bg-[#484848]'
             }`}>
             {tab.label}
             {tab.id === 'alertas' && alertCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ef4444] text-white text-[9px] font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ef4444] text-[#ffffff] text-[9px] font-bold flex items-center justify-center">
                 {alertCount > 9 ? '9+' : alertCount}
               </span>
             )}

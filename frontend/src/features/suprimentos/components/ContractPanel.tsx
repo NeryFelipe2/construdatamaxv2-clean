@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { useSuprimentosStore } from '@/store/suprimentosStore'
 import { useShallow } from 'zustand/react/shallow'
 import type { FrameworkAgreement } from '@/types'
-import { Copy, Check, ExternalLink, ChevronDown, ChevronUp, Pencil, X } from 'lucide-react'
+import { Copy, Check, ExternalLink, ChevronDown, ChevronUp, Pencil, X, Search } from 'lucide-react'
+import { buscarPrecosContrato, type PrecoContrato } from '@/hooks/usePrecosContrato'
 
 // ─── Copy button ──────────────────────────────────────────────────────────────
 
@@ -87,6 +88,30 @@ export function ContractPanel() {
   const [editData, setEditData]     = useState<FrameworkAgreement | null>(null)
 
   const selected = frameworkAgreements.find((fa) => fa.id === selectedId) ?? null
+
+  // Referência de preço do contrato (Sabesp) — busca real sob demanda, nunca
+  // um match automático: o usuário confirma se o item encontrado é o mesmo.
+  const [refQuery, setRefQuery]       = useState('')
+  const [refResults, setRefResults]   = useState<PrecoContrato[]>([])
+  const [refBuscando, setRefBuscando] = useState(false)
+  const [refBuscou, setRefBuscou]     = useState(false)
+
+  useEffect(() => {
+    setRefQuery(selected?.category ?? '')
+    setRefResults([])
+    setRefBuscou(false)
+  }, [selectedId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function buscarReferenciaContrato() {
+    if (refQuery.trim().length < 2) return
+    setRefBuscando(true)
+    setRefBuscou(true)
+    try {
+      setRefResults(await buscarPrecosContrato(refQuery))
+    } finally {
+      setRefBuscando(false)
+    }
+  }
 
   function startEdit() {
     if (!selected) return
@@ -399,6 +424,73 @@ export function ContractPanel() {
                     Volume máximo contratado: {display.maxQuantity.toLocaleString('pt-BR')} {display.unit}.
                   </p>
                 )
+              )}
+            </AccordionSection>
+
+            {/* Section 2.5: Referência de Preço do Contrato (Sabesp) — dado real */}
+            <AccordionSection title="Referência: Preço do Contrato (Sabesp)">
+              <p className="text-[#6b6b6b] text-xs mt-1 mb-2">
+                Compare o preço negociado com {display.supplier || 'o fornecedor'} ao valor que a WCR fatura à Sabesp pelo
+                mesmo serviço/material — catálogo oficial (tabela <span className="font-mono text-[#a3a3a3]">precos_contrato</span>, dado real, nunca inferido).
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  className={cn(inp, 'flex-1')}
+                  value={refQuery}
+                  onChange={(e) => setRefQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') buscarReferenciaContrato() }}
+                  placeholder="Buscar por código ou descrição no contrato oficial..."
+                />
+                <button
+                  onClick={buscarReferenciaContrato}
+                  disabled={refQuery.trim().length < 2 || refBuscando}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-semibold transition-colors disabled:opacity-40 shrink-0"
+                >
+                  <Search size={12} /> {refBuscando ? 'Buscando...' : 'Buscar'}
+                </button>
+              </div>
+
+              {!refBuscou && (
+                <p className="text-[#6b6b6b] text-xs">Digite ao menos 2 caracteres e busque no catálogo oficial do contrato.</p>
+              )}
+              {refBuscou && !refBuscando && refResults.length === 0 && (
+                <p className="text-amber-400 text-xs bg-amber-950/30 border border-amber-800/40 rounded-lg px-3 py-2">
+                  ⚠ Nenhum item encontrado no catálogo oficial para "{refQuery}". Sem dado real para esse termo.
+                </p>
+              )}
+              {refResults.length > 0 && (
+                <div className="overflow-x-auto"><table className="w-full text-xs mt-1">
+                  <thead>
+                    <tr className="text-[#6b6b6b] border-b border-[#525252]">
+                      <th className="text-left pb-2 font-medium">Código</th>
+                      <th className="text-left pb-2 font-medium">Descrição</th>
+                      <th className="text-left pb-2 font-medium">Un.</th>
+                      <th className="text-right pb-2 font-medium">Valor WCR (60%)</th>
+                      <th className="text-right pb-2 font-medium">Δ vs. Preço Acordado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {refResults.map((r) => {
+                      const delta = display.agreedUnitPrice > 0 ? r.valor_wcr - display.agreedUnitPrice : null
+                      return (
+                        <tr key={r.id} className="border-b border-[#525252] last:border-0">
+                          <td className="py-2 font-mono text-[#a3a3a3]">{r.codigo}</td>
+                          <td className="py-2 text-[#f5f5f5]">{r.descricao}</td>
+                          <td className="py-2 text-[#a3a3a3]">{r.unidade ?? '—'}</td>
+                          <td className="py-2 text-right tabular-nums text-[#f5f5f5]">
+                            {r.valor_wcr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                          </td>
+                          <td className={cn(
+                            'py-2 text-right tabular-nums font-medium',
+                            delta === null ? 'text-[#6b6b6b]' : delta >= 0 ? 'text-[#4ade80]' : 'text-[#f87171]',
+                          )}>
+                            {delta === null ? '—' : `${delta >= 0 ? '+' : ''}${delta.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table></div>
               )}
             </AccordionSection>
 
