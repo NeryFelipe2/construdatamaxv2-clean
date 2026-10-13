@@ -24,6 +24,13 @@ export function Rede360Header() {
 
   return (
     <div className="bg-[#0a1628] border-b border-[#525252] shrink-0">
+      {/* Demo-data banner: este módulo (Rede 360) veio de um template de rede elétrica
+          (circuitos, estações NWS, vegetation management) e ainda não tem fonte de dados
+          real da WCR — o fetchFromBackend fica desativado em modo demo (VITE_ENABLE_DEMO_DATA). */}
+      <div className="flex items-center gap-2 px-4 py-1 bg-amber-900/20 border-b border-amber-700/30 text-[10px] text-amber-300">
+        <AlertTriangle size={11} className="shrink-0" />
+        <span>DADOS DE DEMONSTRAÇÃO — sem fonte real conectada ainda (modelo de rede elétrica, não saneamento). Ativos/Ordens/Riscos abaixo estão vazios.</span>
+      </div>
       {/* Top row: brand + search + meta */}
       <div className="flex items-center gap-3 px-4 py-2 border-b border-[#525252]/50">
         <span className="text-[#f97316] font-bold text-sm tracking-wide whitespace-nowrap">Rede 360</span>

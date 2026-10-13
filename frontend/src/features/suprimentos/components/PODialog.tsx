@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { X, Plus, Trash2 } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
 import { useSuprimentosStore } from '@/store/suprimentosStore'
 import type { PurchaseOrder, POItem } from '@/types'
 
@@ -20,10 +21,12 @@ function emptyItem(): POItem {
 }
 
 export function PODialog({ po, onClose }: Props) {
-  const { addPO, updatePO } = useSuprimentosStore((s) => ({
-    addPO:    s.addPO,
-    updatePO: s.updatePO,
-  }))
+  const { addPO, updatePO } = useSuprimentosStore(
+    useShallow((s) => ({
+      addPO:    s.addPO,
+      updatePO: s.updatePO,
+    }))
+  )
 
   const [form, setForm] = useState({
     code:             po?.code             ?? `OC-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`,

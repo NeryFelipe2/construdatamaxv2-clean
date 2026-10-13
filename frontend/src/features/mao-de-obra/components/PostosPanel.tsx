@@ -38,8 +38,8 @@ function WorkPostDialog({ post, onClose, onSave }: WorkPostDialogProps) {
     onClose()
   }
 
-  const labelCls = 'block text-xs font-medium text-[var(--color-text-secondary)] mb-1'
-  const inputCls = 'w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]'
+  const labelCls = 'block text-xs font-medium text-[#a3a3a3] mb-1'
+  const inputCls = 'w-full px-3 py-2 rounded-lg border border-[#525252] bg-[#3d3d3d] text-[#f5f5f5] text-sm focus:outline-none focus:ring-2 focus:ring-[#f97316]'
   const errCls   = 'text-xs text-[#ef4444] mt-1'
 
   const shiftOptions: { value: WorkPost['shift']; label: string }[] = [
@@ -50,9 +50,9 @@ function WorkPostDialog({ post, onClose, onSave }: WorkPostDialogProps) {
   ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-6">
-        <h2 className="text-base font-bold text-[var(--color-text-primary)] mb-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-md bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-6">
+        <h2 className="text-base font-bold text-[#f5f5f5] mb-5">
           {post ? 'Editar Posto' : 'Novo Posto de Trabalho'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,11 +98,11 @@ function WorkPostDialog({ post, onClose, onSave }: WorkPostDialogProps) {
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+              className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">
               Cancelar
             </button>
             <button type="submit"
-              className="px-5 py-2 rounded-lg text-sm font-bold bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity">
+              className="px-5 py-2 rounded-lg text-sm font-bold bg-[#f97316] text-[#ffffff] hover:opacity-90 transition-opacity">
               Salvar
             </button>
           </div>
@@ -216,62 +216,62 @@ export function PostosPanel() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-3">
           {[
-            { label: 'Total de Postos', value: totalPosts,  color: 'text-[var(--color-text-primary)]' },
+            { label: 'Total de Postos', value: totalPosts,  color: 'text-[#f5f5f5]' },
             { label: 'Cobertos Hoje',   value: coveredToday,  color: 'text-[#22c55e]' },
-            { label: 'Descobertos',     value: uncoveredNow,  color: uncoveredNow > 0 ? 'text-[#ef4444]' : 'text-[var(--color-text-secondary)]' },
+            { label: 'Descobertos',     value: uncoveredNow,  color: uncoveredNow > 0 ? 'text-[#ef4444]' : 'text-[#a3a3a3]' },
           ].map(stat => (
             <div key={stat.label}
-              className="flex flex-col items-center px-4 py-2 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+              className="flex flex-col items-center px-4 py-2 rounded-xl bg-[#3d3d3d] border border-[#525252]">
               <span className={`text-xl font-bold ${stat.color}`}>{stat.value}</span>
-              <span className="text-xs text-[var(--color-text-muted)] whitespace-nowrap">{stat.label}</span>
+              <span className="text-xs text-[#6b6b6b] whitespace-nowrap">{stat.label}</span>
             </div>
           ))}
         </div>
         <button onClick={openNew}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
           <span className="text-lg leading-none">+</span> Novo Posto
         </button>
       </div>
 
       {/* Posts table */}
-      <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+      <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+              <tr className="border-b border-[#525252]/50">
                 {['Nome do Posto', 'Frente', 'Cargo', 'Mín. Trabalhadores', 'Turno', 'Ações'].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap">
+                  <th key={h} className="text-left text-[#a3a3a3] text-xs font-medium px-4 py-2 whitespace-nowrap">
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
+            <tbody className="divide-y divide-[#525252]/50">
               {workPosts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-[var(--color-text-muted)]">
+                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-[#6b6b6b]">
                     Nenhum posto cadastrado
                   </td>
                 </tr>
               ) : workPosts.map(post => (
-                <tr key={post.id} className="hover:bg-[var(--color-surface)] transition-colors">
-                  <td className="px-4 py-3 font-medium text-[var(--color-text-primary)]">{post.name}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">{post.workFront}</td>
-                  <td className="px-4 py-3 text-[var(--color-text-secondary)]">{post.role}</td>
+                <tr key={post.id} className="hover:bg-[#2c2c2c] transition-colors">
+                  <td className="px-4 py-3 font-medium text-[#f5f5f5]">{post.name}</td>
+                  <td className="px-4 py-3 text-[#a3a3a3]">{post.workFront}</td>
+                  <td className="px-4 py-3 text-[#a3a3a3]">{post.role}</td>
                   <td className="px-4 py-3 text-center">
-                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-bold text-xs">
+                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#f97316]/10 text-[#f97316] font-bold text-xs">
                       {post.minWorkers}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#2c2c2c] border border-[#525252] text-[#a3a3a3]">
                       {shiftLabel[post.shift]}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-2">
                       <button onClick={() => openEdit(post)}
-                        className="px-3 py-1 rounded-lg text-xs font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 transition-colors">
+                        className="px-3 py-1 rounded-lg text-xs font-medium bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/20 transition-colors">
                         Editar
                       </button>
                       <button onClick={() => setConfirmDelete(post.id)}
@@ -288,53 +288,53 @@ export function PostosPanel() {
       </div>
 
       {/* Coverage calendar */}
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--color-border)]">
-          <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Cobertura Semanal por Posto</h3>
+      <div className="rounded-2xl border border-[#525252] bg-[#3d3d3d] overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-[#525252]">
+          <h3 className="text-sm font-bold text-[#f5f5f5]">Cobertura Semanal por Posto</h3>
           <div className="flex items-center gap-2">
             <button onClick={() => setWeekOffset(w => w - 1)}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors">
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors">
               ‹
             </button>
-            <span className="text-xs text-[var(--color-text-secondary)] min-w-[120px] text-center">
+            <span className="text-xs text-[#a3a3a3] min-w-[120px] text-center">
               {formatDateShort(weekDates[0])} — {formatDateShort(weekDates[6])}
             </span>
             <button onClick={() => setWeekOffset(w => w + 1)}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-surface)] text-[var(--color-text-secondary)] transition-colors">
+              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#2c2c2c] text-[#a3a3a3] transition-colors">
               ›
             </button>
           </div>
         </div>
 
         {workPosts.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-[var(--color-text-muted)]">
+          <p className="px-5 py-8 text-center text-sm text-[#6b6b6b]">
             Cadastre postos para visualizar a cobertura
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-                  <th className="sticky left-0 z-10 bg-[var(--color-surface)] px-4 py-2 text-left font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider min-w-[180px]">
+                <tr className="border-b border-[#525252]/50">
+                  <th className="sticky left-0 z-10 bg-[#3d3d3d] px-4 py-2 text-left font-medium text-[#a3a3a3] min-w-[180px]">
                     Posto
                   </th>
                   {weekDates.map(date => {
                     const dow = new Date(date + 'T12:00:00').getDay()
                     const isSun = dow === 0
                     return (
-                      <th key={date} className={`px-2 py-2 text-center font-semibold ${isSun ? 'text-[#ef4444]/70' : 'text-[var(--color-text-secondary)]'} uppercase tracking-wider min-w-[80px]`}>
+                      <th key={date} className={`px-2 py-2 text-center font-medium ${isSun ? 'text-[#ef4444]/70' : 'text-[#a3a3a3]'}  min-w-[80px]`}>
                         {formatDateShort(date)}
                       </th>
                     )
                   })}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
+              <tbody className="divide-y divide-[#525252]/50">
                 {workPosts.map(post => (
-                  <tr key={post.id} className="hover:bg-[var(--color-surface)]/50 transition-colors">
-                    <td className="sticky left-0 z-10 bg-[var(--color-surface-elevated)] px-4 py-2 font-medium text-[var(--color-text-primary)]">
+                  <tr key={post.id} className="hover:bg-[#2c2c2c]/50 transition-colors">
+                    <td className="sticky left-0 z-10 bg-[#3d3d3d] px-4 py-2 font-medium text-[#f5f5f5]">
                       <div>{post.name}</div>
-                      <div className="text-[var(--color-text-muted)]">{post.workFront}</div>
+                      <div className="text-[#6b6b6b]">{post.workFront}</div>
                     </td>
                     {weekDates.map(date => {
                       const cell = coverageMatrix[post.id]?.[date]
@@ -345,7 +345,7 @@ export function PostosPanel() {
                       if (isSun) {
                         return (
                           <td key={date} className="px-2 py-2 text-center">
-                            <span className="text-[var(--color-text-muted)]">DSR</span>
+                            <span className="text-[#6b6b6b]">DSR</span>
                           </td>
                         )
                       }
@@ -378,7 +378,7 @@ export function PostosPanel() {
         )}
 
         {/* Legend */}
-        <div className="flex items-center gap-4 px-5 py-2 border-t border-[var(--color-border)]">
+        <div className="flex items-center gap-4 px-5 py-2 border-t border-[#525252]">
           {[
             { color: 'bg-[#22c55e]/15 text-[#22c55e]', label: 'Coberto' },
             { color: 'bg-[#f59e0b]/15 text-[#f59e0b]', label: 'Parcial' },
@@ -386,7 +386,7 @@ export function PostosPanel() {
           ].map(({ color, label }) => (
             <div key={label} className="flex items-center gap-1.5">
               <span className={`inline-block w-3 h-3 rounded ${color.split(' ')[0]}`} />
-              <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+              <span className="text-xs text-[#6b6b6b]">{label}</span>
             </div>
           ))}
         </div>
@@ -402,19 +402,19 @@ export function PostosPanel() {
       )}
 
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-[var(--color-surface-elevated)] rounded-2xl shadow-2xl p-6">
-            <h3 className="text-base font-bold text-[var(--color-text-primary)] mb-2">Remover Posto</h3>
-            <p className="text-sm text-[var(--color-text-secondary)] mb-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-sm bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl p-6">
+            <h3 className="text-base font-bold text-[#f5f5f5] mb-2">Remover Posto</h3>
+            <p className="text-sm text-[#a3a3a3] mb-5">
               Tem certeza que deseja remover este posto? Esta ação não pode ser desfeita.
             </p>
             <div className="flex justify-end gap-3">
               <button onClick={() => setConfirmDelete(null)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors">
+                className="px-4 py-2 rounded-lg text-sm font-medium text-[#a3a3a3] hover:bg-[#484848] transition-colors">
                 Cancelar
               </button>
               <button onClick={() => { removeWorkPost(confirmDelete); setConfirmDelete(null) }}
-                className="px-5 py-2 rounded-lg text-sm font-bold bg-[#ef4444] text-white hover:opacity-90 transition-opacity">
+                className="px-5 py-2 rounded-lg text-sm font-bold bg-[#ef4444] text-[#ffffff] hover:opacity-90 transition-opacity">
                 Remover
               </button>
             </div>

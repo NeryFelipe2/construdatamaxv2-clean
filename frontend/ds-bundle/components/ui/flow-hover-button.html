@@ -1,0 +1,54 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowHoverButton Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+    .flow-btn {
+      position: relative;
+      z-index: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      overflow: hidden;
+      padding: 0.625rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+    }
+    .flow-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      transform: translateX(150%) translateY(150%) scale(2.5);
+      border-radius: 100%;
+      transition: transform 0.7s;
+    }
+    .flow-btn:hover::before { transform: translateX(0%) translateY(0%); }
+    .flow-btn:active { transform: scale(0.95); }
+    .accent { border: 1px solid #2abfdc; color: #2abfdc; }
+    .accent::before { background: #2abfdc; }
+    .accent:hover { color: black; }
+    .white { border: 1px solid rgba(255,255,255,0.3); color: white; }
+    .white::before { background: white; }
+    .white:hover { color: black; }
+    .ghost { border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+    .ghost::before { background: rgba(255,255,255,0.1); }
+    .ghost:hover { color: white; border-color: rgba(255,255,255,0.3); }
+  </style>
+</head>
+<body>
+  <div class="flex flex-col gap-6 items-center">
+    <button class="flow-btn accent">→ Explore a Plataforma</button>
+    <button class="flow-btn white">→ Saiba Mais</button>
+    <button class="flow-btn ghost">→ Começar Agora</button>
+  </div>
+</body>
+</html>

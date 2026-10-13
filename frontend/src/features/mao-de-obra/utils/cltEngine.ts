@@ -242,6 +242,50 @@ export function validateDSR(workerShifts: Shift[], workerName: string, weekOf: s
   return violations
 }
 
+// ─── Prospective check (antes de salvar) ───────────────────────────────────────
+
+/**
+ * O que `checkNewBlockingViolations` resolve: `runAllCLTChecks` só roda DEPOIS
+ * do turno já ter sido salvo — nesse ponto o "bloqueante" já virou fato consumado,
+ * é só uma etiqueta vermelha na tela. Esta função roda o mesmo cálculo ANTES de
+ * salvar, comparando a escala do trabalhador com e sem o turno candidato, e
+ * devolve só as violações BLOQUEANTES que esse turno especificamente introduziria
+ * — não repete bloqueios que já existiam na escala antes desta edição.
+ *
+ * Ao editar um turno existente, `candidate.id` precisa ser o id real: é assim
+ * que a versão antiga dele é excluída do "antes" (senão ele contaria duas vezes).
+ */
+export function checkNewBlockingViolations(
+  candidate: Shift,
+  workers: Worker[],
+  allShifts: Shift[],
+  settings: CLTSettings,
+): CLTViolation[] {
+  const worker = workers.find((w) => w.id === candidate.workerId)
+  if (!worker) return []
+
+  const before = allShifts.filter((s) => s.workerId === candidate.workerId && s.id !== candidate.id)
+  const after  = [...before, candidate]
+
+  function blockingFor(workerShifts: Shift[]): CLTViolation[] {
+    const violations: CLTViolation[] = []
+    for (const shift of workerShifts) {
+      violations.push(...validateDailyHours(shift, worker!.name, settings))
+      violations.push(...validateBreaks(shift, worker!.name))
+    }
+    violations.push(...validateRestBetweenShifts(workerShifts, worker!.name, settings))
+    const weeks = new Set(workerShifts.map((s) => mondayOf(s.date)))
+    for (const weekStart of weeks) {
+      violations.push(...validateWeeklyHours(workerShifts, worker!.name, weekStart, settings))
+      violations.push(...validateDSR(workerShifts, worker!.name, weekStart))
+    }
+    return violations.filter((v) => v.severity === 'blocking')
+  }
+
+  const jaExistiam = new Set(blockingFor(before).map((v) => `${v.type}|${v.date}`))
+  return blockingFor(after).filter((v) => !jaExistiam.has(`${v.type}|${v.date}`))
+}
+
 // ─── Full check pass ──────────────────────────────────────────────────────────
 
 export function runAllCLTChecks(workers: Worker[], shifts: Shift[], settings: CLTSettings): CLTViolation[] {

@@ -259,9 +259,9 @@ export function ResumoPanel() {
 
       {/* Source distribution donut */}
       {currentItems.length > 0 && (() => {
-        const SOURCE_LABELS: Record<string, string> = { sinapi: 'SINAPI', seinfra: 'SEINFRA', custom: 'Personalizada', manual: 'Manual' }
-        const SOURCE_COLORS: Record<string, string> = { sinapi: '#38bdf8', seinfra: '#f97316', custom: '#a78bfa', manual: '#fb923c' }
-        const sources = ['sinapi', 'seinfra', 'custom', 'manual'] as const
+        const SOURCE_LABELS: Record<string, string> = { sinapi: 'SINAPI', seinfra: 'SEINFRA', custom: 'Personalizada', manual: 'Manual', contrato: 'Contrato (Sabesp)' }
+        const SOURCE_COLORS: Record<string, string> = { sinapi: '#38bdf8', seinfra: '#f97316', custom: '#a78bfa', manual: '#fb923c', contrato: '#fb7185' }
+        const sources = ['sinapi', 'seinfra', 'custom', 'manual', 'contrato'] as const
         const srcData = sources.map((src) => {
           const items = currentItems.filter((i) => i.source === src)
           const total = items.reduce((s, i) => s + i.totalCost, 0)

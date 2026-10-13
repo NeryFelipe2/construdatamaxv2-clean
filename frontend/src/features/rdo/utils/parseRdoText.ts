@@ -17,6 +17,11 @@
  *   Clima Noite: Limpo
  */
 import type { RdoEquipmentEntry, RdoServiceEntry, RdoTrechoEntry, RdoTrechoStatus } from '@/types'
+import {
+  parseApontamentoWcr as lerApontamentoWcr,
+  type ApontamentoWcr as ApontamentoWcrLido,
+} from './apontamentoWcr'
+import { hojeLocalISO } from '@/lib/utils'
 
 const NI = 'Não informado'
 
@@ -95,9 +100,168 @@ function parseCount(s: string): number {
   return m ? parseInt(m[1], 10) : 0
 }
 
+// ─── Modelo de APONTAMENTO DIÁRIO da obra ────────────────────────────────────
+//
+// É o formato que circula todo dia no grupo — escrito com HÍFEN, não com
+// dois-pontos, e com as siglas de água/esgoto uma por linha:
+//
+//   Produção - 03/10          ← isto é a DATA do apontamento
+//   Equipe - Juan
+//   Núcleo - Boi Malhado
+//   Imóvel - Travessa Vaness  ← pode repetir (a equipe roda várias ruas no dia)
+//
+//   SERVIÇO ÁGUA
+//   PRA - 48
+//   LA - 3
+//   ...
+//   obs: ...
+//
+// ⚠️ UM INTERPRETADOR SÓ (regra 8 do pacote RDO·FCP·Caixa): a leitura é a de
+// ./apontamentoWcr.ts — a mesma do painel RDO WCR. Este bloco só traduz o
+// resultado para o formato do RDO genérico. Antes havia aqui um segundo parser
+// que descartava sigla em branco e linha não reconhecida sem avisar.
+
+/**
+ * Grafias que a equipe usa e o interpretador do pacote não conhece. Reescritas ANTES da leitura,
+ * para a lista branca continuar sendo uma só: IHM → HM, C.UMA → Caixa UMA, INT → Interligação,
+ * C.INSP → CI, Líder/Encarregado → Equipe, Imóveis/Local/Endereço → Imóvel.
+ */
+const APELIDOS_WCR: Record<string, string> = {
+  ihm: 'HM', int: 'Interligação', 'c.uma': 'Caixa UMA', 'c uma': 'Caixa UMA', uma: 'Caixa UMA',
+  'c.insp': 'CI', 'c insp': 'CI', lider: 'Equipe', encarregado: 'Equipe',
+  imoveis: 'Imóvel', local: 'Imóvel', endereco: 'Imóvel',
+}
+
+/** Troca só a CHAVE da linha ("IHM - 2" → "HM - 2"), nunca o valor. */
+export function aplicarApelidosWcr(texto: string): string {
+  return texto.split(/\r?\n/).map((linha) => {
+    const m = linha.match(/^(\s*)([^:\-–—]+?)(\s*[:\-–—].*)$/)
+    if (!m) return linha
+    const canonica = APELIDOS_WCR[norm(m[2])]
+    return canonica ? `${m[1]}${canonica}${m[3]}` : linha
+  }).join('\n')
+}
+
+/** Rótulo e unidade no vocabulário que o RDO/Produção já usavam. */
+const ROTULO_RDO: Record<string, { rotulo: string; unidade: string }> = {
+  'PRA':          { rotulo: 'PRA — rede de água',                      unidade: 'm' },
+  'LA':           { rotulo: 'LA — ligação de água',                    unidade: 'un' },
+  'LIA':          { rotulo: 'LIA — ligação intradomiciliar de água',   unidade: 'un' },
+  'Caixa UMA':    { rotulo: 'C.UMA — caixa UMA',                       unidade: 'un' },
+  'HM':           { rotulo: 'IHM — hidrômetro',                        unidade: 'un' },
+  'Interligação': { rotulo: 'INT — interligação',                      unidade: 'un' },
+  'Válvula':      { rotulo: 'Válvula',                                 unidade: 'un' },
+  'PRE':          { rotulo: 'PRE — rede de esgoto',                    unidade: 'm' },
+  'LE':           { rotulo: 'LE — ligação de esgoto',                  unidade: 'un' },
+  'LIE':          { rotulo: 'LIE — ligação intradomiciliar de esgoto', unidade: 'un' },
+  'PV':           { rotulo: 'PV — poço de visita',                     unidade: 'un' },
+  'PI':           { rotulo: 'PI — poço de inspeção',                   unidade: 'un' },
+  'CI':           { rotulo: 'C.INSP — caixa de inspeção',              unidade: 'un' },
+}
+
+/**
+ * As siglas COM número viram serviços do RDO (rótulos do vocabulário da Produção). Sigla sem
+ * número fica de fora — não informado não é zero. Metros de rede voltam somados à parte.
+ */
+export function servicosDoApontamentoWcr(lido: Pick<ApontamentoWcrLido, 'linhas'>): {
+  services: Omit<RdoServiceEntry, 'id'>[]
+  metrosRede: number
+} {
+  const services: Omit<RdoServiceEntry, 'id'>[] = []
+  let metrosRede = 0
+  for (const l of lido.linhas) {
+    if (l.quantidade === undefined) continue
+    const r = ROTULO_RDO[l.sigla] ?? { rotulo: l.rotulo, unidade: l.unidade === 'M' ? 'm' : 'un' }
+    services.push({ description: r.rotulo, quantity: l.quantidade, unit: r.unidade })
+    if (l.unidade === 'M') metrosRede += l.quantidade
+  }
+  return { services, metrosRede }
+}
+
+export interface ApontamentoWcr {
+  date?: string
+  responsible: string
+  local: string
+  services: Omit<RdoServiceEntry, 'id'>[]
+  metrosRede: number
+  observations: string
+  /** A leitura completa (siglas sem número, ano deduzido, linhas não entendidas). */
+  lido: ApontamentoWcrLido
+}
+
+/**
+ * Lê o modelo de apontamento. Devolve null quando o texto NÃO é esse modelo —
+ * aí o parser genérico (Local:, Empreiteira:, Equipe rede:) continua valendo.
+ *
+ * Sigla SEM NÚMERO não vira serviço (não informado ≠ zero); um 0 ESCRITO vira serviço de
+ * quantidade 0. Linha que o interpretador não entendeu vai para as observações marcada
+ * "[não entendido]" — nunca some.
+ */
+export function parseApontamentoWcr(raw: string): ApontamentoWcr | null {
+  const lido = lerApontamentoWcr(aplicarApelidosWcr(raw), { hoje: hojeLocalISO() })
+
+  // É este modelo se tem ao menos duas siglas (mesmo em branco), ou uma sigla mais data/equipe/núcleo.
+  const pareceWcr = lido.linhas.length >= 2 ||
+    (lido.linhas.length >= 1 && !!(lido.data || lido.equipe || lido.nucleo))
+  if (!pareceWcr) return null
+
+  const { services, metrosRede } = servicosDoApontamentoWcr(lido)
+
+  const obs = (lido.observacoes ?? '')
+    .split('\n')
+    .filter((x) => !norm(x).startsWith('qualquer coisa fora da lista'))
+  const naoEntendidas = lido.naoEntendidas.map((x) => `[não entendido] ${x}`)
+
+  return {
+    date: lido.data,
+    responsible: lido.equipe ?? '',
+    local: [lido.imoveis.join(' · '), lido.nucleo ?? ''].filter(Boolean).join(' — '),
+    services,
+    metrosRede,
+    observations: [...obs, ...naoEntendidas].join('\n').trim(),
+    lido,
+  }
+}
+
 // ─── Main parser ──────────────────────────────────────────────────────────────
 
 export function parseRdoText(raw: string): ParsedRdoData {
+  // O modelo de apontamento da obra tem precedência: o parser genérico não sabe
+  // que "Produção - 03/10" é data nem que PRA/PRE são metros de rede.
+  const apontamento = parseApontamentoWcr(raw)
+  if (apontamento) {
+    return {
+      responsible: apontamento.responsible,
+      services: apontamento.services,
+      trechos: [],
+      equipment: [],
+      manpower: { foremanCount: 0, officialCount: 0, helperCount: 0, operatorCount: 0 },
+      employeeNames: apontamento.responsible ? apontamento.responsible.split(' / ') : [],
+      observations: apontamento.observations,
+      date: apontamento.date,
+      local: apontamento.local || NI,
+      gerenteContrato: NI,
+      tecnicoSeguranca: NI,
+      nomeEmpreiteira: NI,
+      servicoExecutar: apontamento.services.length
+        ? apontamento.services.map((s) => `${s.description} ${s.quantity}${s.unit}`).join(' · ')
+        : NI,
+      ocorrencias: apontamento.observations || NI,
+      funcionariosDiretos: 0,
+      funcionariosIndiretos: 0,
+      qtdEquipamentosFerramentas: 0,
+      numeroOS: NI,
+      numeroContrato: NI,
+      climaManha: NI,
+      climaTarde: NI,
+      climaNoite: NI,
+    }
+  }
+
+  return parseRdoTextGenerico(raw)
+}
+
+function parseRdoTextGenerico(raw: string): ParsedRdoData {
   const lines = raw.split('\n').map((l) => l.trim())
 
   const services:  Omit<RdoServiceEntry,   'id'>[] = []

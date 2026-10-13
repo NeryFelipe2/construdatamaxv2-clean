@@ -5,6 +5,7 @@
 import { useEffect } from 'react'
 import { TrendingUp, Activity, Target } from 'lucide-react'
 import { useOperacaoCampoStore } from '@/store/operacaoCampoStore'
+import { useAppModeStore } from '@/store/appModeStore'
 import { useShallow } from 'zustand/react/shallow'
 import type { TrendPoint, WeeklyPpcResult, NotableServiceCurve } from '@/types'
 
@@ -170,9 +171,10 @@ export function LpsPccPanel() {
       loadDemoData:         s.loadDemoData,
     }))
   )
+  const isDemoMode = useAppModeStore((s) => s.isDemoMode)
 
   useEffect(() => {
-    if (activities.length === 0) loadDemoData()
+    if (activities.length === 0 && isDemoMode) loadDemoData()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

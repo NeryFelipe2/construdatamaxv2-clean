@@ -1,21 +1,20 @@
 import { Link, useLocation } from 'react-router-dom'
 import {
-  ClipboardList, Calendar, Truck, Wrench, FolderKanban, Radio,
+  ClipboardList, Calendar, Wrench, FolderKanban, Radio,
   FileSearch, PackageSearch, Users, Cpu, LayoutDashboard,
 } from 'lucide-react'
 
 const ALL_MODULES = [
-  { label: 'Relatório 360',  icon: ClipboardList,  to: '/relatorio360'        },
-  { label: 'Agenda',         icon: Calendar,        to: '/agenda'              },
-  { label: 'Equipamentos',   icon: Truck,           to: '/equipamentos'        },
-  { label: 'Gest. Equip.',   icon: Wrench,          to: '/gestao-equipamentos' },
-  { label: 'Projetos',       icon: FolderKanban,    to: '/projetos'            },
-  { label: 'Torre Controle', icon: Radio,           to: '/torre-de-controle'   },
-  { label: 'Pré-Constr.',    icon: FileSearch,      to: '/pre-construcao'      },
-  { label: 'Suprimentos',    icon: PackageSearch,   to: '/suprimentos'         },
-  { label: 'Mão de Obra',    icon: Users,           to: '/mao-de-obra'         },
-  { label: 'Frota',          icon: Cpu,             to: '/otimizacao-frota'    },
-  { label: 'Gestão 360',     icon: LayoutDashboard, to: '/gestao-360'          },
+  { label: 'Relatório 360',  icon: ClipboardList,  to: '/app/relatorio360'        },
+  { label: 'Agenda',         icon: Calendar,        to: '/app/agenda'              },
+  { label: 'Gest. Equip.',   icon: Wrench,          to: '/app/gestao-equipamentos' },
+  { label: 'Projetos',       icon: FolderKanban,    to: '/app/projetos'            },
+  { label: 'Torre Controle', icon: Radio,           to: '/app/torre-de-controle'   },
+  { label: 'Pré-Constr.',    icon: FileSearch,      to: '/app/pre-construcao'      },
+  { label: 'Suprimentos',    icon: PackageSearch,   to: '/app/suprimentos'         },
+  { label: 'Mão de Obra',    icon: Users,           to: '/app/mao-de-obra'         },
+  { label: 'Frota',          icon: Cpu,             to: '/app/otimizacao-frota'    },
+  { label: 'Gestão 360',     icon: LayoutDashboard, to: '/app/gestao-360'          },
 ]
 
 interface Props {
@@ -26,8 +25,10 @@ interface Props {
 
 export function ModuleQuickLinks({ exclude = [], className }: Props) {
   const { pathname } = useLocation()
+  // Aceita exclude com ou sem o prefixo /app (call-sites antigos passam '/gestao-360')
+  const norm = (path: string) => (path.startsWith('/app/') ? path : `/app${path}`)
   const visible = ALL_MODULES.filter(
-    (m) => !exclude.includes(m.to) && m.to !== pathname
+    (m) => !exclude.some((e) => norm(e) === m.to) && m.to !== pathname
   )
 
   if (visible.length === 0) return null
@@ -42,7 +43,7 @@ export function ModuleQuickLinks({ exclude = [], className }: Props) {
           <Link
             key={m.to}
             to={m.to}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#20406a] text-[#6b6b6b] text-[11px] font-medium hover:border-[#2abfdc]/50 hover:text-[#2abfdc] transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#525252] text-[#6b6b6b] text-[11px] font-medium hover:border-[#f97316]/50 hover:text-[#f97316] transition-colors"
           >
             <m.icon size={11} />
             {m.label}

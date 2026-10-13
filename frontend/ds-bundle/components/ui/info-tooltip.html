@@ -1,0 +1,68 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfoTooltip Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+    .animate-in { animation: fadeIn 0.15s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+  <div class="space-y-6 max-w-md">
+    <div>
+      <label class="block text-xs font-semibold uppercase tracking-wider text-[#a3a3a3] mb-2">
+        Receita Bruta
+        <span class="relative inline-flex items-center ml-1 cursor-help">
+          <span class="text-[#5a8caa]/60 hover:text-[#2abfdc] transition-colors">?</span>
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[100] w-72 animate-in">
+            <div class="bg-[#1a2e4a] border border-[#2a4a6e] rounded-xl shadow-2xl shadow-black/40 overflow-hidden">
+              <div class="bg-[#0d2040] px-4 py-2.5 flex items-center gap-2 border-b border-[#2a4a6e]">
+                <span class="text-xs font-bold text-[#e4f2f8]">Receita Bruta</span>
+              </div>
+              <div class="px-4 py-3 space-y-2.5">
+                <p class="text-[11px] text-[#c8dce8] leading-relaxed">Total de medições aprovadas pela fiscalização no período.</p>
+                <div class="flex items-start gap-2 bg-yellow-500/5 border border-yellow-500/15 rounded-lg px-3 py-2">
+                  <span class="text-[9px] font-bold text-yellow-400">POR QUE IMPORTA</span>
+                  <p class="text-[10px] text-yellow-200/80 leading-relaxed">É o topo do funil financeiro.</p>
+                </div>
+                <div class="flex items-start gap-2 bg-cyan-500/5 border border-cyan-500/15 rounded-lg px-3 py-2">
+                  <span class="text-[9px] font-bold text-cyan-400">O QUE FAZER</span>
+                  <p class="text-[10px] text-cyan-200/80 leading-relaxed">Compare com o cronograma.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </span>
+      </label>
+      <div class="text-2xl font-bold font-mono text-[#22c55e]">R$ 2.580.000</div>
+    </div>
+
+    <div class="bg-[#112645] border border-[#20406a] rounded-xl p-4">
+      <h4 class="text-sm font-bold text-[#f5f5f5] mb-2">Tooltip Variants</h4>
+      <div class="flex flex-wrap gap-4">
+        <span class="relative inline-flex items-center">
+          <span class="text-[11px] text-[#a3a3a3]">Tooltip Top</span>
+          <span class="ml-1 text-[#5a8caa]/60 hover:text-[#2abfdc] cursor-help">?</span>
+        </span>
+        <span class="relative inline-flex items-center">
+          <span class="text-[11px] text-[#a3a3a3]">Tooltip Bottom</span>
+          <span class="ml-1 text-[#5a8caa]/60 hover:text-[#2abfdc] cursor-help">?</span>
+        </span>
+        <span class="relative inline-flex items-center">
+          <span class="text-[11px] text-[#a3a3a3]">Tooltip Left</span>
+          <span class="ml-1 text-[#5a8caa]/60 hover:text-[#2abfdc] cursor-help">?</span>
+        </span>
+        <span class="relative inline-flex items-center">
+          <span class="text-[11px] text-[#a3a3a3]">Tooltip Right</span>
+          <span class="ml-1 text-[#5a8caa]/60 hover:text-[#2abfdc] cursor-help">?</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

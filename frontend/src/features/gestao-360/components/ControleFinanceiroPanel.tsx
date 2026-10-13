@@ -1,11 +1,65 @@
 import { useSupabaseDre } from '@/lib/useSupabaseDre'
 import { apiProjetoControleFluxo, apiProjetoPreencherControleFluxo } from '@/lib/api'
 import { useProjectContext } from '@/store/projectContext'
+import { useAppModeStore } from '@/store/appModeStore'
 import {
   DollarSign, TrendingDown, TrendingUp, AlertTriangle,
   Activity, Calendar, FileText, PieChart, Loader2
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+
+function extrairValorMonetario(texto: string): number {
+  const match = texto.match(/R\$\s*([\d.,]+)/)
+  if (!match) return 0
+  const normalizado = match[1].replace(/\./g, '').replace(',', '.')
+  const valor = Number(normalizado)
+  return Number.isFinite(valor) ? valor : 0
+}
+
+function parseTextoFluxoLocal(texto: string) {
+  const linhas = texto.split('\n')
+  let custosProjetados = 0
+  let receitasPrevistas = 0
+  let lancamentos = 0
+  let secaoAtual: 'custos' | 'receitas' | null = null
+
+  for (const linhaRaw of linhas) {
+    const linha = linhaRaw.trim()
+    if (!linha) continue
+    const linhaLower = linha.toLowerCase()
+
+    if (linhaLower.startsWith('custos')) {
+      secaoAtual = 'custos'
+      continue
+    }
+    if (linhaLower.startsWith('medicao') || linhaLower.startsWith('medição') || linhaLower.startsWith('recebimento')) {
+      secaoAtual = 'receitas'
+      continue
+    }
+    if (linhaLower.startsWith('desvios')) {
+      secaoAtual = null
+      continue
+    }
+
+    if (linha.startsWith('-') && secaoAtual) {
+      const valor = extrairValorMonetario(linha)
+      if (valor > 0) {
+        if (secaoAtual === 'custos') custosProjetados += valor
+        else receitasPrevistas += valor
+        lancamentos += 1
+      }
+    }
+  }
+
+  return {
+    resumo: {
+      custos_projetados: custosProjetados,
+      receitas_previstas: receitasPrevistas,
+      saldo_projetado: receitasPrevistas - custosProjetados,
+      lancamentos,
+    },
+  }
+}
 
 export function ControleFinanceiroPanel() {
   const { activeProjectId } = useProjectContext()
@@ -19,6 +73,9 @@ export function ControleFinanceiroPanel() {
   const carregarFluxo = async () => {
     if (!activeProjectId) {
       setFluxo(null)
+      return
+    }
+    if (useAppModeStore.getState().isDemoMode) {
       return
     }
     try {
@@ -37,6 +94,18 @@ export function ControleFinanceiroPanel() {
   const salvarTextoFluxo = async () => {
     if (!activeProjectId || !textoFluxo.trim()) return
     setSalvandoFluxo(true)
+
+    if (useAppModeStore.getState().isDemoMode) {
+      try {
+        setFluxo(parseTextoFluxoLocal(textoFluxo))
+        setTextoFluxo('')
+        alert('Controle de obra e fluxo projetado preenchidos (dados locais - modo demo).')
+      } finally {
+        setSalvandoFluxo(false)
+      }
+      return
+    }
+
     try {
       const payload: any = await apiProjetoPreencherControleFluxo(activeProjectId, textoFluxo)
       setFluxo(payload.fluxo ?? null)

@@ -1,0 +1,13 @@
+      6 src/store/projectContext.ts: error TS2322
+      4 src/hooks/useUsuarios.ts: error TS2339
+      2 src/features/rdo/components/RdoCampoForm.tsx: error TS2339
+      2 src/features/meta-ligacoes/index.tsx: error TS2322
+      1 src/utils/parseApontamento.ts: error TS2339
+      1 src/store/mapaInterativoStore.ts: error TS2677
+      1 src/store/bimStore.ts: error TS2554
+      1 src/hooks/usePessoas.ts: error TS2352
+      1 src/hooks/useAgendaSupabase.ts: error TS2352
+      1 src/features/rdo/components/TextParseModal.tsx: error TS2554
+      1 src/features/rdo/components/RdoAutomaticoPanel.tsx: error TS2741
+      1 src/features/rdo/components/NovoRdoPanel.tsx: error TS2741
+      1 src/components/shared/Sidebar.tsx: error TS2339

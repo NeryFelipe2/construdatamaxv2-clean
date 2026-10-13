@@ -66,6 +66,13 @@ export function OperationalCyclePanel({ compact = false, showPlanningActions = f
 
   async function load() {
     if (!activeProjectId) return
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+      setLogs([])
+      setPlans([])
+      setDeviations([])
+      setReplans([])
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -75,7 +82,16 @@ export function OperationalCyclePanel({ compact = false, showPlanningActions = f
         apiProjetoDesvios(activeProjectId),
         apiProjetoReplanejamentos(activeProjectId),
       ])
-      setLogs(logRes.items ?? [])
+      // Não vaza ruído de infra pro usuário: logs que são só falha de
+      // conexão/plumbing do backend ML (Errno, "Resource temporarily
+      // unavailable", erro ao listar planejamentos) são filtrados — o operador
+      // não precisa ver traceback de backend no RDO. Só logs operacionais reais.
+      const RUIDO_BACKEND = /errno|resource temporarily unavailable|listar planejamentos|connection refused|tim-?out|traceback|502|503|econnrefused/i
+      const logsLimpos = (logRes.items ?? []).filter((l) => {
+        const msg = String((l as Record<string, unknown>).error_message ?? '')
+        return !RUIDO_BACKEND.test(msg)
+      })
+      setLogs(logsLimpos)
       setPlans(planRes.items ?? [])
       setDeviations(devRes.items ?? [])
       setReplans(replanRes.items ?? [])
@@ -88,6 +104,10 @@ export function OperationalCyclePanel({ compact = false, showPlanningActions = f
 
   async function recalcMl() {
     if (!activeProjectId) return
+    if (import.meta.env.VITE_ENABLE_DEMO_DATA === 'true') {
+      setError('ML indisponivel em modo demo.')
+      return
+    }
     setLoading(true)
     setError(null)
     try {

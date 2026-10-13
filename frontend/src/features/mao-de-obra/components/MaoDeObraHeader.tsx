@@ -1,10 +1,16 @@
+/**
+ * MaoDeObraHeader — top bar no molde EvmHeader (4 faixas: título, KPIs, abas).
+ * KPIs seguem o contrato de honestidade: `value: null` = insumo real ausente →
+ * mostra "—" cinza com a razão em `note`. Nunca exibe 0 fingindo dado calculado.
+ */
 import { useMemo } from 'react'
 import { useShallow } from 'zustand/react/shallow'
-import { Users, Clock, ShieldCheck, AlertTriangle, MapPin } from 'lucide-react'
-import { useMaoDeObraStore, type MaoDeObraTab } from '@/store/maoDeObraStore'
+import { Users } from 'lucide-react'
+import { useMaoDeObraStore } from '@/store/maoDeObraStore'
+import type { MaoDeObraTab } from '@/store/maoDeObraStore'
 import { cn } from '@/lib/utils'
 
-// Re-export so index.tsx can keep using this import path
+// Re-export so callers can keep using this import path
 export type { MaoDeObraTab } from '@/store/maoDeObraStore'
 
 const TABS: Array<{ id: MaoDeObraTab; label: string }> = [
@@ -23,19 +29,46 @@ const TABS: Array<{ id: MaoDeObraTab; label: string }> = [
   { id: 'seguranca',     label: 'Segurança'              },
 ]
 
-interface Props {
-  activeTab: MaoDeObraTab
-  onTabChange: (tab: MaoDeObraTab) => void
+/**
+ * KpiCard — aceita `value: null` = insumo real ausente: mostra "—" cinza
+ * (#6b6b6b) com a razão em `note`. Nunca exibe 0 fingindo dado calculado
+ * quando a fonte ainda não foi conectada.
+ */
+function KpiCard({
+  label,
+  value,
+  color,
+  note,
+}: {
+  label: string
+  value: string | null
+  color?: string
+  note?: string
+}) {
+  return (
+    <div className="bg-[#3d3d3d] border border-[#525252] rounded-xl p-4 min-w-[140px]" title={value == null ? note : undefined}>
+      <p className="text-[#a3a3a3] text-xs mb-1">{label}</p>
+      <p className="font-mono text-lg font-semibold" style={{ color: value == null ? '#6b6b6b' : color ?? '#f5f5f5' }}>
+        {value ?? '—'}
+      </p>
+      {value == null && note && (
+        <p className="text-[#6b6b6b] text-[9px] mt-0.5 leading-tight">{note}</p>
+      )}
+    </div>
+  )
 }
 
-export function MaoDeObraHeader({ activeTab, onTabChange }: Props) {
-  const { workers, shifts, absences, workPosts, violations } = useMaoDeObraStore(
+export function MaoDeObraHeader() {
+  const { activeTab, setActiveTab, workers, shifts, absences, workPosts, violations, cltSettings } = useMaoDeObraStore(
     useShallow((s) => ({
-      workers:    s.workers,
-      shifts:     s.shifts,
-      absences:   s.absences,
-      workPosts:  s.workPosts,
-      violations: s.violations,
+      activeTab:    s.activeTab,
+      setActiveTab: s.setActiveTab,
+      workers:      s.workers,
+      shifts:       s.shifts,
+      absences:     s.absences,
+      workPosts:    s.workPosts,
+      violations:   s.violations,
+      cltSettings:  s.cltSettings,
     }))
   )
 
@@ -69,92 +102,93 @@ export function MaoDeObraHeader({ activeTab, onTabChange }: Props) {
       return covered < p.minWorkers
     }).length
 
-    const cltViol = violations.length
+    // Contrato de honestidade: mock vazio → null (travessão + nota), não "0".
+    const semFonte    = workers.length === 0
+    const cltZerado   = cltSettings.maxDailyHours === 0 && cltSettings.maxWeeklyHours === 0
+    const cltViol     = violations.length
 
     return [
       {
         label: 'Colaboradores Ativos',
-        value: `${activeWorkers} / ${workers.length}`,
-        icon:  Users,
+        value: semFonte ? null : `${activeWorkers} / ${workers.length}`,
         color: '#3b82f6',
+        note:  'nenhum funcionário carregado — fonte real ainda não conectada',
       },
       {
         label: 'Faltas esta Semana',
-        value: String(faltasSemana),
-        icon:  AlertTriangle,
+        value: semFonte ? null : String(faltasSemana),
         color: faltasSemana === 0 ? '#22c55e' : faltasSemana <= 3 ? '#f59e0b' : '#ef4444',
+        note:  'sem apontamentos de ausência — fonte real ainda não conectada',
       },
       {
         label: 'HE esta Semana',
-        value: `${heHours.toFixed(1)}h`,
-        icon:  Clock,
+        value: semFonte ? null : `${heHours.toFixed(1)}h`,
         color: heHours === 0 ? '#22c55e' : heHours <= 20 ? '#f59e0b' : '#ef4444',
+        note:  'sem turnos lançados — fonte real ainda não conectada',
       },
       {
         label: 'Postos Descobertos',
-        value: String(postosDesc),
-        icon:  MapPin,
+        value: workPosts.length === 0 ? null : String(postosDesc),
         color: postosDesc === 0 ? '#22c55e' : '#ef4444',
+        note:  'nenhum posto de trabalho cadastrado',
       },
       {
         label: 'Violações CLT',
-        value: String(cltViol),
-        icon:  ShieldCheck,
+        value: cltZerado ? null : String(cltViol),
         color: cltViol === 0 ? '#22c55e' : cltViol <= 3 ? '#f59e0b' : '#ef4444',
+        note:  'parâmetros CLT não configurados',
       },
-    ] as const
-  }, [workers, shifts, absences, workPosts, violations])
+    ]
+  }, [workers, shifts, absences, workPosts, violations, cltSettings])
 
   return (
-    <div className="flex flex-col gap-4 px-6 pt-6 pb-0">
+    <div className="bg-[#2c2c2c] border-b border-[#525252] print:hidden">
       {/* Title row */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#f97316]/15">
-          <Users size={18} className="text-[#f97316]" />
-        </div>
-        <div>
-          <h1 className="text-[#f5f5f5] text-lg font-semibold leading-none">Mão de Obra</h1>
-          <p className="text-[#6b6b6b] text-xs mt-0.5">Gestão de equipes, frotas, ausências e folha de pagamento</p>
-        </div>
-      </div>
-
-      {/* KPI cards — 2 cols on mobile, 5 on xl */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
-        {kpis.map((kpi) => (
-          <div
-            key={kpi.label}
-            className="bg-[#3d3d3d] border border-[#525252] rounded-xl px-4 py-3 flex items-center gap-3"
-          >
-            <div
-              className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-              style={{ backgroundColor: `${kpi.color}18` }}
-            >
-              <kpi.icon size={16} style={{ color: kpi.color }} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[#6b6b6b] text-xs truncate">{kpi.label}</p>
-              <p className="text-[#f5f5f5] text-lg font-bold leading-tight">{kpi.value}</p>
-            </div>
+      <div className="px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#f97316]">
+            <Users size={20} className="text-[#ffffff]" />
           </div>
+          <div>
+            <h1 className="text-[#f5f5f5] font-semibold text-lg leading-tight">
+              Mão de Obra
+            </h1>
+            <p className="text-[#a3a3a3] text-xs">
+              Gestão de equipes, frotas, ausências e folha de pagamento
+              <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[10px] font-semibold bg-[#484848] text-[#a3a3a3]">Local</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* KPI cards */}
+      <div className="px-6 pb-4 flex gap-3 overflow-x-auto scrollbar-hide">
+        {kpis.map((kpi) => (
+          <KpiCard key={kpi.label} label={kpi.label} value={kpi.value} color={kpi.color} note={kpi.note} />
         ))}
       </div>
 
-      {/* Tab bar — scrollable */}
-      <div className="flex gap-1 border-b border-[#525252] -mb-px overflow-x-auto scrollbar-hide">
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={cn(
-              'px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap shrink-0',
-              activeTab === tab.id
-                ? 'border-[#f97316] text-[#f97316]'
-                : 'border-transparent text-[#6b6b6b] hover:text-[#f5f5f5]',
-            )}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Tab bar */}
+      <div className="overflow-x-auto scrollbar-hide">
+        <div className="flex px-6 gap-1 min-w-max pb-0">
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap border-b-2',
+                  isActive
+                    ? 'text-[#f5f5f5] border-orange-500 bg-[#3d3d3d]'
+                    : 'text-[#a3a3a3] border-transparent hover:text-[#f5f5f5] hover:bg-[#3d3d3d]/50',
+                )}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

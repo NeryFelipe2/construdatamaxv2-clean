@@ -11,6 +11,11 @@ import type {
   Requisition,
   RequisitionStatus,
   FrameworkAgreement,
+  DepositoVirtual,
+  ItemEstoque,
+  MovimentacaoEstoque,
+  ReservaMaterial,
+  LeadTimeRecord,
 } from '@/types'
 import {
   mockPurchaseOrders,
@@ -21,6 +26,11 @@ import {
   mockForecasts,
   mockRequisitions,
   mockFrameworkAgreements,
+  mockDepositos,
+  mockEstoqueItens,
+  mockMovimentacoes,
+  mockReservas,
+  mockLeadTimeRecords,
 } from '@/data/mockSuprimentos'
 
 // ─── Three-Way Match algorithm ────────────────────────────────────────────────
@@ -95,6 +105,31 @@ function runThreeWayMatch(
   return { status, discrepancies, matchedAt: new Date().toISOString() }
 }
 
+// ─── What-if Logístico ─────────────────────────────────────────────────────────
+
+export interface WhatIfItemInsuficiente {
+  itemId:        string
+  descricao:     string
+  qtdDisponivel: number
+  qtdNecessaria: number
+  deficit:       number
+  fornecedor?:   string
+  leadTimeDias?: number
+}
+
+export interface WhatIfResult {
+  resultado:          'viavel' | 'alerta' | 'inviavel'
+  mensagem:           string
+  itensInsuficientes: WhatIfItemInsuficiente[]
+}
+
+interface WhatIfParams {
+  activityId:     string
+  semanaOriginal: number
+  semanaSimulada: number
+  depositoId:     string
+}
+
 // ─── Store ────────────────────────────────────────────────────────────────────
 
 interface SuprimentosState {
@@ -106,6 +141,14 @@ interface SuprimentosState {
   forecasts:          DemandForecast[]
   requisitions:       Requisition[]
   frameworkAgreements: FrameworkAgreement[]
+
+  // Materiais & Estoque
+  depositos:          DepositoVirtual[]
+  estoqueItens:       ItemEstoque[]
+  movimentacoes:      MovimentacaoEstoque[]
+  reservas:           ReservaMaterial[]
+  leadTimeRecords:    LeadTimeRecord[]
+  selectedDepositoId: string | null
 
   // CRUD — POs
   addPO:    (po: PurchaseOrder) => void
@@ -129,7 +172,21 @@ interface SuprimentosState {
 
   // Requisitions
   addRequisition:           (req: Requisition)                  => void
+  updateRequisition:        (id: string, patch: Partial<Requisition>) => void
   advanceRequisitionStatus: (id: string)                        => void
+
+  // Framework Agreements
+  addFrameworkAgreement:    (fa: Omit<FrameworkAgreement, 'id'>) => void
+  updateFrameworkAgreement: (id: string, patch: Partial<FrameworkAgreement>) => void
+
+  // Materiais & Estoque — actions
+  setSelectedDeposito: (id: string) => void
+  addItemEstoque:      (item: Omit<ItemEstoque, 'id'>) => void
+  addMovimentacao:     (mov: Omit<MovimentacaoEstoque, 'id'>) => void
+  consumirMaterial:    (itemId: string, quantidade: number, extra?: Partial<MovimentacaoEstoque>) => void
+  calcSemaforo:        (depositoId: string, lpsActivityId: string, semana: number) => 'verde' | 'amarelo' | 'vermelho'
+  updateReserva:       (id: string, patch: Partial<ReservaMaterial>) => void
+  runWhatIf:           (params: WhatIfParams) => WhatIfResult
 
   // Demo mode
   loadDemoData: () => void
@@ -153,6 +210,13 @@ export const useSuprimentosStore = create<SuprimentosState>((set, get) => ({
   forecasts:           mockForecasts,
   requisitions:        mockRequisitions,
   frameworkAgreements: mockFrameworkAgreements,
+
+  depositos:           mockDepositos,
+  estoqueItens:        mockEstoqueItens,
+  movimentacoes:       mockMovimentacoes,
+  reservas:            mockReservas,
+  leadTimeRecords:     mockLeadTimeRecords,
+  selectedDepositoId:  null,
 
   addPO: (po) =>
     set((s) => ({ purchaseOrders: [...s.purchaseOrders, po] })),
@@ -224,6 +288,11 @@ export const useSuprimentosStore = create<SuprimentosState>((set, get) => ({
   addRequisition: (req) =>
     set((s) => ({ requisitions: [...s.requisitions, req] })),
 
+  updateRequisition: (id, patch) =>
+    set((s) => ({
+      requisitions: s.requisitions.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+    })),
+
   advanceRequisitionStatus: (id) =>
     set((s) => ({
       requisitions: s.requisitions.map((r) => {
@@ -233,6 +302,122 @@ export const useSuprimentosStore = create<SuprimentosState>((set, get) => ({
         return next ? { ...r, status: next } : r
       }),
     })),
+
+  addFrameworkAgreement: (fa) =>
+    set((s) => ({
+      frameworkAgreements: [...s.frameworkAgreements, { ...fa, id: `fa-${Date.now()}` }],
+    })),
+
+  updateFrameworkAgreement: (id, patch) =>
+    set((s) => ({
+      frameworkAgreements: s.frameworkAgreements.map((fa) => (fa.id === id ? { ...fa, ...patch } : fa)),
+    })),
+
+  setSelectedDeposito: (id) => set({ selectedDepositoId: id }),
+
+  addItemEstoque: (item) =>
+    set((s) => ({
+      estoqueItens: [...s.estoqueItens, { ...item, id: `ie-${Date.now()}` }],
+    })),
+
+  addMovimentacao: (mov) => {
+    set((s) => ({
+      movimentacoes: [...s.movimentacoes, { ...mov, id: `mov-${Date.now()}` }],
+    }))
+    if (mov.tipo === 'entrada') {
+      set((s) => ({
+        estoqueItens: s.estoqueItens.map((i) =>
+          i.id === mov.itemId ? { ...i, qtdDisponivel: i.qtdDisponivel + mov.quantidade } : i
+        ),
+      }))
+    }
+  },
+
+  consumirMaterial: (itemId, quantidade, extra) => {
+    set((s) => ({
+      estoqueItens: s.estoqueItens.map((i) =>
+        i.id === itemId ? { ...i, qtdDisponivel: Math.max(0, i.qtdDisponivel - quantidade) } : i
+      ),
+    }))
+    const item = get().estoqueItens.find((i) => i.id === itemId)
+    if (item) {
+      set((s) => ({
+        movimentacoes: [
+          ...s.movimentacoes,
+          {
+            id:            `mov-${Date.now()}`,
+            itemId,
+            depositoId:    item.depositoId,
+            tipo:          'saida',
+            quantidade,
+            dataMovimento: new Date().toISOString().slice(0, 10),
+            ...extra,
+          },
+        ],
+      }))
+    }
+  },
+
+  calcSemaforo: (depositoId, lpsActivityId, semana) => {
+    const { reservas, estoqueItens } = get()
+    const reserva = reservas.find(
+      (r) => r.depositoId === depositoId && r.lpsActivityId === lpsActivityId && r.semana === semana
+    )
+    if (!reserva) return 'verde'
+    const item = estoqueItens.find((i) => i.id === reserva.itemId)
+    if (!item) return reserva.status
+    if (item.qtdDisponivel >= reserva.qtdNecessaria) return 'verde'
+    if (item.qtdTransito > 0) return 'amarelo'
+    return 'vermelho'
+  },
+
+  updateReserva: (id, patch) =>
+    set((s) => ({
+      reservas: s.reservas.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+    })),
+
+  runWhatIf: ({ activityId, depositoId }) => {
+    const { reservas, estoqueItens, leadTimeRecords } = get()
+    const itensDaAtividade = reservas.filter(
+      (r) => r.depositoId === depositoId && r.lpsActivityId === activityId
+    )
+
+    const itensInsuficientes: WhatIfItemInsuficiente[] = []
+    for (const r of itensDaAtividade) {
+      const item = estoqueItens.find((i) => i.id === r.itemId)
+      if (!item) continue
+      const deficit = r.qtdNecessaria - item.qtdDisponivel
+      if (deficit > 0) {
+        const lt = leadTimeRecords.find((l) => l.fornecedor === item.fornecedorPrincipal)
+        itensInsuficientes.push({
+          itemId:        item.id,
+          descricao:     item.descricao,
+          qtdDisponivel: item.qtdDisponivel,
+          qtdNecessaria: r.qtdNecessaria,
+          deficit,
+          fornecedor:    item.fornecedorPrincipal,
+          leadTimeDias:  lt?.leadTimeDias,
+        })
+      }
+    }
+
+    if (itensInsuficientes.length === 0) {
+      return {
+        resultado: 'viavel',
+        mensagem:  'Cenário viável — estoque suficiente para a nova data.',
+        itensInsuficientes: [],
+      }
+    }
+
+    const critico = itensInsuficientes.some((i) => (i.leadTimeDias ?? 0) > 7)
+    return {
+      resultado: critico ? 'inviavel' : 'alerta',
+      mensagem:  critico
+        ? 'Cenário inviável — déficit de materiais com lead time alto.'
+        : 'Cenário com alerta — déficit de materiais a resolver antes da data simulada.',
+      itensInsuficientes,
+    }
+  },
 
   loadDemoData: () =>
     set({
@@ -244,6 +429,11 @@ export const useSuprimentosStore = create<SuprimentosState>((set, get) => ({
       forecasts:           mockForecasts,
       requisitions:        mockRequisitions,
       frameworkAgreements: mockFrameworkAgreements,
+      depositos:           mockDepositos,
+      estoqueItens:        mockEstoqueItens,
+      movimentacoes:       mockMovimentacoes,
+      reservas:            mockReservas,
+      leadTimeRecords:     mockLeadTimeRecords,
     }),
 
   clearData: () =>
@@ -256,5 +446,11 @@ export const useSuprimentosStore = create<SuprimentosState>((set, get) => ({
       forecasts:           [],
       requisitions:        [],
       frameworkAgreements: [],
+      depositos:           [],
+      estoqueItens:        [],
+      movimentacoes:       [],
+      reservas:            [],
+      leadTimeRecords:     [],
+      selectedDepositoId:  null,
     }),
 }))

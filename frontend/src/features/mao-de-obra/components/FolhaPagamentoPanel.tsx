@@ -28,46 +28,46 @@ function downloadCSV(content: string, filename: string) {
 
 function PayslipExpanded({ payslip }: { payslip: WorkerPayslip }) {
   return (
-    <tr className="bg-[var(--color-surface)]">
+    <tr className="bg-[#2c2c2c]">
       <td colSpan={9} className="px-4 py-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Allowances */}
           <div>
-            <p className="text-xs font-bold text-[var(--color-text-secondary)] uppercase mb-2">Proventos</p>
+            <p className="text-xs font-bold text-[#a3a3a3] uppercase mb-2">Proventos</p>
             <div className="space-y-1.5">
               <div className="flex justify-between text-sm">
-                <span className="text-[var(--color-text-secondary)]">Salário Base ({payslip.hoursWorked - payslip.overtimeHours}h)</span>
-                <span className="text-[var(--color-text-primary)] font-medium">{fmt(payslip.baseSalary)}</span>
+                <span className="text-[#a3a3a3]">Salário Base ({payslip.hoursWorked - payslip.overtimeHours}h)</span>
+                <span className="text-[#f5f5f5] font-medium">{fmt(payslip.baseSalary)}</span>
               </div>
               {payslip.allowances.map((a, i) => (
                 <div key={i} className="flex justify-between text-sm">
-                  <span className="text-[var(--color-text-secondary)]">{a.description}</span>
+                  <span className="text-[#a3a3a3]">{a.description}</span>
                   <span className="text-[#22c55e] font-medium">+ {fmt(a.amount)}</span>
                 </div>
               ))}
-              <div className="flex justify-between text-sm font-bold border-t border-[var(--color-border)] pt-1.5 mt-1.5">
-                <span className="text-[var(--color-text-primary)]">Total Bruto</span>
-                <span className="text-[var(--color-text-primary)]">{fmt(payslip.grossTotal)}</span>
+              <div className="flex justify-between text-sm font-bold border-t border-[#525252] pt-1.5 mt-1.5">
+                <span className="text-[#f5f5f5]">Total Bruto</span>
+                <span className="text-[#f5f5f5]">{fmt(payslip.grossTotal)}</span>
               </div>
             </div>
           </div>
 
           {/* Deductions */}
           <div>
-            <p className="text-xs font-bold text-[var(--color-text-secondary)] uppercase mb-2">Deduções</p>
+            <p className="text-xs font-bold text-[#a3a3a3] uppercase mb-2">Deduções</p>
             <div className="space-y-1.5">
               {payslip.deductions.map((d, i) => (
                 <div key={i} className="flex justify-between text-sm">
-                  <span className={`${d.workerPays ? 'text-[var(--color-text-secondary)]' : 'text-[var(--color-text-muted)] italic'}`}>
+                  <span className={`${d.workerPays ? 'text-[#a3a3a3]' : 'text-[#6b6b6b] italic'}`}>
                     {d.description}{!d.workerPays ? ' (empregador)' : ''}
                   </span>
-                  <span className={`font-medium ${d.workerPays ? 'text-[#ef4444]' : 'text-[var(--color-text-muted)]'}`}>
+                  <span className={`font-medium ${d.workerPays ? 'text-[#ef4444]' : 'text-[#6b6b6b]'}`}>
                     {d.workerPays ? '- ' : ''}{fmt(d.amount)}
                   </span>
                 </div>
               ))}
-              <div className="flex justify-between text-sm font-bold border-t border-[var(--color-border)] pt-1.5 mt-1.5">
-                <span className="text-[var(--color-text-primary)]">Salário Líquido</span>
+              <div className="flex justify-between text-sm font-bold border-t border-[#525252] pt-1.5 mt-1.5">
+                <span className="text-[#f5f5f5]">Salário Líquido</span>
                 <span className="text-[#22c55e]">{fmt(payslip.netTotal)}</span>
               </div>
             </div>
@@ -75,7 +75,7 @@ function PayslipExpanded({ payslip }: { payslip: WorkerPayslip }) {
         </div>
 
         {/* Summary */}
-        <div className="flex flex-wrap gap-4 mt-4 pt-3 border-t border-[var(--color-border)]">
+        <div className="flex flex-wrap gap-4 mt-4 pt-3 border-t border-[#525252]">
           {[
             { label: 'Dias Úteis',    value: payslip.workingDays },
             { label: 'H. Regulares', value: `${(payslip.hoursWorked - payslip.overtimeHours).toFixed(1)}h` },
@@ -84,8 +84,8 @@ function PayslipExpanded({ payslip }: { payslip: WorkerPayslip }) {
             { label: 'Custo Empresa', value: fmt(payslip.employerCost) },
           ].map(item => (
             <div key={item.label} className="flex flex-col">
-              <span className="text-xs text-[var(--color-text-muted)]">{item.label}</span>
-              <span className="text-sm font-semibold text-[var(--color-text-primary)]">{item.value}</span>
+              <span className="text-xs text-[#6b6b6b]">{item.label}</span>
+              <span className="text-sm font-semibold text-[#f5f5f5]">{item.value}</span>
             </div>
           ))}
         </div>
@@ -163,30 +163,30 @@ export function FolhaPagamentoPanel() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <button onClick={prevMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors text-lg">
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#3d3d3d] border border-[#525252] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors text-lg">
             ‹
           </button>
-          <span className="min-w-[160px] text-center text-sm font-semibold text-[var(--color-text-primary)] capitalize">
+          <span className="min-w-[160px] text-center text-sm font-semibold text-[#f5f5f5] capitalize">
             {monthLabel}
           </span>
           <button onClick={nextMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)] transition-colors text-lg">
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#3d3d3d] border border-[#525252] text-[#a3a3a3] hover:bg-[#2c2c2c] transition-colors text-lg">
             ›
           </button>
         </div>
         <div className="flex gap-2">
           <button onClick={() => generatePayroll(yearMonth)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--color-accent)] text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
             Gerar Folha
           </button>
           {currentPayroll && (
             <>
               <button onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] text-sm font-medium hover:bg-[var(--color-surface)] transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] text-sm font-medium hover:bg-[#2c2c2c] transition-colors">
                 Exportar CSV
               </button>
               <button onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] text-sm font-medium hover:bg-[var(--color-surface)] transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#525252] bg-[#3d3d3d] text-[#a3a3a3] text-sm font-medium hover:bg-[#2c2c2c] transition-colors">
                 <Printer size={14} /> PDF
               </button>
             </>
@@ -195,12 +195,12 @@ export function FolhaPagamentoPanel() {
       </div>
 
       {!currentPayroll ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl border border-dashed border-[var(--color-border)]">
-          <p className="text-[var(--color-text-muted)] text-sm mb-4">
+        <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl border border-dashed border-[#525252]">
+          <p className="text-[#6b6b6b] text-sm mb-4">
             Nenhuma folha gerada para {monthLabel}
           </p>
           <button onClick={() => generatePayroll(yearMonth)}
-            className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-white text-sm font-semibold hover:opacity-90 transition-opacity">
+            className="px-5 py-2 rounded-xl bg-[#f97316] text-[#ffffff] text-sm font-semibold hover:opacity-90 transition-opacity">
             Gerar Folha Agora
           </button>
         </div>
@@ -211,25 +211,25 @@ export function FolhaPagamentoPanel() {
             {[
               { label: 'Custo Total Empresa', value: fmt(currentPayroll.totalEmployerCost), color: 'text-[#ef4444]' },
               { label: 'Total Líquido',        value: fmt(currentPayroll.totalNet),          color: 'text-[#22c55e]' },
-              { label: 'Total Bruto',          value: fmt(currentPayroll.totalGross),        color: 'text-[var(--color-accent)]' },
-              { label: 'Colaboradores',        value: currentPayroll.headcount,              color: 'text-[var(--color-text-primary)]' },
+              { label: 'Total Bruto',          value: fmt(currentPayroll.totalGross),        color: 'text-[#f97316]' },
+              { label: 'Colaboradores',        value: currentPayroll.headcount,              color: 'text-[#f5f5f5]' },
             ].map(card => (
               <div key={card.label}
-                className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+                className="flex flex-col items-center py-3 px-2 rounded-2xl bg-[#3d3d3d] border border-[#525252]">
                 <span className={`text-base font-bold ${card.color}`}>{card.value}</span>
-                <span className="text-xs text-[var(--color-text-muted)] text-center mt-0.5">{card.label}</span>
+                <span className="text-xs text-[#6b6b6b] text-center mt-0.5">{card.label}</span>
               </div>
             ))}
           </div>
 
           {/* Payslip table */}
-          <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-elevated)]">
+          <div className="rounded-2xl border border-[#525252] overflow-hidden bg-[#3d3d3d]">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+                  <tr className="border-b border-[#525252]/50">
                     {['', 'Colaborador', 'Cargo', 'H. Trab.', 'Base Bruto', 'Descontos', 'Líquido', 'Custo Empresa', ''].map((h, i) => (
-                      <th key={i} className="text-left px-3 py-3 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider whitespace-nowrap">
+                      <th key={i} className="text-left text-[#a3a3a3] text-xs font-medium px-3 py-2 whitespace-nowrap">
                         {h}
                       </th>
                     ))}
@@ -247,18 +247,18 @@ export function FolhaPagamentoPanel() {
                     return (
                       <>
                         <tr key={payslip.id}
-                          className="border-b border-[var(--color-border)] hover:bg-[var(--color-surface)] transition-colors cursor-pointer"
+                          className="border-b border-[#525252] hover:bg-[#2c2c2c] transition-colors cursor-pointer"
                           onClick={() => toggleExpand(payslip.id)}>
-                          <td className="px-3 py-3 text-[var(--color-text-muted)] text-xs">
+                          <td className="px-3 py-3 text-[#6b6b6b] text-xs">
                             <span className="select-none">{expanded ? '▼' : '▶'}</span>
                           </td>
-                          <td className="px-3 py-3 font-medium text-[var(--color-text-primary)] whitespace-nowrap">{name}</td>
-                          <td className="px-3 py-3 text-[var(--color-text-secondary)] text-xs max-w-[120px] truncate">{role}</td>
-                          <td className="px-3 py-3 text-[var(--color-text-secondary)]">{payslip.hoursWorked.toFixed(1)}h</td>
-                          <td className="px-3 py-3 text-[var(--color-text-primary)]">{fmt(payslip.baseSalary)}</td>
+                          <td className="px-3 py-3 font-medium text-[#f5f5f5] whitespace-nowrap">{name}</td>
+                          <td className="px-3 py-3 text-[#a3a3a3] text-xs max-w-[120px] truncate">{role}</td>
+                          <td className="px-3 py-3 text-[#a3a3a3]">{payslip.hoursWorked.toFixed(1)}h</td>
+                          <td className="px-3 py-3 text-[#f5f5f5]">{fmt(payslip.baseSalary)}</td>
                           <td className="px-3 py-3 text-[#ef4444]">- {fmt(workerDed)}</td>
                           <td className="px-3 py-3 font-semibold text-[#22c55e]">{fmt(payslip.netTotal)}</td>
-                          <td className="px-3 py-3 font-semibold text-[var(--color-text-primary)]">{fmt(payslip.employerCost)}</td>
+                          <td className="px-3 py-3 font-semibold text-[#f5f5f5]">{fmt(payslip.employerCost)}</td>
                           <td className="px-3 py-3" />
                         </tr>
                         {expanded && <PayslipExpanded payslip={payslip} />}
@@ -266,17 +266,17 @@ export function FolhaPagamentoPanel() {
                     )
                   })}
                 </tbody>
-                <tfoot className="border-t-2 border-[var(--color-border)]">
-                  <tr className="bg-[var(--color-surface)]">
-                    <td colSpan={4} className="px-3 py-3 font-bold text-[var(--color-text-primary)]">Total</td>
-                    <td className="px-3 py-3 font-bold text-[var(--color-text-primary)]">
+                <tfoot className="border-t-2 border-[#525252]">
+                  <tr className="bg-[#2c2c2c]">
+                    <td colSpan={4} className="px-3 py-3 font-bold text-[#f5f5f5]">Total</td>
+                    <td className="px-3 py-3 font-bold text-[#f5f5f5]">
                       {fmt(currentPayroll.payslips.reduce((s, p) => s + p.baseSalary, 0))}
                     </td>
                     <td className="px-3 py-3 font-bold text-[#ef4444]">
                       - {fmt(currentPayroll.payslips.reduce((s, p) => s + p.deductions.filter(d => d.workerPays).reduce((a, d) => a + d.amount, 0), 0))}
                     </td>
                     <td className="px-3 py-3 font-bold text-[#22c55e]">{fmt(currentPayroll.totalNet)}</td>
-                    <td className="px-3 py-3 font-bold text-[var(--color-text-primary)]">{fmt(currentPayroll.totalEmployerCost)}</td>
+                    <td className="px-3 py-3 font-bold text-[#f5f5f5]">{fmt(currentPayroll.totalEmployerCost)}</td>
                     <td />
                   </tr>
                 </tfoot>
@@ -284,7 +284,7 @@ export function FolhaPagamentoPanel() {
             </div>
           </div>
 
-          <p className="text-xs text-[var(--color-text-muted)]">
+          <p className="text-xs text-[#6b6b6b]">
             Gerado em {new Date(currentPayroll.payslips[0]?.generatedAt ?? '').toLocaleString('pt-BR')}.
             Clique em uma linha para expandir o detalhamento. Valores calculados com tabelas INSS/IRRF 2025.
           </p>

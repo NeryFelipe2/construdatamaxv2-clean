@@ -1,0 +1,65 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuidedTour Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+    .animate-in { animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"></div>
+
+  <!-- Tour Overlay -->
+  <div class="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+    <div class="pointer-events-auto w-[440px] max-w-[90vw] bg-[#112645] border border-[#2a4a6e] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden animate-in">
+      <!-- Progress bar -->
+      <div class="h-1 bg-[#0d2040]">
+        <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300" style="width: 40%"></div>
+      </div>
+
+      <!-- Header -->
+      <div class="px-5 py-3 border-b border-[#20406a] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-400">🎓</div>
+        <div class="flex-1">
+          <h3 class="text-sm font-bold text-[#e4f2f8]">💰 Receita Bruta</h3>
+          <span class="text-[10px] text-[#5a8caa]">Passo 2 de 5</span>
+        </div>
+        <button class="text-[#5a8caa] hover:text-white">✕</button>
+      </div>
+
+      <!-- Content -->
+      <div class="px-5 py-4 space-y-3">
+        <p class="text-xs text-[#c8dce8] leading-relaxed">Total de medições aprovadas pela fiscalização. É o dinheiro que o cliente aceita pagar.</p>
+        <div class="flex items-start gap-2 bg-purple-500/8 border border-purple-500/15 rounded-lg px-3 py-2.5">
+          <span class="text-purple-400 shrink-0">💡</span>
+          <p class="text-[11px] text-purple-200/80 leading-relaxed">A plataforma confere automaticamente medição × contrato. Zero supramedição.</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-5 py-3 bg-[#0d2040] border-t border-[#20406a] flex items-center gap-2">
+        <button class="text-[10px] text-[#5a8caa] hover:text-white px-2 py-1.5">⏭ Pular</button>
+        <div class="flex-1"></div>
+        <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[#8fb3c8] hover:text-white bg-[#14294e]">← Anterior</button>
+        <button class="flex items-center gap-1 px-4 py-1.5 rounded-lg text-[11px] font-bold text-white bg-gradient-to-r from-purple-600 to-cyan-500">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sample page content behind -->
+  <div class="max-w-md mx-auto mt-8 opacity-50">
+    <div class="bg-[#112645] border border-[#20406a] rounded-xl p-4">
+      <h3 class="text-sm font-bold text-[#2abfdc] mb-2">DRE Financeiro</h3>
+      <p class="text-xs text-[#a3a3a3]">Visão geral do demonstrativo</p>
+    </div>
+  </div>
+</body>
+</html>

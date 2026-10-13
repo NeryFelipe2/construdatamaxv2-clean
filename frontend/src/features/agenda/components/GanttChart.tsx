@@ -3,6 +3,7 @@ import { useAgendaStore, getTasksForResource } from '@/store/agendaStore'
 import { SIDEBAR_W, HEADER_H, ROW_HEIGHT, getTodayOffset, getViewParams } from '../utils'
 import { GanttTimeHeader } from './GanttTimeHeader'
 import { GanttRow } from './GanttRow'
+import { DependencyArrows } from './DependencyArrows'
 
 interface GanttChartProps {
   filteredResourceIds: string[]
@@ -17,6 +18,14 @@ export function GanttChart({ filteredResourceIds }: GanttChartProps) {
     () => resources.filter((r) => filteredResourceIds.includes(r.id)),
     [resources, filteredResourceIds]
   )
+
+  // Índice da linha por recurso — usado pelo overlay de setas de dependência
+  // pra converter resourceId → posição vertical (mesma ordem do map de rows).
+  const rowIndexByResource = useMemo(() => {
+    const map: Record<string, number> = {}
+    visibleResources.forEach((r, i) => { map[r.id] = i })
+    return map
+  }, [visibleResources])
 
   const todayOffset = useMemo(
     () => getTodayOffset(viewStart, visibleWeeks, viewParams.pixelsPerDay),
@@ -74,6 +83,19 @@ export function GanttChart({ filteredResourceIds }: GanttChartProps) {
             >
               Nenhum recurso encontrado
             </div>
+          )}
+
+          {/* Setas de dependência (fim→início) — overlay sem pointer events */}
+          {visibleResources.length > 0 && (
+            <DependencyArrows
+              tasks={tasks}
+              rowIndexByResource={rowIndexByResource}
+              viewStart={viewStart}
+              visibleWeeks={visibleWeeks}
+              pixelsPerDay={viewParams.pixelsPerDay}
+              width={totalWidth}
+              height={totalHeight}
+            />
           )}
 
           {/* Today indicator */}

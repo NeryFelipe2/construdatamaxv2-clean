@@ -1,0 +1,46 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="space-y-6 max-w-md">
+    <div class="rounded-xl border border-[#20406a] bg-[#112645] shadow-sm p-6">
+      <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#f5f5f5] mb-1.5">Card Title</h3>
+      <p class="text-sm text-[#a3a3a3] mb-4">Card description goes here.</p>
+      <div class="p-6 pt-0">
+        <p class="text-[#c8dce8] text-sm">Card content area with additional information.</p>
+      </div>
+      <div class="flex items-center p-6 pt-0 gap-4">
+        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-[#2abfdc] text-black h-9 px-4 py-2">Action</button>
+        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-[#20406a] bg-transparent text-[#a3a3a3] hover:bg-[#1a3662] h-9 px-4 py-2">Cancel</button>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-[#20406a] bg-[#112645] shadow-sm p-6">
+      <div class="flex flex-col space-y-1.5 mb-4">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#2abfdc]">Label</span>
+        <h3 class="text-xl font-semibold text-[#f5f5f5]">Estatísticas</h3>
+        <p class="text-sm text-[#a3a3a3]">Visão geral do projeto</p>
+      </div>
+      <div class="p-6 pt-0 space-y-3">
+        <div class="flex justify-between">
+          <span class="text-sm text-[#a3a3a3]">Receita</span>
+          <span class="text-sm font-mono font-bold text-[#22c55e]">R$ 2.5M</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-[#a3a3a3]">Custo</span>
+          <span class="text-sm font-mono font-bold text-[#ef4444]">R$ 1.8M</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

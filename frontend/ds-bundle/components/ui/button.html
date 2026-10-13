@@ -1,0 +1,53 @@
+<!-- @dsCard group="UI" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="space-y-4">
+    <h2 class="text-xl font-bold text-cyan-400 mb-4">Button - Variants</h2>
+
+    <div class="flex flex-wrap gap-3">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#2abfdc] text-black shadow-sm hover:bg-[#1a9ab8] h-9 px-4 py-2">
+        Default
+      </button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors bg-red-600 text-white shadow-sm hover:bg-red-500 h-9 px-4 py-2">
+        Destructive
+      </button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors border border-[#20406a] bg-transparent text-[#a3a3a3] hover:bg-[#1a3662] hover:text-[#f5f5f5] h-9 px-4 py-2">
+        Outline
+      </button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors bg-[#1a3662] text-[#f5f5f5] shadow-sm hover:bg-[#20406a] h-9 px-4 py-2">
+        Secondary
+      </button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors hover:bg-[#1a3662] text-[#a3a3a3] hover:text-[#f5f5f5] h-9 px-4 py-2">
+        Ghost
+      </button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors text-[#2abfdc] underline-offset-4 hover:underline h-9 px-4 py-2">
+        Link
+      </button>
+    </div>
+
+    <h2 class="text-xl font-bold text-cyan-400 mb-4 mt-8">Button - Sizes</h2>
+    <div class="flex flex-wrap items-center gap-3">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors bg-[#2abfdc] text-black h-9 px-4 py-2">Default</button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-xs font-medium transition-colors bg-[#2abfdc] text-black h-8 px-3">Small</button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors bg-[#2abfdc] text-black h-10 px-8">Large</button>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-[#2abfdc] text-black h-9 w-9">Icon</button>
+    </div>
+
+    <h2 class="text-xl font-bold text-cyan-400 mb-4 mt-8">Button - States</h2>
+    <div class="flex flex-wrap gap-3">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-[#2abfdc] text-black h-9 px-4 py-2">Normal</button>
+      <button disabled class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-[#2abfdc] text-black opacity-50 cursor-not-allowed h-9 px-4 py-2">Disabled</button>
+    </div>
+  </div>
+</body>
+</html>

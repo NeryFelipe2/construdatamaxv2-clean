@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { X, Trash2, AlertTriangle } from 'lucide-react'
+import { X, Trash2, AlertTriangle, Link2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAgendaStore } from '@/store/agendaStore'
 import { useProjetosStore } from '@/store/projetosStore'
 import { taskSchema, type TaskFormValues } from '../schemas'
+import { criariaCiclo } from '../utils'
 import type { TaskColor, AgendaPriority } from '@/types'
 
 const COLOR_OPTIONS: { value: TaskColor; bg: string; border: string; label: string }[] = [
@@ -54,7 +55,7 @@ export function TaskEditDialog() {
       color: 'blue', status: 'scheduled', priority: 'medium',
       assignedTo: '', teamLeadName: '', location: '',
       estimatedHours: undefined, completionPct: undefined,
-      linkedProjectId: '', notes: '',
+      linkedProjectId: '', notes: '', dependsOn: [],
     },
   })
 
@@ -75,6 +76,7 @@ export function TaskEditDialog() {
         completionPct:   existingTask.completionPct,
         linkedProjectId: existingTask.linkedProjectId ?? '',
         notes:           existingTask.notes          ?? '',
+        dependsOn:       existingTask.dependsOn      ?? [],
       })
     } else if (isNew) {
       reset({
@@ -83,7 +85,7 @@ export function TaskEditDialog() {
         color: 'blue', status: 'scheduled', priority: 'medium',
         assignedTo: '', teamLeadName: '', location: '',
         estimatedHours: undefined, completionPct: undefined,
-        linkedProjectId: '', notes: '',
+        linkedProjectId: '', notes: '', dependsOn: [],
       })
     }
     setConfirmDelete(false)
@@ -126,6 +128,32 @@ export function TaskEditDialog() {
   const watchedColor    = watch('color')
   const watchedPriority = watch('priority')
   const priorityCfg     = PRIORITY_OPTIONS.find((p) => p.value === watchedPriority)
+
+  // ── Dependências (fim→início) ──────────────────────────────────────────────
+  const watchedDependsOn = watch('dependsOn') ?? []
+
+  // Candidatas: todas as outras tarefas, exceto a própria, as já adicionadas
+  // e as que criariam ciclo (DFS em criariaCiclo — só relevante em edição;
+  // tarefa nova ainda não tem id, ninguém pode depender dela).
+  const dependencyCandidates = useMemo(
+    () =>
+      tasks.filter((t) => {
+        if (t.id === editingTaskId) return false
+        if (watchedDependsOn.includes(t.id)) return false
+        if (existingTask && criariaCiclo(tasks, existingTask.id, t.id)) return false
+        return true
+      }),
+    [tasks, editingTaskId, watchedDependsOn, existingTask]
+  )
+
+  function addDependency(id: string) {
+    if (!id || watchedDependsOn.includes(id)) return
+    setValue('dependsOn', [...watchedDependsOn, id], { shouldDirty: true })
+  }
+
+  function removeDependency(id: string) {
+    setValue('dependsOn', watchedDependsOn.filter((d) => d !== id), { shouldDirty: true })
+  }
 
   if (!editingTaskId) return null
 
@@ -318,6 +346,59 @@ export function TaskEditDialog() {
                     <option key={p.id} value={p.id}>{p.code} — {p.name}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Depende de (fim→início) */}
+              <div className="flex flex-col gap-1.5 mt-3">
+                <label className={cn(LABEL, 'flex items-center gap-1.5')}>
+                  <Link2 size={11} /> Depende de
+                </label>
+
+                {watchedDependsOn.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {watchedDependsOn.map((depId) => {
+                      const dep = tasks.find((t) => t.id === depId)
+                      return (
+                        <span
+                          key={depId}
+                          className="flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md bg-[#2c2c2c] border border-[#525252] text-xs text-[#a3a3a3]"
+                          title={dep ? dep.title : `Tarefa não encontrada (${depId})`}
+                        >
+                          <span className="truncate max-w-[180px]">
+                            {dep ? dep.title : 'Tarefa removida'}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeDependency(depId)}
+                            className="flex items-center justify-center w-4 h-4 rounded text-[#6b6b6b] hover:text-[#ef4444] hover:bg-[#484848] transition-colors"
+                            title="Remover dependência"
+                          >
+                            <X size={10} />
+                          </button>
+                        </span>
+                      )
+                    })}
+                  </div>
+                )}
+
+                <select
+                  value=""
+                  onChange={(e) => addDependency(e.target.value)}
+                  disabled={dependencyCandidates.length === 0}
+                  className={cn(fieldCls(false), dependencyCandidates.length === 0 && 'opacity-50 cursor-not-allowed')}
+                >
+                  <option value="">
+                    {dependencyCandidates.length === 0
+                      ? '— Nenhuma tarefa disponível —'
+                      : '+ adicionar dependência'}
+                  </option>
+                  {dependencyCandidates.map((t) => (
+                    <option key={t.id} value={t.id}>{t.title}</option>
+                  ))}
+                </select>
+                <span className="text-[10px] text-[#6b6b6b]">
+                  Fim→início: se a dependência terminar depois desta tarefa começar, a seta no Gantt fica vermelha (só alerta, nada é movido). Tarefas que criariam ciclo não aparecem na lista.
+                </span>
               </div>
             </fieldset>
 

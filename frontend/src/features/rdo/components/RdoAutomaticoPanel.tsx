@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { AlertTriangle, CheckCircle2, FileImage, FileText, Upload, XCircle } from 'lucide-react'
 import { useProjectContext } from '@/store/projectContext'
 import { useRdoStore } from '@/store/rdoStore'
+import { parseRdoText } from '../utils/parseRdoText'
 import type { RDO } from '@/types'
 
 const textCls = 'w-full rounded-lg bg-[#3d3d3d] border border-[#525252] px-3 py-2.5 text-xs text-[#f5f5f5] placeholder-[#6b6b6b] focus:outline-none focus:border-[#f97316]/50 resize-y'
@@ -33,6 +34,7 @@ export function RdoAutomaticoPanel() {
     rdos,
     isSaving,
     automaticoResult,
+    addRdo,
     createAutomaticoFromText,
     uploadAutomatico,
     revisarRdo,
@@ -53,11 +55,65 @@ export function RdoAutomaticoPanel() {
   const evidencePayload = automaticoResult?.evidence?.payload as Record<string, unknown> | undefined
   const preview = typeof evidencePayload?.preview_base64 === 'string' ? evidencePayload.preview_base64 : ''
 
+  function criarRdoLocalDeTexto(texto: string) {
+    const parsed = parseRdoText(texto)
+    addRdo({
+      date: parsed.date || new Date().toISOString().slice(0, 10),
+      responsible: parsed.responsible || '',
+      weather: { morning: 'good', afternoon: 'good', night: 'good' },
+      manpower: { ...parsed.manpower, employeeNames: parsed.employeeNames },
+      equipment: parsed.equipment.map((e) => ({ ...e, id: crypto.randomUUID() })),
+      services: parsed.services.map((s) => ({ ...s, id: crypto.randomUUID() })),
+      trechos: parsed.trechos.map((t) => ({ ...t, id: crypto.randomUUID() })),
+      geolocation: null,
+      observations: parsed.observations,
+      incidents: parsed.ocorrencias !== 'Não informado' ? parsed.ocorrencias : '',
+      photos: [],
+      local: parsed.local !== 'Não informado' ? parsed.local : undefined,
+      gerenteContrato: parsed.gerenteContrato !== 'Não informado' ? parsed.gerenteContrato : undefined,
+      tecnicoSeguranca: parsed.tecnicoSeguranca !== 'Não informado' ? parsed.tecnicoSeguranca : undefined,
+      nomeEmpreiteira: parsed.nomeEmpreiteira !== 'Não informado' ? parsed.nomeEmpreiteira : undefined,
+      servicoExecutar: parsed.servicoExecutar !== 'Não informado' ? parsed.servicoExecutar : undefined,
+      ocorrencias: parsed.ocorrencias !== 'Não informado' ? parsed.ocorrencias : undefined,
+      funcionariosDiretos: parsed.funcionariosDiretos || undefined,
+      funcionariosIndiretos: parsed.funcionariosIndiretos || undefined,
+      qtdEquipamentosFerramentas: parsed.qtdEquipamentosFerramentas || undefined,
+      numeroOS: parsed.numeroOS !== 'Não informado' ? parsed.numeroOS : undefined,
+      numeroContrato: parsed.numeroContrato !== 'Não informado' ? parsed.numeroContrato : undefined,
+      climaManha: parsed.climaManha !== 'Não informado' ? parsed.climaManha : undefined,
+      climaTarde: parsed.climaTarde !== 'Não informado' ? parsed.climaTarde : undefined,
+      climaNoite: parsed.climaNoite !== 'Não informado' ? parsed.climaNoite : undefined,
+      origem: 'automatico-local',
+      statusRevisao: 'extraido',
+    })
+    useRdoStore.setState({
+      automaticoResult: {
+        extraction: {
+          fields: {
+            local: parsed.local,
+            servico: parsed.servicoExecutar,
+            gerenteContrato: parsed.gerenteContrato,
+            numeroOS: parsed.numeroOS,
+          },
+          confidence: {},
+          pending_fields: [],
+          status_revisao: 'extraido',
+        },
+        status: 'local',
+      },
+    })
+  }
+
   async function handleText() {
     if (!activeProjectId) { setMessage('Selecione um projeto antes.'); return }
     if (!text.trim()) { setMessage('Cole o texto do RDO.'); return }
     const result = await createAutomaticoFromText(activeProjectId, text)
-    setMessage(result ? 'RDO automatico criado para revisao.' : 'Falha ao criar RDO automatico.')
+    if (result) {
+      setMessage('RDO automatico criado para revisao.')
+    } else {
+      criarRdoLocalDeTexto(text)
+      setMessage('Backend indisponivel: RDO criado localmente a partir do texto para revisao.')
+    }
   }
 
   async function handleUpload() {
@@ -67,7 +123,15 @@ export function RdoAutomaticoPanel() {
     fd.append('arquivo', file)
     if (text.trim()) fd.append('texto', text)
     const result = await uploadAutomatico(activeProjectId, fd)
-    setMessage(result ? 'Arquivo preservado e RDO criado para revisao.' : 'Falha ao processar upload.')
+    if (result) {
+      setMessage('Arquivo preservado e RDO criado para revisao.')
+    } else if (file.type === 'text/plain' || file.name.toLowerCase().endsWith('.txt')) {
+      const conteudo = await file.text()
+      criarRdoLocalDeTexto(text.trim() ? `${text}\n${conteudo}` : conteudo)
+      setMessage('Backend indisponivel: RDO criado localmente a partir do TXT para revisao.')
+    } else {
+      setMessage('Falha ao processar upload: recurso indisponivel offline para fotos/PDF.')
+    }
   }
 
   async function handleFinalize(rdo: RDO) {

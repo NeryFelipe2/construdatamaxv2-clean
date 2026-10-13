@@ -323,15 +323,19 @@ export const apiProjetoTorre = (projectId: string) =>
 export const apiProjetoGestao360 = (projectId: string) =>
   get<ApiProjetoGestao360Payload>(`/api/projetos/${projectId}/gestao360`);
 
+/** @deprecated 27/07/2026 — as restrições do LPS migraram pra tabela Supabase `lps_restricoes` (src/hooks/useLpsRestricoes.ts). Mantida só como fallback do lpsStore quando o Supabase está indisponível. */
 export const apiProjetoLpsRestricoes = (projectId: string) =>
   get<{ items: Array<Record<string, unknown>> }>(`/api/projetos/${projectId}/lps-restricoes`);
 
+/** @deprecated 27/07/2026 — ver apiProjetoLpsRestricoes (fonte primária agora é `lps_restricoes` no Supabase). */
 export const apiProjetoCriarLpsRestricao = (projectId: string, payload: Record<string, unknown>) =>
   post<Record<string, unknown>>(`/api/projetos/${projectId}/lps-restricoes`, payload);
 
+/** @deprecated 27/07/2026 — ver apiProjetoLpsRestricoes (fonte primária agora é `lps_restricoes` no Supabase). */
 export const apiProjetoAtualizarLpsRestricao = (projectId: string, restricaoId: string, payload: Record<string, unknown>) =>
   patch<Record<string, unknown>>(`/api/projetos/${projectId}/lps-restricoes/${restricaoId}`, payload);
 
+/** @deprecated 27/07/2026 — ver apiProjetoLpsRestricoes (fonte primária agora é `lps_restricoes` no Supabase). */
 export const apiProjetoRemoverLpsRestricao = (projectId: string, restricaoId: string) =>
   fetch(url(`/api/projetos/${projectId}/lps-restricoes/${restricaoId}`), { method: "DELETE" }).then(async (r) => {
     if (!r.ok) {

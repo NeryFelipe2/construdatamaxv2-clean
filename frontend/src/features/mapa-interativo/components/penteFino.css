@@ -1,0 +1,17 @@
+/* Tooltip dos PVs do pente fino — linguagem visual escura da plataforma.
+   Escopo só na classe .pente-fino-tooltip pra não mexer em nenhum outro
+   tooltip do Leaflet já usado no app. */
+.pente-fino-tooltip.leaflet-tooltip {
+  background: #0a0f1a;
+  border: 1px solid #1e293b;
+  border-radius: 2px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+  color: #e2e8f0;
+  padding: 0;
+  opacity: 1 !important;
+  white-space: nowrap;
+}
+
+.pente-fino-tooltip.leaflet-tooltip::before {
+  display: none;
+}

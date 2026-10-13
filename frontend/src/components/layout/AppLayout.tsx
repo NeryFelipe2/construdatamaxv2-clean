@@ -1,55 +1,13 @@
 import React, { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  Menu, Settings, Bell, Search, Plus, Filter, RotateCw, UserCircle, MessageSquare, Briefcase, Play, Calendar, MoreHorizontal, Layers, Target, FileText, Cpu, Calculator, FolderKanban, Wrench
+  Menu, Settings, Bell, Search, Plus, Filter, RotateCw, MessageSquare, Calendar, MoreHorizontal, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-// Modules grouped by top categories
-const MODULE_GROUPS = [
-  {
-    category: "Gestão", id: "gestao",
-    items: [
-      { label: "Gestão 360", to: "/app/gestao-360", icon: Layers },
-      { label: "Torre Controle", to: "/app/torre-de-controle", icon: Play },
-      { label: "Projetos", to: "/app/projetos", icon: FolderKanban },
-    ]
-  },
-  {
-    category: "Engenharia", id: "engenharia",
-    items: [
-      { label: "Motor NS V5", to: "/app/ns-v5", icon: Cpu },
-      { label: "Mapa / GIS", to: "/app/mapa-interativo", icon: Filter },
-      { label: "BIM", to: "/app/bim", icon: Layers },
-      { label: "Rede 360", to: "/app/rede-360", icon: Target },
-    ]
-  },
-  {
-    category: "Tarefas", id: "tarefas",
-    items: [
-      { label: "RDO", to: "/app/rdo", icon: FileText },
-      { label: "Punch List", to: "/app/punch-list", icon: Target },
-      { label: "Agenda", to: "/app/agenda", icon: Calendar },
-      { label: "Planejamento", to: "/app/planejamento", icon: Calculator },
-    ]
-  },
-  {
-    category: "Recursos", id: "recursos",
-    items: [
-      { label: "Suprimentos", to: "/app/suprimentos", icon: FolderKanban },
-      { label: "Mão de Obra", to: "/app/mao-de-obra", icon: UserCircle },
-      { label: "Equipamentos", to: "/app/gestao-equipamentos", icon: Wrench },
-    ]
-  },
-  {
-    category: "Data-Driven", id: "data",
-    items: [
-      // { label: "IA Analytics", to: "/app/ia-analytics", icon: Cpu },
-      { label: "EVM", to: "/app/evm", icon: Calculator },
-      { label: "Engine V5", to: "/app/engine-v5", icon: Cpu },
-    ]
-  }
-];
+import { OrgSelector } from "@/components/layout/OrgSelector";
+import { UserMenu } from "@/components/layout/UserMenu";
+import { NAV_GROUPS as MODULE_GROUPS } from "@/config/navigation";
+import { GuiaTrilhoBar } from "@/components/shared/GuiaTrilhoBar";
 
 export function AppLayout() {
   const location = useLocation();
@@ -135,13 +93,15 @@ export function AppLayout() {
             <Layers size={18} />
           </button>
 
-          <button className="h-full px-2 ml-1">
-            <div className="w-8 h-8 rounded-full bg-indigo-300 border-2 border-white/20 overflow-hidden flex items-center justify-center">
-               <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Avatar" className="w-full h-full object-cover" />
-            </div>
-          </button>
+          <div className="flex items-center gap-2 px-2 ml-1">
+            <OrgSelector isDark={false} />
+            <UserMenu isDark={false} />
+          </div>
         </div>
       </header>
+
+      {/* Trilho guiado da semana (P1..P5) — barra fina, colapsável via guiaStore */}
+      <GuiaTrilhoBar />
 
       {/* 2. SUB NAV BAR (Context Area) */}
       <div className="h-12 bg-[#0c40cf] text-white flex items-center px-4 shrink-0 shadow-sm z-40 text-sm">

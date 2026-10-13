@@ -1,0 +1,168 @@
+/* ConstrudaDataMax UI Primitives - Design System Styles */
+
+@import "tailwindcss";
+
+/* ─── CSS Custom Properties / Design Tokens ─────────────────────────────── */
+
+:root {
+  /* Primary Brand Colors */
+  --color-primary: #2abfdc;
+  --color-primary-hover: #1a9ab8;
+  --color-primary-light: #2abfdc/15;
+
+  /* Dark Theme Backgrounds */
+  --color-bg-base: #0a1628;
+  --color-bg-elevated: #112645;
+  --color-bg-surface: #14294e;
+  --color-bg-input: #0d2040;
+
+  /* Borders */
+  --color-border: #20406a;
+  --color-border-light: #2a4a6e;
+
+  /* Text */
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #6b6b6b;
+  --color-text-link: #5a8caa;
+
+  /* Semantic Colors */
+  --color-success: #22c55e;
+  --color-warning: #fbbf24;
+  --color-danger: #ef4444;
+  --color-info: #2abfdc;
+
+  /* Typography */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+
+  /* Spacing */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* ─── Tailwind Layer ─────────────────────────────────────────────────────── */
+
+@layer base {
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+  }
+}
+
+/* ─── Animation Utilities ────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-8px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideInFromBottom {
+  from { transform: translateY(8px); }
+  to { transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeIn 0.15s ease-out, zoomIn 0.15s ease-out;
+}
+
+.fade-in-0 { animation: fadeIn 0.15s ease-out; }
+.zoom-in-95 { animation: zoomIn 0.15s ease-out; }
+.fade-out-0 { animation: fadeIn 0.15s ease-out reverse; }
+.zoom-out-95 { animation: zoomIn 0.15s ease-out reverse; }
+
+.slide-in-from-top-2 { animation: slideInFromTop 0.15s ease-out; }
+.slide-in-from-bottom-2 { animation: slideInFromBottom 0.15s ease-out; }
+
+/* ─── Component Classes ─────────────────────────────────────────────────── */
+
+/* Button Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition-colors;
+  outline-offset: 2px;
+  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  disabled:pointer-events-none disabled:opacity-50;
+}
+
+.btn svg {
+  pointer-events: none;
+  shrink: 0;
+}
+
+/* Card */
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Input */
+.input {
+  display: flex;
+  height: 2.25rem;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-input);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+/* Tooltip / Popover */
+.tooltip-content {
+  z-index: 50;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-elevated);
+  padding: 1rem;
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-lg);
+  outline: none;
+}
+
+/* ─── Font Import (if needed) ───────────────────────────────────────────── */
+
+/* Inter for UI text */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */

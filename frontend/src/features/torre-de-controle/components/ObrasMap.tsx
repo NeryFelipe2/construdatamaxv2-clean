@@ -12,6 +12,8 @@ import { useEquipamentosStore } from '@/store/equipamentosStore'
 import { useOtimizacaoFrotaStore } from '@/store/otimizacaoFrotaStore'
 import { haversineKm } from '@/store/otimizacaoFrotaStore'
 import { useThemeStore } from '@/store/themeStore'
+import { safeFlyTo } from '@/lib/mapUtils'
+import { MapAutoResize } from '@/components/map/MapAutoResize'
 import type { ConstructionSite, ObraStatus } from '@/types'
 
 // ─── Tile URLs ────────────────────────────────────────────────────────────────
@@ -118,9 +120,7 @@ function MapController() {
     if (!selectedId || selectedId === prevId.current) return
     prevId.current = selectedId
     const site = sites.find((s) => s.id === selectedId)
-    if (site?.lat != null && site.lng != null) {
-      map.flyTo([site.lat, site.lng], Math.max(map.getZoom(), 15), { duration: 0.9 })
-    }
+    if (site) safeFlyTo(map, site.lat, site.lng, 15)
   }, [selectedId, sites, map])
 
   return null
@@ -259,8 +259,8 @@ export function ObrasMap() {
       <style>{mapCSS}</style>
 
       <MapContainer
-        center={[-23.5505, -46.6333]}
-        zoom={11}
+        center={[-23.48016, -46.669912]}
+        zoom={15}
         style={{ height: '100%', width: '100%', background: '#f5f5f5' }}
         zoomControl
       >
@@ -318,6 +318,7 @@ export function ObrasMap() {
         </LayersControl>
 
         <ScaleControl position="bottomleft" imperial={false} />
+        <MapAutoResize />
         <MapController />
 
         <DistanceMeasureController

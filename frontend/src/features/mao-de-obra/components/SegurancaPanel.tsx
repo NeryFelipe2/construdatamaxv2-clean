@@ -49,10 +49,10 @@ function AccessCheckModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-[#333333] border border-[#525252] rounded-xl w-full max-w-md p-6 flex flex-col gap-4">
+      <div className="bg-[#2c2c2c] border border-[#525252] rounded-xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-4">
         <h2 className="text-[#f5f5f5] text-base font-semibold">Verificar Acesso à Área de Risco</h2>
 
         <div className="flex flex-col gap-3">
@@ -61,7 +61,7 @@ function AccessCheckModal({
             <select
               value={workerId}
               onChange={(e) => setWorkerId(e.target.value)}
-              className="bg-[#3d3d3d] border border-[#1f3c5e] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]"
+              className="bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]"
             >
               <option value="">Selecionar...</option>
               {workers.map((w) => (
@@ -75,7 +75,7 @@ function AccessCheckModal({
             <select
               value={riskAreaId}
               onChange={(e) => setRiskAreaId(e.target.value)}
-              className="bg-[#3d3d3d] border border-[#1f3c5e] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]"
+              className="bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-2 text-sm text-[#f5f5f5] focus:outline-none focus:border-[#f97316]"
             >
               <option value="">Selecionar...</option>
               {riskAreas.map((r) => (
@@ -130,7 +130,7 @@ function AccessCheckModal({
 
         <button
           onClick={onClose}
-          className="self-end px-4 py-2 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-sm hover:bg-[#484848] transition-colors"
+          className="self-end px-4 py-2 rounded-lg border border-[#525252] text-[#f5f5f5] text-sm hover:bg-[#484848] transition-colors"
         >
           Fechar
         </button>
@@ -200,14 +200,14 @@ export function SegurancaPanel() {
       <div className="flex gap-2">
         <button
           onClick={() => setIsWorkerDialogOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-white text-sm font-semibold transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f97316] hover:bg-[#ea6c0a] text-[#ffffff] text-sm font-semibold transition-colors"
         >
           <Plus size={15} />
           Novo Funcionário
         </button>
         <button
           onClick={() => setIsAccessCheckOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#1f3c5e] text-[#f5f5f5] text-sm font-medium hover:bg-[#484848] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#525252] text-[#f5f5f5] text-sm font-medium hover:bg-[#484848] transition-colors"
         >
           <ShieldCheck size={15} />
           Verificar Acesso

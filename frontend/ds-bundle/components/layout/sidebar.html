@@ -1,0 +1,57 @@
+<!-- @dsCard group="Layout" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidebar Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a1628; padding: 2rem; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="flex gap-6">
+    <!-- Expanded -->
+    <aside class="flex flex-col shrink-0 border-r border-[#20406a] bg-[#0d2040] w-[200px] rounded-lg overflow-hidden">
+      <div class="flex items-center h-14 border-b border-[#20406a] px-[14px] gap-3">
+        <div class="w-9 h-9 rounded-xl bg-[#071422] flex items-center justify-center border border-[#2abfdc]/30">💧</div>
+        <div class="flex flex-col leading-none">
+          <span class="text-sm font-bold text-[#e4f2f8]">Atlântico</span>
+          <span class="text-[9px] font-medium text-[#2abfdc]">Plataforma</span>
+        </div>
+      </div>
+      <nav class="flex flex-col flex-1 gap-0.5 p-2">
+        <a href="#" class="flex items-center gap-3 h-10 px-[10px] rounded-lg bg-[#2abfdc]/12 text-[#2abfdc]">
+          <span class="text-lg">📊</span><span class="text-xs font-medium">Gestão 360</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8]">
+          <span class="text-lg">📋</span><span class="text-xs font-medium">Relatório</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8]">
+          <span class="text-lg">📅</span><span class="text-xs font-medium">Agenda</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 h-10 px-[10px] rounded-lg text-[#6b6b6b] hover:bg-[#14294e] hover:text-[#8fb3c8]">
+          <span class="text-lg">🔧</span><span class="text-xs font-medium">Equipamentos</span>
+        </a>
+      </nav>
+      <div class="p-2 border-t border-[#20406a] flex items-center gap-3 h-10 px-[10px] text-[#6b6b6b]">
+        <span>☀️</span><span class="text-xs font-medium">Escuro</span>
+      </div>
+    </aside>
+
+    <!-- Collapsed -->
+    <aside class="flex flex-col shrink-0 border-r border-[#20406a] bg-[#0d2040] w-16 rounded-lg overflow-hidden">
+      <div class="flex items-center justify-center h-14 border-b border-[#20406a]">
+        <div class="w-9 h-9 rounded-xl bg-[#071422] flex items-center justify-center border border-[#2abfdc]/30">💧</div>
+      </div>
+      <nav class="flex flex-col flex-1 gap-0.5 p-2 items-center">
+        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-lg bg-[#2abfdc]/12 text-[#2abfdc]" title="Gestão 360">📊</a>
+        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-lg text-[#6b6b6b] hover:bg-[#14294e]" title="Relatório">📋</a>
+        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-lg text-[#6b6b6b] hover:bg-[#14294e]" title="Agenda">📅</a>
+        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-lg text-[#6b6b6b] hover:bg-[#14294e]" title="Equipamentos">🔧</a>
+      </nav>
+    </aside>
+  </div>
+</body>
+</html>

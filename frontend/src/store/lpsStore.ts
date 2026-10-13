@@ -1,9 +1,23 @@
 /**
  * lpsStore.ts - Zustand store for the LPS / Lean Construction module.
  *
- * Phase 1 rule:
- * - restrictions come from the canonical API whenever possible
- * - lookahead / takt / semaforo remain local UI state until their canonical domains are implemented
+ * Fase 5 (10/07/2026): as ATIVIDADES (semáforo/PPC — a "meta verdinho")
+ * passaram a persistir em `lps_tasks` no Supabase (useLpsTasks.ts): leitura no
+ * loadFromProject, escrita fire-and-forget nos CRUDs, gated por
+ * currentProjectId (que vira null em demo/clear pra mock nunca ir pro banco).
+ *
+ * Fase 2 do plano LPS-real (27/07/2026):
+ *  - RESTRIÇÕES agora persistem em `lps_restricoes` no Supabase
+ *    (useLpsRestricoes.ts, tabela populada com 74 linhas seed em 27/07) —
+ *    a API Render (apiProjetoLpsRestricoes etc., @deprecated em lib/api.ts)
+ *    ficou só como fallback quando o Supabase está indisponível.
+ *  - STAFFING deixou de ser inventado a partir das atividades
+ *    (computeStaffingFromActivities morreu): agora é o efetivo REAL de
+ *    `wcr_equipes` ativas + contagem de `equipe_membros`. Sem Supabase →
+ *    lista vazia honesta (a tela declara a fonte).
+ *  - integrationStatuses/autoClearRestrictions (números e "baixa automática"
+ *    fabricados) foram removidos — o IntegracoesPanel passou a contar direto
+ *    nas tabelas reais.
  */
 import { create } from 'zustand'
 import {
@@ -12,9 +26,12 @@ import {
   apiProjetoLpsRestricoes,
   apiProjetoRemoverLpsRestricao,
 } from '@/lib/api'
+import { supabase } from '@/lib/supabase'
+import { carregarLpsTasks, salvarLpsTask, removerLpsTask } from '@/hooks/useLpsTasks'
+import { carregarLpsRestricoes, salvarLpsRestricao, removerLpsRestricao } from '@/hooks/useLpsRestricoes'
 import type {
-  IntegrationStatus,
   LpsActivity,
+  LpsAlert,
   LpsRestriction,
   LpsRestrictionCategory,
   LpsRestrictionStatus,
@@ -138,14 +155,6 @@ function makeMockTaktZones(): TaktZone[] {
   ]
 }
 
-function createBaseIntegrationStatuses(): IntegrationStatus[] {
-  return [
-    { source: 'suprimentos', label: 'Suprimentos', lastSyncAt: null, itemsLinked: 0, restrictionsAutoClearable: 0, status: 'disconnected' },
-    { source: 'mao_de_obra', label: 'Mao de Obra', lastSyncAt: null, itemsLinked: 0, restrictionsAutoClearable: 0, status: 'disconnected' },
-    { source: 'rdo', label: 'RDO', lastSyncAt: null, itemsLinked: 0, restrictionsAutoClearable: 0, status: 'disconnected' },
-  ]
-}
-
 function mapCategoria(input: unknown): LpsRestrictionCategory {
   const raw = String(input ?? '').toLowerCase()
   if (['projeto', 'engenharia', 'projeto_engenharia'].includes(raw)) return 'projeto_engenharia'
@@ -182,59 +191,42 @@ function mapRestriction(row: Record<string, unknown>): LpsRestriction {
   }
 }
 
-function buildIntegrationStatuses(restrictions: LpsRestriction[], activities: LpsActivity[], lastSyncAt: string | null): IntegrationStatus[] {
-  const openRestrictions = restrictions.filter((r) => r.status !== 'resolvida').length
-  const linkedActivities = activities.filter((a) => a.planned).length
-  return [
-    {
-      source: 'suprimentos',
-      label: 'Suprimentos',
-      lastSyncAt,
-      itemsLinked: restrictions.filter((r) => r.categoria === 'materiais').length,
-      restrictionsAutoClearable: restrictions.filter((r) => r.categoria === 'materiais' && r.status !== 'resolvida').length > 0 ? 1 : 0,
-      status: restrictions.some((r) => r.categoria === 'materiais') ? 'partial' : 'disconnected',
-    },
-    {
-      source: 'mao_de_obra',
-      label: 'Mao de Obra',
-      lastSyncAt,
-      itemsLinked: linkedActivities,
-      restrictionsAutoClearable: restrictions.filter((r) => r.categoria === 'mao_de_obra' && r.status !== 'resolvida').length,
-      status: activities.length > 0 ? 'partial' : 'disconnected',
-    },
-    {
-      source: 'rdo',
-      label: 'RDO',
-      lastSyncAt,
-      itemsLinked: openRestrictions,
-      restrictionsAutoClearable: restrictions.filter((r) => r.status === 'em_resolucao').length,
-      status: restrictions.length > 0 ? 'connected' : 'partial',
-    },
-  ]
-}
-
-function computeStaffingFromActivities(activities: LpsActivity[]): StaffingDimension[] {
-  const grouped = new Map<string, LpsActivity[]>()
-  for (const activity of activities) {
-    const key = activity.responsibleTeam || 'Equipe'
-    grouped.set(key, [...(grouped.get(key) ?? []), activity])
-  }
-  return Array.from(grouped.entries()).map(([team, teamActivities], index) => {
-    const requiredTeams = Math.max(1, Math.ceil(teamActivities.length / 2))
-    const requiredWorkers = requiredTeams * 5
-    const availableFromMaoDeObra = requiredWorkers - (index % 2 === 0 ? 0 : 2)
-    const gap = requiredWorkers - availableFromMaoDeObra
-    return {
-      id: `sd-${team}-${index}`,
-      activityName: team,
-      requiredTeams,
-      requiredWorkers,
-      role: 'Equipe de campo',
-      availableFromMaoDeObra,
-      gap,
-      status: gap > 0 ? 'deficit' : gap < 0 ? 'surplus' : 'ok',
+/**
+ * Staffing REAL: uma linha por equipe ativa de `wcr_equipes`, com o efetivo
+ * contado em `equipe_membros`. Não existe "dimensionamento-alvo" cadastrado no
+ * banco, então NÃO inventamos gap numérico: requerido = efetivo atual e gap=0;
+ * o sinal honesto de déficit é qualitativo — equipe marcada `a_contratar` ou
+ * ativa sem nenhum membro cadastrado. Sem Supabase/erro → [] (vazio honesto).
+ */
+async function carregarStaffingReal(): Promise<StaffingDimension[]> {
+  if (!supabase) return []
+  try {
+    const [equipesRes, membrosRes] = await Promise.all([
+      supabase.from('wcr_equipes').select('id, nome, frente, foco, a_contratar, ordem, ativo').eq('ativo', true).order('ordem'),
+      supabase.from('equipe_membros').select('id, equipe_id'),
+    ])
+    if (equipesRes.error || membrosRes.error) return []
+    const membrosPorEquipe = new Map<string, number>()
+    for (const m of (membrosRes.data ?? []) as Array<{ id: string; equipe_id: string }>) {
+      membrosPorEquipe.set(m.equipe_id, (membrosPorEquipe.get(m.equipe_id) ?? 0) + 1)
     }
-  })
+    type DbEquipe = { id: string; nome: string; frente: string | null; foco: string | null; a_contratar: boolean }
+    return ((equipesRes.data ?? []) as DbEquipe[]).map((e) => {
+      const membros = membrosPorEquipe.get(e.id) ?? 0
+      return {
+        id: e.id,
+        activityName: e.nome,
+        requiredTeams: 1,
+        requiredWorkers: membros,
+        role: e.foco || e.frente || 'Equipe de campo',
+        availableFromMaoDeObra: membros,
+        gap: 0,
+        status: e.a_contratar || membros === 0 ? 'deficit' : 'ok',
+      }
+    })
+  } catch {
+    return []
+  }
 }
 
 export function computeWeeklyPPC(activities: LpsActivity[]): LpsWeeklyPPC[] {
@@ -267,7 +259,7 @@ interface LpsState {
   taktTotalDays: number
   restrictions: LpsRestriction[]
   staffingDimensions: StaffingDimension[]
-  integrationStatuses: IntegrationStatus[]
+  alerts: LpsAlert[]
 
   setActiveTab: (tab: LpsTab) => void
   loadFromProject: (projectId: string) => Promise<void>
@@ -285,8 +277,9 @@ interface LpsState {
   removeRestriction: (id: string) => Promise<void>
 
   computeStaffingDimensions: () => void
-  refreshIntegrationStatus: () => void
-  autoClearRestrictions: () => void
+
+  addAlert: (a: Omit<LpsAlert, 'id'>) => void
+  acknowledgeAlert: (id: string) => void
 
   loadDemoData: () => void
   clearData: () => void
@@ -300,71 +293,73 @@ export const useLpsStore = create<LpsState>((set, get) => ({
   taktZones: ALLOW_DEMO_DATA ? makeMockTaktZones() : [],
   taktTotalDays: 48,
   restrictions: ALLOW_DEMO_DATA ? makeMockRestrictions() : [],
-  staffingDimensions: ALLOW_DEMO_DATA ? computeStaffingFromActivities(makeMockActivities()) : [],
-  integrationStatuses: buildIntegrationStatuses(ALLOW_DEMO_DATA ? makeMockRestrictions() : [], ALLOW_DEMO_DATA ? makeMockActivities() : [], null),
+  // Staffing nunca nasce de mock: é sempre o efetivo real (carregado em
+  // loadFromProject/computeStaffingDimensions) ou vazio honesto.
+  staffingDimensions: [],
+  alerts: [],
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
   loadFromProject: async (projectId) => {
     if (!projectId) return
-    try {
-      const payload = await apiProjetoLpsRestricoes(projectId)
-      const restrictions = (payload.items ?? []).map((row) => mapRestriction(row))
-      const nextActivities = get().activities.length > 0 ? get().activities : (ALLOW_DEMO_DATA ? makeMockActivities() : [])
-      set({
-        currentProjectId: projectId,
-        restrictions,
-        activities: nextActivities,
-        taktZones: get().taktZones.length > 0 ? get().taktZones : (ALLOW_DEMO_DATA ? makeMockTaktZones() : []),
-        staffingDimensions: computeStaffingFromActivities(nextActivities),
-        integrationStatuses: buildIntegrationStatuses(restrictions, nextActivities, new Date().toISOString()),
-        connectionStatus: 'connected',
-      })
-      return
-    } catch {
-      const nextActivities = ALLOW_DEMO_DATA ? makeMockActivities() : []
-      const nextRestrictions = ALLOW_DEMO_DATA ? makeMockRestrictions() : []
-      set({
-        currentProjectId: projectId,
-        restrictions: nextRestrictions,
-        activities: get().activities.length > 0 ? get().activities : nextActivities,
-        taktZones: get().taktZones.length > 0 ? get().taktZones : (ALLOW_DEMO_DATA ? makeMockTaktZones() : []),
-        staffingDimensions: computeStaffingFromActivities(get().activities.length > 0 ? get().activities : nextActivities),
-        integrationStatuses: buildIntegrationStatuses(nextRestrictions, get().activities.length > 0 ? get().activities : nextActivities, null),
-        connectionStatus: ALLOW_DEMO_DATA ? 'local' : 'partial',
-      })
+    // Atividades reais vêm do Supabase (lps_tasks). null = leitura falhou
+    // (mantém comportamento antigo); [] = banco vazio de verdade (seta vazio,
+    // sem vazar mock/projeto anterior — mesma lição do Planejamento na Fase 2).
+    const tasksDb = await carregarLpsTasks(projectId)
+    // Restrições reais: Supabase (lps_restricoes) é a fonte primária desde
+    // 27/07; a API Render é só fallback legado (@deprecated em lib/api.ts).
+    const restricoesDb = await carregarLpsRestricoes(projectId)
+    let restrictions: LpsRestriction[]
+    let restricoesOk = restricoesDb !== null
+    if (restricoesDb) {
+      restrictions = restricoesDb
+    } else {
+      try {
+        const payload = await apiProjetoLpsRestricoes(projectId)
+        restrictions = (payload.items ?? []).map((row) => mapRestriction(row))
+        restricoesOk = true
+      } catch {
+        restrictions = ALLOW_DEMO_DATA ? makeMockRestrictions() : []
+      }
     }
+    const nextActivities = tasksDb ?? (get().activities.length > 0 ? get().activities : (ALLOW_DEMO_DATA ? makeMockActivities() : []))
+    set({
+      currentProjectId: projectId,
+      restrictions,
+      activities: nextActivities,
+      taktZones: get().taktZones.length > 0 ? get().taktZones : (ALLOW_DEMO_DATA ? makeMockTaktZones() : []),
+      connectionStatus:
+        restricoesOk && tasksDb !== null
+          ? 'connected'
+          : restricoesOk || tasksDb !== null
+            ? 'partial'
+            : ALLOW_DEMO_DATA
+              ? 'local'
+              : 'partial',
+    })
+    // Staffing real (wcr_equipes + equipe_membros) — independente do resto.
+    get().computeStaffingDimensions()
   },
 
-  addActivity: (a) =>
-    set((s) => {
-      const activities = [...s.activities, { ...a, id: crypto.randomUUID() }]
-      return {
-        activities,
-        staffingDimensions: computeStaffingFromActivities(activities),
-        integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
-      }
-    }),
+  addActivity: (a) => {
+    const nova: LpsActivity = { ...a, id: crypto.randomUUID() }
+    set((s) => ({ activities: [...s.activities, nova] }))
+    const { currentProjectId } = get()
+    if (currentProjectId) salvarLpsTask(currentProjectId, nova)
+  },
 
-  updateActivity: (id, updates) =>
-    set((s) => {
-      const activities = s.activities.map((a) => (a.id === id ? { ...a, ...updates } : a))
-      return {
-        activities,
-        staffingDimensions: computeStaffingFromActivities(activities),
-        integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
-      }
-    }),
+  updateActivity: (id, updates) => {
+    set((s) => ({ activities: s.activities.map((a) => (a.id === id ? { ...a, ...updates } : a)) }))
+    const { currentProjectId, activities } = get()
+    const atualizada = activities.find((a) => a.id === id)
+    if (currentProjectId && atualizada) salvarLpsTask(currentProjectId, atualizada)
+  },
 
-  removeActivity: (id) =>
-    set((s) => {
-      const activities = s.activities.filter((a) => a.id !== id)
-      return {
-        activities,
-        staffingDimensions: computeStaffingFromActivities(activities),
-        integrationStatuses: buildIntegrationStatuses(s.restrictions, activities, new Date().toISOString()),
-      }
-    }),
+  removeActivity: (id) => {
+    set((s) => ({ activities: s.activities.filter((a) => a.id !== id) }))
+    const { currentProjectId } = get()
+    if (currentProjectId) removerLpsTask(id)
+  },
 
   updateTaktZone: (id, updates) =>
     set((s) => ({
@@ -387,134 +382,115 @@ export const useLpsStore = create<LpsState>((set, get) => ({
 
   addRestriction: async (r) => {
     const projectId = get().currentProjectId
+    const nova: LpsRestriction = { ...r, id: crypto.randomUUID(), createdAt: new Date().toISOString().slice(0, 10) }
+    if (projectId && supabase) {
+      // Fonte primária: escrita otimista + fire-and-forget em lps_restricoes
+      // (padrão useLpsTasks — erro só loga, não trava a UI).
+      set((s) => ({ restrictions: [...s.restrictions, nova], connectionStatus: 'connected' }))
+      salvarLpsRestricao(projectId, nova)
+      return
+    }
     if (projectId) {
+      // Fallback legado: API Render (@deprecated em lib/api.ts).
       try {
         const created = await apiProjetoCriarLpsRestricao(projectId, r as unknown as Record<string, unknown>)
         const restriction = mapRestriction(created)
-        set((s) => {
-          const restrictions = [...s.restrictions, restriction]
-          return {
-            restrictions,
-            integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-            connectionStatus: 'connected',
-          }
-        })
+        set((s) => ({ restrictions: [...s.restrictions, restriction] }))
         return
       } catch {
-        // fallback below
+        // cai no estado local abaixo
       }
     }
-    set((s) => {
-      const restrictions = [...s.restrictions, { ...r, id: crypto.randomUUID(), createdAt: new Date().toISOString().slice(0, 10) }]
-      return {
-        restrictions,
-        integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-      }
-    })
+    set((s) => ({ restrictions: [...s.restrictions, nova] }))
   },
 
   updateRestriction: async (id, updates) => {
     const projectId = get().currentProjectId
+    if (projectId && supabase) {
+      set((s) => ({ restrictions: s.restrictions.map((r) => (r.id === id ? { ...r, ...updates } : r)) }))
+      const atualizada = get().restrictions.find((r) => r.id === id)
+      if (atualizada) salvarLpsRestricao(projectId, atualizada)
+      return
+    }
     if (projectId) {
+      // Fallback legado: API Render (@deprecated em lib/api.ts).
       try {
         const updated = await apiProjetoAtualizarLpsRestricao(projectId, id, updates as unknown as Record<string, unknown>)
         const restriction = mapRestriction(updated)
-        set((s) => {
-          const restrictions = s.restrictions.map((r) => (r.id === id ? restriction : r))
-          return {
-            restrictions,
-            integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-            connectionStatus: 'connected',
-          }
-        })
+        set((s) => ({ restrictions: s.restrictions.map((r) => (r.id === id ? restriction : r)) }))
         return
       } catch {
-        // fallback below
+        // cai no estado local abaixo
       }
     }
-    set((s) => {
-      const restrictions = s.restrictions.map((r) => (r.id === id ? { ...r, ...updates } : r))
-      return {
-        restrictions,
-        integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-      }
-    })
+    set((s) => ({ restrictions: s.restrictions.map((r) => (r.id === id ? { ...r, ...updates } : r)) }))
   },
 
   removeRestriction: async (id) => {
     const projectId = get().currentProjectId
+    if (projectId && supabase) {
+      set((s) => ({ restrictions: s.restrictions.filter((r) => r.id !== id) }))
+      removerLpsRestricao(id)
+      return
+    }
     if (projectId) {
+      // Fallback legado: API Render (@deprecated em lib/api.ts).
       try {
         await apiProjetoRemoverLpsRestricao(projectId, id)
-        set((s) => {
-          const restrictions = s.restrictions.filter((r) => r.id !== id)
-          return {
-            restrictions,
-            integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-            connectionStatus: 'connected',
-          }
-        })
+        set((s) => ({ restrictions: s.restrictions.filter((r) => r.id !== id) }))
         return
       } catch {
-        // fallback below
+        // cai no estado local abaixo
       }
     }
-    set((s) => {
-      const restrictions = s.restrictions.filter((r) => r.id !== id)
-      return {
-        restrictions,
-        integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-      }
-    })
+    set((s) => ({ restrictions: s.restrictions.filter((r) => r.id !== id) }))
   },
 
   computeStaffingDimensions: () => {
-    const activities = get().activities
-    set({ staffingDimensions: computeStaffingFromActivities(activities) })
+    // Efetivo REAL (wcr_equipes ativas + equipe_membros) — assíncrono, mas a
+    // assinatura continua síncrona pros chamadores (painel só dispara).
+    void carregarStaffingReal().then((dims) => set({ staffingDimensions: dims }))
   },
 
-  refreshIntegrationStatus: () => {
-    const { restrictions, activities } = get()
-    set({ integrationStatuses: buildIntegrationStatuses(restrictions, activities, new Date().toISOString()) })
-  },
+  addAlert: (a) =>
+    set((s) => ({
+      alerts: [...s.alerts, { ...a, id: crypto.randomUUID() }],
+    })),
 
-  autoClearRestrictions: () => {
-    set((s) => {
-      const restrictions = s.restrictions.map((restriction, index) =>
-        restriction.status === 'em_resolucao' && index < 2
-          ? { ...restriction, status: 'resolvida' as const, resolvedAt: new Date().toISOString().slice(0, 10) }
-          : restriction,
-      )
-      return {
-        restrictions,
-        integrationStatuses: buildIntegrationStatuses(restrictions, s.activities, new Date().toISOString()),
-      }
-    })
-  },
+  acknowledgeAlert: (id) =>
+    set((s) => ({
+      alerts: s.alerts.map((a) =>
+        a.id === id ? { ...a, acknowledged: true, acknowledgedAt: new Date().toISOString() } : a,
+      ),
+    })),
 
   loadDemoData: () => {
     const activities = makeMockActivities()
     const restrictions = makeMockRestrictions()
     set({
+      // currentProjectId null: em demo, os CRUDs nunca persistem mock no
+      // Supabase (lps_tasks/lps_restricoes) — loadFromProject re-seta ao
+      // voltar pro real. Staffing NÃO tem versão mock: continua vazio.
+      currentProjectId: null,
       activities,
       taktZones: makeMockTaktZones(),
       taktTotalDays: 48,
       restrictions,
-      staffingDimensions: computeStaffingFromActivities(activities),
-      integrationStatuses: buildIntegrationStatuses(restrictions, activities, null),
+      staffingDimensions: [],
       connectionStatus: 'local',
     })
   },
 
   clearData: () =>
     set({
+      currentProjectId: null,
       activities: [],
       taktZones: [],
       taktTotalDays: 48,
       restrictions: [],
       staffingDimensions: [],
-      integrationStatuses: createBaseIntegrationStatuses(),
       connectionStatus: 'local',
+      alerts: [],
     }),
 }))
 

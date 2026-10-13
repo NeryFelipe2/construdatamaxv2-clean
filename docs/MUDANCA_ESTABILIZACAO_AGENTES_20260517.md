@@ -57,7 +57,6 @@ Tambem foram validados com `TestClient`:
 
 Observacao local: o mount Flask opcional informou ausencia de `flask`, e a migracao operacional informou ausencia de `psycopg2` no Python local. Ambos sao tolerados no startup e estao cobertos pelo `backend/requirements.txt` no deploy.
 
-## OpenClaw
 
 Config desejada para esta fase:
 
@@ -66,12 +65,10 @@ Config desejada para esta fase:
 - web/search/browser desativados por padrao;
 - acoes externas futuras somente via allowlist explicita para Supabase, n8n, Render, Vercel e WhatsApp.
 
-Status: aplicado em `C:\Users\felip\.openclaw\openclaw.json`.
 
 Backup criado:
 
 ```text
-C:\Users\felip\.openclaw\openclaw.json.bak.20260517_codex
 ```
 
 ## Rollback

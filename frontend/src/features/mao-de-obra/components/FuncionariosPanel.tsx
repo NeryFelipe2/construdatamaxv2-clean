@@ -64,7 +64,7 @@ function WorkerFormModal({ initial, crews, onSave, onClose }: WorkerFormProps) {
     onSave(form as Omit<Worker, 'id'>)
   }
 
-  const fieldClass = 'w-full bg-[#333333] border border-[#1f3c5e] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
+  const fieldClass = 'w-full bg-[#333333] border border-[#525252] rounded-lg px-3 py-2 text-[#f5f5f5] text-sm focus:outline-none focus:border-[#f97316]'
   const labelClass = 'block text-[#6b6b6b] text-xs mb-1'
 
   return (
@@ -147,10 +147,10 @@ function WorkerFormModal({ initial, crews, onSave, onClose }: WorkerFormProps) {
           {error && <p className="col-span-2 text-[#ef4444] text-xs">{error}</p>}
 
           <div className="col-span-2 flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg border border-[#525252] text-[#6b6b6b] text-sm hover:text-[#f5f5f5] hover:border-[#1f3c5e]">
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg border border-[#525252] text-[#6b6b6b] text-sm hover:text-[#f5f5f5] hover:border-[#6b6b6b]">
               Cancelar
             </button>
-            <button type="submit" className="px-4 py-2 rounded-lg bg-[#f97316] text-white text-sm font-semibold hover:bg-[#ea6c10]">
+            <button type="submit" className="px-4 py-2 rounded-lg bg-[#f97316] text-[#ffffff] text-sm font-semibold hover:bg-[#ea6c10]">
               {initial ? 'Salvar Alterações' : 'Cadastrar'}
             </button>
           </div>
@@ -403,10 +403,10 @@ export function FuncionariosPanel() {
           Agrupar por Equipe
         </button>
         <span className="text-[#6b6b6b] text-xs ml-auto">{filtered.length} colaborador{filtered.length !== 1 ? 'es' : ''}</span>
-        <button onClick={exportCSV} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] hover:border-[#1f3c5e]">
+        <button onClick={exportCSV} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#525252] text-[#6b6b6b] text-xs hover:text-[#f5f5f5] hover:border-[#6b6b6b]">
           <Download size={12} /> CSV
         </button>
-        <button onClick={() => { setEditingWorker(null); setShowForm(true) }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-white text-xs font-semibold hover:bg-[#ea6c10]">
+        <button onClick={() => { setEditingWorker(null); setShowForm(true) }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f97316] text-[#ffffff] text-xs font-semibold hover:bg-[#ea6c10]">
           <Plus size={13} /> Novo Funcionário
         </button>
       </div>
@@ -426,7 +426,7 @@ export function FuncionariosPanel() {
               {groupedByCrew ? (
                 groupedByCrew.map((group) => (
                   <>{/* Crew group header */}
-                    <tr key={`grp-${group.crew?.id ?? 'none'}`} className="bg-[#0d1f3c]">
+                    <tr key={`grp-${group.crew?.id ?? 'none'}`} className="bg-[#333333]">
                       <td colSpan={8} className="px-4 py-2">
                         <div className="flex items-center gap-2">
                           <span className={`w-2 h-2 rounded-full ${group.crew ? 'bg-[#f97316]' : 'bg-[#6b6b6b]'}`} />

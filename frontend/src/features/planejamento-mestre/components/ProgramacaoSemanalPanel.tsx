@@ -118,6 +118,7 @@ export function ProgramacaoSemanalPanel() {
 
   const [week, setWeek]         = useState(currentISOWeek)
   const [filterNucleo, setFilterNucleo] = useState('')
+  const [filterEquipe, setFilterEquipe] = useState('')
 
   const weekDates = useMemo(() => getISOWeekDates(week), [week])
   const weekNumber = week.split('-W')[1]
@@ -133,10 +134,17 @@ export function ProgramacaoSemanalPanel() {
     return Array.from(set).sort()
   }, [leafActivities])
 
+  const equipes = useMemo(() => {
+    const set = new Set(leafActivities.map((a) => a.responsibleTeam ?? '').filter(Boolean))
+    return Array.from(set).sort()
+  }, [leafActivities])
+
   const filtered = useMemo(() => {
-    if (!filterNucleo) return leafActivities
-    return leafActivities.filter((a) => (a.nucleo ?? '') === filterNucleo)
-  }, [leafActivities, filterNucleo])
+    return leafActivities.filter((a) =>
+      (!filterNucleo || (a.nucleo ?? '') === filterNucleo) &&
+      (!filterEquipe || (a.responsibleTeam ?? '') === filterEquipe)
+    )
+  }, [leafActivities, filterNucleo, filterEquipe])
 
   function getDay(activityId: string, date: string): ProgramacaoDiaria {
     return programacaoSemanal[activityId]?.[date] ?? { previsto: 0, realizado: 0 }
@@ -184,7 +192,7 @@ export function ProgramacaoSemanalPanel() {
 
   function handleExportExcel() {
     const header = [
-      'Item', 'Núcleo', 'Local', 'Atividade', 'Comprimento', 'Qtd. Ligações',
+      'Item', 'Núcleo', 'Equipe', 'Local', 'Atividade', 'Comprimento', 'Qtd. Ligações',
       '% Peso', 'Coordenador', 'Ação/Restrição', 'Unidade',
       ...weekDates.flatMap((d, i) => [`${DAY_NAMES[i]} ${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')} Prev`, `${DAY_NAMES[i]} Real`]),
       'Prev Total Semana', 'Real Total Semana', 'Acum. Sem. Anterior', 'Acum. Sem. Atual', 'Acum. Total',
@@ -194,7 +202,7 @@ export function ProgramacaoSemanalPanel() {
       const { prevTotal, realTotal } = actTotals(a)
       const ant = acumAnterior(a.id)
       return [
-        a.wbsCode, a.nucleo ?? '', a.local ?? '', a.name,
+        a.wbsCode, a.nucleo ?? '', a.responsibleTeam ?? '', a.local ?? '', a.name,
         a.comprimento ?? '', a.quantidadeLigacoes ?? '',
         a.pesoMeta1000 ?? '', a.coordenador ?? a.responsibleTeam ?? '', a.notes ?? '',
         a.unidade ?? '',
@@ -262,6 +270,18 @@ export function ProgramacaoSemanalPanel() {
             </select>
           )}
 
+          {/* Equipe filter */}
+          {equipes.length > 0 && (
+            <select
+              value={filterEquipe}
+              onChange={(e) => setFilterEquipe(e.target.value)}
+              className="bg-[#3d3d3d] border border-[#525252] rounded-lg px-3 py-1.5 text-xs text-[#f5f5f5] focus:outline-none focus:border-[#f97316]/50"
+            >
+              <option value="">Todas as Equipes</option>
+              {equipes.map((eq) => <option key={eq} value={eq}>{eq}</option>)}
+            </select>
+          )}
+
           {/* Export */}
           <button
             onClick={handleExportExcel}
@@ -280,7 +300,7 @@ export function ProgramacaoSemanalPanel() {
             <thead>
               {/* Row 1: group headers */}
               <tr>
-                <th colSpan={10} className={`${thCls} text-left`}>Identificação da Atividade</th>
+                <th colSpan={11} className={`${thCls} text-left`}>Identificação da Atividade</th>
                 {weekDates.map((d, i) => (
                   <th key={i} colSpan={2} className={thCls} style={{ color: '#f97316' }}>
                     {DAY_NAMES[i]}<br />
@@ -295,6 +315,7 @@ export function ProgramacaoSemanalPanel() {
               <tr>
                 <th className={`${thCls} text-left sticky left-0 z-10 min-w-[48px]`}>Item</th>
                 <th className={`${thCls} text-left min-w-[80px]`}>Núcleo</th>
+                <th className={`${thCls} text-left min-w-[100px]`}>Equipe</th>
                 <th className={`${thCls} text-left min-w-[100px]`}>Local</th>
                 <th className={`${thCls} text-left min-w-[160px]`}>Atividade</th>
                 <th className={thCls}>Comp. (m)</th>
@@ -320,7 +341,7 @@ export function ProgramacaoSemanalPanel() {
             <tbody>
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={10 + 14 + 5} className="text-center py-8 text-[#6b6b6b] text-xs">
+                  <td colSpan={11 + 14 + 5} className="text-center py-8 text-[#6b6b6b] text-xs">
                     Nenhuma atividade encontrada. Carregue dados demo no módulo Longo Prazo.
                   </td>
                 </tr>
@@ -337,6 +358,7 @@ export function ProgramacaoSemanalPanel() {
                   <tr key={a.id} className={`${rowBg} hover:bg-[#3d3d3d]/60 transition-colors`}>
                     <td className={`${tdFixedCls} left-0 z-10 font-mono`}>{a.wbsCode}</td>
                     <td className={tdCls}>{a.nucleo ?? <span className="text-[#525252]">—</span>}</td>
+                    <td className={tdCls}>{a.responsibleTeam ?? <span className="text-[#525252]">—</span>}</td>
                     <td className={tdCls}>{a.local ?? <span className="text-[#525252]">—</span>}</td>
                     <td className={`${tdCls} max-w-[200px]`}>
                       <span className="block truncate text-[#f5f5f5]" title={a.name}>{a.name}</span>
@@ -391,7 +413,7 @@ export function ProgramacaoSemanalPanel() {
             {filtered.length > 0 && (
               <tfoot>
                 <tr className="bg-[#3d3d3d]">
-                  <td colSpan={10} className={`${tdCls} font-semibold text-[#f5f5f5]`}>
+                  <td colSpan={11} className={`${tdCls} font-semibold text-[#f5f5f5]`}>
                     Total ({filtered.length} atividades)
                   </td>
                   {weekDates.map((d) => {

@@ -162,9 +162,7 @@ export const usePreConstrucaoStore = create<PreConstrucaoState>((set) => ({
 
   rejectAllNormalizations: () =>
     set((s) => ({
-      takeoffItems: s.takeoffItems.map((item) =>
-        item.normalized ? { ...item, normalized: false } : item
-      ),
+      takeoffItems: s.takeoffItems.map((item) => ({ ...item, normalized: false })),
     })),
 
   setCostMatches: (matches) => set({ costMatches: matches }),
