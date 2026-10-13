@@ -42,6 +42,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: 'Gestão 360', to: '/app/gestao-360', icon: Layers },
       { label: 'Torre Controle', to: '/app/torre-de-controle', icon: Play },
       { label: 'Projetos', to: '/app/projetos', icon: FolderKanban },
+      { label: 'Tarefas da Gestão', to: '/app/gestao-tarefas', icon: ClipboardCheck },
     ],
   },
   {
